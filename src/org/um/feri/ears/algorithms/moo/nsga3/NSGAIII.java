@@ -93,6 +93,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 			//TODO èe je seznam rešitev prazen za to rešitev ga naloži iz json in nastavi index na 0
 			//metoda get random in metoda get next iz seznama rešitev 
 			//metoda get hash saveID+="v"+this.version + this.getID()+task.getProblem().name +"v"+ task.getProblem().getVersion()+"obj"+num_obj +"var"+ num_var;
+			//return
 		}
 		
 		if(optimalParam)
