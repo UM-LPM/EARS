@@ -36,10 +36,10 @@ import org.um.feri.ears.util.ValueComparator;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  * @author Juan J. Durillo
  */
-public class GeneralizedSpread<T> extends QualityIndicator<T>{
+public class GeneralizedSpread<T extends Number> extends QualityIndicator<T>{
 	
-	public GeneralizedSpread(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public GeneralizedSpread(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Generalized Spread";
 	}
 

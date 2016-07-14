@@ -77,7 +77,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     			for (int j=i+1; j<results.size(); j++) {
     				second = results.get(j);
     				indicatorName = indicators.get(Util.nextInt(indicators.size()));
-    				qi = IndicatorFactory.createIndicator(indicatorName, t.getProblem());
+    				qi = IndicatorFactory.createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
     				
     				try {
     					if(qi.getIndicatorType() == IndicatorType.Unary)
@@ -89,17 +89,17 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
 						e.printStackTrace();
 					}
     				if (resultEqual(first.getBest(), second.getBest(), qi)) { 
-						arena.addGameResult(Game.DRAW, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+						arena.addGameResult(Game.DRAW, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
 					} 
     				else 
     				{
     					if (t.isFirstBetter(first.getBest(),second.getBest(), qi))
     					{
-    						arena.addGameResult(Game.WIN, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
     					}
     					else
     					{
-    						arena.addGameResult(Game.WIN, second.getAl().getAlgorithmInfo().getVersionAcronym(), first.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, second.getAl().getAlgorithmInfo().getVersionAcronym(), first.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
     					}
     				}
         		}
@@ -135,13 +135,13 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     	problems.add(new UnconstrainedProblem5());
     	problems.add(new UnconstrainedProblem6());
     	problems.add(new UnconstrainedProblem7());
-    	problems.add(new UnconstrainedProblem8());
-    	problems.add(new UnconstrainedProblem9());
-    	problems.add(new UnconstrainedProblem10());
+    	//problems.add(new UnconstrainedProblem8());
+    	//problems.add(new UnconstrainedProblem9());
+    	//problems.add(new UnconstrainedProblem10());
 
     	
     	for (DoubleMOProblem moProblem : problems) {
-    		registerTask(stopCriteria, evaluationsOnDimension, 0.001, moProblem);
+    		registerTask(stopCriteria, evaluationsOnDimension, 1.0E-4, moProblem);
 		}
     }
         

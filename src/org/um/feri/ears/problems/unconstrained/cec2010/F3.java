@@ -9,6 +9,7 @@ import java.util.Random;
 
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.unconstrained.cec2010.base.AckleyShifted;
+import org.um.feri.ears.util.Util;
 
 /**
  * Problem function!
@@ -37,10 +38,9 @@ public class F3 extends Problem {
 		name = "F03 Shifted Ackley's Function";
 		
 		P = new int[numberOfDimensions];
-		Random rand = new Random();
 		int rand_place = 0;
 		for (int i=numberOfDimensions-1; i>0; i--){
-			rand_place = rand.nextInt(numberOfDimensions);
+			rand_place = Util.nextInt(numberOfDimensions);
 			P[i] = rand_place;			
 		}
 	}

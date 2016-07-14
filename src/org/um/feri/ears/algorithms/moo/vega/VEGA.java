@@ -29,6 +29,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
 
@@ -74,7 +75,9 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				"VEGA",
 				"\\bibitem{Schaffer1985}\nD.~Schaffer.\n\\newblock Multiple Objective Optimization with Vector Evaluated Genetic Algorithms.\n\\newblock \\emph{Proceedings of the 1st International Conference on Genetic Algorithms}, 93--100, 1985.\n",
 				"VEGA", "Vector Evaluated Genetic Algorithm");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
 	
 	@Override
@@ -83,13 +86,24 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		task = taskProblem;
 		num_var = task.getDimensions();
 		num_obj = task.getNumberOfObjectives();
+		
+		if(caching != Cache.None && caching != Cache.Save)
+		{
+			return returnNext(task.taskInfo());
+		}
+		
 		long initTime = System.currentTimeMillis();
 		init();
 		start();
 		long estimatedTime = System.currentTimeMillis() - initTime;
 		System.out.println("Total execution time: "+estimatedTime + "ms");
 		
-		population.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
+		
+		
+		if(caching == Cache.Save)
+		{
+			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), population);
+		}
 		
 		return population;
 	}

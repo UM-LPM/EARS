@@ -34,13 +34,13 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  *            elitist multiobjective genetic algorithm: NSGA-II. IEEE Trans. 
  *            on Evol. Computation 6 (2002) 182-197
  */
-public class Spread<T> extends QualityIndicator<T>{
+public class Spread<T extends Number> extends QualityIndicator<T>{
 
 	/**
 	 * Constructor. Creates a new instance of a Spread object
 	 */
-	public Spread(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public Spread(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name="Spread";
 	}
 

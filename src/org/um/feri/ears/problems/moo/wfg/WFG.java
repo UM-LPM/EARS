@@ -54,7 +54,6 @@ public abstract class WFG extends DoubleMOProblem {
   protected int[] a;
   protected int[] s;
   protected int d = 1;
-  protected Random random = new Random();
   
   /**
    * Constructor

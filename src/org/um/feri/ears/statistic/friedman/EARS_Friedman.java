@@ -43,46 +43,20 @@
  */
 package org.um.feri.ears.statistic.friedman;
 
-import static java.lang.System.out;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
 import java.util.Vector;
 
-import net.sourceforge.jswarm_pso.SwarmAlgorithm;
-
-import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
 import org.um.feri.ears.algorithms.es.ES1p1sAlgorithm;
-import org.um.feri.ears.algorithms.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.tlbo.TLBOAlgorithm;
-import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.benchmark.RatingCEC2010;
-import org.um.feri.ears.benchmark.RatingRPUOed2;
-import org.um.feri.ears.export.data.EDBenchmark;
-import org.um.feri.ears.export.data.EDBenchmarkRunArena;
-import org.um.feri.ears.export.data.EDEnumBenchmarkRunType;
-import org.um.feri.ears.export.data.EDPlayerMoreInfo;
-import org.um.feri.ears.export.data.EDStatP2PList;
-import org.um.feri.ears.export.data.EDStatP2TaskList;
-import org.um.feri.ears.export.data.EDStatPlayer2Player;
-import org.um.feri.ears.export.data.EDStatPlayer2Task;
-import org.um.feri.ears.export.data.EDStatPlayerMoreInfoList;
-import org.um.feri.ears.export.data.EDWinnLossDraw;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.problems.results.FriedmanTransport;
-import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.run.RunMain;
-import org.um.feri.ears.util.Util;
 
 import com.erciyes.karaboga.bee.BeeColonyAlgorithm;
-import com.google.gson.Gson;
 import com.um.feri.brest.de.DEAlgorithm;
 
 /**

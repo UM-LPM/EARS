@@ -20,7 +20,9 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Ranking;
+import org.um.feri.ears.util.Util;
 
 
 public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
@@ -49,7 +51,10 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				"SPEA2",
 				"\\bibitem{Zitzler2002}\nE.~Zitzler,M.~Laumanns,L.~Thiele\n\\newblock SPEA2: Improving the Strength Pareto Evolutionary Algorithm for Multiobjective Optimization.\n\\newblock \\emph{EUROGEN 2001. Evolutionary Methods for Design, Optimization and Control with Applications to Industrial Problems}, 95--100, 2002.\n",
 				"SPEA2", "Strength Pareto Evolutionary Algorithm");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
 	}
 
 	@Override
@@ -87,6 +92,18 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			}
 			}
 		}
+		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
+		
+		if(caching != Cache.None && caching != Cache.Save)
+		{
+			ParetoSolution<Type> next = returnNext(task.taskInfo());
+			if(next != null)
+				return next;
+			else
+				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
+		}
 
 		long initTime = System.currentTimeMillis();
 		init();
@@ -99,15 +116,20 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
 		if(display_data)
 		{
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
+			best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
+			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 		}
 		if(save_data)
 		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
+			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 			best.printFeasibleFUN("FUN_SPEA2");
 			best.printVariablesToFile("VAR");
 			best.printObjectivesToCSVFile("FUN");
+		}
+		
+		if(caching == Cache.Save)
+		{
+			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), best);
 		}
 
 		return best;

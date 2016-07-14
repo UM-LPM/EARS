@@ -19,6 +19,7 @@ import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Reporting;
 import org.um.feri.ears.util.Util;
 
@@ -32,7 +33,7 @@ public class BIOMABencmarkTest {
 	        players.add(new D_MOEAD(300));
 	        players.add(new D_NSGAII(300));
 	        players.add(new D_SPEA2(300,300));
-	        players.add(new D_PESA2(300));
+	        players.add(new D_PESAII(300));
 	        players.add(new D_IBEA(300,300));
 	        MOAlgorithm.setRunWithOptimalParameters(true);
 	        
@@ -55,23 +56,23 @@ public class BIOMABencmarkTest {
 		    indicators.add(IndicatorName.MaximumSpread);
 		    indicators.add(IndicatorName.R2);
 
+			MOAlgorithm.setCaching(Cache.None);
 
-
-        	BIOMABenchmark cec = new BIOMABenchmark(indicators, 0.0000001, true); //Create banchmark
+        	BIOMABenchmark cec = new BIOMABenchmark(indicators, 1e-7, true); //Create banchmark
         	for (MOAlgorithm al:players) {
         		ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
         		cec.registerAlgorithm(al);
         	}
         	BankOfResults ba = new BankOfResults();
         	long initTime = System.currentTimeMillis();
-        	cec.run(ra, ba, 30);
+        	cec.run(ra, ba, 5);
         	long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         	System.out.println("Benchmark execution time: "+estimatedTime + "s");
         	ArrayList<Player> list = new ArrayList<Player>();
         	list.addAll(ra.recalcRangs()); //new ranks
 
-        	Reporting.createLatexTable(list, "D:\\Benchmark results\\BIOMA_benchmark_rand.tex");
-        	Reporting.savePlayersToFile(list, "D:\\Benchmark results\\BIOMA_benchmark_rand.tex",0);
+        	//Reporting.createLatexTable(list, "D:\\Benchmark results\\BIOMA_benchmark_rand.tex");
+        	//Reporting.savePlayersToFile(list, "D:\\Benchmark results\\BIOMA_benchmark_rand.tex",0);
         	for (Player p: list) System.out.println(p); //print ranks
 	        
 		    

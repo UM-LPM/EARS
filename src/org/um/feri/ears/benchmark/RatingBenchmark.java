@@ -95,12 +95,12 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
 
 
                 	results.add(new AlgorithmEvalResult(bestByALg, al)); 
-                	allSingleProblemRunResults.add(task.getProblem(), bestByALg, al);
+                	allSingleProblemRunResults.add(task, bestByALg, al);
 
 
                 }
                 else {
-                	System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemShortName());
+                	System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemName());
                 	results.add(new AlgorithmEvalResult(null, al)); // this can be done parallel - asynchrony                    
                 }
             } catch (StopCriteriaException e) {
@@ -145,8 +145,8 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
             for (int j=i+1; j<results.size(); j++) {
                 lose = results.get(j);
                 if (resultEqual(win.best, lose.best)) { //Special for this benchmark
-                    if (debugPrint) System.out.println("draw of "+win.getAl().getID()+" ("+Util.df3.format(win.getBest().getEval())+", feasable="+win.getBest().isFeasible()+") against "+lose.getAl().getID()+" ("+Util.df3.format(lose.getBest().getEval())+", feasable="+lose.getBest().isFeasible()+") for "+t.getProblemShortName());
-                    arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName());
+                    if (debugPrint) System.out.println("draw of "+win.getAl().getID()+" ("+Util.df3.format(win.getBest().getEval())+", feasable="+win.getBest().isFeasible()+") against "+lose.getAl().getID()+" ("+Util.df3.format(lose.getBest().getEval())+", feasable="+lose.getBest().isFeasible()+") for "+t.getProblemName());
+                    arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName());
                 } else {
                     if (win.getAl()==null) {
                         System.out.println("NULL ID "+win.getClass().getName());
@@ -160,8 +160,8 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
                     if (lose.getBest()==null) {
                         System.out.println(lose.getAl().getID()+" NULL");
                     }                     
-                    if (debugPrint) System.out.println("win of "+win.getAl().getID()+" ("+Util.df3.format(win.getBest().getEval())+", feasable="+win.getBest().isFeasible()+") against "+lose.getAl().getID()+" ("+Util.df3.format(lose.getBest().getEval())+", feasable="+lose.getBest().isFeasible()+") for "+t.getProblemShortName());
-                    arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName());
+                    if (debugPrint) System.out.println("win of "+win.getAl().getID()+" ("+Util.df3.format(win.getBest().getEval())+", feasable="+win.getBest().isFeasible()+") against "+lose.getAl().getID()+" ("+Util.df3.format(lose.getBest().getEval())+", feasable="+lose.getBest().isFeasible()+") for "+t.getProblemName());
+                    arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName());
                 }
                     
             }

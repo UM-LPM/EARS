@@ -35,15 +35,15 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  *            Technical Report TR-98-03, Dept. Elec. Comput. Eng., Air Force 
  *            Inst. Technol. (1998)
  */
-public class GenerationalDistance<T> extends QualityIndicator<T>{
+public class GenerationalDistance<T extends Number> extends QualityIndicator<T>{
 
 	static final double pow_ = 2.0; // pow. This is the pow used for the distances
 
 	/**
 	 * Constructor. Creates a new instance of the generational distance metric.
 	 */
-	public GenerationalDistance(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public GenerationalDistance(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Generational Distance";
 	}
 

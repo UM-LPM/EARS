@@ -80,7 +80,7 @@ public class Util {
 	public static DecimalFormat intf = new DecimalFormat("###,###,###");
 	public static long randomseed = 316227711; //to be able too repeat experiment
 	public static Random rnd = new MersenneTwister(randomseed);
-	static final String JSON_FILE = "Cache\\Pareto_Cache.json";
+	static final String JSON_DIR = "Cache\\Pareto_Cache_%s.json";
 	
 	
     public static double roundDouble3(double r) {
@@ -110,13 +110,13 @@ public class Util {
 		return s;
 	}
 	
-	public static void addParetoToJSON(String listID, ParetoSolution<Type> best)
+	public static <T extends Number> void addParetoToJSON(String listID, String file, ParetoSolution<T> best)
 	{
 		ParetoSolutionCache cache = new ParetoSolutionCache();
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(JSON_FILE));
+			BufferedReader br = new BufferedReader(new FileReader(String.format(JSON_DIR,file)));
 			cache = gson.fromJson(br, ParetoSolutionCache.class); 
 		} catch (IOException e) 
 		{
@@ -136,7 +136,7 @@ public class Util {
 			
 			List<double[]> paretoList = new ArrayList<>();
 			
-			for(MOSolutionBase<Type> s: best.solutions)
+			for(MOSolutionBase<T> s: best.solutions)
 			{
 				double[] objectives = s.getObjectives();
 				paretoList.add(objectives);
@@ -151,29 +151,38 @@ public class Util {
 			
 			List<double[]> paretoList = new ArrayList<double[]>();
 			
-			for(MOSolutionBase<Type> s: best.solutions)
+			for(MOSolutionBase<T> s: best.solutions)
 			{
 				double[] objectives = s.getObjectives();
+				//check for NaN
+				for(int i = 0; i < objectives.length; i++)
+				if (Double.isNaN(objectives[i]))
+				{
+					System.err.println("Pareto contains NaN!");
+					return;
+				}
+				
 				paretoList.add(objectives);
 			}
 			solutions.add(paretoList);
 			cache.data.put(listID, solutions);
 		}
 		
-		try (Writer writer = new FileWriter(JSON_FILE)) {
+		try (Writer writer = new FileWriter(String.format(JSON_DIR,file))) {
 		    gson.toJson(cache, writer);
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println("ww");
 		}
 	}
 	
-	public static List<ParetoSolution<Double>> readParetoListFromJSON(String listID)
+	public static <T extends Number> List<ParetoSolution<T>> readParetoListFromJSON(String listID, String file)
 	{
 		ParetoSolutionCache cache = new ParetoSolutionCache();
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(JSON_FILE));
+			BufferedReader br = new BufferedReader(new FileReader(String.format(JSON_DIR,file)));
 			cache = gson.fromJson(br, ParetoSolutionCache.class); 
 		} catch (IOException e) 
 		{
@@ -185,16 +194,16 @@ public class Util {
 		if(!cache.data.containsKey(listID))
 			return null;
 		
-		List<ParetoSolution<Double>> solutions = new ArrayList<ParetoSolution<Double>>();
+		List<ParetoSolution<T>> solutions = new ArrayList<ParetoSolution<T>>();
 		List<List<double[]>> ps = cache.data.get(listID);
 		
 		for(List<double[]> pareto : ps)
 		{
-			ParetoSolution<Double> solution = new ParetoSolution<Double>(pareto.size());
+			ParetoSolution<T> solution = new ParetoSolution<T>(pareto.size());
 			
 			for(double[] obj : pareto)
 			{
-				MOSolutionBase<Double> sol = new MOSolutionBase<>(obj.length);
+				MOSolutionBase<T> sol = new MOSolutionBase<T>(obj.length);
 				sol.setObjectives(obj);
 				solution.add(sol);
 			}

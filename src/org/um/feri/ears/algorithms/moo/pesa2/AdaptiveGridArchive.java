@@ -14,7 +14,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.DominanceComparator;
 
-public class AdaptiveGridArchive<Type> extends ParetoSolution<Type> {
+public class AdaptiveGridArchive<Type extends Number> extends ParetoSolution<Type> {
 
 	private AdaptiveGrid<Type> grid;
 

@@ -208,12 +208,12 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		
 		if(display_data)
 		{
-			population.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-			population.displayAllUnaryQulaityIndicators(task.getProblem());
+			population.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
+			population.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
 		}
 		if(save_data)
 		{
-			population.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
+			population.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 			population.printFeasibleFUN("FUN_DBEA");
 			population.printVariablesToFile("VAR");
 			population.printObjectivesToCSVFile("FUN");
@@ -235,7 +235,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
 		
 		do {
-			int[] permutation = randomPermutation(population.size());
+			int[] permutation = Util.randomPermutation(population.size());
 		
 			for (int i = 0; i < population.size(); i++) {
 				int n = permutation[i];
@@ -267,24 +267,6 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	@Override
 	public void resetDefaultsBeforNewRun() {
 		
-	}
-	
-	/**
-	 * Generates a random permutation of the given length.
-	 * 
-	 * @param length the length of the permutation
-	 * @return the random permutation
-	 */
-	int[] randomPermutation(int length) {
-		int[] permutation = new int[length];
-		
-		for (int i = 0; i < length; i++) {
-			permutation[i] = i;
-		}
-		
-		Util.shuffle(permutation);
-		
-		return permutation;
 	}
 	
 	public void initPopulation() throws StopCriteriaException {
@@ -354,7 +336,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		}
 
 		double[] f2 = normalizedObjectives(child);
-		int[] order = randomPermutation(population.size());
+		int[] order = Util.randomPermutation(population.size());
 		
 		if (TESTING_MODE) {
 			for (int i = 0; i < order.length; i++) {

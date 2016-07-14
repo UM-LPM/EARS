@@ -36,15 +36,15 @@ public class Testing {
             	ParetoSolution best1 = moead.run(t1);
             	ParetoSolution best2 = ibea.run(t2);
             	
-            	best1.evaluate(new GenerationalDistance(t1.getProblem()));
-            	best2.evaluate(new GenerationalDistance(t1.getProblem()));
+            	best1.evaluate(new GenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
+            	best2.evaluate(new GenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
 
             	System.out.println("GD:");
             	System.out.println(best1.getEval());
             	System.out.println(best2.getEval());
             	
-            	best1.evaluate(new InvertedGenerationalDistance(t1.getProblem()));
-            	best2.evaluate(new InvertedGenerationalDistance(t1.getProblem()));
+            	best1.evaluate(new InvertedGenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
+            	best2.evaluate(new InvertedGenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
 
             	System.out.println("IGD:");
             	System.out.println(best1.getEval());

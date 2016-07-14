@@ -35,7 +35,7 @@ import org.um.feri.ears.util.Util;
  * This class implements an operator for binary selections using the same code
  * in Deb's NSGA-II implementation
  */
-public class BinaryTournament2<Type> {
+public class BinaryTournament2<Type extends Number> {
   
   /**
    * dominance_ store the <code>Comparator</code> for check dominance_

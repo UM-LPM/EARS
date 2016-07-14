@@ -64,7 +64,7 @@ public class DummyAlgorithm extends Algorithm{
 
 	@Override
 	public DoubleSolution run(Task taskProblem) {
-		String problemName = taskProblem.getProblem().name;
+		String problemName = taskProblem.getProblemName();
 		
 		if(results.containsKey(problemName.toLowerCase()))
 		{

@@ -30,7 +30,7 @@ import org.um.feri.ears.util.DominanceComparator;
 * solution are removed. If the new solution is dominated by any member of the
 * population, the new solution is not added.
 */
-public class NondominatedPopulation<T> extends ParetoSolution<T> {
+public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> {
 	
 	/**
 	 * The dominance comparator used by this non-dominated population.

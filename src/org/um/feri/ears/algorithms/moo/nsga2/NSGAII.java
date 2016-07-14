@@ -20,9 +20,11 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.Ranking;
+import org.um.feri.ears.util.Util;
 
 
 /** 
@@ -59,7 +61,10 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 				"NSGAII",
 				"\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
 				"NSGAII", "Nondominated Sorting Genetic Algorithm II ");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+		
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
 
 	@Override
@@ -94,6 +99,17 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 			}
 		}
 		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+
+		if(caching != Cache.None && caching != Cache.Save)
+		{
+			ParetoSolution<Type> next = returnNext(task.taskInfo());
+			if(next != null)
+				return next;
+			else
+				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
+		}
+		
 		long initTime = System.currentTimeMillis();
 		init();
 		start();
@@ -105,16 +121,22 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 		ParetoSolution<Type> best = ranking.getSubfront(0);
 		if(save_data)
 		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
+			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 			best.printFeasibleFUN("FUN_NSGAII");
 			best.printVariablesToFile("VAR");
 			best.printObjectivesToCSVFile("FUN");
 		}
 		if(display_data)
 		{
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
+			best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
+			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 		}
+		
+		if(caching == Cache.Save)
+		{
+			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), best);
+		}
+		
 		return best;
 	}
 

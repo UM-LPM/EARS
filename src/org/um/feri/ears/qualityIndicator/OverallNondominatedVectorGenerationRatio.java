@@ -16,10 +16,10 @@ import org.um.feri.ears.util.DominanceComparator;
  * "On measuring multiobjective evolutionary algorithm performance", 
  * Proc. Congr. Evol. Comput., 2000, pp. 204-211.
  */
-public class OverallNondominatedVectorGenerationRatio<T> extends QualityIndicator<T> {
+public class OverallNondominatedVectorGenerationRatio<T extends Number> extends QualityIndicator<T> {
 
-	public OverallNondominatedVectorGenerationRatio(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public OverallNondominatedVectorGenerationRatio(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Overall Nondominated Vector Generation Ratio";
 	}
 	

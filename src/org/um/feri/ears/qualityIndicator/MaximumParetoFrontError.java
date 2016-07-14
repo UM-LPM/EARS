@@ -15,12 +15,12 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  * Classifications, analyses, and new innovations," Ph.D. dissertation, 
  * Air Force Inst. Technol., Wright-Patterson AFB, OH, 1999.
  */
-public class MaximumParetoFrontError<T> extends QualityIndicator<T>{
+public class MaximumParetoFrontError<T extends Number> extends QualityIndicator<T>{
 
 	static final double pow_ = 2.0; // pow. This is the pow used for the distances
 
-	public MaximumParetoFrontError(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public MaximumParetoFrontError(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Maximum Pareto Front Error";
 	}
 	

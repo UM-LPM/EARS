@@ -289,7 +289,7 @@ public class DoubleEliminationTournament {
 		ensemble = new ArrayList<QualityIndicator>();
 		
 		for (IndicatorName name : indicators) {
-			ensemble.add(IndicatorFactory.createIndicator(name, problem));
+			ensemble.add(IndicatorFactory.createIndicator(name, problem.getNumberOfObjectives(),problem.getFileName()));
 		}
 	}
 	

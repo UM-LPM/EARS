@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
@@ -80,6 +81,10 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 				"NSGAIII",
 				"\\bibitem{Deb2014}\nK.~Deb, H.~Jain\n\\newblock An evolutionary many-objective optimization algorithm using reference-point-based nondominated sorting approach, part I: Solving problems with box constraints.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 18(4):577--601, 2014.\n",
 				"NSGAIII", "Nondominated Sorting Genetic Algorithm III ");
+		
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
 
 	@Override
@@ -88,17 +93,8 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 		num_var = task.getDimensions();
 		num_obj = task.getNumberOfObjectives();
 		
-		if(caching != Cache.None)
-		{
-			//TODO èe je seznam rešitev prazen za to rešitev ga naloži iz json in nastavi index na 0
-			//metoda get random in metoda get next iz seznama rešitev 
-			//metoda get hash saveID+="v"+this.version + this.getID()+task.getProblem().name +"v"+ task.getProblem().getVersion()+"obj"+num_obj +"var"+ num_var;
-			//return
-		}
-		
-		if(optimalParam)
-		{
-			switch(num_obj){
+
+		switch(num_obj){
 			case 1:
 			{
 				populationSize = 100;
@@ -119,7 +115,17 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 				populationSize = 500;
 				break;
 			}
-			}
+		}
+		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+
+		if(caching != Cache.None && caching != Cache.Save)
+		{
+			ParetoSolution<Type> next = returnNext(task.taskInfo());
+			if(next != null)
+				return next;
+			else
+				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
 		}
 
 		long initTime = System.currentTimeMillis();
@@ -130,25 +136,23 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 
 		// Return the first non-dominated front
 		Ranking<Type> ranking = new Ranking<Type>(population);
-		ParetoSolution best = ranking.getSubfront(0);
+		ParetoSolution<Type> best = ranking.getSubfront(0);
 		if(save_data)
 		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
+			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 			best.printFeasibleFUN("FUN_NSGAII");
 			best.printVariablesToFile("VAR");
 			best.printObjectivesToCSVFile("FUN");
 		}
 		if(display_data)
 		{
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
+			best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
+			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 		}
 		
 		if(caching == Cache.Save)
 		{
-			String saveID ="";
-			saveID+="v"+this.version + this.getID()+task.getProblem().name +"v"+ task.getProblem().getVersion()+"obj"+num_obj +"var"+ num_var;
-			Util.addParetoToJSON(saveID, best);
+			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), best);
 		}
 		
 		return best;

@@ -33,12 +33,12 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  *       IMM-REP-1998-7.
  * </ol>
  */
-public abstract class RIndicator<T> extends QualityIndicator<T>{
+public abstract class RIndicator<T extends Number> extends QualityIndicator<T>{
 	
 	protected int num_obj;
 	
-	public RIndicator(MOProblemBase problem){
-		super(problem, (ParetoSolution<T>) getReferenceSet(problem.getFileName()));
+	public RIndicator(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 	}
 	/**
 	 * Interface for defining utility functions.  These utility functions

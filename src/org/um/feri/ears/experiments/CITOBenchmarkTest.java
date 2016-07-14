@@ -1,6 +1,7 @@
 package org.um.feri.ears.experiments;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.ibea.I_IBEA;
@@ -39,27 +40,42 @@ public class CITOBenchmarkTest {
 		ResultArena ra = new ResultArena(100);
 
 		ArrayList<IndicatorName> indicators = new ArrayList<IndicatorName>();
-		indicators.add(IndicatorName.IGDPlus);
-		indicators.add(IndicatorName.IGD);
 		indicators.add(IndicatorName.NativeHV);
+		indicators.add(IndicatorName.IGD);
+		indicators.add(IndicatorName.IGDPlus);
 		indicators.add(IndicatorName.Epsilon);
-		indicators.add(IndicatorName.MaximumSpread);
 		indicators.add(IndicatorName.R2);
-		//indicators.add(IndicatorName.CovergeOfTwoSets);
+		indicators.add(IndicatorName.MaximumSpread);
+		indicators.add(IndicatorName.GeneralizedSpread);
+		indicators.add(IndicatorName.CovergeOfTwoSets);
+		indicators.add(IndicatorName.GD);
+		indicators.add(IndicatorName.MPFE);
+		indicators.add(IndicatorName.Spacing);
 
-		CITOBenchmark cb = new CITOBenchmark(indicators, 1e-8, false); //Create banchmark
-		for (MOAlgorithm al:players) {
-			ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
-			cb.registerAlgorithm(al);
+		HashMap<IndicatorName, ArrayList<Player>> results = new HashMap<IndicatorName, ArrayList<Player>>();
+
+		for (IndicatorName indicatorName : indicators) {
+
+			ArrayList<IndicatorName> tempindi = new ArrayList<IndicatorName>();
+			tempindi.add(indicatorName);
+
+			CITOBenchmark cb = new CITOBenchmark(tempindi, 1e-8, false); //Create banchmark
+			for (MOAlgorithm al:players) {
+				ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+				cb.registerAlgorithm(al);
+			}
+			BankOfResults ba = new BankOfResults();
+			cb.run(ra, ba, 30); //repeat competition 50X
+			ArrayList<Player> list = new ArrayList<Player>();
+			list.addAll(ra.recalcRangs()); //new ranks
+			
+			results.put(indicatorName, list);
+			Reporting.createLatexTable(list, "D:\\Benchmark results\\AppliedSoftComputing\\benchmark_CITO"+indicatorName+".tex");
+			Reporting.saveLeaderboard(list, "D:\\Benchmark results\\AppliedSoftComputing\\benchmark_leaderboard_"+indicatorName+".txt");
+
+			for (Player p: list) System.out.println(p); //print ranks
 		}
-		BankOfResults ba = new BankOfResults();
-		cb.run(ra, ba, 30); //repeat competition 50X
-		ArrayList<Player> list = new ArrayList<Player>();
-		list.addAll(ra.recalcRangs()); //new ranks
 		
-    	Reporting.createLatexTable(list, "D:\\Benchmark results\\BIOMA_benchmark_CITO.tex");
-
-
-		for (Player p: list) System.out.println(p); //print ranks
+		Reporting.createLatexTable(results, "D:\\Benchmark results\\AppliedSoftComputing\\AppliedSoftComputing_benchmark_CITO_all.tex");
 	}
 }

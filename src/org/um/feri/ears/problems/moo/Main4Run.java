@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.algorithms.moo.ibea.D_IBEA;
 import org.um.feri.ears.algorithms.moo.ibea.IBEA;
 import org.um.feri.ears.algorithms.moo.moead.I_MOEAD;
 import org.um.feri.ears.algorithms.moo.moead.MOEAD;
@@ -44,6 +45,7 @@ import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
 import org.um.feri.ears.problems.moo.wfg.WFG2;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
+import org.um.feri.ears.qualityIndicator.GenerationalDistance;
 import org.um.feri.ears.qualityIndicator.InvertedGenerationalDistance;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Cache;
@@ -105,48 +107,41 @@ public class Main4Run {
     	//tasks.add(t10);
     	//tasks.add(uc);
     	String data ="";
+    	
+    	
+    	
     	for (DoubleMOTask task : tasks) {
-
-    		//MOEAD_DRA moead = new MOEAD_DRA(300);
-    		//MOEAD_STM moeadtsm = new MOEAD_STM(300);
-    		//OMOPSO omopso = new OMOPSO();
     		
-    		//CrossoverOperator<Double, DoubleMOTask> cross = new SBXCrossover(0.9, 20.0);
-    		//MutationOperator<Double, DoubleMOTask> mut = new PolynomialMutation(1.0 / 30, 20.0);
-    		
+   	
     		CrossoverOperator<Integer, IntegerMOTask> cross = new PMXCrossover();
     		MutationOperator<Integer, IntegerMOTask> mut = new PermutationSwapMutation(0.2);
 
     		NSGAIII nsgaiii = new NSGAIII<IntegerMOTask,Integer>(cross, mut);
     		D_PESA2 mpesa = new D_PESA2();
-    		//MOEADSTM moeadtsm = new MOEADSTM();
-    		
+
     		I_MOEAD moead = new I_MOEAD();
     		D_NSGAIII nsga = new D_NSGAIII();
 
-    		//nsga.setDisplayData(true);
-    		moead.setDisplayData(true);
-    		/*moead.setDisplayData(true);
-    		moeadtsm.setDisplayData(true);
-    		omopso.setDisplayData(true);*/
-    		
-    		nsgaiii.setDisplayData(true);
-    		nsgaiii.setCaching(Cache.Save);
-    		
-    		List<ParetoSolution<Double>> cache = Util.readParetoListFromJSON("NSGAIIIv1UF1");
+    		D_IBEA ibea = new D_IBEA(200,200);
+
+    		ibea.setDisplayData(true);
+    		ibea.setSaveData(true);
     		
             try {
             	
-            	//ParetoSolution best1 = mpesa.run(new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
             	// OA_AJHsqldb OO_BCEL OO_MyBatis
             	//ParetoSolution best1 = nsgaiii.run(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new CITOProblem("OO_MyBatis")));
             	
-            	ParetoSolution best = nsga.run(new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
-            	//Util.addParetoToJSON("NSGAIIIv1UF1", best);
+            	ParetoSolution best = ibea.run(new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
+            	
+            	best.printFeasibleFUN("D:\\Benchmark results\\IBEA_UF1.csv");
             	//moead.run(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new CITOProblem("OO_MyBatis")));
             	
-            	//best1.evaluate(new InvertedGenerationalDistance<Integer>(task.getProblem()));
-            	//System.out.println(best1.getEval());
+            	best.evaluate(new InvertedGenerationalDistance<Double>(task.getNumberOfObjectives(), task.getProblemFileName()));
+            	System.out.println(best.getEval());
+            	best.evaluate(new GenerationalDistance<Double>(task.getNumberOfObjectives(), task.getProblemFileName()));
+            	System.out.println(best.getEval());
+            	
                 //ParetoSolution best2 = moeadtsm.run(new MOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new DTLZ2(3)));
             	
             	/*best1.evaluate(new NativeHV(task.getProblem()));

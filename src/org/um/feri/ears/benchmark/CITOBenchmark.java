@@ -73,7 +73,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
     			for (int j=i+1; j<results.size(); j++) {
     				second = results.get(j);
     				indicatorName = indicators.get(Util.nextInt(indicators.size()));
-    				qi = IndicatorFactory.createIndicator(indicatorName, t.getProblem());
+    				qi = IndicatorFactory.createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
     				
     				try {
     					if(qi.getIndicatorType() == IndicatorType.Unary)
@@ -85,17 +85,17 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
 						e.printStackTrace();
 					}
     				if (resultEqual(first.getBest(), second.getBest(), qi)) { 
-						arena.addGameResult(Game.DRAW, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+						arena.addGameResult(Game.DRAW, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
 					} 
     				else 
     				{
     					if (t.isFirstBetter(first.getBest(),second.getBest(), qi))
     					{
-    						arena.addGameResult(Game.WIN, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
     					}
     					else
     					{
-    						arena.addGameResult(Game.WIN, second.getAl().getAlgorithmInfo().getVersionAcronym(), first.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, second.getAl().getAlgorithmInfo().getVersionAcronym(), first.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
     					}
     				}
         		}

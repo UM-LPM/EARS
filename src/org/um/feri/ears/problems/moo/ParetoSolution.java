@@ -36,7 +36,7 @@ import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.Style;
 import com.panayotis.gnuplot.terminal.PostscriptTerminal;
 
-public class ParetoSolution<Type> extends SolutionBase<Type> implements Iterable<MOSolutionBase<Type>> {
+public class ParetoSolution<Type extends Number> extends SolutionBase<Type> implements Iterable<MOSolutionBase<Type>> {
 
 	public ParetoSolution(ParetoSolution<Type> ps) {
 
@@ -261,13 +261,13 @@ public class ParetoSolution<Type> extends SolutionBase<Type> implements Iterable
 		return solutions.contains(solution);
 	}
 	
-	public void displayAllUnaryQulaityIndicators(MOProblemBase problem)
+	public void displayAllUnaryQulaityIndicators(int num_obj, String file_name)
 	{
 		 ArrayList<QualityIndicator<Type>> indicators = new ArrayList<QualityIndicator<Type>>();
 		 double value;
 		 // add all unary indicators to list
 		 for (IndicatorName name : IndicatorName.values()) {
-			  QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, problem);
+			  QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, num_obj, file_name);
 			  if(qi.getIndicatorType() == IndicatorType.Unary)
 				  indicators.add(qi);
 		 }
@@ -465,7 +465,7 @@ public class ParetoSolution<Type> extends SolutionBase<Type> implements Iterable
 		return s;
 	}
 
-	public void displayData(String algorithm, String problemN, MOProblemBase problem) {
+	public void displayData(String algorithm, String problemN) {
 
 		final String algorithm_name = algorithm.replace("_", "\\_");
 		final String problem_name = problemN.replace("_", "\\_");

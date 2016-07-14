@@ -20,9 +20,11 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.DominanceComparator;
+import org.um.feri.ears.util.Util;
 
-public class PAES<T extends MOTask, Type> extends MOAlgorithm<T, Type> {
+public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
 	AdaptiveGridArchive<Type> archive;
 	int archiveSize = 100;
@@ -42,7 +44,8 @@ public class PAES<T extends MOTask, Type> extends MOAlgorithm<T, Type> {
 				"PAES",
 				"\\bibitem{knowles1999}\nJ.~Knowles,D.W.~Corne\n\\newblock The Pareto Archived Evolution Strategy: A New Baseline Algorithm for Pareto Multiobjective Optimisation.\n\\newblock \\emph{Proceedings of the Congress of Evolutionary Computation}, 98--105, 1999.\n",
 				"PAES", "Pareto Archived Evolution Strategy");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
 
 	@Override
@@ -50,6 +53,15 @@ public class PAES<T extends MOTask, Type> extends MOAlgorithm<T, Type> {
 		task = taskProblem;
 		num_var = task.getDimensions();
 		num_obj = task.getNumberOfObjectives();
+		
+		if(caching != Cache.None && caching != Cache.Save)
+		{
+			ParetoSolution<Type> next = returnNext(task.taskInfo());
+			if(next != null)
+				return next;
+			else
+				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
+		}
 		
 		long initTime = System.currentTimeMillis();
 		init();
@@ -59,16 +71,22 @@ public class PAES<T extends MOTask, Type> extends MOAlgorithm<T, Type> {
 
 		if(display_data)
 		{
-			archive.displayAllUnaryQulaityIndicators(task.getProblem());
-			archive.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
+			archive.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
+			archive.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 		}
 		if(save_data)
 		{
-			archive.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
+			archive.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 			archive.printFeasibleFUN("FUN_PEAS");
 			archive.printVariablesToFile("VAR");
 			archive.printObjectivesToCSVFile("FUN");
 		}
+		
+		if(caching == Cache.Save)
+		{
+			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), archive);
+		}
+		
 		return archive;
 	}
 

@@ -25,17 +25,17 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  * Classifications, analyses, and new innovations," Ph.D. dissertation, 
  * Air Force Inst. Technol., Wright-Patterson AFB, OH, 1999.
  */
-public class ErrorRatio<T> extends QualityIndicator<T>{
+public class ErrorRatio<T extends Number> extends QualityIndicator<T>{
 
 	static final double pow_ = 2.0; // pow. This is the pow used for the distances
 	private final double epsilon;
 
-	public ErrorRatio(MOProblemBase<T> moProblemBase){
-		this(0.0, moProblemBase);
+	public ErrorRatio(int num_obj, String file_name){
+		this(0.0, num_obj, file_name);
 	}
 	
-	public ErrorRatio(double epsilon, MOProblemBase<T> moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public ErrorRatio(double epsilon, int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Error Ratio";
 		this.epsilon = epsilon;
 	}

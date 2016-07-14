@@ -83,4 +83,7 @@ public abstract class ProblemBase <Type> {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public abstract String toString();
 }

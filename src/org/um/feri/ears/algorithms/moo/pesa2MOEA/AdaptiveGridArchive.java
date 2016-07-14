@@ -41,7 +41,7 @@ import org.um.feri.ears.util.NonDominatedSolutionList;
  * vol. 7, no. 2, pp. 100-116, 2003.
  * </ol>
  */
-public class AdaptiveGridArchive<Type> extends NonDominatedSolutionList<Type> {
+public class AdaptiveGridArchive<Type extends Number> extends NonDominatedSolutionList<Type> {
 
 	/**
 	 * The maximum capacity of this archive.

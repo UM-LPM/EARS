@@ -35,7 +35,7 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  *       IMM-REP-1998-7.
  * </ol>
  */
-public class R1<T> extends RIndicator<T>{
+public class R1<T extends Number> extends RIndicator<T>{
 
 	/**
 	 * The default value for {@code espilon}.
@@ -49,12 +49,12 @@ public class R1<T> extends RIndicator<T>{
 	 */
 	private double epsilon;
 
-	public R1(double epsilon, MOProblemBase moProblemBase)
+	public R1(double epsilon, int num_obj, String file_name)
 	{
-		super(moProblemBase);
+		super(num_obj, file_name);
 		name = "R1 indicator";
 		this.utilityFunction = new ChebychevUtility();
-		num_obj = moProblemBase.getNumberOfObjectives();
+		this.num_obj = num_obj;
 		this.epsilon = epsilon;
 		try {
 			weights = generateUniformWeights(getDefaultSubdivisions(num_obj), num_obj);
@@ -63,8 +63,8 @@ public class R1<T> extends RIndicator<T>{
 		}
 	}
 	
-	public R1(MOProblemBase moProblemBase) {
-		this(DEFAULT_EPSILON, moProblemBase);
+	public R1(int num_obj, String file_name) {
+		this(DEFAULT_EPSILON, num_obj, file_name);
 	}
 	
 	@Override

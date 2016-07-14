@@ -18,10 +18,10 @@ public class HypervolumeTest {
     	try {
     		
     		ParetoSolution best = moead.run(task);
-			best.evaluate(new NativeHV(task.getProblem()));
+			best.evaluate(new NativeHV(task.getNumberOfObjectives(), task.getProblemFileName()));
 			System.out.println(best.getEval());
 			
-			best.evaluate(new WfgHypervolume(task.getProblem()));
+			best.evaluate(new WfgHypervolume(task.getNumberOfObjectives(), task.getProblemFileName()));
 			System.out.println(best.getEval());
 			
 			/*best.evaluate(new Hypervolume(task.getProblem()));

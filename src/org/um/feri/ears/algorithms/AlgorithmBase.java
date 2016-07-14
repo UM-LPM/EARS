@@ -3,13 +3,14 @@ package org.um.feri.ears.algorithms;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
-import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.util.Cache;
+import org.um.feri.ears.util.Util;
 
 public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase> {
 	
@@ -58,6 +59,41 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
      * @throws StopCriteriaException
      */
 	public abstract T2 run(T taskProblem) throws StopCriteriaException;
+	
+	protected String getCacheKey(String taskString) {
+		
+		return "Algorithm = "+ ai.getPublishedAcronym() + " version: "+ version + ", " + shortAlgorithmInfo()+" " + taskString;
+	}
+	
+	public String shortAlgorithmInfo() {
+		
+		String info ="";
+		
+		for(Entry<EnumAlgorithmParameters, String> entry : ai.getParameters().entrySet())
+		{
+			info+= entry.getKey().getShortName() + ": " + entry.getValue()+", ";
+		}
+		
+		if(info.length() > 1)
+			info = info.substring(0, info.length() - 2);
+		
+		return info;
+	}
+	
+	public String longAlgorithmInfo() {
+		
+		String info ="";
+		
+		for(Entry<EnumAlgorithmParameters, String> entry : ai.getParameters().entrySet())
+		{
+			info+= entry.getKey().getDescription() + ": " + entry.getValue()+", ";
+		}
+		
+		if(info.length() > 1)
+			info = info.substring(0, info.length() - 2);
+		
+		return info;
+	}
 	
 	/**
 	 * It is called every time before every run! 
@@ -119,8 +155,13 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
     	return save_data;
     }
     
-    public void setCaching(Cache c)
+    public static void setCaching(Cache c)
     {
     	caching = c;
+    }
+    
+    public static Cache getCaching()
+    {
+    	return caching;
     }
 }

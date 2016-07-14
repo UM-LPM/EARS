@@ -8,7 +8,7 @@ import org.um.feri.ears.problems.ProblemBase;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.util.Util;
 
-public abstract class MOProblemBase<Type> extends ProblemBase<Type>  {
+public abstract class MOProblemBase<Type extends Number> extends ProblemBase<Type>  {
 
 	public MOProblemBase(int numberOfDimensions, int numberOfConstraints) {
 		super(numberOfDimensions, numberOfConstraints);
@@ -16,8 +16,6 @@ public abstract class MOProblemBase<Type> extends ProblemBase<Type>  {
 	
 	protected int numberOfObjectives;
 	protected String file_name;
-	protected String version = "1.0";
-	
 	
 	
 	public String getVersion() {
@@ -75,6 +73,12 @@ public abstract class MOProblemBase<Type> extends ProblemBase<Type>  {
 
 	public boolean isFirstBetter(ParetoSolution<Type> x, ParetoSolution<Type> y, QualityIndicator<Type> qi) {
 		return x.isFirstBetter(y, qi);
+	}
+	
+	@Override
+	public String toString() {
+
+		return "Problem: "+name+ " version: "+version+" dimensions: "+ numberOfDimensions+" objectives: "+ numberOfObjectives + " constraints: "+numberOfConstraints;
 	}
 
 }

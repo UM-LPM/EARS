@@ -13,7 +13,7 @@ import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
 
-public class PESA2Selection<Type> {
+public class PESA2Selection<Type extends Number> {
 
 	  /**
 	  * Performs the operation

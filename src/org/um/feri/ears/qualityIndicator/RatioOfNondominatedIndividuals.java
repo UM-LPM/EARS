@@ -20,10 +20,10 @@ import org.um.feri.ears.util.DominanceComparator;
  * optimization: Performance assessments and comparisons,"
  * Artificial Intell. Rev., vol. 17, no. 4, pp. 253–290, 2002.
  */
-public class RatioOfNondominatedIndividuals<T> extends QualityIndicator<T>{
+public class RatioOfNondominatedIndividuals<T extends Number> extends QualityIndicator<T>{
 
-	public RatioOfNondominatedIndividuals(MOProblemBase moProblemBase) {
-		super(moProblemBase);
+	public RatioOfNondominatedIndividuals(int num_obj) {
+		super(num_obj);
 		name = "Ratio Of Nondominated Individuals";
 	}
 	

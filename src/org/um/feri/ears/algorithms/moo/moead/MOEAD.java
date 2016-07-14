@@ -29,6 +29,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.RandomGenerator;
 import org.um.feri.ears.util.Util;
 
@@ -109,7 +110,9 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				"MOEAD",
 				"\\bibitem{Zhang2009}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock The Performance of a New Version of MOEA/D on CEC09 Unconstrained MOP Test Instances.\n\\newblock \\emph{IEEE Congress on Evolutionary Computation}, 203--208, 2009.\n",
 				"MOEAD", "Multiobjective Evolutionary Algorithm Based on Decomposition");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
 
 	@Override
@@ -143,6 +146,17 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			}
 			}
 		}
+		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		
+		if(caching != Cache.None && caching != Cache.Save)
+		{
+			ParetoSolution<Type> next = returnNext(task.taskInfo());
+			if(next != null)
+				return next;
+			else
+				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
+		}
 			
 		long initTime = System.currentTimeMillis();
 		init();
@@ -154,24 +168,22 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 		
 		if(display_data)
 		{
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(),task.getProblem());
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
+			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
+			best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
 		}
 		if(save_data)
 		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
+			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 			best.printFeasibleFUN("FUN_MOEAD_DRA");
 			best.printVariablesToFile("VAR");
 			best.printObjectivesToCSVFile("FUN");
 		}
 		
-		/*try {
-			if(qi.getIndicatorType() == IndicatorType.Unary)
-				best.evaluate(qi);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getMessage());
-		}*/
+		if(caching == Cache.Save)
+		{
+			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), best);
+		}
+
 		return best;
 	}
 

@@ -74,7 +74,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
         EDTask tmp;
         for (TaskBase ta:listOfProblems) {
             tmp = new EDTask();
-            tmp.name = ta.getProblemShortName();
+            tmp.name = ta.getProblemName();
             tmp.info = ta.getStopCriteriaDescription(); //tu!!!
             ed.tasks.add(tmp);
         }

@@ -26,12 +26,12 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  */
 public class SolutionListUtils {
 
-	public static <T> ParetoSolution<T> getNondominatedSolutions(ParetoSolution<T> solutionList) {
+	public static <T extends Number> ParetoSolution<T> getNondominatedSolutions(ParetoSolution<T> solutionList) {
 		Ranking<T> ranking = new Ranking<T>(solutionList) ;
 		return ranking.getSubfront(0);
 	}
 
-	public <T> MOSolutionBase<T> findWorstSolution(ParetoSolution<T> solutionList, Comparator comparator) {
+	public <T extends Number> MOSolutionBase<T> findWorstSolution(ParetoSolution<T> solutionList, Comparator comparator) {
 		if ((solutionList == null) || (solutionList.isEmpty())) {
 			throw new IllegalArgumentException("No solution provided: "+solutionList);
 		}
@@ -52,7 +52,7 @@ public class SolutionListUtils {
 	 * @param comparator
 	 * @return The index of the best solution
 	 */
-	public static <T> int findIndexOfBestSolution(ParetoSolution<T> solutionList, Comparator comparator) {
+	public static <T extends Number> int findIndexOfBestSolution(ParetoSolution<T> solutionList, Comparator comparator) {
 
 		int index = 0;
 		MOSolutionBase<T> bestKnown = solutionList.get(0) ;
@@ -77,7 +77,7 @@ public class SolutionListUtils {
 	 * @param comparator
 	 * @return The index of the best solution
 	 */
-	public static <T> int findIndexOfWorstSolution(ParetoSolution<T> solutionList, Comparator comparator) {
+	public static <T extends Number> int findIndexOfWorstSolution(ParetoSolution<T> solutionList, Comparator comparator) {
 
 		int index = 0;
 		MOSolutionBase<T> worstKnown = solutionList.get(0) ;
@@ -96,7 +96,7 @@ public class SolutionListUtils {
 		return index;
 	}
 
-	public static <T> MOSolutionBase<T> findBestSolution(ParetoSolution<T> solutionList, Comparator comparator) {
+	public static <T extends Number> MOSolutionBase<T> findBestSolution(ParetoSolution<T> solutionList, Comparator comparator) {
 		return solutionList.get(findIndexOfBestSolution(solutionList, comparator)) ;
 	}
 
@@ -127,7 +127,7 @@ public class SolutionListUtils {
 	 * @param minimumValue The minimum values of the objectives
 	 * @return the normalized list of non-dominated solutions
 	 */
-	public static <T> ParetoSolution<T> getNormalizedFront(ParetoSolution<T> solutionList,
+	public static <T extends Number> ParetoSolution<T> getNormalizedFront(ParetoSolution<T> solutionList,
 			List<Double> maximumValue,
 			List<Double> minimumValue) {
 
@@ -153,7 +153,7 @@ public class SolutionListUtils {
 	 * @return The inverted front
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> ParetoSolution<T> getInvertedFront(ParetoSolution<T> solutionSet) {
+	public static <T extends Number> ParetoSolution<T> getInvertedFront(ParetoSolution<T> solutionSet) {
 		ParetoSolution<T> invertedFront = new ParetoSolution<T>(solutionSet.size()) ;
 		int numberOfObjectives = solutionSet.get(0).numberOfObjectives() ;
 
@@ -173,7 +173,7 @@ public class SolutionListUtils {
 		return invertedFront;
 	}
 
-	public static <T> boolean isSolutionDominatedBySolutionList(MOSolutionBase<T> solution, ParetoSolution<T> solutionSet) {
+	public static <T extends Number> boolean isSolutionDominatedBySolutionList(MOSolutionBase<T> solution, ParetoSolution<T> solutionSet) {
 		boolean result = false ;
 		Comparator dominance = new DominanceComparator() ;
 
@@ -196,7 +196,7 @@ public class SolutionListUtils {
 	 * @param solutionList The front to invert
 	 * @return The inverted front
 	 */
-	public static <T> ParetoSolution<T> selectNRandomDifferentSolutions(
+	public static <T extends Number> ParetoSolution<T> selectNRandomDifferentSolutions(
 			int numberOfSolutionsToBeReturned, ParetoSolution<T> solutionList) {
 
 
@@ -224,7 +224,7 @@ public class SolutionListUtils {
 	 * @param solutionSet
 	 * @return
 	 */
-	public static <T> double [][] distanceMatrix(ParetoSolution<T> solutionSet) {
+	public static <T extends Number> double [][] distanceMatrix(ParetoSolution<T> solutionSet) {
 		double [][] distance = new double [solutionSet.size()][solutionSet.size()];
 		for (int i = 0; i < solutionSet.size(); i++){
 			distance[i][i] = 0.0;
@@ -243,7 +243,7 @@ public class SolutionListUtils {
 	 * @param newSolutionList A <code>Solution list</code>
 	 * @return true if both are contains the same solutions, false in other case
 	 */
-	public static <T> boolean solutionListsAreEquals(ParetoSolution<T> solutionList,
+	public static <T extends Number> boolean solutionListsAreEquals(ParetoSolution<T> solutionList,
 			ParetoSolution<T> newSolutionList) {
 		boolean found;
 		for (int i = 0; i < solutionList.size(); i++) {

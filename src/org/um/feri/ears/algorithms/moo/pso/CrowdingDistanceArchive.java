@@ -24,7 +24,7 @@ import org.um.feri.ears.util.SolutionListUtils;
 * Created by Antonio J. Nebro on 24/09/14.
 * Modified by Juanjo on 07/04/2015
 */
-public class CrowdingDistanceArchive<Type> {
+public class CrowdingDistanceArchive<Type extends Number> {
 	private Comparator<MOSolutionBase<Type>> crowdingDistanceComparator;
 	private CrowdingDistance<Type> crowdingDistance ;
 	protected NondominatedPopulation<Type>  archive;

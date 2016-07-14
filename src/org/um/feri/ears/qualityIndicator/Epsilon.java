@@ -34,15 +34,15 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  * It can be used also as a command line program just by typing
  * $java jmetal.qualityIndicator.Epsilon <solutionFrontFile> <trueFrontFile> <numberOfObjectives>
  */
-public class Epsilon<T> extends QualityIndicator<T>{
+public class Epsilon<T extends Number> extends QualityIndicator<T>{
 
 	int[] obj; /* obj_[i] = 0 means objective i is to be minimized */
 	// method_ = 0 means apply additive epsilon and method_ = 1 means multiplicative epsilon. This code always apply additive epsilon
 	int method;
 	
 
-	public Epsilon(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public Epsilon(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Epsilon";
 	}
 

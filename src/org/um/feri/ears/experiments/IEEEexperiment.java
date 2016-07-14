@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.gde3.D_GDE3;
 import org.um.feri.ears.algorithms.moo.ibea.D_IBEA;
+import org.um.feri.ears.algorithms.moo.moead.D_MOEAD;
 import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_DRA;
 import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_STM;
+import org.um.feri.ears.algorithms.moo.nsga2.D_NSGAII;
 import org.um.feri.ears.algorithms.moo.nsga3.D_NSGAIII;
 import org.um.feri.ears.algorithms.moo.pesa2.D_PESAII;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
@@ -16,6 +18,7 @@ import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Reporting;
 import org.um.feri.ears.util.Util;
 
@@ -28,10 +31,16 @@ public class IEEEexperiment {
 		RatingBenchmark.debugPrint = true; //prints one on one results
 		ArrayList<MOAlgorithm> players = new ArrayList<MOAlgorithm>();
 
-		players.add(new D_MOEAD_DRA());
+		/*players.add(new D_MOEAD());
+		players.add(new D_NSGAII());
+		players.add(new D_SPEA2());
+		players.add(new D_PESAII());
+		players.add(new D_IBEA());*/
+		
+		players.add(new D_MOEAD_STM());
 		players.add(new D_NSGAIII());
 		players.add(new D_SPEA2());
-		players.add(new D_GDE3());
+		players.add(new D_PESAII());
 		players.add(new D_IBEA());
 
 		MOAlgorithm.setRunWithOptimalParameters(true);
@@ -46,8 +55,13 @@ public class IEEEexperiment {
 		indicators.add(IndicatorName.Epsilon);
 		indicators.add(IndicatorName.MaximumSpread);
 		indicators.add(IndicatorName.R2);
+		
+		//MOAlgorithm.setCaching(Cache.RandomPermutation);
+		long initTime = System.currentTimeMillis();
 
-		RatingEnsemble re = new RatingEnsemble(indicators, 1e-8, true); //Create banchmark
+
+
+		RatingEnsemble re = new RatingEnsemble(indicators, 1e-7, true); //Create banchmark
 		for (MOAlgorithm al:players) {
 			ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
 			re.registerAlgorithm(al);
@@ -56,9 +70,12 @@ public class IEEEexperiment {
 		re.run(ra, ba, 30); //repeat competition 50X
 		ArrayList<Player> list = new ArrayList<Player>();
 		list.addAll(ra.recalcRangs()); //new ranks
+		
+		long estimatedTime = System.currentTimeMillis() - initTime;
+		System.out.println("Total execution time: "+estimatedTime + "ms");
 
-		Reporting.saveLeaderboard(list, "D:\\Benchmark results\\IEEE_benchmark_leaderboard_rand.txt");
-    	Reporting.createLatexTable(list, "D:\\Benchmark results\\IEEE_benchmark_table_rand.tex");
+		Reporting.saveLeaderboard(list, "D:\\Benchmark results\\IEEE\\IEEE_benchmark_leaderboard_rand_DTLZ_2_3obj.txt");
+    	Reporting.createLatexTable(list, "D:\\Benchmark results\\IEEE\\IEEE_benchmark_table_rand_DTLZ_2_3obj.tex");
 
 		for (Player p: list) System.out.println(p); //print ranks
 	}

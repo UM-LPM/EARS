@@ -3,15 +3,15 @@ package org.um.feri.ears.qualityIndicator;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 
-public class UniformDistribution extends QualityIndicator{
+public class UniformDistribution<T extends Number> extends QualityIndicator<T>{
 
-	public UniformDistribution(DoubleMOProblem problem) {
-		super(problem);
+	public UniformDistribution(int num_obj) {
+		super(num_obj);
 		name = "Uniform Distribution";
 	}
 	
 	@Override
-	public double evaluate(ParetoSolution front) {
+	public double evaluate(ParetoSolution<T> front) {
 		
 		double sigma_share;
 		
@@ -35,7 +35,7 @@ public class UniformDistribution extends QualityIndicator{
 	}
 
 	@Override
-	public int compare(ParetoSolution front1, ParetoSolution front2, Double epsilon) {
+	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
 		return 0;
 	}
 

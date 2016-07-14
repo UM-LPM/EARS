@@ -12,7 +12,7 @@ import org.um.feri.ears.util.PointComparator;
 /**
  * Created by ajnebro on 2/2/15.
  */
-public class WfgHypervolume<T> extends QualityIndicator<T>{
+public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 	
 	private double offset = 0.0;
 	static final int OPT = 2;
@@ -23,14 +23,14 @@ public class WfgHypervolume<T> extends QualityIndicator<T>{
 	private int currentDimension;
 	private Comparator<MOSolutionBase<T>> pointComparator;
 
-	public WfgHypervolume(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public WfgHypervolume(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		
 		name = "WFG Hypervolume";
 		maximizing = false;
 		currentDeep = 0;
-		currentDimension = moProblemBase.getNumberOfObjectives();
-		numberOfObjectives = moProblemBase.getNumberOfObjectives();
+		currentDimension = num_obj;
+		numberOfObjectives = num_obj;
 		pointComparator = new PointComparator();
 
 		referencePoint = new MOSolutionBase<T>(numberOfObjectives);

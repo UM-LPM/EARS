@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 
-public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>{
+public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> extends TaskBase<P>{
 	
     /**
      * Task constructor for multiobjective optimization.
@@ -44,7 +44,6 @@ public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>
 	}
 	
 	/**
-	 * Use only for multiobjective problems! 
 	 * @return The number of objectives
 	 */
 	public int getNumberOfObjectives() {
@@ -52,7 +51,6 @@ public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>
 	}
 	
 	/**
-	 * Use only for multiobjective problems! 
 	 * @return The file name of the problem
 	 */
 	public String getProblemFileName() {
@@ -67,10 +65,6 @@ public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>
 	
 	public boolean isFirstBetter(ParetoSolution<T> x, ParetoSolution<T> y, QualityIndicator<T> qi) {
 		return p.isFirstBetter(x, y, qi);
-	}
-	
-	public P getProblem(){
-		return p;
 	}
 	
 	/**
@@ -106,5 +100,15 @@ public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>
         return "Task [stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", numberOfEvaluations=" + numberOfEvaluations + ", epsilon="
                 + epsilon + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                 + precisionOfRealNumbersInDecimalPlaces + ", p=" + p + "]";
+    }
+    
+    /**
+     * Returns a string containing all the tasks information that doesen't change.
+     * @return
+     */
+    public String taskInfo() {
+        return "Task = " + p +" stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", epsilon="
+                + epsilon + ", precisionOfRealNumbersInDecimalPlaces="
+                + precisionOfRealNumbersInDecimalPlaces;
     }
 }

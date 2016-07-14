@@ -156,7 +156,7 @@ public class EpsilonTest {
 					ParetoSolution best = alg.run(task);
 					indiCounter = 0;
 					for (IndicatorName name : indi) {
-						QualityIndicator qi = IndicatorFactory.createIndicator(name, task.getProblem());
+						QualityIndicator qi = IndicatorFactory.createIndicator(name, task.getNumberOfObjectives(), task.getProblemFileName());
 						best.evaluate(qi);
 						//sb.append(best.getEval()+";");
 						data[indiCounter][i] = best.getEval();

@@ -42,7 +42,10 @@ public class ZDT4 extends DoubleMOProblem{
 		lowerLimit = new ArrayList<Double>(numberOfDimensions);
 
 
-		for (int i = 0; i < numberOfDimensions; i++) {
+		lowerLimit.add(0.0);
+		upperLimit.add(1.0);
+		
+		for (int i = 1; i < numberOfDimensions; i++) {
 			lowerLimit.add(-5.0);
 			upperLimit.add(5.0);
 		}

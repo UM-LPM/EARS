@@ -15,12 +15,12 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  * evolutionary algorithms: Empirical results,"" IEEE Trans. Evol. Comput.,
  * vol. 8, no. 2, pp. 173–195, Jun. 2000.
  */
-public class MaximumSpread<T> extends QualityIndicator<T> {
+public class MaximumSpread<T extends Number> extends QualityIndicator<T> {
 
 	static final double pow_ = 2.0;
 	
-	public MaximumSpread(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public MaximumSpread(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Maximum Spread";
 	}
 	

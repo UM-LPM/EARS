@@ -33,6 +33,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.DominanceComparator;
 import org.um.feri.ears.util.NonDominatedSolutionList;
 import org.um.feri.ears.util.Util;
@@ -95,9 +96,87 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 				"OMOPSO",
 				"\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
 				"OMOPSO", "Nondominated Sorting Genetic Algorithm II ");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ETA, eta+"");
+		ai.addParameter(EnumAlgorithmParameters.P_M, (1.0 / num_var)+"");
 	}
 
+	
+	@Override
+	public ParetoSolution<Double> run(DoubleMOTask taskProblem) throws StopCriteriaException {
+		task = taskProblem;
+		num_var = task.getDimensions();
+		num_obj = task.getNumberOfObjectives();
+		
+		if(optimalParam)
+		{
+			switch(num_obj){
+			case 1:
+			{
+				swarmSize = 100;
+				archiveSize = 100;
+				break;
+			}
+			case 2:
+			{
+				swarmSize = 100;
+				archiveSize = 100;
+				break;
+			}
+			case 3:
+			{
+				swarmSize = 300;
+				archiveSize = 300;
+				break;
+			}
+			default:
+			{
+				swarmSize = 500;
+				archiveSize = 500;
+				break;
+			}
+			}
+		}
+		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
+
+		if(caching != Cache.None && caching != Cache.Save)
+		{
+			ParetoSolution<Double> next = returnNext(task.taskInfo());
+			if(next != null)
+				return next;
+			else
+				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
+		}
+		
+		long initTime = System.currentTimeMillis();
+		init();
+		start();
+		long estimatedTime = System.currentTimeMillis() - initTime;
+		System.out.println("Total execution time: "+estimatedTime + "ms");
+
+		if(save_data)
+		{
+			epsilonArchive.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
+			epsilonArchive.printFeasibleFUN("FUN_NSGAII");
+			epsilonArchive.printVariablesToFile("VAR");
+			epsilonArchive.printObjectivesToCSVFile("FUN");
+		}
+		if(display_data)
+		{
+			epsilonArchive.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
+			epsilonArchive.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
+		}
+		
+		if(caching == Cache.Save)
+		{
+			Util.addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), epsilonArchive);
+		}
+		
+		return epsilonArchive;
+	}
 
 	protected void initializeLeader(ParetoSolution<Double> swarm) {
 		for (MOSolutionBase<Double> solution : swarm) {
@@ -213,66 +292,6 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 				epsilonArchive.add(particle.copy());
 			}
 		}
-	}
-
-
-	@Override
-	public ParetoSolution<Double> run(DoubleMOTask taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
-
-		
-		if(optimalParam)
-		{
-			switch(num_obj){
-			case 1:
-			{
-				swarmSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 2:
-			{
-				swarmSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 3:
-			{
-				swarmSize = 300;
-				archiveSize = 300;
-				break;
-			}
-			default:
-			{
-				swarmSize = 500;
-				archiveSize = 500;
-				break;
-			}
-			}
-		}
-		
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		if(save_data)
-		{
-			epsilonArchive.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			epsilonArchive.printFeasibleFUN("FUN_NSGAII");
-			epsilonArchive.printVariablesToFile("VAR");
-			epsilonArchive.printObjectivesToCSVFile("FUN");
-		}
-		if(display_data)
-		{
-			epsilonArchive.displayAllUnaryQulaityIndicators(task.getProblem());
-			epsilonArchive.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		}
-		return epsilonArchive;
 	}
 	
 	protected void init() throws StopCriteriaException {
