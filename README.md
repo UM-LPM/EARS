@@ -1,4 +1,4 @@
-Evolutionary Algorithms Rating System
+Evolutionary Algorithms Rating System 2.0
 =====================================
 
 EARS in action http://earatingsystem.appspot.com
