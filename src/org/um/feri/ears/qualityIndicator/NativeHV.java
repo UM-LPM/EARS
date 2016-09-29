@@ -37,7 +37,6 @@ public class NativeHV<T extends Number> extends QualityIndicator<T>{
 		return invokeNativeHypervolume(invertedFront, true);
 	}
 	
-
 	/**
 	 * Since hypervolume calculation is expensive, this method provides the
 	 * ability to execute a native process to calculate hypervolume. If
