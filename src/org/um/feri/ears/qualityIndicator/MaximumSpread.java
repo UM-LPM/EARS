@@ -26,7 +26,13 @@ public class MaximumSpread<T extends Number> extends QualityIndicator<T> {
 	
 	@Override
 	public double evaluate(ParetoSolution<T> population) {
-		double[][] front = population.writeObjectivesToMatrix();
+		
+		//double[][] front = population.writeObjectivesToMatrix();
+		
+		double[][] normalizedApproximation;
+
+		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
+		
 		double MS = 0.0;
 		double sum = 0.0;
 		double PF_true_max, PF_true_min, PF_known_max, PF_known_min;
@@ -35,7 +41,7 @@ public class MaximumSpread<T extends Number> extends QualityIndicator<T> {
 			PF_true_max = PF_known_max = Double.MIN_VALUE;
 			PF_true_min = PF_known_min = Double.MAX_VALUE;
 			
-			for (double[] ds : referenceSet) {
+			for (double[] ds : normalizedReference) {
 				if(ds[i] > PF_true_max)
 					PF_true_max = ds[i];
 				
@@ -43,7 +49,7 @@ public class MaximumSpread<T extends Number> extends QualityIndicator<T> {
 					PF_true_min = ds[i];
 			}
 			
-			for (double[] ds : front) {
+			for (double[] ds : normalizedApproximation) {
 				if(ds[i] > PF_known_max)
 					PF_known_max = ds[i];
 				

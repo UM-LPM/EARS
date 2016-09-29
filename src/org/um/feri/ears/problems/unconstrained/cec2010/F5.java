@@ -37,10 +37,8 @@ public class F5 extends Problem {
 		rastrigin_shifted = new RastriginShifted(numberOfDimensions);
 		rastrigin_rotated= new RastriginRotated(numberOfDimensions);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -5.0);
-		Collections.fill(upperLimit, 10.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
 		
 		name = "F05 Single-group Shifted and m-rotated Rastrigin's Function";
 		

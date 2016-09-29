@@ -55,10 +55,9 @@ public class ProblemAckley extends Problem {
 	// http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page295.htm
 	public ProblemAckley(int d) {
 		super(d,0);
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -32.0);
-		Collections.fill(upperLimit, 64.0);
+		
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 64.0));
 
 		name = "Ackley";
 	}

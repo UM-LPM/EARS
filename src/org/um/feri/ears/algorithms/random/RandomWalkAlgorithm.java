@@ -56,7 +56,7 @@ public class RandomWalkAlgorithm extends Algorithm {
 	boolean debug=false;
 	public RandomWalkAlgorithm() {
 		this.debug = false;
-		ai = new AlgorithmInfo("","","RWSi","Random Walk Simple");
+		ai = new AlgorithmInfo("RWSi","","RWSi","Random Walk Simple");
 		au =  new Author("matej", "matej.crepinsek at uni-mb.si");
 	}
 	public RandomWalkAlgorithm(boolean d) {
@@ -65,7 +65,7 @@ public class RandomWalkAlgorithm extends Algorithm {
 	}
 	
 	@Override
-	public DoubleSolution run(Task taskProblem) throws StopCriteriaException{
+	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException{
 		DoubleSolution ii;
 			i = taskProblem.getRandomIndividual();
 			if (debug) System.out.println(taskProblem.getNumberOfEvaluations()+" "+i);

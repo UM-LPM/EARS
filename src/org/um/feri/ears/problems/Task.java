@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.um.feri.ears.mine.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 
 /**
@@ -82,7 +83,9 @@ public class Task extends TaskBase<Problem> {
 
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
 			incEvaluate();
-			return p.getRandomSolution();
+			DoubleSolution tmpSolution = p.getRandomSolution();
+			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+			return tmpSolution;
 		}
 
 		return null;
@@ -214,7 +217,10 @@ public class Task extends TaskBase<Problem> {
 		
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
 			incEvaluate();
-			return new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
+			
+			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
+			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+			return tmpSolution;
 		}
 		if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
 			if (isGlobal)
@@ -224,7 +230,9 @@ public class Task extends TaskBase<Problem> {
 			if (Math.abs(d - p.getOptimumEval()) <= epsilon) {
 				isGlobal = true;
 			}
-			return new DoubleSolution(ds,d,p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
+			DoubleSolution tmpSolution = new DoubleSolution(ds,d,p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
+			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+			return tmpSolution;
 		}
 		assert false; // Execution should never reach this point!
 		return null; //error

@@ -31,4 +31,9 @@ public class AlgorithmRunTime {
     public MeanStDev getStandardDev() {
         return new MeanStDev(durations);
     }
+    
+    public double getLastDuration()
+    {
+    	return durations.get(durations.size() - 1);
+    }
 }

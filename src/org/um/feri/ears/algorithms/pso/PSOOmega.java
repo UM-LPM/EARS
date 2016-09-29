@@ -39,7 +39,7 @@ public class PSOOmega extends Algorithm  {
 	}
 	
 	@Override
-	public DoubleSolution run(Task taskProblem) throws StopCriteriaException {
+	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
 		initPopulation(taskProblem);
 		double rp, rg;
 		double v[];

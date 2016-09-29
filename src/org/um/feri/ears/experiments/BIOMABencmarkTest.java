@@ -32,8 +32,8 @@ public class BIOMABencmarkTest {
 	        ArrayList<MOAlgorithm> players = new ArrayList<MOAlgorithm>();
 	        players.add(new D_MOEAD(300));
 	        players.add(new D_NSGAII(300));
-	        players.add(new D_SPEA2(300,300));
-	        players.add(new D_PESAII(300));
+	        /*players.add(new D_SPEA2(300,300));
+	        players.add(new D_PESAII(300));*/
 	        players.add(new D_IBEA(300,300));
 	        MOAlgorithm.setRunWithOptimalParameters(true);
 	        

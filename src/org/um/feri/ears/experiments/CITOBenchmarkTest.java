@@ -40,17 +40,17 @@ public class CITOBenchmarkTest {
 		ResultArena ra = new ResultArena(100);
 
 		ArrayList<IndicatorName> indicators = new ArrayList<IndicatorName>();
-		indicators.add(IndicatorName.NativeHV);
-		indicators.add(IndicatorName.IGD);
-		indicators.add(IndicatorName.IGDPlus);
-		indicators.add(IndicatorName.Epsilon);
-		indicators.add(IndicatorName.R2);
+//		indicators.add(IndicatorName.NativeHV);
+//		indicators.add(IndicatorName.IGD);
+//		indicators.add(IndicatorName.IGDPlus);
+//		indicators.add(IndicatorName.Epsilon);
+//		indicators.add(IndicatorName.R2);
 		indicators.add(IndicatorName.MaximumSpread);
-		indicators.add(IndicatorName.GeneralizedSpread);
-		indicators.add(IndicatorName.CovergeOfTwoSets);
-		indicators.add(IndicatorName.GD);
-		indicators.add(IndicatorName.MPFE);
-		indicators.add(IndicatorName.Spacing);
+//		indicators.add(IndicatorName.GeneralizedSpread);
+//		indicators.add(IndicatorName.CovergeOfTwoSets);
+//		indicators.add(IndicatorName.GD);
+//		indicators.add(IndicatorName.MPFE);
+//		indicators.add(IndicatorName.Spacing);
 
 		HashMap<IndicatorName, ArrayList<Player>> results = new HashMap<IndicatorName, ArrayList<Player>>();
 
@@ -70,12 +70,12 @@ public class CITOBenchmarkTest {
 			list.addAll(ra.recalcRangs()); //new ranks
 			
 			results.put(indicatorName, list);
-			Reporting.createLatexTable(list, "D:\\Benchmark results\\AppliedSoftComputing\\benchmark_CITO"+indicatorName+".tex");
+			Reporting.createLatexTable(list, "D:\\Benchmark results\\AppliedSoftComputing\\benchmark_CITO_"+indicatorName+".tex");
 			Reporting.saveLeaderboard(list, "D:\\Benchmark results\\AppliedSoftComputing\\benchmark_leaderboard_"+indicatorName+".txt");
 
 			for (Player p: list) System.out.println(p); //print ranks
 		}
 		
-		Reporting.createLatexTable(results, "D:\\Benchmark results\\AppliedSoftComputing\\AppliedSoftComputing_benchmark_CITO_all.tex");
+		//Reporting.createLatexTable(results, "D:\\Benchmark results\\AppliedSoftComputing\\AppliedSoftComputing_benchmark_CITO_all.tex");
 	}
 }

@@ -108,7 +108,10 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 				mut.execute(child, task);
 
 				if (task.isStopCriteria())
+				{
+					best = finalSelection(populationSize);
 					return;
+				}
 				// Evaluation
 				task.eval(child);
 
@@ -140,6 +143,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 
 		} while (!task.isStopCriteria());
 		//System.out.println(gen);
+		best = finalSelection(populationSize);
 	}
 	
 	//initialize the nadir point

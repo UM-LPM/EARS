@@ -8,7 +8,7 @@ import org.um.feri.ears.problems.moo.functions.UP7_1;
 import org.um.feri.ears.problems.moo.functions.UP7_2;
 
 
-public class UnconstrainedProblem7 extends DoubleMOProblem {
+public class UnconstrainedProblem7 extends CEC2009 {
 
 	/**
 	 * Constructor. Creates a default instance of problem CEC2009_UnconstrainedProblem7 (30 decision variables)

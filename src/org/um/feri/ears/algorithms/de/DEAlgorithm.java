@@ -227,7 +227,7 @@ public class DEAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution run(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
         this.task = taskProblem;
         init(); // referesh all data
         pold = c; /* old population (generation G) */

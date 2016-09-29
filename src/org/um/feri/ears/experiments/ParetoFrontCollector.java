@@ -90,7 +90,7 @@ public class ParetoFrontCollector {
 				task = new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 600000, 0.0001, mop);
 
 				try {
-					best = alg.run(task);
+					best = alg.execute(task);
 					for (MOSolutionBase<Integer> moSolution : best) {
 						archive.add(moSolution);
 					}

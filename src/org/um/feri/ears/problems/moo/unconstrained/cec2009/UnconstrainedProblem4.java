@@ -7,7 +7,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.UP4_1;
 import org.um.feri.ears.problems.moo.functions.UP4_2;
 
-public class UnconstrainedProblem4 extends DoubleMOProblem {
+public class UnconstrainedProblem4 extends CEC2009 {
 	
 	/**
 	 * Constructor. Creates a default instance of problem CEC2009_UnconstrainedProblem4 (30 decision variables)
@@ -45,7 +45,6 @@ public class UnconstrainedProblem4 extends DoubleMOProblem {
 
 	@Override
 	public void evaluateConstraints(MOSolutionBase<Double> solution) {
-		// TODO Auto-generated method stub
 		
 	}
 }

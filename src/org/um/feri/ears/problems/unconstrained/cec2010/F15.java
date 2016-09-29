@@ -34,11 +34,9 @@ public class F15 extends Problem {
 		super(d,0);
 		rastrigin_rotated= new RastriginRotated(numberOfDimensions);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -5.0);
-		Collections.fill(upperLimit, 10.0);
-		
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+
 		name = "F15 D/m-group Shifted and m-rotated Rastrigin's Function";
 		
 		P = new int[numberOfDimensions];

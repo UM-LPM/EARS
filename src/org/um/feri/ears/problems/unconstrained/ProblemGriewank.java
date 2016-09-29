@@ -55,20 +55,17 @@ public class ProblemGriewank  extends Problem{
 	public ProblemGriewank(int d) {
 		super(d,0);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -50.0);
-		Collections.fill(upperLimit, 100.0);
-		
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -50.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+
 		name ="Griewank";
 	}
 	public ProblemGriewank(int d, double i) {
 		super(d,0);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -i);
-		Collections.fill(upperLimit, i*2.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -i));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, i*2.0));
+
 		name ="Griewank";
 	}
 	

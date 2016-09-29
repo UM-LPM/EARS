@@ -49,9 +49,6 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	ParetoSolution<Type> offspringPopulation ;
 	ParetoSolution<Type> union               ;
 
-	int num_var;
-	int num_obj;
-	
 	int populationSize ;
     int selectionProcedure;
     Ranking<Type> ranking;
@@ -87,52 +84,12 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	}
 	
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
-		if(caching != Cache.None && caching != Cache.Save)
-		{
-			ParetoSolution<Type> next = returnNext(task.taskInfo());
-			if(next != null)
-				return next;
-			else
-				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
-		}
-		
-		init();
-		start();
-		
-		ParetoSolution<Type> best = ranking.getSubfront(0);
-
-		if(display_data)
-		{
-			best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-		}
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-			best.printFeasibleFUN("FUN_DEMO");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		
-		if(caching == Cache.Save)
-		{
-			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), best);
-		}
-		
-		return best;
-	}
-	
-	private void init() {
+	protected void init() {
 		population = new ParetoSolution<Type>(populationSize * 2);
 	}
 	
-	public void start() throws StopCriteriaException {
+	@Override
+	protected void start() throws StopCriteriaException {
 		
 		distance = new Distance<Type>();
 		dominance = new DominanceComparator<Type>();
@@ -237,7 +194,8 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
           }
 
           // Return the first non-dominated front
-          ranking = new Ranking(population);	
+          ranking = new Ranking(population);
+          best = ranking.getSubfront(0);
 	}
 	
 	private boolean areSolutionsTheSame(MOSolutionBase<Type> parent, MOSolutionBase<Type> child) {

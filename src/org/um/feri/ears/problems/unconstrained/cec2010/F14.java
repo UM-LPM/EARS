@@ -34,10 +34,8 @@ public class F14 extends Problem {
 		super(d,0);
 		elliptic_rotated = new EllipticRotated(numberOfDimensions);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -100.0);
-		Collections.fill(upperLimit, 200.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
 		
 		name = "F14 D/m-group Shifted and m-rotated Elliptic Function";
 		

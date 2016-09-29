@@ -1,54 +1,23 @@
 package org.um.feri.ears.problems.moo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.algorithms.moo.ibea.D_IBEA;
-import org.um.feri.ears.algorithms.moo.ibea.IBEA;
+import org.um.feri.ears.algorithms.moo.ibea.I_IBEA;
 import org.um.feri.ears.algorithms.moo.moead.I_MOEAD;
-import org.um.feri.ears.algorithms.moo.moead.MOEAD;
-import org.um.feri.ears.algorithms.moo.moead_dra.MOEAD_DRA;
-import org.um.feri.ears.algorithms.moo.moead_dra.MOEAD_STM;
 import org.um.feri.ears.algorithms.moo.nsga2.I_NSGAII;
-import org.um.feri.ears.algorithms.moo.nsga2.NSGAII;
-import org.um.feri.ears.algorithms.moo.nsga3.D_NSGAIII;
-import org.um.feri.ears.algorithms.moo.nsga3.NSGAIII;
-import org.um.feri.ears.algorithms.moo.pesa2.D_PESAII;
-import org.um.feri.ears.algorithms.moo.pesa2.PESAII;
-import org.um.feri.ears.algorithms.moo.pesa2MOEA.D_PESA2;
-import org.um.feri.ears.algorithms.moo.pso.OMOPSO;
-import org.um.feri.ears.algorithms.moo.spea2.SPEA2;
-import org.um.feri.ears.benchmark.DoubleEliminationTournament;
+import org.um.feri.ears.algorithms.moo.pesa2.I_PESAII;
+import org.um.feri.ears.algorithms.moo.spea2.I_SPEA2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
-import org.um.feri.ears.operators.PolynomialMutation;
-import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.IntegerMOTask;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.moo.dtlz.DTLZ1;
-import org.um.feri.ears.problems.moo.dtlz.DTLZ2;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
-import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem10;
-import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem2;
-import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem3;
-import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem4;
-import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem5;
-import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem6;
-import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem7;
-import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8;
-import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
-import org.um.feri.ears.problems.moo.wfg.WFG2;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
-import org.um.feri.ears.qualityIndicator.GenerationalDistance;
-import org.um.feri.ears.qualityIndicator.InvertedGenerationalDistance;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Util;
 
 public class Main4Run {
@@ -109,6 +78,8 @@ public class Main4Run {
     	String data ="";
     	
     	
+		//MOAlgorithm.setCaching(Cache.Random);
+		MOAlgorithm.setRunWithOptimalParameters(true);
     	
     	for (DoubleMOTask task : tasks) {
     		
@@ -116,31 +87,31 @@ public class Main4Run {
     		CrossoverOperator<Integer, IntegerMOTask> cross = new PMXCrossover();
     		MutationOperator<Integer, IntegerMOTask> mut = new PermutationSwapMutation(0.2);
 
-    		NSGAIII nsgaiii = new NSGAIII<IntegerMOTask,Integer>(cross, mut);
-    		D_PESA2 mpesa = new D_PESA2();
-
-    		I_MOEAD moead = new I_MOEAD();
-    		D_NSGAIII nsga = new D_NSGAIII();
-
-    		D_IBEA ibea = new D_IBEA(200,200);
-
-    		ibea.setDisplayData(true);
-    		ibea.setSaveData(true);
     		
+    		I_NSGAII nsga = new I_NSGAII();
+    		I_IBEA ibea = new I_IBEA();
+    		I_MOEAD moead = new I_MOEAD();
+    		I_PESAII pesa2 = new I_PESAII();
+    		I_SPEA2 spea2 = new I_SPEA2();
+    		
+    		nsga.setDisplayData(true);
             try {
             	
             	// OA_AJHsqldb OO_BCEL OO_MyBatis
-            	//ParetoSolution best1 = nsgaiii.run(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new CITOProblem("OO_MyBatis")));
+            
+            	ParetoSolution best = nsga.execute(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new CITOProblem("OO_MyBatis")));
             	
-            	ParetoSolution best = ibea.run(new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
+            	//ParetoSolution best = moead.execute(new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
             	
-            	best.printFeasibleFUN("D:\\Benchmark results\\IBEA_UF1.csv");
+            	//best.printFeasibleFUN("D:\\Benchmark results\\MOEAD.dat");
+            	
+            	//best.printFeasibleFUN("D:\\Benchmark results\\IBEA_UF1.csv");
             	//moead.run(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new CITOProblem("OO_MyBatis")));
             	
-            	best.evaluate(new InvertedGenerationalDistance<Double>(task.getNumberOfObjectives(), task.getProblemFileName()));
+            	/*best.evaluate(new InvertedGenerationalDistance<Double>(task.getNumberOfObjectives(), task.getProblemFileName()));
             	System.out.println(best.getEval());
             	best.evaluate(new GenerationalDistance<Double>(task.getNumberOfObjectives(), task.getProblemFileName()));
-            	System.out.println(best.getEval());
+            	System.out.println(best.getEval());*/
             	
                 //ParetoSolution best2 = moeadtsm.run(new MOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new DTLZ2(3)));
             	

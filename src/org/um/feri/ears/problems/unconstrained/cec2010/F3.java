@@ -30,10 +30,8 @@ public class F3 extends Problem {
 		super(d,0);
 		ackley_shifted = new AckleyShifted(numberOfDimensions);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -32.0);
-		Collections.fill(upperLimit, 64.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 64.0));
 		
 		name = "F03 Shifted Ackley's Function";
 		

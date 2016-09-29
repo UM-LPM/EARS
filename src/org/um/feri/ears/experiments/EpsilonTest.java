@@ -61,7 +61,7 @@ public class EpsilonTest {
 	    //indi.add(IndicatorName.EpsilonBin);
 	    indi.add(IndicatorName.GD);
 	    //indi.add(IndicatorName.GeneralizedSpread);
-	    indi.add(IndicatorName.Hypervolume);
+	    //indi.add(IndicatorName.Hypervolume);
 	    indi.add(IndicatorName.IGD);
 	    indi.add(IndicatorName.IGDPlus);
 	    //indi.add(IndicatorName.MaximumSpread);
@@ -132,7 +132,7 @@ public class EpsilonTest {
     	
     	for(DoubleMOProblem mop : problems)
     	{
-    		sb.append(mop.name+" ");
+    		sb.append(mop.getName()+" ");
     	}
     	sb.append(";\n;");
     	
@@ -153,7 +153,7 @@ public class EpsilonTest {
 				
 
 				try {
-					ParetoSolution best = alg.run(task);
+					ParetoSolution best = alg.execute(task);
 					indiCounter = 0;
 					for (IndicatorName name : indi) {
 						QualityIndicator qi = IndicatorFactory.createIndicator(name, task.getNumberOfObjectives(), task.getProblemFileName());

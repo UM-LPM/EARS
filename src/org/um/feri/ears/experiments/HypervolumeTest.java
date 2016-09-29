@@ -17,7 +17,7 @@ public class HypervolumeTest {
 		D_MOEAD_DRA moead = new D_MOEAD_DRA();
     	try {
     		
-    		ParetoSolution best = moead.run(task);
+    		ParetoSolution best = moead.execute(task);
 			best.evaluate(new NativeHV(task.getNumberOfObjectives(), task.getProblemFileName()));
 			System.out.println(best.getEval());
 			

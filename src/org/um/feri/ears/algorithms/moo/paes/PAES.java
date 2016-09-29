@@ -29,8 +29,6 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	AdaptiveGridArchive<Type> archive;
 	int archiveSize = 100;
 	int bisections = 5;
-	int num_var;
-	int num_obj;
 	
 	MutationOperator<Type, MOTask> mut;
 
@@ -49,61 +47,18 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
-		if(caching != Cache.None && caching != Cache.Save)
-		{
-			ParetoSolution<Type> next = returnNext(task.taskInfo());
-			if(next != null)
-				return next;
-			else
-				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
-		}
-		
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		if(display_data)
-		{
-			archive.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
-			archive.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-		}
-		if(save_data)
-		{
-			archive.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-			archive.printFeasibleFUN("FUN_PEAS");
-			archive.printVariablesToFile("VAR");
-			archive.printObjectivesToCSVFile("FUN");
-		}
-		
-		if(caching == Cache.Save)
-		{
-			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), archive);
-		}
-		
-		return archive;
-	}
-
-	@Override
 	public void resetDefaultsBeforNewRun() {
 
 	}
 
-	private void init() {
+	@Override
+	protected void init() {
 		archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, num_obj);
 	}
 
 	public void start() throws StopCriteriaException {
 		
 		Comparator<MOSolutionBase<Type>> dominance;
-
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
 		dominance = new DominanceComparator();
 
 		if (task.isStopCriteria())
@@ -143,6 +98,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 			 */
 		} while (!task.isStopCriteria());
 
+		best = archive;
 	}
 
 	public MOSolutionBase<Type> test(MOSolutionBase<Type> solution,

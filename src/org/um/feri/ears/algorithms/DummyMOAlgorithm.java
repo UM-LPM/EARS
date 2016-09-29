@@ -27,7 +27,7 @@ public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOA
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
+	public ParetoSolution<Type> execute(T taskProblem) throws StopCriteriaException {
 		String problemName = taskProblem.getProblemFileName();
 		
 		if(results.containsKey(problemName.toLowerCase()))
@@ -106,6 +106,18 @@ public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOA
 
 			}
 		}
+	}
+
+	@Override
+	protected void init() throws StopCriteriaException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void start() throws StopCriteriaException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -10,6 +10,10 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem>{
 		super(stop, eval, epsilon, p);
 	}
 	
+	public IntegerMOTask(IntegerMOTask task) {
+		super(task);
+	}
+
 	public MOSolutionBase<Integer> getRandomMOIndividual() throws StopCriteriaException {
 
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {

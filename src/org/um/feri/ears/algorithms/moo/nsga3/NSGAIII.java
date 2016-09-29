@@ -48,9 +48,7 @@ import org.um.feri.ears.util.Util;
  */
 public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
-	int populationSize;
-	int num_var;
-	int num_obj;
+	int populationSize=100;
 
 	double[][] lambda_; // reference points
 
@@ -88,77 +86,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
-
-		switch(num_obj){
-			case 1:
-			{
-				populationSize = 100;
-				break;
-			}
-			case 2:
-			{
-				populationSize = 100;
-				break;
-			}
-			case 3:
-			{
-				populationSize = 300;
-				break;
-			}
-			default:
-			{
-				populationSize = 500;
-				break;
-			}
-		}
-		
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
-
-		if(caching != Cache.None && caching != Cache.Save)
-		{
-			ParetoSolution<Type> next = returnNext(task.taskInfo());
-			if(next != null)
-				return next;
-			else
-				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
-		}
-
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		// Return the first non-dominated front
-		Ranking<Type> ranking = new Ranking<Type>(population);
-		ParetoSolution<Type> best = ranking.getSubfront(0);
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-			best.printFeasibleFUN("FUN_NSGAII");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		if(display_data)
-		{
-			best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-		}
-		
-		if(caching == Cache.Save)
-		{
-			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), best);
-		}
-		
-		return best;
-	}
-
-	public void start() throws StopCriteriaException {
+	protected void start() throws StopCriteriaException {
 		// Create the initial population
 		MOSolutionBase<Type> newSolution;
 		for (int i = 0; i < populationSize; i++) {
@@ -177,6 +105,10 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 		      offspringPopulation = reproduction(matingPopulation);
 		      population = replacement(population, offspringPopulation);
 		}
+		
+		// Return the first non-dominated front
+		Ranking<Type> ranking = new Ranking<Type>(population);
+		best = ranking.getSubfront(0);
 	}
 
 	private ParetoSolution<Type> selection(ParetoSolution<Type> population) {
@@ -261,8 +193,34 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 		return copy;
 	}
 
-	private void init() {
+	@Override
+	protected void init() {
 		
+		switch(num_obj){
+		case 1:
+		{
+			populationSize = 100;
+			break;
+		}
+		case 2:
+		{
+			populationSize = 100;
+			break;
+		}
+		case 3:
+		{
+			populationSize = 300;
+			break;
+		}
+		default:
+		{
+			populationSize = 500;
+			break;
+		}
+		}
+
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+
 		distance = new Distance();
 		bt2 = new BinaryTournament2<Type>();
 		sbx = new SBXCrossover(0.9, 20.0);

@@ -76,8 +76,6 @@ import org.um.feri.ears.util.Util;
 public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 	
 	int populationSize;
-	int num_var;
-	int num_obj;
 	
 	/**
 	 * Set to {@code true} to remove random permutations to make unit testing
@@ -195,44 +193,15 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
-		//TODO if unset
-		
-		init();
-		start();
-		
-		if(display_data)
-		{
-			population.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-			population.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
-		}
-		if(save_data)
-		{
-			population.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-			population.printFeasibleFUN("FUN_DBEA");
-			population.printVariablesToFile("VAR");
-			population.printObjectivesToCSVFile("FUN");
-		}
-		
-		return population;
-	}
-	
-	private void init() throws StopCriteriaException{
+	protected void init() throws StopCriteriaException{
 		initPopulation();
 		generateWeights();
 		preserveCorner();
 		initializeIdealPointAndIntercepts();
 	}
 	
-	private void start() throws StopCriteriaException {
-		
-		SBXCrossover sbx = new SBXCrossover();
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
+	@Override
+	protected void start() throws StopCriteriaException {
 		
 		do {
 			int[] permutation = Util.randomPermutation(population.size());
@@ -248,7 +217,10 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				mut.execute(offSpring[0], task);
 		
 				if (task.isStopCriteria())
+				{
+					best = population;
 					return;
+				}
 				// Evaluation
 				task.eval(offSpring[0]);
 		
@@ -262,6 +234,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 			// version
 			preserveCorner();
 		} while (!task.isStopCriteria());
+		best = population;
 	}
 
 	@Override

@@ -53,10 +53,9 @@ import org.um.feri.ears.problems.Problem;
 public class ProblemBeale  extends Problem{
 	public ProblemBeale() {
 		super(2,0);
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
-		Collections.fill(lowerLimit, -4.5);
-		Collections.fill(upperLimit, 9.0);
+		
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -4.5));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 9.0));
 		
 		name ="Beale function";
 	}

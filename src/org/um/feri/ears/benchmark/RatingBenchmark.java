@@ -53,6 +53,7 @@ import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.export.data.EDBenchmark;
 import org.um.feri.ears.export.data.EDTask;
+import org.um.feri.ears.mine.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.MOTask;
@@ -84,8 +85,10 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
                 if (printSingleRunDuration) {
             	  System.out.print(al.getID()+": ");
                 }
+                
+                GraphDataRecorder.SetContext(al,task);
 
-                DoubleSolution bestByALg = al.run(task); //check if result is fake!
+                DoubleSolution bestByALg = al.execute(task); //check if result is fake!
 
                 duration = System.currentTimeMillis()-start;
                 al.addRunDuration(duration);

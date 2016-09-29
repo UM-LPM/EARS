@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class SolutionBase <Type> {
@@ -44,7 +45,11 @@ public abstract class SolutionBase <Type> {
 	
 	public double[] getNewVariables() {
 		double[] xx = new double[variable.size()];
-		System.arraycopy(variable, 0, xx, 0, variable.size());
+
+		for (int i = 0; i < variable.size(); i++) {
+			xx[i] = (double) variable.get(i);
+		}
+		//System.arraycopy(variable, 0, xx, 0, variable.size());
 		return xx;
 	}
 

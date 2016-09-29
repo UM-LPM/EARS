@@ -54,10 +54,12 @@ public class ProblemBranin  extends Problem{
 	public ProblemBranin() {
 		super(2,0);
 
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+
 		lowerLimit.set(0, -5.0);
 		upperLimit.set(0, 15.0);
+		
 		lowerLimit.set(1, 0.0); //diff than in paper
 		upperLimit.set(1, 15.0);
 

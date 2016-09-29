@@ -18,7 +18,7 @@ public class RandomAlgorithmTest {
 		Algorithm test = new RandomWalkAlgorithm(true);
 		DoubleSolution best;
         try {
-            best = test.run(sphere);
+            best = test.execute(sphere);
             System.out.println("Best is:"+best);
         } catch (StopCriteriaException e) {
             e.printStackTrace();

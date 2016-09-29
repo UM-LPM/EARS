@@ -8,7 +8,7 @@ import org.um.feri.ears.problems.moo.functions.UP10_1;
 import org.um.feri.ears.problems.moo.functions.UP10_2;
 import org.um.feri.ears.problems.moo.functions.UP10_3;
 
-public class UnconstrainedProblem10 extends DoubleMOProblem {
+public class UnconstrainedProblem10 extends CEC2009 {
 
 	
 	/**

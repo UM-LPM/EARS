@@ -8,7 +8,7 @@ import org.um.feri.ears.problems.moo.functions.UP9_1;
 import org.um.feri.ears.problems.moo.functions.UP9_2;
 import org.um.feri.ears.problems.moo.functions.UP9_3;
 
-public class UnconstrainedProblem9 extends DoubleMOProblem {
+public class UnconstrainedProblem9 extends CEC2009 {
 
 	double epsilon;
 

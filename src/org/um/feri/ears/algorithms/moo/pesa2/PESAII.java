@@ -29,8 +29,6 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	int bisections = 5;
 	ParetoSolution<Type> population;
 	AdaptiveGridArchive<Type> archive;
-	int num_var;
-	int num_obj;
 	
 	CrossoverOperator<Type, MOTask> cross;
 	MutationOperator<Type, MOTask> mut;
@@ -54,10 +52,11 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
+	public void resetDefaultsBeforNewRun() {
+	}
+
+	@Override
+	protected void init() {
 		
 		if(optimalParam)
 		{
@@ -92,56 +91,14 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
 
-		if(caching != Cache.None && caching != Cache.Save)
-		{
-			ParetoSolution<Type> next = returnNext(task.taskInfo());
-			if(next != null)
-				return next;
-			else
-				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
-		}
 		
-
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-		
-		if(display_data)
-		{
-			archive.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
-			archive.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-		}
-		if(save_data)
-		{
-			archive.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-			archive.printFeasibleFUN("FUN_PESAII");
-			archive.printVariablesToFile("VAR");
-			archive.printObjectivesToCSVFile("FUN");
-		}
-		
-		if(caching == Cache.Save)
-		{
-			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), archive);
-		}
-		
-		return archive;
-	}
-
-	@Override
-	public void resetDefaultsBeforNewRun() {
-	}
-
-	private void init() {
 		archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, num_obj);
 		population = new ParetoSolution<Type>(populationSize);
 	}
 
-	public void start() throws StopCriteriaException {
+	@Override
+	protected void start() throws StopCriteriaException {
 
-		SBXCrossover sbx = new SBXCrossover(0.9, 20.0);
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
 		PESA2Selection<Type> selection = new PESA2Selection<Type>();
 
 		// Create the initial individual and evaluate it and his constraints
@@ -186,5 +143,7 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 			population.clear();
 
 		} while (!task.isStopCriteria());
+		
+		best = archive;
 	}
 }

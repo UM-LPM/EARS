@@ -17,7 +17,6 @@ public abstract class MOProblemBase<Type extends Number> extends ProblemBase<Typ
 	protected int numberOfObjectives;
 	protected String file_name;
 	
-	
 	public String getVersion() {
 		return version;
 	}

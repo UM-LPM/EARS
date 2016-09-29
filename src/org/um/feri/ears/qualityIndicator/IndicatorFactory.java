@@ -29,9 +29,9 @@ public final class IndicatorFactory<T> {
             qi = new GenerationalDistance<T>(num_obj, file_name);
             break;
             
-        case Hypervolume:
+        /*case Hypervolume:
             qi = new Hypervolume<T>(num_obj, file_name);
-            break;
+            break;*/
             
         case IGD:
             qi = new InvertedGenerationalDistance<T>(num_obj, file_name);

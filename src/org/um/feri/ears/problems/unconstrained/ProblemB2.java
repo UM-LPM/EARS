@@ -53,10 +53,10 @@ import org.um.feri.ears.problems.Problem;
 public class ProblemB2  extends Problem{
 		public ProblemB2() {
 			super(2,0);
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
-		Collections.fill(lowerLimit, -50.0);
-		Collections.fill(upperLimit, 100.0);
+
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -50.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+
 		
 		name ="B2 function";
 	}

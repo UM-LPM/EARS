@@ -36,12 +36,12 @@ public class RatingEnsembleTest {
     	indicators.add(IndicatorName.IGD);
     	//indicators.add(IndicatorName.IGDPlus);
     	//indicators.add(IndicatorName.GD);
-    	indicators.add(IndicatorName.Hypervolume);
+    	//indicators.add(IndicatorName.Hypervolume);
     	//indicators.add(IndicatorName.Spacing);
     	//indicators.add(IndicatorName.MaximumSpread);
     	//indicators.add(IndicatorName.CovergeOfTwoSets);
 
-        RatingEnsemble re = new RatingEnsemble(indicators, 1e-8, false); //Create banchmark
+        RatingEnsemble re = new RatingEnsemble(indicators, 1e-8, false, true); //Create banchmark
         for (MOAlgorithm al:players) {
         	ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
         	re.registerAlgorithm(al);

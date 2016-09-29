@@ -94,6 +94,11 @@ public abstract class TaskBase<T extends ProblemBase> {
         return p.getName();
     }
     
+    public int getProblemHashCode()
+    {
+    	return p.hashCode();
+    }
+    
     public void resetCounter() {
     	resetCount++;
         numberOfEvaluations = 0;

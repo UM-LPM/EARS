@@ -2,6 +2,7 @@ package org.um.feri.ears.algorithms.tlbo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
@@ -107,8 +108,17 @@ public class TLBOAlgorithm extends Algorithm {
             for (int j = i + 1; j < pop_size; j++) {
                 if (task.isStopCriteria())
                     return; // end jump out
-                System.arraycopy(population[i].getVariables(), 0, tmp1, 0, num_var);
-                System.arraycopy(population[j].getVariables(), 0, tmp2, 0, num_var);
+                //System.arraycopy(population[i].getVariables(), 0, tmp1, 0, num_var);
+                //System.arraycopy(population[j].getVariables(), 0, tmp2, 0, num_var);
+        		
+                for (int k = 0; k < population[i].getVariables().size(); k++) {
+        			tmp1[k] = (double) population[i].getVariables().get(k);
+        		}
+                for (int l = 0; l < population[j].getVariables().size(); l++) {
+        			tmp1[l] = (double) population[j].getVariables().get(l);
+        		}
+                
+                
                 Arrays.sort(tmp1);
                 Arrays.sort(tmp2);
                 if (Arrays.equals(tmp1, tmp2)) {
@@ -281,7 +291,7 @@ public class TLBOAlgorithm extends Algorithm {
      * Task)
      */
     @Override
-    public DoubleSolution run(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
         task = taskProblem;
         num_var = task.getDimensions();
         // max_eval = task.getMaxEvaluations();

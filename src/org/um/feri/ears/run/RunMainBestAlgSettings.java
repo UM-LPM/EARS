@@ -10,6 +10,7 @@ import org.um.feri.ears.algorithms.AlgorithmRunTime;
 import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.benchmark.RatingBenchmark;
+import org.um.feri.ears.mine.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.rating.Rating;
 
 public class RunMainBestAlgSettings extends RunMain {
@@ -35,6 +36,9 @@ public class RunMainBestAlgSettings extends RunMain {
     
     @Override
     public void addAlgorithm(Algorithm al, Rating startRating) {
+    	
+    	GraphDataRecorder.enabled = false;
+    	
     	System.out.println(al.getID());
     	long t=System.currentTimeMillis();
         allAlgorithmWithBestSettingsRating.add(startRating);
@@ -70,6 +74,8 @@ public class RunMainBestAlgSettings extends RunMain {
             benchMark.clearPlayers();
                                                                         // BEST
         } 
+        
+        GraphDataRecorder.enabled = true;
         System.out.println("Time min:"+((System.currentTimeMillis()-t)/60000));
         //System.out.println("End:"+al.getID());
     }

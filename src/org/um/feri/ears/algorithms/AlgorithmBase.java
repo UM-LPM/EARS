@@ -39,6 +39,12 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
         }
         art.addRunDuration(duration);
     }
+    
+    public String getLastRunDuration()
+    {
+    	return art.getLastDuration()+" s";
+    }
+    
     public void setAlgorithmTmpInfo(AlgorithmInfo aii) {
         tmpAi = ai;
         ai = aii;
@@ -58,9 +64,9 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
      * @return
      * @throws StopCriteriaException
      */
-	public abstract T2 run(T taskProblem) throws StopCriteriaException;
+	public abstract T2 execute(T taskProblem) throws StopCriteriaException;
 	
-	protected String getCacheKey(String taskString) {
+	public String getCacheKey(String taskString) {
 		
 		return "Algorithm = "+ ai.getPublishedAcronym() + " version: "+ version + ", " + shortAlgorithmInfo()+" " + taskString;
 	}

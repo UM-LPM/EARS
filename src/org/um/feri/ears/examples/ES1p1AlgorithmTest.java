@@ -20,7 +20,7 @@ public class ES1p1AlgorithmTest {
 		Algorithm test = new ES1p1sAlgorithm(true);
 		DoubleSolution best;
         try {
-            best = test.run(sphere);
+            best = test.execute(sphere);
             System.out.println("Best is:"+best);
         } catch (StopCriteriaException e) {
             e.printStackTrace();

@@ -47,7 +47,7 @@ public class SoilModelTest {
 		
 		try {
 			long initTime = System.currentTimeMillis();
-			DoubleSolution best = es.run(task);
+			DoubleSolution best = es.execute(task);
         	long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         	System.out.println("Execution time: "+estimatedTime + "s");
 			//System.out.println(Arrays.toString(best.getVariables()));

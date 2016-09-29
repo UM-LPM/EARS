@@ -49,23 +49,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
-import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 public class Util {
     public static DecimalFormat df0 = new DecimalFormat("####.##");
@@ -110,13 +106,13 @@ public class Util {
 		return s;
 	}
 	
-	public static <T extends Number> void addParetoToJSON(String listID, String file, ParetoSolution<T> best)
+	public static <T extends Number> void addParetoToJSON(String listID, String benchmark, String file, ParetoSolution<T> best)
 	{
 		ParetoSolutionCache cache = new ParetoSolutionCache();
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(String.format(JSON_DIR,file)));
+			BufferedReader br = new BufferedReader(new FileReader(String.format(JSON_DIR,file+"_"+benchmark)));
 			cache = gson.fromJson(br, ParetoSolutionCache.class); 
 		} catch (IOException e) 
 		{
@@ -132,43 +128,81 @@ public class Util {
 			{
 				return;
 			}
-			List<List<double[]>> solutions = cache.data.get(listID);
+			//List<List<double[]>> solutions = cache.data.get(listID);
+			List<ParetoWithEval> pareto = cache.data.get(listID);
 			
-			List<double[]> paretoList = new ArrayList<>();
-			
-			for(MOSolutionBase<T> s: best.solutions)
-			{
-				double[] objectives = s.getObjectives();
-				paretoList.add(objectives);
-			}
-			solutions.add(paretoList);
-			cache.data.put(listID, solutions);
-
-		}
-		else
-		{
-			List<List<double[]>> solutions = new ArrayList<List<double[]>>();
-			
-			List<double[]> paretoList = new ArrayList<double[]>();
+			ParetoWithEval paretoList = new ParetoWithEval();
 			
 			for(MOSolutionBase<T> s: best.solutions)
 			{
 				double[] objectives = s.getObjectives();
 				//check for NaN
 				for(int i = 0; i < objectives.length; i++)
-				if (Double.isNaN(objectives[i]))
 				{
-					System.err.println("Pareto contains NaN!");
-					return;
+					if (Double.isNaN(objectives[i]))
+					{
+						System.err.println("Pareto contains NaN!");
+						return;
+					}
 				}
 				
-				paretoList.add(objectives);
+				paretoList.pareto.add(objectives);
 			}
-			solutions.add(paretoList);
-			cache.data.put(listID, solutions);
+			
+			HashMap<String, Double> allQI = best.getAllQiEval();
+			for(Entry<String, Double> qi: allQI.entrySet())
+			{
+				if(Double.isNaN(qi.getValue()))
+				{
+					System.out.println("QI value is NaN for: "+qi.getKey());
+					allQI.put(qi.getKey(), Double.MAX_VALUE);
+				}
+			}
+			
+			paretoList.qiEval = allQI;
+			pareto.add(paretoList);
+			cache.data.put(listID, pareto);
+
+		}
+		else
+		{
+			//List<List<double[]>> solutions = new ArrayList<List<double[]>>();
+			List<ParetoWithEval> pareto = new ArrayList<ParetoWithEval>();
+			
+			ParetoWithEval paretoList = new ParetoWithEval();
+			
+			for(MOSolutionBase<T> s: best.solutions)
+			{
+				double[] objectives = s.getObjectives();
+				//check for NaN
+				for(int i = 0; i < objectives.length; i++)
+				{
+					if (Double.isNaN(objectives[i]))
+					{
+						System.err.println("Pareto contains NaN!");
+						return;
+					}
+				}
+				
+				paretoList.pareto.add(objectives);
+			}
+			
+			HashMap<String, Double> allQI = best.getAllQiEval();
+			for(Entry<String, Double> qi: allQI.entrySet())
+			{
+				if(Double.isNaN(qi.getValue()))
+				{
+					System.out.println("QI value is NaN for: "+qi.getKey());
+					allQI.put(qi.getKey(), Double.MAX_VALUE);
+				}
+			}
+			
+			paretoList.qiEval = allQI;
+			pareto.add(paretoList);
+			cache.data.put(listID, pareto);
 		}
 		
-		try (Writer writer = new FileWriter(String.format(JSON_DIR,file))) {
+		try (Writer writer = new FileWriter(String.format(JSON_DIR,file+"_"+benchmark))) {
 		    gson.toJson(cache, writer);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -176,42 +210,21 @@ public class Util {
 		}
 	}
 	
-	public static <T extends Number> List<ParetoSolution<T>> readParetoListFromJSON(String listID, String file)
+	public static ParetoSolutionCache readParetoListFromJSON(String file, String benchmark)
 	{
+		System.out.println("Loading cache for algorithm: "+file+" and benchmark: "+benchmark);
 		ParetoSolutionCache cache = new ParetoSolutionCache();
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(String.format(JSON_DIR,file)));
+			BufferedReader br = new BufferedReader(new FileReader(String.format(JSON_DIR,file+"_"+benchmark)));
 			cache = gson.fromJson(br, ParetoSolutionCache.class); 
 		} catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
 		
-		if(cache == null)
-			return null;
-		if(!cache.data.containsKey(listID))
-			return null;
-		
-		List<ParetoSolution<T>> solutions = new ArrayList<ParetoSolution<T>>();
-		List<List<double[]>> ps = cache.data.get(listID);
-		
-		for(List<double[]> pareto : ps)
-		{
-			ParetoSolution<T> solution = new ParetoSolution<T>(pareto.size());
-			
-			for(double[] obj : pareto)
-			{
-				MOSolutionBase<T> sol = new MOSolutionBase<T>(obj.length);
-				sol.setObjectives(obj);
-				solution.add(sol);
-			}
-			
-			solutions.add(solution);
-		}
-		
-		return solutions;
+		return cache;
 	}
 	
 /*

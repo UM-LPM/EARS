@@ -55,6 +55,7 @@ import org.um.feri.ears.util.Util;
  *       Parallel Problem Solving from Nature PPSN VI, pp. 839-848.
  * </ol>
  */
+// Very slow
 public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type>{
 
 	int populationSize = 100;
@@ -62,8 +63,6 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	int bisections = 8;
 	ParetoSolution<Type> population;
 	AdaptiveGridArchive<Type> archive;
-	int num_var;
-	int num_obj;
 	
 	/**
 	 * A mapping from grid index to the solutions occupying that grid index.
@@ -91,90 +90,10 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
 	}
 	
-
-	
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
-		if(optimalParam)
-		{
-			switch(num_obj){
-			case 1:
-			{
-				populationSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 2:
-			{
-				populationSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 3:
-			{
-				populationSize = 300;
-				archiveSize = 300;
-				break;
-			}
-			default:
-			{
-				populationSize = 500;
-				archiveSize = 500;
-				break;
-			}
-			}
-		}
-		
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
-		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
-
-		if(caching != Cache.None && caching != Cache.Save)
-		{
-			ParetoSolution<Type> next = returnNext(task.taskInfo());
-			if(next != null)
-				return next;
-			else
-				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
-		}
-
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-		
-		if(display_data)
-		{
-			archive.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
-			archive.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-		}
-		if(save_data)
-		{
-			archive.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-			archive.printFeasibleFUN("FUN_PESAII");
-			archive.printVariablesToFile("VAR");
-			archive.printObjectivesToCSVFile("FUN");
-		}
-		
-		if(caching == Cache.Save)
-		{
-			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), archive);
-		}
-
-		return archive;
-		
-	}
-	
-	public void start() throws StopCriteriaException {
+	protected void start() throws StopCriteriaException {
 		
 		RegionBasedSelection selection = new RegionBasedSelection();
-		SBXCrossover sbx = new SBXCrossover(0.9, 20.0);
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
 		
 		// Create the initial individual and evaluate it and his constraints
 		for (int i = 0; i < populationSize; i++) {
@@ -211,6 +130,8 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			archive.addAll(population);
 			
 		} while (!task.isStopCriteria());
+		
+		best = archive;
 	}
 	
 	/**
@@ -310,7 +231,42 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 		
 	}
 	
-	private void init() {
+	@Override
+	protected void init() {
+		
+		if(optimalParam)
+		{
+			switch(num_obj){
+			case 1:
+			{
+				populationSize = 100;
+				archiveSize = 100;
+				break;
+			}
+			case 2:
+			{
+				populationSize = 100;
+				archiveSize = 100;
+				break;
+			}
+			case 3:
+			{
+				populationSize = 300;
+				archiveSize = 300;
+				break;
+			}
+			default:
+			{
+				populationSize = 500;
+				archiveSize = 500;
+				break;
+			}
+			}
+		}
+		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
+		
 		archive = new AdaptiveGridArchive<Type>(archiveSize, num_obj, ArithmeticUtils.pow(2, bisections));
 		population = new ParetoSolution<Type>(populationSize);
 	}

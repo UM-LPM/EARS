@@ -81,7 +81,7 @@ public class RandomWalkAMAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution run(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
         DoubleSolution ii, iAritmetic, iExtend;
         task = taskProblem;
         i = taskProblem.getRandomIndividual();

@@ -37,10 +37,10 @@ public class IEEEexperiment {
 		players.add(new D_PESAII());
 		players.add(new D_IBEA());*/
 		
-		players.add(new D_MOEAD_STM());
+		players.add(new D_MOEAD_STM());// D_MOEAD_STM
 		players.add(new D_NSGAIII());
 		players.add(new D_SPEA2());
-		players.add(new D_PESAII());
+		players.add(new D_GDE3());
 		players.add(new D_IBEA());
 
 		MOAlgorithm.setRunWithOptimalParameters(true);
@@ -50,18 +50,16 @@ public class IEEEexperiment {
 		ArrayList<IndicatorName> indicators = new ArrayList<IndicatorName>();
 		
 		indicators.add(IndicatorName.IGDPlus);
-		indicators.add(IndicatorName.IGD);
 		indicators.add(IndicatorName.NativeHV);
 		indicators.add(IndicatorName.Epsilon);
 		indicators.add(IndicatorName.MaximumSpread);
 		indicators.add(IndicatorName.R2);
+
 		
-		//MOAlgorithm.setCaching(Cache.RandomPermutation);
+		//MOAlgorithm.setCaching(Cache.Random);
 		long initTime = System.currentTimeMillis();
 
-
-
-		RatingEnsemble re = new RatingEnsemble(indicators, 1e-7, true); //Create banchmark
+		RatingEnsemble re = new RatingEnsemble(indicators, 1e-7, true, false); //Create banchmark
 		for (MOAlgorithm al:players) {
 			ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
 			re.registerAlgorithm(al);
@@ -74,8 +72,8 @@ public class IEEEexperiment {
 		long estimatedTime = System.currentTimeMillis() - initTime;
 		System.out.println("Total execution time: "+estimatedTime + "ms");
 
-		Reporting.saveLeaderboard(list, "D:\\Benchmark results\\IEEE\\IEEE_benchmark_leaderboard_rand_DTLZ_2_3obj.txt");
-    	Reporting.createLatexTable(list, "D:\\Benchmark results\\IEEE\\IEEE_benchmark_table_rand_DTLZ_2_3obj.tex");
+		//Reporting.saveLeaderboard(list, "D:\\Benchmark results\\IEEE\\IEEE_benchmark_leaderboard_WFG_3.txt");
+    	//Reporting.createLatexTable(list, "D:\\Benchmark results\\IEEE\\IEEE_benchmark_table_WFG_3.tex");
 
 		for (Player p: list) System.out.println(p); //print ranks
 	}

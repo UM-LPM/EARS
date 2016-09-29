@@ -28,10 +28,8 @@ public class F1 extends Problem {
 		type=Problem.SHIFTED;
 		elliptic_shifted = new EllipticShifted(numberOfDimensions);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -100.0);
-		Collections.fill(upperLimit, 200.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
 		
 		name = "F01 Shifted Elliptic Function";
 		

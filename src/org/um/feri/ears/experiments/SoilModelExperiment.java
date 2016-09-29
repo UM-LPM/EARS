@@ -69,8 +69,8 @@ public class SoilModelExperiment {
 					System.out.println(i);
 					ti2 = new Task(EnumStopCriteria.EVALUATIONS, 20000, 0.0001, i2);
 					ti3 = new Task(EnumStopCriteria.EVALUATIONS, 20000, 0.0001, i3);
-					i2_res[k][i] = alg.run(ti2).getEval();
-					i3_res[k][i] = alg.run(ti3).getEval();
+					i2_res[k][i] = alg.execute(ti2).getEval();
+					i3_res[k][i] = alg.execute(ti3).getEval();
 				}
 			}
 

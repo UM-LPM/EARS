@@ -49,9 +49,6 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	ParetoSolution<Type> population          ;
 	ParetoSolution<Type> offspringPopulation ;
 	ParetoSolution<Type> union               ;
-
-	int num_var;
-	int num_obj;
 	
 	int populationSize;
 	
@@ -70,56 +67,9 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		ai.addParameters(crossover.getOperatorParameters());
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
-  
-  
+    
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-
-		if(caching != Cache.None && caching != Cache.Save)
-		{
-			ParetoSolution<Type> next = returnNext(task.taskInfo());
-			if(next != null)
-				return next;
-			else
-				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
-		}
-		
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		// Return the first non-dominated front
-		Ranking ranking = new Ranking(population);
-		ParetoSolution best = ranking.getSubfront(0);
-
-		if(display_data)
-		{
-			best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-		}
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
-			best.printFeasibleFUN("FUN_GDE3");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		
-		if(caching == Cache.Save)
-		{
-			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), best);
-		}
-		
-		return best;
-	}
-
-	private void init() {
+	protected void init() {
 		population = new ParetoSolution<Type>(populationSize);
 	}
 
@@ -132,7 +82,8 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	 * @return a <code>SolutionSet</code> that is a set of non dominated solutions as a result of the algorithm execution
 	 * @throws StopCriteriaException
 	 */
-	public void start() throws StopCriteriaException {
+	@Override
+	protected void start() throws StopCriteriaException {
 
 		Distance<Type> distance;
 		Comparator<MOSolutionBase<Type>> dominance;
@@ -142,7 +93,6 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
 		MOSolutionBase<Type> parent[] = null;
 
-		DifferentialEvolutionCrossover dec = new DifferentialEvolutionCrossover();
 		DifferentialEvolutionSelection<Type> des = new DifferentialEvolutionSelection<Type>();
 
 		// Create the initial solutionSet
@@ -235,5 +185,9 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				remain = 0;
 			}
 		}
+		
+		// Return the first non-dominated front
+		Ranking ranking = new Ranking(population);
+		best = ranking.getSubfront(0);
 	}
 }

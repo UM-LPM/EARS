@@ -54,11 +54,9 @@ public class ProblemDeJong  extends Problem{
 	public ProblemDeJong() {
 		super(2,0);
 		
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
-		Collections.fill(lowerLimit, -2.048);
-		Collections.fill(upperLimit, 4.096);
-		
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -2.048));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 4.096));
+
 		name ="De Jong";
 		this.minimum = false; //search maximum
 	}

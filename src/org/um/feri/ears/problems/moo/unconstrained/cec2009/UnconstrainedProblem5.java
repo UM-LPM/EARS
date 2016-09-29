@@ -7,7 +7,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.UP5_1;
 import org.um.feri.ears.problems.moo.functions.UP5_2;
 
-public class UnconstrainedProblem5 extends DoubleMOProblem {
+public class UnconstrainedProblem5 extends CEC2009 {
 
 	int N;
 	double epsilon;

@@ -99,7 +99,7 @@ public class ES1p1sAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution run(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
         resetDefaultsBeforNewRun(); //usually no need for this call 
         task = taskProblem;
         DoubleSolution ii;

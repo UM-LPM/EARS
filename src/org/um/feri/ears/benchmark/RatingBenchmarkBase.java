@@ -25,7 +25,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     protected EnumStopCriteria stopCriteria = EnumStopCriteria.EVALUATIONS; //default
     protected ArrayList<T3> results;
     protected EnumMap<EnumBenchmarkInfoParameters,String> parameters; //add all specific parameters
-    public static boolean printSingleRunDuration=false;
+    public static boolean printSingleRunDuration=true;
     protected int duelNumber;
     private int resetCallCounter; // increment when calling task reset counter 
     public void addParameter(EnumBenchmarkInfoParameters id, String value){

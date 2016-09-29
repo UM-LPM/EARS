@@ -16,7 +16,9 @@ public abstract class ProblemBase <Type> {
 	public Type count_constraints[]; 
 	public Type sum_constraints[]; 
 	public Type normalization_constraints_factor[]; // used for normalization
-	public String name;
+	protected String name;
+	protected String benchmarkName;
+	
 	protected String version = "1.0";
 	public static final int CONSTRAINED_TYPE_COUNT=1;
 	public static final int CONSTRAINED_TYPE_SUM=2;
@@ -84,6 +86,12 @@ public abstract class ProblemBase <Type> {
 		return name;
 	}
 	
+	public String getBenchmarkName() {
+		return benchmarkName;
+	}
+	public void setBenchmarkName(String benchmarkName) {
+		this.benchmarkName = benchmarkName;
+	}
 	@Override
 	public abstract String toString();
 }

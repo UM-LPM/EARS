@@ -1,5 +1,6 @@
 package org.um.feri.ears.problems;
 
+import org.um.feri.ears.mine.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -43,6 +44,18 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
         super.p = p; // TODO generic type in TaskBase
 	}
 	
+	public MOTask(MOTask<T,P> task)
+	{
+		precisionOfRealNumbersInDecimalPlaces = task.precisionOfRealNumbersInDecimalPlaces;
+        stopCriteria = task.stopCriteria;
+        maxEvaluations = task.maxEvaluations;
+        numberOfEvaluations = task.numberOfEvaluations;
+        epsilon = task.epsilon;
+        isStop = task.isStop;
+        isGlobal = task.isGlobal;
+        super.p = task.p;  //TODO deep copy?
+	}
+	
 	/**
 	 * @return The number of objectives
 	 */
@@ -55,6 +68,11 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 	 */
 	public String getProblemFileName() {
 		return p.getFileName();
+	}
+	
+	public String getBenchmarkName()
+	{
+		return p.getBenchmarkName();
 	}
 	
 	public int getNumberOfConstrains() {
@@ -77,6 +95,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 			incEvaluate();
 			p.evaluate(ind);
 			p.evaluateConstraints(ind);
+			GraphDataRecorder.AddRecord(ind, this.getProblemName());
 		}
 		assert false; // Execution should never reach this point!
 	}

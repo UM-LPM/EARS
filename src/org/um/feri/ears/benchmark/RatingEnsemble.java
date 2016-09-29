@@ -45,26 +45,38 @@
 package org.um.feri.ears.benchmark;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.dtlz.DTLZ1;
-import org.um.feri.ears.problems.moo.dtlz.DTLZ2;
-import org.um.feri.ears.problems.moo.dtlz.DTLZ3;
-import org.um.feri.ears.problems.moo.dtlz.DTLZ4;
-import org.um.feri.ears.problems.moo.dtlz.DTLZ5;
-import org.um.feri.ears.problems.moo.dtlz.DTLZ6;
-import org.um.feri.ears.problems.moo.dtlz.DTLZ7;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem10;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem2;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem3;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem4;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem5;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem6;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem7;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8;
+import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
+import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.rating.Game;
 import org.um.feri.ears.rating.ResultArena;
-import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.Cache;
+import org.um.feri.ears.util.FutureResult;
 
 public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem>{
     public static final String name="Rating Ensemble";
@@ -90,9 +102,10 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
         return false;
 	}
     
-    public RatingEnsemble(List<IndicatorName> indicators, double draw_limit, boolean random) {
+    public RatingEnsemble(List<IndicatorName> indicators, double draw_limit, boolean random, boolean runInParalel) {
         super(indicators);
         this.random = random;
+        this.runInParalel = runInParalel;
         this.draw_limit = draw_limit;
         evaluationsOnDimension=300000;
         initFullProblemList();
@@ -100,7 +113,18 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
 
     }
-    /* (non-Javadoc)
+    public RatingEnsemble(ArrayList<IndicatorName> indicators, double[] weights, double draw_limit, boolean random, boolean runInParalel) {
+        super(indicators, weights);
+        this.random = random;
+        this.runInParalel = runInParalel;
+        this.draw_limit = draw_limit;
+        evaluationsOnDimension=300000;
+        initFullProblemList();
+        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
+        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
+	}
+
+	/* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
@@ -121,14 +145,14 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     			first = results.get(i);
     			for (int j=i+1; j<results.size(); j++) {
     				second = results.get(j);
-    				indicatorName = indicators.get(Util.nextInt(indicators.size()));
+    				indicatorName = getRandomIndicator();
     				qi = IndicatorFactory.createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
     				
     				try {
     					if(qi.getIndicatorType() == IndicatorType.Unary)
     					{
-    						first.getBest().evaluate(qi);
-    						second.getBest().evaluate(qi);
+    						first.getBest().evaluate(qi, true); //TODO paralel
+    						second.getBest().evaluate(qi, true);
     					}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -155,6 +179,50 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     		super.setWinLoseFromResultList(arena, t);
     	
     }
+    
+    
+    @Override
+	protected void runOneProblem(DoubleMOTask task, BankOfResults allSingleProblemRunResults) {
+
+    	if(MOAlgorithm.getCaching() == Cache.None && runInParalel)
+    	{
+    		reset(task);
+    		ExecutorService pool = Executors.newFixedThreadPool(listOfAlgorithmsPlayers.size());
+    		Set<Future<FutureResult<DoubleMOTask, Double>>> set = new HashSet<Future<FutureResult<DoubleMOTask, Double>>>();
+    		for (MOAlgorithm<DoubleMOTask, Double> al: listOfAlgorithmsPlayers) {
+    			Future<FutureResult<DoubleMOTask, Double>> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+    			set.add(future);
+    		}
+
+    		for (Future<FutureResult<DoubleMOTask, Double>> future : set) {
+    			try {
+    				FutureResult<DoubleMOTask, Double> res = future.get();
+
+    				if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
+    				//reset(task); //for one eval!
+    				if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.None) {
+
+    					results.add(new MOAlgorithmEvalResult(res.result, res.algorithm)); 
+    					allSingleProblemRunResults.add(task, res.result, res.algorithm);
+    				}
+    				else {
+    					System.err.println(res.algorithm.getAlgorithmInfo().getVersionAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
+    					results.add(new MOAlgorithmEvalResult(null, res.algorithm)); // this can be done parallel - asynchrony                    
+    				}
+
+    				//reset(task);
+    			} catch (InterruptedException | ExecutionException e) {
+    				e.printStackTrace();
+    			}
+    		}
+
+    		pool.shutdown();
+    	}
+    	else
+    	{
+    		super.runOneProblem(task, allSingleProblemRunResults);
+    	}
+    }
 
 	/* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#initFullProblemList()
@@ -168,24 +236,30 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     	problems.add(new ZDT2());
     	problems.add(new ZDT3());
     	problems.add(new ZDT4());
-    	problems.add(new ZDT6());*/
-    	
-    	/*
+    	problems.add(new ZDT6());
     	problems.add(new DTLZ2(3));
     	problems.add(new WFG1(5));
     	problems.add(new WFG2(5));
-    	problems.add(new DTLZ1(10));
-    	*/
-    	/*
-    	problems.add(new UnconstrainedProblem1());
-    	problems.add(new UnconstrainedProblem2());
-    	problems.add(new UnconstrainedProblem5());
-    	problems.add(new UnconstrainedProblem8());
-    	problems.add(new UnconstrainedProblem9());
-    	problems.add(new WFG1(5));
-    	problems.add(new WFG2());
-    	problems.add(new DTLZ1(2));*/
-    	/*
+    	problems.add(new DTLZ1(10));*/
+    	
+    	/*problems.add(new ZDT1());
+    	problems.add(new ZDT2());
+    	problems.add(new ZDT3());
+    	problems.add(new ZDT4());
+    	problems.add(new ZDT6());*/
+    	    	
+    	
+    	/*problems.add(new WFG1(2));
+    	problems.add(new WFG2(2));
+    	problems.add(new WFG3(2));
+    	problems.add(new WFG4(2));
+    	problems.add(new WFG5(2));
+    	problems.add(new WFG6(2));
+    	problems.add(new WFG7(2));
+    	problems.add(new WFG8(2));
+    	problems.add(new WFG9(2));*/
+    	
+    	
     	problems.add(new UnconstrainedProblem1());
     	problems.add(new UnconstrainedProblem2());
     	problems.add(new UnconstrainedProblem3());
@@ -196,19 +270,20 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     	problems.add(new UnconstrainedProblem8());
     	problems.add(new UnconstrainedProblem9());
     	problems.add(new UnconstrainedProblem10());
-    	*/
+
     	
-    	problems.add(new DTLZ1(3));
+    	
+    	/*problems.add(new DTLZ1(3));
     	problems.add(new DTLZ2(3));
     	problems.add(new DTLZ3(3));
     	problems.add(new DTLZ4(3));
-    	problems.add(new DTLZ5(3));
+    	problems.add(new DTLZ5(3)); // ?
     	problems.add(new DTLZ6(3));
-    	problems.add(new DTLZ7(3));
+    	problems.add(new DTLZ7(3));*/
     	
     	
     	for (DoubleMOProblem moProblem : problems) {
-    		registerTask(stopCriteria, evaluationsOnDimension, 0.001, moProblem);
+    		registerTask(stopCriteria, evaluationsOnDimension, 0.0001, moProblem);
 		}
     }
         
