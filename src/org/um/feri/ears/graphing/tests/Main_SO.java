@@ -22,7 +22,6 @@ import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.run.RunMainBestAlgSettings;
 import org.um.feri.ears.util.Util;
 
-import com.um.feri.brest.de.DEAlgorithm;
 
 //import net.sourceforge.jswarm_pso.SwarmAlgorithm;
 //import com.erciyes.karaboga.bee.BeeColonyAlgorithm;

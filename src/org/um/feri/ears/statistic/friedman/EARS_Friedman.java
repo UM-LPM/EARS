@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
+import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
@@ -55,9 +56,6 @@ import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.problems.results.FriedmanTransport;
 import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.run.RunMain;
-
-import com.erciyes.karaboga.bee.BeeColonyAlgorithm;
-import com.um.feri.brest.de.DEAlgorithm;
 
 /**
  * @author Administrator
@@ -68,7 +66,7 @@ public class EARS_Friedman {
     	RatingCEC2010 b2 = new RatingCEC2010(0.001);
         RunMain m = new RunMain(false, false, b2) ;
         m.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06)); // RWSi
-        m.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));  // ABC
+        //m.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));  // ABC
         m.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));       // TLBO
         m.addAlgorithm(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin, 20),new Rating(1500, 350, 0.06));  //jDE
         m.addAlgorithm(new ES1p1sAlgorithm(),new Rating(1500, 350, 0.06)); // ES
