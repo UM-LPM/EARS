@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.mine.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.IntegerMOTask;

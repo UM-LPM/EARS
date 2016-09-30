@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.mine.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 
 /**
@@ -147,7 +147,7 @@ public class Task extends TaskBase<Problem> {
         if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
                 return "Global optimum epsilon="+epsilon+" or  E="+getMaxEvaluations();
         }
-        return "not defened";
+        return "not defined";
 	}
 	/**
 	 * Better use method eval returns Individual with calculated fitness and constrains

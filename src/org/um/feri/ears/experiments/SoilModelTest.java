@@ -1,10 +1,11 @@
 package org.um.feri.ears.experiments;
 
-import org.um.feri.ears.algorithms.es.ES1cNsAlgorithm;
-import org.um.feri.ears.algorithms.es.ES1pNsAlgorithm;
-import org.um.feri.ears.algorithms.pso.PSO;
-import org.um.feri.ears.algorithms.pso.PSOOmega;
-import org.um.feri.ears.algorithms.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.es.ES1cNsAlgorithm;
+import org.um.feri.ears.algorithms.so.es.ES1pNsAlgorithm;
+import org.um.feri.ears.algorithms.so.pso.PSO;
+import org.um.feri.ears.algorithms.so.pso.PSOOmega;
+import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.DoubleSolution;
@@ -22,8 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.algorithms.de.DEAlgorithm;;
+import org.apache.commons.lang3.ArrayUtils;;
 
 public class SoilModelTest {
 

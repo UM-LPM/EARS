@@ -10,7 +10,7 @@ import org.um.feri.ears.algorithms.AlgorithmRunTime;
 import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.mine.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.rating.Rating;
 
 public class RunMainBestAlgSettings extends RunMain {

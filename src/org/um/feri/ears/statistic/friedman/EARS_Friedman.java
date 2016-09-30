@@ -47,9 +47,9 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
-import org.um.feri.ears.algorithms.es.ES1p1sAlgorithm;
-import org.um.feri.ears.algorithms.random.RandomWalkAlgorithm;
-import org.um.feri.ears.algorithms.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
+import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
+import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingCEC2010;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.problems.results.FriedmanTransport;

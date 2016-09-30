@@ -53,7 +53,7 @@ import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.export.data.EDBenchmark;
 import org.um.feri.ears.export.data.EDTask;
-import org.um.feri.ears.mine.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.MOTask;

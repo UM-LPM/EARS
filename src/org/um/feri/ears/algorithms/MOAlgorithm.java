@@ -8,7 +8,7 @@ import java.util.stream.Collector.Characteristics;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.algorithms.moo.moead.MOEAD;
-import org.um.feri.ears.mine.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
