@@ -6,3 +6,6 @@
 /ZDT1_bad.csv
 /output/
 /experiments/
+/bin/
+*.class
+*.DS_Store
