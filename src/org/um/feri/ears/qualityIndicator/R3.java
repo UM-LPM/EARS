@@ -33,13 +33,13 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  *       IMM-REP-1998-7.
  * </ol>
  */
-public class R3<T> extends RIndicator<T> {
+public class R3<T extends Number> extends RIndicator<T> {
 
-	public R3(MOProblemBase moProblemBase) {
-		super(moProblemBase);
+	public R3(int num_obj, String file_name) {
+		super(num_obj, file_name);
 		name = "R3 indicator";
 		this.utilityFunction = new ChebychevUtility();
-		num_obj = moProblemBase.getNumberOfObjectives();
+		this.num_obj = num_obj;
 		try {
 			weights = generateUniformWeights(getDefaultSubdivisions(num_obj), num_obj);
 		} catch (Exception e) {

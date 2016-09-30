@@ -34,10 +34,12 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
+import org.um.feri.ears.util.Util;
 
 /**
  * This class implements the GDE3 algorithm. 
@@ -47,9 +49,6 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	ParetoSolution<Type> population          ;
 	ParetoSolution<Type> offspringPopulation ;
 	ParetoSolution<Type> union               ;
-
-	int num_var;
-	int num_obj;
 	
 	int populationSize;
 	
@@ -64,43 +63,13 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				"GDE3",
 				"\\bibitem{Kukkonen2009}\nS.~Kukkonen, J.~Lampinen\n\\newblock Performance Assessment of Generalized Differential Evolution 3 with a Given Set of Constrained Multi-Objective Test Problems.\n\\newblock \\emph{2009 IEEE Congress on Evolutionary Computation}, 1943--1950, 2009.\n",
 				"GDE3", "Generalized Differential Evolution 3");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+		
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
-  
-  
+    
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		// Return the first non-dominated front
-		Ranking ranking = new Ranking(population);
-		ParetoSolution best = ranking.getSubfront(0);
-
-		if(display_data)
-		{
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		}
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			best.printFeasibleFUN("FUN_GDE3");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		return best;
-	}
-
-	private void init() {
+	protected void init() {
 		population = new ParetoSolution<Type>(populationSize);
 	}
 
@@ -113,7 +82,8 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	 * @return a <code>SolutionSet</code> that is a set of non dominated solutions as a result of the algorithm execution
 	 * @throws StopCriteriaException
 	 */
-	public void start() throws StopCriteriaException {
+	@Override
+	protected void start() throws StopCriteriaException {
 
 		Distance<Type> distance;
 		Comparator<MOSolutionBase<Type>> dominance;
@@ -123,7 +93,6 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
 		MOSolutionBase<Type> parent[] = null;
 
-		DifferentialEvolutionCrossover dec = new DifferentialEvolutionCrossover();
 		DifferentialEvolutionSelection<Type> des = new DifferentialEvolutionSelection<Type>();
 
 		// Create the initial solutionSet
@@ -216,5 +185,9 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				remain = 0;
 			}
 		}
+		
+		// Return the first non-dominated front
+		Ranking ranking = new Ranking(population);
+		best = ranking.getSubfront(0);
 	}
 }

@@ -35,14 +35,14 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  * diversity in multiobjective evolutionary algorithms. IEEE Trans. on 
  * Evolutionary Computation, 7(2):174--188, 2003.
  */
-public class InvertedGenerationalDistance<T> extends QualityIndicator<T> {
+public class InvertedGenerationalDistance<T extends Number> extends QualityIndicator<T> {
 	static final double pow_ = 2.0; // pow. This is the pow used for the distances
 
 	/**
 	 * Constructor. Creates a new instance of the generational distance metric.
 	 */
-	public InvertedGenerationalDistance(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public InvertedGenerationalDistance(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Inverted Generational Distance";
 	}
   

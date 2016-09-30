@@ -22,7 +22,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
 
-public class VEGASelection<Type> {
+public class VEGASelection<Type extends Number> {
 	
 	private final ObjectiveComparator<Type> comparator;
 	

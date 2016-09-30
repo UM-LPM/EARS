@@ -20,6 +20,9 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package org.um.feri.ears.operators;
+import java.util.EnumMap;
+
+import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -29,7 +32,7 @@ import org.um.feri.ears.util.Util;
  * Class implementing the selection operator used in DE: three different
  * solutions are returned from a population.
  */
-public class DifferentialEvolutionSelection<Type> implements SelectionOperator<MOSolutionBase<Type>[], ParetoSolution<Type>>{
+public class DifferentialEvolutionSelection<Type extends Number> implements SelectionOperator<MOSolutionBase<Type>[], ParetoSolution<Type>>{
 
 	private int currentIndex;
 
@@ -77,5 +80,10 @@ public class DifferentialEvolutionSelection<Type> implements SelectionOperator<M
 		parents[2] = population.get(r3);
 
 		return parents;
+	}
+	
+	@Override
+	public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
+		return null;
 	}
 }

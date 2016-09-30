@@ -56,10 +56,8 @@ public class ProblemRosenbrockD3  extends Problem{
 	public ProblemRosenbrockD3() {
 		super(3,0);
 		
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
-		Collections.fill(lowerLimit, -1.2);
-		Collections.fill(upperLimit, 2.4);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -1.2));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 2.4));
 		
 		name = "Rosenbrock d3";
 	}

@@ -1,7 +1,7 @@
 package org.um.feri.ears.examples;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.random.RandomWalkAlgorithm;
+import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
@@ -18,7 +18,7 @@ public class RandomAlgorithmTest {
 		Algorithm test = new RandomWalkAlgorithm(true);
 		DoubleSolution best;
         try {
-            best = test.run(sphere);
+            best = test.execute(sphere);
             System.out.println("Best is:"+best);
         } catch (StopCriteriaException e) {
             e.printStackTrace();

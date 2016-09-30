@@ -11,6 +11,7 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.unconstrained.cec2010.base.AckleyRotated;
+import org.um.feri.ears.util.Util;
 
 /**
  * Problem function!
@@ -33,18 +34,16 @@ public class F16 extends Problem {
 		super(d,0);
 		ackley_rotated = new AckleyRotated(numberOfDimensions);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -32.0);
-		Collections.fill(upperLimit, 64.0);
-		
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 64.0));
+
 		name = "F16 D/m-group Shifted and m-rotated Ackley's Function";
 		
 		P = new int[numberOfDimensions];
-		Random rand = new Random();
+
 		int rand_place = 0;
 		for (int i=numberOfDimensions-1; i>0; i--){
-			rand_place = rand.nextInt(numberOfDimensions);
+			rand_place = Util.nextInt(numberOfDimensions);
 			P[i] = rand_place;			
 		}
 		
@@ -52,8 +51,8 @@ public class F16 extends Problem {
 		
 		rot_matrix = new double[m][m];
 		
-		Random rand1 = new Random();
-		DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, rand1);
+
+		DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, Util.rnd);
 		
 		for (int i=0; i<m; i++){
 			for (int j=0; j<m; j++){

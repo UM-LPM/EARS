@@ -16,10 +16,10 @@ import org.um.feri.ears.util.SolutionComparator;
  * paradigm for dynamic multiobjective optimization. IEEE Transactions
  * on Evolutionary Computation, 13(1), 103–-127, 2009.
  */
-public class NR<T> extends QualityIndicator<T>{
+public class NR<T extends Number> extends QualityIndicator<T>{
 	
-	public NR(MOProblemBase moProblemBase) {
-		super(moProblemBase);
+	public NR(int num_obj) {
+		super(num_obj);
 		name = "NR";
 	}
 

@@ -45,8 +45,15 @@
 package org.um.feri.ears.benchmark;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
@@ -61,9 +68,12 @@ import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem6
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem7;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
+import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
+import org.um.feri.ears.util.Cache;
+import org.um.feri.ears.util.FutureResult;
 
 //TODO calculate CD for rating
 public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem>{
@@ -131,6 +141,45 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
     		registerTask(stopCriteria, evaluationsOnDimension, 0.001, moProblem);
 		}
     }
+    
+    @Override
+	protected void runOneProblem(DoubleMOTask task, BankOfResults allSingleProblemRunResults) {
+
+    	reset(task);
+    	ExecutorService pool = Executors.newFixedThreadPool(listOfAlgorithmsPlayers.size());
+        Set<Future<FutureResult<DoubleMOTask, Double>>> set = new HashSet<Future<FutureResult<DoubleMOTask, Double>>>();
+        for (MOAlgorithm<DoubleMOTask, Double> al: listOfAlgorithmsPlayers) {
+          Future<FutureResult<DoubleMOTask, Double>> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+          set.add(future);
+        }
+
+        for (Future<FutureResult<DoubleMOTask, Double>> future : set) {
+        	try {
+        		FutureResult<DoubleMOTask, Double> res = future.get();
+
+        		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
+        		//reset(task); //for one eval!
+        		if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.None) {
+
+        			results.add(new MOAlgorithmEvalResult(res.result, res.algorithm)); 
+        			allSingleProblemRunResults.add(task, res.result, res.algorithm);
+        		}
+        		else {
+        			System.err.println(res.algorithm.getAlgorithmInfo().getVersionAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
+        			results.add(new MOAlgorithmEvalResult(null, res.algorithm)); // this can be done parallel - asynchrony                    
+        		}
+        		
+        		//reset(task);
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+        }
+        
+    	pool.shutdown();
+    	
+    	//TODO if not parallel call super
+        
+	}
         
     /* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#getName()

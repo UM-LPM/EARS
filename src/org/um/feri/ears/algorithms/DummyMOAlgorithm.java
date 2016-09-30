@@ -10,7 +10,7 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public class DummyMOAlgorithm<T extends MOTask, Type> extends MOAlgorithm<T, Type> {
+public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
 	HashMap<String, ParetoSolution<Type>[]> results;
 	HashMap<String, Integer> positions; //stores the position of the current result of the current problem
@@ -27,8 +27,8 @@ public class DummyMOAlgorithm<T extends MOTask, Type> extends MOAlgorithm<T, Typ
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		String problemName = taskProblem.getProblem().getFileName();
+	public ParetoSolution<Type> execute(T taskProblem) throws StopCriteriaException {
+		String problemName = taskProblem.getProblemFileName();
 		
 		if(results.containsKey(problemName.toLowerCase()))
 		{
@@ -106,6 +106,18 @@ public class DummyMOAlgorithm<T extends MOTask, Type> extends MOAlgorithm<T, Typ
 
 			}
 		}
+	}
+
+	@Override
+	protected void init() throws StopCriteriaException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void start() throws StopCriteriaException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

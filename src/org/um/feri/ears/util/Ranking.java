@@ -37,7 +37,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  * solutions, subset 1 contains the non-dominated solutions after removing those
  * belonging to subset 0, and so on.
  */
-public class Ranking<Type> {
+public class Ranking<Type extends Number> {
   
 	/**
 	 * The <code>SolutionSet</code> to rank

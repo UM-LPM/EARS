@@ -17,15 +17,15 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  * of Technology, 1995.
  *
  */
-public class Spacing<T> extends QualityIndicator<T>{
+public class Spacing<T extends Number> extends QualityIndicator<T>{
 
 	static final double pow_ = 2.0; // pow. This is the pow used for the distances
 
 	/**
 	 * Constructor. Creates a new instance of the spacing metric.
 	 */
-	public Spacing(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public Spacing(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Spacing";
 	}
 	

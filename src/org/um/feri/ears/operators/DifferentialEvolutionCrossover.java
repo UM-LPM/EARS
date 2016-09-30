@@ -21,6 +21,9 @@
 
 package org.um.feri.ears.operators;
 
+import java.util.EnumMap;
+
+import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
@@ -235,5 +238,15 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 		MOSolutionBase<Double>[] children = new MOSolutionBase[1];
 		children[0] = child;
 		return children;
+	}
+	
+	@Override
+	public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
+		EnumMap<EnumAlgorithmParameters, String> para = new EnumMap<EnumAlgorithmParameters, String>(EnumAlgorithmParameters.class);
+		para.put(EnumAlgorithmParameters.CR, CR+"");
+		para.put(EnumAlgorithmParameters.F, F+"");
+		para.put(EnumAlgorithmParameters.K, K+"");
+		para.put(EnumAlgorithmParameters.DE_VARIANT, DE_Variant);
+		return para;
 	}
 }

@@ -2,13 +2,12 @@ package org.um.feri.ears.problems.unconstrained.cec2010;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.unconstrained.cec2010.base.EllipticShifted;
+import org.um.feri.ears.util.Util;
 
 /**
  * Problem function!
@@ -29,18 +28,16 @@ public class F1 extends Problem {
 		type=Problem.SHIFTED;
 		elliptic_shifted = new EllipticShifted(numberOfDimensions);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -100.0);
-		Collections.fill(upperLimit, 200.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
 		
 		name = "F01 Shifted Elliptic Function";
 		
 		P = new int[numberOfDimensions];
-		Random rand = new Random();
+
 		int rand_place = 0;
 		for (int i=numberOfDimensions-1; i>0; i--){
-			rand_place = rand.nextInt(numberOfDimensions);
+			rand_place = Util.nextInt(numberOfDimensions);
 			P[i] = rand_place;			
 		}
 	}

@@ -26,7 +26,7 @@ import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 
-public class DTLZ1 extends DoubleMOProblem{
+public class DTLZ1 extends DTLZ{
 	
 	public DTLZ1(int numberOfObjectives) {
 		this(numberOfObjectives + 4, numberOfObjectives);
@@ -38,6 +38,7 @@ public class DTLZ1 extends DoubleMOProblem{
 
 		file_name = "DTLZ1."+numberOfObjectives+"D";
 		name = "DTLZ1";
+		
 
 		upperLimit = new ArrayList<Double>(numberOfDimensions);
 		lowerLimit = new ArrayList<Double>(numberOfDimensions);

@@ -20,7 +20,9 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Ranking;
+import org.um.feri.ears.util.Util;
 
 
 public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
@@ -29,8 +31,6 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	int archiveSize = 100;
 	ParetoSolution<Type> population;
 	ParetoSolution<Type> archive;
-	int num_var;
-	int num_obj;
 	
 	CrossoverOperator<Type, MOTask> cross;
 	MutationOperator<Type, MOTask> mut;
@@ -49,14 +49,18 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				"SPEA2",
 				"\\bibitem{Zitzler2002}\nE.~Zitzler,M.~Laumanns,L.~Thiele\n\\newblock SPEA2: Improving the Strength Pareto Evolutionary Algorithm for Multiobjective Optimization.\n\\newblock \\emph{EUROGEN 2001. Evolutionary Methods for Design, Optimization and Control with Applications to Industrial Problems}, 95--100, 2002.\n",
 				"SPEA2", "Strength Pareto Evolutionary Algorithm");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
+	public void resetDefaultsBeforNewRun() {
+	}
+
+	@Override
+	protected void init() {
 		
 		if(optimalParam)
 		{
@@ -87,48 +91,20 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			}
 			}
 		}
-
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		Ranking<Type> ranking = new Ranking<Type>(archive);
-		ParetoSolution<Type> best = ranking.getSubfront(0);
-
-		if(display_data)
-		{
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		}
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			best.printFeasibleFUN("FUN_SPEA2");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-
-		return best;
-	}
-
-	@Override
-	public void resetDefaultsBeforNewRun() {
-	}
-
-	private void init() {
+		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
+		
 		population = new ParetoSolution<Type>(populationSize);
 		archive = new ParetoSolution<Type>(archiveSize);
 	}
 
-	public void start() throws StopCriteriaException {
+	@Override
+	protected void start() throws StopCriteriaException {
 
 		ParetoSolution<Type> offspringPopulation;
 
 		BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
-		SBXCrossover sbx = new SBXCrossover(0.9, 20.0);
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
 
 		// -> Create the initial solutionSet
 		for (int i = 0; i < populationSize; i++) {
@@ -171,5 +147,8 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			// End Create a offSpring solutionSet
 			population = offspringPopulation;
 		}
+		
+		Ranking<Type> ranking = new Ranking<Type>(archive);
+		best = ranking.getSubfront(0);
 	}
 }

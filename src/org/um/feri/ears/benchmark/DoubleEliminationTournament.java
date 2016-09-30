@@ -266,7 +266,7 @@ public class DoubleEliminationTournament {
 				ParetoSolution bestByALg = null;
 				
 				try {
-					bestByALg = al.run(task);
+					bestByALg = al.execute(task);
 					task.resetCounter();
 				} catch (StopCriteriaException e) {
 					// TODO Auto-generated catch block
@@ -289,7 +289,7 @@ public class DoubleEliminationTournament {
 		ensemble = new ArrayList<QualityIndicator>();
 		
 		for (IndicatorName name : indicators) {
-			ensemble.add(IndicatorFactory.createIndicator(name, problem));
+			ensemble.add(IndicatorFactory.createIndicator(name, problem.getNumberOfObjectives(),problem.getFileName()));
 		}
 	}
 	

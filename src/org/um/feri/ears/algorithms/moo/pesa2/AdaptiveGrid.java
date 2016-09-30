@@ -11,7 +11,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
-public class AdaptiveGrid<Type> {
+public class AdaptiveGrid<Type extends Number> {
 
 	private int bisections;
 

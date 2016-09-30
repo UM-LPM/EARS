@@ -46,7 +46,9 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 				"MOEAD_STM",
 				"\\bibitem{Zhang2009}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock The Performance of a New Version of MOEA/D on CEC09 Unconstrained MOP Test Instances.\n\\newblock \\emph{IEEE Congress on Evolutionary Computation}, 203--208, 2009.\n",
 				"MOEAD_STM", "Multiobjective Evolutionary Algorithm Based on Decomposition");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
 	
 
@@ -63,9 +65,6 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 
 	@Override
 	protected void start() throws StopCriteriaException {
-
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
-		DifferentialEvolutionCrossover dec = new DifferentialEvolutionCrossover();
 		
 		// STEP 2. Update
 		do {
@@ -109,7 +108,10 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 				mut.execute(child, task);
 
 				if (task.isStopCriteria())
+				{
+					best = finalSelection(populationSize);
 					return;
+				}
 				// Evaluation
 				task.eval(child);
 
@@ -141,6 +143,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 
 		} while (!task.isStopCriteria());
 		//System.out.println(gen);
+		best = finalSelection(populationSize);
 	}
 	
 	//initialize the nadir point

@@ -36,10 +36,12 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
+import org.um.feri.ears.util.Util;
 
 public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
@@ -47,9 +49,6 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	ParetoSolution<Type> offspringPopulation ;
 	ParetoSolution<Type> union               ;
 
-	int num_var;
-	int num_obj;
-	
 	int populationSize ;
     int selectionProcedure;
     Ranking<Type> ranking;
@@ -78,41 +77,19 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				"DEMO",
 				"\\bibitem{Robic2005}\nT.~Robiè, B.~Filipiè\n\\newblock DEMO: Differential Evolution for Multiobjective Optimization.\n\\newblock \\emph{Evolutionary Multi-Criterion Optimization}, 520-533, 2005.\n",
 				"DEMO", "Differential Evolution for Multiobjective Optimization");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+		
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		
 	}
 	
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
-		init();
-		start();
-		
-		ParetoSolution<Type> best = ranking.getSubfront(0);
-
-		if(display_data)
-		{
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		}
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			best.printFeasibleFUN("FUN_DEMO");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		return best;
-	}
-	
-	private void init() {
+	protected void init() {
 		population = new ParetoSolution<Type>(populationSize * 2);
 	}
 	
-	public void start() throws StopCriteriaException {
+	@Override
+	protected void start() throws StopCriteriaException {
 		
 		distance = new Distance<Type>();
 		dominance = new DominanceComparator<Type>();
@@ -217,7 +194,8 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
           }
 
           // Return the first non-dominated front
-          ranking = new Ranking(population);	
+          ranking = new Ranking(population);
+          best = ranking.getSubfront(0);
 	}
 	
 	private boolean areSolutionsTheSame(MOSolutionBase<Type> parent, MOSolutionBase<Type> child) {

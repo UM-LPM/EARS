@@ -90,8 +90,13 @@ public abstract class TaskBase<T extends ProblemBase> {
     /**
      * @return
      */
-    public String getProblemShortName() {
+    public String getProblemName() {
         return p.getName();
+    }
+    
+    public int getProblemHashCode()
+    {
+    	return p.hashCode();
     }
     
     public void resetCounter() {
@@ -104,10 +109,6 @@ public abstract class TaskBase<T extends ProblemBase> {
     public int getResetCount()
     {
     	return resetCount;
-    }
-    
-    public T getProblem() {
-    	return p;
     }
 
 }

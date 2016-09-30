@@ -107,6 +107,15 @@ public class AlgorithmInfo {
     public void addParameter(EnumAlgorithmParameters id, String value) {
         parameters.put(id, value);
     }
+    
+	public void addParameters(EnumMap<EnumAlgorithmParameters,String> operatorParameters) {
+		
+		if(operatorParameters != null)
+		{
+			parameters.putAll(operatorParameters);
+		}
+	}
+    
     public AlgorithmInfo(String publishedName, String paperBib, String versionName, String versionDescription) {
         super();
         selectedParameterCombination = NO_PARAM_SELECTION;

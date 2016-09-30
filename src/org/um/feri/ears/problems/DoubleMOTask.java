@@ -9,8 +9,10 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 	public DoubleMOTask(EnumStopCriteria stop, int eval, double epsilon, DoubleMOProblem p) {
 		super(stop, eval, epsilon, p);
 	}
-	
-	
+		
+	public DoubleMOTask(DoubleMOTask task) {
+		super(task);
+	}
 
 	public MOSolutionBase<Double> getRandomMOIndividual() throws StopCriteriaException {
 
@@ -36,8 +38,6 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 	public boolean areDimensionsInFeasableInterval(ParetoSolution<Double> bestByALg) {
 	    return p.areDimensionsInFeasableInterval(bestByALg);
 	}
-
-
 
 	public Double[] getLowerLimit() {
 		Double[] arr = new Double[p.lowerLimit.size()];

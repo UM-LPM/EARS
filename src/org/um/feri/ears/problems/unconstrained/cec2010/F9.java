@@ -12,6 +12,7 @@ import org.ejml.ops.RandomMatrices;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.unconstrained.cec2010.base.EllipticRotated;
 import org.um.feri.ears.problems.unconstrained.cec2010.base.EllipticShifted;
+import org.um.feri.ears.util.Util;
 
 /**
  * Problem function!
@@ -36,18 +37,15 @@ public class F9 extends Problem {
 		elliptic_shifted = new EllipticShifted(numberOfDimensions);
 		elliptic_rotated= new EllipticRotated(numberOfDimensions);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -100.0);
-		Collections.fill(upperLimit, 200.0);
-		
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
+
 		name = "F09 D/2m-group Shifted and m-rotated Elliptic Function";
 		
 		P = new int[numberOfDimensions];
-		Random rand = new Random();
 		int rand_place = 0;
 		for (int i=numberOfDimensions-1; i>0; i--){
-			rand_place = rand.nextInt(numberOfDimensions);
+			rand_place = Util.nextInt(numberOfDimensions);
 			P[i] = rand_place;			
 		}
 		
@@ -55,8 +53,7 @@ public class F9 extends Problem {
 		
 		rot_matrix = new double[m][m];
 		
-		Random rand1 = new Random();
-		DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, rand1);
+		DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, Util.rnd);
 		
 		for (int i=0; i<m; i++){
 			for (int j=0; j<m; j++){

@@ -30,7 +30,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 /** 
  * This class implements an unbound list of non-dominated solutions
  */
-public class NonDominatedSolutionList<Type> extends ParetoSolution<Type>{
+public class NonDominatedSolutionList<Type extends Number> extends ParetoSolution<Type>{
 
 	/**
 	* Stores a <code>Comparator</code> for dominance checking

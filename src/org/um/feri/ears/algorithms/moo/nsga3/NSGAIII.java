@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
@@ -47,9 +48,7 @@ import org.um.feri.ears.util.Util;
  */
 public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
-	int populationSize;
-	int num_var;
-	int num_obj;
+	int populationSize=100;
 
 	double[][] lambda_; // reference points
 
@@ -80,81 +79,14 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 				"NSGAIII",
 				"\\bibitem{Deb2014}\nK.~Deb, H.~Jain\n\\newblock An evolutionary many-objective optimization algorithm using reference-point-based nondominated sorting approach, part I: Solving problems with box constraints.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 18(4):577--601, 2014.\n",
 				"NSGAIII", "Nondominated Sorting Genetic Algorithm III ");
+		
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
-		if(caching != Cache.None)
-		{
-			//TODO èe je seznam rešitev prazen za to rešitev ga naloži iz json in nastavi index na 0
-			//metoda get random in metoda get next iz seznama rešitev 
-			//metoda get hash saveID+="v"+this.version + this.getID()+task.getProblem().name +"v"+ task.getProblem().getVersion()+"obj"+num_obj +"var"+ num_var;
-			//return
-		}
-		
-		if(optimalParam)
-		{
-			switch(num_obj){
-			case 1:
-			{
-				populationSize = 100;
-				break;
-			}
-			case 2:
-			{
-				populationSize = 100;
-				break;
-			}
-			case 3:
-			{
-				populationSize = 300;
-				break;
-			}
-			default:
-			{
-				populationSize = 500;
-				break;
-			}
-			}
-		}
-
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		// Return the first non-dominated front
-		Ranking<Type> ranking = new Ranking<Type>(population);
-		ParetoSolution best = ranking.getSubfront(0);
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			best.printFeasibleFUN("FUN_NSGAII");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		if(display_data)
-		{
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		}
-		
-		if(caching == Cache.Save)
-		{
-			String saveID ="";
-			saveID+="v"+this.version + this.getID()+task.getProblem().name +"v"+ task.getProblem().getVersion()+"obj"+num_obj +"var"+ num_var;
-			Util.addParetoToJSON(saveID, best);
-		}
-		
-		return best;
-	}
-
-	public void start() throws StopCriteriaException {
+	protected void start() throws StopCriteriaException {
 		// Create the initial population
 		MOSolutionBase<Type> newSolution;
 		for (int i = 0; i < populationSize; i++) {
@@ -173,6 +105,10 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 		      offspringPopulation = reproduction(matingPopulation);
 		      population = replacement(population, offspringPopulation);
 		}
+		
+		// Return the first non-dominated front
+		Ranking<Type> ranking = new Ranking<Type>(population);
+		best = ranking.getSubfront(0);
 	}
 
 	private ParetoSolution<Type> selection(ParetoSolution<Type> population) {
@@ -257,8 +193,34 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 		return copy;
 	}
 
-	private void init() {
+	@Override
+	protected void init() {
 		
+		switch(num_obj){
+		case 1:
+		{
+			populationSize = 100;
+			break;
+		}
+		case 2:
+		{
+			populationSize = 100;
+			break;
+		}
+		case 3:
+		{
+			populationSize = 300;
+			break;
+		}
+		default:
+		{
+			populationSize = 500;
+			break;
+		}
+		}
+
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+
 		distance = new Distance();
 		bt2 = new BinaryTournament2<Type>();
 		sbx = new SBXCrossover(0.9, 20.0);

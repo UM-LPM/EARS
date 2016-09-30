@@ -8,7 +8,7 @@ import org.um.feri.ears.problems.moo.dtlz.DTLZ2;
 import org.um.feri.ears.problems.moo.functions.UP1_F2_1;
 import org.um.feri.ears.problems.moo.functions.UP1_F2_2;
 
-public class UnconstrainedProblem11 extends DoubleMOProblem {
+public class UnconstrainedProblem11 extends CEC2009 {
 	
 	/**
 	 * The decision variable lower and upper bounds for the instance with 10 
@@ -200,7 +200,7 @@ public class UnconstrainedProblem11 extends DoubleMOProblem {
 		double[] zz2 = new double[numberOfDimensions];
 		
 		//apply transform to convert from UF11 to DTLZ2
-		CEC2009.transform(x, zz, psum, 
+		CEC2009helper.transform(x, zz, psum, 
 				numberOfDimensions == 10 ? M_10D : M_30D, 
 				numberOfDimensions == 10 ? lamda_l_10D : lamda_l_30D,
 				numberOfDimensions, numberOfObjectives);

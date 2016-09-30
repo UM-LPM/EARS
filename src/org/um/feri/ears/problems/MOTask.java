@@ -1,11 +1,12 @@
 package org.um.feri.ears.problems;
 
+import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 
-public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>{
+public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> extends TaskBase<P>{
 	
     /**
      * Task constructor for multiobjective optimization.
@@ -43,8 +44,19 @@ public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>
         super.p = p; // TODO generic type in TaskBase
 	}
 	
+	public MOTask(MOTask<T,P> task)
+	{
+		precisionOfRealNumbersInDecimalPlaces = task.precisionOfRealNumbersInDecimalPlaces;
+        stopCriteria = task.stopCriteria;
+        maxEvaluations = task.maxEvaluations;
+        numberOfEvaluations = task.numberOfEvaluations;
+        epsilon = task.epsilon;
+        isStop = task.isStop;
+        isGlobal = task.isGlobal;
+        super.p = task.p;  //TODO deep copy?
+	}
+	
 	/**
-	 * Use only for multiobjective problems! 
 	 * @return The number of objectives
 	 */
 	public int getNumberOfObjectives() {
@@ -52,11 +64,15 @@ public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>
 	}
 	
 	/**
-	 * Use only for multiobjective problems! 
 	 * @return The file name of the problem
 	 */
 	public String getProblemFileName() {
 		return p.getFileName();
+	}
+	
+	public String getBenchmarkName()
+	{
+		return p.getBenchmarkName();
 	}
 	
 	public int getNumberOfConstrains() {
@@ -69,10 +85,6 @@ public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>
 		return p.isFirstBetter(x, y, qi);
 	}
 	
-	public P getProblem(){
-		return p;
-	}
-	
 	/**
 	 * Use only on multiobjective problems!
 	 * @param ind <code>MOIndividual</code> to be evaluated
@@ -83,6 +95,7 @@ public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>
 			incEvaluate();
 			p.evaluate(ind);
 			p.evaluateConstraints(ind);
+			GraphDataRecorder.AddRecord(ind, this.getProblemName());
 		}
 		assert false; // Execution should never reach this point!
 	}
@@ -106,5 +119,15 @@ public abstract class MOTask<T , P extends MOProblemBase<T>> extends TaskBase<P>
         return "Task [stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", numberOfEvaluations=" + numberOfEvaluations + ", epsilon="
                 + epsilon + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                 + precisionOfRealNumbersInDecimalPlaces + ", p=" + p + "]";
+    }
+    
+    /**
+     * Returns a string containing all the tasks information that doesen't change.
+     * @return
+     */
+    public String taskInfo() {
+        return "Task = " + p +" stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", epsilon="
+                + epsilon + ", precisionOfRealNumbersInDecimalPlaces="
+                + precisionOfRealNumbersInDecimalPlaces;
     }
 }

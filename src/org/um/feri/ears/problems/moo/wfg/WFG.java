@@ -54,7 +54,6 @@ public abstract class WFG extends DoubleMOProblem {
   protected int[] a;
   protected int[] s;
   protected int d = 1;
-  protected Random random = new Random();
   
   /**
    * Constructor
@@ -67,6 +66,8 @@ public abstract class WFG extends DoubleMOProblem {
   public WFG(Integer k, Integer l, Integer M) {
 	super(k + l, 0, M);
     
+	benchmarkName = "WFG";
+	
 	this.k = k;
     this.l = l;
     this.m = M;

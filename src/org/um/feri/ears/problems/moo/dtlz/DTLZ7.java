@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 
-public class DTLZ7 extends DoubleMOProblem{
+public class DTLZ7 extends DTLZ{
 	
 	public DTLZ7(int numberOfObjectives) {
 		this(numberOfObjectives + 19, numberOfObjectives);

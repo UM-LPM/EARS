@@ -20,11 +20,11 @@ import org.um.feri.ears.util.DominanceComparator;
  * Classifications, analyses, and new innovations," Ph.D. dissertation, 
  * Air Force Inst. Technol., Wright-Patterson AFB, OH, 1999.
  */
-public class OverallNondominatedVectorGeneration<T> extends QualityIndicator<T> {
+public class OverallNondominatedVectorGeneration<T extends Number> extends QualityIndicator<T> {
 
 	
-	public OverallNondominatedVectorGeneration(MOProblemBase moProblemBase) {
-		super(moProblemBase);
+	public OverallNondominatedVectorGeneration(int num_obj) {
+		super(num_obj);
 		name = "Overall Nondominated Vector Generation";
 	}
 	

@@ -44,11 +44,16 @@ package org.um.feri.ears.algorithms;
  * 
  */
 public enum EnumAlgorithmParameters {
-    POP_SIZE("population size","pop_size"),  
+    POP_SIZE("population size","pop_size"), 
+    ARCHIVE_SIZE("archive size","archive_size"), 
     P_C("crossover probability","pc"),
     P_M("mutation probability","pm"),
-    CR("CR DE parameter","CR"), 
+    ETA("distribution index","eta"),
+    CR("CR DE parameter","CR"),
+    B("perturbation","B"),
     F("F DE parameter", "F"), //DE parameter
+    K("K DE parameter", "K"), //DE parameter
+    DE_VARIANT("DE Variant", "DE_Variant"), //DE parameter
     TURNAMENT_SIZE("turnament size", "TS"), //DE parameter
     ELITE("Number of unchangerd individuals","elite"), //number of elite
     LAMBDA("ES lambda offspring","lambda"), //- number of samples pre iteratiun

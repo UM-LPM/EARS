@@ -23,7 +23,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
  *
  * @author Antonio J. Nebro
  */
-public class CrowdingDistanceComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class CrowdingDistanceComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
 	private final CrowdingDistance<Type> crowdingDistance = new CrowdingDistance<Type>() ;
 
 	/**

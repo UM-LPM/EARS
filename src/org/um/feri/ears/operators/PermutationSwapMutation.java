@@ -1,5 +1,8 @@
 package org.um.feri.ears.operators;
 
+import java.util.EnumMap;
+
+import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
@@ -54,6 +57,13 @@ public class PermutationSwapMutation implements MutationOperator<Integer, Intege
 	public void setProbability(double mutationProbability) {
 		this.mutationProbability = mutationProbability;
 		
+	}
+	
+	@Override
+	public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
+		EnumMap<EnumAlgorithmParameters, String> para = new EnumMap<EnumAlgorithmParameters, String>(EnumAlgorithmParameters.class);
+		para.put(EnumAlgorithmParameters.P_M, mutationProbability+"");
+		return para;
 	}
 
 }

@@ -1,7 +1,13 @@
 package org.um.feri.ears.benchmark;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
@@ -18,12 +24,15 @@ import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem6
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem7;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
+import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.rating.Game;
 import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.util.Cache;
+import org.um.feri.ears.util.FutureResult;
 import org.um.feri.ears.util.Util;
 
 public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem>{
@@ -77,7 +86,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     			for (int j=i+1; j<results.size(); j++) {
     				second = results.get(j);
     				indicatorName = indicators.get(Util.nextInt(indicators.size()));
-    				qi = IndicatorFactory.createIndicator(indicatorName, t.getProblem());
+    				qi = IndicatorFactory.createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
     				
     				try {
     					if(qi.getIndicatorType() == IndicatorType.Unary)
@@ -89,17 +98,17 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
 						e.printStackTrace();
 					}
     				if (resultEqual(first.getBest(), second.getBest(), qi)) { 
-						arena.addGameResult(Game.DRAW, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+						arena.addGameResult(Game.DRAW, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
 					} 
     				else 
     				{
     					if (t.isFirstBetter(first.getBest(),second.getBest(), qi))
     					{
-    						arena.addGameResult(Game.WIN, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
     					}
     					else
     					{
-    						arena.addGameResult(Game.WIN, second.getAl().getAlgorithmInfo().getVersionAcronym(), first.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, second.getAl().getAlgorithmInfo().getVersionAcronym(), first.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
     					}
     				}
         		}
@@ -110,6 +119,43 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     		super.setWinLoseFromResultList(arena, t);
     	
     }
+    
+    @Override
+	protected void runOneProblem(DoubleMOTask task, BankOfResults allSingleProblemRunResults) {
+
+    	reset(task);
+    	ExecutorService pool = Executors.newFixedThreadPool(listOfAlgorithmsPlayers.size());
+        Set<Future<FutureResult<DoubleMOTask, Double>>> set = new HashSet<Future<FutureResult<DoubleMOTask, Double>>>();
+        for (MOAlgorithm<DoubleMOTask, Double> al: listOfAlgorithmsPlayers) {
+          Future<FutureResult<DoubleMOTask, Double>> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+          set.add(future);
+        }
+
+        for (Future<FutureResult<DoubleMOTask, Double>> future : set) {
+        	try {
+        		FutureResult<DoubleMOTask, Double> res = future.get();
+
+        		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
+        		//reset(task); //for one eval!
+        		if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.None) {
+
+        			results.add(new MOAlgorithmEvalResult(res.result, res.algorithm)); 
+        			allSingleProblemRunResults.add(task, res.result, res.algorithm);
+        		}
+        		else {
+        			System.err.println(res.algorithm.getAlgorithmInfo().getVersionAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
+        			results.add(new MOAlgorithmEvalResult(null, res.algorithm)); // this can be done parallel - asynchrony                    
+        		}
+        		
+        		//reset(task);
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+        }
+        
+    	//pool.shutdown();
+        
+	}
     
     /* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
@@ -135,13 +181,13 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     	problems.add(new UnconstrainedProblem5());
     	problems.add(new UnconstrainedProblem6());
     	problems.add(new UnconstrainedProblem7());
-    	problems.add(new UnconstrainedProblem8());
-    	problems.add(new UnconstrainedProblem9());
-    	problems.add(new UnconstrainedProblem10());
+    	//problems.add(new UnconstrainedProblem8());
+    	//problems.add(new UnconstrainedProblem9());
+    	//problems.add(new UnconstrainedProblem10());
 
     	
     	for (DoubleMOProblem moProblem : problems) {
-    		registerTask(stopCriteria, evaluationsOnDimension, 0.001, moProblem);
+    		registerTask(stopCriteria, evaluationsOnDimension, 1.0E-4, moProblem);
 		}
     }
         

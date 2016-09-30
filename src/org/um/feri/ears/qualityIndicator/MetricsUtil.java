@@ -286,7 +286,7 @@ public final class MetricsUtil<T> {
      * @param maximumValue The maximun values allowed
      * @param minimumValue The mininum values allowed
      **/
-	public static <T> void normalizeFront(ParetoSolution<T> front, double[] maximumValue, double[] minimumValue) {
+	public static <T extends Number> void normalizeFront(ParetoSolution<T> front, double[] maximumValue, double[] minimumValue) {
 
 		MOSolutionBase<T> normSolution;
 		for (int i = 0; i < front.size(); i++) {
@@ -297,7 +297,7 @@ public final class MetricsUtil<T> {
 		}
 	}
 	
-	public static <T,P extends MOProblemBase<T>> double[][] getNormalizedFront(double[][] front, P problem){
+	public static <T extends Number,P extends MOProblemBase<T>> double[][] getNormalizedFront(double[][] front, P problem){
 		
 		ParetoSolution<T> referenceSet = new ParetoSolution<T>(0);
 		String fileName = problem.getFileName(); 
@@ -369,7 +369,7 @@ public final class MetricsUtil<T> {
 		return invertedFront;
 	}
 	
-	public static <T> void invertedFront(ParetoSolution<T> population) {
+	public static <T extends Number> void invertedFront(ParetoSolution<T> population) {
 		
 		for (MOSolutionBase<T> sol : population) {
 			for (int i = 0; i < sol.numberOfObjectives(); i++) {
@@ -391,7 +391,7 @@ public final class MetricsUtil<T> {
      * @param path The path of the file containing the data
      * @return A solution set
      */
-	public static <T> ParetoSolution<T> readNonDominatedSolutionSet(String path) {
+	public static <T extends Number> ParetoSolution<T> readNonDominatedSolutionSet(String path) {
 		try {
 			/* Open the file */
 			FileInputStream fis = new FileInputStream(path);

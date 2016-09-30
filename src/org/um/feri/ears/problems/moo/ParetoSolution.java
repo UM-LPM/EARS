@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -36,7 +37,7 @@ import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.Style;
 import com.panayotis.gnuplot.terminal.PostscriptTerminal;
 
-public class ParetoSolution<Type> extends SolutionBase<Type> implements Iterable<MOSolutionBase<Type>> {
+public class ParetoSolution<Type extends Number> extends SolutionBase<Type> implements Iterable<MOSolutionBase<Type>> {
 
 	public ParetoSolution(ParetoSolution<Type> ps) {
 
@@ -59,6 +60,20 @@ public class ParetoSolution<Type> extends SolutionBase<Type> implements Iterable
 	public List<MOSolutionBase<Type>> solutions;
 	private double pareto_eval;
 	
+	private HashMap<String,Double> qiEval = new HashMap<String,Double>();
+	
+	/**
+	 * Returns evaluations for all unary quality indicators.
+	 * @return all unary quality indicators evaluations.
+	 */
+	public HashMap<String, Double> getAllQiEval() {
+		return qiEval;
+	}
+	
+	public void setEvalForAllUnaryQIs(HashMap<String, Double> qiEval) {
+		this.qiEval = qiEval;
+	}
+
 	/**
 	 * Maximum size of the solution set
 	 */
@@ -171,13 +186,48 @@ public class ParetoSolution<Type> extends SolutionBase<Type> implements Iterable
 		return pareto_eval;
 	}
 	
-    public void evaluate(QualityIndicator qi) throws Exception
+	public void evaluate(QualityIndicator qi) throws Exception
+	{
+		this.evaluate(qi,false);
+	}
+	
+	/**
+	 * Evaluates the Pareto approximation with the given quality indicator. If {@code usecache} is set to true
+	 * and the Pareto approximation is already evaluated with the given {@code qi}, that value is used.
+	 * @param qi the quality indicator used for evaluation
+	 * @param usecache set to true to read from cache
+	 * @throws Exception if {@code qi} is null or an incorrect type
+	 */
+    public void evaluate(QualityIndicator qi, boolean usecache) throws Exception
     {
+    	if(usecache)
+    	{
+    		if(qiEval.containsKey(qi.getName()))
+    		{
+    			pareto_eval = qiEval.get(qi.getName());
+    			return;
+    		}
+    	}
+    	
     	// throw error if the indicator is null or not unary
     	if(qi == null || qi.getIndicatorType() != IndicatorType.Unary)
 			throw new Exception("Indicator is null or incorrect indicator type!");
 		pareto_eval = qi.evaluate(this);
+		
+		qiEval.put(qi.getName(), pareto_eval); //replace value
     }
+    
+    public void evaluteWithAllUnaryQI(int num_obj, String file_name) throws Exception
+    {
+    	for (IndicatorName name : IndicatorName.values()) {
+    		QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, num_obj, file_name);
+    		if(qi.getIndicatorType() == IndicatorType.Unary)
+    		{
+    			this.evaluate(qi);
+    		}
+    	}
+    }
+
 	
 	public boolean isFirstBetter(ParetoSolution second, QualityIndicator qi) 
 	{
@@ -261,13 +311,13 @@ public class ParetoSolution<Type> extends SolutionBase<Type> implements Iterable
 		return solutions.contains(solution);
 	}
 	
-	public void displayAllUnaryQulaityIndicators(MOProblemBase problem)
+	public void displayAllUnaryQulaityIndicators(int num_obj, String file_name)
 	{
 		 ArrayList<QualityIndicator<Type>> indicators = new ArrayList<QualityIndicator<Type>>();
 		 double value;
 		 // add all unary indicators to list
 		 for (IndicatorName name : IndicatorName.values()) {
-			  QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, problem);
+			  QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, num_obj, file_name);
 			  if(qi.getIndicatorType() == IndicatorType.Unary)
 				  indicators.add(qi);
 		 }
@@ -465,7 +515,7 @@ public class ParetoSolution<Type> extends SolutionBase<Type> implements Iterable
 		return s;
 	}
 
-	public void displayData(String algorithm, String problemN, MOProblemBase problem) {
+	public void displayData(String algorithm, String problemN) {
 
 		final String algorithm_name = algorithm.replace("_", "\\_");
 		final String problem_name = problemN.replace("_", "\\_");

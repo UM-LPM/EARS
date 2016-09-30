@@ -27,7 +27,7 @@ import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.Objective;
 
-public class ZDT1 extends DoubleMOProblem{
+public class ZDT1 extends ZDT{
 	
 	public ZDT1() {
 		this(30); 

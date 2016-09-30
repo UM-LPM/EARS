@@ -55,10 +55,8 @@ public class ProblemRastrigin  extends Problem{
 	public ProblemRastrigin(int d) {
 		super(d,0);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -5.12);
-		Collections.fill(upperLimit, 10.24);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.12));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.24));
 		
 		name = "Rastrigin";
 	}
@@ -66,10 +64,8 @@ public class ProblemRastrigin  extends Problem{
 	public ProblemRastrigin(int d, double j) {
 		super(d,0);
 		
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, j*-1.0);
-		Collections.fill(upperLimit, j*2.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, j*-1.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, j*2.0));
 		
 		name = "Rastrigin";
 	}

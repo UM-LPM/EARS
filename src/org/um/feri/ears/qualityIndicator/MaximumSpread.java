@@ -15,18 +15,24 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  * evolutionary algorithms: Empirical results,"" IEEE Trans. Evol. Comput.,
  * vol. 8, no. 2, pp. 173–195, Jun. 2000.
  */
-public class MaximumSpread<T> extends QualityIndicator<T> {
+public class MaximumSpread<T extends Number> extends QualityIndicator<T> {
 
 	static final double pow_ = 2.0;
 	
-	public MaximumSpread(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public MaximumSpread(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name = "Maximum Spread";
 	}
 	
 	@Override
 	public double evaluate(ParetoSolution<T> population) {
-		double[][] front = population.writeObjectivesToMatrix();
+		
+		//double[][] front = population.writeObjectivesToMatrix();
+		
+		double[][] normalizedApproximation;
+
+		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
+		
 		double MS = 0.0;
 		double sum = 0.0;
 		double PF_true_max, PF_true_min, PF_known_max, PF_known_min;
@@ -35,7 +41,7 @@ public class MaximumSpread<T> extends QualityIndicator<T> {
 			PF_true_max = PF_known_max = Double.MIN_VALUE;
 			PF_true_min = PF_known_min = Double.MAX_VALUE;
 			
-			for (double[] ds : referenceSet) {
+			for (double[] ds : normalizedReference) {
 				if(ds[i] > PF_true_max)
 					PF_true_max = ds[i];
 				
@@ -43,7 +49,7 @@ public class MaximumSpread<T> extends QualityIndicator<T> {
 					PF_true_min = ds[i];
 			}
 			
-			for (double[] ds : front) {
+			for (double[] ds : normalizedApproximation) {
 				if(ds[i] > PF_known_max)
 					PF_known_max = ds[i];
 				

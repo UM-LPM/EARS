@@ -40,7 +40,7 @@ import org.um.feri.ears.util.PointComparator;
  *           IEEE Transactions on Evolutionary Computation, vol. 16, no. 1, 
  *           pp. 86-95, 2012.
  */
-public class WFGHypervolume<T> extends QualityIndicator<T>{
+public class WFGHypervolume<T extends Number> extends QualityIndicator<T>{
 	
 	static final int OPT = 2;
 	ParetoSolution<T>[] fs;
@@ -54,16 +54,16 @@ public class WFGHypervolume<T> extends QualityIndicator<T>{
 	/**
 	 * Constructor Creates a new instance of MultiDelta
 	 */
-	public WFGHypervolume(MOProblemBase<T> problem) {
-		super(problem, (ParetoSolution<T>) getReferenceSet(problem.getFileName()));
+	public WFGHypervolume(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name="WFGHypervolume";
 		
 	    maximizing = false;
 	    currentDeep = 0;
 	    pointComparator = new PointComparator();
 
-	    currentDimension = problem.getNumberOfObjectives();
-	    numberOfObjectives = problem.getNumberOfObjectives();
+	    currentDimension = num_obj;
+	    numberOfObjectives = num_obj;
 		
 	}
 

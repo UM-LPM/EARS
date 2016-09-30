@@ -1,10 +1,22 @@
 package org.um.feri.ears.benchmark;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.MOTask;
@@ -18,10 +30,17 @@ import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.rating.Game;
 import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.util.Cache;
+import org.um.feri.ears.util.ParetoSolutionCache;
+import org.um.feri.ears.util.Util;
 
-public abstract class MORatingBenchmark<T, Task extends MOTask<T, P>, P extends MOProblemBase<T>> extends RatingBenchmarkBase<Task, MOAlgorithm<Task, T>, MOAlgorithmEvalResult> {
+public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T, P>, P extends MOProblemBase<T>> extends RatingBenchmarkBase<Task, MOAlgorithm<Task, T>, MOAlgorithmEvalResult> {
 	
 	protected List<IndicatorName> indicators;
+    private double indicatorWeights[];
+    protected boolean runInParalel = false;
+    
+	
 	/**
 	 * This indicator is only used when comparing two approximation sets
 	 */
@@ -31,6 +50,12 @@ public abstract class MORatingBenchmark<T, Task extends MOTask<T, P>, P extends 
 		this.indicators = indicators;
 	}
 	
+	public MORatingBenchmark(ArrayList<IndicatorName> indicators, double[] weights) {
+		super();
+		this.indicators = indicators;
+		indicatorWeights = weights;
+	}
+
 	public abstract boolean resultEqual(ParetoSolution<T> a, ParetoSolution<T> b, QualityIndicator<T> qi);
     protected abstract void registerTask(EnumStopCriteria sc, int eval, double epsilon, P p);
 	
@@ -39,38 +64,18 @@ public abstract class MORatingBenchmark<T, Task extends MOTask<T, P>, P extends 
         listOfAlgorithmsPlayers.add(al);
     }
     
-    @Override
-	protected void runOneProblem(Task task, BankOfResults allSingleProblemRunResults) {
-		long start=0;
-    	long duration=0;
-        for (MOAlgorithm<Task, T> al: listOfAlgorithmsPlayers) {
-            reset(task); //number of evaluations  
-            try {
-                start = System.currentTimeMillis();
-                if (printSingleRunDuration) {
-            	  System.out.print(al.getID()+": ");
-                }
-                
-                ParetoSolution<T> bestByALg = al.run(task); //check if result is fake!
-                
-                duration = System.currentTimeMillis()-start;
-                al.addRunDuration(duration);
-                if (printSingleRunDuration) System.out.println(duration/1000);
-                reset(task); //for one eval!
-                if (task.areDimensionsInFeasableInterval(bestByALg)) {
-                	
-                	results.add(new MOAlgorithmEvalResult(bestByALg, al)); 
-                    allSingleProblemRunResults.add(task.getProblem(), bestByALg, al);
-                }
-                else {
-                    System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemShortName());
-                    results.add(new MOAlgorithmEvalResult(null, al)); // this can be done parallel - asynchrony                    
-                }
-            } catch (StopCriteriaException e) {
-                System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" StopCriteriaException for:"+task+"\n"+e);
-                results.add(new MOAlgorithmEvalResult(null, al));
-            }   
-        }
+	protected IndicatorName getRandomIndicator()
+	{
+		if(indicatorWeights != null)
+		{
+			double rand = Util.rnd.nextDouble();
+			for (int i = 0; i < indicatorWeights.length; i++) {
+				if(rand < indicatorWeights[i])
+					return indicators.get(i);
+			}
+			
+		}
+		return indicators.get(Util.nextInt(indicators.size()));
 	}
 
 	class FitnessComparator implements Comparator<MOAlgorithmEvalResult> {
@@ -115,7 +120,7 @@ public abstract class MORatingBenchmark<T, Task extends MOTask<T, P>, P extends 
 			MOAlgorithmEvalResult win;
 			MOAlgorithmEvalResult lose;        
 			FitnessComparator fc;
-			QualityIndicator<T> qi = IndicatorFactory.<T>createIndicator(indicatorName, t.getProblem());
+			QualityIndicator<T> qi = IndicatorFactory.<T>createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
 			fc = new FitnessComparator(t, qi);
 			Collections.sort(results, fc); //best first
 			for (int i=0; i<results.size()-1; i++) {
@@ -123,7 +128,7 @@ public abstract class MORatingBenchmark<T, Task extends MOTask<T, P>, P extends 
 				for (int j=i+1; j<results.size(); j++) {
 					lose = results.get(j);
 					if (resultEqual(win.getBest(), lose.getBest(), qi)) {
-						arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+						arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
 					} else {
 						if (win.getAl()==null) {
 							System.out.println("NULL ID "+win.getClass().getName());
@@ -137,7 +142,7 @@ public abstract class MORatingBenchmark<T, Task extends MOTask<T, P>, P extends 
 						if (lose.getBest()==null) {
 							System.out.println(lose.getAl().getID()+" NULL");
 						}                     
-						arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemShortName(), indicatorName.toString());
+						arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
 					}
 
 				}
@@ -157,7 +162,9 @@ public abstract class MORatingBenchmark<T, Task extends MOTask<T, P>, P extends 
         duelNumber = repetition;
         parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_DEULS, ""+repetition);
         for (Task t:listOfProblems) {
+        	System.out.println("Current problem: "+t.getProblemName());
             for (int i=0; i<repetition; i++) {
+            	System.out.println("Current repetition: "+ (i+1));
                 runOneProblem(t,allSingleProblemRunResults);
                 setWinLoseFromResultList(arena,t);
                 results.clear();
@@ -170,7 +177,46 @@ public abstract class MORatingBenchmark<T, Task extends MOTask<T, P>, P extends 
         }
         
     }
-	
-	
 
+	@Override
+	protected void runOneProblem(Task task, BankOfResults allSingleProblemRunResults) {
+
+			long start=0;
+			long duration=0;
+			for (MOAlgorithm<Task, T> al: listOfAlgorithmsPlayers) {
+
+				reset(task); //number of evaluations  
+				try {
+					start = System.currentTimeMillis();
+					
+					GraphDataRecorder.SetContext(al,task);
+					
+					ParetoSolution<T> bestByALg = al.execute(task); //check if result is fake!
+					
+	                GraphDataRecorder.SetParetoSolution(bestByALg);
+
+					duration = System.currentTimeMillis()-start;
+					if (printSingleRunDuration) {
+						System.out.println(al.getID()+": "+(duration/1000));
+					}
+					al.addRunDuration(duration);
+
+					reset(task); //for one eval!
+					if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(bestByALg)) || MOAlgorithm.getCaching() != Cache.None) {
+
+						results.add(new MOAlgorithmEvalResult(bestByALg, al)); 
+						allSingleProblemRunResults.add(task, bestByALg, al);
+					}
+					else {
+						System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemName());
+						results.add(new MOAlgorithmEvalResult(null, al)); // this can be done parallel - asynchrony                    
+					}
+				} catch (StopCriteriaException e) {
+					System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" StopCriteriaException for:"+task+"\n"+e);
+					results.add(new MOAlgorithmEvalResult(null, al));
+				}
+			}
+
+	}
+	
 }

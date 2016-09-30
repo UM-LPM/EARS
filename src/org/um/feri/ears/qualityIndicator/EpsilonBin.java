@@ -35,10 +35,10 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  * It can be used also as a command line program just by typing
  * $java jmetal.qualityIndicator.Epsilon <solutionFrontFile> <trueFrontFile> <numberOfObjectives>
  */
-public class EpsilonBin<T> extends QualityIndicator<T>{
+public class EpsilonBin<T extends Number> extends QualityIndicator<T>{
 	
-	public EpsilonBin(MOProblemBase moProblemBase) {
-		super(moProblemBase);
+	public EpsilonBin(int num_obj) {
+		super(num_obj);
 		name = "EpsilonBin";
 	}
 

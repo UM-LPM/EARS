@@ -20,6 +20,8 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
+import org.um.feri.ears.util.Util;
 public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type>{
 
 	int populationSize = 100;
@@ -27,8 +29,6 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	int bisections = 5;
 	ParetoSolution<Type> population;
 	AdaptiveGridArchive<Type> archive;
-	int num_var;
-	int num_obj;
 	
 	CrossoverOperator<Type, MOTask> cross;
 	MutationOperator<Type, MOTask> mut;
@@ -45,14 +45,18 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 				"PESAII",
 				"\\bibitem{corne2001}\nD.W.~Corne,N.R.~Jerram,J.D.~Knowles,M.J.~Oates\n\\newblock PESA-II: Region-based Selection in Evolutionary Multiobjective Optimization.\n\\newblock \\emph{Proceedings of the Genetic and Evolutionary Computation Conference (GECCO-2001)}, 283--290, 2001.\n",
 				"PESAII", "Pareto Envelope-Based Selection Algorithm");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
+	public void resetDefaultsBeforNewRun() {
+	}
+
+	@Override
+	protected void init() {
 		
 		if(optimalParam)
 		{
@@ -83,42 +87,18 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 			}
 			}
 		}
-
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
 		
-		if(display_data)
-		{
-			archive.displayAllUnaryQulaityIndicators(task.getProblem());
-			archive.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		}
-		if(save_data)
-		{
-			archive.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			archive.printFeasibleFUN("FUN_PESAII");
-			archive.printVariablesToFile("VAR");
-			archive.printObjectivesToCSVFile("FUN");
-		}
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
 
-		return archive;
-	}
-
-	@Override
-	public void resetDefaultsBeforNewRun() {
-	}
-
-	private void init() {
+		
 		archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, num_obj);
 		population = new ParetoSolution<Type>(populationSize);
 	}
 
-	public void start() throws StopCriteriaException {
+	@Override
+	protected void start() throws StopCriteriaException {
 
-		SBXCrossover sbx = new SBXCrossover(0.9, 20.0);
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
 		PESA2Selection<Type> selection = new PESA2Selection<Type>();
 
 		// Create the initial individual and evaluate it and his constraints
@@ -163,5 +143,7 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 			population.clear();
 
 		} while (!task.isStopCriteria());
+		
+		best = archive;
 	}
 }

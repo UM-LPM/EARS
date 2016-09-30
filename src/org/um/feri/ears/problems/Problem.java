@@ -74,8 +74,12 @@ public abstract class Problem extends ProblemBase<Double> {
         return true;
 	    
 	}
-	
-	
+		
+	@Override
+	public String toString() {
+
+		return "Problem: "+name+ " version: "+version+" dimensions: "+ numberOfDimensions+" constraints: "+numberOfConstraints;
+	}
 
 	public static final EnumProblemTypes TYPE = EnumProblemTypes.SORPO;
 	

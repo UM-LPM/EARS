@@ -34,13 +34,13 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  *           IEEE Transactions on Evolutionary Computation, vol. 3, no. 4, 
  *           pp. 257-271, 1999.
  */
-public class Hypervolume<T> extends QualityIndicator<T>{
+public class Hypervolume<T extends Number> extends QualityIndicator<T>{
 
 	/**
 	 * Constructor Creates a new instance of MultiDelta
 	 */
-	public Hypervolume(MOProblemBase moProblemBase) {
-		super(moProblemBase, (ParetoSolution<T>) getReferenceSet(moProblemBase.getFileName()));
+	public Hypervolume(int num_obj, String file_name) {
+		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
 		name="Hypervolume";
 	}
   

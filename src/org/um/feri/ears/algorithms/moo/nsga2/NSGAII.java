@@ -20,9 +20,11 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.Ranking;
+import org.um.feri.ears.util.Util;
 
 
 /** 
@@ -37,8 +39,6 @@ import org.um.feri.ears.util.Ranking;
 public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
 	int populationSize = 100;
-	int num_var;
-	int num_obj;
 
 	ParetoSolution<Type> population;
 	ParetoSolution<Type> offspringPopulation;
@@ -59,66 +59,15 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 				"NSGAII",
 				"\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
 				"NSGAII", "Nondominated Sorting Genetic Algorithm II ");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+		
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
+
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-
-		if(optimalParam)
-		{
-			switch(num_obj){
-			case 1:
-			{
-				populationSize = 100;
-				break;
-			}
-			case 2:
-			{
-				populationSize = 100;
-				break;
-			}
-			case 3:
-			{
-				populationSize = 300;
-				break;
-			}
-			default:
-			{
-				populationSize = 500;
-				break;
-			}
-			}
-		}
-		
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-		
-		// Return the first non-dominated front
-		Ranking<Type> ranking = new Ranking<Type>(population);
-		ParetoSolution<Type> best = ranking.getSubfront(0);
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			best.printFeasibleFUN("FUN_NSGAII");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		if(display_data)
-		{
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		}
-		return best;
-	}
-
-	public void start() throws StopCriteriaException {
+	protected void start() throws StopCriteriaException {
 		Distance<Type> distance = new Distance<Type>();
 		BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
 
@@ -202,9 +151,42 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 				remain = 0;
 			}
 		}
+		
+		Ranking<Type> ranking = new Ranking<Type>(population);
+		best = ranking.getSubfront(0);
 	}
 
+	@Override
 	protected void init() {
+		
+		if(optimalParam)
+		{
+			switch(num_obj){
+			case 1:
+			{
+				populationSize = 100;
+				break;
+			}
+			case 2:
+			{
+				populationSize = 100;
+				break;
+			}
+			case 3:
+			{
+				populationSize = 300;
+				break;
+			}
+			default:
+			{
+				populationSize = 500;
+				break;
+			}
+			}
+		}
+		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		
 		population = new ParetoSolution<Type>(populationSize);
 	}
 

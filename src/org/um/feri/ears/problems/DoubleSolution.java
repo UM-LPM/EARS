@@ -58,8 +58,8 @@ public class DoubleSolution extends SolutionBase<Double>{
 	public DoubleSolution(DoubleSolution s) {
 		super(s);
 		
-		upperLimit = new ArrayList<Double>(s.upperLimit);
-		lowerLimit = new ArrayList<Double>(s.lowerLimit);
+		//upperLimit = new ArrayList<Double>(s.upperLimit);
+		//lowerLimit = new ArrayList<Double>(s.lowerLimit);
 	    
 		eval = s.eval;
 	}

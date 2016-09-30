@@ -26,6 +26,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.InitWeight;
 import org.um.feri.ears.util.Util;
@@ -82,8 +83,6 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 	MOSolutionBase<Type>[] indArray;
 	String functionType;
 	int gen;
-	int num_var;
-	int num_obj;
 
 	static String dataDirectory = "Weight";
 
@@ -101,14 +100,13 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 				"MOEAD_DRA",
 				"\\bibitem{Zhang2009}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock The Performance of a New Version of MOEA/D on CEC09 Unconstrained MOP Test Instances.\n\\newblock \\emph{IEEE Congress on Evolutionary Computation}, 203--208, 2009.\n",
 				"MOEAD_DRA", "Multiobjective Evolutionary Algorithm Based on Decomposition");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
+	protected void init() throws StopCriteriaException {
 		
 		if(optimalParam)
 		{
@@ -135,32 +133,8 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 			}
 			}
 		}
-			
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		ParetoSolution<Type> best = finalSelection(populationSize);
 		
-		if(display_data)
-		{
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(),task.getProblem());
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-		}
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			best.printFeasibleFUN("FUN_MOEAD_DRA");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		
-		return best;
-	}
-
-	protected void init() throws StopCriteriaException {
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 
 		population = new ParetoSolution<Type>(populationSize);
 		savedValues = new MOSolutionBase[populationSize];
@@ -199,9 +173,6 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 	}
 
 	protected void start() throws StopCriteriaException {
-
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
-		DifferentialEvolutionCrossover dec = new DifferentialEvolutionCrossover();
 		
 		// STEP 2. Update
 		do {
@@ -245,7 +216,10 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 				mut.execute(child, task);
 
 				if (task.isStopCriteria())
+				{
+					best = finalSelection(populationSize);
 					return;
+				}
 				// Evaluation
 				task.eval(child);
 
@@ -265,6 +239,8 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 
 		} while (!task.isStopCriteria());
 		System.out.println(gen);
+		
+		best = finalSelection(populationSize);
 	}
 
 	public void initUniformWeight() {

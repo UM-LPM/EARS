@@ -24,10 +24,10 @@ import org.um.feri.ears.util.DominanceComparator;
  * results. Journal of Evolutionary Computation, 8(2),
  * 2000,pp.173-195.
  */
-public class CoverageOfTwoSets<Type> extends QualityIndicator<Type> {
+public class CoverageOfTwoSets<Type extends Number> extends QualityIndicator<Type> {
 	
-	public CoverageOfTwoSets(MOProblemBase moProblemBase) {
-		super(moProblemBase);
+	public CoverageOfTwoSets(int num_obj) {
+		super(num_obj);
 		name = "Coverage of two sets";
 	}
 
@@ -37,8 +37,9 @@ public class CoverageOfTwoSets<Type> extends QualityIndicator<Type> {
 	private static final Comparator<MOSolutionBase> dominance_ = new DominanceComparator();
 	
 	@Override
-	public double evaluate(ParetoSolution front) {
+	public double evaluate(ParetoSolution<Type> front) {
 		// TODO calculate throw error if second front is null
+		System.err.println("Cannot evaluate wit binary indicator!");
 		double CS = 0.0;
 		
 		return CS;
@@ -60,7 +61,7 @@ public class CoverageOfTwoSets<Type> extends QualityIndicator<Type> {
 	}
 
 	@Override
-	public int compare(ParetoSolution front1, ParetoSolution front2, Double epsilon) {
+	public int compare(ParetoSolution<Type> front1, ParetoSolution<Type> front2, Double epsilon) {
 		double CS1 = 0.0;
 		double CS2 = 0.0;
 		

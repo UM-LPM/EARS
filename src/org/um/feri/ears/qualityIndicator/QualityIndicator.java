@@ -1,10 +1,9 @@
 package org.um.feri.ears.qualityIndicator;
 
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public abstract class QualityIndicator<Type> {
+public abstract class QualityIndicator<Type extends Number> {
 
 	/** Returns the calculated quality indicator
 	   *  @param population
@@ -20,11 +19,7 @@ public abstract class QualityIndicator<Type> {
 	 */
 	protected double eps;
 	
-	/**
-	 * The problem.
-	 */
-	protected final MOProblemBase problem;
-	
+	protected String problem_file;
 
 	protected ParetoSolution<Type> referencePopulation;
 	
@@ -57,33 +52,29 @@ public abstract class QualityIndicator<Type> {
 	 */
 	double[][] normalizedReference;
 	
-	public QualityIndicator(MOProblemBase<Type> problem, ParetoSolution<Type> population)
+	public QualityIndicator(int num_obj, String file_name, ParetoSolution<Type> population)
 	{
-		this.problem = problem;
-		if(problem != null)
-		{
-			this.numberOfObjectives = problem.getNumberOfObjectives();
-		}
-		minimumValue = new double[problem.getNumberOfObjectives()];
-		maximumValue = new double[problem.getNumberOfObjectives()];
-		referencePoint = getReferencePoint(problem.getFileName());
+
+		this.numberOfObjectives = num_obj;
+		this.problem_file = file_name;
+
+		minimumValue = new double[numberOfObjectives];
+		maximumValue = new double[numberOfObjectives];
+		referencePoint = getReferencePoint(problem_file);
 		referencePopulation = population;
-		this.referenceSet = population.writeObjectivesToMatrix(); 
+		this.referenceSet = population.writeObjectivesToMatrix();
 		normalizedReference = normalize(population);
 	}
 	/**
 	 * Quality Indicator constructor for indicators without reference sets
 	 * @param moProblemBase
 	 */
-	public QualityIndicator(MOProblemBase moProblemBase)
+	public QualityIndicator(int num_obj)
 	{
-		this.problem = moProblemBase;
-		if(moProblemBase != null)
-		{
-			this.numberOfObjectives = moProblemBase.getNumberOfObjectives();
-		}
-		minimumValue = new double[moProblemBase.getNumberOfObjectives()];
-		maximumValue = new double[moProblemBase.getNumberOfObjectives()];
+		this.numberOfObjectives = num_obj;
+		
+		minimumValue = new double[numberOfObjectives];
+		maximumValue = new double[numberOfObjectives];
 	}
 	
 	public double getEpsilon()
@@ -97,7 +88,7 @@ public abstract class QualityIndicator<Type> {
 			throw new IllegalArgumentException("requires at least two solutions");
 		}
 		
-		for (int i = 0; i < problem.getNumberOfObjectives(); i++) {
+		for (int i = 0; i < numberOfObjectives; i++) {
 			minimumValue[i] = Double.POSITIVE_INFINITY;
 			maximumValue[i] = Double.NEGATIVE_INFINITY;
 		}
@@ -109,7 +100,7 @@ public abstract class QualityIndicator<Type> {
 				continue;
 			}
 			
-			for (int j = 0; j < problem.getNumberOfObjectives(); j++) {
+			for (int j = 0; j < numberOfObjectives; j++) {
 				minimumValue[j] = Math.min(minimumValue[j], solution.getObjective(j));
 				maximumValue[j] = Math.max(maximumValue[j], solution.getObjective(j));
 			}
@@ -135,7 +126,7 @@ public abstract class QualityIndicator<Type> {
 	 *         smaller than machine precision
 	 */
 	private void checkRanges() {
-		for (int i = 0; i < problem.getNumberOfObjectives(); i++) {
+		for (int i = 0; i < numberOfObjectives; i++) {
 			if (Math.abs(minimumValue[i] - maximumValue[i]) < 1e-10) {
 				throw new IllegalArgumentException(
 						"objective with empty range");
@@ -143,7 +134,7 @@ public abstract class QualityIndicator<Type> {
 		}
 	}
 
-	protected static <T> ParetoSolution<T> getReferenceSet(String fileName) {
+	protected static <T extends Number> ParetoSolution<T> getReferenceSet(String fileName) {
 		
 		ParetoSolution<T> referenceSet = new ParetoSolution<T>(0);
 
@@ -175,7 +166,45 @@ public abstract class QualityIndicator<Type> {
 	}
 	
 	public enum IndicatorName {
-	    CovergeOfTwoSets, Epsilon, EpsilonBin, ErrorRatio, GD, Hypervolume, IGD, IGDPlus, MPFE, MaximumSpread, NR, ONVG, ONVGR, R1, R2, R3, RNI, Spacing, Spread, GeneralizedSpread, NativeHV
+	    CovergeOfTwoSets("CS"," Coverage of two sets"), 
+	    Epsilon("eps","Epsilon"), 
+	    EpsilonBin("eps bin","Binary Epsilon"), 
+	    ErrorRatio("ER", "Error Ratio"), 
+	    GD("GD","Generational Distance"), 
+	    //Hypervolume("HV","Hypervolume"), 
+	    IGD("IGD","Inverted Generational Distance"), 
+	    IGDPlus("IGD+","Inverted Generational Distance Plus"), 
+	    MPFE("MPFE","Maximum Pareto Front Error"), 
+	    MaximumSpread("MS","Maximum Spread"), 
+	    NR("NR","Nondominated Ratio"), 
+	    ONVG("ONVG","Overall Nondominated Vector Generation"), 
+	    ONVGR("ONVG","Overall Nondominated Vector Generation Ratio"), 
+	    R1("R1","R1"), 
+	    R2("R2","R2"), 
+	    R3("R3","R3"), 
+	    RNI("RNI","Ratio of Nondominated Individuals"), 
+	    Spacing("S","Spacing"), 
+	    Spread("Spread","Spread"), 
+	    GeneralizedSpread("GS","Generalized Spread"), 
+	    NativeHV("HV","Hypervolume");
+	    
+	    private String shortName, longName;
+	    private IndicatorName(String sn, String ln) {
+	    	shortName = sn;
+	        longName = ln;
+	        
+	    }   
+	    public String getLongName() {
+	        return longName;
+	    }
+
+	    public String getShortName() {
+	        return shortName;
+	    }
+
+	    public String toString() {
+	        return shortName;
+	    }
 	}
 
 	public String getName() {
@@ -184,10 +213,6 @@ public abstract class QualityIndicator<Type> {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public MOProblemBase getProblem() {
-		return problem;
 	}
 	
 	/**

@@ -26,7 +26,7 @@ import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.Objective;
 
-public class ZDT4 extends DoubleMOProblem{
+public class ZDT4 extends ZDT{
 	
 	public ZDT4() {
 		this(30); 
@@ -42,7 +42,10 @@ public class ZDT4 extends DoubleMOProblem{
 		lowerLimit = new ArrayList<Double>(numberOfDimensions);
 
 
-		for (int i = 0; i < numberOfDimensions; i++) {
+		lowerLimit.add(0.0);
+		upperLimit.add(1.0);
+		
+		for (int i = 1; i < numberOfDimensions; i++) {
 			lowerLimit.add(-5.0);
 			upperLimit.add(5.0);
 		}

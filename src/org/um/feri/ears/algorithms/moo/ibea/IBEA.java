@@ -37,12 +37,12 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
+import org.um.feri.ears.util.Util;
 public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
-	int num_var;
-	int num_obj;
 	int populationSize;
 	int archiveSize;
 	
@@ -82,78 +82,18 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				"IBEA",
 				"\\bibitem{Zitzler2004}\nE.~Zitzler, S.~Kunzli\n\\newblock Indicator-Based Selection in Multiobjective Search.\n\\newblock \\emph{Parallel Problem Solving from Nature (PPSN VIII)}, 832--842, 2004.\n",
 				"IBEA", "Indicator-based evolutionary algorithm");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
 	}
 	
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
-		if(optimalParam)
-		{
-			switch(num_obj){
-			case 1:
-			{
-				populationSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 2:
-			{
-				populationSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 3:
-			{
-				populationSize = 300;
-				archiveSize = 300;
-				break;
-			}
-			default:
-			{
-				populationSize = 500;
-				archiveSize = 500;
-				break;
-			}
-			}
-		}
-		
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		// Return the first non-dominated front
-		Ranking<Type> ranking = new Ranking<Type>(archive);
-		ParetoSolution<Type> best = ranking.getSubfront(0);
-
-		if(display_data)
-		{
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		}
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			best.printFeasibleFUN("FUN_GDE3");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		return best;
-	}
-	
-	public void start() throws StopCriteriaException {
+	protected void start() throws StopCriteriaException {
 
 	    ParetoSolution<Type> offSpringSolutionSet;
 	    
 		BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
-		SBXCrossover sbx = new SBXCrossover(0.9, 20.0);
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
 
 		// Create the initial solutionSet
 		MOSolutionBase<Type> newSolution;
@@ -200,10 +140,49 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	      // End Create a offSpring solutionSet
 	      population = offSpringSolutionSet;
 	    } // while
+		
+		// Return the first non-dominated front
+		Ranking<Type> ranking = new Ranking<Type>(archive);
+		best = ranking.getSubfront(0);
 
 	}
 	
-	private void init() {
+	@Override
+	protected void init() {
+		
+		if(optimalParam)
+		{
+			switch(num_obj){
+			case 1:
+			{
+				populationSize = 100;
+				archiveSize = 100;
+				break;
+			}
+			case 2:
+			{
+				populationSize = 100;
+				archiveSize = 100;
+				break;
+			}
+			case 3:
+			{
+				populationSize = 300;
+				archiveSize = 300;
+				break;
+			}
+			default:
+			{
+				populationSize = 500;
+				archiveSize = 500;
+				break;
+			}
+			}
+		}
+		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
+		
 		population = new ParetoSolution<Type>(populationSize);
 	    archive = new ParetoSolution<Type>(archiveSize);
 	}

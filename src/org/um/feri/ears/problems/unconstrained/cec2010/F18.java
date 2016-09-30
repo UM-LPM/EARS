@@ -9,6 +9,7 @@ import java.util.Random;
 
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.unconstrained.cec2010.base.RosenbrockShifted;
+import org.um.feri.ears.util.Util;
 
 /**
  * Problem function!
@@ -30,18 +31,15 @@ public class F18 extends Problem {
 		super(d,0);
 		rosenbrock_shifted = new RosenbrockShifted(numberOfDimensions);
 
-		upperLimit = new ArrayList<Double>(d);
-		lowerLimit = new ArrayList<Double>(d);
-		Collections.fill(lowerLimit, -100.0);
-		Collections.fill(upperLimit, 200.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
 		
 		name = "F18 D/m-group Shifted and m-dimensional Rosenbrock's Problem 1.2";
 		
 		P = new int[numberOfDimensions];
-		Random rand = new Random();
 		int rand_place = 0;
 		for (int i=numberOfDimensions-1; i>0; i--){
-			rand_place = rand.nextInt(numberOfDimensions);
+			rand_place = Util.nextInt(numberOfDimensions);
 			P[i] = rand_place;			
 		}
 		

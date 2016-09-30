@@ -21,6 +21,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.algorithms.moo.dbea.NondominatedPopulation;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.MutationOperator;
@@ -29,7 +30,9 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.RandomGenerator;
+import org.um.feri.ears.util.Ranking;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -90,8 +93,6 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	MOSolutionBase<Type>[] indArray;
 	String functionType;
 	int gen;
-	int num_var;
-	int num_obj;
 	
 	CrossoverOperator<Type, MOTask> cross;
 	MutationOperator<Type, MOTask> mut;
@@ -109,14 +110,13 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				"MOEAD",
 				"\\bibitem{Zhang2009}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock The Performance of a New Version of MOEA/D on CEC09 Unconstrained MOP Test Instances.\n\\newblock \\emph{IEEE Congress on Evolutionary Computation}, 203--208, 2009.\n",
 				"MOEAD", "Multiobjective Evolutionary Algorithm Based on Decomposition");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
 
 	@Override
-	public ParetoSolution<Type> run(T taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
+	protected void init() throws StopCriteriaException {
 		
 		if(optimalParam)
 		{
@@ -143,39 +143,8 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			}
 			}
 		}
-			
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		ParetoSolution<Type> best = population;
 		
-		if(display_data)
-		{
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(),task.getProblem());
-			best.displayAllUnaryQulaityIndicators(task.getProblem());
-		}
-		if(save_data)
-		{
-			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			best.printFeasibleFUN("FUN_MOEAD_DRA");
-			best.printVariablesToFile("VAR");
-			best.printObjectivesToCSVFile("FUN");
-		}
-		
-		/*try {
-			if(qi.getIndicatorType() == IndicatorType.Unary)
-				best.evaluate(qi);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getMessage());
-		}*/
-		return best;
-	}
-
-	private void init() throws StopCriteriaException {
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 
 		population = new ParetoSolution<Type>(populationSize);
 		savedValues = new MOSolutionBase[populationSize];
@@ -204,10 +173,8 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	public void resetDefaultsBeforNewRun() {
 	}
 
+	@Override
 	protected void start() throws StopCriteriaException {
-
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
-		DifferentialEvolutionCrossover dec = new DifferentialEvolutionCrossover();
 		
 		// STEP 2. Update
 		do {
@@ -246,7 +213,10 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				mut.execute(child, task);
 
 				if (task.isStopCriteria())
+				{
+					best = population;
 					return;
+				}
 				// Evaluation
 				task.eval(child);
 
@@ -260,7 +230,9 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			} // for
 
 		} while (!task.isStopCriteria());
-		System.out.println(gen);
+		//System.out.println(gen);
+		Ranking ranking = new Ranking(population);
+		best = ranking.getSubfront(0);
 	}
 
 	public void initUniformWeight() {
@@ -471,4 +443,76 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 		}*/
 		return fitness;
 	}
+	
+/*
+	@Override
+	public void run() {
+		
+		num_var = task.getDimensions();
+		num_obj = task.getNumberOfObjectives();
+		
+		if(optimalParam)
+		{
+			switch(num_obj){
+			case 1:
+			{
+				populationSize = 100;
+				break;
+			}
+			case 2:
+			{
+				populationSize = 100;
+				break;
+			}
+			case 3:
+			{
+				populationSize = 300;
+				break;
+			}
+			default:
+			{
+				populationSize = 500;
+				break;
+			}
+			}
+		}
+		
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
+		
+		if(caching != Cache.None && caching != Cache.Save)
+		{
+			ParetoSolution<Type> next = returnNext(task.taskInfo());
+			if(next != null)
+				return next;
+			else
+				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
+		}
+			
+		long initTime = System.currentTimeMillis();
+		init();
+		start();
+		long estimatedTime = System.currentTimeMillis() - initTime;
+		System.out.println("Total execution time: "+estimatedTime + "ms");
+
+		ParetoSolution<Type> best = population;
+		
+		if(display_data)
+		{
+			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
+			best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
+		}
+		if(save_data)
+		{
+			best.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
+			best.printFeasibleFUN("FUN_MOEAD_DRA");
+			best.printVariablesToFile("VAR");
+			best.printObjectivesToCSVFile("FUN");
+		}
+		
+		if(caching == Cache.Save)
+		{
+			Util.<Type>addParetoToJSON(getCacheKey(task.taskInfo()),ai.getPublishedAcronym(), best);
+		}
+		
+	}*/
 }

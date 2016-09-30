@@ -54,10 +54,11 @@ public class ProblemGoldSteinAndPrice  extends Problem{
 	public ProblemGoldSteinAndPrice() {
 		super(2,0);
 		
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-		Collections.fill(lowerLimit, -2.0);
-		Collections.fill(upperLimit, 4.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -2.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 4.0));
+		
+		//Collections.fill(lowerLimit, -2.0);
+		//Collections.fill(upperLimit, 4.0);
 		
 		name ="Goldstein And Price";
 	}

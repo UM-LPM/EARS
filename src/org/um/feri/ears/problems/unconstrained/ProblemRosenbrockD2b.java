@@ -56,11 +56,9 @@ public class ProblemRosenbrockD2b  extends Problem{
 	public ProblemRosenbrockD2b() {
 		super(2,0);
 		
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
-		Collections.fill(lowerLimit, -10.0);
-		Collections.fill(upperLimit, 20.0);
-		
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 20.0));
+
 		name = "Rosenbrock d2b";
 	}
 	public double eval(double x[]) {

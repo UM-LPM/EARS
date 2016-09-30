@@ -54,10 +54,8 @@ public class ProblemMartinAndGaddy  extends Problem{
 	public ProblemMartinAndGaddy() {
 		super(2,0);
 	
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
-		Collections.fill(lowerLimit, 0.0);
-		Collections.fill(upperLimit, 10.0);
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
 		
 		name ="Martin And Gaddy";
 	}

@@ -28,7 +28,7 @@ import org.um.feri.ears.util.ObjectiveComparator;
  *
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
-public class CrowdingDistance<Type> {
+public class CrowdingDistance<Type extends Number> {
 
 	/**
 	 * Assigns crowding distances to all solutions in a <code>SolutionSet</code>.

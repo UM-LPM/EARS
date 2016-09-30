@@ -33,6 +33,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.DominanceComparator;
 import org.um.feri.ears.util.NonDominatedSolutionList;
 import org.um.feri.ears.util.Util;
@@ -54,9 +55,6 @@ import org.um.feri.ears.util.Util;
  * </ol>
  */
 public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
-
-	int num_var;
-	int num_obj;
 
 	private int swarmSize;
 	private int archiveSize;
@@ -95,10 +93,13 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 				"OMOPSO",
 				"\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
 				"OMOPSO", "Nondominated Sorting Genetic Algorithm II ");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ETA, eta+"");
+		ai.addParameter(EnumAlgorithmParameters.P_M, (1.0 / num_var)+"");
 	}
 
-
+	
 	protected void initializeLeader(ParetoSolution<Double> swarm) {
 		for (MOSolutionBase<Double> solution : swarm) {
 			MOSolutionBase<Double> particle = solution.copy();
@@ -214,16 +215,10 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 			}
 		}
 	}
-
-
+	
 	@Override
-	public ParetoSolution<Double> run(DoubleMOTask taskProblem) throws StopCriteriaException {
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		
+	protected void init() throws StopCriteriaException {
 
-		
 		if(optimalParam)
 		{
 			switch(num_obj){
@@ -254,29 +249,9 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 			}
 		}
 		
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-
-		if(save_data)
-		{
-			epsilonArchive.saveParetoImage(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName());
-			epsilonArchive.printFeasibleFUN("FUN_NSGAII");
-			epsilonArchive.printVariablesToFile("VAR");
-			epsilonArchive.printObjectivesToCSVFile("FUN");
-		}
-		if(display_data)
-		{
-			epsilonArchive.displayAllUnaryQulaityIndicators(task.getProblem());
-			epsilonArchive.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		}
-		return epsilonArchive;
-	}
-	
-	protected void init() throws StopCriteriaException {
-
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize+"");
+		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
+		
 		currentIteration = 1;
 		swarm = new ParetoSolution<Double>(swarmSize);
 		this.maxIterations = task.getMaxEvaluations() / swarmSize;
@@ -313,7 +288,8 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 	    crowdingDistance.computeDensityEstimator(leaderArchive.getSolutionList());
 	}
 	
-	public void start() throws StopCriteriaException {
+	@Override
+	protected void start() throws StopCriteriaException {
 
 		// Generations
 		while (!task.isStopCriteria()) {
@@ -335,6 +311,8 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 		    crowdingDistance.computeDensityEstimator(leaderArchive.getSolutionList());
 			currentIteration++;
 		}
+		
+		best = epsilonArchive;
 	}
 
 	@Override

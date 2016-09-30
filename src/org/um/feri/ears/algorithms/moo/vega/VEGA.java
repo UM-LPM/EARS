@@ -29,6 +29,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
 
@@ -56,8 +57,6 @@ import org.um.feri.ears.util.Util;
 public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
 	int populationSize;
-	int num_var;
-	int num_obj;
 	ParetoSolution<Type> population;
 	
 	CrossoverOperator<Type, MOTask> cross;
@@ -74,28 +73,14 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				"VEGA",
 				"\\bibitem{Schaffer1985}\nD.~Schaffer.\n\\newblock Multiple Objective Optimization with Vector Evaluated Genetic Algorithms.\n\\newblock \\emph{Proceedings of the 1st International Conference on Genetic Algorithms}, 93--100, 1985.\n",
 				"VEGA", "Vector Evaluated Genetic Algorithm");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameters(crossover.getOperatorParameters());
+		ai.addParameters(mutation.getOperatorParameters());
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 	}
-	
+
 	@Override
-	public ParetoSolution<Type>  run(T taskProblem) throws StopCriteriaException {
-		
-		task = taskProblem;
-		num_var = task.getDimensions();
-		num_obj = task.getNumberOfObjectives();
-		long initTime = System.currentTimeMillis();
-		init();
-		start();
-		long estimatedTime = System.currentTimeMillis() - initTime;
-		System.out.println("Total execution time: "+estimatedTime + "ms");
-		
-		population.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemShortName(), task.getProblem());
-		
-		return population;
-	}
-	
-	public void start() throws StopCriteriaException {
-		
+	protected void start() throws StopCriteriaException {
+
 		// Create the initial solutionSet
 		MOSolutionBase<Type> newSolution;
 		for (int i = 0; i < populationSize; i++) {
@@ -105,53 +90,53 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 			// problem.evaluateConstraints(newSolution);
 			population.add(newSolution);
 		}
-		
-		SBXCrossover sbx = new SBXCrossover();
-		PolynomialMutation plm = new PolynomialMutation(1.0 / num_var, 20.0);
-		
+
 		do{
-		// select the parents from the M different subgroups
+			// select the parents from the M different subgroups
 			MOSolutionBase<Type>[] parents = performSelection(populationSize, population);
-		
-		// shuffle the parents
-		Util.shuffle(parents);
-		
-		// loop until the next generation is filled
-		int index = 0;
-		boolean filled = false;
-		
-		population.clear();
-		
-		while (!filled) {
-			
-			MOSolutionBase<Type>[] offSpring = cross.execute(select(parents, index, 2), task);
-			mut.execute(offSpring[0], task);
-			mut.execute(offSpring[1], task);
-			
-			for (int i = 0; i < offSpring.length; i++) {
-				population.add(offSpring[i]);
-				
-				if (population.size() >= populationSize) {
-					filled = true;
-					break;
+
+			// shuffle the parents
+			Util.shuffle(parents);
+
+			// loop until the next generation is filled
+			int index = 0;
+			boolean filled = false;
+
+			population.clear();
+
+			while (!filled) {
+
+				MOSolutionBase<Type>[] offSpring = cross.execute(select(parents, index, 2), task);
+				mut.execute(offSpring[0], task);
+				mut.execute(offSpring[1], task);
+
+				for (int i = 0; i < offSpring.length; i++) {
+					population.add(offSpring[i]);
+
+					if (population.size() >= populationSize) {
+						filled = true;
+						break;
+					}
 				}
+
+				index += 2 % populationSize;
 			}
-			
-			index += 2 % populationSize;
-		}
-		
-		// evaluate the offspring
-		for (MOSolutionBase<Type> ind : population.solutions) {
-			if (task.isStopCriteria())
-				return;
-			task.eval(ind);
-		}
-		
-	} while (!task.isStopCriteria());
-	
+
+			// evaluate the offspring
+			for (MOSolutionBase<Type> ind : population.solutions) {
+				if (task.isStopCriteria())
+					return;
+				task.eval(ind);
+			}
+
+		} while (!task.isStopCriteria());
+
+		best = population;
+
 	}
-	
-	private void init() {
+
+	@Override
+	protected void init() {
 		population = new ParetoSolution<Type>(populationSize);
 	}
 
