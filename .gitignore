@@ -9,3 +9,4 @@
 /bin/
 *.class
 *.DS_Store
+/Cache/

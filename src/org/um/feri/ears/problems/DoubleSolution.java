@@ -78,7 +78,7 @@ public class DoubleSolution extends SolutionBase<Double>{
 		//this.variable = new ArrayList<>(x.size());
 		variable = new ArrayList<Double>(x);
 		
-		System.arraycopy(x, 0, this.variable, 0, x.size());
+		//System.arraycopy(x, 0, this.variable, 0, x.size());
 		this.eval = eval;
 		feasible = true;
 	}
