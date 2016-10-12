@@ -56,7 +56,7 @@ public class ProblemGriewank  extends Problem{
 		super(d,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -50.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 50.0));
 
 		name ="Griewank";
 	}
@@ -64,7 +64,7 @@ public class ProblemGriewank  extends Problem{
 		super(d,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -i));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, i*2.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, i));
 
 		name ="Griewank";
 	}

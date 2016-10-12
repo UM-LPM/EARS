@@ -35,7 +35,7 @@ public class F16 extends Problem {
 		ackley_rotated = new AckleyRotated(numberOfDimensions);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 64.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.0));
 
 		name = "F16 D/m-group Shifted and m-rotated Ackley's Function";
 		

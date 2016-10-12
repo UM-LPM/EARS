@@ -30,7 +30,7 @@ public class F2 extends Problem {
 		rastrigin_shifted = new RastriginShifted(numberOfDimensions);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
 		
 		name = "F02 Shifted Rastrigin's Function";
 		

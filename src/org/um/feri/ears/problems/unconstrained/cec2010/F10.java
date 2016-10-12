@@ -38,7 +38,7 @@ public class F10 extends Problem {
 		rastrigin_rotated = new RastriginRotated(numberOfDimensions);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
 		
 		name = "F10 D/2m-group Shifted and m-rotated Rastrigin's Function";
 		

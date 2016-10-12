@@ -54,7 +54,7 @@ public class JADE extends Algorithm {
 	private void initPopulation() throws StopCriteriaException {
 		pop_x = new JADEIndividual[pop_size];
 		for (int i = 0; i < pop_size; i++) {
-			pop_x[i] = new JADEIndividual(task.getRandomIndividual(), 0.5, 0.5);
+			pop_x[i] = new JADEIndividual(task.getRandomSolution(), 0.5, 0.5);
 			updateEliteAndGlobalBest(pop_x[i]);
 			if (task.isStopCriteria())
 				break;

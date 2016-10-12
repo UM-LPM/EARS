@@ -57,7 +57,7 @@ public class ProblemSchwefelRidge  extends Problem{
 		super(d,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -64.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 128.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 64.0));
 		
 		name = "Schwefel Rigle ("+d+")";
 	}

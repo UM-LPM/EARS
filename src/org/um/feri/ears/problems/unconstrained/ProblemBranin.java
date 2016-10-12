@@ -58,7 +58,7 @@ public class ProblemBranin  extends Problem{
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
 
 		lowerLimit.set(0, -5.0);
-		upperLimit.set(0, 15.0);
+		upperLimit.set(0, 10.0);
 		
 		lowerLimit.set(1, 0.0); //diff than in paper
 		upperLimit.set(1, 15.0);

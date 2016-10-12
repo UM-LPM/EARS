@@ -63,7 +63,7 @@ public abstract class DoubleMOProblem extends MOProblemBase<Double> {
 		//List<Double> var=new ArrayList<Double>(numberOfDimensions);
 		Double[] var = new Double[numberOfDimensions];
 		for (int j = 0; j < numberOfDimensions; j++) {
-			var[j] = lowerLimit.get(j) + Util.rnd.nextDouble() * upperLimit.get(j);
+			var[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
 		}
 		MOSolutionBase<Double> sol = new MOSolutionBase<Double>(var, evaluate(var), upperLimit, lowerLimit);
 		evaluateConstraints(sol);

@@ -195,7 +195,7 @@ public class DEAlgorithm extends Algorithm {
 
     public void init() throws StopCriteriaException {
         this.D = task.getDimensions();
-        inibound_h = task.getIntervalRight();
+        inibound_h = task.getUpperLimit();
         inibound_l = task.getLowerLimit();
         // this.NP = D * 10; Set by constructor
         this.F = memF;
@@ -204,7 +204,7 @@ public class DEAlgorithm extends Algorithm {
         c = new IndividualSA[NP];
         d = new IndividualSA[NP];
         for (i = 0; i < NP; i++) {
-            c[i] = new IndividualSA(task.getRandomIndividual(), Finit, CRinit);
+            c[i] = new IndividualSA(task.getRandomSolution(), Finit, CRinit);
             // System.out.println(i+". "+c[i]);
         }
         

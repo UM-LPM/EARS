@@ -56,7 +56,7 @@ public class ProblemEasom  extends Problem{
 		super(2,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
 		
 		name = "Easom";
 	}

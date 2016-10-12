@@ -38,7 +38,7 @@ public class F9 extends Problem {
 		elliptic_rotated= new EllipticRotated(numberOfDimensions);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
 
 		name = "F09 D/2m-group Shifted and m-rotated Elliptic Function";
 		

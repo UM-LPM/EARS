@@ -55,7 +55,7 @@ public class ProblemGoldSteinAndPrice  extends Problem{
 		super(2,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -2.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 4.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 2.0));
 		
 		//Collections.fill(lowerLimit, -2.0);
 		//Collections.fill(upperLimit, 4.0);

@@ -199,7 +199,7 @@ public class PSOCBCW extends Algorithm {
 
 					tt1 = 0.0;
 
-					xu = taskProblem.getIntervalRight();
+					xu = taskProblem.getUpperLimit();
 					xl = taskProblem.getLowerLimit();
 
 					for (int k = 0; k < x.length; k++) {
@@ -252,7 +252,7 @@ public class PSOCBCW extends Algorithm {
 						}
 
 						else {
-							inertia[dd] = taskProblem.getIntervalRight()[dd] - epsilon;
+							inertia[dd] = taskProblem.getUpperLimit()[dd] - epsilon;
 						}
 					}
 					if (taskProblem.isStopCriteria())

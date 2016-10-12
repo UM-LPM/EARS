@@ -55,7 +55,7 @@ public class ProblemB2  extends Problem{
 			super(2,0);
 
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -50.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 50.0));
 
 		
 		name ="B2 function";

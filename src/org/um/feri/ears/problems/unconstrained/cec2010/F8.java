@@ -35,7 +35,7 @@ public class F8 extends Problem {
 		sphere_shifted = new SphereShifted(numberOfDimensions);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
 		
 		name = "F08 Single-group Shifted m-dimensional Rosenbrock's Function";
 		

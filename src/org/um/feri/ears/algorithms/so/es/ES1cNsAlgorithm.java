@@ -105,7 +105,7 @@ public class ES1cNsAlgorithm extends Algorithm {
         resetDefaultsBeforNewRun(); // usually no need for this call
         task = taskProblem;
         DoubleSolution ii;
-        one = taskProblem.getRandomIndividual();
+        one = taskProblem.getRandomSolution();
         DoubleSolution oneTmp;
         int everyK = 0; // recalculate variance
         int succ = 0;

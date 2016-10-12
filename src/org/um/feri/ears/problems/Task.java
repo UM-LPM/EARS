@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
+import org.um.feri.ears.util.Util;
 
 /**
 * Task is main class, for communication between algorithm and problem  
@@ -69,17 +70,17 @@ public class Task extends TaskBase<Problem> {
         this.p = p;
     }
     
-	//TODO ?
-	public double[] getIntervalRight(){
-		double intervalR[] = new double[p.upperLimit.size()];
-		for (int i=0; i<intervalR.length;i++) {
-			intervalR[i] = p.lowerLimit.get(i)+p.upperLimit.get(i);
+
+	public double[] getInterval(){
+		double interval[] = new double[p.upperLimit.size()];
+		for (int i=0; i<interval.length;i++) {
+			interval[i] = p.upperLimit.get(i) - p.lowerLimit.get(i);
 		}
-		return intervalR;
+		return interval;
 	}
 
 
-	public DoubleSolution getRandomIndividual() throws StopCriteriaException {
+	public DoubleSolution getRandomSolution() throws StopCriteriaException {
 
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
 			incEvaluate();

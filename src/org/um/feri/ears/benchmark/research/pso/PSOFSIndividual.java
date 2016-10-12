@@ -47,12 +47,12 @@ public class PSOFSIndividual extends DoubleSolution{
 	}
 
 	public PSOFSIndividual(Task t) throws StopCriteriaException {
-		super(t.getRandomIndividual());
+		super(t.getRandomSolution());
 		v = new double[t.getDimensions()];
 		double l; double r;
 		for (int i=0; i<t.getDimensions(); i++) {
-			l = -Math.abs(t.getIntervalRight()[i]-t.getLowerLimit()[i])/4; 
-			r = Math.abs(t.getIntervalRight()[i]-t.getLowerLimit()[i])/4; 
+			l = -Math.abs(t.getUpperLimit()[i]-t.getLowerLimit()[i])/4; 
+			r = Math.abs(t.getUpperLimit()[i]-t.getLowerLimit()[i])/4; 
 		    v[i] = Util.rnd.nextDouble()*(r-l)+l;
 		}
 		p = this;

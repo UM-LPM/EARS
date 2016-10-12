@@ -56,7 +56,7 @@ public class ProblemSphere extends Problem {
 		super(d,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
 		
 		name = "Sphere";
 	}
@@ -64,7 +64,7 @@ public class ProblemSphere extends Problem {
 	public ProblemSphere(int d, double intervalRight) {
 		super(d,0);
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, intervalRight*-1.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, intervalRight*2.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, intervalRight));
 		
 		name = "Sphere";
 	}

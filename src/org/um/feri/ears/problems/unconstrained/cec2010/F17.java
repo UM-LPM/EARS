@@ -31,7 +31,7 @@ public class F17 extends Problem {
 		schwefel_shifted = new SchwefelShifted(numberOfDimensions);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
 
 		name = "F17 D/m-group Shifted and m-dimensional Schwefel's Problem 1.2";
 		

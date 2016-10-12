@@ -31,7 +31,7 @@ public class F20 extends Problem {
 		rosenbrock_shifted = new RosenbrockShifted(numberOfDimensions);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
 		
 		name = "F20 Shifted Rosenbrock's Function";
 		

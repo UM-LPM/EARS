@@ -57,7 +57,7 @@ public class ProblemRosenbrock  extends Problem{
 		super(d,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -30.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 60.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 30.0));
 
 		
 		name = "Rosenbrock";

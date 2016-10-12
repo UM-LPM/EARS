@@ -34,7 +34,7 @@ public class jDElscop extends Algorithm {
 		pop_x = new jDElscopIdividual[pop_size];
 		for (int i = 0; i < pop_size; i++) {
 			pop_x[i] = jDElscopIdividual.setInitState(task
-					.getRandomIndividual());
+					.getRandomSolution());
 			if (i == 0)
 				g = pop_x[0];
 			else if (task.isFirstBetter(pop_x[i], g))

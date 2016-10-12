@@ -103,7 +103,7 @@ public class ES1p1sAlgorithm extends Algorithm {
         resetDefaultsBeforNewRun(); //usually no need for this call 
         task = taskProblem;
         DoubleSolution ii;
-        one = taskProblem.getRandomIndividual();
+        one = taskProblem.getRandomSolution();
         int everyK=0; //recalculate variance
         int succ=0;
         double oneplus[];

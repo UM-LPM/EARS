@@ -56,7 +56,7 @@ public class ProblemPowellBadlyScaledFunction  extends Problem{
 		super(2,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -50.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 50.0));
 		
 		name ="Powell badly scaled function";
 

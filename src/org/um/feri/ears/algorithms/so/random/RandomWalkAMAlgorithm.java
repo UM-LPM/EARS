@@ -84,11 +84,11 @@ public class RandomWalkAMAlgorithm extends Algorithm {
     public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
         DoubleSolution ii, iAritmetic, iExtend;
         task = taskProblem;
-        i = taskProblem.getRandomIndividual();
+        i = taskProblem.getRandomSolution();
         if (debug)
             System.out.println(taskProblem.getNumberOfEvaluations() + " " + i);
         while (!taskProblem.isStopCriteria()) {
-            ii = taskProblem.getRandomIndividual();
+            ii = taskProblem.getRandomSolution();
             if (taskProblem.isFirstBetter(ii, i)) {
                 if (!taskProblem.isStopCriteria()) { // try also arithmetic mean
                     iAritmetic = taskProblem.eval(xArithmeticMeanOf(i.getDoubleVariables(), ii.getDoubleVariables()));

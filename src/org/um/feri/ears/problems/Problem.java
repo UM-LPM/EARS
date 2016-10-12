@@ -67,7 +67,6 @@ public abstract class Problem extends ProblemBase<Double> {
 	    for (int i=0; i<numberOfDimensions; i++) {
         if (ds.get(i) < lowerLimit.get(i))
             return false;
-        //if (ds[i] > (lowerLimit.get(i) + upperLimit.get(i)))
         if (ds.get(i) > upperLimit.get(i))
             return false;
 	    }

@@ -31,7 +31,7 @@ public class F19 extends Problem {
 		schwefel_shifted = new SchwefelShifted(numberOfDimensions);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
 		
 		name = "F19 Shifted Schwefel's Problem 1.2";
 		

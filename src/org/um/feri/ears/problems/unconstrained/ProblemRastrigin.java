@@ -56,7 +56,7 @@ public class ProblemRastrigin  extends Problem{
 		super(d,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.12));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.24));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.12));
 		
 		name = "Rastrigin";
 	}
@@ -65,7 +65,7 @@ public class ProblemRastrigin  extends Problem{
 		super(d,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, j*-1.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, j*2.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, j));
 		
 		name = "Rastrigin";
 	}

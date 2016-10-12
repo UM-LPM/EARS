@@ -67,11 +67,11 @@ public class RandomWalkAlgorithm extends Algorithm {
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException{
 		DoubleSolution ii;
-			i = taskProblem.getRandomIndividual();
+			i = taskProblem.getRandomSolution();
 			if (debug) System.out.println(taskProblem.getNumberOfEvaluations()+" "+i);
 			while (!taskProblem.isStopCriteria()) {
 				
-				ii = taskProblem.getRandomIndividual();
+				ii = taskProblem.getRandomSolution();
 				if (taskProblem.isFirstBetter(ii, i)) {
 					i = ii;
 					if (debug) System.out.println(taskProblem.getNumberOfEvaluations()+" "+i);

@@ -27,7 +27,7 @@ public class PSOCBCWIndividual extends DoubleSolution
 	
 	public PSOCBCWIndividual(Task t) throws StopCriteriaException
 	{
-		super(t.getRandomIndividual());
+		super(t.getRandomSolution());
 		v = new double[t.getDimensions()];
 		
 		for (int i=0; i<t.getDimensions(); i++)

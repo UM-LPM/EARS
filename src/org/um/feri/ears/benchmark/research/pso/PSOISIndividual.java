@@ -24,13 +24,13 @@ public class PSOISIndividual extends DoubleSolution {
 	}
 
 	public PSOISIndividual(Task t) throws StopCriteriaException {
-		super(t.getRandomIndividual());
+		super(t.getRandomSolution());
 		v = new double[t.getDimensions()];
 		double l;
 		double r;
 		for (int i = 0; i < t.getDimensions(); i++) {
-			l = -Math.abs(t.getIntervalRight()[i] - t.getLowerLimit()[i]) / 4;
-			r = Math.abs(t.getIntervalRight()[i] - t.getLowerLimit()[i]) / 4;
+			l = -Math.abs(t.getUpperLimit()[i] - t.getLowerLimit()[i]) / 4;
+			r = Math.abs(t.getUpperLimit()[i] - t.getLowerLimit()[i]) / 4;
 			v[i] = Util.rnd.nextDouble() * (r - l) + l;
 		}
 		Pbest = this;

@@ -56,7 +56,7 @@ public class ProblemSchwefel  extends Problem{
 		super(d,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -500.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1000.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 500.0));
 		
 		name = "Schwefel 2.26";
 	}

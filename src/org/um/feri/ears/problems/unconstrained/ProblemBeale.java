@@ -55,7 +55,7 @@ public class ProblemBeale  extends Problem{
 		super(2,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -4.5));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 9.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 4.5));
 		
 		name ="Beale function";
 	}

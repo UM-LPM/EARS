@@ -35,7 +35,7 @@ public class F7 extends Problem {
 		sphere_shifted = new SphereShifted(numberOfDimensions);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 200.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
 		
 		name = "F07 Single-group Shifted m-dimensional Schwefel's Problem 1.2";
 		

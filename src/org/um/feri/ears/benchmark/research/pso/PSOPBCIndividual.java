@@ -26,12 +26,12 @@ public class PSOPBCIndividual extends DoubleSolution {
 	}
 	
 	public PSOPBCIndividual(Task tsk) throws StopCriteriaException {
-		super(tsk.getRandomIndividual());
+		super(tsk.getRandomSolution());
 		hitrost = new double[tsk.getDimensions()];//Hitrost za vsako dimenzijo
 		double l; double r;
 		for (int i=0; i<tsk.getDimensions(); i++) {
-			l = -Math.abs(tsk.getIntervalRight()[i]-tsk.getLowerLimit()[i])/4; 
-			r = Math.abs(tsk.getIntervalRight()[i]-tsk.getLowerLimit()[i])/4; 
+			l = -Math.abs(tsk.getUpperLimit()[i]-tsk.getLowerLimit()[i])/4; 
+			r = Math.abs(tsk.getUpperLimit()[i]-tsk.getLowerLimit()[i])/4; 
 		    hitrost[i] = Util.rnd.nextDouble()*(r-l)+l;
 		}
 		Pbest = this;	

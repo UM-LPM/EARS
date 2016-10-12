@@ -161,7 +161,7 @@ public class TLBOAlgorithm extends Algorithm {
         intervalL = task.getLowerLimit();
         interval = task.getUpperLimit();
         for (int i = 0; i < pop_size; i++) {
-            population[i] = task.getRandomIndividual();
+            population[i] = task.getRandomSolution();
             if (task.isStopCriteria())
                 break;
         }

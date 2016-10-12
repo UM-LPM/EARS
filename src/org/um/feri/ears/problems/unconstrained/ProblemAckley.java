@@ -57,7 +57,7 @@ public class ProblemAckley extends Problem {
 		super(d,0);
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 64.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.0));
 
 		name = "Ackley";
 	}
