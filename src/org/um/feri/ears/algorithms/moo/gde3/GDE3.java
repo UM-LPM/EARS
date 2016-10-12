@@ -100,7 +100,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		for (int i = 0; i < populationSize; i++) {
 			if (task.isStopCriteria())
 				return;
-			newSolution = new MOSolutionBase<Type>(task.getRandomMOIndividual());
+			newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(newSolution);
 			population.add(newSolution);
 		}

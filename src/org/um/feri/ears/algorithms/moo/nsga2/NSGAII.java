@@ -76,7 +76,7 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 		for (int i = 0; i < populationSize; i++) {
 			if (task.isStopCriteria())
 				return;
-			newSolution = task.getRandomMOIndividual();
+			newSolution = task.getRandomMOSolution();
 			// problem.evaluateConstraints(newSolution);
 			population.add(newSolution);
 		}

@@ -79,7 +79,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 	    return p.getNumberOfConstraints();
 	}
 	
-	abstract public MOSolutionBase<T> getRandomMOIndividual() throws StopCriteriaException;
+	abstract public MOSolutionBase<T> getRandomMOSolution() throws StopCriteriaException;
 	
 	public boolean isFirstBetter(ParetoSolution<T> x, ParetoSolution<T> y, QualityIndicator<T> qi) {
 		return p.isFirstBetter(x, y, qi);

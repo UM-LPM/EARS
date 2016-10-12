@@ -110,7 +110,7 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 		for (int i = 0; i < populationSize; i++) {
 			if (task.isStopCriteria())
 				return;
-			MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOIndividual());
+			MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(newSolution);;
 			population.add(newSolution);
 		}

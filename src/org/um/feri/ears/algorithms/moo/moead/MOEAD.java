@@ -314,7 +314,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
 			if (task.isStopCriteria())
 				return;
-			MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOIndividual());
+			MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 
 			population.add(newSolution);
 			savedValues[i] = new MOSolutionBase<Type>(newSolution);
@@ -326,7 +326,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			z[i] = 1.0e+30;
 			if (task.isStopCriteria())
 				return;
-			indArray[i] = new MOSolutionBase<Type>(task.getRandomMOIndividual());
+			indArray[i] = new MOSolutionBase<Type>(task.getRandomMOSolution());
 		}
 
 		for (int i = 0; i < populationSize; i++) {

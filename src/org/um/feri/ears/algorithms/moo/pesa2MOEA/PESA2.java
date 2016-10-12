@@ -99,7 +99,7 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 		for (int i = 0; i < populationSize; i++) {
 			if (task.isStopCriteria())
 				return;
-			MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOIndividual());
+			MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(solution);
 			population.add(solution);
 		}

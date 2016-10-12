@@ -14,7 +14,7 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 		super(task);
 	}
 
-	public MOSolutionBase<Double> getRandomMOIndividual() throws StopCriteriaException {
+	public MOSolutionBase<Double> getRandomMOSolution() throws StopCriteriaException {
 
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
 			incEvaluate();

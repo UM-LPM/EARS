@@ -63,7 +63,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
 		if (task.isStopCriteria())
 			return;
-		MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOIndividual());
+		MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 		// problem.evaluateConstraints(solution);
 
 		archive.add(new MOSolutionBase<Type>(solution));

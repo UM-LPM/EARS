@@ -249,7 +249,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
 			if (task.isStopCriteria())
 				return;
-			MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOIndividual());
+			MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 
 			population.add(newSolution);
 		}

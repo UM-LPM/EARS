@@ -275,7 +275,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 		for (int i = 0; i < swarmSize; i++) {
 			if (task.isStopCriteria())
 				return;
-			newSolution = new MOSolutionBase<Double>(task.getRandomMOIndividual());
+			newSolution = new MOSolutionBase<Double>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(newSolution);
 			swarm.add(newSolution);
 		}
