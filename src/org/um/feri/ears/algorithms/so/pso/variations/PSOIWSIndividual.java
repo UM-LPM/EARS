@@ -1,4 +1,4 @@
-package org.um.feri.ears.benchmark.research.pso;
+package org.um.feri.ears.algorithms.so.pso.variations;
 
 import java.util.Arrays;
 
@@ -7,15 +7,15 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class PSODOPIndividual extends DoubleSolution {
-	PSODOPIndividual Pbest;
+public class PSOIWSIndividual extends DoubleSolution {
+	PSOIWSIndividual Pbest;
 	double v[];
 
-	public PSODOPIndividual getPbest() {
+	public PSOIWSIndividual getPbest() {
 		return Pbest;
 	}
 
-	public void setPbest(PSODOPIndividual Pbest) {
+	public void setPbest(PSOIWSIndividual Pbest) {
 		this.Pbest = Pbest;
 	}
 
@@ -23,7 +23,7 @@ public class PSODOPIndividual extends DoubleSolution {
 		return v;
 	}
 
-	public PSODOPIndividual(Task t) throws StopCriteriaException {
+	public PSOIWSIndividual(Task t) throws StopCriteriaException {
 		super(t.getRandomSolution());
 		v = new double[t.getDimensions()];
 		double l;
@@ -36,7 +36,7 @@ public class PSODOPIndividual extends DoubleSolution {
 		Pbest = this;
 	}
 
-	public PSODOPIndividual(DoubleSolution eval) {
+	public PSOIWSIndividual(DoubleSolution eval) {
 		super(eval);
 
 	}
@@ -46,12 +46,12 @@ public class PSODOPIndividual extends DoubleSolution {
 		return super.toString() + " v:" + (Arrays.toString(v) + " p:" + Pbest.getEval());
 	}
 
-	public PSODOPIndividual update(Task t, double v[]) throws StopCriteriaException {
+	public PSOIWSIndividual update(Task t, double v[]) throws StopCriteriaException {
 		double x[] = getNewVariables();
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.feasible(x[i] + v[i], i);
 		}
-		PSODOPIndividual tmp = new PSODOPIndividual(t.eval(x));
+		PSOIWSIndividual tmp = new PSOIWSIndividual(t.eval(x));
 		if (t.isFirstBetter(tmp, Pbest)) {
 			tmp.Pbest = tmp;
 		} else

@@ -1,4 +1,4 @@
-package org.um.feri.ears.benchmark.research.pso;
+package org.um.feri.ears.algorithms.so.pso.variations;
 
 import java.util.ArrayList;
 
@@ -11,70 +11,45 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class PSODOP extends Algorithm {
+public class PSOoriginal extends Algorithm {
 
 	int populationSize;
 	ArrayList<PSOoriginalIndividual> population;
 	PSOoriginalIndividual PgBest;
-	double c1, c2, w, cr;
+	double c1, c2;
 
-	public PSODOP() {
-		this(20, 1.49445, 1.49445, 0.723);
+	public PSOoriginal() {
+		this(20, 1.49445, 1.49445);
 	}
 
-	public PSODOP(int populationSize, double c1, double c2, double w) {
+	public PSOoriginal(int populationSize, double c1, double c2) {
 		super();
 		this.populationSize = populationSize;
 		this.c1 = c1;
 		this.c2 = c2;
-		this.w = w;
-		this.cr = 0.9;
 		setDebug(debug);
-		ai = new AlgorithmInfo("PSODOP", "PSODOP", "PSODOP", "PSODOP");
+		ai = new AlgorithmInfo("PSOO", "PSOO", "PSOO", "PSOO");
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 		ai.addParameter(EnumAlgorithmParameters.C1, c1 + "");
 		ai.addParameter(EnumAlgorithmParameters.C2, c2 + "");
-		ai.addParameter(EnumAlgorithmParameters.W_INTERIA, w + "");
 		au = new Author("Robnik", "aleksander.robnik@student.um.si");
 	}
-	// Algoritem PSO z uporabo diferencialnega operatorja
-
+//Originalni algoritem PSO
+	
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
 		initPopulation(taskProblem);
 		double v[];
 		while (!taskProblem.isStopCriteria()) {
 			for (int i = 0; i < populationSize; i++) {
-				PSOoriginalIndividual P = population.get(i);
-				int jj = Util.rnd.nextInt(populationSize);
-				int kk = Util.rnd.nextInt(populationSize);
-				
-				while((i != jj) && (i != kk))
-				{
-					jj = Util.rnd.nextInt(populationSize);
-					kk = Util.rnd.nextInt(populationSize);
-				}
-				PSOoriginalIndividual Pj = population.get(jj);
-				PSOoriginalIndividual Pk = population.get(kk);
-
-				double Pd[] = new double[taskProblem.getDimensions()];
-				for (int d = 0; d < taskProblem.getDimensions(); d++) {
-					Pd[d] = Pk.getDoubleVariables()[d] - Pj.getDoubleVariables()[d];
-				}
-
 				v = new double[taskProblem.getDimensions()];
 				for (int d = 0; d < taskProblem.getDimensions(); d++) {
+					PSOoriginalIndividual P = population.get(i);
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();
-					double sigma = c1 * (P.getPbest().getDoubleVariables()[d] - P.getDoubleVariables()[d]);
-					if (Util.rnd.nextDouble() < cr) {
-						v[d] = w * (P.getV()[d]) + sigma * r1 + c2 * r2 * (PgBest.getDoubleVariables()[d] - P.getDoubleVariables()[d]);
-					} else {
-						v[d] = P.getV()[d];
-					}
-
+					v[d] = (P.getV()[d]) + c1 * r1 * (P.getPbest().getVariables().get(d) - P.getVariables().get(d))
+							+ c2 * r2 * (PgBest.getVariables().get(d) - P.getVariables().get(d));
 				}
-
 				population.set(i, population.get(i).update(taskProblem, v));
 				if (taskProblem.isFirstBetter(population.get(i), PgBest))
 					PgBest = population.get(i);

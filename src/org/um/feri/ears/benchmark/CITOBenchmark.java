@@ -149,7 +149,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
 			}
         }
         
-    	//pool.shutdown();
+    	pool.shutdown();
         
 	}
 

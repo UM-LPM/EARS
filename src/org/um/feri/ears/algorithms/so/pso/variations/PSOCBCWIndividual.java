@@ -1,4 +1,4 @@
-package org.um.feri.ears.benchmark.research.pso;
+package org.um.feri.ears.algorithms.so.pso.variations;
 
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;

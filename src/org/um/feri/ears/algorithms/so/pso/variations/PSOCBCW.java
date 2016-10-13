@@ -1,4 +1,4 @@
-package org.um.feri.ears.benchmark.research.pso;
+package org.um.feri.ears.algorithms.so.pso.variations;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -153,7 +153,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
 			}
         }
         
-    	//pool.shutdown();
+    	pool.shutdown();
         
 	}
     
@@ -181,9 +181,9 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     	problems.add(new UnconstrainedProblem5());
     	problems.add(new UnconstrainedProblem6());
     	problems.add(new UnconstrainedProblem7());
-    	//problems.add(new UnconstrainedProblem8());
-    	//problems.add(new UnconstrainedProblem9());
-    	//problems.add(new UnconstrainedProblem10());
+    	problems.add(new UnconstrainedProblem8());
+    	problems.add(new UnconstrainedProblem9());
+    	problems.add(new UnconstrainedProblem10());
 
     	
     	for (DoubleMOProblem moProblem : problems) {
