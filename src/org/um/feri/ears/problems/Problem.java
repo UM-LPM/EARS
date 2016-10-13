@@ -298,7 +298,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	{
 		List<Double> var=new ArrayList<Double>(numberOfDimensions);
 		for (int j = 0; j < numberOfDimensions; j++) {
-			var.add(lowerLimit.get(j) + Util.rnd.nextDouble() * upperLimit.get(j));
+			var.add(Util.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
 		}
 		DoubleSolution sol = new DoubleSolution(var, eval(var), calc_constrains(var), upperLimit, lowerLimit);
 		return sol;

@@ -32,7 +32,7 @@ public class PSOPBCIndividual extends DoubleSolution {
 		for (int i=0; i<tsk.getDimensions(); i++) {
 			l = -Math.abs(tsk.getUpperLimit()[i]-tsk.getLowerLimit()[i])/4; 
 			r = Math.abs(tsk.getUpperLimit()[i]-tsk.getLowerLimit()[i])/4; 
-		    hitrost[i] = Util.rnd.nextDouble()*(r-l)+l;
+		    hitrost[i] = Util.nextDouble(l,r);
 		}
 		Pbest = this;	
 	}

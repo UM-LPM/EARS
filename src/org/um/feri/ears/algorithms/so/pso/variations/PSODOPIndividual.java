@@ -31,7 +31,7 @@ public class PSODOPIndividual extends DoubleSolution {
 		for (int i = 0; i < t.getDimensions(); i++) {
 			l = -Math.abs(t.getUpperLimit()[i] - t.getLowerLimit()[i]) / 4;
 			r = Math.abs(t.getUpperLimit()[i] - t.getLowerLimit()[i]) / 4;
-			v[i] = Util.rnd.nextDouble() * (r - l) + l;
+			v[i] = Util.nextDouble(l,r);
 		}
 		Pbest = this;
 	}

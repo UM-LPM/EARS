@@ -38,7 +38,7 @@ public class PSOSIndividual extends DoubleSolution implements Comparable<PSOSInd
 		for (int i=0; i<t.getDimensions(); i++) {
 			l = -Math.abs(t.getUpperLimit()[i]-t.getLowerLimit()[i])/4; 
 			r = Math.abs(t.getUpperLimit()[i]-t.getLowerLimit()[i])/4; 
-		    v[i] = Util.rnd.nextDouble()*(r-l)+l;
+		    v[i] = Util.nextDouble(l,r);
 		}
 		p = this;
 	}
