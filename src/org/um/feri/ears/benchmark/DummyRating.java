@@ -83,8 +83,8 @@ public class DummyRating extends RatingBenchmark{
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, double epsilon) {
-        listOfProblems.add(new Task(sc, eval, epsilon, p));
+    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, double epsilon) {
+        listOfProblems.add(new Task(sc, eval, time, epsilon, p));
     }
     
     /* (non-Javadoc)
@@ -123,12 +123,12 @@ public class DummyRating extends RatingBenchmark{
     	registerTask(new DummyProblem("750HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
     	registerTask(new DummyProblem("9s20_c4"),stopCriteria, evaluationsOnDimension, 0.001);*/
     	
-    	registerTask(new DummyProblem("en300_c5"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("1HZ_c5"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("50HZ_c5"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("300HZ_c5"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("750HZ_c5"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("9s20_c5"),stopCriteria, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("en300_c5"),stopCriteria,  evaluationsOnDimension, 0, 0.001);
+    	registerTask(new DummyProblem("1HZ_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
+    	registerTask(new DummyProblem("50HZ_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
+    	registerTask(new DummyProblem("300HZ_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
+    	registerTask(new DummyProblem("750HZ_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
+    	registerTask(new DummyProblem("9s20_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
     	
     	
     	// Grouped by material

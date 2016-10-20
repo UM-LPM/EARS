@@ -28,10 +28,9 @@ import org.um.feri.ears.util.FutureResult;
 import org.um.feri.ears.util.Util;
 
 public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, IntegerMOProblem>{
-    public static final String name="Rating Ensemble";
+    public static final String name="CITO Benchmark";
     protected int evaluationsOnDimension;
-    protected int dimension=3;
-    private double draw_limit=0.000000001;
+    private double draw_limit=0.0;
     private boolean random;
     
 	@Override
@@ -184,7 +183,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
      */
     @Override
     public String getAcronym() {
-        return "RatingEnsemble";
+        return "CITOBenchmark";
     }
     /* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#getInfo()

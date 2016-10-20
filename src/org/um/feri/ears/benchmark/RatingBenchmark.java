@@ -86,8 +86,9 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
             	  System.out.print(al.getID()+": ");
                 }
                 
+                task.startTimer();
                 GraphDataRecorder.SetContext(al,task);
-
+                
                 DoubleSolution bestByALg = al.execute(task); //check if result is fake!
 
                 duration = System.currentTimeMillis()-start;
@@ -172,7 +173,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
     }
     
     public abstract boolean resultEqual(DoubleSolution a, DoubleSolution b);
-    protected abstract void registerTask(Problem p, EnumStopCriteria sc, int eval, double epsilon);
+    protected abstract void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, double epsilon);
     
     /**
      * Fill all data!

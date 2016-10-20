@@ -3,6 +3,7 @@ package org.um.feri.ears.problems;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.util.Util;
@@ -99,7 +100,6 @@ public class DoubleSolution extends SolutionBase<Double>{
 			lowerLimit = new ArrayList<Double>(lowerLimit);
 	        setFeasible(constrains);
 	        this.eval = eval;
-	        
 	}
 
     public DoubleSolution(double[] ds, double eval2, double[] calc_constrains, List<Double> upperLimit, List<Double> lowerLimit) {

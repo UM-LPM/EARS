@@ -73,6 +73,23 @@ public abstract class Problem extends ProblemBase<Double> {
         return true;
 	    
 	}
+    
+	/**
+	 * If selected value in interval is not feasible  
+	 * 
+	 * @param d
+	 * @param i
+	 * @return
+	 */
+	public double feasible(double d, int i) {
+		if (d < lowerLimit.get(i))
+			return lowerLimit.get(i);
+		if (d > upperLimit.get(i))
+		return upperLimit.get(i);
+		
+		return d;
+
+	}
 		
 	@Override
 	public String toString() {
@@ -212,24 +229,7 @@ public abstract class Problem extends ProblemBase<Double> {
         return true;
 	    
 	}*/
-	/**
-	 * If selected value in interval is not feasible  
-	 * 
-	 * @param d
-	 * @param i
-	 * @return
-	 */
-	public double feasible(double d, int i) {
-		if (d < lowerLimit.get(i))
-			return lowerLimit.get(i);
-		/*if (d > (lowerLimit.get(i) + upperLimit.get(i)))
-			return lowerLimit.get(i) + upperLimit.get(i);*/
-		if (d > upperLimit.get(i))
-		return upperLimit.get(i);
-		
-		return d;
 
-	}
 	/**
 	 * Important! Do not use this function for constrained problems,
 	 * if fitness is not reflecting feasibility of the solution.

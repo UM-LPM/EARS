@@ -2,6 +2,8 @@ package org.um.feri.ears.problems;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
@@ -53,13 +55,21 @@ import org.um.feri.ears.util.Util;
 */
 public class Task extends TaskBase<Problem> {
 
-	protected QualityIndicator qi; //is required for multiobjective optimization
-
-	public Task(EnumStopCriteria stop, int eval, double epsilon, Problem p) {
-	    this(stop, eval, epsilon, p,  (int) Math.log10((1./epsilon)+1));
+	/**
+	 * @param stop the stopping criteria
+	 * @param eval the maximum number of evaluations allowed
+	 * @param allowedTime the maximum CPU time allowed in milliseconds
+	 * @param epsilon the epsilon value for global optimum
+	 * @param p the problem
+	 */
+	
+	
+	
+	public Task(EnumStopCriteria stop, int eval, long allowedTime, double epsilon, Problem p) {
+	    this(stop, eval, allowedTime, epsilon, p,  (int) Math.log10((1./epsilon)+1));
 	}
 	
-    public Task(EnumStopCriteria stop, int eval, double epsilon, Problem p, int precisonOfRealNumbers) {
+    public Task(EnumStopCriteria stop, int eval, long allowedTime, double epsilon, Problem p, int precisonOfRealNumbers) {
         precisionOfRealNumbersInDecimalPlaces = precisonOfRealNumbers;
         stopCriteria = stop;
         maxEvaluations = eval;
@@ -68,6 +78,7 @@ public class Task extends TaskBase<Problem> {
         isStop = false;
         isGlobal = false;
         this.p = p;
+        this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
     }
     
 
@@ -86,7 +97,29 @@ public class Task extends TaskBase<Problem> {
 			incEvaluate();
 			DoubleSolution tmpSolution = p.getRandomSolution();
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+			if(isAncestorLogginEnabled)
+			{
+				ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+				ancestorSB.append("\n");
+			}
+
 			return tmpSolution;
+		}
+		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
+		{
+			// check if the CPU time is not exceeded yet
+			if(!isCPUTimeExceeded())
+			{
+				DoubleSolution tmpSolution = p.getRandomSolution();
+				GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+				if(isAncestorLogginEnabled)
+				{
+					ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+					ancestorSB.append("\n");
+				}
+
+				return tmpSolution;
+			}
 		}
 
 		return null;
@@ -145,7 +178,7 @@ public class Task extends TaskBase<Problem> {
         if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
             return "E="+getMaxEvaluations();
         }
-        if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
+        else if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
                 return "Global optimum epsilon="+epsilon+" or  E="+getMaxEvaluations();
         }
         return "not defined";
@@ -223,7 +256,7 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			return tmpSolution;
 		}
-		if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
+		else if(stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
 			if (isGlobal)
 				throw new StopCriteriaException("Global optimum already found");
 			incEvaluate();
@@ -235,8 +268,44 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			return tmpSolution;
 		}
+		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
+		{
+			if(!isCPUTimeExceeded())
+			{
+				DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
+				GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+				return tmpSolution;
+			}
+		}
+		
 		assert false; // Execution should never reach this point!
 		return null; //error
 	}
-    
+
+	public DoubleSolution eval(double[] x, List<DoubleSolution> parents) throws StopCriteriaException {
+		
+		DoubleSolution tmpSolution = eval(x);
+		
+		if(isAncestorLogginEnabled)
+		{
+			
+			ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";[");
+			for(int i = 0; i < parents.size(); i++)
+			{
+				ancestorSB.append(parents.get(i).getID());
+				if(i+1 < parents.size())
+					ancestorSB.append(",");
+			}
+
+			ancestorSB.append("]\n");
+		}
+		
+		return tmpSolution;
+	}
+
+	public static void resetLoggingID() {
+			SolutionBase.resetLoggingID();	
+	}
+
+   
 }

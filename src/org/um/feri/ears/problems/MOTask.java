@@ -126,8 +126,14 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
      * @return
      */
     public String taskInfo() {
-        return "Task = " + p +" stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", epsilon="
-                + epsilon + ", precisionOfRealNumbersInDecimalPlaces="
-                + precisionOfRealNumbersInDecimalPlaces;
+    	
+    	if(stopCriteria == EnumStopCriteria.EVALUATIONS)
+    	{
+    		return "Task = " + p +" stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", epsilon="
+    				+ epsilon + ", precisionOfRealNumbersInDecimalPlaces="
+    				+ precisionOfRealNumbersInDecimalPlaces;
+    	}
+    	else
+    		return "";
     }
 }

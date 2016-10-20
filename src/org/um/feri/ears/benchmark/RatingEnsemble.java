@@ -81,8 +81,7 @@ import org.um.feri.ears.util.FutureResult;
 public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem>{
     public static final String name="Rating Ensemble";
     protected int evaluationsOnDimension;
-    protected int dimension=3;
-    private double draw_limit=0.000000001;
+    private double draw_limit=0.0;
     private boolean random;
     
 	@Override

@@ -79,8 +79,8 @@ public class RatingRPCOe1 extends RatingBenchmark {
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, double epsilon) {
-        listOfProblems.add(new Task(sc, eval, epsilon, p));
+    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, double epsilon) {
+        listOfProblems.add(new Task(sc, eval, time, epsilon, p));
     }
     
     /* (non-Javadoc)
@@ -88,11 +88,11 @@ public class RatingRPCOe1 extends RatingBenchmark {
      */
     @Override
     protected void initFullProblemList() {
-        registerTask(new TLBOBenchmarkFunction1(),stopCriteria, 200000, 0.001);
-        registerTask(new TLBOBenchmarkFunction2(),stopCriteria, 200000, 0.001);
-        registerTask(new TLBOBenchmarkFunction3(),stopCriteria, 200000, 0.001);
-        registerTask(new TLBOBenchmarkFunction4(),stopCriteria, 200000, 0.001);
-        registerTask(new TLBOBenchmarkFunction5(),stopCriteria, 200000, 0.001);
+        registerTask(new TLBOBenchmarkFunction1(),stopCriteria, 200000, 0, 0.001);
+        registerTask(new TLBOBenchmarkFunction2(),stopCriteria, 200000, 0, 0.001);
+        registerTask(new TLBOBenchmarkFunction3(),stopCriteria, 200000, 0, 0.001);
+        registerTask(new TLBOBenchmarkFunction4(),stopCriteria, 200000, 0, 0.001);
+        registerTask(new TLBOBenchmarkFunction5(),stopCriteria, 200000, 0, 0.001);
     }
         
     /* (non-Javadoc)

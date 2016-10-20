@@ -38,8 +38,7 @@ import org.um.feri.ears.util.Util;
 public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem>{
     public static final String name="BIOMA Benchmark";
     protected int evaluationsOnDimension;
-    protected int dimension=3;
-    private double draw_limit=0.0000001;
+    private double draw_limit=0.0;
     private boolean random;
     
 	@Override
@@ -65,7 +64,6 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
         this.draw_limit = draw_limit;
         evaluationsOnDimension=300000;
         initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION,"2");
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
 

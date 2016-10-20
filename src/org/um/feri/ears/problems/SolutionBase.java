@@ -3,6 +3,7 @@ package org.um.feri.ears.problems;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class SolutionBase <Type> {
 	
@@ -13,8 +14,16 @@ public abstract class SolutionBase <Type> {
 	protected int  numberOfViolatedConstraints_ ;
 	protected List<Type> upperLimit;
 	protected List<Type> lowerLimit;
+	protected long ID;
+	protected static long currentID = 1;
 
-	public SolutionBase() {}
+	public SolutionBase() {
+		ID = currentID++;
+	}
+
+	public long getID() {
+		return ID;
+	}
 
 	public SolutionBase(SolutionBase<Type> s) {
 		variable = new ArrayList<Type>(s.variable);
@@ -26,6 +35,7 @@ public abstract class SolutionBase <Type> {
 		}
 		overallConstraintViolation_  = s.getOverallConstraintViolation();
 		numberOfViolatedConstraints_ = s.getNumberOfViolatedConstraint();
+		ID = s.ID;
 	}
 
 	public boolean isFeasible() {
@@ -173,6 +183,11 @@ public abstract class SolutionBase <Type> {
 	 */
 	public double getConstraint(int index) {
 		return constraints[index];
+	}
+
+	public static void resetLoggingID() {
+		currentID = 1;
+		
 	}
 
 }

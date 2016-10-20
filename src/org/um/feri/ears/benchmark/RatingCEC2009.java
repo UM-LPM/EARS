@@ -75,12 +75,11 @@ import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.FutureResult;
 
-//TODO calculate CD for rating
+
 public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem>{
     public static final String name="Benchmark CEC 2009";
     protected int evaluationsOnDimension;
-    protected int dimension=3;
-    private double draw_limit=0.0000001;
+    private double draw_limit=0.0;
     
 	@Override
 	public boolean resultEqual(ParetoSolution<Double> a, ParetoSolution<Double> b, QualityIndicator<Double> qi) {
@@ -103,9 +102,7 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
         super(indicators);
         this.draw_limit = draw_limit;
         evaluationsOnDimension=30000;
-        dimension=3;
         initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION,"2");
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
 
