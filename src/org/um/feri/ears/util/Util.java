@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -77,8 +78,7 @@ public class Util {
 	public static long randomseed = 316227711; //to be able too repeat experiment
 	public static Random rnd = new MersenneTwister(randomseed);
 	static final String JSON_DIR = "Cache\\Pareto_Cache_%s.json";
-	
-	
+
     public static double roundDouble3(double r) {
         return roundDouble(r, 3); 
     }
