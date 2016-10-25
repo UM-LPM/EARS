@@ -280,6 +280,7 @@ public class TLBOAlgorithm extends Algorithm {
             // stat.getCurrent_g().setAvrEval(averageCost);
             stat.getCurrent_g().setBest(population[0]);
             gen++;
+			task.incrementNumberOfIterations();
         }
     }
 

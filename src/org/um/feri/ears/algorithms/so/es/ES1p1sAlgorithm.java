@@ -126,6 +126,7 @@ public class ES1p1sAlgorithm extends Algorithm {
                 if (debug)
                     System.out.println(taskProblem.getNumberOfEvaluations() + " " + one);
             }
+			task.incrementNumberOfIterations();
         }
         return one;
     }

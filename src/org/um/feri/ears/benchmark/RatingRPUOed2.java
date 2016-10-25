@@ -68,9 +68,10 @@ import org.um.feri.ears.problems.unconstrained.ProblemSphere;
 //TODO calculate CD for rating
 public class RatingRPUOed2 extends RatingBenchmark {
     public static final String name="Real Parameter Unconstrained Optimization Problems with maximum evaluation condition";
-    protected int evaluationsOnDimension=1500;
-    protected long timeLimit = 5 * 1000;
+    protected int evaluationsOnDimension;
+    protected long timeLimit;
     public static final double DRAW_LIMIT=0.000000001;
+    private int maxIterations; 
     
     public boolean resultEqual(DoubleSolution a, DoubleSolution b) {
         if ((a==null) &&(b==null)) return true;
@@ -81,9 +82,10 @@ public class RatingRPUOed2 extends RatingBenchmark {
     }
     public RatingRPUOed2() {
         super();
-        //stopCriteria = EnumStopCriteria.CPU_TIME;
-        
+        stopCriteria = EnumStopCriteria.ITERATIONS;
+        timeLimit = 10;
         evaluationsOnDimension=1500;
+        maxIterations = 500; 
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,"2");
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension*2));
@@ -93,8 +95,8 @@ public class RatingRPUOed2 extends RatingBenchmark {
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, double epsilon) {
-        listOfProblems.add(new Task(sc, eval, time, epsilon, p));
+    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations, double epsilon) {
+        listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
     
     /* (non-Javadoc)
@@ -102,22 +104,22 @@ public class RatingRPUOed2 extends RatingBenchmark {
      */
     @Override
     protected void initFullProblemList() {
-        registerTask(new ProblemAckley(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemB2(),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemBeale(),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemBooth(),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemBranin(),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemDeJong(),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemEasom(),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemGoldSteinAndPrice(),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemGriewank(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemMartinAndGaddy(),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemPowellBadlyScaledFunction(),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemRastrigin(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemRosenbrock(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemSchwefel(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemSchwefelRidge(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
-        registerTask(new ProblemSphere(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, 0.001);
+        registerTask(new ProblemAckley(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemB2(),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemBeale(),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemBooth(),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemBranin(),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemDeJong(),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemEasom(),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemGoldSteinAndPrice(),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemGriewank(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemMartinAndGaddy(),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemPowellBadlyScaledFunction(),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemRastrigin(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemRosenbrock(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemSchwefel(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemSchwefelRidge(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
+        registerTask(new ProblemSphere(2),stopCriteria, 2*evaluationsOnDimension, timeLimit, maxIterations, 0.001);
     }
         
     /* (non-Javadoc)

@@ -138,6 +138,7 @@ public class ES1cNsAlgorithm extends Algorithm {
                 }
                 if (task.isStopCriteria()) break;
             }
+			task.incrementNumberOfIterations();
         }
         return one;
     }

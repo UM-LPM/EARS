@@ -58,6 +58,7 @@ public class DummyRating extends RatingBenchmark{
     protected int evaluationsOnDimension=3000;
     protected int dimension=3;
     private double draw_limit;
+    private int maxIterations;
     
     public boolean resultEqual(DoubleSolution a, DoubleSolution b) {
         if ((a==null) &&(b==null)) return true;
@@ -74,6 +75,7 @@ public class DummyRating extends RatingBenchmark{
         this.draw_limit = draw_limit;
         evaluationsOnDimension=3000;
         dimension=3;
+        maxIterations = 0;
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,"3");
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
@@ -83,8 +85,8 @@ public class DummyRating extends RatingBenchmark{
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, double epsilon) {
-        listOfProblems.add(new Task(sc, eval, time, epsilon, p));
+    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time,int maxIterations, double epsilon) {
+        listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
     
     /* (non-Javadoc)
@@ -123,12 +125,12 @@ public class DummyRating extends RatingBenchmark{
     	registerTask(new DummyProblem("750HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
     	registerTask(new DummyProblem("9s20_c4"),stopCriteria, evaluationsOnDimension, 0.001);*/
     	
-    	registerTask(new DummyProblem("en300_c5"),stopCriteria,  evaluationsOnDimension, 0, 0.001);
-    	registerTask(new DummyProblem("1HZ_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
-    	registerTask(new DummyProblem("50HZ_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
-    	registerTask(new DummyProblem("300HZ_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
-    	registerTask(new DummyProblem("750HZ_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
-    	registerTask(new DummyProblem("9s20_c5"),stopCriteria, evaluationsOnDimension, 0, 0.001);
+    	registerTask(new DummyProblem("en300_c5"),stopCriteria,  evaluationsOnDimension, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("1HZ_c5"),stopCriteria, evaluationsOnDimension, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("50HZ_c5"),stopCriteria, evaluationsOnDimension, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("300HZ_c5"),stopCriteria, evaluationsOnDimension, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("750HZ_c5"),stopCriteria, evaluationsOnDimension, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("9s20_c5"),stopCriteria, evaluationsOnDimension, 0, maxIterations, 0.001);
     	
     	
     	// Grouped by material

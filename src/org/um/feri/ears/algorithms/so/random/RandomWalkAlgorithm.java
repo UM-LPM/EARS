@@ -52,6 +52,7 @@ import org.um.feri.ears.problems.Task;
  */
 public class RandomWalkAlgorithm extends Algorithm {
 	DoubleSolution i;
+	Task task;
 	
 	boolean debug=false;
 	public RandomWalkAlgorithm() {
@@ -66,6 +67,7 @@ public class RandomWalkAlgorithm extends Algorithm {
 	
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException{
+		task = taskProblem;
 		DoubleSolution ii;
 			i = taskProblem.getRandomSolution();
 			if (debug) System.out.println(taskProblem.getNumberOfEvaluations()+" "+i);
@@ -76,6 +78,7 @@ public class RandomWalkAlgorithm extends Algorithm {
 					i = ii;
 					if (debug) System.out.println(taskProblem.getNumberOfEvaluations()+" "+i);
 				}
+				task.incrementNumberOfIterations();
 			}
 		return i;
 

@@ -65,16 +65,17 @@ public class Task extends TaskBase<Problem> {
 	
 	
 	
-	public Task(EnumStopCriteria stop, int eval, long allowedTime, double epsilon, Problem p) {
-	    this(stop, eval, allowedTime, epsilon, p,  (int) Math.log10((1./epsilon)+1));
+	public Task(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon, Problem p) {
+	    this(stop, eval, allowedTime, maxIterations, epsilon, p,  (int) Math.log10((1./epsilon)+1));
 	}
 	
-    public Task(EnumStopCriteria stop, int eval, long allowedTime, double epsilon, Problem p, int precisonOfRealNumbers) {
+    public Task(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon, Problem p, int precisonOfRealNumbers) {
         precisionOfRealNumbersInDecimalPlaces = precisonOfRealNumbers;
         stopCriteria = stop;
         maxEvaluations = eval;
         numberOfEvaluations = 0;
         this.epsilon = epsilon;
+        this.maxIterations = maxIterations;
         isStop = false;
         isGlobal = false;
         this.p = p;
@@ -105,11 +106,29 @@ public class Task extends TaskBase<Problem> {
 
 			return tmpSolution;
 		}
+		else if(stopCriteria == EnumStopCriteria.ITERATIONS)
+		{
+			if(isStop)
+				throw new StopCriteriaException("Max iterations");
+			
+			DoubleSolution tmpSolution = p.getRandomSolution();
+			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+			if(isAncestorLogginEnabled)
+			{
+				ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+				ancestorSB.append("\n");
+			}
+
+			return tmpSolution;
+			
+		}
 		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
 		{
 			// check if the CPU time is not exceeded yet
-			if(!isCPUTimeExceeded())
+			if(!isStop)
 			{
+				isCPUTimeExceeded(); // if CPU time is exceed allow last eval
+				
 				DoubleSolution tmpSolution = p.getRandomSolution();
 				GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 				if(isAncestorLogginEnabled)
@@ -119,6 +138,10 @@ public class Task extends TaskBase<Problem> {
 				}
 
 				return tmpSolution;
+			}
+			else
+			{
+				throw new StopCriteriaException("CPU Time");
 			}
 		}
 
@@ -219,13 +242,6 @@ public class Task extends TaskBase<Problem> {
     }
 
 
-    @Override
-    public String toString() {
-        return "Task [stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", numberOfEvaluations=" + numberOfEvaluations + ", epsilon="
-                + epsilon + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
-                + precisionOfRealNumbersInDecimalPlaces + ", p=" + p + "]";
-    }
-
     public double[] getLowerLimit() {
 
     	double[] target = new double[p.lowerLimit.size()];
@@ -256,6 +272,15 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			return tmpSolution;
 		}
+		else if(stopCriteria == EnumStopCriteria.ITERATIONS)
+		{
+			if(isStop)
+				throw new StopCriteriaException("Max iterations");
+			
+			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
+			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+			return tmpSolution;
+		}
 		else if(stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
 			if (isGlobal)
 				throw new StopCriteriaException("Global optimum already found");
@@ -270,13 +295,20 @@ public class Task extends TaskBase<Problem> {
 		}
 		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
 		{
-			if(!isCPUTimeExceeded())
+			if(!isStop)
 			{
+				isCPUTimeExceeded(); // if CPU time is exceed allow last eval
+				
 				DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
 				GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 				return tmpSolution;
 			}
+			else
+			{
+				throw new StopCriteriaException("CPU Time");
+			}
 		}
+
 		
 		assert false; // Execution should never reach this point!
 		return null; //error

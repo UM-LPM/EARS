@@ -26,14 +26,14 @@ public class jDElscop extends Algorithm {
 	 * static final int STRATEGY_jDEexp=2;
 	 */
 	private int pop_size;
-	jDElscopIdividual pop_x[]; // population
-	jDElscopIdividual g; // global best
+	jDElscopSolution pop_x[]; // population
+	jDElscopSolution g; // global best
 	Task task; // set it in run
 
 	private void initPopulation() throws StopCriteriaException {
-		pop_x = new jDElscopIdividual[pop_size];
+		pop_x = new jDElscopSolution[pop_size];
 		for (int i = 0; i < pop_size; i++) {
-			pop_x[i] = jDElscopIdividual.setInitState(task
+			pop_x[i] = jDElscopSolution.setInitState(task
 					.getRandomSolution());
 			if (i == 0)
 				g = pop_x[0];
@@ -83,7 +83,7 @@ public class jDElscop extends Algorithm {
 		double tmp_par[];
 		int odmik;
 		int D = task.getDimensions();
-		jDElscopIdividual pop_tmp[] = new jDElscopIdividual[pop_size];
+		jDElscopSolution pop_tmp[] = new jDElscopSolution[pop_size];
 		while (!task.isStopCriteria()) {
 			// iteration++;
 			for (int i = 0; i < pop_size; i++) {
@@ -189,7 +189,7 @@ public class jDElscop extends Algorithm {
 				if (task.isFirstBetter(pop_x[i], tmpI)) { // old is better
 					pop_tmp[i] = pop_x[i];
 				} else {
-					pop_tmp[i] = jDElscopIdividual.setParamState(tmpI, tmp_par);
+					pop_tmp[i] = jDElscopSolution.setParamState(tmpI, tmp_par);
 					if (task.isFirstBetter(pop_tmp[i], g)) {
 						g = pop_tmp[i];
 						if (debug) {
@@ -234,6 +234,7 @@ public class jDElscop extends Algorithm {
 
 				}
 			}
+			task.incrementNumberOfIterations();
 
 		}
 		return g;

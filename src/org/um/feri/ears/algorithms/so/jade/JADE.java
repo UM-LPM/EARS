@@ -15,10 +15,10 @@ public class JADE extends Algorithm {
 	// private int arch_size;
 	private int elite_size; // calculated by p*pop_size pbest
 	// private double F,CR;
-	private ArrayList<JADEIndividual> elite; // pbest
-	private JADEIndividual pop_x[]; // population
-	private ArrayList<JADEIndividual> arch_x; // population
-	private JADEIndividual g; // global best
+	private ArrayList<JADESolution> elite; // pbest
+	private JADESolution pop_x[]; // population
+	private ArrayList<JADESolution> arch_x; // population
+	private JADESolution g; // global best
 
 	private ArrayList<Double> SCR; // list of successful F, CR in current gen
 	private ArrayList<Double> SF; //
@@ -30,7 +30,7 @@ public class JADE extends Algorithm {
 	/*
 	 * Keep track of best individuals pbest! Also sets global best
 	 */
-	private void updateEliteAndGlobalBest(JADEIndividual in) {
+	private void updateEliteAndGlobalBest(JADESolution in) {
 		boolean add = false;
 		for (int i = 0; i < elite.size(); i++) {
 			if (task.isFirstBetter(in, elite.get(i))) {
@@ -52,9 +52,9 @@ public class JADE extends Algorithm {
 	}
 
 	private void initPopulation() throws StopCriteriaException {
-		pop_x = new JADEIndividual[pop_size];
+		pop_x = new JADESolution[pop_size];
 		for (int i = 0; i < pop_size; i++) {
-			pop_x[i] = new JADEIndividual(task.getRandomSolution(), 0.5, 0.5);
+			pop_x[i] = new JADESolution(task.getRandomSolution(), 0.5, 0.5);
 			updateEliteAndGlobalBest(pop_x[i]);
 			if (task.isStopCriteria())
 				break;
@@ -71,8 +71,8 @@ public class JADE extends Algorithm {
 		this.c = c;
 		this.p = p;
 		elite_size = (int) Math.round(pop_size * p);
-		elite = new ArrayList<JADEIndividual>();
-		arch_x = new ArrayList<JADEIndividual>();
+		elite = new ArrayList<JADESolution>();
+		arch_x = new ArrayList<JADESolution>();
 		SCR = new ArrayList<Double>();
 		SF = new ArrayList<Double>();
 		if (elite_size == 0)
@@ -98,13 +98,13 @@ public class JADE extends Algorithm {
 		task = taskProblem;
 		elite.clear();
 		arch_x.clear();
-		JADEIndividual pop_new[] = new JADEIndividual[pop_size];
+		JADESolution pop_new[] = new JADESolution[pop_size];
 		double tmp[];
 		int j_rand;
 		int D = task.getDimensions();
 		int r1, r2, pBest;
 		double Fpom;
-		JADEIndividual in_r2, tmpIn;
+		JADESolution in_r2, tmpIn;
 
 		double muCR = 0.5; // adaptive control parameters
 		double muF = 0.5;
@@ -154,7 +154,7 @@ public class JADE extends Algorithm {
 														.getVariables().get(d)), d);
 					}
 				}
-				tmpIn = new JADEIndividual(task.eval(tmp), pop_x[i].CR,
+				tmpIn = new JADESolution(task.eval(tmp), pop_x[i].CR,
 						pop_x[i].F);
 				if (task.isFirstBetter(tmpIn, pop_x[i])) {
 					SCR.add(tmpIn.CR); // save successful parameters
@@ -187,6 +187,7 @@ public class JADE extends Algorithm {
 					muF = 0.1;
 			}
 			// System.out.println("\nmuCR:" + muCR + " " + " muF:" +muF);
+			task.incrementNumberOfIterations();
 		}
 		return g;
 	}

@@ -173,7 +173,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
     }
     
     public abstract boolean resultEqual(DoubleSolution a, DoubleSolution b);
-    protected abstract void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, double epsilon);
+    protected abstract void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations, double epsilon);
     
     /**
      * Fill all data!

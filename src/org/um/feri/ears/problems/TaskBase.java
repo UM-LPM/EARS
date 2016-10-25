@@ -22,6 +22,8 @@ public abstract class TaskBase<T extends ProblemBase> {
 	
 	protected long timerStart;
 	protected long allowedCPUTime;
+	protected int numberOfIterations = 0;
+	protected int maxIterations;
 	
 	protected StringBuilder ancestorSB;
 	protected boolean isAncestorLogginEnabled = false;
@@ -33,6 +35,15 @@ public abstract class TaskBase<T extends ProblemBase> {
 	public void startTimer()
 	{
 		timerStart = System.nanoTime();
+	}
+	
+	public void incrementNumberOfIterations() throws StopCriteriaException
+	{
+		if (numberOfIterations >= maxIterations)
+			throw new StopCriteriaException("Max iterations");
+		numberOfIterations++;
+		if (numberOfIterations >= maxIterations)
+			isStop = true;
 	}
 
 	/**
@@ -91,8 +102,28 @@ public abstract class TaskBase<T extends ProblemBase> {
         return maxEvaluations;
     }
 	
+	public int getMaxIteratirons() {
+		return maxIterations;
+	}
+	
+	public long getAllowedCPUTime() {
+		return allowedCPUTime;
+	}
+	
 	public int getNumberOfEvaluations(){
 		return numberOfEvaluations;
+	}
+	
+	public int getNumberOfIterations() {
+		return numberOfIterations;
+	}
+	
+	public long getAvailableCPUTime() {
+		return allowedCPUTime - System.nanoTime();
+	}
+	
+	public long getUsedCPUTime() {
+		return System.nanoTime() - timerStart;
 	}
 	
 	public boolean isStopCriteria() {
@@ -160,6 +191,7 @@ public abstract class TaskBase<T extends ProblemBase> {
     public void resetCounter() {
     	resetCount++;
         numberOfEvaluations = 0;
+        numberOfIterations = 0;
         isStop = false;
         isGlobal = false;
         timerStart = System.nanoTime();
@@ -168,6 +200,38 @@ public abstract class TaskBase<T extends ProblemBase> {
     public int getResetCount()
     {
     	return resetCount;
+    }
+    
+    @Override
+    public String toString() {
+        return "Task [stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", numberOfEvaluations=" + numberOfEvaluations + ", epsilon="
+                + epsilon + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
+                + precisionOfRealNumbersInDecimalPlaces + ", p=" + p + "]";
+    }
+    
+    /**
+     * Returns a string containing all the tasks information that doesen't change.
+     * @return
+     */
+    public String taskInfo() {
+
+    	if(stopCriteria == EnumStopCriteria.EVALUATIONS) {
+    		return "Task = " + p +" stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", epsilon="
+    				+ epsilon + ", precisionOfRealNumbersInDecimalPlaces="
+    				+ precisionOfRealNumbersInDecimalPlaces;
+    	}
+    	else if(stopCriteria == EnumStopCriteria.ITERATIONS) {
+    		return "Task = " + p +" stopCriteria=" + stopCriteria + ", maxIterations=" + maxIterations + ", epsilon="
+    				+ epsilon + ", precisionOfRealNumbersInDecimalPlaces="
+    				+ precisionOfRealNumbersInDecimalPlaces;
+    	}
+    	else if(stopCriteria == EnumStopCriteria.CPU_TIME){
+    		return "Task = " + p +" stopCriteria=" + stopCriteria + ", allowedCPUTime=" + allowedCPUTime + ", epsilon="
+    				+ epsilon + ", precisionOfRealNumbersInDecimalPlaces="
+    				+ precisionOfRealNumbersInDecimalPlaces;
+    	}
+    	else
+    		return "";
     }
 
 }

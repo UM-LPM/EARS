@@ -15,8 +15,9 @@ import org.um.feri.ears.util.Util;
 public class PSOOmega extends Algorithm  {
 
 	int pop_size;
-	ArrayList<MyPSOIndividual> x;
-	MyPSOIndividual g; //blobal best
+	ArrayList<MyPSOSolution> x;
+	Task task;
+	MyPSOSolution g; //blobal best
 	double omega, phiG, phiP;
 	public PSOOmega() {
 		this(10,0.7, 2, 2);
@@ -40,39 +41,41 @@ public class PSOOmega extends Algorithm  {
 	
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
-		initPopulation(taskProblem);
+		task = taskProblem;
+		initPopulation();
 		double rp, rg;
 		double v[];
-		while (!taskProblem.isStopCriteria()) {
+		while (!task.isStopCriteria()) {
 			for (int i=0; i<pop_size; i++) {
 				rp = Util.rnd.nextDouble();
 				rg = Util.rnd.nextDouble();
-				v = new double[taskProblem.getDimensions()];
+				v = new double[task.getDimensions()];
 				// r*vec(x) double r = Util.rnd.nextDouble();
-				for (int d=0; d<taskProblem.getDimensions(); d++) {
+				for (int d=0; d<task.getDimensions(); d++) {
 					//http://www.atscience.org/IJISAE/article/view/7
 					//omega different formula omega multiplies with 
 					v[d] = omega*(
 							x.get(i).getV()[d]+
-							phiP* Util.rnd.nextDouble()*(x.get(i).getP().getDoubleVariables()[d]-x.get(i).getDoubleVariables()[d])+
-							phiG* Util.rnd.nextDouble()*(g.getDoubleVariables()[d]-x.get(i).getDoubleVariables()[d]));
+							phiP* Util.rnd.nextDouble()*(x.get(i).getP().getVariables().get(d)-x.get(i).getVariables().get(d))+
+							phiG* Util.rnd.nextDouble()*(g.getVariables().get(d)-x.get(i).getVariables().get(d)));
 					//if (v[d]>(taskProblem.getIntervalLength()[d])) v[d]=taskProblem.getIntervalLength()[d]; 
 					//if (v[d]<(taskProblem.getIntervalLength()[d])) v[d]=-taskProblem.getIntervalLength()[d]; 
 				}
-				x.set(i, x.get(i).update(taskProblem,v));
-				if (taskProblem.isFirstBetter(x.get(i), g)) g=x.get(i); 
-				if (taskProblem.isStopCriteria()) break;
+				x.set(i, x.get(i).update(task,v));
+				if (task.isFirstBetter(x.get(i), g)) g=x.get(i); 
+				if (task.isStopCriteria()) break;
 			}
+			task.incrementNumberOfIterations();
 		}
 		return g;
 	}
 	
-	private void initPopulation(Task taskProblem) throws StopCriteriaException {
+	private void initPopulation() throws StopCriteriaException {
 		x = new ArrayList<>();
 		for (int i=0; i<pop_size; i++) {
-			x.add(new MyPSOIndividual(taskProblem));
+			x.add(new MyPSOSolution(task));
 			if (i==0) g = x.get(0);
-			else if (taskProblem.isFirstBetter(x.get(i), g)) g=x.get(i);
+			else if (task.isFirstBetter(x.get(i), g)) g=x.get(i);
 		}
 	}
 

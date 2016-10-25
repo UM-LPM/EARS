@@ -58,6 +58,8 @@ import org.um.feri.ears.problems.constrained.TLBOBenchmarkFunction5;
 public class RatingRPCOe1 extends RatingBenchmark {
     public static final String name="Solving Real parameter Constrained Optimization with maximum evaluation condition";
     
+    private int maxIterations;
+    
     public boolean resultEqual(DoubleSolution a, DoubleSolution b) { //Tie
         if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
@@ -70,6 +72,7 @@ public class RatingRPCOe1 extends RatingBenchmark {
     }
     public RatingRPCOe1() {
         super();
+        maxIterations = 0; 
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,String.valueOf("10")); //everage
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(200000));
@@ -79,8 +82,8 @@ public class RatingRPCOe1 extends RatingBenchmark {
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, double epsilon) {
-        listOfProblems.add(new Task(sc, eval, time, epsilon, p));
+    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations, double epsilon) {
+        listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
     
     /* (non-Javadoc)
@@ -88,11 +91,11 @@ public class RatingRPCOe1 extends RatingBenchmark {
      */
     @Override
     protected void initFullProblemList() {
-        registerTask(new TLBOBenchmarkFunction1(),stopCriteria, 200000, 0, 0.001);
-        registerTask(new TLBOBenchmarkFunction2(),stopCriteria, 200000, 0, 0.001);
-        registerTask(new TLBOBenchmarkFunction3(),stopCriteria, 200000, 0, 0.001);
-        registerTask(new TLBOBenchmarkFunction4(),stopCriteria, 200000, 0, 0.001);
-        registerTask(new TLBOBenchmarkFunction5(),stopCriteria, 200000, 0, 0.001);
+        registerTask(new TLBOBenchmarkFunction1(),stopCriteria, 200000, 0, maxIterations, 0.001);
+        registerTask(new TLBOBenchmarkFunction2(),stopCriteria, 200000, 0, maxIterations, 0.001);
+        registerTask(new TLBOBenchmarkFunction3(),stopCriteria, 200000, 0, maxIterations, 0.001);
+        registerTask(new TLBOBenchmarkFunction4(),stopCriteria, 200000, 0, maxIterations, 0.001);
+        registerTask(new TLBOBenchmarkFunction5(),stopCriteria, 200000, 0, maxIterations, 0.001);
     }
         
     /* (non-Javadoc)

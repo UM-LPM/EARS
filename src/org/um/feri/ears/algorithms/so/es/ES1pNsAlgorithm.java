@@ -135,6 +135,7 @@ public class ES1pNsAlgorithm extends Algorithm {
                 }
                 if (task.isStopCriteria()) break;
             }
+			task.incrementNumberOfIterations();
         }
         return one;
     }

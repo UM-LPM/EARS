@@ -107,6 +107,7 @@ public class RandomWalkAMAlgorithm extends Algorithm {
                 if (debug)
                     System.out.println(taskProblem.getNumberOfEvaluations() + " " + i);
             }
+			task.incrementNumberOfIterations();
         }
         return i;
 

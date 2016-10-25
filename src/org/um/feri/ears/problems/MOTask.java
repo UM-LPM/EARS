@@ -113,27 +113,4 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
     /*public double feasible(double d, int i){
         return p.feasible(d, i);
     }*/
-    
-    @Override
-    public String toString() {
-        return "Task [stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", numberOfEvaluations=" + numberOfEvaluations + ", epsilon="
-                + epsilon + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
-                + precisionOfRealNumbersInDecimalPlaces + ", p=" + p + "]";
-    }
-    
-    /**
-     * Returns a string containing all the tasks information that doesen't change.
-     * @return
-     */
-    public String taskInfo() {
-    	
-    	if(stopCriteria == EnumStopCriteria.EVALUATIONS)
-    	{
-    		return "Task = " + p +" stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", epsilon="
-    				+ epsilon + ", precisionOfRealNumbersInDecimalPlaces="
-    				+ precisionOfRealNumbersInDecimalPlaces;
-    	}
-    	else
-    		return "";
-    }
 }
