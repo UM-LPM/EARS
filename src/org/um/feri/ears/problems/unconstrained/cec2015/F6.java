@@ -2,6 +2,8 @@ package org.um.feri.ears.problems.unconstrained.cec2015;
 
 import java.util.List;
 
+import org.um.feri.ears.problems.unconstrained.cec.Functions;
+
 
 public class F6 extends CEC2015{
 	

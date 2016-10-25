@@ -22,7 +22,7 @@ public final class DataReader {
 	private static double[] readDouble(Scanner input, int maxSize) {
 		double[] ret = new double[maxSize];
 		int actualSize = 0;
-		input.useLocale(Locale.US); // Added to work on any PC 
+		Locale.setDefault(Locale.US); // Added to work on any PC 
 		try {
 
 			// Scanner input = new Scanner(dataFile);

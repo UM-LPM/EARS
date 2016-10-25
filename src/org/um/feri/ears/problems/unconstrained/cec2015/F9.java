@@ -2,6 +2,8 @@ package org.um.feri.ears.problems.unconstrained.cec2015;
 
 import java.util.List;
 
+import org.um.feri.ears.problems.unconstrained.cec.Functions;
+
 public class F9 extends CEC2015 {
 	
 	public F9(int d) {

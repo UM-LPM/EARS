@@ -14,8 +14,9 @@ public abstract class CEC2015 extends Problem {
     protected double[] y;
     protected double[] z;
     protected double[] x_bound;
-    private int n_flag, func_flag;
+    private int func_num;
     protected int[] SS;
+    
 	
     /**
      * Expensive Test functions are only defined for D=10, 30.
@@ -25,6 +26,7 @@ public abstract class CEC2015 extends Problem {
 	public CEC2015(int d, int func_num) {
 		super(d,0);
 		
+		this.func_num = func_num;
         if ((func_num < 1) || (func_num > 15)) {
             System.err.println("Function number must be between 1 and 15!");
         }
@@ -58,11 +60,22 @@ public abstract class CEC2015 extends Problem {
         OShift = DataReader.readShiftData(func_num, d, cf_num);
 
         /* Load Shuffle_data****************************************** */
-        SS        = DataReader.readShuffleData(func_num, d);
-        n_flag    = d;
-        func_flag = func_num;
+        SS = DataReader.readShuffleData(func_num, d);
 
 	}
 
+	@Override
+	public double getOptimumEval() {
 
+		return func_num * 100;
+	}
+
+	@Override
+	public double[][] getOptimalVector() {
+		
+		double[][] optimal = new double [1][numberOfDimensions];
+		optimal[1] = OShift;
+		return optimal;
+	}
+	
 }
