@@ -39,8 +39,12 @@ public abstract class TaskBase<T extends ProblemBase> {
 	
 	public void incrementNumberOfIterations() throws StopCriteriaException
 	{
-		if (numberOfIterations >= maxIterations)
-			throw new StopCriteriaException("Max iterations");
+		if(stopCriteria == EnumStopCriteria.ITERATIONS)
+		{
+			if (numberOfIterations >= maxIterations)
+				throw new StopCriteriaException("Max iterations");
+		}
+		
 		numberOfIterations++;
 		if (numberOfIterations >= maxIterations)
 			isStop = true;
