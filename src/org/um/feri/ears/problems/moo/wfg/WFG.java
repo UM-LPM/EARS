@@ -21,7 +21,6 @@
 package org.um.feri.ears.problems.moo.wfg;
 
 import java.util.ArrayList;
-import java.util.Random;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 
 /**

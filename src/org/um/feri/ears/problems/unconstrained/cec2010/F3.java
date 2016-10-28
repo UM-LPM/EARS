@@ -2,10 +2,8 @@ package org.um.feri.ears.problems.unconstrained.cec2010;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.unconstrained.cec2010.base.AckleyShifted;

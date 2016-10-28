@@ -183,8 +183,17 @@ public strictfp class MersenneTwister extends java.util.Random implements Serial
 
     private double __nextNextGaussian;
     private boolean __haveNextNextGaussian;
+    
+    //Number of calls for testing
+    private static int numberOfCalls = 0;
+    
+    
 
-    /* We're overriding all internal data, to my knowledge, so this should be okay */
+    public static int getNumberOfCalls() {
+		return numberOfCalls;
+	}
+
+	/* We're overriding all internal data, to my knowledge, so this should be okay */
     public Object clone()
         {
         try
@@ -350,6 +359,8 @@ public strictfp class MersenneTwister extends java.util.Random implements Serial
      */
     synchronized protected int next(final int bits)
         {
+    	
+    	numberOfCalls++;
         int y;
         
         if (mti >= N)   // generate N words at one time
@@ -379,7 +390,7 @@ public strictfp class MersenneTwister extends java.util.Random implements Serial
         y ^= (y << 7) & TEMPERING_MASK_B;       // TEMPERING_SHIFT_S(y)
         y ^= (y << 15) & TEMPERING_MASK_C;      // TEMPERING_SHIFT_T(y)
         y ^= (y >>> 18);                        // TEMPERING_SHIFT_L(y)
-
+        
         return y >>> (32 - bits);    // hope that's right!
         }
     
