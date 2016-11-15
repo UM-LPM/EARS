@@ -32,7 +32,7 @@ import org.um.feri.ears.util.Util;
 /**
  * This class allows to apply a SBX crossover operator using two parent solutions.
  */
-public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask>{
+public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOSolutionBase<Double>>{
   /**
    * EPS defines the minimum difference allowed between real values
    */

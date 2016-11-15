@@ -1,13 +1,16 @@
 package org.um.feri.ears.problems;
 
+import java.util.Arrays;
+
+import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 	
-	public DoubleMOTask(EnumStopCriteria stop, int eval, double epsilon, DoubleMOProblem p) {
-		super(stop, eval, epsilon, p);
+	public DoubleMOTask(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
+		super(stop, eval, allowedTime, maxIterations, epsilon, p);
 	}
 		
 	public DoubleMOTask(DoubleMOTask task) {
@@ -16,12 +19,38 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 
 	public MOSolutionBase<Double> getRandomMOSolution() throws StopCriteriaException {
 
+		
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
 			incEvaluate();
 			MOSolutionBase<Double> newSolution = p.getRandomSolution();
 			//p.evaluateConstraints(newSolution);
 			return newSolution;
 		}
+		else if(stopCriteria == EnumStopCriteria.ITERATIONS)
+		{
+			if(isStop)
+				throw new StopCriteriaException("Max iterations");
+			incEvaluate();
+			MOSolutionBase<Double> newSolution = p.getRandomSolution();
+			return newSolution;
+			
+		}
+		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
+		{
+			// check if the CPU time is not exceeded yet
+			if(!isStop)
+			{
+				hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
+				incEvaluate();
+				MOSolutionBase<Double> newSolution = p.getRandomSolution();
+				return newSolution;
+			}
+			else
+			{
+				throw new StopCriteriaException("CPU Time");
+			}
+		}
+		
 		assert false; // Execution should never reach this point!
 		return null; //error
 	}

@@ -28,7 +28,7 @@ import org.um.feri.ears.util.Util;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  * @author Juan J. Durillo
  */
-public class UniformMutation implements MutationOperator<Double, DoubleMOTask> {
+public class UniformMutation implements MutationOperator<Double, DoubleMOTask, MOSolutionBase<Double>> {
   private Double perturbation;
   private Double mutationProbability = null;
 

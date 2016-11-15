@@ -32,7 +32,7 @@ import org.um.feri.ears.util.Util;
  * Class implementing the selection operator used in DE: three different
  * solutions are returned from a population.
  */
-public class DifferentialEvolutionSelection<Type extends Number> implements SelectionOperator<MOSolutionBase<Type>[], ParetoSolution<Type>>{
+public class DifferentialEvolutionSelection<Type extends Number> implements SelectionOperator<MOSolutionBase<Type>[], ParetoSolution<Type>, MOTask>{
 
 	private int currentIndex;
 

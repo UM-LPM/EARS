@@ -28,7 +28,7 @@ import org.um.feri.ears.util.Util;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  * @author Juan J. Durillo
  */
-public class NonUniformMutation implements MutationOperator<Double, DoubleMOTask> {
+public class NonUniformMutation implements MutationOperator<Double, DoubleMOTask, MOSolutionBase<Double>> {
 	private double perturbation;
 	private int maxIterations;
 	private double mutationProbability;

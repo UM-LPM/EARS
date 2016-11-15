@@ -74,7 +74,7 @@ public class RandomWalkAMAlgorithm extends Algorithm {
     private double[] xInSameDirection(double[] old, double[] newX) {
         double[] am = new double[old.length];
         for (int i = 0; i < old.length; i++) {
-            am[i] = task.feasible(newX[i] + (newX[i] - old[i]), i); // if out of
+            am[i] = task.setFeasible(newX[i] + (newX[i] - old[i]), i); // if out of
                                                                     // range
         }
         return am;

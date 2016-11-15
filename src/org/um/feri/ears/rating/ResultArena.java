@@ -107,13 +107,13 @@ public class ResultArena {
         allGames.add(newGame);
 	}
 	/**
-	 * Recalculates ranks and returns a list. All ranks need to be updated. 
-	 * @return
+	 * Recalculates ranks for all games played. All ranks need to be updated. 
+	 * @return list of all players in the arena with new ratings.
 	 */
-	public ArrayList<Player> recalcRangs() {
+	public ArrayList<Player> recalcRatings() {
 		id_period++;
 		ArrayList<Player> ap = new ArrayList<Player>();
-		RatingCalculations.computePlayerRatings(players); //changes ratings
+		RatingCalculations.computePlayerRatings(players, true); //changes ratings
 		ap.addAll(players.values());
 		Collections.sort(ap, new Player.RatingComparator());
 		return ap;
@@ -121,27 +121,24 @@ public class ResultArena {
 	}
 	
 	/**
-	 * Recalculates ranks and returns a list. All ranks need to be updated. 
-	 * @return
+	 * Calculates the ratings for all unevaluated games.
+	 * @return list of all players in the arena with new ratings.
 	 */
-	public ArrayList<Player> recalcRatingByGame() {
+	public ArrayList<Player> calculteRatings() {
 		id_period++;
 		ArrayList<Player> ap = new ArrayList<Player>();
-		
-		//TODO test reset ratings
-        Iterator<String> playerIds = players.keySet().iterator();
-        while (playerIds.hasNext()) {
-        	
-            String id = playerIds.next(); 
-            Player p = players.get(id);
-            p.setRatingData(new Rating(1500, 350, 0.06));
-        }
-		
-		RatingCalculations.computePlayerRatings(players, getUnevaluatedGames()); //changes ratings
+		RatingCalculations.computePlayerRatings(players, false); //changes ratings
 		ap.addAll(players.values());
 		Collections.sort(ap, new Player.RatingComparator());
 		return ap;
 		
+	}
+	
+	public ArrayList<Player> getPlayers() {
+		ArrayList<Player> ap = new ArrayList<Player>();
+		ap.addAll(players.values());
+		Collections.sort(ap, new Player.RatingComparator());
+		return ap;
 	}
 	
 	public List<Game> getUnevaluatedGames()

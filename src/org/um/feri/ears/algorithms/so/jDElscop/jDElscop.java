@@ -183,7 +183,7 @@ public class jDElscop extends Algorithm {
 
 				}
 				for (int j = 0; j < D; j++) {
-					tmp[j] = task.feasible(tmp[j], j); // in bounds
+					tmp[j] = task.setFeasible(tmp[j], j); // in bounds
 				}
 				DoubleSolution tmpI = task.eval(tmp);
 				if (task.isFirstBetter(pop_x[i], tmpI)) { // old is better

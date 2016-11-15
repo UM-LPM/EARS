@@ -94,8 +94,8 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	String functionType;
 	int gen;
 	
-	CrossoverOperator<Type, MOTask> cross;
-	MutationOperator<Type, MOTask> mut;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 
 	static String dataDirectory = "Weight";
 
@@ -228,7 +228,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				// STEP 2.5. Update of solutions
 				updateProblem(child, n, type);
 			} // for
-
+			task.incrementNumberOfIterations();
 		} while (!task.isStopCriteria());
 		//System.out.println(gen);
 		Ranking ranking = new Ranking(population);

@@ -12,11 +12,14 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package org.um.feri.ears.util;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
+import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
@@ -263,5 +266,49 @@ public class SolutionListUtils {
 		return true;
 
 	}
+	
+	  /**
+	   * Return the best solution between those passed as arguments. If they are equal or incomparable
+	   * one of them is chosen randomly.
+	   * @param solution1
+	   * @param solution2
+	   * @return The best solution
+	   */
+	  public static  DoubleSolution getBestSolution(DoubleSolution solution1, DoubleSolution solution2, Comparator<DoubleSolution> comparator) {
+		  DoubleSolution result ;
+	    int flag = comparator.compare(solution1, solution2);
+	    if (flag == -1) {
+	      result = solution1;
+	    } else if (flag == 1) {
+	      result = solution2;
+	    } else {
+	      if (Util.nextDouble() < 0.5) {
+	        result = solution1;
+	      } else {
+	        result = solution2;
+	      }
+	    }
+
+	    return result ;
+	  }
+
+	  public static <T extends SolutionBase<?>> List<T> selectNRandomDifferentSolutions(int numberOfSolutionsToBeReturned, List<T> source) {
+
+		  List<T> resultList = new ArrayList<>(numberOfSolutionsToBeReturned);
+
+		  if (source.size() == 1) {
+			  resultList.add(source.get(0));
+		  } else {
+			  Collection<Integer> positions = new HashSet<>(numberOfSolutionsToBeReturned);
+			  while (positions.size() < numberOfSolutionsToBeReturned) {
+				  int nextPosition = Util.nextInt(0, source.size() - 1);
+				  if (!positions.contains(nextPosition)) {
+					  positions.add(nextPosition);
+					  resultList.add(source.get(nextPosition));
+				  }
+			  }
+		  }
+		  return resultList ;
+	  }
 }
 

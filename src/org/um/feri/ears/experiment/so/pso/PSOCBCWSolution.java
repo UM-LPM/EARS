@@ -55,7 +55,7 @@ public class PSOCBCWSolution extends DoubleSolution
 		
 		for (int i=0; i<x.length; i++)
 		{
-			x[i]=t.feasible(x[i]+v[i],i);
+			x[i]=t.setFeasible(x[i]+v[i],i);
 		}
 		
 		PSOCBCWSolution tmp = new PSOCBCWSolution(t.eval(x));

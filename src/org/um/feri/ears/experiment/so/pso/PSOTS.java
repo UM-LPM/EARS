@@ -54,8 +54,9 @@ public class PSOTS extends Algorithm {
 		double vA[];
 		double vB[];
 		while (!task.isStopCriteria()) {
-			Collections.shuffle(permutacijaA);
-			Collections.shuffle(permutacijaB);
+			
+			Util.shuffle(permutacijaA);
+			Util.shuffle(permutacijaB);
 			for (int i = 0; i < populationSize; i++) {
 				vA = new double[task.getDimensions()];
 				vB = new double[task.getDimensions()];

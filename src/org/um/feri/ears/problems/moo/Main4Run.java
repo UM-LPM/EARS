@@ -51,7 +51,7 @@ public class Main4Run {
     	//det.run(50, indicators, players, new ZDT1(),50);
         
 
-        DoubleMOTask t1 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1());
+        DoubleMOTask t1 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 500, 300, 0.0001, new UnconstrainedProblem1());
        /*DoubleMOTask t2 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem2());
         DoubleMOTask t3 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem3());
         DoubleMOTask t4 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem4());
@@ -84,8 +84,8 @@ public class Main4Run {
     	for (DoubleMOTask task : tasks) {
     		
    	
-    		CrossoverOperator<Integer, IntegerMOTask> cross = new PMXCrossover();
-    		MutationOperator<Integer, IntegerMOTask> mut = new PermutationSwapMutation(0.2);
+    		CrossoverOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> cross = new PMXCrossover();
+    		MutationOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> mut = new PermutationSwapMutation(0.2);
 
     		
     		I_NSGAII nsga = new I_NSGAII();
@@ -99,7 +99,7 @@ public class Main4Run {
             	
             	// OA_AJHsqldb OO_BCEL OO_MyBatis
             
-            	ParetoSolution best = nsga.execute(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new CITOProblem("OO_MyBatis")));
+            	ParetoSolution best = nsga.execute(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 500, 300, 0.0001, new CITOProblem("OO_MyBatis")));
             	
             	//ParetoSolution best = moead.execute(new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
             	

@@ -110,7 +110,7 @@ public class PSOS extends Algorithm {
 	public PSOSSolution update(PSOSSolution sol, double v[]) throws StopCriteriaException {
 		double x[] = sol.getNewVariables();
 		for (int i=0; i<x.length; i++) {
-			x[i]=task.feasible(x[i]+v[i],i);
+			x[i]=task.setFeasible(x[i]+v[i],i);
 		}
 		PSOSSolution tmp = new PSOSSolution(task.eval(x));
 		sol.turnamentScore = 0;

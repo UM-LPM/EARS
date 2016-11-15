@@ -48,6 +48,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 				long duration = System.currentTimeMillis();
 				
 				GraphDataRecorder.SetContext(al,taskProblem);
+				taskProblem.startTimer();
 				ParetoSolution<Type> res = execute(taskProblem);
                 GraphDataRecorder.SetParetoSolution(res);
 				

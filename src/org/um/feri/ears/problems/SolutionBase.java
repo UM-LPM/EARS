@@ -37,7 +37,10 @@ public abstract class SolutionBase <Type> {
 		numberOfViolatedConstraints_ = s.getNumberOfViolatedConstraint();
 		ID = s.ID;
 	}
-
+	/**
+	 * 
+	 * @return true if the solution satisfies the constraints.
+	 */
 	public boolean isFeasible() {
 		return feasible;
 	}

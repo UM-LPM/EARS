@@ -46,7 +46,7 @@ public class MainBenchMarkTestMOO {
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         System.out.println("Benchmark execution time: "+estimatedTime + "s");
         ArrayList<Player> list = new ArrayList<Player>();
-        list.addAll(ra.recalcRangs()); //new ranks
+        list.addAll(ra.calculteRatings()); //new ranks
 
 
         for (Player p: list) System.out.println(p); //print ranks

@@ -49,8 +49,8 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	ParetoSolution<Type> population;
 	ParetoSolution<Type> archive;
 	
-	CrossoverOperator<Type, MOTask> cross;
-	MutationOperator<Type, MOTask> mut;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 	
 	/**
 	 * Defines the number of tournaments for creating the mating pool
@@ -139,6 +139,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	      } // while
 	      // End Create a offSpring solutionSet
 	      population = offSpringSolutionSet;
+	      task.incrementNumberOfIterations();
 	    } // while
 		
 		// Return the first non-dominated front

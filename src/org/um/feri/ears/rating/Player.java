@@ -97,7 +97,8 @@ public class Player {
         }
         if (tmpIndicator==null) {
         	tmpIndicator = new WinLossDraw(0,0,0);
-        	wldIndicator.put(newone.getIndicator(), tmpIndicator);
+        	if(newone.getIndicator() != null)
+        		wldIndicator.put(newone.getIndicator(), tmpIndicator);
         }
         if (newone.getGameResult(playerId) == Game.DRAW) {
             sumWinLossDraw.incDraw();
@@ -135,6 +136,10 @@ public class Player {
 		}
 		return unevaluatedGames;
     }
+	
+	public ArrayList<Game> getAllGames() {
+		return listOfGamesPlayed;
+	}
 
     public String getPlayerId() {
         return playerId;
@@ -154,7 +159,7 @@ public class Player {
      * @param r
      */
     public void setRatingData(Rating r) {
-        listOfGamesPlayed.clear();
+        //listOfGamesPlayed.clear(); //commented -> flag if game is evaluated
         this.r = r;
         ratingHistory.add(r);
     }
@@ -162,7 +167,7 @@ public class Player {
         return sumWinLossDraw;
     }
     public String toString() {
-        return playerId + "; " + r +sumWinLossDraw+"\n\t Against:"+wldPlayers+"\n\t Problems:"+wldProblems + ((wldIndicator == null)? "" : "\n\t Indicators:"+wldIndicator);
+        return playerId + "; " + r +sumWinLossDraw+"\n\t Against:"+wldPlayers+"\n\t Problems:"+wldProblems + ((wldIndicator.size() == 0)? "" : "\n\t Indicators:"+wldIndicator);
     }
     
     public static class RatingComparator implements Comparator<Player> {

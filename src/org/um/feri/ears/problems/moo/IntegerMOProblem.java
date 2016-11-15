@@ -48,7 +48,7 @@ public abstract class IntegerMOProblem extends MOProblemBase<Integer>{
 			randomSequence.add(j);
 		}
 
-		java.util.Collections.shuffle(randomSequence);
+		Util.shuffle(randomSequence);
 
 		for (int i = 0; i < numberOfDimensions; i++) {
 			var[i]= randomSequence.get(i);

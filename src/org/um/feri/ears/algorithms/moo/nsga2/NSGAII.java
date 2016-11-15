@@ -45,8 +45,8 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	ParetoSolution<Type> union;
 
 	
-	CrossoverOperator<Type, MOTask> cross;
-	MutationOperator<Type, MOTask> mut;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 
 	public NSGAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
 
@@ -150,6 +150,7 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 				}
 				remain = 0;
 			}
+			task.incrementNumberOfIterations();
 		}
 		
 		Ranking<Type> ranking = new Ranking<Type>(population);

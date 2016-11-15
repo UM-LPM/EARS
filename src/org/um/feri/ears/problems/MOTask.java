@@ -1,5 +1,7 @@
 package org.um.feri.ears.problems;
 
+import java.util.concurrent.TimeUnit;
+
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
@@ -16,9 +18,9 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
      * @param p
      * @param qi
      */
-    public MOTask(EnumStopCriteria stop, int eval, double epsilon, P p) {
+    public MOTask(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon, P p) {
     	
-    	this(stop, eval, epsilon, p,  (int) Math.log10((1./epsilon)+1));
+    	this(stop, eval, allowedTime, maxIterations, epsilon, p,  (int) Math.log10((1./epsilon)+1));
 	}
     
     abstract public boolean areDimensionsInFeasableInterval(ParetoSolution<T> bestByALg);
@@ -32,7 +34,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
      * @param qi
      * @param precisonOfRealNumbers
      */
-	public MOTask(EnumStopCriteria stop, int eval, double epsilon, P p, int precisonOfRealNumbers) {
+	public MOTask(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon, P p, int precisonOfRealNumbers) {
 		
 		precisionOfRealNumbersInDecimalPlaces = precisonOfRealNumbers;
         stopCriteria = stop;
@@ -42,6 +44,8 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
         isStop = false;
         isGlobal = false;
         super.p = p; // TODO generic type in TaskBase
+        this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
+        this.maxIterations = maxIterations;
 	}
 	
 	public MOTask(MOTask<T,P> task)
@@ -53,6 +57,8 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
         epsilon = task.epsilon;
         isStop = task.isStop;
         isGlobal = task.isGlobal;
+        maxIterations = task.maxIterations;
+        allowedCPUTime = task.allowedCPUTime;
         super.p = task.p;  //TODO deep copy?
 	}
 	
@@ -91,13 +97,37 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 	 * @throws StopCriteriaException
 	 */
 	public void eval(MOSolutionBase<T> ind) throws StopCriteriaException {
+		
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
 			incEvaluate();
 			p.evaluate(ind);
 			p.evaluateConstraints(ind);
 			GraphDataRecorder.AddRecord(ind, this.getProblemName());
 		}
-		assert false; // Execution should never reach this point!
+		else if(stopCriteria == EnumStopCriteria.ITERATIONS)
+		{
+			if(isStop)
+				throw new StopCriteriaException("Max iterations");
+			incEvaluate();
+			p.evaluate(ind);
+			p.evaluateConstraints(ind);
+			GraphDataRecorder.AddRecord(ind, this.getProblemName());
+		}
+		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
+		{
+			if(!isStop)
+			{
+				hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
+				incEvaluate();
+				p.evaluate(ind);
+				p.evaluateConstraints(ind);
+				GraphDataRecorder.AddRecord(ind, this.getProblemName());
+			}
+			else
+			{
+				throw new StopCriteriaException("CPU Time");
+			}
+		}
 	}
 
     /**

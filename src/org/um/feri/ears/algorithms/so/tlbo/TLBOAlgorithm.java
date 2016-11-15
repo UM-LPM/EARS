@@ -205,7 +205,7 @@ public class TLBOAlgorithm extends Algorithm {
                     break; // in loop after incEval
                 tmpX = population[i].getDoubleVariables();
                 for (int n = 0; n < num_var; n++) {
-                    pop_tmp[i][n] = task.feasible(tmpX[n] + Dif_mean[n], n);
+                    pop_tmp[i][n] = task.setFeasible(tmpX[n] + Dif_mean[n], n);
                 }
                 eval_tmp[i] = task.eval(pop_tmp[i]);
                 if (task.isFirstBetter(eval_tmp[i], bestEvalCond))
@@ -241,11 +241,11 @@ public class TLBOAlgorithm extends Algorithm {
                 tmpIsland = new double[num_var];
                 if (task.isFirstBetter(population[i_first], population[ii])) {
                     for (int n = 0; n < num_var; n++) {
-                        tmpIsland[n] = task.feasible(tmpX[n] + rand * (tmpX[n] - tmpY[n]), n);
+                        tmpIsland[n] = task.setFeasible(tmpX[n] + rand * (tmpX[n] - tmpY[n]), n);
                     }
                 } else {
                     for (int n = 0; n < num_var; n++) {
-                        tmpIsland[n] = task.feasible(tmpX[n] + rand * (tmpY[n] - tmpX[n]), n);
+                        tmpIsland[n] = task.setFeasible(tmpX[n] + rand * (tmpY[n] - tmpX[n]), n);
                     }
                 }
                 if (test)

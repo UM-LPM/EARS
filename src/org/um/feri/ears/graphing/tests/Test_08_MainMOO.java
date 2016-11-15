@@ -53,7 +53,7 @@ public class Test_08_MainMOO
         BankOfResults ba = new BankOfResults();
         cec.run(ra, ba, 1); //repeat competition 50X
         ArrayList<Player> list = new ArrayList<Player>();
-        list.addAll(ra.recalcRangs()); //new rangs
+        list.addAll(ra.calculteRatings()); //new rangs
         for (Player p: list) System.out.println(p); //print rangs
         
         

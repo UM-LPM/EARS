@@ -63,7 +63,7 @@ public class PSOPBC extends Algorithm {
 
 		while (!task.isStopCriteria()) {
 			if (counter % Crossiter == 0) {
-				Collections.shuffle(permutations);
+				Util.shuffle(permutations);
 				for (int i = 0; i < populationSize; i++) {
 					
 					if (task.isStopCriteria()) {

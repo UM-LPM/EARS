@@ -59,7 +59,7 @@ public class VEGASelection<Type extends Number> {
 	 * population, returning the tournament winner. If more than one solution is
 	 * a winner, one of the winners is returned with equal probability.
 	 * 
-	 * @param population the population from which candidate solutions are
+	 * @param coralReef the population from which candidate solutions are
 	 *        selected
 	 * @return the winner of tournament selection
 	 */

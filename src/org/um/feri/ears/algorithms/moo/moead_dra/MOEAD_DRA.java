@@ -86,8 +86,8 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 
 	static String dataDirectory = "Weight";
 
-	CrossoverOperator<Type, MOTask> cross;
-	MutationOperator<Type, MOTask> mut;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 
 	public MOEAD_DRA(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
 		this.populationSize = pop_size;
@@ -236,7 +236,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 			if (gen % 30 == 0) {
 				comp_utility();
 			}
-
+			task.incrementNumberOfIterations();
 		} while (!task.isStopCriteria());
 		System.out.println(gen);
 		

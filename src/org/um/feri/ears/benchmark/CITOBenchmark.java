@@ -29,8 +29,6 @@ import org.um.feri.ears.util.Util;
 
 public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, IntegerMOProblem>{
     public static final String name="CITO Benchmark";
-    protected int evaluationsOnDimension;
-    private double draw_limit=0.0;
     private boolean random;
     
 	@Override
@@ -54,9 +52,9 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
         super(indicators);
         this.random = random;
         this.draw_limit = draw_limit;
-        evaluationsOnDimension=300000;
+        maxEvaluations=300000;
         initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
+        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
 
     }
@@ -64,8 +62,8 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(EnumStopCriteria sc, int eval, double epsilon, IntegerMOProblem p) {
-        listOfProblems.add(new IntegerMOTask(sc, eval, epsilon, p));
+    protected void registerTask(EnumStopCriteria sc, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
+        listOfProblems.add(new IntegerMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
     
     @Override
@@ -166,7 +164,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
     	
     	
     	for (IntegerMOProblem moProblem : problems) {
-    		registerTask(stopCriteria, evaluationsOnDimension, 0.001, moProblem);
+    		registerTask(stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
 		}
     }
         

@@ -71,7 +71,6 @@ public abstract class Problem extends ProblemBase<Double> {
             return false;
 	    }
         return true;
-	    
 	}
     
 	/**
@@ -81,14 +80,38 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param i
 	 * @return
 	 */
-	public double feasible(double d, int i) {
+	public double setFeasible(double d, int i) {
 		if (d < lowerLimit.get(i))
 			return lowerLimit.get(i);
 		if (d > upperLimit.get(i))
 		return upperLimit.get(i);
 		
 		return d;
-
+	}
+	
+	public double[] setFeasible(double[] d) {
+		for(int i = 0; i < d.length;i++)
+		{
+			d[i] = setFeasible(d[i], i);
+		}
+		return d;
+	}
+	
+	public List<Double> setFeasible(List<Double> d) {
+		for(int i = 0; i < d.size();i++)
+		{
+			d.set(i, setFeasible(d.get(i).doubleValue(), i));
+		}
+		return d;
+	}
+	
+	public boolean isFeasble(double d, int i) {
+		if (d < lowerLimit.get(i))
+			return false;
+		if (d > upperLimit.get(i))
+		return false;
+		
+		return true;
 	}
 		
 	@Override

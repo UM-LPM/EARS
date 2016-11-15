@@ -14,6 +14,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.DoubleMOTask;
@@ -57,12 +58,19 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 	}
 
 	public abstract boolean resultEqual(ParetoSolution<T> a, ParetoSolution<T> b, QualityIndicator<T> qi);
-    protected abstract void registerTask(EnumStopCriteria sc, int eval, double epsilon, P p);
+	
+    protected abstract void registerTask(EnumStopCriteria sc, int eval, long allowedTime, int maxIterations, double epsilon, P p);
 	
 	@Override
 	public void registerAlgorithm(MOAlgorithm<Task, T> al) {
         listOfAlgorithmsPlayers.add(al);
     }
+	
+    @Override
+	public void registerAlgorithms(ArrayList<MOAlgorithm<Task, T>> algorithms) {
+    	listOfAlgorithmsPlayers.addAll(algorithms);
+		
+	}
     
 	protected IndicatorName getRandomIndicator()
 	{
@@ -174,6 +182,14 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
         if(isCheating())
         {
         	System.out.println("The reset count does not match!");
+        }
+        
+        // Recalculate ratings after tournament
+        arena.calculteRatings();
+        
+        if(displayRatingIntervalChart)
+        {
+        	displayRatingIntervalsChart(arena.getPlayers());
         }
         
     }

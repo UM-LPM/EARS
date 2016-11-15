@@ -57,9 +57,7 @@ import org.um.feri.ears.problems.constrained.TLBOBenchmarkFunction5;
 //TODO calculate CD for rating
 public class RatingRPCOe1 extends RatingBenchmark {
     public static final String name="Solving Real parameter Constrained Optimization with maximum evaluation condition";
-    
-    private int maxIterations;
-    
+
     public boolean resultEqual(DoubleSolution a, DoubleSolution b) { //Tie
         if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
@@ -72,7 +70,6 @@ public class RatingRPCOe1 extends RatingBenchmark {
     }
     public RatingRPCOe1() {
         super();
-        maxIterations = 0; 
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,String.valueOf("10")); //everage
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(200000));

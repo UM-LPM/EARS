@@ -78,8 +78,6 @@ import org.um.feri.ears.util.FutureResult;
 
 public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem>{
     public static final String name="Benchmark CEC 2009";
-    protected int evaluationsOnDimension;
-    private double draw_limit=0.0;
     
 	@Override
 	public boolean resultEqual(ParetoSolution<Double> a, ParetoSolution<Double> b, QualityIndicator<Double> qi) {
@@ -101,9 +99,9 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
     public RatingCEC2009(List<IndicatorName> indicators, double draw_limit) {
         super(indicators);
         this.draw_limit = draw_limit;
-        evaluationsOnDimension=30000;
+        maxEvaluations=30000;
         initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
+        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
 
     }
@@ -111,8 +109,8 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(EnumStopCriteria sc, int eval, double epsilon, DoubleMOProblem p) {
-        listOfProblems.add(new DoubleMOTask(sc, eval, epsilon, p));
+    protected void registerTask(EnumStopCriteria sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
+        listOfProblems.add(new DoubleMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
     
     /* (non-Javadoc)
@@ -135,7 +133,7 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
     	problems.add(new UnconstrainedProblem10());
     	
     	for (DoubleMOProblem moProblem : problems) {
-    		registerTask(stopCriteria, evaluationsOnDimension, 0.001, moProblem);
+    		registerTask(stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
 		}
     }
     

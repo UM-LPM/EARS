@@ -64,8 +64,8 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 	SBXCrossover sbx ;
 	PolynomialMutation plm;
 	
-	CrossoverOperator<Type, MOTask> cross;
-	MutationOperator<Type, MOTask> mut;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 
 
 	public NSGAIII(CrossoverOperator crossover, MutationOperator mutation) {
@@ -104,6 +104,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 		      matingPopulation = selection(population);
 		      offspringPopulation = reproduction(matingPopulation);
 		      population = replacement(population, offspringPopulation);
+		      task.incrementNumberOfIterations();
 		}
 		
 		// Return the first non-dominated front

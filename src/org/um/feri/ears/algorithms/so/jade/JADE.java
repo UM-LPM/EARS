@@ -145,7 +145,7 @@ public class JADE extends Algorithm {
 				for (int d = 0; d < D; d++) {
 					if ((Util.rnd.nextDouble() < pop_x[i].CR) || (d == j_rand)) {
 						tmp[d] = task
-								.feasible(
+								.setFeasible(
 										tmp[d]
 												+ pop_x[i].F
 												* (elite.get(pBest).getVariables().get(d) - tmp[d])

@@ -32,8 +32,8 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	ParetoSolution<Type> population;
 	ParetoSolution<Type> archive;
 	
-	CrossoverOperator<Type, MOTask> cross;
-	MutationOperator<Type, MOTask> mut;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 
 	public static final int TOURNAMENTS_ROUNDS = 1;
 
@@ -146,6 +146,7 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			}
 			// End Create a offSpring solutionSet
 			population = offspringPopulation;
+			task.incrementNumberOfIterations();
 		}
 		
 		Ranking<Type> ranking = new Ranking<Type>(archive);

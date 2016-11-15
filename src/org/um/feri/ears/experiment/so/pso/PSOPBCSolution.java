@@ -62,7 +62,7 @@ public class PSOPBCSolution extends DoubleSolution {
 		double pozicija[] = getNewVariables();
 		
 		for (int i=0; i<pozicija.length; i++) {
-			pozicija[i]=tsk.feasible(pozicija[i]+hitrosti[i],i);
+			pozicija[i]=tsk.setFeasible(pozicija[i]+hitrosti[i],i);
 		}
 		
 		PSOPBCSolution vmesni = new PSOPBCSolution(tsk.eval(pozicija));

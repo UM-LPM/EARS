@@ -6,8 +6,8 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem>{
 	
-	public IntegerMOTask(EnumStopCriteria stop, int eval, double epsilon, IntegerMOProblem p) {
-		super(stop, eval, epsilon, p);
+	public IntegerMOTask(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
+		super(stop, eval, allowedTime, maxIterations, epsilon, p);
 	}
 	
 	public IntegerMOTask(IntegerMOTask task) {
@@ -22,6 +22,32 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem>{
 			//p.evaluateConstraints(newSolution);
 			return newSolution;
 		}
+		else if(stopCriteria == EnumStopCriteria.ITERATIONS)
+		{
+			if(isStop)
+				throw new StopCriteriaException("Max iterations");
+			
+			incEvaluate();
+			MOSolutionBase<Integer> newSolution = p.getRandomSolution();
+			return newSolution;
+			
+		}
+		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
+		{
+			// check if the CPU time is not exceeded yet
+			if(!isStop)
+			{
+				hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
+				incEvaluate();
+				MOSolutionBase<Integer> newSolution = p.getRandomSolution();
+				return newSolution;
+			}
+			else
+			{
+				throw new StopCriteriaException("CPU Time");
+			}
+		}
+		
 		assert false; // Execution should never reach this point!
 		return null; //error
 	}

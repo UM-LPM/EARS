@@ -304,6 +304,27 @@ public class Util {
 		}
 	}
 	
+	
+	/**
+	 * Shuffles the elements of the specified list using the same algorithm as
+	 * {@link Collections#shuffle}.
+	 * 
+	 * @param <T> the type of element stored in the List
+	 * @param list the list to be shuffled
+	 */
+	public static <T> void shuffle(List<T> list) {
+		for (int i = list.size() - 1; i >= 1; i--) {
+			int j = nextInt(i + 1);
+
+			if (i != j) {
+				T temp = list.get(i);
+				list.set(i, list.get(j));
+				list.set(j, temp);
+			}
+		}
+	}
+	
+	
 	public static int[] randomPermutation(int length) {
 		int[] permutation = new int[length];
 		

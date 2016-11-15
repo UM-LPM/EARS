@@ -30,8 +30,8 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	ParetoSolution<Type> population;
 	AdaptiveGridArchive<Type> archive;
 	
-	CrossoverOperator<Type, MOTask> cross;
-	MutationOperator<Type, MOTask> mut;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 	
 	public PESAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
 		this.populationSize = populationSize;
@@ -141,7 +141,7 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 
 			// Clear the solutionSet
 			population.clear();
-
+			task.incrementNumberOfIterations();
 		} while (!task.isStopCriteria());
 		
 		best = archive;

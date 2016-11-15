@@ -140,7 +140,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 			if (gen % 30 == 0) {
 				comp_utility();
 			}*/
-
+			task.incrementNumberOfIterations();
 		} while (!task.isStopCriteria());
 		//System.out.println(gen);
 		best = finalSelection(populationSize);

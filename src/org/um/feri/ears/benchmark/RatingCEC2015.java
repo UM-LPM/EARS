@@ -44,20 +44,35 @@
  */
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.EnumStopCriteria;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.cec2015.*;
+import org.um.feri.ears.problems.unconstrained.cec2015.F1;
+import org.um.feri.ears.problems.unconstrained.cec2015.F10;
+import org.um.feri.ears.problems.unconstrained.cec2015.F11;
+import org.um.feri.ears.problems.unconstrained.cec2015.F12;
+import org.um.feri.ears.problems.unconstrained.cec2015.F13;
+import org.um.feri.ears.problems.unconstrained.cec2015.F14;
+import org.um.feri.ears.problems.unconstrained.cec2015.F15;
+import org.um.feri.ears.problems.unconstrained.cec2015.F2;
+import org.um.feri.ears.problems.unconstrained.cec2015.F3;
+import org.um.feri.ears.problems.unconstrained.cec2015.F4;
+import org.um.feri.ears.problems.unconstrained.cec2015.F5;
+import org.um.feri.ears.problems.unconstrained.cec2015.F6;
+import org.um.feri.ears.problems.unconstrained.cec2015.F7;
+import org.um.feri.ears.problems.unconstrained.cec2015.F8;
+import org.um.feri.ears.problems.unconstrained.cec2015.F9;
 
 
 public class RatingCEC2015 extends RatingBenchmark{
     public static final String name="Benchmark CEC 2015";
-    protected int evaluationsOnDimension;
     protected int dimension;
-    private double draw_limit=0.0000001;
-    protected long timeLimit;
-    private int maxIterations;
+    protected boolean calculateTime = true;
+
     
     public boolean resultEqual(DoubleSolution a, DoubleSolution b) {
         if ((a==null) &&(b==null)) return true;
@@ -72,13 +87,14 @@ public class RatingCEC2015 extends RatingBenchmark{
     public RatingCEC2015(double draw_limit) {
         super();
         this.draw_limit = draw_limit;
-        evaluationsOnDimension=3000;
-        dimension=10;
+        maxEvaluations=30000; // 1500 exact evaluations
+        dimension=30;
         timeLimit = 0;
-        maxIterations = 0;
+        maxIterations = 300;
+        stopCriteria = EnumStopCriteria.EVALUATIONS;
         initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION,"3");
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
+        addParameter(EnumBenchmarkInfoParameters.DIMENSION,""+dimension);
+        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
     }
     /* (non-Javadoc)
@@ -95,25 +111,51 @@ public class RatingCEC2015 extends RatingBenchmark{
     @Override
     protected void initFullProblemList() {
     	
-    	registerTask(new F1(dimension),stopCriteria,evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F2(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F3(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F4(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F5(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F6(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F7(dimension),stopCriteria,  evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F8(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F9(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F10(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F11(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F12(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F13(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F14(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-    	registerTask(new F15(dimension),stopCriteria, evaluationsOnDimension, timeLimit, maxIterations, 0.001);
-
+    	ArrayList<Problem> problems = new ArrayList<Problem>();
+    	
+    	problems.add(new F1(dimension));
+    	problems.add(new F2(dimension));
+    	problems.add(new F3(dimension));
+    	problems.add(new F4(dimension));
+    	problems.add(new F5(dimension));
+    	problems.add(new F6(dimension));
+    	problems.add(new F7(dimension));
+    	problems.add(new F8(dimension));
+    	problems.add(new F9(dimension));
+    	problems.add(new F10(dimension));
+    	problems.add(new F11(dimension));
+    	problems.add(new F12(dimension));
+    	problems.add(new F13(dimension));
+    	problems.add(new F14(dimension));
+    	problems.add(new F15(dimension));
+    	
+    	for(Problem p : problems)
+    	{
+    		if(stopCriteria == EnumStopCriteria.CPU_TIME && calculateTime)
+    		{
+    			System.out.println("Calculating time for problem: "+p.getName());
+    			timeLimit = calculateTime(p);
+    		}
+    		
+    		registerTask(p, stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	}
     }
         
-    /* (non-Javadoc)
+    private long calculateTime(Problem p) {
+		
+    	long start = System.nanoTime();
+		long duration;
+		for(int i = 0; i < maxEvaluations; i++)
+		{
+			p.getRandomSolution();
+		}
+		duration = System.nanoTime() - start;
+		// add algorithm runtime
+		duration += (int)(duration*(10.0f/100.0f));
+		
+		return TimeUnit.NANOSECONDS.toMillis(duration);
+	}
+	/* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#getName()
      */
     @Override

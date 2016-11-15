@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
@@ -37,8 +38,6 @@ import org.um.feri.ears.util.Util;
 
 public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem>{
     public static final String name="BIOMA Benchmark";
-    protected int evaluationsOnDimension;
-    private double draw_limit=0.0;
     private boolean random;
     
 	@Override
@@ -62,9 +61,12 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
         super(indicators);
         this.random = random;
         this.draw_limit = draw_limit;
-        evaluationsOnDimension=300000;
+        maxEvaluations=300000;
+        stopCriteria = EnumStopCriteria.CPU_TIME;
+        maxIterations = 500;
+        timeLimit = 5000; //millisecnods
         initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
+        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
 
     }
@@ -120,7 +122,8 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     
     @Override
 	protected void runOneProblem(DoubleMOTask task, BankOfResults allSingleProblemRunResults) {
-
+    	
+    	//super.runOneProblem(task, allSingleProblemRunResults);
     	reset(task);
     	ExecutorService pool = Executors.newFixedThreadPool(listOfAlgorithmsPlayers.size());
         Set<Future<FutureResult<DoubleMOTask, Double>>> set = new HashSet<Future<FutureResult<DoubleMOTask, Double>>>();
@@ -159,8 +162,8 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(EnumStopCriteria sc, int eval, double epsilon, DoubleMOProblem p) {
-        listOfProblems.add(new DoubleMOTask(sc, eval, epsilon, p));
+    protected void registerTask(EnumStopCriteria sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
+        listOfProblems.add(new DoubleMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
     
     /* (non-Javadoc)
@@ -185,7 +188,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
 
     	
     	for (DoubleMOProblem moProblem : problems) {
-    		registerTask(stopCriteria, evaluationsOnDimension, 1.0E-4, moProblem);
+    		registerTask(stopCriteria, maxEvaluations, timeLimit, maxIterations,  1.0E-4, moProblem);
 		}
     }
         

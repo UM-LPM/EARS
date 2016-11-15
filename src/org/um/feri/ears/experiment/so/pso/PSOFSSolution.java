@@ -71,7 +71,7 @@ public class PSOFSSolution extends DoubleSolution{
 	public PSOFSSolution update(Task t, double v[]) throws StopCriteriaException {
 		double x[] = getNewVariables();
 		for (int i=0; i<x.length; i++) {
-			x[i]=t.feasible(x[i]+v[i],i);
+			x[i]=t.setFeasible(x[i]+v[i],i);
 		}
 		PSOFSSolution tmp = new PSOFSSolution(t.eval(x));
 		if (t.isFirstBetter(tmp, p)) {

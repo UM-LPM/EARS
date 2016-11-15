@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.concurrent.TimeUnit;
 
 import org.um.feri.ears.benchmark.MORatingBenchmark;
 import org.um.feri.ears.benchmark.RatingBenchmarkBase;
@@ -20,6 +21,7 @@ public abstract class TaskBase<T extends ProblemBase> {
 	protected T p;
 	private int resetCount;
 	
+	protected long evaluationTime = 0;
 	protected long timerStart;
 	protected long allowedCPUTime;
 	protected int numberOfIterations = 0;
@@ -28,6 +30,21 @@ public abstract class TaskBase<T extends ProblemBase> {
 	protected StringBuilder ancestorSB;
 	protected boolean isAncestorLogginEnabled = false;
 	
+	
+	
+	public long getEvaluationTimeNs() {
+		return evaluationTime;
+	}
+	
+	public long getEvaluationTimeMs() {
+		return TimeUnit.NANOSECONDS.toMillis(evaluationTime);
+	}
+
+
+	public EnumStopCriteria getStopCriteria() {
+		return stopCriteria;
+	}
+
 	public TaskBase() {
 		resetCount = 0;
 	}
@@ -46,10 +63,11 @@ public abstract class TaskBase<T extends ProblemBase> {
 		}
 		
 		numberOfIterations++;
-		if (numberOfIterations >= maxIterations)
+		if (numberOfIterations >= maxIterations && stopCriteria == EnumStopCriteria.ITERATIONS)
+		{
 			isStop = true;
+		}
 	}
-
 	/**
      * When you subtract 2 solutions and difference is less or equal epsilon,
      * solution are treated as equal good (draw in algorithm match)!
@@ -134,13 +152,13 @@ public abstract class TaskBase<T extends ProblemBase> {
 		
 		if(stopCriteria == EnumStopCriteria.CPU_TIME)
 		{
-			isCPUTimeExceeded();
+			hasTheCPUTimeBeenExceeded();
 		}
-		
+		//System.out.println(isStop);
 		return isStop||isGlobal;
 	}
 	
-	public boolean isCPUTimeExceeded()
+	public boolean hasTheCPUTimeBeenExceeded()
 	{
 		if(System.nanoTime() - timerStart > allowedCPUTime)
 		{
@@ -161,10 +179,10 @@ public abstract class TaskBase<T extends ProblemBase> {
 	}
 	
 	protected void incEvaluate() throws StopCriteriaException {
-		if (numberOfEvaluations >= maxEvaluations)
+		if (numberOfEvaluations >= maxEvaluations && stopCriteria == EnumStopCriteria.EVALUATIONS)
 			throw new StopCriteriaException("Max evaluations");
 		numberOfEvaluations++;
-		if (numberOfEvaluations >= maxEvaluations)
+		if (numberOfEvaluations >= maxEvaluations && (stopCriteria == EnumStopCriteria.EVALUATIONS || stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS))
 			isStop = true;
 	}
 	
@@ -196,6 +214,7 @@ public abstract class TaskBase<T extends ProblemBase> {
     	resetCount++;
         numberOfEvaluations = 0;
         numberOfIterations = 0;
+        evaluationTime = 0;
         isStop = false;
         isGlobal = false;
         timerStart = System.nanoTime();

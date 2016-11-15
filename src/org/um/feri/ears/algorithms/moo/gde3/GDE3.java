@@ -52,7 +52,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	
 	int populationSize;
 	
-	CrossoverOperator<Type, MOTask> cross;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
 
 	public GDE3(CrossoverOperator crossover, int populationSize) {
 		this.populationSize = populationSize;
@@ -184,6 +184,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				}
 				remain = 0;
 			}
+			task.incrementNumberOfIterations();
 		}
 		
 		// Return the first non-dominated front

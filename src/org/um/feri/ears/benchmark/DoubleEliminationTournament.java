@@ -260,7 +260,7 @@ public class DoubleEliminationTournament {
 			//TODO number of evaluations
 			// get random quality indicator from ensemble
 			QualityIndicator qi = getMetric();
-			task = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 15000, 0.001, problem);
+			task = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 15000, 500, 300, 0.001, problem);
 			for (MOAlgorithm al: players) {
 				
 				ParetoSolution bestByALg = null;

@@ -7,7 +7,7 @@ import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
 
-public class PermutationSwapMutation implements MutationOperator<Integer, IntegerMOTask>{
+public class PermutationSwapMutation implements MutationOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>>{
 
 	private double mutationProbability;
 	  /**

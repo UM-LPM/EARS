@@ -73,7 +73,7 @@ public class PSOoriginalLogging extends Algorithm {
 		
 		double x[] = sol.getNewVariables();
 		for (int i = 0; i < x.length; i++) {
-			x[i] = task.feasible(x[i] + v[i], i);
+			x[i] = task.setFeasible(x[i] + v[i], i);
 		}
 		List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
 		parents.add(sol.Pbest);

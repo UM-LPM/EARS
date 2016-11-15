@@ -3,7 +3,9 @@ package org.um.feri.ears.benchmark;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.concurrent.TimeUnit;
 
+import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.export.data.EDBenchmark;
@@ -15,14 +17,25 @@ import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.results.BankOfResults;
+import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.util.RatingIntervalPlot;
 
 public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends AlgorithmBase, T3> {
     public static boolean debugPrint=false;
     protected ArrayList<T> listOfProblems;
     protected ArrayList<T2> listOfAlgorithmsPlayers;
-    protected boolean recheck = false;  
-    protected EnumStopCriteria stopCriteria = EnumStopCriteria.EVALUATIONS; //default
+    protected boolean recheck = false;
+    protected boolean displayRatingIntervalChart = false;
+    
+   	// Default benchmark settings
+    protected EnumStopCriteria stopCriteria = EnumStopCriteria.EVALUATIONS; 
+    protected int maxEvaluations = 1500;
+    protected long timeLimit = TimeUnit.MILLISECONDS.toNanos(500); //milliseconds
+    protected int maxIterations = 500;
+    public static double draw_limit = 10e-7;
+
+    
     protected ArrayList<T3> results;
     protected EnumMap<EnumBenchmarkInfoParameters,String> parameters; //add all specific parameters
     public static boolean printSingleRunDuration=true;
@@ -86,12 +99,25 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
         results = new ArrayList<T3>();
         parameters = new  EnumMap<EnumBenchmarkInfoParameters, String>(EnumBenchmarkInfoParameters.class);
         resetCallCounter = 0;
+        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,""+draw_limit); //default
+        addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+stopCriteria);
+        
         //initFullProblemList();
     }
+    
+    public boolean isDisplayRatingIntervalChart() {
+		return displayRatingIntervalChart;
+	}
+
+	public void setDisplayRatingIntervalChart(boolean displayRatingIntervalChart) {
+		this.displayRatingIntervalChart = displayRatingIntervalChart;
+	}
     
     protected abstract void initFullProblemList(); 
     
     public abstract void registerAlgorithm(T2 al);
+    
+    public abstract void registerAlgorithms(ArrayList<T2> algorithms);
     
     protected void incrementResetCallCounter()
     {
@@ -124,6 +150,14 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
      * @param repetition
      */
     public abstract void run(ResultArena arena, BankOfResults allSingleProblemRunResults, int repetition);
+    
+    public static void displayRatingIntervalsChart(ArrayList<Player> list)
+    {
+        RatingIntervalPlot demo = new RatingIntervalPlot("Rating Interval", list);
+        demo.pack();
+        RefineryUtilities.centerFrameOnScreen(demo);
+        demo.setVisible(true);
+    }
     
 	protected boolean isCheating() {
 		int sum = 0;

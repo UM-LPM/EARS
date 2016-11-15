@@ -80,8 +80,6 @@ import org.um.feri.ears.util.FutureResult;
 
 public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem>{
     public static final String name="Rating Ensemble";
-    protected int evaluationsOnDimension;
-    private double draw_limit=0.0;
     private boolean random;
     
 	@Override
@@ -106,9 +104,9 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
         this.random = random;
         this.runInParalel = runInParalel;
         this.draw_limit = draw_limit;
-        evaluationsOnDimension=300000;
+        maxEvaluations=300000;
         initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
+        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
 
     }
@@ -117,9 +115,9 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
         this.random = random;
         this.runInParalel = runInParalel;
         this.draw_limit = draw_limit;
-        evaluationsOnDimension=300000;
+        maxEvaluations=300000;
         initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(evaluationsOnDimension));
+        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
 	}
 
@@ -127,8 +125,8 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(EnumStopCriteria sc, int eval, double epsilon, DoubleMOProblem p) {
-        listOfProblems.add(new DoubleMOTask(sc, eval, epsilon, p));
+    protected void registerTask(EnumStopCriteria sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
+        listOfProblems.add(new DoubleMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
     
     @Override
@@ -282,7 +280,7 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     	
     	
     	for (DoubleMOProblem moProblem : problems) {
-    		registerTask(stopCriteria, evaluationsOnDimension, 0.0001, moProblem);
+    		registerTask(stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.0001, moProblem);
 		}
     }
         

@@ -84,8 +84,8 @@ public class RatingExample {
         players.put(a1.getPlayerId(), a1);
         players.put(a2.getPlayerId(), a2);
         players.put(a3.getPlayerId(), a3);   
-            RatingCalculations.computePlayerRatings(players);
-       System.out.println(a.getRatingData());
+        RatingCalculations.computePlayerRatings(players,false);
+        System.out.println(a.getRatingData());
         System.out.println(a1.getRatingData());
         System.out.println(a2.getRatingData());
         System.out.println(a3.getRatingData());

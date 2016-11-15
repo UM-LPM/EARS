@@ -11,11 +11,12 @@ import java.util.EnumMap;
 
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleMOTask;
+import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
 
 
-public class PolynomialMutation implements MutationOperator<Double, DoubleMOTask>{
+public class PolynomialMutation implements MutationOperator<Double, DoubleMOTask, MOSolutionBase<Double>>{
 	
 	
 	private static final double ETA_M_DEFAULT_ = 20.0;
@@ -80,4 +81,6 @@ public class PolynomialMutation implements MutationOperator<Double, DoubleMOTask
 		para.put(EnumAlgorithmParameters.ETA, distributionIndex+"");
 		return para;
 	}
+
+
 }

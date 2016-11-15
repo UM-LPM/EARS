@@ -19,7 +19,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.DistanceNodeComparator;
 import org.um.feri.ears.util.DominanceComparator;
-import org.um.feri.ears.util.FitnessComparator;
+import org.um.feri.ears.util.MOFitnessComparator;
 
 public class Spea2fitness {
 
@@ -102,7 +102,7 @@ public class Spea2fitness {
 		}
 
 		if (aux.size() < size) {
-			Comparator comparator = new FitnessComparator();
+			Comparator comparator = new MOFitnessComparator();
 			solutionSet_.sort(comparator);
 			int remain = size - aux.size();
 			for (i = 0; i < remain; i++) {

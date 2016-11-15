@@ -118,8 +118,8 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	 */
 	private final int divisionsInner;
 	
-	CrossoverOperator<Type, MOTask> cross;
-	MutationOperator<Type, MOTask> mut;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 	
 	
 	public DBEA(CrossoverOperator crossover, MutationOperator mutation, MOTask problem) {
@@ -233,6 +233,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 			// this call is likely not necessary, but is included in the Matlab
 			// version
 			preserveCorner();
+			task.incrementNumberOfIterations();
 		} while (!task.isStopCriteria());
 		best = population;
 	}

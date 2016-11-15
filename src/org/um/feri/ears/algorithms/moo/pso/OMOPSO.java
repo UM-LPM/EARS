@@ -310,6 +310,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 			
 		    crowdingDistance.computeDensityEstimator(leaderArchive.getSolutionList());
 			currentIteration++;
+			task.incrementNumberOfIterations();
 		}
 		
 		best = epsilonArchive;

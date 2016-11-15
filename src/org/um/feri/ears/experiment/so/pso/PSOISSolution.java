@@ -49,7 +49,7 @@ public class PSOISSolution extends DoubleSolution {
 	public PSOISSolution update(Task t, double v[]) throws StopCriteriaException {
 		double x[] = getNewVariables();
 		for (int i = 0; i < x.length; i++) {
-			x[i] = t.feasible(x[i] + v[i], i);
+			x[i] = t.setFeasible(x[i] + v[i], i);
 		}
 		PSOISSolution tmp = new PSOISSolution(t.eval(x));
 		if (t.isFirstBetter(tmp, Pbest)) {
@@ -65,12 +65,12 @@ public class PSOISSolution extends DoubleSolution {
 		double x[] = getNewVariables();
 		boolean improved = false;
 		for (int i = 0; i < x.length; i++) {
-			x[i] = t.feasible(x[i] + v[i], i);
+			x[i] = t.setFeasible(x[i] + v[i], i);
 		}
 		
 		for (int i = 0; i < x.length; i++) {
 			if(t.isFirstBetter(x[i], oldx.getNewVariables()[i])) {
-				oldx.getNewVariables()[i] = t.feasible(x[i] + v[i], i);
+				oldx.getNewVariables()[i] = t.setFeasible(x[i] + v[i], i);
 				oldx.getV()[i] = v[i];
 				improved = true;
 			}

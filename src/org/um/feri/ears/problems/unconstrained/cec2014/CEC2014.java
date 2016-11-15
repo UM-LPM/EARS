@@ -60,6 +60,7 @@ public abstract class CEC2014 extends Problem {
 		}
 
 		Scanner input = new Scanner(dataFile);
+		input.useLocale(Locale.US);
 
 
 		if (func_num<23)
@@ -97,6 +98,7 @@ public abstract class CEC2014 extends Problem {
 			}
 			
 			input = new Scanner(dataFile);
+			input.useLocale(Locale.US);
 			
 			OShift=new double[d];
 			for(i=0;i<d;i++)
@@ -161,6 +163,7 @@ public abstract class CEC2014 extends Problem {
 			    System.out.println("\n Error: Cannot open input file for reading ");
 			}
 			input = new Scanner(dataFile);
+			input.useLocale(Locale.US);
 		
 			//SS=(int *)malloc(nx*sizeof(int));
 			SS = new int[d];
@@ -180,6 +183,7 @@ public abstract class CEC2014 extends Problem {
 			    System.out.println("\n Error: Cannot open input file for reading ");
 			}
 			input = new Scanner(dataFile);
+			input.useLocale(Locale.US);
 
 			
 			//SS=(int *)malloc(nx*cf_num*sizeof(int));

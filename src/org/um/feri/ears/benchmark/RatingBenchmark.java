@@ -118,8 +118,18 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
 	public void registerAlgorithm(Algorithm al) {
         listOfAlgorithmsPlayers.add(al);
     }
+	
+	
     
-    class FitnessComparator implements Comparator<AlgorithmEvalResult> {
+    @Override
+	public void registerAlgorithms(ArrayList<Algorithm> algorithms) {
+    	listOfAlgorithmsPlayers.addAll(algorithms);
+		
+	}
+
+
+
+	class FitnessComparator implements Comparator<AlgorithmEvalResult> {
         Task t;
         public FitnessComparator(Task t) {
             this.t = t;
@@ -184,7 +194,8 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
      */
     public void run(ResultArena arena, BankOfResults allSingleProblemRunResults, int repetition) {
         duelNumber = repetition;
-        parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_DEULS, ""+repetition);
+        addParameter(EnumBenchmarkInfoParameters.NUMBER_OF_DEULS, ""+repetition);
+        //parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_DEULS, ""+repetition);
         for (Task t:listOfProblems) {
             for (int i=0; i<repetition; i++) {
                 runOneProblem(t,allSingleProblemRunResults);
@@ -196,6 +207,16 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
         if(isCheating())
         {
         	System.out.println("The reset count does not match!");
+        }
+        
+        // Recalculate ratings after tournament
+        //arena.recalcRatings();
+
+        
+        if(displayRatingIntervalChart)
+        {
+        	arena.calculteRatings();
+        	displayRatingIntervalsChart(arena.getPlayers());
         }
         
     }

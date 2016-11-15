@@ -63,7 +63,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     MOSolutionBase<Type> parents[] ;
     
-	CrossoverOperator<Type, MOTask> cross;
+	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
     
 
 	public DEMO(CrossoverOperator crossover, int populationSize, int selectionProcedure) {
@@ -190,7 +190,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
              * so we double it back. 
              */
             //population.setMaxSize(populationSize*2);
-            
+			task.incrementNumberOfIterations();
           }
 
           // Return the first non-dominated front

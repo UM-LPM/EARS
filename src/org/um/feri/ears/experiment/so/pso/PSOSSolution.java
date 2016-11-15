@@ -56,7 +56,7 @@ public class PSOSSolution extends DoubleSolution implements Comparable<PSOSSolut
 	public PSOSSolution update(Task t, double v[]) throws StopCriteriaException {
 		double x[] = getNewVariables();
 		for (int i=0; i<x.length; i++) {
-			x[i]=t.feasible(x[i]+v[i],i);
+			x[i]=t.setFeasible(x[i]+v[i],i);
 		}
 		PSOSSolution tmp = new PSOSSolution(t.eval(x));
 		this.turnamentScore = 0;

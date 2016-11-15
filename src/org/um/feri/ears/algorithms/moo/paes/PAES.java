@@ -30,7 +30,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	int archiveSize = 100;
 	int bisections = 5;
 	
-	MutationOperator<Type, MOTask> mut;
+	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 
 	public PAES(MutationOperator mutation, int populationSize) {
 		
@@ -96,6 +96,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 			 * archive.printObjectivesOfValidSolutionsToFile("FUNV"+evaluations)
 			 * ; }
 			 */
+			task.incrementNumberOfIterations();
 		} while (!task.isStopCriteria());
 
 		best = archive;

@@ -7,7 +7,7 @@ import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
 
-public class PMXCrossover implements CrossoverOperator<Integer, IntegerMOTask> {
+public class PMXCrossover implements CrossoverOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> {
 
 	private double crossoverProbability = 1.0;
 

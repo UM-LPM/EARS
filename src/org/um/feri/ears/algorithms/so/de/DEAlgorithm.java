@@ -467,7 +467,7 @@ public class DEAlgorithm extends Algorithm {
                 }
                 // CM???
                 for (int kk = 0; kk < D; kk++) {
-                    tmp[kk] = task.feasible(tmp[kk], kk);
+                    tmp[kk] = task.setFeasible(tmp[kk], kk);
                 }
                 DoubleSolution br = task.eval(tmp);
                 IndividualSA trial_cost = new IndividualSA(br, tmpF, tmpCR);
