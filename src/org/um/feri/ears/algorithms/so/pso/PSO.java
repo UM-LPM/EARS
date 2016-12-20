@@ -22,7 +22,7 @@ public class PSO extends Algorithm  {
 	double omega, phiG, phiP;
 	Task task;
 	public PSO() {
-		this(20,0.7, 2, 2);
+		this(10,0.7, 2, 2);
 	}
 
 	public PSO(int pop_size, double om, double p1, double p2) {

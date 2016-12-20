@@ -28,31 +28,31 @@ public class Testing {
 
 
 
-    		D_MOEAD moead = new D_MOEAD();
-    		D_IBEA ibea = new D_IBEA();
-    		moead.setDisplayData(true);
-    		ibea.setDisplayData(true);
-            try {
-            	ParetoSolution best1 = moead.execute(t1);
-            	ParetoSolution best2 = ibea.execute(t2);
-            	
-            	best1.evaluate(new GenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
-            	best2.evaluate(new GenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
+    	D_MOEAD moead = new D_MOEAD();
+    	D_IBEA ibea = new D_IBEA();
+    	moead.setDisplayData(true);
+    	ibea.setDisplayData(true);
+    	try {
+    		ParetoSolution best1 = moead.execute(t1);
+    		ParetoSolution best2 = ibea.execute(t2);
 
-            	System.out.println("GD:");
-            	System.out.println(best1.getEval());
-            	System.out.println(best2.getEval());
-            	
-            	best1.evaluate(new InvertedGenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
-            	best2.evaluate(new InvertedGenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
+    		best1.evaluate(new GenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
+    		best2.evaluate(new GenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
 
-            	System.out.println("IGD:");
-            	System.out.println(best1.getEval());
-            	System.out.println(best2.getEval());
+    		System.out.println("GD:");
+    		System.out.println(best1.getEval());
+    		System.out.println(best2.getEval());
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    		best1.evaluate(new InvertedGenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
+    		best2.evaluate(new InvertedGenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
+
+    		System.out.println("IGD:");
+    		System.out.println(best1.getEval());
+    		System.out.println(best2.getEval());
+
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
 
     	
     }
