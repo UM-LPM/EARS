@@ -33,11 +33,17 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
     protected AlgorithmInfo ai;
     protected AlgorithmInfo tmpAi;
     protected AlgorithmRunTime art;
-    public void addRunDuration(long duration) {
+    
+    /**
+     * Adds total run time of the algorithm and the execution time without function evaluations.
+     * @param totalRunTime total run time of the algorithm
+     * @param algorithmRunTime execution time of the algorithm without function evaluations
+     */
+    public void addRunDuration(long totalRunTime, long algorithmRunTime) {
         if (art==null) {
             art = new AlgorithmRunTime();
         }
-        art.addRunDuration(duration);
+        art.addRunDuration(totalRunTime, algorithmRunTime);
     }
     
     public String getLastRunDuration()

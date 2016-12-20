@@ -23,15 +23,29 @@ public abstract class TaskBase<T extends ProblemBase> {
 	
 	protected long evaluationTime = 0;
 	protected long timerStart;
-	protected long allowedCPUTime;
+	protected long allowedCPUTime; // nanoseconds
 	protected int numberOfIterations = 0;
 	protected int maxIterations;
+    protected int maxEvaluationsBeforStagnation = 10000;
+    protected int stagnationTrials = 0;
+	/**
+	 * Keeps track of the best solution found.
+	 */
+	protected double bestEval;
 	
 	protected StringBuilder ancestorSB;
 	protected boolean isAncestorLogginEnabled = false;
 	
 	
 	
+	/**
+	 * Has the global optimum been reached.
+	 * @return true if the global optimum found else false.
+	 */
+	public boolean isGlobal() {
+		return isGlobal;
+	}
+
 	public long getEvaluationTimeNs() {
 		return evaluationTime;
 	}
@@ -175,6 +189,18 @@ public abstract class TaskBase<T extends ProblemBase> {
         if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
                 return "Global optimum epsilon="+epsilon+" or  E="+getMaxEvaluations();
         }
+        if(stopCriteria == EnumStopCriteria.ITERATIONS)
+        {
+        	return "ITERATIONS="+getMaxIteratirons();
+        }
+        if(stopCriteria == EnumStopCriteria.CPU_TIME)
+        {
+        	return "TIME="+TimeUnit.NANOSECONDS.toMillis(getAllowedCPUTime())+" ms";
+        }
+        if(stopCriteria == EnumStopCriteria.STAGNATION)
+        {
+        	return "STAGNATION= trials: "+stagnationTrials;
+        }
         return "not defined";
 	}
 	
@@ -218,6 +244,7 @@ public abstract class TaskBase<T extends ProblemBase> {
         isStop = false;
         isGlobal = false;
         timerStart = System.nanoTime();
+        stagnationTrials = 0;
     }
     
     public int getResetCount()

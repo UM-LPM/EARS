@@ -169,15 +169,17 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
     public void run(ResultArena arena, BankOfResults allSingleProblemRunResults, int repetition) {
         duelNumber = repetition;
         parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_DEULS, ""+repetition);
+        long start = System.nanoTime();
         for (Task t:listOfProblems) {
         	System.out.println("Current problem: "+t.getProblemName());
             for (int i=0; i<repetition; i++) {
-            	System.out.println("Current repetition: "+ (i+1));
+            	System.out.println("Current duel: "+ (i+1));
                 runOneProblem(t,allSingleProblemRunResults);
                 setWinLoseFromResultList(arena,t);
                 results.clear();
             }
         }
+        addParameter(EnumBenchmarkInfoParameters.BENCHMARK_RUN_DURATION, ""+TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
         
         if(isCheating())
         {
@@ -203,7 +205,7 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 
 				reset(task); //number of evaluations  
 				try {
-					start = System.currentTimeMillis();
+					start = System.nanoTime();
 					
 					GraphDataRecorder.SetContext(al,task);
 					task.startTimer();
@@ -212,11 +214,11 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 					
 	                GraphDataRecorder.SetParetoSolution(bestByALg);
 
-					duration = System.currentTimeMillis()-start;
+					duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-start);
 					if (printSingleRunDuration) {
-						System.out.println(al.getID()+": "+(duration/1000));
+						System.out.println(al.getID()+": "+(duration/1000.0));
 					}
-					al.addRunDuration(duration);
+					al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
 
 					reset(task); //for one eval!
 					if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(bestByALg)) || MOAlgorithm.getCaching() != Cache.None) {

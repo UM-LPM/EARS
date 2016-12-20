@@ -9,7 +9,7 @@ public abstract class SolutionBase <Type> {
 	
 	protected List<Type> variable;
 	protected double[] constraints; //TODO refactor 2 types of individual for constrained optimization
-	protected boolean feasible; //Feasible checks constrains
+	protected boolean feasible = true; //Feasible checks constrains
 	protected double  overallConstraintViolation_ ;
 	protected int  numberOfViolatedConstraints_ ;
 	protected List<Type> upperLimit;

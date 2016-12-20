@@ -57,6 +57,12 @@ public class F3 extends Problem {
 	public double getOptimumEval() {
 		return 0;
 	}
+	
+	/*@Override
+	public double[][] getOptimalVector() {
+
+		
+	}*/
 
 	@Override
 	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,

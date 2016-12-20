@@ -80,7 +80,7 @@ public class RatingRPUOed2 extends RatingBenchmark {
         super();
         stopCriteria = EnumStopCriteria.EVALUATIONS;
         timeLimit = 10;
-        maxEvaluations=1500;
+        maxEvaluations=10000;
         maxIterations = 500; 
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,"2");

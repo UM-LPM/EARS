@@ -16,12 +16,14 @@ public class F11 extends CEC2015{
 	public double eval(List<Double> ds) {
 		double F;
 		F = Functions.hf03(ds, numberOfDimensions, OShift, M, SS, 1, 1);
+		F+= 100 * func_num;
 		return F;
 	}
 	
 	public double eval(double x[]) {
 		double F;
 		F = Functions.hf03(x, numberOfDimensions, OShift, M, SS, 1, 1);
+		F+= 100 * func_num;
 		return F;
 	}
 }

@@ -14,7 +14,7 @@ public abstract class CEC2015 extends Problem {
     protected double[] y;
     protected double[] z;
     protected double[] x_bound;
-    private int func_num;
+    protected int func_num;
     protected int[] SS;
     
 	
@@ -32,6 +32,7 @@ public abstract class CEC2015 extends Problem {
         }
 		
 		benchmarkName = "CEC20015";
+		shortName = "F"+func_num;
 		
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
@@ -74,7 +75,7 @@ public abstract class CEC2015 extends Problem {
 	public double[][] getOptimalVector() {
 		
 		double[][] optimal = new double [1][numberOfDimensions];
-		optimal[1] = OShift;
+		optimal[0] = OShift;
 		return optimal;
 	}
 	

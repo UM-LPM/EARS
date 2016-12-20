@@ -9,7 +9,7 @@ public class F3 extends CEC2014 {
 	public F3(int d) {
 		super(d,3);
 
-		name = "F03 Discus FSunction";
+		name = "F03 Discus Function";
 	}
 
 	@Override

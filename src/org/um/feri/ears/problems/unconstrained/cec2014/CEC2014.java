@@ -41,6 +41,7 @@ public abstract class CEC2014 extends Problem {
 		
 		int cf_num=10,i,j;
 		
+		shortName = "F"+func_num;
 		
 		benchmarkName = "CEC20014";
 		
@@ -214,7 +215,7 @@ public abstract class CEC2014 extends Problem {
 	public double[][] getOptimalVector() {
 		
 		double[][] optimal = new double [1][numberOfDimensions];
-		optimal[1] = OShift;
+		optimal[0] = OShift;
 		return optimal;
 	}
 

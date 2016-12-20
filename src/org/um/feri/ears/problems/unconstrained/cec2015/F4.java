@@ -16,12 +16,14 @@ public class F4 extends CEC2015 {
 	public double eval(List<Double> ds) {
 		double F;
 		F = Functions.schwefel_func(ds, numberOfDimensions, OShift, M, 1, 0);
+		F+= 100 * func_num;
 		return F;
 	}
 	
 	public double eval(double x[]) {
 		double F;
 		F = Functions.schwefel_func(x, numberOfDimensions, OShift, M, 1, 0);
+		F+= 100 * func_num;
 		return F;
 	}
 }

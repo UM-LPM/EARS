@@ -17,6 +17,7 @@ public abstract class ProblemBase <Type> {
 	public Type sum_constraints[]; 
 	public Type normalization_constraints_factor[]; // used for normalization
 	protected String name;
+	protected String shortName;
 	protected String benchmarkName;
 	
 	protected String version = "1.0";
@@ -39,7 +40,16 @@ public abstract class ProblemBase <Type> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+		
+	public boolean isMinimum() {
+		return minimum;
+	}
+	public String getShortName() {
+		return shortName;
+	}
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
 	public int getNumberOfConstraints() {
 		return numberOfConstraints;
 	}

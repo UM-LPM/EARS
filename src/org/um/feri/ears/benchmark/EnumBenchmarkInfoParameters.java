@@ -55,7 +55,8 @@ public enum EnumBenchmarkInfoParameters {
     DRAW_PARAM("sets condition for draw","DRAW_PARAM"),
     NUMBER_OF_TEST_CONFIGURATIONS("maximum number of tested parameter configurations","BEST_OF_X_CONFIGURATIONS"),
     NUMBER_OF_TASKS("number of problems","NUMBER_OF_TASKS"), 
-    NUMBER_OF_DEULS("number of duels / repetitions","NUMBER_OF_DEULS");
+    NUMBER_OF_DEULS("number of duels / repetitions","NUMBER_OF_DEULS"),
+	BENCHMARK_RUN_DURATION("run duration of the benchmark in milliseconds","DURATION");
     
     private String description, shortName;
     private EnumBenchmarkInfoParameters(String s, String sh) {

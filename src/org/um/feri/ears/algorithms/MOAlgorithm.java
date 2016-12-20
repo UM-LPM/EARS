@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collector.Characteristics;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -45,7 +46,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 			@Override
 			public FutureResult<T, Type> call() throws Exception {
 				
-				long duration = System.currentTimeMillis();
+				long duration = System.nanoTime();
 				
 				GraphDataRecorder.SetContext(al,taskProblem);
 				taskProblem.startTimer();
@@ -53,8 +54,8 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
                 GraphDataRecorder.SetParetoSolution(res);
 				
 
-				duration = System.currentTimeMillis()-duration;
-				al.addRunDuration(duration);
+				duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - duration);
+                al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
 				FutureResult<T, Type> future = new FutureResult(al, res);
 				
 				return future;

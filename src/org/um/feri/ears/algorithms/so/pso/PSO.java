@@ -22,7 +22,7 @@ public class PSO extends Algorithm  {
 	double omega, phiG, phiP;
 	Task task;
 	public PSO() {
-		this(10,0.7, 2, 2);
+		this(20,0.7, 2, 2);
 	}
 
 	public PSO(int pop_size, double om, double p1, double p2) {
@@ -32,7 +32,7 @@ public class PSO extends Algorithm  {
 		this.phiP = p1;
 		this.phiG = p2;
 	    setDebug(debug);  //EARS prints some debug info
-        ai = new AlgorithmInfo("Wiki","Wiki","PSO_Wiki","My Wiki PSO");  //EARS add algorithm name
+        ai = new AlgorithmInfo("Wiki","Wiki","PSO","My Wiki PSO");  //EARS add algorithm name
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
         ai.addParameter(EnumAlgorithmParameters.C1, p1 + "");
         ai.addParameter(EnumAlgorithmParameters.C2, p2 + "");

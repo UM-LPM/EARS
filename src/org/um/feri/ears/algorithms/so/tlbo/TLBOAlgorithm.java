@@ -33,7 +33,7 @@ public class TLBOAlgorithm extends Algorithm {
 
     // double averageCost; //for stat
     // double minCost; //for stat
-    public static boolean removeDuplicates = true;;
+    public static boolean removeDuplicates = true;
     public Statistic stat;
     public static boolean useTF = true;
     public static boolean useAll4Mean = true;// used for internal tests
@@ -107,17 +107,8 @@ public class TLBOAlgorithm extends Algorithm {
             for (int j = i + 1; j < pop_size; j++) {
                 if (task.isStopCriteria())
                     return; // end jump out
-                //System.arraycopy(population[i].getVariables(), 0, tmp1, 0, num_var);
-                //System.arraycopy(population[j].getVariables(), 0, tmp2, 0, num_var);
-        		
-                for (int k = 0; k < population[i].getVariables().size(); k++) {
-        			tmp1[k] = (double) population[i].getVariables().get(k);
-        		}
-                for (int l = 0; l < population[j].getVariables().size(); l++) {
-        			tmp1[l] = (double) population[j].getVariables().get(l);
-        		}
-                
-                
+                System.arraycopy(population[i].getDoubleVariables(), 0, tmp1, 0, num_var);
+                System.arraycopy(population[j].getDoubleVariables(), 0, tmp2, 0, num_var);
                 Arrays.sort(tmp1);
                 Arrays.sort(tmp2);
                 if (Arrays.equals(tmp1, tmp2)) {
@@ -126,7 +117,7 @@ public class TLBOAlgorithm extends Algorithm {
                     int pos = Util.rnd.nextInt(num_var);
                     tmp3 = population[j].getNewVariables();
 
-                    tmp3[pos] = intervalL[pos] + Util.rnd.nextDouble() * interval[pos];
+                    tmp3[pos] = intervalL[pos] + Util.rnd.nextDouble() * (interval[pos] - intervalL[pos]);
                     StopCriteriaException.id =" 3";
                     population[j] = task.eval(tmp3);
                    

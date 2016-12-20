@@ -2,13 +2,11 @@ package org.um.feri.ears.problems;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
-import org.um.feri.ears.util.Util;
+
 
 /**
 * Task is main class, for communication between algorithm and problem  
@@ -63,6 +61,8 @@ public class Task extends TaskBase<Problem> {
 	 * @param p the problem
 	 */
 	
+
+	
 	public Task(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon, Problem p) {
 	    this(stop, eval, allowedTime, maxIterations, epsilon, p,  (int) Math.log10((1./epsilon)+1));
 	}
@@ -78,6 +78,9 @@ public class Task extends TaskBase<Problem> {
         isGlobal = false;
         this.p = p;
         this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
+        
+        // set initial best eval
+        bestEval = p.isMinimum()? Double.MAX_VALUE : Double.MIN_VALUE;  
     }
     
 
@@ -97,6 +100,7 @@ public class Task extends TaskBase<Problem> {
 			long start = System.nanoTime();
 			DoubleSolution tmpSolution = p.getRandomSolution();
 			evaluationTime +=  System.nanoTime() - start;
+			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
@@ -113,9 +117,7 @@ public class Task extends TaskBase<Problem> {
 			long start = System.nanoTime();
 			DoubleSolution tmpSolution = p.getRandomSolution();
 			evaluationTime +=  System.nanoTime() - start;
-			if (Math.abs(tmpSolution.getEval() - p.getOptimumEval()) <= epsilon) {
-				isGlobal = true;
-			}
+			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
@@ -133,6 +135,7 @@ public class Task extends TaskBase<Problem> {
 			long start = System.nanoTime();
 			DoubleSolution tmpSolution = p.getRandomSolution();
 			evaluationTime +=  System.nanoTime() - start;
+			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
@@ -141,7 +144,6 @@ public class Task extends TaskBase<Problem> {
 			}
 
 			return tmpSolution;
-			
 		}
 		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
 		{
@@ -153,6 +155,7 @@ public class Task extends TaskBase<Problem> {
 				long start = System.nanoTime();
 				DoubleSolution tmpSolution = p.getRandomSolution();
 				evaluationTime +=  System.nanoTime() - start;
+				checkIfGlobalReached(tmpSolution.getEval());
 				GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 				if(isAncestorLogginEnabled)
 				{
@@ -166,6 +169,26 @@ public class Task extends TaskBase<Problem> {
 			{
 				throw new StopCriteriaException("CPU Time");
 			}
+		}
+		else if(stopCriteria == EnumStopCriteria.STAGNATION)
+		{
+			if(isStop)
+				throw new StopCriteriaException("Solution stagnation");
+			
+			incEvaluate();
+			long start = System.nanoTime();
+			DoubleSolution tmpSolution = p.getRandomSolution();
+			evaluationTime +=  System.nanoTime() - start;
+			checkIfGlobalReached(tmpSolution.getEval());
+			checkImprovment(tmpSolution.getEval());
+			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+			if(isAncestorLogginEnabled)
+			{
+				ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+				ancestorSB.append("\n");
+			}
+
+			return tmpSolution;
 		}
 
 		return null;
@@ -220,15 +243,6 @@ public class Task extends TaskBase<Problem> {
 	    return p.areDimensionsInFeasableInterval(ds);
 	}
 
-	public String getStopCriteriaDescription() {
-        if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
-            return "E="+getMaxEvaluations();
-        }
-        else if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
-                return "Global optimum epsilon="+epsilon+" or  E="+getMaxEvaluations();
-        }
-        return "not defined";
-	}
 	/**
 	 * Better use method eval returns Individual with calculated fitness and constrains
 	 * @deprecated
@@ -308,6 +322,7 @@ public class Task extends TaskBase<Problem> {
 			long start = System.nanoTime();
 			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
 			evaluationTime +=  System.nanoTime() - start;
+			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			return tmpSolution;
 		}
@@ -319,6 +334,7 @@ public class Task extends TaskBase<Problem> {
 			long start = System.nanoTime();
 			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
 			evaluationTime +=  System.nanoTime() - start;
+			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			return tmpSolution;
 		}
@@ -329,9 +345,7 @@ public class Task extends TaskBase<Problem> {
 			long start = System.nanoTime();
 			double d = p.eval(ds);
 			evaluationTime +=  System.nanoTime() - start;
-			if (Math.abs(d - p.getOptimumEval()) <= epsilon) {
-				isGlobal = true;
-			}
+			checkIfGlobalReached(d);
 			DoubleSolution tmpSolution = new DoubleSolution(ds,d,p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			return tmpSolution;
@@ -345,6 +359,7 @@ public class Task extends TaskBase<Problem> {
 				long start = System.nanoTime();
 				DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
 				evaluationTime +=  System.nanoTime() - start;
+				checkIfGlobalReached(tmpSolution.getEval());
 				GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 				return tmpSolution;
 			}
@@ -353,10 +368,38 @@ public class Task extends TaskBase<Problem> {
 				throw new StopCriteriaException("CPU Time");
 			}
 		}
+		else if(stopCriteria == EnumStopCriteria.STAGNATION)
+		{
+			if(isStop)
+				throw new StopCriteriaException("Solution stagnation");
+			
+			incEvaluate();
+			long start = System.nanoTime();
+			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
+			evaluationTime +=  System.nanoTime() - start;
+			checkIfGlobalReached(tmpSolution.getEval());
+			checkImprovment(tmpSolution.getEval());
+			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+			if(isAncestorLogginEnabled)
+			{
+				ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+				ancestorSB.append("\n");
+			}
+
+			return tmpSolution;
+		}
 
 		
 		assert false; // Execution should never reach this point!
 		return null; //error
+	}
+
+	private void checkIfGlobalReached(double d) {
+		
+		if (Math.abs(d - p.getOptimumEval()) <= epsilon) {
+			isGlobal = true;
+		}
+		
 	}
 
 	public DoubleSolution eval(double[] x, List<DoubleSolution> parents) throws StopCriteriaException {
@@ -378,6 +421,39 @@ public class Task extends TaskBase<Problem> {
 		}
 		
 		return tmpSolution;
+	}
+	
+	protected void checkImprovment(double eval)
+	{
+		if(p.isMinimum())
+		{
+			if(eval < bestEval)
+			{
+				bestEval = eval;
+				stagnationTrials = 0;
+			}
+			else
+			{
+				stagnationTrials++;
+			}
+		}
+		else
+		{
+			if(eval > bestEval)
+			{
+				bestEval = eval;
+				stagnationTrials = 0;
+			}
+			else
+			{
+				stagnationTrials++;
+			}
+		}
+		
+		if(stagnationTrials >= maxEvaluationsBeforStagnation)
+		{
+			isStop = true;
+		}
 	}
 
 	public static void resetLoggingID() {
