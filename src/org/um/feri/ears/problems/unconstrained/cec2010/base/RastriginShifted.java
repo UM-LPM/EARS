@@ -11,7 +11,7 @@ public class RastriginShifted{
 		dim = d;
 		shifted_optimum = new double[dim];
 		for (int i=0; i<dim; i++){
-			shifted_optimum[i] = 0.5;
+			shifted_optimum[i] = 5;
 		}
 	}
 	

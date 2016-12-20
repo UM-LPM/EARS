@@ -70,32 +70,25 @@ import org.um.feri.ears.problems.unconstrained.cec2015.F9;
 
 public class RatingCEC2015 extends RatingBenchmark{
     public static final String name="Benchmark CEC 2015";
-    protected int dimension;
-    protected boolean calculateTime = true;
+    protected boolean calculateTime = false;
+    protected int warmupIterations = 10000;
 
-    
-    public boolean resultEqual(DoubleSolution a, DoubleSolution b) {
-        if ((a==null) &&(b==null)) return true;
-        if (a==null) return false;
-        if (b==null) return false;
-        if (Math.abs(a.getEval()-b.getEval())<draw_limit) return true;
-        return false;
-    }
     public RatingCEC2015(){
     	this(0.0000001);
     }
     public RatingCEC2015(double draw_limit) {
         super();
         this.draw_limit = draw_limit;
-        maxEvaluations=30000; // 1500 exact evaluations
+        maxEvaluations= 300000; // 1500 exact evaluations
         dimension=30;
-        timeLimit = 0;
-        maxIterations = 300;
-        stopCriteria = EnumStopCriteria.EVALUATIONS;
+        timeLimit = 5000;
+        maxIterations = 6000;
+        stopCriteria = EnumStopCriteria.CPU_TIME;
         initFullProblemList();
+        /*addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+stopCriteria);
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,""+dimension);
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
+        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);*/
     }
     /* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
@@ -131,10 +124,18 @@ public class RatingCEC2015 extends RatingBenchmark{
     	
     	for(Problem p : problems)
     	{
-    		if(stopCriteria == EnumStopCriteria.CPU_TIME && calculateTime)
+    		/*if(stopCriteria == EnumStopCriteria.CPU_TIME && calculateTime)
     		{
     			System.out.println("Calculating time for problem: "+p.getName());
     			timeLimit = calculateTime(p);
+    		}*/
+    		
+    		if(stopCriteria == EnumStopCriteria.CPU_TIME)
+    		{
+    			for(int i = 0; i < warmupIterations; i++)
+    			{
+    				p.getRandomSolution();
+    			}
     		}
     		
     		registerTask(p, stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);

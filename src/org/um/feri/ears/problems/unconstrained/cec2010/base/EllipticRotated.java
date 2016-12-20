@@ -12,7 +12,7 @@ public class EllipticRotated{
 		dim = d;
 		shifted_optimum = new double[dim];
 		for (int i=0; i<dim; i++){
-			shifted_optimum[i] = 2.7;
+			shifted_optimum[i] = 5;
 		}
 	}
 	
