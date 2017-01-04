@@ -14,6 +14,10 @@ public class CBOIndividual extends DoubleSolution
 	double masa;
 	boolean stacionarni;
 	
+	
+	
+	
+	
 	public CBOIndividual(DoubleSolution eval) 
 	{
 		super(eval);	
