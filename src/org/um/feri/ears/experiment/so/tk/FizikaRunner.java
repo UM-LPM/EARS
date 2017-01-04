@@ -68,7 +68,7 @@ public class FizikaRunner {
 		{
 			//DEAlgorithm a = new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin);
 			
-			CSS a = new CSS();
+			EML a = new EML();
 
 			Task t = new Task(EnumStopCriteria.EVALUATIONS, 200000, 500000, 300000, 0.0001, new ProblemSphere(30));  
 
