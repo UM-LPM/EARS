@@ -1,6 +1,9 @@
 package org.um.feri.ears.experiment.so.tk;
 
 
+import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.gsa.GSA;
+import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriteriaException;
@@ -19,7 +22,7 @@ public class FizikaRunner {
 	//run metoda main
 	public static void main(String[] args) 
 	{	
-		Util.rnd.setSeed(100);
+		Util.rnd.setSeed(System.currentTimeMillis());
 
 
 		//ECBO a = new ECBO();
@@ -51,18 +54,23 @@ public class FizikaRunner {
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.0001, new F1(30));
 
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.0001, new FX(1,30));
-
-
+		//new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin)
+		//new RandomWalkAlgorithm()
+		
 		double avg_eval = 0;
 		double best = 99999;
 		double avg_best = 0;
 		double worst = -9999;
 		
-		for(int i = 0;i < 30;i++)
+		int runs = 1;
+		
+		for(int i = 0;i < runs;i++)
 		{
-			EML2 a = new EML2(); 
+			//DEAlgorithm a = new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin);
+			
+			CSS a = new CSS();
 
-			Task t = new Task(EnumStopCriteria.EVALUATIONS, 200000, 500, 300, 0.0001, new ProblemSphere(30));  
+			Task t = new Task(EnumStopCriteria.EVALUATIONS, 200000, 500000, 300000, 0.0001, new ProblemSphere(30));  
 
 			try 		    
 			{		
@@ -87,8 +95,8 @@ public class FizikaRunner {
 
 		}
 
-		avg_eval = avg_eval / 30.0;
-		avg_best = avg_best / 30.0;
+		avg_eval = avg_eval / (double)runs;
+		avg_best = avg_best / (double)runs;
 
 		System.out.println("AVG EVAl:" + avg_eval + "  bestfx:" + best);
 		System.out.println("worstfx: "  + worst);

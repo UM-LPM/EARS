@@ -4,7 +4,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 
-public class EMIndividual2 extends DoubleSolution
+public class EMIndividual extends DoubleSolution
 {
 	double [] Fi;  // Total Force
 	double Q;  // Charge
@@ -18,7 +18,7 @@ public class EMIndividual2 extends DoubleSolution
 	
 	
 	//navadni	
-	public EMIndividual2(DoubleSolution eval)
+	public EMIndividual(DoubleSolution eval)
 	{
 		super(eval);
 		Q = 0.0;
@@ -27,7 +27,7 @@ public class EMIndividual2 extends DoubleSolution
 	}
 	
 	//kopirni konstruktor
-	public EMIndividual2(EMIndividual2 copy)
+	public EMIndividual(EMIndividual copy)
 	{
 		super(copy);
 		
@@ -37,7 +37,7 @@ public class EMIndividual2 extends DoubleSolution
 		this.Q = copy.Q;
 	}
 
-	public EMIndividual2(Task t) throws StopCriteriaException {
+	public EMIndividual(Task t) throws StopCriteriaException {
 		super(t.getRandomSolution());
 		
 		Q = 0.0;

@@ -2,7 +2,6 @@ package org.um.feri.ears.experiment.so.tk;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
@@ -14,7 +13,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 //klasièni EML po prvotnem èlanku
-public class EML2 extends Algorithm {
+public class EML extends Algorithm {
 	// Dimension of the function
 	int N;
 	// Population size
@@ -25,12 +24,12 @@ public class EML2 extends Algorithm {
 	double DELTA;
 
 	// Current best ion
-	EMIndividual2 best;
+	EMIndividual best;
 
 	// Population of ions
-	ArrayList<EMIndividual2> ions;
+	ArrayList<EMIndividual> ions;
 
-	public EML2(int pop_size, int lsiter, double delta) {
+	public EML(int pop_size, int lsiter, double delta) {
 		super();
 		this.M = pop_size;
 		this.LS = lsiter;
@@ -46,7 +45,7 @@ public class EML2 extends Algorithm {
 		// info
 	}
 
-	public EML2() {
+	public EML() {
 		this(30, 20, 0.001); // èlanek nastavitve
 	}
 
@@ -55,8 +54,8 @@ public class EML2 extends Algorithm {
 		N = taskProblem.getDimensions();
 		Initialize(taskProblem);
 
-		int iter = 0;
-		int iter_max = 100;
+		//int iter = 0;
+		//int iter_max = 100;
 
 		while (!taskProblem.isStopCriteria()) {
 			if (LS != 0)
@@ -65,10 +64,10 @@ public class EML2 extends Algorithm {
 			CalcF(taskProblem);
 			Move(taskProblem);
 
-			if (taskProblem.isStopCriteria())
-				break;
+			//if (taskProblem.isStopCriteria())
+		//		break;
 
-			iter++;
+		//	iter++;
 /*
 			if (iter == iter_max) {
 				System.out.println("iteracija full");
@@ -83,7 +82,7 @@ public class EML2 extends Algorithm {
 				best = ions.get(i);
 				best.index = i;
 				best.count = taskProblem.getNumberOfEvaluations();
-
+				
 				System.out.println("last minute");
 			}
 		}
@@ -104,13 +103,13 @@ public class EML2 extends Algorithm {
 		ions = new ArrayList<>();
 
 		for (int i = 0; i < M; i++) {
-			ions.add(new EMIndividual2(t));
+			ions.add(new EMIndividual(t));
 
 			if (t.isStopCriteria())
 				break;
 		}
 
-		best = new EMIndividual2(ions.get(0));
+		best = new EMIndividual(ions.get(0));
 		best.count = 0;
 		best.index = 0;
 
@@ -118,7 +117,7 @@ public class EML2 extends Algorithm {
 		for (int i = 0; i < M; i++) {
 
 			if (t.isFirstBetter(ions.get(i), best)) {
-				best = new EMIndividual2(ions.get(i));
+				best = new EMIndividual(ions.get(i));
 				best.index = i;
 				best.count = t.getNumberOfEvaluations();
 			}
@@ -165,7 +164,7 @@ public class EML2 extends Algorithm {
 					break;
 
 				// Evaluate new temp ion.
-				EMIndividual2 temp = new EMIndividual2(t.eval(y));
+				EMIndividual temp = new EMIndividual(t.eval(y));
 
 				// Update the best values.
 				if (t.isFirstBetter(temp, best)) {
@@ -174,7 +173,7 @@ public class EML2 extends Algorithm {
 
 					ions.set(i, temp);
 
-					best = new EMIndividual2(temp);
+					best = new EMIndividual(temp);
 					best.index = i;
 					best.count = t.getNumberOfEvaluations();
 
@@ -267,7 +266,7 @@ public class EML2 extends Algorithm {
 					break;
 
 				// Evaluate new position of ion i
-				EMIndividual2 novi = new EMIndividual2(t.eval(y));
+				EMIndividual novi = new EMIndividual(t.eval(y));
 
 				// if(t.isFirstBetter(novi, ions.get(i)))
 				ions.set(i, novi);
@@ -279,9 +278,11 @@ public class EML2 extends Algorithm {
 		// Find best
 		for (i = 0; i < M; i++) {
 			if (t.isFirstBetter(ions.get(i), best)) {
-				best = new EMIndividual2(ions.get(i));
+				best = new EMIndividual(ions.get(i));
 				best.index = i;
 				best.count = t.getNumberOfEvaluations();
+				
+				//System.out.println(t.getNumberOfEvaluations() + "; " + best.getEval());
 			}
 		}
 	}

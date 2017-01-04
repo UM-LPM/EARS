@@ -63,7 +63,7 @@ public class FizikaCompetition {
 		players.add(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin));
 		
 		players.add(new CSS());
-		players.add(new EML2());
+		players.add(new EML());
 		players.add(new ECBO());
 		players.add(new LSA());
 		
