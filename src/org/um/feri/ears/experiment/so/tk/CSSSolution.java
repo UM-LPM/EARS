@@ -4,13 +4,13 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 
-public class CSSIndividual extends DoubleSolution
+public class CSSSolution extends DoubleSolution
 {
 	double Q; //magnitude of charge, quality of the movement
 	double [] v; //Velocity
 	double [] F; //force, ki deluje na delec
 	
-	public CSSIndividual(DoubleSolution i) 
+	public CSSSolution(DoubleSolution i) 
 	{
 		super(i);
 		v = new double[i.getVariables().size()]; //zacetni velocity na nulo
@@ -18,7 +18,7 @@ public class CSSIndividual extends DoubleSolution
 		Q = 0.0;
 	}
 	
-	public CSSIndividual(Task t) throws StopCriteriaException {
+	public CSSSolution(Task t) throws StopCriteriaException {
 		super(t.getRandomSolution());
 		v = new double[t.getDimensions()]; //zaèetni velocity na 0
 		F = new double[t.getDimensions()];  //init force na 0
@@ -26,7 +26,7 @@ public class CSSIndividual extends DoubleSolution
 	
 	}
 	
-	public CSSIndividual(DoubleSolution i, double[] vi) throws StopCriteriaException {
+	public CSSSolution(DoubleSolution i, double[] vi) throws StopCriteriaException {
 		super(i);
 		
 		v = new double[vi.length];
@@ -38,7 +38,7 @@ public class CSSIndividual extends DoubleSolution
 	}
 	
 	
-	public CSSIndividual (CSSIndividual kopija)
+	public CSSSolution (CSSSolution kopija)
 	{
 		super(kopija);
 		

@@ -26,13 +26,13 @@ public class ECBO extends Algorithm {
 	double Pro;
 
 	// Population of colliding bodies
-	ArrayList<CBOIndividual> CB;
+	ArrayList<CBOSolution> CB;
 
 	// Colliding Memory
-	ArrayList<CBOIndividual> CM;
+	ArrayList<CBOSolution> CM;
 
 	// Best CB by far
-	CBOIndividual best = null;
+	CBOSolution best = null;
 	
 	TaskComparator comparator;
 
@@ -234,11 +234,11 @@ public class ECBO extends Algorithm {
 			// uporabi new_x za fitnes oceno CB delca, ocenitev delca
 			for (int i = 0; i < pop_size; i++) // premikajoci se CB enacba 8
 			{
-				CBOIndividual tmp = new CBOIndividual(taskProblem.eval(CB.get(i).getNoviX()));
+				CBOSolution tmp = new CBOSolution(taskProblem.eval(CB.get(i).getNoviX()));
 
 				// najdi najboljšega za izpis
 				if (taskProblem.isFirstBetter(tmp, best)) {
-					best = new CBOIndividual(tmp);
+					best = new CBOSolution(tmp);
 				}
 
 				CB.set(i, tmp);
@@ -261,7 +261,7 @@ public class ECBO extends Algorithm {
 		// poici najboljsega preden vrnes
 		for (int i = 0; i < pop_size; i++) {
 			if (taskProblem.isFirstBetter(CB.get(i), best)) {
-				best = new CBOIndividual(CB.get(i));
+				best = new CBOSolution(CB.get(i));
 			}
 		}
 
@@ -277,7 +277,7 @@ public class ECBO extends Algorithm {
 	// kreiranje zaèetne populacije
 	private void initPop(Task taskProb) throws StopCriteriaException {
 		for (int i = 0; i < pop_size; i++) {
-			CB.add(new CBOIndividual(taskProb));
+			CB.add(new CBOSolution(taskProb));
 
 			// best set
 			if (i == 0)

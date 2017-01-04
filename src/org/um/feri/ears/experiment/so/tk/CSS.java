@@ -28,13 +28,13 @@ public class CSS extends Algorithm {
 	TaskComparator comparator;
 	
 	// populacija nabojev
-	ArrayList<CSSIndividual> CPs;
+	ArrayList<CSSSolution> CPs;
 
 	// charged memory
-	ArrayList<CSSIndividual> CM;
+	ArrayList<CSSSolution> CM;
 
 	// najboljši do zdaj in najslabši do zdaj
-	CSSIndividual best, worst;
+	CSSSolution best, worst;
 
 	// random generator
 
@@ -159,7 +159,7 @@ public class CSS extends Algorithm {
 		// kreiraj pop_size posameznikov
 		for (int i = 0; i < pop_size; i++) 
 		{
-			CPs.add(new CSSIndividual(problem));
+			CPs.add(new CSSSolution(problem));
 
 			// find best cp
 			if (i == 0)
@@ -358,7 +358,7 @@ public class CSS extends Algorithm {
 				break;
 
 			//edino ovrednotenje v kodi
-			CSSIndividual tmp2 = new CSSIndividual(taskProblem.eval(y), yv);
+			CSSSolution tmp2 = new CSSSolution(taskProblem.eval(y), yv);
 			
 			//A hybrid HS-CSS algorithm forsimultaneous analysis, design andoptimization of trusses via forcemethod
 			//Ali Kaveh / Omid Khadem Hosseini

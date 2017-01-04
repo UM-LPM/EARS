@@ -24,10 +24,10 @@ public class EML extends Algorithm {
 	double DELTA;
 
 	// Current best ion
-	EMIndividual best;
+	EMSolution best;
 
 	// Population of ions
-	ArrayList<EMIndividual> ions;
+	ArrayList<EMSolution> ions;
 
 	public EML(int pop_size, int lsiter, double delta) {
 		super();
@@ -103,13 +103,13 @@ public class EML extends Algorithm {
 		ions = new ArrayList<>();
 
 		for (int i = 0; i < M; i++) {
-			ions.add(new EMIndividual(t));
+			ions.add(new EMSolution(t));
 
 			if (t.isStopCriteria())
 				break;
 		}
 
-		best = new EMIndividual(ions.get(0));
+		best = new EMSolution(ions.get(0));
 		best.count = 0;
 		best.index = 0;
 
@@ -117,7 +117,7 @@ public class EML extends Algorithm {
 		for (int i = 0; i < M; i++) {
 
 			if (t.isFirstBetter(ions.get(i), best)) {
-				best = new EMIndividual(ions.get(i));
+				best = new EMSolution(ions.get(i));
 				best.index = i;
 				best.count = t.getNumberOfEvaluations();
 			}
@@ -164,7 +164,7 @@ public class EML extends Algorithm {
 					break;
 
 				// Evaluate new temp ion.
-				EMIndividual temp = new EMIndividual(t.eval(y));
+				EMSolution temp = new EMSolution(t.eval(y));
 
 				// Update the best values.
 				if (t.isFirstBetter(temp, best)) {
@@ -173,7 +173,7 @@ public class EML extends Algorithm {
 
 					ions.set(i, temp);
 
-					best = new EMIndividual(temp);
+					best = new EMSolution(temp);
 					best.index = i;
 					best.count = t.getNumberOfEvaluations();
 
@@ -266,7 +266,7 @@ public class EML extends Algorithm {
 					break;
 
 				// Evaluate new position of ion i
-				EMIndividual novi = new EMIndividual(t.eval(y));
+				EMSolution novi = new EMSolution(t.eval(y));
 
 				// if(t.isFirstBetter(novi, ions.get(i)))
 				ions.set(i, novi);
@@ -278,7 +278,7 @@ public class EML extends Algorithm {
 		// Find best
 		for (i = 0; i < M; i++) {
 			if (t.isFirstBetter(ions.get(i), best)) {
-				best = new EMIndividual(ions.get(i));
+				best = new EMSolution(ions.get(i));
 				best.index = i;
 				best.count = t.getNumberOfEvaluations();
 				

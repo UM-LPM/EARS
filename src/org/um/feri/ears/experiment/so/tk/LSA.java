@@ -23,9 +23,9 @@ public class LSA extends Algorithm
 	int D;
 
 	//populacija
-	ArrayList<LSAIndividual> pop;
+	ArrayList<LSASolution> pop;
 
-	LSAIndividual best, worst;
+	LSASolution best, worst;
 
 	int ch_time;
 	int max_ch_time;
@@ -177,7 +177,7 @@ public class LSA extends Algorithm
 
 
 			//{		
-			LSAIndividual tmp = new LSAIndividual(taskProblem.eval(pop.get(i).getNewVariables()));
+			LSASolution tmp = new LSASolution(taskProblem.eval(pop.get(i).getNewVariables()));
 			pop.set(i, tmp);
 			//pop.get(i).setEvalviran(false);
 			//}	
@@ -238,7 +238,7 @@ public class LSA extends Algorithm
 
 		for (int i=0; i<N; i++) 
 		{	
-			pop.add(new LSAIndividual(taskProb));
+			pop.add(new LSASolution(taskProb));
 
 			//best set
 			if (i==0) 
@@ -279,7 +279,7 @@ public class LSA extends Algorithm
 			y[d] = y[d] + direct[d] * 0.005 * (taskProb.getInterval()[d]);
 
 			//eval
-			LSAIndividual test = new LSAIndividual(taskProb.eval(y));
+			LSASolution test = new LSASolution(taskProb.eval(y));
 
 			if(taskProb.isFirstBetter(test, best))
 			{
@@ -339,7 +339,7 @@ public class LSA extends Algorithm
 
 			if (taskProb.isStopCriteria()) break;
 
-			LSAIndividual tmp = new LSAIndividual(taskProb.eval(tmp_x));
+			LSASolution tmp = new LSASolution(taskProb.eval(tmp_x));
 
 			//fv = evaluateF(Dpoint_temp,F_index);
 			//  if (fv < Ec(i))
@@ -365,7 +365,7 @@ public class LSA extends Algorithm
 					}//end for dimenzije
 
 					if (taskProb.isStopCriteria()) break;
-					LSAIndividual fock_tmp = new LSAIndividual(taskProb.eval(fock_x));
+					LSASolution fock_tmp = new LSASolution(taskProb.eval(fock_x));
 					//fock_tmp.setEvalviran(true);
 
 					//fock_tmp.setEvalviran();
