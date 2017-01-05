@@ -6,8 +6,6 @@ import org.um.feri.ears.problems.Task;
 
 public class LSASolution extends DoubleSolution 
 {
-	
-
 	//nekaj test
 	public LSASolution(DoubleSolution eval) 
 	{
