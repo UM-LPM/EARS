@@ -10,9 +10,9 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-//vir: 
-//https://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-
-//http://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-/content/Standard%20LSA/LSA_Main.m
+//Izvorna koda avtorjev spremenjena v Javo
+//Vir1: https://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-
+//Vir2: http://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-/content/Standard%20LSA/LSA_Main.m
 
 public class LSA extends Algorithm 
 {
@@ -36,10 +36,13 @@ public class LSA extends Algorithm
 		this.N = pop_size;
 		this.max_ch_time = max_time;
 		
-		ai = new AlgorithmInfo("Lightning search algorithm ","clanek","LSA","LSA");    
+		ai = new AlgorithmInfo("Lightning Search Algorithm",
+				"H. Shareef, A.H. Mutlag, Lightning Search Algorithm, Applied Soft Computing, 2015",
+				"LSA",
+				"Phsyics-based metaheuristics algorithm");    
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE,N + "");
 
-		au =  new Author("Tadej Klakocer", "tadej.klakocer@student.um.si"); //EARS author info	 
+		au =  new Author("Tadej Klakocer", "tadej.klakocer@student.um.si");
 	}
 
 	public LSA()
@@ -51,20 +54,18 @@ public class LSA extends Algorithm
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException 
 	{
 		D = taskProblem.getDimensions();
-		//int max_iter = 500; //200.000 evalvacij
+		
 		int iter = 0;
 
 		double max_iter = (taskProblem.getMaxEvaluations() - N) / N;  //-initpopulation!
 
 		ch_time = 0;
 
-		//System.out.println("max_iteracij: "  + max_iter);
 		double[] direct = new double[N];
 
 		for(int i=0;i<D;i++)
 		{
-			direct[i] = Util.nextInt(3) - 1.0 ; // -1, 0, 1
-			//System.out.println(direct[i]);		
+			direct[i] = Util.nextInt(3) - 1.0 ; // -1, 0, 1	
 		}
 
 		//inicializiramo populacijo
@@ -111,10 +112,6 @@ public class LSA extends Algorithm
 
 			double Energy = 2.05 - 2.0 * Math.exp(-5.0 * (max_iter - iter ) / max_iter);// Update energy
 
-			//double Energy = 2.05 - 2.0 * Math.exp(-5.0 * (taskProblem.getMaxEvaluations() - taskProblem.getNumberOfEvaluations() ) / taskProblem.getMaxEvaluations());// Update energy
-
-			//System.out.println(Energy);
-
 			// update direction
 			direct = UpdateDirect(taskProblem, direct);
 
@@ -129,18 +126,10 @@ public class LSA extends Algorithm
 			}
 
 			iter++;
-			//System.out.println(iter + " / " + max_iter);
 
-			if (taskProblem.isStopCriteria()) break;
-
-			/*
-			if(iter == max_iter)
-			{
-				System.out.println("iteracija full");
+			if (taskProblem.isStopCriteria()) 
 				break;
-
-			}
-			*/
+			
 		}
 
 		//% select the optimal value
@@ -157,10 +146,6 @@ public class LSA extends Algorithm
 				worst = pop.get(i);
 		}
 
-		//System.out.println("besteval: " + best.getEval());
-		//System.out.println("worsteval: " + worst.getEval());
-		//System.out.println(iter   + " / " + max_iter);
-
 		return best;
 	}
 
@@ -170,21 +155,10 @@ public class LSA extends Algorithm
 		for (int i=0;i<N;i++)
 		{		
 			if (taskProblem.isStopCriteria()) break;	
-
-			//if(pop.get(i).getEvalviran() == false)
-			//	{
-			//System.out.println("nov eval potreben");
-
-
-			//{		
+	
 			LSASolution tmp = new LSASolution(taskProblem.eval(pop.get(i).getNewVariables()));
 			pop.set(i, tmp);
-			//pop.get(i).setEvalviran(false);
-			//}	
-			//	}
-			///else
-			//	System.out.println("že evalviran");
-
+		
 			//isce best
 			if (taskProblem.isFirstBetter(pop.get(i), best))
 				best = pop.get(i);			
@@ -207,8 +181,6 @@ public class LSA extends Algorithm
 			if(taskProblem.isFirstBetter(pop.get(worst_indeks), pop.get(i)))
 				worst_indeks = i;
 
-			//	if(taskProblem.isFirstBetter(pop.get(i), best))
-			//	best = pop.get(i);
 		}
 
 		if (ch_time >= max_ch_time)
@@ -365,19 +337,14 @@ public class LSA extends Algorithm
 					}//end for dimenzije
 
 					if (taskProb.isStopCriteria()) break;
-					LSASolution fock_tmp = new LSASolution(taskProb.eval(fock_x));
-					//fock_tmp.setEvalviran(true);
-
-					//fock_tmp.setEvalviran();
-					//fock_fit = evaluateF(Dpoint_fock,F_index); // Evaluate
-
+					LSASolution fork_tmp = new LSASolution(taskProb.eval(fock_x));
 					//         if fock_fit < Ec(i) 
 					//               Dpoint(i,:) = Dpoint_fock; % Replace the channel
 					//                      Ec(i) = fock_fit;
 					//                  end
-					if(taskProb.isFirstBetter(fock_tmp, pop.get(i)))
+					if(taskProb.isFirstBetter(fork_tmp, pop.get(i)))
 					{
-						pop.set(i, fock_tmp); //replace the channel
+						pop.set(i, fork_tmp); //replace the channel
 					}
 
 				}//end   

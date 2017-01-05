@@ -2,7 +2,6 @@ package org.um.feri.ears.experiment.so.tk;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
@@ -14,51 +13,65 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
 
+//Opis algoritma se zaène v poglavju 2.2 Presentation of charged search system
 public class CSS extends Algorithm {
-	int counter_fail = 0;
-	double eps = 2.2204e-16; // matlab eps
+	//int counter_fail = 0;
+	
+	// matlab eps
+	double eps = 2.2204e-16;
 
-	int pop_size = 20; // Size of the population ,N, iz èlanka 20 nabojev pop
-						// size
-	int CMS = pop_size / 4; // numbers of CP in charge memory
-
-	double PAR = 0.1; // pitch adjusting rate
-	double CMCR = 0.95; // the Charged Memory Considering Rate (CMCR)
+	 // Size of the population
+	int pop_size; 
+	
+	// Numbers of CP in charge memory
+	int CMS;
+	
+ // Pitch Adjusting Rate
+	double PAR;
+	
+	// The Charged Memory Considering Rate (CMCR)
+	double CMCR; 
 
 	TaskComparator comparator;
 	
-	// populacija nabojev
+	// Glavna populacija nabojev
 	ArrayList<CSSSolution> CPs;
 
-	// charged memory
+	// Charged memory - spominska populacija
 	ArrayList<CSSSolution> CM;
 
-	// najboljši do zdaj in najslabši do zdaj
+	// Najbojša rešitev in najslabša rešitev v celotnem zagonu
 	CSSSolution best, worst;
 
-	// random generator
+	public CSS(int pop, double par, double cmcr) {	
+		this.pop_size = pop;
+		this.PAR = par;
+		this.CMCR = cmcr;
+		this.CMS = pop_size / 4;
 
-	public CSS() {
-		ai = new AlgorithmInfo("Charged system search ", "clanek", "CSS", "CSS");
+		ai = new AlgorithmInfo("Charged system search",
+				"A. Kaveh, S. Talatahari, A novel heuristic optimization method: charged system search, Acta Mech 213, 2010",
+				"CSS",
+				"Physics-based metaheuristic algorithm");
+		au = new Author("Tadej Klakoèer", "tadej.klakocer@student.um.si");			
+		
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
 		ai.addParameter(EnumAlgorithmParameters.UNNAMED1, CMS + "");
 		ai.addParameter(EnumAlgorithmParameters.UNNAMED2, PAR + "");
-		ai.addParameter(EnumAlgorithmParameters.UNNAMED2, CMCR + "");
-
-		au = new Author("Tadej Klakoèer", "tadej.klakocer@student.um.si");																																	// info
+		ai.addParameter(EnumAlgorithmParameters.UNNAMED2, CMCR + "");																																// info
 	}
 
+	public CSS(){
+		this(20, 0.1, 0.95);
+	}
+	
+	
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
 		comparator = new TaskComparator(taskProblem);
-		//int iter = 0;
-		int itermax = (taskProblem.getMaxEvaluations() - pop_size) / pop_size; // -initpopulation!
-		 //itermax = itermax / 2;
-		counter_fail = 0;
 
-		//200 iteracij kot v èlanku
-		//int itermax = 200;
 		int iter = 0;
+		int itermax = (taskProblem.getMaxEvaluations() - pop_size) / pop_size;
 		
 		
 		// LEVEL 1: Initialization
@@ -66,7 +79,6 @@ public class CSS extends Algorithm {
 		initPopulation(taskProblem);
 		calcMagnitude();
 		
-		// ***************************************//
 		while (!taskProblem.isStopCriteria()) {
 			// LEVEL2 : SEARCH
 
@@ -90,6 +102,7 @@ public class CSS extends Algorithm {
 			double ka = 0.5 * (1.0 + iter / itermax); // exploitacija
 
 			// premakne delce, èe so izven mej jih popravi z HS
+			//rule 5, 6 , 7 
 			moveParticles(taskProblem, kv, ka);
 
 			//poisce novi best, poisce novi worst
@@ -102,15 +115,7 @@ public class CSS extends Algorithm {
 			
 			if (taskProblem.isStopCriteria())
 				break;
-			
-			/*
-			if(iter == itermax)
-			{
-				System.out.println("iteracija full");
-				break;
-		
-			}
-			*/
+	
 		}
 
 		// reset worst
@@ -131,12 +136,6 @@ public class CSS extends Algorithm {
 		return best; // return najboljši najden cp
 	}
 
-	@Override
-	public void resetDefaultsBeforNewRun() {
-		// TODO Auto-generated method stub
-
-	}
-
 	// dolzina vektorja, Euclidean norm ||x||
 	public double vectorLength(double[] x) {
 		double res = 0;
@@ -147,7 +146,7 @@ public class CSS extends Algorithm {
 		return Math.sqrt(res);
 	}
 
-	/******************** LEVEL1: INIT ****************/
+	//Level1: STEP1 STEP2
 	private void initPopulation(Task problem) throws StopCriteriaException {
 		// reset
 		CPs = null;
@@ -184,6 +183,7 @@ public class CSS extends Algorithm {
 		initChargedMemory();
 	}
 
+	//Level1: STEP3
 	private void initChargedMemory() {
 		// generate the initial charged memory [some of the best solutions] as many as CMS
 		CM = null;
@@ -195,8 +195,7 @@ public class CSS extends Algorithm {
 		}
 	}
 
-	/******************** LEVEL1: END INIT ****************/
-
+	
 	// izraèuna magnitued of charge
 	private void calcMagnitude() {
 		// magnitude of charge
@@ -321,7 +320,7 @@ public class CSS extends Algorithm {
 				// RULE 7
 				if (taskProblem.isFeasible(xj_new, d) == false)
 				{
-					counter_fail++;
+					//counter_fail++;
 
 					harmonized[j] = true;
 
@@ -426,4 +425,11 @@ public class CSS extends Algorithm {
 
 		Collections.sort(CM, comparator);
 	}
+
+	@Override
+	public void resetDefaultsBeforNewRun() {
+		// TODO Auto-generated method stub
+
+	}
+	
 }

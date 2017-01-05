@@ -57,24 +57,24 @@ public class FizikaCompetition {
 		RatingBenchmark.debugPrint = false; //prints one on one results
 		ArrayList<Algorithm> players = new ArrayList<Algorithm>();
 		players.add(new PSOTS());
-		players.add(new CRO());
-		players.add(new TLBOAlgorithm());
+		//players.add(new CRO());
+		//players.add(new TLBOAlgorithm());
 		players.add(new RandomWalkAlgorithm());
 		players.add(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin));
 		
 		players.add(new CSS());
-		players.add(new EML());
+		players.add(new EM());
 		players.add(new ECBO());
 		players.add(new LSA());
 		
 		ResultArena ra = new ResultArena(100); 
-		RatingRPUOed2 rpuoed2 = new RatingRPUOed2(); //Create banchmark
-		RatingRPUOed30 rpuoed30 = new RatingRPUOed30();
+		//RatingRPUOed2 rpuoed2 = new RatingRPUOed2(); //Create banchmark
+		//RatingRPUOed30 rpuoed30 = new RatingRPUOed30();
 		RatingCEC2015 cec = new RatingCEC2015();
 
 		//RatingCEC2014 suopm = new RatingCEC2014();
-		rpuoed2.registerAlgorithms(players);
-		rpuoed30.registerAlgorithms(players);
+		//rpuoed2.registerAlgorithms(players);
+		//rpuoed30.registerAlgorithms(players);
 		cec.registerAlgorithms(players);
 
 
@@ -84,7 +84,10 @@ public class FizikaCompetition {
 		BankOfResults ba = new BankOfResults();
 		//rpuoed2.run(ra, ba, 50);
 		//rpuoed30.run(ra, ba, 10);
-		rpuoed30.run(ra, ba, 10);
+		//rpuoed30.run(ra, ba, 10);
+		
+		cec.run(ra, ba, 1);
+		
 		ArrayList<Player> list = new ArrayList<Player>();
 		list.addAll(ra.calculteRatings());
 		for (Player p: list) System.out.println(p);
