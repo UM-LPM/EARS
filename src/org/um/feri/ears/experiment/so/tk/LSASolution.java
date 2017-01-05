@@ -6,10 +6,13 @@ import org.um.feri.ears.problems.Task;
 
 public class LSASolution extends DoubleSolution 
 {
+	
+	
 	public LSASolution(DoubleSolution eval) 
 	{
 		super(eval);	
 		//evalviran = true;
+		
 		
 		//v = new double[eval.getX().length];	
 		//v_after = new double[eval.getX().length];
