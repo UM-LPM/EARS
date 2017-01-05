@@ -19,24 +19,24 @@ import org.um.feri.ears.util.Util;
 //ECBO
 public class ECBO extends Algorithm {
 	// Size of the population
-	int pop_size;
+	private int pop_size;
 
 	// Colliding memory size
-	int cMS;
+	private int cMS;
 
 	// 0.25 ali 0.3
-	double Pro;
+	private double Pro;
 
 	// Population of colliding bodies
-	ArrayList<ECBOSolution> CB;
+	private ArrayList<ECBOSolution> CB;
 
 	// Colliding Memory
-	ArrayList<ECBOSolution> CM;
+	private ArrayList<ECBOSolution> CM;
 
 	// Best CB by far
-	ECBOSolution best = null;
+	private ECBOSolution best = null;
 
-	TaskComparator comparator;
+	private TaskComparator comparator;
 
 	public ECBO(int pop, double PRO) {
 		super();

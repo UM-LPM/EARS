@@ -26,12 +26,9 @@ public class FizikaRunner {
 
 
 		//ECBO a = new ECBO();
-
-		//	EML a = new EML(); 
+		//EML a = new EML(); 
 		//GSA a = new GSA(); 
 		//LSA a = new LSA();
-
-		//še v testiranju, kodiranju, popravljanju
 		//CSS a = new CSS();
 
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.0001, new ProblemSphere(30));
@@ -69,6 +66,8 @@ public class FizikaRunner {
 			//DEAlgorithm a = new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin);
 			
 			CSS a = new CSS();
+			
+		
 			Task t = new Task(EnumStopCriteria.EVALUATIONS, 200000, 500, 300, 0.0001, new ProblemBranin());  
 
 			try 		    

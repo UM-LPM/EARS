@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.so.cro.CRO;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.gsa.GSA;
 import org.um.feri.ears.algorithms.so.pso.PSO;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
@@ -57,15 +58,17 @@ public class FizikaCompetition {
 		RatingBenchmark.debugPrint = false; //prints one on one results
 		ArrayList<Algorithm> players = new ArrayList<Algorithm>();
 		players.add(new PSOTS());
-		//players.add(new CRO());
-		//players.add(new TLBOAlgorithm());
+		players.add(new CRO());
+		players.add(new TLBOAlgorithm());
 		players.add(new RandomWalkAlgorithm());
 		players.add(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin));
 		
+		//PHYSICS BASED ALGORITHMS
 		players.add(new CSS());
 		players.add(new EM());
 		players.add(new ECBO());
 		players.add(new LSA());
+		players.add(new GSA());
 		
 		ResultArena ra = new ResultArena(100); 
 		//RatingRPUOed2 rpuoed2 = new RatingRPUOed2(); //Create banchmark

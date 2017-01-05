@@ -18,33 +18,33 @@ public class CSS extends Algorithm {
 	//int counter_fail = 0;
 
 	// matlab eps
-	double eps = 2.2204e-16;
+	private double eps = 2.2204e-16;
 
 	// Size of the population
-	int pop_size; 
+	private int pop_size; 
 
 	// Numbers of CP in charge memory
-	int CMS;
+	private int CMS;
 
 	// Pitch Adjusting Rate
-	double PAR;
+	private double PAR;
 
 	// The Charged Memory Considering Rate (CMCR)
-	double CMCR; 
+	private double CMCR; 
 
 	//Max interval med zgornjo in spodnjo mejo (razpon)
 	//private double max;
 
-	TaskComparator comparator;
+	private TaskComparator comparator;
 
 	// Glavna populacija nabojev
-	ArrayList<CSSSolution> CPs;
+	private ArrayList<CSSSolution> CPs;
 
 	// Charged memory - spominska populacija
-	ArrayList<CSSSolution> CM;
+	private ArrayList<CSSSolution> CM;
 
 	// Najbojša rešitev in najslabša rešitev v celotnem zagonu
-	CSSSolution best, worst;
+	private CSSSolution best, worst;
 
 	public CSS(int pop, double par, double cmcr) {	
 		this.pop_size = pop;
@@ -280,7 +280,7 @@ public class CSS extends Algorithm {
 					if (i == j) // brez samega sebe
 						continue;
 
-					double desno = 1.0 * Pij[j][i] * (CPs.get(i).getVariables().get(d) - CPs.get(j).getVariables().get(d));
+					double desno = Pij[j][i] * (CPs.get(i).getVariables().get(d) - CPs.get(j).getVariables().get(d));
 					double i1, i2;
 
 					if (rij[j][i] < a) {

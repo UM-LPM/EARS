@@ -12,28 +12,29 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
+///Izvorna koda spremenjena v Javo
 //Vir1: https://www.mathworks.com/matlabcentral/fileexchange/47064-a-multilevel-thresholding-algorithm-using-electromagnetism-optimization/content/MTEMO/EMO_KAPUR/EMO.m
 //Vir2: http://www.codeforge.com/read/212138/EM.cpp__html
 
 //klasièni EML po prvotnem èlanku
 public class EM extends Algorithm {
 	// Dimenzija problema
-	int N;
+	private int N;
 
 	// Velikost populacije
-	int M;
+	private int M;
 
 	// Število lokalnih iskanj (koliko ovrednotenj porabi za lokalno iskanje).
-	int LS;
+	private int LS;
 
 	// Parameter lokalnega iskanja.
-	double DELTA;
+	private double DELTA;
 
 	// Trenutno najboljši ion.
-	int best_idx;
+	private int best_idx;
 
 	// Populacija ionov.
-	ArrayList<EMSolution> ions;
+	private ArrayList<EMSolution> ions;
 
 	public EM(int pop_size, int lsiter, double delta) {
 		super();
