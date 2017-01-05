@@ -146,7 +146,7 @@ public class LSA extends Algorithm
 	}
 
 	// Ovrednotenje celotne populacije
-	public void Evaluate(Task taskProblem) throws StopCriteriaException
+	private void Evaluate(Task taskProblem) throws StopCriteriaException
 	{
 		for (int i=0;i<N;i++)
 		{		
@@ -162,7 +162,7 @@ public class LSA extends Algorithm
 	}
 
 	//update channel funkcija
-	public void UpdateChannel(Task taskProblem)
+	private void UpdateChannel(Task taskProblem)
 	{
 		int best_indeks = 0;
 		int worst_indeks = 0;
@@ -351,7 +351,7 @@ public class LSA extends Algorithm
 	private static boolean isSpareReady = false;
 
 	//normrnd matlab funkcija
-	public static synchronized double normrnd(double mean, double stdDev) {
+	private static synchronized double normrnd(double mean, double stdDev) {
 		if (isSpareReady) {
 			isSpareReady = false;
 			return spare * stdDev + mean;
@@ -370,7 +370,7 @@ public class LSA extends Algorithm
 	}
 
 	//exprnd matlab funkcija
-	public double exprnd(double mu)
+	private double exprnd(double mu)
 	{
 		return -Math.log(Util.nextDouble()) * mu;
 	}
