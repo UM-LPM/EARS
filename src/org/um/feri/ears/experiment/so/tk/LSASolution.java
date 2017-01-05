@@ -12,8 +12,6 @@ public class LSASolution extends DoubleSolution
 	{
 		super(eval);	
 		//evalviran = true;
-		
-		
 		//v = new double[eval.getX().length];	
 		//v_after = new double[eval.getX().length];
 	}
