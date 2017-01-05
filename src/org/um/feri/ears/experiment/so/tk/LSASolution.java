@@ -6,12 +6,6 @@ import org.um.feri.ears.problems.Task;
 
 public class LSASolution extends DoubleSolution 
 {
-	//private boolean evalviran = false;
-	
-	
-	//public boolean getEvalviran(){ return evalviran;}
-	//public void setEvalviran(boolean value){ evalviran = value;}
-	
 	public LSASolution(DoubleSolution eval) 
 	{
 		super(eval);	
