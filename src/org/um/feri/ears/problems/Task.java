@@ -321,12 +321,7 @@ public class Task extends TaskBase<Problem> {
 			incEvaluate();
 			long start = System.nanoTime();
 			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
-			evaluationTime +=  System.nanoTime() - start;
-			
-			//EVALUATIONS EnumStopCriteria
-			//Ce je stop critera število evalvacij, potem je brezveze tukaj gledati ali je global dosežen- isto kot GLOBAL_OPTIMUM_OR_EVALUATIONS
-			//checkIfGlobalReached(tmpSolution.getEval());
-			
+			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			return tmpSolution;
 		}
