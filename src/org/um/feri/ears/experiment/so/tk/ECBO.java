@@ -2,7 +2,6 @@ package org.um.feri.ears.experiment.so.tk;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
@@ -14,28 +13,30 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
 
+// V èlanku se zaène ta algoritem v poglavju 
+// 2.2. Enhanced Colliding Bodies Optimization (ECBO)
+
 //ECBO
 public class ECBO extends Algorithm {
 	// Size of the population
-	int pop_size;
+	private int pop_size;
 
 	// Colliding memory size
-	int cMS;
+	private int cMS;
 
 	// 0.25 ali 0.3
-	double Pro;
+	private double Pro;
 
 	// Population of colliding bodies
-	ArrayList<CBOIndividual> CB;
+	private ArrayList<ECBOSolution> CB;
 
 	// Colliding Memory
-	ArrayList<CBOIndividual> CM;
+	private ArrayList<ECBOSolution> CM;
 
 	// Best CB by far
-	CBOIndividual best = null;
-	
-	TaskComparator comparator;
+	private ECBOSolution best = null;
 
+	private TaskComparator comparator;
 
 	public ECBO(int pop, double PRO) {
 		super();
@@ -43,14 +44,15 @@ public class ECBO extends Algorithm {
 		this.pop_size = pop;
 		this.Pro = PRO;
 
-		ai = new AlgorithmInfo("Enhanced Coliding body optimisation ", "clanek", "ECBO", "ECBO");
+		au = new Author("Tadej Klakocer", "tadej.klakocer@student.um.si"); // EARS
+		ai = new AlgorithmInfo("Enhanced Coliding body optimisation ",
+				"A.Kaveh, M.Ilchi Ghazaan, Enhanced colliding bodies optimization for design problems with continuous and discrete variables, Advances in Engineering Software 77, 2014",
+				"ECBO", "Physics-based metaheuristic algorithm");
+
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
 		ai.addParameter(EnumAlgorithmParameters.UNNAMED1, cMS + "");
 		ai.addParameter(EnumAlgorithmParameters.UNNAMED2, Pro + "");
 
-		au = new Author("Tadej Klakocer", "tadej.klakocer@student.um.si"); // EARS
-		// author
-		// info
 	}
 
 	// Parametri kot v èlanku.
@@ -58,214 +60,71 @@ public class ECBO extends Algorithm {
 		this(20, 0.25);
 	}
 
+	//Glavna zanka algoritma (zagon)
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
 		comparator = new TaskComparator(taskProblem);
-		// celotna populacija
+
+		// Celotna populacija
 		CB = new ArrayList<>();
 
-		// collison memory
+		// Collision memory
 		CM = new ArrayList<>();
 
 		best = null;
 
-		// iteracije se dobro raèunajo
 		double iter = 0;
-		// double max_iter = 200;//(taskProblem.getMaxEvaluations() - pop_size)
-		// / pop_size; //-initpopulation!
-		// double max_iter = 10000;
-		double max_iter = (taskProblem.getMaxEvaluations() - pop_size) / pop_size; // -initpopulation!
+		double max_iter = (taskProblem.getMaxEvaluations() - pop_size) / pop_size;
 
 		initPop(taskProblem);
 
-		// glavna zanka algoritma
+		// Glavna zanka algoritma.
 		while (!taskProblem.isStopCriteria()) {
 
-			// coefficient of restitution
+			// Coefficient of restitution
 			double cor;
 
-			// calculate maso delcev
-			double sum_spodaj = 0;
+			DefineMass(taskProblem);
 
-			for (int i = 0; i < pop_size; i++) {
-				sum_spodaj = sum_spodaj + (1.0 / CB.get(i).getEval());
-			}
+			Saving(iter, taskProblem);
 
-			sum_spodaj = 1.0 / sum_spodaj;
-
-			for (int i = 0; i < pop_size; i++) {
-				CB.get(i).masa = (1.0 / CB.get(i).getEval()) / sum_spodaj;
-			}
-
-			// Reversed - padajoèe - descending
-			// normalno - narašèujoèe - ascending
-
-			// CM - coliding memory
-			// nekaj najboljših CB se shrani
-			// v naslednji iteraciji daš iz CM v glavno populacijo
-			// iz glavne jih toliko odstraniš kot si jih dal noter
-
-			// oèitno vsi problemi minimizirajo
-			Collections.sort(CB, comparator);
-
-			if (iter == 0) // prva iteracija samo shrani
-			{
-				// shranimo za naslednjo iteracijo
-				for (int i = 0; i < cMS; i++)
-					CM.add(CB.get(i));
-			} else // ostale iteracije se
-			{
-				// prvo dodaj iz CM
-				for (int i = 0; i < cMS; i++)
-					CB.add(CM.get(i));
-
-				// oèitno vsi problemi minimizirajo
-				Collections.sort(CB, comparator);
-
-				// zbriši toliko zadnjih najslabših
-				for (int i = 0; i < cMS; i++)
-					CB.remove(CB.size() - 1);
-
-				// shranimo za naslednjo iteracijo (zamenjava ce je boljsi)
-				// - zgodovinsko najboljši so v CM (skozi celotni proces)
-
-				// oèitno vsi problemi minimizirajo
-				Collections.sort(CM, comparator);
-
-				for (int j = 0; j < cMS; j++) {
-					// èe že isti noter preskoèi
-					if (CM.contains(CB.get(j)))
-						continue;
-
-					if (taskProblem.isFirstBetter(CB.get(j), CM.get(j)))
-						CM.set(j, CB.get(j));
-				}
-			}
-
-			// sort po masi(veèja masa , boljši fitnes)
+			// Sortiranje po masi(veèja masa , boljši fitnes)
 			Collections.sort(CB, comparator);
 
 			// pre-update velocity
-			for (int i = 0; i < pop_size / 2; i++) // stacionarni CB
+			for (int i = 0; i < pop_size / 2; i++) // Stacionarni delci v CB
 			{
-				CB.get(i).v = new double[taskProblem.getDimensions()]; // vse na
-				// nulo
+				CB.get(i).v = new double[taskProblem.getDimensions()];
 			}
 
-			for (int i = pop_size / 2; i < pop_size; i++) // premikajoci se CB,
-				// enacba 2
+			for (int i = pop_size / 2; i < pop_size; i++) // Premikajoci se delci v CB, enacba 2
 			{
 				for (int j = 0; j < taskProblem.getDimensions(); j++)
 					CB.get(i).v[j] = CB.get(i - pop_size / 2).getVariables().get(j) - CB.get(i).getVariables().get(j);
 			}
 
-			// 1- ( iter / max_iter) enacba 6
+			// enacba 6
 			cor = 1.0 - (iter / max_iter);
 
-			// kolizija delcev
-			for (int i = 0; i < pop_size / 2; i++) // stacionarni CB enacba 4
-			{
-				for (int j = 0; j < taskProblem.getDimensions(); j++) {
-					double zgoraj = (CB.get(i + pop_size / 2).masa + cor * CB.get(i + pop_size / 2).masa)
-							* CB.get(i + pop_size / 2).v[j];
-					double spodaj = CB.get(i).masa + CB.get(i + pop_size / 2).masa;
+			Collision(cor, taskProblem);
 
-					CB.get(i).v_after[j] = zgoraj / spodaj;
-				}
-			}
-
-			for (int i = pop_size / 2; i < pop_size; i++) // premikajoci se CB
-				// enacba 5
-			{
-				for (int j = 0; j < taskProblem.getDimensions(); j++) {
-					double zgoraj = (CB.get(i).masa - cor * CB.get(i - pop_size / 2).masa) * CB.get(i).v[j];
-					double spodaj = CB.get(i).masa + CB.get(i - pop_size / 2).masa;
-
-					CB.get(i).v_after[j] = zgoraj / spodaj;
-				}
-			}
-
-			// posodobi pozicijo delcev
-			for (int i = 0; i < pop_size / 2; i++) // stacionarni CB enacba 7
-			{
-				CB.get(i).new_x = new double[taskProblem.getDimensions()];
-
-				for (int j = 0; j < taskProblem.getDimensions(); j++) {
-					double rand = Util.nextDouble() * 2 - 1; // med -1 in 1
-					double new_value = CB.get(i).getVariables().get(j) + rand * CB.get(i).v_after[j];
-
-					CB.get(i).new_x[j] = taskProblem.setFeasible(new_value, j);
-				}
-
-				// dodatno za izognitev lokalnega optimuma, ENACBA 10
-				if (Util.nextDouble() < Pro) {
-					int rand_dimenzija = Util.nextInt(taskProblem.getDimensions());
-					CB.get(i).new_x[rand_dimenzija] = taskProblem.setFeasible(taskProblem.getLowerLimit()[rand_dimenzija]
-							+ Util.nextDouble() * (taskProblem.getUpperLimit()[rand_dimenzija]
-									- taskProblem.getLowerLimit()[rand_dimenzija]),
-							rand_dimenzija);
-				}
-			}
-
-			for (int i = pop_size / 2; i < pop_size; i++) // premikajoci se CB
-				// enacba 8
-			{
-				CB.get(i).new_x = new double[taskProblem.getDimensions()];
-
-				for (int j = 0; j < taskProblem.getDimensions(); j++) {
-					double rand = Util.nextDouble() * 2 - 1; // med -1 in 1
-
-					double new_value = CB.get(i - pop_size / 2).getVariables().get(j) + rand * CB.get(i).v_after[j];
-
-					CB.get(i).new_x[j] = taskProblem.setFeasible(new_value, j);
-				}
-
-				// enacba 10, izognitev lokalnega optimuma
-				if (Util.nextDouble() < Pro) {
-					int rand_dimenzija = Util.nextInt(taskProblem.getDimensions());
-
-					CB.get(i).new_x[rand_dimenzija] = taskProblem.setFeasible(taskProblem.getLowerLimit()[rand_dimenzija]
-							+ Util.nextDouble() * (taskProblem.getUpperLimit()[rand_dimenzija]
-									- taskProblem.getLowerLimit()[rand_dimenzija]),
-							rand_dimenzija);
-				}
-			}
-
-			// uporabi new_x za fitnes oceno CB delca, ocenitev delca
-			for (int i = 0; i < pop_size; i++) // premikajoci se CB enacba 8
-			{
-				CBOIndividual tmp = new CBOIndividual(taskProblem.eval(CB.get(i).getNoviX()));
-
-				// najdi najboljšega za izpis
-				if (taskProblem.isFirstBetter(tmp, best)) {
-					best = new CBOIndividual(tmp);
-				}
-
-				CB.set(i, tmp);
-
-				if (taskProblem.isStopCriteria())
-					break;
-			}
+			UpdateCBs(taskProblem);
 
 			iter++;
+			
 			if (taskProblem.isStopCriteria())
 				break;
-			/*
-			if (iter == max_iter) {
-				System.out.println("iteracija full");
-				break;
-			}
-			 */
+
 		}
 
-		// poici najboljsega preden vrnes
+		// Poišèi najboljšo najdeno rešitev, preden jo vrneš.
 		for (int i = 0; i < pop_size; i++) {
 			if (taskProblem.isFirstBetter(CB.get(i), best)) {
-				best = new CBOIndividual(CB.get(i));
+				best = new ECBOSolution(CB.get(i));
 			}
 		}
 
-		return best; //vrni best CB
+		return best; // Vrni najboljšo najdeno rešitev.
 	}
 
 	@Override
@@ -274,10 +133,13 @@ public class ECBO extends Algorithm {
 
 	}
 
-	// kreiranje zaèetne populacije
+	
+	
+	//Poglavje 2.2 Step1
+	// Ustvarjanje zaèetne populacije.
 	private void initPop(Task taskProb) throws StopCriteriaException {
 		for (int i = 0; i < pop_size; i++) {
-			CB.add(new CBOIndividual(taskProb));
+			CB.add(new ECBOSolution(taskProb));
 
 			// best set
 			if (i == 0)
@@ -289,4 +151,158 @@ public class ECBO extends Algorithm {
 				break;
 		}
 	}
+
+	//Poglavj 2.2 Step2
+	//2.2 Step2 Defining mass
+	private void DefineMass(Task taskprob){
+		// Raèunanje mase delcev.
+		double sum_spodaj = 0;
+
+		for (int i = 0; i < pop_size; i++) {
+			sum_spodaj = sum_spodaj + (1.0 / CB.get(i).getEval());
+		}
+
+		sum_spodaj = 1.0 / sum_spodaj;
+
+		for (int i = 0; i < pop_size; i++) {
+			CB.get(i).masa = (1.0 / CB.get(i).getEval()) / sum_spodaj;
+		}
+
+	}
+
+	//Poglavje 2.2 Step3
+	//2.2 Step3 Saving - CM memory
+	private void Saving(double iter, Task taskProb){
+		// CM - coliding memory
+		// nekaj najboljših CB se shrani
+		// v naslednji iteraciji daš iz CM v glavno populacijo
+		// iz glavne jih toliko odstraniš kot si jih dal noter
+
+		Collections.sort(CB, comparator);
+
+		if (iter == 0) // Prva iteracija samo shrani.
+		{
+			// Shranimo za naslednjo iteracijo.
+			for (int i = 0; i < cMS; i++)
+				CM.add(CB.get(i));
+		} else // Ostale iteracije med izvajanjem.
+		{
+			// Prvo dodaj iz CM v CB populacijo.
+			for (int i = 0; i < cMS; i++)
+				CB.add(CM.get(i));
+
+			Collections.sort(CB, comparator);
+
+			// Izbriši toliko zadnjih najslabših iz CB populacije
+			for (int i = 0; i < cMS; i++)
+				CB.remove(CB.size() - 1);
+
+			// shranimo za naslednjo iteracijo (zamenjava ce je boljsi)
+			// - zgodovinsko najboljši so v CM (skozi celotni proces)
+
+			Collections.sort(CM, comparator);
+
+			for (int j = 0; j < cMS; j++) {
+				// Èe že isti noter preskoèi.
+				if (CM.contains(CB.get(j)))
+					continue;
+
+				if (taskProb.isFirstBetter(CB.get(j), CM.get(j)))
+					CM.set(j, CB.get(j));
+			}
+		}
+
+	}
+
+	//Poglavje 2.2 Step4,5,6
+	private void Collision(double cor, Task taskProb){
+		// Trki med delci.
+		for (int i = 0; i < pop_size / 2; i++) // Stacionarni delci v CB, enacba 4
+		{
+			for (int j = 0; j < taskProb.getDimensions(); j++) {
+				double zgoraj = (CB.get(i + pop_size / 2).masa + cor * CB.get(i + pop_size / 2).masa)
+						* CB.get(i + pop_size / 2).v[j];
+				double spodaj = CB.get(i).masa + CB.get(i + pop_size / 2).masa;
+
+				CB.get(i).v_after[j] = zgoraj / spodaj;
+			}
+		}
+
+		for (int i = pop_size / 2; i < pop_size; i++) // Premikajoci se delci v CB, enacba 5
+		{
+			for (int j = 0; j < taskProb.getDimensions(); j++) {
+				double zgoraj = (CB.get(i).masa - cor * CB.get(i - pop_size / 2).masa) * CB.get(i).v[j];
+				double spodaj = CB.get(i).masa + CB.get(i - pop_size / 2).masa;
+
+				CB.get(i).v_after[j] = zgoraj / spodaj;
+			}
+		}
+
+	}
+
+	//Poglavje 2.2 Step7, 8
+	private void UpdateCBs(Task taskProb) throws StopCriteriaException {
+		// Posodobi pozicijo delcev (premik).
+		for (int i = 0; i < pop_size / 2; i++) // Stacionarni delci v CB, enacba 7
+		{
+			CB.get(i).new_x = new double[taskProb.getDimensions()];
+
+			for (int j = 0; j < taskProb.getDimensions(); j++) {
+				double rand = Util.nextDouble() * 2 - 1; // med -1 in 1
+				double new_value = CB.get(i).getVariables().get(j) + rand * CB.get(i).v_after[j];
+
+				CB.get(i).new_x[j] = taskProb.setFeasible(new_value, j);
+			}
+
+			// Dodatno za izognitev lokalnega optimuma, enacba 10
+			if (Util.nextDouble() < Pro) {
+				int rand_dimenzija = Util.nextInt(taskProb.getDimensions());
+				CB.get(i).new_x[rand_dimenzija] = taskProb
+						.setFeasible(taskProb.getLowerLimit()[rand_dimenzija]
+								+ Util.nextDouble() * (taskProb.getUpperLimit()[rand_dimenzija]
+										- taskProb.getLowerLimit()[rand_dimenzija]),
+								rand_dimenzija);
+			}
+		}
+
+		for (int i = pop_size / 2; i < pop_size; i++) // Premikajoci se delci v CB, enacba 8
+		{
+			CB.get(i).new_x = new double[taskProb.getDimensions()];
+
+			for (int j = 0; j < taskProb.getDimensions(); j++) {
+				double rand = Util.nextDouble() * 2 - 1; // med -1 in 1
+
+				double new_value = CB.get(i - pop_size / 2).getVariables().get(j) + rand * CB.get(i).v_after[j];
+
+				CB.get(i).new_x[j] = taskProb.setFeasible(new_value, j);
+			}
+
+			// Dodatno za izognitev lokalnega optimuma, enacba 10
+			if (Util.nextDouble() < Pro) {
+				int rand_dimenzija = Util.nextInt(taskProb.getDimensions());
+
+				CB.get(i).new_x[rand_dimenzija] = taskProb
+						.setFeasible(taskProb.getLowerLimit()[rand_dimenzija]
+								+ Util.nextDouble() * (taskProb.getUpperLimit()[rand_dimenzija]
+										- taskProb.getLowerLimit()[rand_dimenzija]),
+								rand_dimenzija);
+			}
+		}
+
+		// Uporabi new_x za fitnes oceno CB delca (ocenitev rešitve)
+		for (int i = 0; i < pop_size; i++) {
+			ECBOSolution tmp = new ECBOSolution(taskProb.eval(CB.get(i).getNoviX()));
+
+			// Najdi boljšega od trenutno najboljšega delca.
+			if (taskProb.isFirstBetter(tmp, best)) {
+				best = new ECBOSolution(tmp);
+			}
+
+			CB.set(i, tmp);
+
+			if (taskProb.isStopCriteria())
+				break;
+		}
+	}
+
 }

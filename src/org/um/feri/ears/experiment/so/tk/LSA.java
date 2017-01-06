@@ -1,11 +1,6 @@
 package org.um.feri.ears.experiment.so.tk;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Random;
-
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
@@ -15,25 +10,25 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-//vir: 
-//https://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-
-//http://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-/content/Standard%20LSA/LSA_Main.m
+//Izvorna koda avtorjev spremenjena v Javo (ni specifièno doloèeno po korakih v èlanku)
+//Vir1: https://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-
+//Vir2: http://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-/content/Standard%20LSA/LSA_Main.m
 
 public class LSA extends Algorithm 
 {
-	//pop size
-	int N;
+	// Velikost populacije
+	private int N;
 
-	//st dimenzij
-	int D;
+	//Število dimenzij v problemu
+	private int D;
 
-	//populacija
-	ArrayList<LSAIndividual> pop;
+	//Glavna populacija
+	private ArrayList<LSASolution> pop;
 
-	LSAIndividual best, worst;
+	private LSASolution best, worst;
 
-	int ch_time;
-	int max_ch_time;
+	private int ch_time;
+	private int max_ch_time;
 
 	public LSA(int pop_size, int max_time) 
 	{
@@ -41,14 +36,16 @@ public class LSA extends Algorithm
 		this.N = pop_size;
 		this.max_ch_time = max_time;
 		
-		ai = new AlgorithmInfo("Lightning search algorithm ","clanek","LSA","LSA");    
+		ai = new AlgorithmInfo("Lightning Search Algorithm",
+				"H. Shareef, A.H. Mutlag, Lightning Search Algorithm, Applied Soft Computing, 2015",
+				"LSA",
+				"Phsyics-based metaheuristics algorithm");    
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE,N + "");
 
-		au =  new Author("Tadej Klakocer", "tadej.klakocer@student.um.si"); //EARS author info	 
+		au =  new Author("Tadej Klakocer", "tadej.klakocer@student.um.si");
 	}
 
-	public LSA()
-	{
+	public LSA(){
 		this(50, 10);
 	}
 
@@ -56,29 +53,27 @@ public class LSA extends Algorithm
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException 
 	{
 		D = taskProblem.getDimensions();
-		//int max_iter = 500; //200.000 evalvacij
+		
 		int iter = 0;
 
 		double max_iter = (taskProblem.getMaxEvaluations() - N) / N;  //-initpopulation!
 
 		ch_time = 0;
 
-		//System.out.println("max_iteracij: "  + max_iter);
 		double[] direct = new double[N];
 
 		for(int i=0;i<D;i++)
 		{
-			direct[i] = Util.nextInt(3) - 1.0 ; // -1, 0, 1
-			//System.out.println(direct[i]);		
+			direct[i] = Util.nextInt(3) - 1.0 ; // -1, 0, 1	
 		}
 
-		//inicializiramo populacijo
+		//Inicializacija populacije
 		initPopulation(taskProblem);
 
-		//glavna zanka algoritma
+		//Glavna zanka algoritma
 		while (!taskProblem.isStopCriteria())
 		{
-			//eval population, prva iteracij je že evaluirana
+			// Ovrednotenje populacije, prva iteracija že ovrednotena
 			if(iter > 0)
 			{
 				//tu se zgubi par evalvacij, ker so pri zamenjavi nekateri že pravilno ocenjeni 
@@ -86,7 +81,7 @@ public class LSA extends Algorithm
 				Evaluate(taskProblem);
 			}
 
-			//update channel
+			// Update channel
 			UpdateChannel(taskProblem);
 
 			// Ranking the fitness value
@@ -100,59 +95,44 @@ public class LSA extends Algorithm
 
 			for (int i=0; i<N; i++) 
 			{	
-				//global best set
+				// Poišèe global best
 				if (taskProblem.isFirstBetter(pop.get(i), best)) 
 				{
 					best = pop.get(i);
 				}
 
-				//worst set
+				// Poišèe global worst
 				if (taskProblem.isFirstBetter(worst, pop.get(i))) 
 				{
 					worst = pop.get(i);					
 				}					
 			}
 
+			// Update energy
+			double Energy = 2.05 - 2.0 * Math.exp(-5.0 * (max_iter - iter ) / max_iter);
 
-			double Energy = 2.05 - 2.0 * Math.exp(-5.0 * (max_iter - iter ) / max_iter);// Update energy
-
-			//double Energy = 2.05 - 2.0 * Math.exp(-5.0 * (taskProblem.getMaxEvaluations() - taskProblem.getNumberOfEvaluations() ) / taskProblem.getMaxEvaluations());// Update energy
-
-			//System.out.println(Energy);
-
-			// update direction
+			// Update direction
 			direct = UpdateDirect(taskProblem, direct);
 
-			// update position
+			// Update position
 			UpdatePositions(taskProblem, direct, Energy);
 
-			//po psevdokodu iz èlanka
-			if(best.getEval() == worst.getEval())
-			{ 		
-				//System.out.println("best == worst");
+			// Po psevdokdu iz èlanka (èe sta best in worst enaka)
+			if(best.getEval() == worst.getEval())		
 				break;
-			}
-
+			
 			iter++;
-			//System.out.println(iter + " / " + max_iter);
 
-			if (taskProblem.isStopCriteria()) break;
-
-			/*
-			if(iter == max_iter)
-			{
-				System.out.println("iteracija full");
+			if (taskProblem.isStopCriteria()) 
 				break;
-
-			}
-			*/
+			
 		}
 
 		//% select the optimal value
 		//grandmin = min(fitness);	
 		worst = pop.get(0);
 
-		//ni potrebno , sem pregledal in je pred tem enak best individual
+		// Poišèe best in worst, preden vrne najboljšo rešitev. 
 		for(int i=0;i<N;i++)
 		{
 			if(taskProblem.isFirstBetter(pop.get(i), best))
@@ -162,34 +142,19 @@ public class LSA extends Algorithm
 				worst = pop.get(i);
 		}
 
-		//System.out.println("besteval: " + best.getEval());
-		//System.out.println("worsteval: " + worst.getEval());
-		//System.out.println(iter   + " / " + max_iter);
-
 		return best;
 	}
 
-	//eval fitnes populacije
-	public void Evaluate(Task taskProblem) throws StopCriteriaException
+	// Ovrednotenje celotne populacije
+	private void Evaluate(Task taskProblem) throws StopCriteriaException
 	{
 		for (int i=0;i<N;i++)
 		{		
 			if (taskProblem.isStopCriteria()) break;	
-
-			//if(pop.get(i).getEvalviran() == false)
-			//	{
-			//System.out.println("nov eval potreben");
-
-
-			//{		
-			LSAIndividual tmp = new LSAIndividual(taskProblem.eval(pop.get(i).getNewVariables()));
+	
+			LSASolution tmp = new LSASolution(taskProblem.eval(pop.get(i).getNewVariables()));
 			pop.set(i, tmp);
-			//pop.get(i).setEvalviran(false);
-			//}	
-			//	}
-			///else
-			//	System.out.println("že evalviran");
-
+		
 			//isce best
 			if (taskProblem.isFirstBetter(pop.get(i), best))
 				best = pop.get(i);			
@@ -197,7 +162,7 @@ public class LSA extends Algorithm
 	}
 
 	//update channel funkcija
-	public void UpdateChannel(Task taskProblem)
+	private void UpdateChannel(Task taskProblem)
 	{
 		int best_indeks = 0;
 		int worst_indeks = 0;
@@ -212,8 +177,6 @@ public class LSA extends Algorithm
 			if(taskProblem.isFirstBetter(pop.get(worst_indeks), pop.get(i)))
 				worst_indeks = i;
 
-			//	if(taskProblem.isFirstBetter(pop.get(i), best))
-			//	best = pop.get(i);
 		}
 
 		if (ch_time >= max_ch_time)
@@ -233,7 +196,7 @@ public class LSA extends Algorithm
 		ch_time = ch_time + 1;
 	}
 
-	//kreiranje zaèetne populacije
+	//Ustvari zaèetno populacijo.
 	private void initPopulation(Task taskProb) throws StopCriteriaException
 	{
 		pop = null;
@@ -243,7 +206,7 @@ public class LSA extends Algorithm
 
 		for (int i=0; i<N; i++) 
 		{	
-			pop.add(new LSAIndividual(taskProb));
+			pop.add(new LSASolution(taskProb));
 
 			//best set
 			if (i==0) 
@@ -262,7 +225,7 @@ public class LSA extends Algorithm
 		}
 	}
 
-	//update direction
+	// Update directions.
 	private double[] UpdateDirect(Task taskProb, double[] direct) throws StopCriteriaException
 	{
 		double [] new_direct = new double[direct.length];
@@ -284,7 +247,7 @@ public class LSA extends Algorithm
 			y[d] = y[d] + direct[d] * 0.005 * (taskProb.getInterval()[d]);
 
 			//eval
-			LSAIndividual test = new LSAIndividual(taskProb.eval(y));
+			LSASolution test = new LSASolution(taskProb.eval(y));
 
 			if(taskProb.isFirstBetter(test, best))
 			{
@@ -299,7 +262,7 @@ public class LSA extends Algorithm
 		return new_direct;
 	}
 
-	//update position of lightning strikes
+	// Update position of lightning strikes (premik na novo pozicijo).
 	private void UpdatePositions(Task taskProb, double [] direct, double Energy) throws StopCriteriaException
 	{
 		for (int i = 0; i < N;i++)
@@ -344,7 +307,7 @@ public class LSA extends Algorithm
 
 			if (taskProb.isStopCriteria()) break;
 
-			LSAIndividual tmp = new LSAIndividual(taskProb.eval(tmp_x));
+			LSASolution tmp = new LSASolution(taskProb.eval(tmp_x));
 
 			//fv = evaluateF(Dpoint_temp,F_index);
 			//  if (fv < Ec(i))
@@ -360,31 +323,25 @@ public class LSA extends Algorithm
 				{
 					//System.out.println("forking");
 
-					double [] fock_x = new double[D];
+					double [] fork_x = new double[D];
 
-					for( int d = 0;d<D;d++)
-					{
+					for( int d = 0;d<D;d++){
 						//Dpoint_fock(d) = UB(d)+LB(d)-Dpoint_temp(d);// Forking
-						fock_x[d] = taskProb.getUpperLimit()[d] + taskProb.getLowerLimit()[d] - tmp_x[d];
+						fork_x[d] = taskProb.getUpperLimit()[d] + taskProb.getLowerLimit()[d] - tmp_x[d];
 
 					}//end for dimenzije
 
-					if (taskProb.isStopCriteria()) break;
-					LSAIndividual fock_tmp = new LSAIndividual(taskProb.eval(fock_x));
-					//fock_tmp.setEvalviran(true);
-
-					//fock_tmp.setEvalviran();
-					//fock_fit = evaluateF(Dpoint_fock,F_index); // Evaluate
-
+					if (taskProb.isStopCriteria()) 
+						break;
+					
+					LSASolution fork_tmp = new LSASolution(taskProb.eval(fork_x));
 					//         if fock_fit < Ec(i) 
 					//               Dpoint(i,:) = Dpoint_fock; % Replace the channel
 					//                      Ec(i) = fock_fit;
 					//                  end
-					if(taskProb.isFirstBetter(fock_tmp, pop.get(i)))
-					{
-						pop.set(i, fock_tmp); //replace the channel
-					}
-
+					if(taskProb.isFirstBetter(fork_tmp, pop.get(i)))
+						pop.set(i, fork_tmp); //replace the channel
+					
 				}//end   
 			}//end if
 		}
@@ -394,7 +351,7 @@ public class LSA extends Algorithm
 	private static boolean isSpareReady = false;
 
 	//normrnd matlab funkcija
-	public static synchronized double normrnd(double mean, double stdDev) {
+	private static synchronized double normrnd(double mean, double stdDev) {
 		if (isSpareReady) {
 			isSpareReady = false;
 			return spare * stdDev + mean;
@@ -413,7 +370,7 @@ public class LSA extends Algorithm
 	}
 
 	//exprnd matlab funkcija
-	public double exprnd(double mu)
+	private double exprnd(double mu)
 	{
 		return -Math.log(Util.nextDouble()) * mu;
 	}

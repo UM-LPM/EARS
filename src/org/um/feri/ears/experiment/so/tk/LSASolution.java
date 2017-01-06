@@ -4,24 +4,18 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 
-public class LSAIndividual extends DoubleSolution 
+public class LSASolution extends DoubleSolution 
 {
-	//private boolean evalviran = false;
-	
-	
-	//public boolean getEvalviran(){ return evalviran;}
-	//public void setEvalviran(boolean value){ evalviran = value;}
-	
-	public LSAIndividual(DoubleSolution eval) 
+	//nekaj test
+	public LSASolution(DoubleSolution eval) 
 	{
 		super(eval);	
 		//evalviran = true;
-		
 		//v = new double[eval.getX().length];	
 		//v_after = new double[eval.getX().length];
 	}
 	
-	public LSAIndividual(LSAIndividual eval) 
+	public LSASolution(LSASolution eval) 
 	{
 		super(eval);	
 		//this.evalviran = eval.evalviran;
@@ -35,7 +29,7 @@ public class LSAIndividual extends DoubleSolution
 	
 	}
 
-	public LSAIndividual(Task t) throws StopCriteriaException 
+	public LSASolution(Task t) throws StopCriteriaException 
 	{
 		super(t.getRandomSolution());
 		//evalviran = true;

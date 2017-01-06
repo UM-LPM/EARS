@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 
-public class CBOIndividual extends DoubleSolution
+public class ECBOSolution extends DoubleSolution
 {
 	double v[];
 	double v_after[];
@@ -14,14 +14,18 @@ public class CBOIndividual extends DoubleSolution
 	double masa;
 	boolean stacionarni;
 	
-	public CBOIndividual(DoubleSolution eval) 
+	
+	
+	
+	
+	public ECBOSolution(DoubleSolution eval) 
 	{
 		super(eval);	
 		v = new double[eval.getVariables().size()];	
 		v_after = new double[eval.getVariables().size()];
 	}
 	
-	public CBOIndividual(CBOIndividual eval) 
+	public ECBOSolution(ECBOSolution eval) 
 	{
 		super(eval);	
 		
@@ -34,7 +38,7 @@ public class CBOIndividual extends DoubleSolution
 	
 	}
 	
-	public CBOIndividual(Task t) throws StopCriteriaException 
+	public ECBOSolution(Task t) throws StopCriteriaException 
 	{
 		super(t.getRandomSolution());
 		v = new double[t.getDimensions()];
@@ -71,7 +75,7 @@ public class CBOIndividual extends DoubleSolution
 	{
         //if (object != null && object instanceof CBOIndividual) 
         {
-        	CBOIndividual thing = (CBOIndividual) object;
+        	ECBOSolution thing = (ECBOSolution) object;
         	
         	if(this.getEval() == thing.getEval())
         		return true;

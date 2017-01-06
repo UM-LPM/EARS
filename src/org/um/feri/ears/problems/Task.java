@@ -321,7 +321,6 @@ public class Task extends TaskBase<Problem> {
 			incEvaluate();
 			long start = System.nanoTime();
 			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
-			evaluationTime +=  System.nanoTime() - start;
 			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			return tmpSolution;

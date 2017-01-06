@@ -1,11 +1,14 @@
 package org.um.feri.ears.experiment.so.tk;
 
 
+import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.gsa.GSA;
+import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.ProblemRosenbrock;
+import org.um.feri.ears.problems.unconstrained.ProblemBranin;
 import org.um.feri.ears.problems.unconstrained.ProblemSphere;
 import org.um.feri.ears.problems.unconstrained.cec2010.F1;
 import org.um.feri.ears.problems.unconstrained.cec2010.F10;
@@ -19,16 +22,13 @@ public class FizikaRunner {
 	//run metoda main
 	public static void main(String[] args) 
 	{	
-		Util.rnd.setSeed(100);
+		Util.rnd.setSeed(System.currentTimeMillis());
 
 
 		//ECBO a = new ECBO();
-
-		//	EML a = new EML(); 
+		//EML a = new EML(); 
 		//GSA a = new GSA(); 
 		//LSA a = new LSA();
-
-		//še v testiranju, kodiranju, popravljanju
 		//CSS a = new CSS();
 
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.0001, new ProblemSphere(30));
@@ -42,7 +42,7 @@ public class FizikaRunner {
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.0001, new Shekel7(4));
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.000001, new Branin(2));
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.001, new Step(30));  
-		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.001, new Griewank(2));  
+	//	Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.001, new Griewank(2));  
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.001, new Rosenbrock(30));  
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.0001, new Ackley(10));  
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.001, new SixHumpCamelBack(2));
@@ -51,18 +51,24 @@ public class FizikaRunner {
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.0001, new F1(30));
 
 		//Task t = new Task(EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS, 200000, 0.0001, new FX(1,30));
-
-
+		//new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin)
+		//new RandomWalkAlgorithm()
+		
 		double avg_eval = 0;
 		double best = 99999;
 		double avg_best = 0;
 		double worst = -9999;
 		
-		for(int i = 0;i < 30;i++)
+		int runs = 1;
+		
+		for(int i = 0;i < runs;i++)
 		{
-			EML2 a = new EML2(); 
-
-			Task t = new Task(EnumStopCriteria.EVALUATIONS, 200000, 500, 300, 0.0001, new ProblemSphere(30));  
+			//DEAlgorithm a = new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin);
+			
+			CSS a = new CSS();
+			
+		
+			Task t = new Task(EnumStopCriteria.EVALUATIONS, 200000, 500, 300, 0.0001, new ProblemBranin());  
 
 			try 		    
 			{		
@@ -87,8 +93,8 @@ public class FizikaRunner {
 
 		}
 
-		avg_eval = avg_eval / 30.0;
-		avg_best = avg_best / 30.0;
+		avg_eval = avg_eval / (double)runs;
+		avg_best = avg_best / (double)runs;
 
 		System.out.println("AVG EVAl:" + avg_eval + "  bestfx:" + best);
 		System.out.println("worstfx: "  + worst);

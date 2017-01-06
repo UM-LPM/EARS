@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.so.cro.CRO;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.gsa.GSA;
 import org.um.feri.ears.algorithms.so.pso.PSO;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
@@ -62,19 +63,21 @@ public class FizikaCompetition {
 		players.add(new RandomWalkAlgorithm());
 		players.add(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin));
 		
+		//PHYSICS BASED ALGORITHMS
 		players.add(new CSS());
-		players.add(new EML2());
+		players.add(new EM());
 		players.add(new ECBO());
 		players.add(new LSA());
+		players.add(new GSA());
 		
 		ResultArena ra = new ResultArena(100); 
-		RatingRPUOed2 rpuoed2 = new RatingRPUOed2(); //Create banchmark
-		RatingRPUOed30 rpuoed30 = new RatingRPUOed30();
+		//RatingRPUOed2 rpuoed2 = new RatingRPUOed2(); //Create banchmark
+		//RatingRPUOed30 rpuoed30 = new RatingRPUOed30();
 		RatingCEC2015 cec = new RatingCEC2015();
 
 		//RatingCEC2014 suopm = new RatingCEC2014();
-		rpuoed2.registerAlgorithms(players);
-		rpuoed30.registerAlgorithms(players);
+		//rpuoed2.registerAlgorithms(players);
+		//rpuoed30.registerAlgorithms(players);
 		cec.registerAlgorithms(players);
 
 
@@ -84,7 +87,10 @@ public class FizikaCompetition {
 		BankOfResults ba = new BankOfResults();
 		//rpuoed2.run(ra, ba, 50);
 		//rpuoed30.run(ra, ba, 10);
-		rpuoed30.run(ra, ba, 10);
+		//rpuoed30.run(ra, ba, 10);
+		
+		cec.run(ra, ba, 1);
+		
 		ArrayList<Player> list = new ArrayList<Player>();
 		list.addAll(ra.calculteRatings());
 		for (Player p: list) System.out.println(p);
