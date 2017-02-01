@@ -51,9 +51,9 @@ public class PSO extends Algorithm  {
 			for (int i=0; i<pop_size; i++) {
 				//rp = Util.rnd.nextDouble(); better to use vector of real numbers
 				//rg = Util.rnd.nextDouble(); 
-				v = new double[task.getDimensions()];
+				v = new double[task.getNumberOfDimensions()];
 				// r*vec(x) double r = Util.rnd.nextDouble();
-				for (int d=0; d<task.getDimensions(); d++) {
+				for (int d=0; d<task.getNumberOfDimensions(); d++) {
 					v[d] = omega*(
 							pop_x.get(i).getV()[d])+
 							phiP* Util.rnd.nextDouble()*(pop_x.get(i).getP().getVariables().get(d)-pop_x.get(i).getVariables().get(d))+

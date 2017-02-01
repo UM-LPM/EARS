@@ -168,7 +168,7 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 	@Override
     public void run(ResultArena arena, BankOfResults allSingleProblemRunResults, int repetition) {
         duelNumber = repetition;
-        parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_DEULS, ""+repetition);
+        parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, ""+repetition);
         long start = System.nanoTime();
         for (Task t:listOfProblems) {
         	System.out.println("Current problem: "+t.getProblemName());
@@ -185,12 +185,12 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
         {
         	System.out.println("The reset count does not match!");
         }
-        
         // Recalculate ratings after tournament
         arena.calculteRatings();
         
         if(displayRatingIntervalChart)
         {
+
         	displayRatingIntervalsChart(arena.getPlayers());
         }
         

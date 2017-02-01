@@ -80,11 +80,11 @@ public class PSOPBC extends Algorithm {
 
 			} else {
 				for (int i = 0; i < populationSize; i++) {
-					velocity = new double[task.getDimensions()];
+					velocity = new double[task.getNumberOfDimensions()];
 					RAND1 = Util.rnd.nextDouble();
 					RAND2 = Util.rnd.nextDouble();
 
-					for (int j = 0; j < task.getDimensions(); j++) {
+					for (int j = 0; j < task.getNumberOfDimensions(); j++) {
 						velocity[j] = w * population.get(i).getV()[j]
 								+ c1 * RAND1 * (population.get(i).getPbest().getVariables().get(j) - population.get(i).getVariables().get(j))
 								+ c2 * RAND2 * (Gbest.getVariables().get(j) - population.get(i).getVariables().get(j));

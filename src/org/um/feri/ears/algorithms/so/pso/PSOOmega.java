@@ -49,9 +49,9 @@ public class PSOOmega extends Algorithm  {
 			for (int i=0; i<pop_size; i++) {
 				rp = Util.rnd.nextDouble();
 				rg = Util.rnd.nextDouble();
-				v = new double[task.getDimensions()];
+				v = new double[task.getNumberOfDimensions()];
 				// r*vec(x) double r = Util.rnd.nextDouble();
-				for (int d=0; d<task.getDimensions(); d++) {
+				for (int d=0; d<task.getNumberOfDimensions(); d++) {
 					//http://www.atscience.org/IJISAE/article/view/7
 					//omega different formula omega multiplies with 
 					v[d] = omega*(

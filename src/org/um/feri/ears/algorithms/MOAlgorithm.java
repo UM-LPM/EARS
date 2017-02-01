@@ -165,7 +165,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 	public ParetoSolution<Type> execute(T taskProblem) throws StopCriteriaException
 	{
 		task = taskProblem;
-		num_var = task.getDimensions();
+		num_var = task.getNumberOfDimensions();
 		num_obj = task.getNumberOfObjectives();
 		
 		//ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");

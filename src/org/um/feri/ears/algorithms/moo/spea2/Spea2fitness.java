@@ -100,7 +100,8 @@ public class Spea2fitness {
 				i++;
 			}
 		}
-
+		
+		// archive not full yet
 		if (aux.size() < size) {
 			Comparator comparator = new MOFitnessComparator();
 			solutionSet_.sort(comparator);
@@ -112,7 +113,9 @@ public class Spea2fitness {
 		} else if (aux.size() == size) {
 			return aux;
 		}
-
+		
+		// archive overfilled
+		
 		double[][] distance = distance_.distanceMatrix(aux);
 		List<List<DistanceNode>> distanceList = new LinkedList<List<DistanceNode>>();
 		for (int pos = 0; pos < aux.size(); pos++) {

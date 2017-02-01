@@ -45,8 +45,8 @@ public class PSOoriginal extends Algorithm {
 		double v[];
 		while (!task.isStopCriteria()) {
 			for (int i = 0; i < populationSize; i++) {
-				v = new double[task.getDimensions()];
-				for (int d = 0; d < task.getDimensions(); d++) {
+				v = new double[task.getNumberOfDimensions()];
+				for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 					PSOoriginalSolution P = population.get(i);
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();

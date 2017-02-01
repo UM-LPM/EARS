@@ -92,7 +92,7 @@ public abstract class TaskBase<T extends ProblemBase> {
 	    return epsilon;
 	}
 	
-	public int getDimensions() {
+	public int getNumberOfDimensions() {
 		return p.getNumberOfDimensions();
 	}
 	

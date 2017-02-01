@@ -33,9 +33,9 @@ public class PSOSSolution extends DoubleSolution implements Comparable<PSOSSolut
 	}
 	public PSOSSolution(Task t) throws StopCriteriaException {
 		super(t.getRandomSolution());
-		v = new double[t.getDimensions()];
+		v = new double[t.getNumberOfDimensions()];
 		double l; double r;
-		for (int i=0; i<t.getDimensions(); i++) {
+		for (int i=0; i<t.getNumberOfDimensions(); i++) {
 			l = -Math.abs(t.getUpperLimit()[i]-t.getLowerLimit()[i])/4; 
 			r = Math.abs(t.getUpperLimit()[i]-t.getLowerLimit()[i])/4; 
 		    v[i] = Util.nextDouble(l,r);

@@ -50,8 +50,8 @@ public class PSOoriginalLogging extends Algorithm {
 		double v[];
 		while (!taskProblem.isStopCriteria()) {
 			for (int i = 0; i < populationSize; i++) {
-				v = new double[taskProblem.getDimensions()];
-				for (int d = 0; d < taskProblem.getDimensions(); d++) {
+				v = new double[taskProblem.getNumberOfDimensions()];
+				for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
 					PSOoriginalSolution P = population.get(i);
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();

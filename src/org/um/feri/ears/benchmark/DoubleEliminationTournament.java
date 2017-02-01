@@ -4,40 +4,52 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
+import org.um.feri.ears.util.Cache;
+import org.um.feri.ears.util.FutureResult;
 import org.um.feri.ears.util.PermutationUtility;
 import org.um.feri.ears.util.Util;
 
 public class DoubleEliminationTournament {
 	
 	ArrayList<QualityIndicator> ensemble;
-	DoubleMOProblem problem;
+	DoubleMOTask task;
 	int playerCount;
 	HashMap<String, Double> averageRanks;
 	ArrayList<MOAlgorithm> players;
 	
-	public void run(int tournamentSize, ArrayList<IndicatorName> indicators, ArrayList<MOAlgorithm> players, DoubleMOProblem problem, int rep){
-		this.problem = problem; 
+	public void run(int tournamentSize, ArrayList<IndicatorName> indicators, ArrayList<MOAlgorithm> players, DoubleMOTask task, int rep){
+		this.task = task; 
 		playerCount = players.size();
 		this.players = players;
 		
 		fillEnsemble(indicators);
 		
 		//generate approximations for the tournament
-		ArrayList<MOAlgorithmEvalResult> participants = getParticipants(tournamentSize, players);
+		ArrayList<MOAlgorithmEvalResult> participants = getParticipants(tournamentSize, players, false);
 		fillPlayers(players);
 		
 		
@@ -61,6 +73,7 @@ public class DoubleEliminationTournament {
 		ArrayList<MOAlgorithmEvalResult> participantsCopy = new ArrayList<>(participants);
 		for (int i = 0; i < numberOfRepetitions; i++) {
 			
+			System.out.println("Repetition: "+i);
 
 			ArrayList<MOAlgorithmEvalResult> ranking = new ArrayList<MOAlgorithmEvalResult>();
 
@@ -128,6 +141,8 @@ public class DoubleEliminationTournament {
 				rankAbsentAlgorithms(ranking);
 		}
 		
+		sortByComparator(averageRanks,false);
+		
 		for(Entry<String, Double> entry : averageRanks.entrySet()) {
 		    String name = entry.getKey();
 		    Double avgRank = (double) (entry.getValue() / numberOfRepetitions);
@@ -179,7 +194,14 @@ public class DoubleEliminationTournament {
 			MOAlgorithmEvalResult p1 = first.get(per1[i]);
 			MOAlgorithmEvalResult p2 = second.get(per2[i]);
 			QualityIndicator qi = getMetric();
-
+			
+			try {
+				p1.getBest().evaluate(qi);
+				p2.getBest().evaluate(qi);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			
 			try {
 				if(p1.getBest().isFirstBetter(p2.getBest(), qi))
 				{
@@ -206,6 +228,14 @@ public class DoubleEliminationTournament {
 			MOAlgorithmEvalResult p1 = participants.get(per[index]);
 			MOAlgorithmEvalResult p2 = participants.get(per[index + 1]);
 			QualityIndicator qi = getMetric();
+			
+
+			try {
+				p1.getBest().evaluate(qi);
+				p2.getBest().evaluate(qi);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 			
 			try {
 				if(p1.getBest().isFirstBetter(p2.getBest(), qi))
@@ -247,49 +277,153 @@ public class DoubleEliminationTournament {
 
 	}
 
-	private ArrayList<MOAlgorithmEvalResult> getParticipants(int tournamentSize, ArrayList<MOAlgorithm> players) {
+	private ArrayList<MOAlgorithmEvalResult> getParticipants(int tournamentSize, ArrayList<MOAlgorithm> players, boolean preliminaries) {
 		
 		
 		ArrayList<MOAlgorithmEvalResult> participants = new ArrayList<MOAlgorithmEvalResult>();
 		ArrayList<MOAlgorithmEvalResult> results = new ArrayList<MOAlgorithmEvalResult>();
 		
-		DoubleMOTask task;
-		
-		for(int i = 0; i < tournamentSize; i++){
-			
-			//TODO number of evaluations
-			// get random quality indicator from ensemble
-			QualityIndicator qi = getMetric();
-			task = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 15000, 500, 300, 0.001, problem);
-			for (MOAlgorithm al: players) {
+		if(preliminaries)
+		{
+			for(int i = 0; i < tournamentSize; i++){
+
+				// get random quality indicator from ensemble
+				QualityIndicator qi = getMetric();
 				
-				ParetoSolution bestByALg = null;
 				
-				try {
-					bestByALg = al.execute(task);
-					task.resetCounter();
-				} catch (StopCriteriaException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				results.add(new MOAlgorithmEvalResult(bestByALg, al)); 
+		    	task.resetCounter();
+		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
+		        Set<Future<FutureResult<DoubleMOTask, Double>>> set = new HashSet<Future<FutureResult<DoubleMOTask, Double>>>();
+		        for (MOAlgorithm<DoubleMOTask, Double> al: players) {
+		          Future<FutureResult<DoubleMOTask, Double>> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+		          set.add(future);
+		        }
+
+		        for (Future<FutureResult<DoubleMOTask, Double>> future : set) {
+		        	try {
+		        		FutureResult<DoubleMOTask, Double> res = future.get();
+
+		        		results.add(new MOAlgorithmEvalResult(res.result, res.algorithm)); 
+
+
+					} catch (InterruptedException | ExecutionException e) {
+						e.printStackTrace();
+					}
+		        }
+		        
+		    	pool.shutdown();
+				
+				/*for (MOAlgorithm al: players) {
+
+					ParetoSolution bestByALg = null;
+
+					try {
+						bestByALg = al.execute(task);
+						task.resetCounter();
+					} catch (StopCriteriaException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					results.add(new MOAlgorithmEvalResult(bestByALg, al)); 
+				}*/
+
+				FitnessComparator fc = new FitnessComparator(task, qi);
+				Collections.sort(results, fc); //best first
+				participants.add(results.get(0));
+				results.clear();
 			}
+		}
+		else //same number of approximations for all paticipating algorithms
+		{
+			if(tournamentSize % players.size() != 0)
+			{
+				System.out.println("Increasing tournament size!");
+				tournamentSize += tournamentSize % players.size();
+			}
+			int approxNum = tournamentSize / players.size();
 			
-			FitnessComparator fc = new FitnessComparator(task, qi);
-	        Collections.sort(results, fc); //best first
-	        participants.add(results.get(0));
-	        results.clear();
+			for (int i = 0; i < approxNum; i++) {
+				
+				System.out.println("Run: "+i);
+		    	task.resetCounter();
+		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
+		        Set<Future<FutureResult<DoubleMOTask, Double>>> set = new HashSet<Future<FutureResult<DoubleMOTask, Double>>>();
+		        for (MOAlgorithm<DoubleMOTask, Double> al: players) {
+		          Future<FutureResult<DoubleMOTask, Double>> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+		          set.add(future);
+		        }
+
+		        for (Future<FutureResult<DoubleMOTask, Double>> future : set) {
+		        	try {
+		        		FutureResult<DoubleMOTask, Double> res = future.get();
+
+		        		participants.add(new MOAlgorithmEvalResult(res.result, res.algorithm)); 
+
+
+					} catch (InterruptedException | ExecutionException e) {
+						e.printStackTrace();
+					}
+		        }
+		        
+		    	pool.shutdown();
+				
+				/*for (MOAlgorithm al: players) {
+					ParetoSolution bestByALg = null;
+
+					try {
+						bestByALg = al.execute(task);
+						task.resetCounter();
+					} catch (StopCriteriaException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					participants.add(new MOAlgorithmEvalResult(bestByALg, al)); 
+				}*/
+			}
 		}
 		
 		return participants;
 	}
+	
+    private static HashMap<String, Double> sortByComparator(HashMap<String, Double> unsortMap, final boolean order)
+    {
+
+        List<Entry<String, Double>> list = new LinkedList<Entry<String, Double>>(unsortMap.entrySet());
+
+        // Sorting the list based on values
+        Collections.sort(list, new Comparator<Entry<String, Double>>()
+        {
+            public int compare(Entry<String, Double> o1,
+                    Entry<String, Double> o2)
+            {
+                if (order)
+                {
+                    return o1.getValue().compareTo(o2.getValue());
+                }
+                else
+                {
+                    return o2.getValue().compareTo(o1.getValue());
+
+                }
+            }
+        });
+
+        // Maintaining insertion order with the help of LinkedList
+        HashMap<String, Double> sortedMap = new LinkedHashMap<String, Double>();
+        for (Entry<String, Double> entry : list)
+        {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedMap;
+    }
 
 
 	private void fillEnsemble(ArrayList<IndicatorName> indicators) {
 		ensemble = new ArrayList<QualityIndicator>();
 		
 		for (IndicatorName name : indicators) {
-			ensemble.add(IndicatorFactory.createIndicator(name, problem.getNumberOfObjectives(),problem.getFileName()));
+			ensemble.add(IndicatorFactory.createIndicator(name, task.getNumberOfObjectives(),task.getProblemFileName()));
 		}
 	}
 	

@@ -100,7 +100,7 @@ public class Rating {
         return GLICKO2_CONSTANT * glicko2RatingDeviation;
     }
     public String toString() {
-        return Util.df1.format(rating)+" SD:"+Util.df1.format(RD)+" ro:"+Util.df3.format(this.ratingVolatility);
+        return Util.df1.format(rating)+" RD:"+Util.df1.format(RD)+" ro:"+Util.df3.format(this.ratingVolatility);
     }
 
 }

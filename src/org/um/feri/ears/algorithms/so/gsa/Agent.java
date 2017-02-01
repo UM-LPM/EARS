@@ -18,19 +18,19 @@ public class Agent extends DoubleSolution{
 
     public Agent(Task t,int id) throws StopCriteriaException {
         super(t.getRandomSolution());
-        velocities = new double[t.getDimensions()];
-        forces = new double[t.getDimensions()];
-        solutionSize = t.getDimensions();
+        velocities = new double[t.getNumberOfDimensions()];
+        forces = new double[t.getNumberOfDimensions()];
+        solutionSize = t.getNumberOfDimensions();
 
     }
 
     public Agent(DoubleSolution ds,Task t)
     {
         super(ds);
-        velocities = new double[t.getDimensions()];
+        velocities = new double[t.getNumberOfDimensions()];
         //Arrayscopy
-        forces = new double[t.getDimensions()];
-        solutionSize = t.getDimensions();
+        forces = new double[t.getNumberOfDimensions()];
+        solutionSize = t.getNumberOfDimensions();
         //mass
     }
 
@@ -39,7 +39,7 @@ public class Agent extends DoubleSolution{
         super(a);
         velocities = Arrays.copyOf(a.getVelocities(),a.getVelocities().length);
         forces = Arrays.copyOf(a.getForces(),a.getForces().length);
-        solutionSize = t.getDimensions();
+        solutionSize = t.getNumberOfDimensions();
         mass = a.getMass();
     }
 

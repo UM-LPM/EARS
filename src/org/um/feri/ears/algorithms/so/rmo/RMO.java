@@ -52,8 +52,8 @@ public class RMO extends Algorithm
 		DoubleSolution globalBest_s = null;
 		
 		//Generate initial pop
-		X = new double[pop_size][taskProblem.getDimensions()];
-		V = new double[pop_size][taskProblem.getDimensions()];
+		X = new double[pop_size][taskProblem.getNumberOfDimensions()];
+		V = new double[pop_size][taskProblem.getNumberOfDimensions()];
 		
 		for (int i = 0; i < pop_size; ++i)
 		{

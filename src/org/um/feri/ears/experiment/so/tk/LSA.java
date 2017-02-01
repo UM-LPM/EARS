@@ -52,7 +52,7 @@ public class LSA extends Algorithm
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException 
 	{
-		D = taskProblem.getDimensions();
+		D = taskProblem.getNumberOfDimensions();
 		
 		int iter = 0;
 

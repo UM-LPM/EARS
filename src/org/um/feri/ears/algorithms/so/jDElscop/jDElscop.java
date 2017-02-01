@@ -82,7 +82,7 @@ public class jDElscop extends Algorithm {
 		double tmp[];
 		double tmp_par[];
 		int odmik;
-		int D = task.getDimensions();
+		int D = task.getNumberOfDimensions();
 		jDElscopSolution pop_tmp[] = new jDElscopSolution[pop_size];
 		while (!task.isStopCriteria()) {
 			// iteration++;

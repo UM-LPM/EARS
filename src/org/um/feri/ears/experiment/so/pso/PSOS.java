@@ -74,8 +74,8 @@ public class PSOS extends Algorithm {
 			for (int i = 0; i < populationSize; i++) {
 				rp = Util.rnd.nextDouble();
 				rg = Util.rnd.nextDouble();
-				v = new double[task.getDimensions()];
-				for (int d = 0; d < task.getDimensions(); d++) {
+				v = new double[task.getNumberOfDimensions()];
+				for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 					v[d] = w * population.get(i).getV()[d] + p1 * rp * (population.get(i).getP().getVariables().get(d) - population.get(i).getVariables().get(d))
 							+ p2 * rg * (PgBest.getVariables().get(d) - population.get(i).getVariables().get(d));
 				}

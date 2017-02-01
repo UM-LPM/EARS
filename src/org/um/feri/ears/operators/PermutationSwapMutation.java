@@ -32,7 +32,7 @@ public class PermutationSwapMutation implements MutationOperator<Integer, Intege
 	   */
 	  public void doMutation(MOSolutionBase<Integer> solution, IntegerMOTask tb) {
 	    int permutationLength ;
-	    permutationLength = tb.getDimensions();
+	    permutationLength = tb.getNumberOfDimensions();
 
 	    if ((permutationLength != 0) && (permutationLength != 1)) {
 	      if (Util.rnd.nextDouble() < mutationProbability) {

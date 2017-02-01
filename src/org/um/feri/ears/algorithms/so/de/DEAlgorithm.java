@@ -194,7 +194,7 @@ public class DEAlgorithm extends Algorithm {
     }
 
     public void init() throws StopCriteriaException {
-        this.D = task.getDimensions();
+        this.D = task.getNumberOfDimensions();
         inibound_h = task.getUpperLimit();
         inibound_l = task.getLowerLimit();
         // this.NP = D * 10; Set by constructor

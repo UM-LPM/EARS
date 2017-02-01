@@ -48,9 +48,9 @@ public class PSOIS extends Algorithm {
 		while (!task.isStopCriteria()) {
 			for (int i = 0; i < populationSize; i++) {
 				improved = false;
-				v = new double[task.getDimensions()];
+				v = new double[task.getNumberOfDimensions()];
 				PSOISSolution P = population.get(i);
-				for (int d = 0; d < task.getDimensions(); d++) {
+				for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();
 					v[d] = w * (P.getV()[d]) + c1 * r1 * (P.getPbest().getVariables().get(d) - P.getVariables().get(d))

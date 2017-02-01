@@ -28,18 +28,18 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     protected ArrayList<T2> listOfAlgorithmsPlayers;
     protected boolean recheck = false;
     protected boolean displayRatingIntervalChart = true;
+    public static boolean printSingleRunDuration = false;
     
    	// Default benchmark settings
     protected EnumStopCriteria stopCriteria = EnumStopCriteria.EVALUATIONS; 
     protected int maxEvaluations = 1500;
     protected long timeLimit = TimeUnit.MILLISECONDS.toNanos(500); //milliseconds
     protected int maxIterations = 500;
-    public double draw_limit = 10e-7;
+    public double draw_limit = 1e-7;
     protected int dimension = 2;
     
     protected ArrayList<T3> results;
     protected EnumMap<EnumBenchmarkInfoParameters,String> parameters; //add all specific parameters
-    public static boolean printSingleRunDuration=true;
     protected int duelNumber;
     private int resetCallCounter; // increment when calling task reset counter 
     public void addParameter(EnumBenchmarkInfoParameters id, String value){

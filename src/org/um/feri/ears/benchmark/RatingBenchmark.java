@@ -83,17 +83,14 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
         	reset(task); //number of evaluations  
             try {
                 start = System.nanoTime();
-                if (printSingleRunDuration) {
-            	  System.out.print(al.getID()+": ");
-                }
-                
+         
                 GraphDataRecorder.SetContext(al,task);
                 task.startTimer();
                 DoubleSolution bestByALg = al.execute(task); //check if result is fake!
 
                 duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
                 al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
-                if (printSingleRunDuration) System.out.println(duration/1000.0);
+                if (printSingleRunDuration) System.out.println(al.getID()+": "+duration/1000.0);
                 reset(task); //for one eval!
                 if (task.areDimensionsInFeasableInterval(bestByALg.getVariables())) {
 
@@ -218,7 +215,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
      */
     public void run(ResultArena arena, BankOfResults allSingleProblemRunResults, int repetition) {
         duelNumber = repetition;
-        addParameter(EnumBenchmarkInfoParameters.NUMBER_OF_DEULS, ""+repetition);
+        addParameter(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, ""+repetition);
         long start = System.nanoTime();
         for (Task t:listOfProblems) {
         	System.out.println("Current problem: "+t.getProblemName());

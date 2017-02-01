@@ -69,7 +69,7 @@ public class DummyRating extends RatingBenchmark{
     }
     public DummyRating(double draw_limit) {
         super();
-        this.draw_limit = draw_limit;
+        this.draw_limit = 1E-2;
         maxEvaluations=3000;
         dimension=3;
         maxIterations = 0;
@@ -91,6 +91,30 @@ public class DummyRating extends RatingBenchmark{
      */
     @Override
     protected void initFullProblemList() {
+    	
+    	
+    	registerTask(new DummyProblem("f1"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f2"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f3"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f4"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f5"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f6"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f7"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f8"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f9"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f10"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f11"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f12"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f13"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f14"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f15"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f16"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f17"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f18"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f19"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f20"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f21"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f22"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
     	
     	//Grouped by method
     	/*
@@ -121,13 +145,13 @@ public class DummyRating extends RatingBenchmark{
     	registerTask(new DummyProblem("300HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
     	registerTask(new DummyProblem("750HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
     	registerTask(new DummyProblem("9s20_c4"),stopCriteria, evaluationsOnDimension, 0.001);*/
-    	
+    	/*
     	registerTask(new DummyProblem("en300_c5"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
     	registerTask(new DummyProblem("1HZ_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
     	registerTask(new DummyProblem("50HZ_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
     	registerTask(new DummyProblem("300HZ_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
     	registerTask(new DummyProblem("750HZ_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("9s20_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("9s20_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);*/
     	
     	
     	// Grouped by material

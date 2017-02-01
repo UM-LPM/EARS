@@ -70,13 +70,13 @@ public class PSODOP extends Algorithm {
 				PSOoriginalSolution Pj = population.get(jj);
 				PSOoriginalSolution Pk = population.get(kk);
 
-				double Pd[] = new double[taskProblem.getDimensions()];
-				for (int d = 0; d < taskProblem.getDimensions(); d++) {
+				double Pd[] = new double[taskProblem.getNumberOfDimensions()];
+				for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
 					Pd[d] = Pk.getVariables().get(d) - Pj.getVariables().get(d);
 				}
 
-				v = new double[taskProblem.getDimensions()];
-				for (int d = 0; d < taskProblem.getDimensions(); d++) {
+				v = new double[taskProblem.getNumberOfDimensions()];
+				for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();
 					double sigma = c1 * (P.getPbest().getVariables().get(d) - P.getVariables().get(d));

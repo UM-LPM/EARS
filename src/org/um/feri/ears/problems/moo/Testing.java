@@ -21,7 +21,6 @@ public class Testing {
     	//filePareto.displayAllUnaryQulaityIndicators(zdt);
 
     	
-    	
 
     	DoubleMOTask t1 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 500, 300, 0.0001, new UnconstrainedProblem1());
     	DoubleMOTask t2 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 500, 300, 0.0001, new UnconstrainedProblem1());

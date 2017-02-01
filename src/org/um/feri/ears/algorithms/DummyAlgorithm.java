@@ -30,7 +30,7 @@ public class DummyAlgorithm extends Algorithm{
 		File folder = new File("D:/Results/");
 		File[] listOfFiles = folder.listFiles();
 		
-		String pathName = "_"+name+"_";
+		String pathName = name+"_";
 		String problemName, fileName, value;
 		
 		for (File file : listOfFiles) {
@@ -38,15 +38,15 @@ public class DummyAlgorithm extends Algorithm{
 				fileName = file.getName().toLowerCase();
 				if(fileName.toLowerCase().contains(pathName.toLowerCase()))
 				{
-					problemName = fileName.substring(fileName.indexOf(pathName)+pathName.length(),fileName.length()-4);
+					problemName = fileName.substring(fileName.indexOf(pathName)+pathName.length()+1,fileName.length()-4);
 					double[] resultArray = new double[10000];
 					int index = 0;
 					try(BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
 						String line = br.readLine();
 
 						while (line != null && index < resultArray.length) {
-							value = line.split("  ")[1];
-							resultArray[index] = Double.parseDouble(value);
+							
+							resultArray[index] = Double.parseDouble(line);
 							line = br.readLine();
 							index++;
 						}

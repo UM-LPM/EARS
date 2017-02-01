@@ -50,18 +50,18 @@ public class PSOQ extends Algorithm {
 			if (task.isStopCriteria())
 				break;
 			
-			mBest = new double[task.getDimensions()];
+			mBest = new double[task.getNumberOfDimensions()];
 			double sumpBest = 0;
-			for (int d = 0; d < task.getDimensions(); d++) {
+			for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 				for (int i = 0; i < populationSize; i++) {
 					sumpBest += population.get(i).getPbest().getVariables().get(d);
 				}
 				mBest[d] = 1/populationSize * sumpBest;
 			}
 			for (int i = 0; i < populationSize; i++) {
-				v = new double[task.getDimensions()];
+				v = new double[task.getNumberOfDimensions()];
 				
-				for (int d = 0; d < task.getDimensions(); d++) {
+				for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 					PSOQSolution P = population.get(i);
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();

@@ -134,13 +134,13 @@ public class PSOCBCW extends Algorithm {
 
 		while (!task.isStopCriteria()) {
 			for (int i = 0; i < populationSize; i++) {
-				v = new double[task.getDimensions()];
+				v = new double[task.getNumberOfDimensions()];
 
 				double _x[] = population.get(i).getDoubleVariables();
 				double _pBestx[] = population.get(i).getP().getDoubleVariables();
 				double _gBestx[] = _gBest.getDoubleVariables();
 
-				for (int d = 0; d < task.getDimensions(); d++) {
+				for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 					double xi = _x[d] + v[d];
 
 					v[d] = v[d] + phi1 * Util.rnd.nextDouble() * (_pBestx[d] - xi)
@@ -228,7 +228,7 @@ public class PSOCBCW extends Algorithm {
 					double phi = phi1 + phi2;
 					double K = 2 / (Math.abs(2 - phi - Math.sqrt(phi * phi - 4 * phi)));
 
-					for (int d = 0; d < task.getDimensions(); d++) {
+					for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 						prob = Util.rnd.nextDouble();
 
 						double xi = px[d] + v[d];
@@ -256,7 +256,7 @@ public class PSOCBCW extends Algorithm {
 					population.set(stevec, population.get(stevec).update(taskProblem, v));
 					//update(population.get(stevec),v);
 
-					for (int dd = 0; dd < task.getDimensions(); dd++) {
+					for (int dd = 0; dd < task.getNumberOfDimensions(); dd++) {
 						if (inertia[dd] >= task.getLowerLimit()[dd] + epsilon) {
 							inertia[dd] = inertia[dd] - dw - epsilon;
 						}
@@ -369,9 +369,9 @@ public class PSOCBCW extends Algorithm {
 			population.add(new PSOCBCWSolution(task));
 		}
 
-		inertia = new double[task.getDimensions()];
+		inertia = new double[task.getNumberOfDimensions()];
 
-		for (int i = 0; i < task.getDimensions(); i++) {
+		for (int i = 0; i < task.getNumberOfDimensions(); i++) {
 			inertia[i] = w;
 		}
 	}

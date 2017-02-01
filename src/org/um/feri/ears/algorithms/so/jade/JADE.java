@@ -101,7 +101,7 @@ public class JADE extends Algorithm {
 		JADESolution pop_new[] = new JADESolution[pop_size];
 		double tmp[];
 		int j_rand;
-		int D = task.getDimensions();
+		int D = task.getNumberOfDimensions();
 		int r1, r2, pBest;
 		double Fpom;
 		JADESolution in_r2, tmpIn;

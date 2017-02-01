@@ -67,9 +67,9 @@ public class BFO extends Algorithm {
 	}
 	
 	public Bacteria chemotaxis(Bacteria b, Task task) throws StopCriteriaException {
-		double di[] = new double[task.getDimensions()];
+		double di[] = new double[task.getNumberOfDimensions()];
 		double cb[] = b.getDoubleVariables();
-		double xn[] = new double[task.getDimensions()];
+		double xn[] = new double[task.getNumberOfDimensions()];
 		double rootProduct = 0;	
 		for (int i = 0; i < di.length; i++) { 
 			di[i] = 2 * rnd.nextDouble() - 1;

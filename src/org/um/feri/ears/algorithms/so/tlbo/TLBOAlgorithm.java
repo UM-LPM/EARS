@@ -284,7 +284,7 @@ public class TLBOAlgorithm extends Algorithm {
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
         task = taskProblem;
-        num_var = task.getDimensions();
+        num_var = task.getNumberOfDimensions();
         // max_eval = task.getMaxEvaluations();
         stat = new Statistic(task);
         init();

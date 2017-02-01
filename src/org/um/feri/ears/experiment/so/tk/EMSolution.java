@@ -41,7 +41,7 @@ public class EMSolution extends DoubleSolution
 		super(t.getRandomSolution());
 		
 		Q = 0.0;
-		Fi = new double[t.getDimensions()];
+		Fi = new double[t.getNumberOfDimensions()];
 	}
 	
 }

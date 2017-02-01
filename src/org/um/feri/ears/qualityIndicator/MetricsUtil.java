@@ -208,7 +208,7 @@ public final class MetricsUtil<T> {
 	 * Returns the Manhattan distance in objective space between the two
 	 * solutions.
 	 * 
-	 * @param problem the problem
+	 * @param task the problem
 	 * @param a the first solution
 	 * @param b the second solution
 	 * @return the Manhattan distance in objective space between the two

@@ -48,9 +48,9 @@ public class PSOM extends Algorithm {
 		double sigma[];
 		while (!task.isStopCriteria()) {
 			for (int i = 0; i < populationSize; i++) {
-				v = new double[task.getDimensions()];
-				sigma = new double[task.getDimensions()];
-				for (int d = 0; d < task.getDimensions(); d++) {
+				v = new double[task.getNumberOfDimensions()];
+				sigma = new double[task.getNumberOfDimensions()];
+				for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 					PSOoriginalSolution P = population.get(i);
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();
@@ -67,10 +67,10 @@ public class PSOM extends Algorithm {
 					PgBest = population.get(i);
 
 
-				if (Util.rnd.nextDouble() < 1.0 / task.getDimensions()) {
+				if (Util.rnd.nextDouble() < 1.0 / task.getNumberOfDimensions()) {
 					t2 = 1 / Math.sqrt(2 * Math.sqrt(i));
 					t1 = 1 / Math.sqrt(2 * i);
-					for (int d = 0; d < task.getDimensions(); d++) {
+					for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 						sigma[d] = sigma[d] * Math.exp(t1 * Util.rnd.nextDouble() + t2 * Util.rnd.nextDouble());
 						sigma[d] *= Util.rnd.nextDouble();
 					}

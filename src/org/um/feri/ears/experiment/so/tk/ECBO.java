@@ -94,12 +94,12 @@ public class ECBO extends Algorithm {
 			// pre-update velocity
 			for (int i = 0; i < pop_size / 2; i++) // Stacionarni delci v CB
 			{
-				CB.get(i).v = new double[taskProblem.getDimensions()];
+				CB.get(i).v = new double[taskProblem.getNumberOfDimensions()];
 			}
 
 			for (int i = pop_size / 2; i < pop_size; i++) // Premikajoci se delci v CB, enacba 2
 			{
-				for (int j = 0; j < taskProblem.getDimensions(); j++)
+				for (int j = 0; j < taskProblem.getNumberOfDimensions(); j++)
 					CB.get(i).v[j] = CB.get(i - pop_size / 2).getVariables().get(j) - CB.get(i).getVariables().get(j);
 			}
 
@@ -219,7 +219,7 @@ public class ECBO extends Algorithm {
 		// Trki med delci.
 		for (int i = 0; i < pop_size / 2; i++) // Stacionarni delci v CB, enacba 4
 		{
-			for (int j = 0; j < taskProb.getDimensions(); j++) {
+			for (int j = 0; j < taskProb.getNumberOfDimensions(); j++) {
 				double zgoraj = (CB.get(i + pop_size / 2).masa + cor * CB.get(i + pop_size / 2).masa)
 						* CB.get(i + pop_size / 2).v[j];
 				double spodaj = CB.get(i).masa + CB.get(i + pop_size / 2).masa;
@@ -230,7 +230,7 @@ public class ECBO extends Algorithm {
 
 		for (int i = pop_size / 2; i < pop_size; i++) // Premikajoci se delci v CB, enacba 5
 		{
-			for (int j = 0; j < taskProb.getDimensions(); j++) {
+			for (int j = 0; j < taskProb.getNumberOfDimensions(); j++) {
 				double zgoraj = (CB.get(i).masa - cor * CB.get(i - pop_size / 2).masa) * CB.get(i).v[j];
 				double spodaj = CB.get(i).masa + CB.get(i - pop_size / 2).masa;
 
@@ -245,9 +245,9 @@ public class ECBO extends Algorithm {
 		// Posodobi pozicijo delcev (premik).
 		for (int i = 0; i < pop_size / 2; i++) // Stacionarni delci v CB, enacba 7
 		{
-			CB.get(i).new_x = new double[taskProb.getDimensions()];
+			CB.get(i).new_x = new double[taskProb.getNumberOfDimensions()];
 
-			for (int j = 0; j < taskProb.getDimensions(); j++) {
+			for (int j = 0; j < taskProb.getNumberOfDimensions(); j++) {
 				double rand = Util.nextDouble() * 2 - 1; // med -1 in 1
 				double new_value = CB.get(i).getVariables().get(j) + rand * CB.get(i).v_after[j];
 
@@ -256,7 +256,7 @@ public class ECBO extends Algorithm {
 
 			// Dodatno za izognitev lokalnega optimuma, enacba 10
 			if (Util.nextDouble() < Pro) {
-				int rand_dimenzija = Util.nextInt(taskProb.getDimensions());
+				int rand_dimenzija = Util.nextInt(taskProb.getNumberOfDimensions());
 				CB.get(i).new_x[rand_dimenzija] = taskProb
 						.setFeasible(taskProb.getLowerLimit()[rand_dimenzija]
 								+ Util.nextDouble() * (taskProb.getUpperLimit()[rand_dimenzija]
@@ -267,9 +267,9 @@ public class ECBO extends Algorithm {
 
 		for (int i = pop_size / 2; i < pop_size; i++) // Premikajoci se delci v CB, enacba 8
 		{
-			CB.get(i).new_x = new double[taskProb.getDimensions()];
+			CB.get(i).new_x = new double[taskProb.getNumberOfDimensions()];
 
-			for (int j = 0; j < taskProb.getDimensions(); j++) {
+			for (int j = 0; j < taskProb.getNumberOfDimensions(); j++) {
 				double rand = Util.nextDouble() * 2 - 1; // med -1 in 1
 
 				double new_value = CB.get(i - pop_size / 2).getVariables().get(j) + rand * CB.get(i).v_after[j];
@@ -279,7 +279,7 @@ public class ECBO extends Algorithm {
 
 			// Dodatno za izognitev lokalnega optimuma, enacba 10
 			if (Util.nextDouble() < Pro) {
-				int rand_dimenzija = Util.nextInt(taskProb.getDimensions());
+				int rand_dimenzija = Util.nextInt(taskProb.getNumberOfDimensions());
 
 				CB.get(i).new_x[rand_dimenzija] = taskProb
 						.setFeasible(taskProb.getLowerLimit()[rand_dimenzija]

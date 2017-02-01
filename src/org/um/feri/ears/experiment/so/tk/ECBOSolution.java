@@ -41,8 +41,8 @@ public class ECBOSolution extends DoubleSolution
 	public ECBOSolution(Task t) throws StopCriteriaException 
 	{
 		super(t.getRandomSolution());
-		v = new double[t.getDimensions()];
-		v_after = new double[t.getDimensions()];
+		v = new double[t.getNumberOfDimensions()];
+		v_after = new double[t.getNumberOfDimensions()];
 	}
 	
 	public double[] getV() {

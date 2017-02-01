@@ -27,9 +27,9 @@ public class PSOPBCSolution extends DoubleSolution {
 	
 	public PSOPBCSolution(Task tsk) throws StopCriteriaException {
 		super(tsk.getRandomSolution());
-		hitrost = new double[tsk.getDimensions()];//Hitrost za vsako dimenzijo
+		hitrost = new double[tsk.getNumberOfDimensions()];//Hitrost za vsako dimenzijo
 		double l; double r;
-		for (int i=0; i<tsk.getDimensions(); i++) {
+		for (int i=0; i<tsk.getNumberOfDimensions(); i++) {
 			l = -Math.abs(tsk.getUpperLimit()[i]-tsk.getLowerLimit()[i])/4; 
 			r = Math.abs(tsk.getUpperLimit()[i]-tsk.getLowerLimit()[i])/4; 
 		    hitrost[i] = Util.nextDouble(l,r);

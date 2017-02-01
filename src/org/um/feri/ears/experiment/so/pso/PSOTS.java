@@ -58,10 +58,10 @@ public class PSOTS extends Algorithm {
 			Util.shuffle(permutacijaA);
 			Util.shuffle(permutacijaB);
 			for (int i = 0; i < populationSize; i++) {
-				vA = new double[task.getDimensions()];
-				vB = new double[task.getDimensions()];
+				vA = new double[task.getNumberOfDimensions()];
+				vB = new double[task.getNumberOfDimensions()];
 
-				for (int d = 0; d < task.getDimensions(); d++) {
+				for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 					PSOTSSolution PA = populationA.get(i);
 					PSOTSSolution PB = populationB.get(i);
 					double r1A = Util.rnd.nextDouble();

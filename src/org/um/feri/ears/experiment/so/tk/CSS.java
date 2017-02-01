@@ -229,10 +229,10 @@ public class CSS extends Algorithm {
 
 		for (int i = 0; i < pop_size; i++)
 			for (int j = 0; j < pop_size; j++) {
-				double[] temp_x1 = new double[taskProblem.getDimensions()]; // zgoraj
-				double[] temp_x2 = new double[taskProblem.getDimensions()]; // spodaj
+				double[] temp_x1 = new double[taskProblem.getNumberOfDimensions()]; // zgoraj
+				double[] temp_x2 = new double[taskProblem.getNumberOfDimensions()]; // spodaj
 
-				for (int d = 0; d < taskProblem.getDimensions(); d++) {
+				for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
 					temp_x1[d] = CPs.get(i).getVariables().get(d) - CPs.get(j).getVariables().get(d); // minus
 					temp_x2[d] = CPs.get(i).getVariables().get(d) + CPs.get(j).getVariables().get(d); // plus
 
@@ -268,7 +268,7 @@ public class CSS extends Algorithm {
 	// Izraèuna total force, ki deluje na delec
 	private void calcForce(Task taskProblem, double[][] Pij, double[][] rij) {
 
-		for (int d = 0; d < taskProblem.getDimensions(); d++) 
+		for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) 
 		{
 			//Enaèba 21, ampak deluje boljše èe je radij vsakega delca 1.0
 			double a = 1.0;
@@ -312,11 +312,11 @@ public class CSS extends Algorithm {
 		for (int j = 0; j < pop_size; j++) {
 
 			double y[] = CPs.get(j).getNewVariables();
-			double yv[] = new double[taskProblem.getDimensions()];
+			double yv[] = new double[taskProblem.getNumberOfDimensions()];
 
 			harmonized[j] = false;
 
-			for (int d = 0; d < taskProblem.getDimensions(); d++) {
+			for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
 				double rand1j = Util.nextDouble();
 				double rand2j = Util.nextDouble();
 

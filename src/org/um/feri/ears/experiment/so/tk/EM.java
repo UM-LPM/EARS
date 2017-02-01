@@ -62,7 +62,7 @@ public class EM extends Algorithm {
 	//V èlanku 3.1. GENERAL SCHEME FOR EM
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
-		N = taskProblem.getDimensions();
+		N = taskProblem.getNumberOfDimensions();
 		Initialize(taskProblem);
 
 		while (!taskProblem.isStopCriteria()) {

@@ -28,9 +28,9 @@ public class PSOCBCWSolution extends DoubleSolution
 	public PSOCBCWSolution(Task t) throws StopCriteriaException
 	{
 		super(t.getRandomSolution());
-		v = new double[t.getDimensions()];
+		v = new double[t.getNumberOfDimensions()];
 		
-		for (int i=0; i<t.getDimensions(); i++)
+		for (int i=0; i<t.getNumberOfDimensions(); i++)
 		{			
 			v[i] = 0;
 		}

@@ -54,8 +54,8 @@ public class PSOFS extends Algorithm {
 
 			for (int i = 0; i < populationSize; i++) {
 
-				v = new double[taskProblem.getDimensions()];
-				for (int d = 0; d < taskProblem.getDimensions(); d++) {
+				v = new double[taskProblem.getNumberOfDimensions()];
+				for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
 					rp = Util.rnd.nextDouble();
 					rg = Util.rnd.nextDouble();
 
