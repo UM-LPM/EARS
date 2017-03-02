@@ -53,7 +53,6 @@ public final class Functions {
         int i;
         double f = 0.0;
         double [] z =ShiftRotation.sr_func(x, nx, Os, Mr, 1.0, s_flag, r_flag);/*shift and rotate*/
-
         for (i = 0; i < nx; i++) {
             f += Math.pow(10.0, 6.0 * i / (nx - 1)) * z[i] * z[i];
         }
@@ -64,9 +63,30 @@ public final class Functions {
         int i;
         double f = 0.0;
         double [] z =ShiftRotation.sr_func(x, nx, Os, Mr, 1.0, s_flag, r_flag);/*shift and rotate*/
-
         for (i = 0; i < nx; i++) {
             f += Math.pow(10.0, 6.0 * i / (nx - 1)) * z[i] * z[i];
+        }
+        return f;
+    }
+	
+    public final static double sphere_func(double[] x, int nx, double[] Os, double[] Mr, int s_flag, int r_flag) /* Sphere */ {
+        int i;
+        double f = 0.0;
+        double [] z =ShiftRotation.sr_func(x, nx, Os, Mr, 1.0, s_flag, r_flag);/*shift and rotate*/
+
+        for (i = 0; i < nx; i++) {
+            f += z[i] * z[i];
+        }
+        return f;
+    }
+    
+    public final static double sphere_func(List<Double> x, int nx, double[] Os, double[] Mr, int s_flag, int r_flag) /* Sphere */ {
+        int i;
+        double f = 0.0;
+        double [] z =ShiftRotation.sr_func(x, nx, Os, Mr, 1.0, s_flag, r_flag);/*shift and rotate*/
+
+        for (i = 0; i < nx; i++) {
+            f += z[i] * z[i];
         }
         return f;
     }
@@ -271,7 +291,7 @@ public final class Functions {
     public final static double rastrigin_func(double[] x, int nx, double[] Os, double[] Mr, int s_flag, int r_flag) /* Rastrigin's  */ {
         double f = 0.0;
 
-        double [] z = ShiftRotation.sr_func(x, nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag);/*shift and rotate*/
+        double [] z = ShiftRotation.sr_func(x, nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag);/*shift and rotate*/ 
 
         for (int i = 0; i < nx; i++) {
             f += (z[i] * z[i] - 10.0 * Math.cos(2.0 * Constants.PI * z[i]) + 10.0);

@@ -19,6 +19,7 @@ import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.MersenneTwister;
+import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
 
 public class TLBOAlgorithm extends Algorithm {
@@ -37,8 +38,8 @@ public class TLBOAlgorithm extends Algorithm {
     public Statistic stat;
     public static boolean useTF = true;
     public static boolean useAll4Mean = true;// used for internal tests
-    private double intervalL[];
-    private double interval[];
+    private double lowerLimit[];
+    private double upperLimit[];
     private ArrayList<DoubleSolution> keepList;
     public static boolean test = false;
 
@@ -74,6 +75,28 @@ public class TLBOAlgorithm extends Algorithm {
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
 
     }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.um.feri.ears.algorithms.IAlgorithm#run(org.um.feri.ears.problems.
+     * Task)
+     */
+    @Override
+    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+        task = taskProblem;
+        num_var = task.getNumberOfDimensions();
+        // max_eval = task.getMaxEvaluations();
+        stat = new Statistic(task);
+        init();
+        try {
+        aTeacher();
+        } catch(StopCriteriaException e) {
+            System.out.println("KDO?"+e);
+        }
+        return stat.getCurrent_g().best;
+    }
 
     private double[] mean() {
         double d[] = new double[num_var];
@@ -85,7 +108,7 @@ public class TLBOAlgorithm extends Algorithm {
         int max = pop_size - min;
         for (int i = min; i < max; i++) {
             for (int j = 0; j < num_var; j++) {
-                d[j] += population[i].getEval();
+                d[j] += population[i].getValue(j);
             }
         }
         for (int j = 0; j < num_var; j++) {
@@ -117,7 +140,7 @@ public class TLBOAlgorithm extends Algorithm {
                     int pos = Util.rnd.nextInt(num_var);
                     tmp3 = population[j].getNewVariables();
 
-                    tmp3[pos] = intervalL[pos] + Util.rnd.nextDouble() * (interval[pos] - intervalL[pos]);
+                    tmp3[pos] = Util.nextDouble(lowerLimit[pos], upperLimit[pos]);
                     StopCriteriaException.id =" 3";
                     population[j] = task.eval(tmp3);
                    
@@ -126,36 +149,25 @@ public class TLBOAlgorithm extends Algorithm {
         }
     }
 
-    public class EvaluationComparator implements Comparator<DoubleSolution> {
-        @Override
-        public int compare(DoubleSolution a, DoubleSolution b) {
-            if (task.isFirstBetter(a, b)) {
-                return -1;
-            }
-            if (task.isFirstBetter(b, a)) {
-                return 1;
-            }
-            	
-            return 0;
-        }
-    }
 
     private void sortByFirstBetterCondition() {
-        Comparator<DoubleSolution> s = new EvaluationComparator();
+    	TaskComparator s = new TaskComparator(task);
         Arrays.sort(population, s);
     }
 
     private void init() throws StopCriteriaException {
 
         population = new DoubleSolution[pop_size];
-        intervalL = task.getLowerLimit();
-        interval = task.getUpperLimit();
+        lowerLimit = task.getLowerLimit();
+        upperLimit = task.getUpperLimit();
         for (int i = 0; i < pop_size; i++) {
             population[i] = task.getRandomSolution();
             if (task.isStopCriteria())
                 break;
         }
-        clearDups();
+        if (TLBOAlgorithm.removeDuplicates) {
+            clearDups(); // stop condition inside
+        }
         // printAllPopulation();
         sortByFirstBetterCondition();
         stat.getCurrent_g().setBest(population[0]);
@@ -272,28 +284,6 @@ public class TLBOAlgorithm extends Algorithm {
             gen++;
 			task.incrementNumberOfIterations();
         }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.um.feri.ears.algorithms.IAlgorithm#run(org.um.feri.ears.problems.
-     * Task)
-     */
-    @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
-        task = taskProblem;
-        num_var = task.getNumberOfDimensions();
-        // max_eval = task.getMaxEvaluations();
-        stat = new Statistic(task);
-        init();
-        try {
-        aTeacher();
-        } catch(StopCriteriaException e) {
-            System.out.println("KDO?"+e);
-        }
-        return stat.getCurrent_g().best;
     }
 
     @Override

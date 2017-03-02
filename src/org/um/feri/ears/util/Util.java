@@ -258,7 +258,9 @@ public class Util {
 		return rnd.nextInt(n);
 	}
 	
-	
+	public static int nextInt() {
+		return rnd.nextInt();
+	}
 	/**
 	 * Returns the next random, uniformly distributed {@code int} value between
 	 * {@code 0} (inclusive) and {@code n} (exclusive).
@@ -373,6 +375,9 @@ public class Util {
 	 */
 	public static boolean nextBoolean() {
 		return rnd.nextBoolean();
+	}
+	public static double nextGaussian() {
+		return rnd.nextGaussian();
 	}
 
 

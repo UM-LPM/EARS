@@ -110,7 +110,7 @@ public class GWO extends Algorithm{
 
 					newPosition[i] = (X1+X2+X3)/3; // Equation (3.7)
 				}
-				task.setFeasible(newPosition);
+				newPosition = task.setFeasible(newPosition);
 				
 				if(task.isStopCriteria())
 					break;
@@ -121,7 +121,7 @@ public class GWO extends Algorithm{
 			updateABD();
 			task.incrementNumberOfIterations();
 		}
-		
+//		System.out.println(task.getNumberOfIterations());
 		return alpha;
 	}
 
