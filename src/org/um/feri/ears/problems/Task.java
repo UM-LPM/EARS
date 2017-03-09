@@ -104,8 +104,9 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
-				ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");
+				ancestors.add(tmpSolution);
+				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+				ancestorSB.append("\n");*/
 			}
 
 			return tmpSolution;
@@ -121,8 +122,9 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
-				ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");
+				ancestors.add(tmpSolution);
+				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+				ancestorSB.append("\n");*/
 			}
 			return tmpSolution;
 		}
@@ -139,8 +141,9 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
-				ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");
+				ancestors.add(tmpSolution);
+				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+				ancestorSB.append("\n");*/
 			}
 
 			return tmpSolution;
@@ -159,8 +162,9 @@ public class Task extends TaskBase<Problem> {
 				GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 				if(isAncestorLogginEnabled)
 				{
-					ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-					ancestorSB.append("\n");
+					ancestors.add(tmpSolution);
+					/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+					ancestorSB.append("\n");*/
 				}
 
 				return tmpSolution;
@@ -184,8 +188,9 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
-				ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");
+				ancestors.add(tmpSolution);
+				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+				ancestorSB.append("\n");*/
 			}
 
 			return tmpSolution;
@@ -381,8 +386,9 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
-				ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");
+				ancestors.add(tmpSolution);
+				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
+				ancestorSB.append("\n");*/
 			}
 
 			return tmpSolution;
@@ -407,8 +413,8 @@ public class Task extends TaskBase<Problem> {
 		
 		if(isAncestorLogginEnabled)
 		{
-			
-			ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";[");
+			tmpSolution.parents = parents;
+		/*	ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";[");
 			for(int i = 0; i < parents.size(); i++)
 			{
 				ancestorSB.append(parents.get(i).getID());
@@ -416,7 +422,8 @@ public class Task extends TaskBase<Problem> {
 					ancestorSB.append(",");
 			}
 
-			ancestorSB.append("]\n");
+			ancestorSB.append("]\n");*/
+			ancestors.add(tmpSolution);
 		}
 		
 		return tmpSolution;
@@ -456,7 +463,8 @@ public class Task extends TaskBase<Problem> {
 	}
 
 	public static void resetLoggingID() {
-			SolutionBase.resetLoggingID();	
+		ancestors.clear();
+		SolutionBase.resetLoggingID();	
 	}
 
 	public DoubleSolution eval(DoubleSolution newSolution) throws StopCriteriaException {

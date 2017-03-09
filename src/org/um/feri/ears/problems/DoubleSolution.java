@@ -55,6 +55,7 @@ import org.um.feri.ears.util.Util;
 */
 public class DoubleSolution extends SolutionBase<Double>{
     private double eval;
+    public List<DoubleSolution> parents;
 	
 	public DoubleSolution(DoubleSolution s) {
 		super(s);
@@ -63,6 +64,7 @@ public class DoubleSolution extends SolutionBase<Double>{
 		//lowerLimit = new ArrayList<Double>(s.lowerLimit);
 	    
 		eval = s.eval;
+		parents = new ArrayList<DoubleSolution>();
 	}
 	
 	public DoubleSolution(){}

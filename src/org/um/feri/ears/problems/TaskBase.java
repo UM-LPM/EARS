@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.um.feri.ears.benchmark.MORatingBenchmark;
 import org.um.feri.ears.benchmark.RatingBenchmarkBase;
@@ -33,7 +36,8 @@ public abstract class TaskBase<T extends ProblemBase> {
 	 */
 	protected double bestEval;
 	
-	protected StringBuilder ancestorSB;
+	//protected StringBuilder ancestorSB;
+	protected static List<DoubleSolution> ancestors;
 	protected boolean isAncestorLogginEnabled = false;
 	
 	
@@ -103,13 +107,13 @@ public abstract class TaskBase<T extends ProblemBase> {
 	public void enableAncestorLogging()
 	{
 		isAncestorLogginEnabled = true;
-		ancestorSB = new StringBuilder();
+		ancestors = new ArrayList<DoubleSolution>();
 	}
 
 	public void disableAncestorLogging()
 	{
 		isAncestorLogginEnabled = false;
-		ancestorSB.setLength(0);
+		ancestors.clear();
 	}
 	
 	public void saveAncestorLogging(String fileName) {
@@ -118,7 +122,26 @@ public abstract class TaskBase<T extends ProblemBase> {
 			FileOutputStream fos = new FileOutputStream(fileName+".csv");
 			OutputStreamWriter osw = new OutputStreamWriter(fos);
 			BufferedWriter bw = new BufferedWriter(osw);
-			bw.write(ancestorSB.toString());
+			
+			for(int i = 0; i < ancestors.size(); ++i)
+			{
+				List<DoubleSolution> parents = ancestors.get(i).parents;
+				bw.write(ancestors.get(i).getID()+";"+ancestors.get(i).getEval()+";"+Arrays.toString(ancestors.get(i).getDoubleVariables())+";");
+				if(parents != null)
+				{
+					bw.write("[");
+					for(int j = 0; j < parents.size(); ++j)
+					{
+						bw.write(""+parents.get(j).getID());
+						if(j+1 < parents.size())
+							bw.write(",");
+					}
+					bw.write("]");
+					
+				}
+				bw.write("\n");
+			}
+			
 			bw.close();
 
 		} catch (IOException e) {
