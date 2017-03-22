@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.Util;
@@ -135,19 +136,8 @@ public class TLBOBenchmarkFunction1 extends Problem {
 
 
 	@Override
-	public double eval(List<Double> ds) {
-		
-		double[] x = new double[numberOfDimensions];
-		for (int i = 0; i < numberOfDimensions; i++)
-			x[i] = ds.get(i);
-		
-		double v = 0;
-		v = 5.0 * (x[0] + x[1] + x[2] + x[3]) - 5.0
-				* (x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3]);
-		for (int j = 4; j < 13; j++) {
-			v = v - x[j];
-		}
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 }

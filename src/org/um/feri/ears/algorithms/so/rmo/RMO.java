@@ -164,7 +164,6 @@ public class RMO extends Algorithm
 			
 			taskProblem.incrementNumberOfIterations();
 		}
-		
 		return globalBest_s;
 	}
 

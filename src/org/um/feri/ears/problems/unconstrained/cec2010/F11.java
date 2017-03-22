@@ -1,93 +1,67 @@
 package org.um.feri.ears.problems.unconstrained.cec2010;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.unconstrained.cec2010.base.AckleyRotated;
-import org.um.feri.ears.problems.unconstrained.cec2010.base.AckleyShifted;
+import org.um.feri.ears.problems.unconstrained.cec.Functions;
 import org.um.feri.ears.util.Util;
 
-/**
- * Problem function!
- * 
- * @author Niki Vecek
- * @version 1
- * 
- **/
-
-public class F11 extends Problem {
+public class F11 extends CEC2010{
 	
-	int[] P;
-	int m;
-	public double[][] rot_matrix;
-	AckleyShifted ackley_shifted;
-	AckleyRotated ackley_rotated;
-	
-	// F11 CEC 2010
-	// D/2m-group Shifted and m-rotated Ackley's Function
 	public F11(int d) {
-		super(d,0);
-		ackley_shifted = new AckleyShifted(numberOfDimensions);
-		ackley_rotated= new AckleyRotated(numberOfDimensions);
-		
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.0));
+		super(d, 11);
 		
 		name = "F11 D/2m-group Shifted and m-rotated Ackley's Function";
 		
 		P = new int[numberOfDimensions];
+		P = Util.randomPermutation(numberOfDimensions);
+		OShift = new double[numberOfDimensions];
 
-		int rand_place = 0;
-		for (int i=numberOfDimensions-1; i>0; i--){
-			rand_place = Util.nextInt(numberOfDimensions);
-			P[i] = rand_place;			
+		for (int i=0; i<numberOfDimensions; i++){
+			OShift[i] = Util.nextDouble(lowerLimit.get(i),upperLimit.get(i));
 		}
 		
-		m = 2;
+		M = new double[m*m];
 		
-		rot_matrix = new double[m][m];
-		
-
 		DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, Util.rnd);
 		
 		for (int i=0; i<m; i++){
 			for (int j=0; j<m; j++){
-				rot_matrix[i][j] = A.get(i, j);
+				M[i * m + j] = A.get(i, j);
 			}
 		}
+	}
+
+	@Override
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double eval(double x[]) {
 		double F = 0;
-		for (int k=0; k<numberOfDimensions/(2*m); k++){
-			F = F + ackley_rotated.eval(x,P,k*m+1,(k+1)*m,rot_matrix);
+		int max = (numberOfDimensions / (m << 1));
+		int from, to;
+		int from2 = numberOfDimensions / 2;
+		
+		double[] p1;
+		double[] s1;
+		
+		double[] p2 = getPermutatedIndices(x,P,from2,numberOfDimensions - from2);
+		double[] s2 = getPermutatedIndices(OShift,P,from2,numberOfDimensions - from2);
+
+		for (int k = 0; k < max; k++) {
+			from = k*m;
+			to = (k+1)*m - 1;
+			p1 = getPermutatedIndices(x,P,from,to-from);
+			s1 = getPermutatedIndices(OShift,P,from,to-from);
+			F += Functions.ackley_func(p1, to-from, s1, M, 1, 1);
 		}
-		F = F + ackley_shifted.eval(x,P,numberOfDimensions/2,numberOfDimensions);
-		return F;
-	}
-	
-	@Override
-	public double eval(List<Double> ds) {
-		double F = 0;
-		for (int k=0; k<numberOfDimensions/(2*m); k++){
-			F = F + ackley_rotated.eval(ds,P,k*m+1,(k+1)*m,rot_matrix);
-		}
-		F = F + ackley_shifted.eval(ds,P,numberOfDimensions/2,numberOfDimensions);
+		
+		F += Functions.ackley_func(p2, numberOfDimensions - from2, s2, M, 1, 0);
+		
 		return F;
 	}
 
-	public double getOptimumEval() {
-		return 0;
-	}
-
-	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x < eval_y;
-	}
 }

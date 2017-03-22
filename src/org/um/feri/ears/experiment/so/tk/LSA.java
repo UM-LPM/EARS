@@ -152,7 +152,7 @@ public class LSA extends Algorithm
 		{		
 			if (taskProblem.isStopCriteria()) break;	
 	
-			LSASolution tmp = new LSASolution(taskProblem.eval(pop.get(i).getNewVariables()));
+			LSASolution tmp = new LSASolution(taskProblem.eval(pop.get(i).getDoubleVariables()));
 			pop.set(i, tmp);
 		
 			//isce best
@@ -242,7 +242,7 @@ public class LSA extends Algorithm
 			//else
 			//   direct(d) = -1*direct(d);
 
-			double[] y = best.getNewVariables();
+			double[] y = best.getDoubleVariables();
 
 			y[d] = y[d] + direct[d] * 0.005 * (taskProb.getInterval()[d]);
 
@@ -276,12 +276,12 @@ public class LSA extends Algorithm
 
 			for (int d = 0;d<D;d++)
 			{
-				double dist = pop.get(i).getVariables().get(d) - best.getVariables().get(d); //pop.get(best_indeks).getX()[d];
+				double dist = pop.get(i).getVariables()[d] - best.getVariables()[d]; //pop.get(best_indeks).getX()[d];
 
 				//if Dpoint(i,:)==Dpoint(ds(1),:)
-				if(pop.get(i).getVariables().get(d) == best.getVariables().get(d)) //pop.get(best_indeks).getX()[d])
+				if(pop.get(i).getVariables()[d] == best.getVariables()[d]) //pop.get(best_indeks).getX()[d])
 				{
-					tmp_x[d] = pop.get(i).getVariables().get(d) + direct[d] * Math.abs(normrnd(0, Energy));
+					tmp_x[d] = pop.get(i).getVariables()[d] + direct[d] * Math.abs(normrnd(0, Energy));
 					//Dpoint_temp(d) = Dpoint(i,d)+direct(d)*abs(normrnd(0,Energy));
 				}
 				else
@@ -289,12 +289,12 @@ public class LSA extends Algorithm
 					if(dist < 0)
 					{
 						//Dpoint_temp(d) = Dpoint(i,d)+exprnd(abs(dist(d)));			
-						tmp_x[d] = pop.get(i).getVariables().get(d) + exprnd(Math.abs(dist));
+						tmp_x[d] = pop.get(i).getVariables()[d] + exprnd(Math.abs(dist));
 					}
 					else
 					{
 						//Dpoint_temp(d) = Dpoint(i,d)-exprnd(dist(d));
-						tmp_x[d] = pop.get(i).getVariables().get(d) - exprnd(dist);
+						tmp_x[d] = pop.get(i).getVariables()[d] - exprnd(dist);
 					}
 				}
 

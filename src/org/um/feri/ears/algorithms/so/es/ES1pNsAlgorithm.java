@@ -124,7 +124,7 @@ public class ES1pNsAlgorithm extends Algorithm {
             }
             oneTmp = new DoubleSolution(one);
             for (int i = 0; i < n; i++) {
-                oneplus = oneTmp.getNewVariables();
+                oneplus = oneTmp.getDoubleVariables();
                 mutate(oneplus, varianceOne);
                 ii = taskProblem.eval(oneplus);
                 if (taskProblem.isFirstBetter(ii, one)) {

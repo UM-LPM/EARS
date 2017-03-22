@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 
@@ -76,9 +77,8 @@ public class TLBOBenchmarkFunction5  extends Problem{
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-		double v= (100-Math.pow(ds.get(0)-5,2)-Math.pow(ds.get(1)-5,2)-Math.pow(ds.get(2)-5,2))/100.;
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	/*

@@ -1,66 +1,45 @@
 package org.um.feri.ears.problems.unconstrained.cec2010;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.unconstrained.cec2010.base.SchwefelShifted;
+import org.apache.commons.lang3.ArrayUtils;
+import org.ejml.data.DenseMatrix64F;
+import org.ejml.ops.RandomMatrices;
+import org.um.feri.ears.problems.unconstrained.cec.Functions;
 import org.um.feri.ears.util.Util;
 
-/**
- * Problem function!
- * 
- * @author Niki Vecek
- * @version 1
- * 
- **/
-
-public class F19 extends Problem {
+public class F19 extends CEC2010{
 	
-	int[] P;
-	SchwefelShifted schwefel_shifted;
-
-	// F19 CEC 2010
-	// Shifted Schwefel's Problem 1.2
 	public F19(int d) {
-		super(d,0);
-		schwefel_shifted = new SchwefelShifted(numberOfDimensions);
-		
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+		super(d, 19);
 		
 		name = "F19 Shifted Schwefel's Problem 1.2";
-		
-		P = new int[numberOfDimensions];
-		int rand_place = 0;
-		for (int i=numberOfDimensions-1; i>0; i--){
-			rand_place = Util.nextInt(numberOfDimensions);
-			P[i] = rand_place;			
+		OShift = new double[numberOfDimensions];
+
+		for (int i=0; i<numberOfDimensions; i++){
+			OShift[i] = Util.nextDouble(lowerLimit.get(i),upperLimit.get(i));
 		}
+		
+		M = new double[m*m];
+		
+		DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, Util.rnd);
+		
+		for (int i=0; i<m; i++){
+			for (int j=0; j<m; j++){
+				M[i * m + j] = A.get(i, j);
+			}
+		}
+	}
+
+	@Override
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double eval(double x[]) {
 		double F = 0;
-		F = schwefel_shifted.eval(x,P,0,numberOfDimensions);
-		return F;
-	}
-	
-	@Override
-	public double eval(List<Double> ds) {
-		double F = 0;
-		F = schwefel_shifted.eval(ds,P,0,numberOfDimensions);
+		F = Functions.schwefel_func(x, numberOfDimensions, OShift, M, 1, 0);
 		return F;
 	}
 
-	public double getOptimumEval() {
-		return 0;
-	}
-
-	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x < eval_y;
-	}
 }

@@ -77,8 +77,8 @@ public class CorrelationAndDependence {
 				ind[j]=tmp;
 			}
 			xi = minEuclidianDistance(best, ind);
-			individual = new ArrayList<Double>( Arrays.asList(ind) );
-			yi = Math.abs(bestf-problem.eval(individual));
+			//individual = new ArrayList<Double>( Arrays.asList(ind) );
+			yi = Math.abs(bestf-problem.eval(ind));
 			sx+=xi;
 			sy+=yi;
 			if (xi<min_x) min_x=xi;

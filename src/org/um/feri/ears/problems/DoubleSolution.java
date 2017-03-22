@@ -76,12 +76,9 @@ public class DoubleSolution extends SolutionBase<Double>{
 	 * @param eval
 	 * @deprecated
 	 */
-	public DoubleSolution(List<Double> x, double eval) {
+	public DoubleSolution(Double[] x, double eval) {
 		
-		//this.variable = new ArrayList<>(x.size());
-		variable = new ArrayList<Double>(x);
-		
-		//System.arraycopy(x, 0, this.variable, 0, x.size());
+		variable = Arrays.copyOf(x,x.length);
 		this.eval = eval;
 		feasible = true;
 	}
@@ -94,9 +91,10 @@ public class DoubleSolution extends SolutionBase<Double>{
 	 * @param upperLimit 
 	 * @param lowerLimit 
 	 */
-	public DoubleSolution(List<Double> x, double eval, double[] constrains, List<Double> upperLimit, List<Double> lowerLimit) {
+	public DoubleSolution(Double[] x, double eval, double[] constrains, List<Double> upperLimit, List<Double> lowerLimit) {
 	       	
-			variable = new ArrayList<Double>(x);
+			variable = Arrays.copyOf(x,x.length);
+			//System.arraycopy(x, 0, this.variable, 0, x.length);
 			
 			upperLimit = new ArrayList<Double>(upperLimit);
 			lowerLimit = new ArrayList<Double>(lowerLimit);
@@ -105,7 +103,7 @@ public class DoubleSolution extends SolutionBase<Double>{
 	}
 
     public DoubleSolution(double[] ds, double eval2, double[] calc_constrains, List<Double> upperLimit, List<Double> lowerLimit) {
-		this(Arrays.asList(ArrayUtils.toObject(ds)), eval2, calc_constrains, upperLimit, lowerLimit);
+		this(ArrayUtils.toObject(ds), eval2, calc_constrains, upperLimit, lowerLimit);
 	}
 
 	private void setFeasible(double[] constrains) {
@@ -120,16 +118,11 @@ public class DoubleSolution extends SolutionBase<Double>{
 	}
 
     /**
-     * Outboxes the List<Double> to a primitive array.
+     * Outboxes the array of variables to a primitive array. 
      * @return the variables in an array of primitives.
      */
 	public double[] getDoubleVariables() {
-		double[] target = new double[variable.size()];
-		for (int i = 0; i < target.length; i++) {
-			target[i] = variable.get(i);
-		}
-
-		return target;
+		return ArrayUtils.toPrimitive(variable);
 	}
 
 	public double getEval() {
@@ -137,6 +130,6 @@ public class DoubleSolution extends SolutionBase<Double>{
 	}
 	
 	public String toString() {
-		return Util.dfcshort.format(eval)+" ["+Util.arrayToString(variable)+"]";
+		return Util.dfcshort.format(eval)+" ["+Util.arrayToString(getDoubleVariables())+"]";
 	}
 }

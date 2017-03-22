@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 
@@ -120,9 +121,8 @@ public class TLBOBenchmarkFunction4 extends Problem {
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-		double v = ds.get(0) + ds.get(1) + ds.get(2);
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 
 	/*

@@ -202,7 +202,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
 		for(int i=0; i< num_var; i++)
 		{
-			if(parent.getVariables().get(i) != child.getVariables().get(i))
+			if(parent.getVariables()[i] != child.getVariables()[i])
 				return false;
 		}
 		return true;

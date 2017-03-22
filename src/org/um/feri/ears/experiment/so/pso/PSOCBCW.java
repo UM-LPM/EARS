@@ -300,7 +300,7 @@ public class PSOCBCW extends Algorithm {
 	
 	public void update(PSOCBCWSolution sol, double v[]) throws StopCriteriaException
 	{
-		double x[] = sol.getNewVariables();
+		double x[] = sol.getDoubleVariables();
 		
 		for (int i=0; i<x.length; i++)
 		{

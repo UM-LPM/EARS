@@ -138,7 +138,7 @@ public class EM extends Algorithm {
 			double Tiny1 = Util.nextDouble();
 
 			while (count < LS) {
-				double[] y = ions.get(best_idx).getNewVariables();
+				double[] y = ions.get(best_idx).getDoubleVariables();
 				double Tiny = Util.nextDouble();
 				// FLAG = 1;
 
@@ -235,7 +235,7 @@ public class EM extends Algorithm {
 				norm = VECNORM(ions.get(i).Fi, N);			
 				ions.get(i).Fi = SCAMUL((1.0 / norm), ions.get(i).Fi, N);
 
-				double[] y = ions.get(i).getNewVariables();
+				double[] y = ions.get(i).getDoubleVariables();
 
 				for (j = 0; j < N; j++) {
 					if (ions.get(i).Fi[j] > 0) {

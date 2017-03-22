@@ -177,11 +177,13 @@ public class GSA extends Algorithm {
         initPop(taskProblem);
         int generation = 1;
         while (!taskProblem.isStopCriteria()) {
-            if(taskProblem.getStopCriteria() == EnumStopCriteria.EVALUATIONS)
+            if(taskProblem.getStopCriteria() == EnumStopCriteria.EVALUATIONS 
+            		|| taskProblem.getStopCriteria() == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS 
+            		|| taskProblem.getStopCriteria() == EnumStopCriteria.STAGNATION)
             	nextGeneration(taskProblem, generation, taskProblem.getMaxEvaluations()/pop_size);
             if(taskProblem.getStopCriteria() == EnumStopCriteria.ITERATIONS)
             	nextGeneration(taskProblem, generation, taskProblem.getMaxIteratirons());
-            	
+           //TODO stop criteria stagnation 	
             generation++;
             taskProblem.incrementNumberOfIterations();
         }

@@ -8,7 +8,7 @@ public class IndividualSA extends DoubleSolution {
     private double F;
     private double CR;
     
-    public IndividualSA(List<Double> x, double eval, double F, double CR) {
+    public IndividualSA(Double[] x, double eval, double F, double CR) {
         super(x, eval);
         this.F = F;
         this.CR =CR;

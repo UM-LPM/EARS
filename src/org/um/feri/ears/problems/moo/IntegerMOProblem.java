@@ -14,8 +14,7 @@ public abstract class IntegerMOProblem extends MOProblemBase<Integer>{
 	}
 	
 	public void evaluate(MOSolutionBase<Integer> solution) {
-		List<Integer> decisionVariables = solution.getVariables();
-		double obj[] = evaluate(decisionVariables.toArray(new Integer[decisionVariables.size()]));
+		double obj[] = evaluate(solution.getVariables());
 		solution.setObjectives(obj);
 	}
 	

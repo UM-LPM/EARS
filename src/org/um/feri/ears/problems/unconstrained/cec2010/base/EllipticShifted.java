@@ -22,7 +22,7 @@ public class EllipticShifted{
 		for (int i=start; i<end; i++){
 			int j = P[i];
 			z[i] = x[j] - shifted_optimum[j];	
-			F += Math.pow(1000000, (i-1)/(dim-1))*z[i]*z[i];
+			F += Math.pow(1000000, i/(dim-1))*z[i]*z[i];
 		}
 		
 		return F;
@@ -35,7 +35,7 @@ public class EllipticShifted{
 		for (int i=start; i<end; i++){
 			int j = P[i];
 			z[i] = x.get(j) - shifted_optimum[j];	
-			F += Math.pow(1000000, (i-1)/(dim-1))*z[i]*z[i];
+			F += Math.pow(1000000, i/(dim-1))*z[i]*z[i];
 		}
 		
 		return F;

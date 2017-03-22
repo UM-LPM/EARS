@@ -56,8 +56,8 @@ public class PSO extends Algorithm  {
 				for (int d=0; d<task.getNumberOfDimensions(); d++) {
 					v[d] = omega*(
 							pop_x.get(i).getV()[d])+
-							phiP* Util.rnd.nextDouble()*(pop_x.get(i).getP().getVariables().get(d)-pop_x.get(i).getVariables().get(d))+
-							phiG* Util.rnd.nextDouble()*(g.getVariables().get(d)-pop_x.get(i).getVariables().get(d));
+							phiP* Util.rnd.nextDouble()*(pop_x.get(i).getP().getVariables()[d]-pop_x.get(i).getVariables()[d])+
+							phiG* Util.rnd.nextDouble()*(g.getVariables()[d]-pop_x.get(i).getVariables()[d]);
 					//if (v[d]>(taskProblem.getIntervalLength()[d])) v[d]=taskProblem.getIntervalLength()[d]; 
 					//if (v[d]<(taskProblem.getIntervalLength()[d])) v[d]=-taskProblem.getIntervalLength()[d]; 
 				}

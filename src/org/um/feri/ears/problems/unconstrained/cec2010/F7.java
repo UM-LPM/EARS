@@ -1,72 +1,53 @@
 package org.um.feri.ears.problems.unconstrained.cec2010;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.unconstrained.cec2010.base.SchwefelShifted;
-import org.um.feri.ears.problems.unconstrained.cec2010.base.SphereShifted;
+import org.apache.commons.lang3.ArrayUtils;
+import org.ejml.data.DenseMatrix64F;
+import org.ejml.ops.RandomMatrices;
+import org.um.feri.ears.problems.unconstrained.cec.Functions;
 import org.um.feri.ears.util.Util;
 
-/**
- * Problem function!
- * 
- * @author Niki Vecek
- * @version 1
- * 
- **/
-
-public class F7 extends Problem {
+public class F7 extends CEC2010{
 	
-	int[] P;
-	int m;
-	SchwefelShifted schwefel_shifted;
-	SphereShifted sphere_shifted;
-	
-	// F7 CEC 2010
-	// Single-group Shifted m-dimensional Schwefel's Problem 1.2
 	public F7(int d) {
-		super(d,0);
-		schwefel_shifted = new SchwefelShifted(numberOfDimensions);
-		sphere_shifted = new SphereShifted(numberOfDimensions);
-		
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+		super(d, 7);
 		
 		name = "F07 Single-group Shifted m-dimensional Schwefel's Problem 1.2";
 		
 		P = new int[numberOfDimensions];
-		int rand_place = 0;
-		for (int i=numberOfDimensions-1; i>0; i--){
-			rand_place = Util.nextInt(numberOfDimensions);
-			P[i] = rand_place;			
+		P = Util.randomPermutation(numberOfDimensions);
+		OShift = new double[numberOfDimensions];
+
+		for (int i=0; i<numberOfDimensions; i++){
+			OShift[i] = Util.nextDouble(lowerLimit.get(i),upperLimit.get(i));
 		}
 		
-		m = 2;
+		M = new double[m*m];
+		
+		DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, Util.rnd);
+		
+		for (int i=0; i<m; i++){
+			for (int j=0; j<m; j++){
+				M[i * m + j] = A.get(i, j);
+			}
+		}
+	}
+
+	@Override
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double eval(double x[]) {
 		double F = 0;
-		F = schwefel_shifted.eval(x,P,0,m)*1000000 + sphere_shifted.eval(x,P,m+1,numberOfDimensions);
-		return F;
-	}
-	
-	@Override
-	public double eval(List<Double> ds) {
-		double F = 0;
-		F = schwefel_shifted.eval(ds,P,0,m)*1000000 + sphere_shifted.eval(ds,P,m+1,numberOfDimensions);
+		double[] p1 = getPermutatedIndices(x,P,0,m);
+		double[] p2 = getPermutatedIndices(x,P,m,numberOfDimensions - m);
+		double[] s1 = getPermutatedIndices(OShift,P,0,m);
+		double[] s2 = getPermutatedIndices(OShift,P,m,numberOfDimensions - m);
+		
+		F = Functions.schwefel_func(p1, m, s1, M, 1, 0) * 1000000 + Functions.sphere_func(p2, numberOfDimensions - m, s2, M, 1, 0);
 		return F;
 	}
 
-	public double getOptimumEval() {
-		return 0;
-	}
-
-	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x < eval_y;
-	}
 }

@@ -131,7 +131,6 @@ public class ICA extends Algorithm{
 			
 			task.incrementNumberOfIterations();
 		}
-//		System.out.println(task.getNumberOfIterations());
 		return best;
 	}
 	

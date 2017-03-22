@@ -55,8 +55,8 @@ public class PSOoriginalLogging extends Algorithm {
 					PSOoriginalSolution P = population.get(i);
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();
-					v[d] = (P.getV()[d]) + c1 * r1 * (P.getPbest().getVariables().get(d) - P.getVariables().get(d))
-							+ c2 * r2 * (PgBest.getVariables().get(d) - P.getVariables().get(d));
+					v[d] = (P.getV()[d]) + c1 * r1 * (P.getPbest().getVariables()[d] - P.getVariables()[d])
+							+ c2 * r2 * (PgBest.getVariables()[d] - P.getVariables()[d]);
 				}
 				population.set(i, update(population.get(i), v));
 				if (taskProblem.isFirstBetter(population.get(i), PgBest))
@@ -64,6 +64,7 @@ public class PSOoriginalLogging extends Algorithm {
 				if (taskProblem.isStopCriteria())
 					break;
 			}
+			task.incrementNumberOfIterations();
 		}
 		
 		return PgBest;
@@ -71,7 +72,7 @@ public class PSOoriginalLogging extends Algorithm {
 
 	private PSOoriginalSolution update(PSOoriginalSolution sol, double[] v) throws StopCriteriaException {
 		
-		double x[] = sol.getNewVariables();
+		double x[] = sol.getDoubleVariables();
 		for (int i = 0; i < x.length; i++) {
 			x[i] = task.setFeasible(x[i] + v[i], i);
 		}

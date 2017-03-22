@@ -68,7 +68,7 @@ public class SoilModelProblem extends Problem{
 
 
 	@Override
-	public double eval(List<Double> ds) {
+	public double eval(Double[] ds) {
 
 		int j = 0;
 		
@@ -77,9 +77,9 @@ public class SoilModelProblem extends Problem{
 		
 		for(int i = 0; i < numberOfDimensions; i+=2)
 		{
-			R[j] = ds.get(i);
+			R[j] = ds[i];
 			if(i+1 < numberOfDimensions)
-				h[j] = ds.get(i+1);
+				h[j] = ds[i+1];
 			j++;
 		}
 

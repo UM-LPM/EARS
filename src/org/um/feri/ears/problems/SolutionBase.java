@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 public abstract class SolutionBase <Type> {
 	
-	protected List<Type> variable;
+	protected Type[] variable;
 	protected double[] constraints; //TODO refactor 2 types of individual for constrained optimization
 	protected boolean feasible = true; //Feasible checks constrains
 	protected double  overallConstraintViolation_ ;
@@ -15,7 +17,12 @@ public abstract class SolutionBase <Type> {
 	protected List<Type> upperLimit;
 	protected List<Type> lowerLimit;
 	protected long ID;
+	
+	//Properties for exploreation and exploitation
 	protected static long currentID = 1;
+	protected long timeStamp;
+	protected int generationNumber;
+	protected long evaluationNumner;
 
 	public SolutionBase() {
 		ID = currentID++;
@@ -24,9 +31,22 @@ public abstract class SolutionBase <Type> {
 	public long getID() {
 		return ID;
 	}
+	
+	public long getTimeStamp() {
+		return timeStamp;
+	}
+
+	public int getGenerationNumber() {
+		return generationNumber;
+	}
+
+	public long getEvaluationNumner() {
+		return evaluationNumner;
+	}
 
 	public SolutionBase(SolutionBase<Type> s) {
-		variable = new ArrayList<Type>(s.variable);
+		variable = Arrays.copyOf(s.variable,s.variable.length); 
+		//new ArrayList<Type>(s.variable);
 		
 		this.feasible = s.feasible;
 		if (s.constraints!=null) {
@@ -45,7 +65,7 @@ public abstract class SolutionBase <Type> {
 		return feasible;
 	}
 
-	public List<Type> getVariables() {
+	public Type[] getVariables() {
 		return variable;
 	}
 	
@@ -56,38 +76,29 @@ public abstract class SolutionBase <Type> {
 		return false;
 	}
 	
-	public double[] getNewVariables() {
-		double[] xx = new double[variable.size()];
-
-		for (int i = 0; i < variable.size(); i++) {
-			xx[i] = (double) variable.get(i);
-		}
-		//System.arraycopy(variable, 0, xx, 0, variable.size());
-		return xx;
-	}
-
 	public int numberOfVariables() {
-		return variable.size();
+		return variable.length;
 	}
 
 	public void setValue(int i, Type c) {
-		variable.set(i, c);
+		variable[i] = c;
 	}
 	
 	public void setVariables(Type[] var) {
-		if(var.length != variable.size())
+		this.variable = var;
+		/*if(var.length != variable.size())
 		{
 			System.err.println("Varible size must match!");
 			return;
 		}
 		for (int i = 0; i < var.length; i++) {
 			setValue(i, var[i]);
-		}
+		}*/
 
 	}
 
 	public Type getValue(int i) {
-		return variable.get(i);
+		return variable[i];
 	}
 	
 	public List<Type> getUpperLimit() {

@@ -51,7 +51,7 @@ public class PSOCBCWSolution extends DoubleSolution
 
 	public PSOCBCWSolution update(Task t, double v[]) throws StopCriteriaException
 	{
-		double x[] = getNewVariables();
+		double x[] = getDoubleVariables();
 		
 		for (int i=0; i<x.length; i++)
 		{

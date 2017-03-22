@@ -117,7 +117,7 @@ public class ES1p1sAlgorithm extends Algorithm {
                 else if ((succ/k)<0.2) varianceOne = varianceOne * c;
                 succ = 0;
             }
-            oneplus = one.getNewVariables();
+            oneplus = one.getDoubleVariables();
             mutate(oneplus,varianceOne);
             ii = taskProblem.eval(oneplus);
             if (taskProblem.isFirstBetter(ii, one)) {

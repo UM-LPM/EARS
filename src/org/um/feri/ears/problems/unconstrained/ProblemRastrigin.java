@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 /**
@@ -81,22 +82,15 @@ public class ProblemRastrigin  extends Problem{
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-		double v=0;
-		for (int i=0; i<(numberOfDimensions); i++) {
-			//10án+sum(x(i)^2-10ácos(2ápiáx(i)))
-			v+=(ds.get(i)*ds.get(i)-10*Math.cos(2*Math.PI*ds.get(i)));
-			//v+=Math.pow(1-ds[i],2)+100*Math.pow(ds[i+1]-ds[i]*ds[i],2);
-		}
-		return 10*numberOfDimensions+v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double getOptimumEval() {
 		return 0;
 	}
 	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x<eval_y;
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
+		return eval_x < eval_y;
 	}
 }

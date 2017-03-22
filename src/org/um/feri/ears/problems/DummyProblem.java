@@ -11,7 +11,7 @@ public class DummyProblem extends Problem{
 	}
 
 	@Override
-	public double eval(List<Double> ds) {
+	public double eval(Double[] ds) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

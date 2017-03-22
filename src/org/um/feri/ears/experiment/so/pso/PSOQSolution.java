@@ -47,7 +47,7 @@ public class PSOQSolution extends DoubleSolution {
 	}
 
 	public PSOQSolution update(Task t, double v[]) throws StopCriteriaException {
-		double x[] = getNewVariables();
+		double x[] = getDoubleVariables();
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.setFeasible(x[i] + v[i], i);
 		}
@@ -61,7 +61,7 @@ public class PSOQSolution extends DoubleSolution {
 	}
 
 	public PSOQSolution updateP(Task taskProblem, double[] v2, double[] mBest, double w) {
-		double x[] = getNewVariables();
+		double x[] = getDoubleVariables();
 		for (int i = 0; i < x.length; i++) {
 			if(Util.rnd.nextDouble() >= 0.5) {
 				double newX = v2[i] + w* Math.abs(x[i] - mBest[i]*Math.log(1/Util.rnd.nextDouble()));

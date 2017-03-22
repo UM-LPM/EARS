@@ -123,11 +123,11 @@ public class ES1cNsAlgorithm extends Algorithm {
                 succ = 0;
             }
             oneTmp = new DoubleSolution(one);
-            oneplus = oneTmp.getNewVariables();
+            oneplus = oneTmp.getDoubleVariables();
             mutate(oneplus, varianceOne);
             one = taskProblem.eval(oneplus);
             for (int i = 0; i < n-1; i++) {
-                oneplus = oneTmp.getNewVariables();
+                oneplus = oneTmp.getDoubleVariables();
                 mutate(oneplus, varianceOne);
                 ii = taskProblem.eval(oneplus);
                 if (taskProblem.isFirstBetter(ii, one)) {

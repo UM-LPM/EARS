@@ -277,7 +277,7 @@ public class DEAlgorithm extends Algorithm {
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
-                        tmp[n] = bestit.getVariables().get(n) + F * (pold[r2].getVariables().get(n) - pold[r3].getVariables().get(n));
+                        tmp[n] = bestit.getVariables()[n] + F * (pold[r2].getVariables()[n] - pold[r3].getVariables()[n]);
                         n = (n + 1) % D;
                         L++;
                     } while ((Util.rnd.nextDouble() < CR) && (L < D));
@@ -293,7 +293,7 @@ public class DEAlgorithm extends Algorithm {
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
-                        tmp[n] = pold[r1].getVariables().get(n) + F * (pold[r2].getVariables().get(n) - pold[r3].getVariables().get(n));
+                        tmp[n] = pold[r1].getVariables()[n] + F * (pold[r2].getVariables()[n] - pold[r3].getVariables()[n]);
                         n = (n + 1) % D;
                         L++;
                     } while ((Util.rnd.nextDouble() < CR) && (L < D));
@@ -309,7 +309,7 @@ public class DEAlgorithm extends Algorithm {
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
-                        tmp[n] = tmp[n] + F * (bestit.getVariables().get(n) - tmp[n]) + F * (pold[r1].getVariables().get(n) - pold[r2].getVariables().get(n));
+                        tmp[n] = tmp[n] + F * (bestit.getVariables()[n] - tmp[n]) + F * (pold[r1].getVariables()[n] - pold[r2].getVariables()[n]);
                         n = (n + 1) % D;
                         L++;
                     } while ((Util.rnd.nextDouble() < CR) && (L < D));
@@ -321,7 +321,7 @@ public class DEAlgorithm extends Algorithm {
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
-                        tmp[n] = bestit.getVariables().get(n) + (pold[r1].getVariables().get(n) + pold[r2].getVariables().get(n) - pold[r3].getVariables().get(n) - pold[r4].getVariables().get(n)) * F;
+                        tmp[n] = bestit.getVariables()[n] + (pold[r1].getVariables()[n] + pold[r2].getVariables()[n] - pold[r3].getVariables()[n] - pold[r4].getVariables()[n]) * F;
                         n = (n + 1) % D;
                         L++;
                     } while ((Util.rnd.nextDouble() < CR) && (L < D));
@@ -332,7 +332,7 @@ public class DEAlgorithm extends Algorithm {
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
-                        tmp[n] = pold[r5].getVariables().get(n) + (pold[r1].getVariables().get(n) + pold[r2].getVariables().get(n) - pold[r3].getVariables().get(n) - pold[r4].getVariables().get(n)) * F;
+                        tmp[n] = pold[r5].getVariables()[n] + (pold[r1].getVariables()[n] + pold[r2].getVariables()[n] - pold[r3].getVariables()[n] - pold[r4].getVariables()[n]) * F;
                         n = (n + 1) % D;
                         L++;
                     } while ((Util.rnd.nextDouble() < CR) && (L < D));
@@ -352,7 +352,7 @@ public class DEAlgorithm extends Algorithm {
                                                                            * parameter
                                                                            */
                         {
-                            tmp[n] = bestit.getVariables().get(n) + F * (pold[r2].getVariables().get(n) - pold[r3].getVariables().get(n));
+                            tmp[n] = bestit.getVariables()[n] + F * (pold[r2].getVariables()[n] - pold[r3].getVariables()[n]);
                         }
                         n = (n + 1) % D;
                     }
@@ -364,7 +364,7 @@ public class DEAlgorithm extends Algorithm {
                     for (L = 0; L < D; L++) /* perform D binomial trials */
                     {
                         if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
-                            tmp[n] = pold[r1].getVariables().get(n) + F * (pold[r2].getVariables().get(n) - pold[r3].getVariables().get(n));
+                            tmp[n] = pold[r1].getVariables()[n] + F * (pold[r2].getVariables()[n] - pold[r3].getVariables()[n]);
                             /*
                              * if (Math.abs(tmp[n])>100) {
                              * System.out.println(F+" "
@@ -402,7 +402,7 @@ public class DEAlgorithm extends Algorithm {
                     for (L = 0; L < D; L++) /* perform D binomial trials */
                     {
                         if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
-                            tmp[n] = pold[r1].getVariables().get(n) + F * (pold[r2].getVariables().get(n) - pold[r3].getVariables().get(n));
+                            tmp[n] = pold[r1].getVariables()[n] + F * (pold[r2].getVariables()[n] - pold[r3].getVariables()[n]);
                         }
                         n = (n + 1) % D;
                     }
@@ -422,7 +422,7 @@ public class DEAlgorithm extends Algorithm {
                                                                            * parameter
                                                                            */
                         {
-                            tmp[n] = tmp[n] + F * (bestit.getVariables().get(n) - tmp[n]) + F * (pold[r1].getVariables().get(n) - pold[r2].getVariables().get(n));
+                            tmp[n] = tmp[n] + F * (bestit.getVariables()[n] - tmp[n]) + F * (pold[r1].getVariables()[n] - pold[r2].getVariables()[n]);
                         }
                         n = (n + 1) % D;
                     }
@@ -441,7 +441,7 @@ public class DEAlgorithm extends Algorithm {
                                                                            * parameter
                                                                            */
                         {
-                            tmp[n] = bestit.getVariables().get(n) + (pold[r1].getVariables().get(n) + pold[r2].getVariables().get(n) - pold[r3].getVariables().get(n) - pold[r4].getVariables().get(n)) * F;
+                            tmp[n] = bestit.getVariables()[n] + (pold[r1].getVariables()[n] + pold[r2].getVariables()[n] - pold[r3].getVariables()[n] - pold[r4].getVariables()[n]) * F;
                         }
                         n = (n + 1) % D;
                     }
@@ -460,7 +460,7 @@ public class DEAlgorithm extends Algorithm {
                                                                            * parameter
                                                                            */
                         {
-                            tmp[n] = pold[r5].getVariables().get(n) + (pold[r1].getVariables().get(n) + pold[r2].getVariables().get(n) - pold[r3].getVariables().get(n) - pold[r4].getVariables().get(n)) * F;
+                            tmp[n] = pold[r5].getVariables()[n] + (pold[r1].getVariables()[n] + pold[r2].getVariables()[n] - pold[r3].getVariables()[n] - pold[r4].getVariables()[n]) * F;
                         }
                         n = (n + 1) % D;
                     }

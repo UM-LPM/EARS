@@ -130,7 +130,7 @@ public class JADELogging extends Algorithm {
 				// System.out.print(
 				// "("+pop_x[i].getCR()+", "+pop_x[i].getF()+") ");
 				j_rand = Util.rnd.nextInt(D);
-				tmp = pop_x[i].getNewVariables();
+				tmp = pop_x[i].getDoubleVariables();
 				do {
 					r1 = Util.rnd.nextInt(pop_size);
 				} while (r1 == i);
@@ -149,10 +149,10 @@ public class JADELogging extends Algorithm {
 								.setFeasible(
 										tmp[d]
 												+ pop_x[i].F
-												* (elite.get(pBest).getVariables().get(d) - tmp[d])
+												* (elite.get(pBest).getVariables()[d] - tmp[d])
 												+ pop_x[i].F
-												* (pop_x[r1].getVariables().get(d) - in_r2
-														.getVariables().get(d)), d);
+												* (pop_x[r1].getVariables()[d] - in_r2
+														.getVariables()[d]), d);
 					}
 				}
 				List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
@@ -194,6 +194,7 @@ public class JADELogging extends Algorithm {
 					muF = 0.1;
 			}
 			// System.out.println("\nmuCR:" + muCR + " " + " muF:" +muF);
+			task.incrementNumberOfIterations();
 		}
 		return g;
 	}

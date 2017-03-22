@@ -62,7 +62,6 @@ public class ABC extends Algorithm{
 			
 			task.incrementNumberOfIterations();
 		}
-		
 		return best;
 	}
 	

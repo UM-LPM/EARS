@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 /**
@@ -79,20 +80,8 @@ public class ProblemAckley extends Problem {
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-		double v = 0;
-		double a = 20;
-		double b = 0.2;
-		double c = 2 * Math.PI;
-		double s1 = 0;
-		double s2 = 0;
-		for (int i = 0; i < numberOfDimensions; i++) {
-			s1 = s1 + ds.get(i) * ds.get(i);
-			s2 = s2 + Math.cos(c * ds.get(i));
-		}
-		v = -a * Math.exp(-b * Math.sqrt(1. / numberOfDimensions * s1))
-				- Math.exp(1. / numberOfDimensions * s2) + a + Math.exp(1.);
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 
 	public double getOptimumEval() {
@@ -100,8 +89,7 @@ public class ProblemAckley extends Problem {
 	}
 
 	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
 		return eval_x < eval_y;
 	}
 }

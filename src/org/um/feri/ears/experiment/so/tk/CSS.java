@@ -233,10 +233,10 @@ public class CSS extends Algorithm {
 				double[] temp_x2 = new double[taskProblem.getNumberOfDimensions()]; // spodaj
 
 				for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
-					temp_x1[d] = CPs.get(i).getVariables().get(d) - CPs.get(j).getVariables().get(d); // minus
-					temp_x2[d] = CPs.get(i).getVariables().get(d) + CPs.get(j).getVariables().get(d); // plus
+					temp_x1[d] = CPs.get(i).getVariables()[d] - CPs.get(j).getVariables()[d]; // minus
+					temp_x2[d] = CPs.get(i).getVariables()[d] + CPs.get(j).getVariables()[d]; // plus
 
-					temp_x2[d] = (temp_x2[d] / 2.0) - best.getVariables().get(d);
+					temp_x2[d] = (temp_x2[d] / 2.0) - best.getVariables()[d];
 				}
 
 				// eps - small positive number to avoid singularity (matlab vrednost eps)
@@ -280,7 +280,7 @@ public class CSS extends Algorithm {
 					if (i == j) // brez samega sebe
 						continue;
 
-					double desno = Pij[j][i] * (CPs.get(i).getVariables().get(d) - CPs.get(j).getVariables().get(d));
+					double desno = Pij[j][i] * (CPs.get(i).getVariables()[d] - CPs.get(j).getVariables()[d]);
 					double i1, i2;
 
 					if (rij[j][i] < a) {
@@ -311,7 +311,7 @@ public class CSS extends Algorithm {
 
 		for (int j = 0; j < pop_size; j++) {
 
-			double y[] = CPs.get(j).getNewVariables();
+			double y[] = CPs.get(j).getDoubleVariables();
 			double yv[] = new double[taskProblem.getNumberOfDimensions()];
 
 			harmonized[j] = false;
@@ -320,7 +320,7 @@ public class CSS extends Algorithm {
 				double rand1j = Util.nextDouble();
 				double rand2j = Util.nextDouble();
 
-				double xj_new = (ka * rand1j * CPs.get(j).F[d]) + (kv * rand2j * CPs.get(j).v[d] + CPs.get(j).getVariables().get(d));
+				double xj_new = (ka * rand1j * CPs.get(j).F[d]) + (kv * rand2j * CPs.get(j).v[d] + CPs.get(j).getVariables()[d]);
 
 				// Èe je dimenzija izven meja problema, Harmony search varjanta za novo pozicijo na tej dimenziji
 				// RULE 7
@@ -331,7 +331,7 @@ public class CSS extends Algorithm {
 					if (Util.nextDouble() < CMCR) {
 						// Memory considering: randomly select a note stored in
 						// HM
-						xj_new = CM.get(Util.nextInt(CMS)).getVariables().get(d);
+						xj_new = CM.get(Util.nextInt(CMS)).getVariables()[d];
 
 						// z vrjetnostjo PAR, pozicijo malo natunaj
 						if (Util.nextDouble() < PAR) {
@@ -350,7 +350,7 @@ public class CSS extends Algorithm {
 				}
 
 				// Nova pozicija - stara pozicija = novi velocity
-				yv[d] = xj_new - CPs.get(j).getVariables().get(d);
+				yv[d] = xj_new - CPs.get(j).getVariables()[d];
 				y[d] = xj_new;
 			}
 			

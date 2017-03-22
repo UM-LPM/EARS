@@ -28,7 +28,7 @@ public class EllipticRotated{
 		z = multiply(z, rot_matrix, start, end);
 		
 		for (int i=start; i<end; i++){	
-			F += Math.pow(1000000, (i-1)/(dim-1))*z[i]*z[i];
+			F += Math.pow(1000000, i/(dim-1))*z[i]*z[i];
 		}
 		
 		return F;
@@ -60,7 +60,7 @@ public class EllipticRotated{
 		z = multiply(z, rot_matrix, start, end);
 		
 		for (int i=start; i<end; i++){	
-			F += Math.pow(1000000, (i-1)/(dim-1))*z[i]*z[i];
+			F += Math.pow(1000000, i/(dim-1))*z[i]*z[i];
 		}
 		
 		return F;

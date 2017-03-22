@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 /**
@@ -82,16 +83,8 @@ public class ProblemGriewank  extends Problem{
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-		double v=0;
-		double a = 0; 
-		double b = 1;
-		for (int i=0; i<numberOfDimensions;i++) {
-			  a += ds.get(i)*ds.get(i);
-			  b *= Math.cos(ds.get(i)/Math.sqrt(i+1));
-			}
-		v = a/4000.- b+1;		
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double getOptimumEval() {
@@ -99,8 +92,7 @@ public class ProblemGriewank  extends Problem{
 	}
 	
 	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x<eval_y;
-	}	
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
+		return eval_x < eval_y;
+	}
 }

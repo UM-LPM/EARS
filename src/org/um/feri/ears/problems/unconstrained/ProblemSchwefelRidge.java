@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 /**
@@ -76,17 +77,8 @@ public class ProblemSchwefelRidge  extends Problem{
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-		double v=0;
-		double v1=0;
-		for (int i=0; i<(numberOfDimensions); i++) {
-			for (int j=0; j<=i; j++) {
-				v1+=ds.get(j);
-			}
-			v+=v1*v1;
-
-		}
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 
 	public double getOptimumEval() {
@@ -94,8 +86,7 @@ public class ProblemSchwefelRidge  extends Problem{
 	}
 	
 	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x<eval_y;
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
+		return eval_x < eval_y;
 	}
 }

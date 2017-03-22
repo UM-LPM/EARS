@@ -2,6 +2,7 @@ package org.um.feri.ears.problems.unconstrained.cec2014;
 
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 
 public class F7 extends CEC2014 {
@@ -13,11 +14,8 @@ public class F7 extends CEC2014 {
 	}
 
 	@Override
-	public double eval(List<Double> ds) {
-		double F;
-		F = Functions.griewank_func(ds,numberOfDimensions,OShift,M,1,1);
-		F+=700.0;
-		return F;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double eval(double x[]) {

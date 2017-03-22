@@ -22,6 +22,7 @@ package org.um.feri.ears.problems.moo.misc;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.Golinski_F1;
@@ -55,9 +56,7 @@ public class Golinski extends DoubleMOProblem {
 	@Override
 	public void evaluate(MOSolutionBase<Double> solution) {
 		
-		double[] x = new double[numberOfDimensions];
-		for (int i = 0; i < numberOfDimensions; i++)
-			x[i] = solution.getVariables().get(i);
+		double[] x = ArrayUtils.toPrimitive(solution.getVariables());
 
 		double obj[] = new double[functions.size()];
 		for (int i = 0; i < obj.length; i++) {
@@ -71,9 +70,7 @@ public class Golinski extends DoubleMOProblem {
 	public void evaluateConstraints(MOSolutionBase<Double> solution) {
 		double[] constraints = new double[numberOfConstraints];
 		
-		double[] dv = new double[numberOfDimensions];
-		for (int i = 0; i < numberOfDimensions; i++)
-			dv[i] = solution.getVariables().get(i);
+		double[] dv = ArrayUtils.toPrimitive(solution.getVariables());
 		
 	    double x1,x2,x3,x4,x5,x6,x7;
 	    

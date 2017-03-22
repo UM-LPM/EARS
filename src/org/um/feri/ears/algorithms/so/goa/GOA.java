@@ -80,7 +80,7 @@ public class GOA extends Algorithm{
 			offspringPopulation = new ArrayList<DoubleSolution>();
 			for(int i = 0; i < pop_size; i++)
 			{
-				double[] temp_i = population.get(i).getNewVariables();
+				double[] temp_i = population.get(i).getDoubleVariables();
 				double[] newPosition = new double[task.getNumberOfDimensions()];
 				S_total = new double[task.getNumberOfDimensions()];
 				for(int k= 0; k < task.getNumberOfDimensions(); k+=2) {
@@ -89,7 +89,7 @@ public class GOA extends Algorithm{
 						if(i==j)
 							continue;
 
-						double[] temp_j = population.get(j).getNewVariables();
+						double[] temp_j = population.get(j).getDoubleVariables();
 
 
 						dist = distance(temp_i[k],temp_i[k+1],temp_j[k],temp_j[k+1]); //Calculate the distance between two grasshoppers
@@ -151,7 +151,6 @@ public class GOA extends Algorithm{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}*/
-//		System.out.println(task.getNumberOfIterations());
 		return best;
 	}
 

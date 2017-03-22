@@ -54,8 +54,8 @@ public class PSOM extends Algorithm {
 					PSOoriginalSolution P = population.get(i);
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();
-					v[d] = w * (P.getV()[d]) + c1 * r1 * (P.getPbest().getVariables().get(d) - P.getVariables().get(d))
-							+ c2 * r2 * (PgBest.getVariables().get(d) - P.getVariables().get(d));
+					v[d] = w * (P.getV()[d]) + c1 * r1 * (P.getPbest().getVariables()[d] - P.getVariables()[d])
+							+ c2 * r2 * (PgBest.getVariables()[d] - P.getVariables()[d]);
 				}
 				
 				if (task.isStopCriteria())

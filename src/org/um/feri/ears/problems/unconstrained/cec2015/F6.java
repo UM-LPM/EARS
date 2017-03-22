@@ -2,6 +2,7 @@ package org.um.feri.ears.problems.unconstrained.cec2015;
 
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 
 
@@ -14,11 +15,8 @@ public class F6 extends CEC2015{
 	}
 
 	@Override
-	public double eval(List<Double> ds) {
-		double F;
-		F = Functions.happycat_func(ds, numberOfDimensions, OShift, M, 1, 1);
-		F+= 100 * func_num;
-		return F;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double eval(double x[]) {

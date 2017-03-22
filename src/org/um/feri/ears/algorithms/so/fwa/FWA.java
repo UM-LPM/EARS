@@ -79,7 +79,6 @@ public class FWA extends Algorithm{
 					
 			task.incrementNumberOfIterations();
 		}
-//		System.out.println(task.getNumberOfIterations());
 		return bestspark;
 	}
 	

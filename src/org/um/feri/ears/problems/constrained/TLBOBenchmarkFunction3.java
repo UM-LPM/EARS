@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 
@@ -124,22 +125,8 @@ public class TLBOBenchmarkFunction3  extends Problem{
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-//		y = (x(1)-10)^2+5*(x(2)-12)^2+x(3)^4+3*(x(4)-11)^2+...
-		//		    10*x(5)^6+7*x(6)^2+x(7)^4-4*x(6)*x(7)-10*x(6)-8*x(7);
-		double a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,v=0;
-		a1=Math.pow(ds.get(0)-10,2);
-		a2=5*Math.pow(ds.get(1)-12,2);
-		a3=Math.pow(ds.get(2),4);
-		a4=3*Math.pow(ds.get(3)-11,2);
-		a5=10*Math.pow(ds.get(4),6);
-		a6=7*Math.pow(ds.get(5),2);
-		a7=Math.pow(ds.get(6),4);
-		a8=4*ds.get(5)*ds.get(6);
-		a9=10*ds.get(5);
-		a10=8*ds.get(6);
-		v=a1+a2+a3+a4+a5+a6+a7-a8-a9-a10;
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 
 	public double getOptimumEval() {

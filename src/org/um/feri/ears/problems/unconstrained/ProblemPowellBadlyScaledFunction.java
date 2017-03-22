@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 /**
@@ -68,9 +69,8 @@ public class ProblemPowellBadlyScaledFunction  extends Problem{
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-		double v = Math.pow(10.*ds.get(0)*ds.get(1) -1,2)+Math.pow(Math.exp(-ds.get(0))+Math.exp(-ds.get(1))-1.0001,2);
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double getOptimumEval() {
@@ -84,8 +84,7 @@ public class ProblemPowellBadlyScaledFunction  extends Problem{
 	}
 	
 	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x<eval_y;
-	}	
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
+		return eval_x < eval_y;
+	}
 }

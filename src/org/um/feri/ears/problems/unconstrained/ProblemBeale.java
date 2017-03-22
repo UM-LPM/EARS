@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 /**
@@ -72,13 +73,8 @@ public class ProblemBeale  extends Problem{
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-		double y[] ={1.5, 2.25, 2.625};
-		double v = 0;
-		for (int i=0; i<3; i++) {
-		  v+=Math.pow(y[i] - ds.get(0)*(1-Math.pow(ds.get(1),i+1)),2);
-		}
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	
@@ -93,8 +89,7 @@ public class ProblemBeale  extends Problem{
 	}
 	
 	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x<eval_y;
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
+		return eval_x < eval_y;
 	}
 }

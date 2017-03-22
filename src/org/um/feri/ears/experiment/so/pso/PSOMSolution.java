@@ -47,7 +47,7 @@ public class PSOMSolution extends DoubleSolution {
 	}
 
 	public PSOMSolution update(Task t, double v[]) throws StopCriteriaException {
-		double x[] = getNewVariables();
+		double x[] = getDoubleVariables();
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.setFeasible(x[i] + v[i], i);
 		}

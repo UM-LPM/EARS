@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.um.feri.ears.experiment.ee.so.PSOoriginalLogging;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 
 
@@ -104,6 +105,9 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
+				tmpSolution.timeStamp = System.currentTimeMillis();
+				tmpSolution.generationNumber = this.getNumberOfIterations();
+				tmpSolution.evaluationNumner = this.getNumberOfEvaluations();
 				ancestors.add(tmpSolution);
 				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
 				ancestorSB.append("\n");*/
@@ -244,7 +248,7 @@ public class Task extends TaskBase<Problem> {
      * @param ds vector of possible solution
      * @return
      */
-	public boolean areDimensionsInFeasableInterval(List<Double> ds) {
+	public boolean areDimensionsInFeasableInterval(Double[] ds) {
 	    return p.areDimensionsInFeasableInterval(ds);
 	}
 
@@ -255,7 +259,7 @@ public class Task extends TaskBase<Problem> {
 	 * @param ds real vector to be evaluated (just calc constraints)
 	 * @return
 	 */
-	public double[] calcConstrains(List<Double> ds) {
+	public double[] calcConstrains(Double[] ds) {
 	    return p.calc_constrains(ds);
 	}
 
@@ -319,8 +323,8 @@ public class Task extends TaskBase<Problem> {
 	
 	public DoubleSolution eval(double[] x) throws StopCriteriaException {
 		
-		Double[] inputBoxed = ArrayUtils.toObject(x);
-		List<Double> ds = Arrays.asList(inputBoxed);
+		Double[] ds = ArrayUtils.toObject(x);
+		//List<Double> ds = Arrays.asList(inputBoxed);
 		
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
 			incEvaluate();
@@ -386,6 +390,9 @@ public class Task extends TaskBase<Problem> {
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
 			if(isAncestorLogginEnabled)
 			{
+				tmpSolution.timeStamp = System.currentTimeMillis();
+				tmpSolution.generationNumber = this.getNumberOfIterations();
+				tmpSolution.evaluationNumner = this.getNumberOfEvaluations();
 				ancestors.add(tmpSolution);
 				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
 				ancestorSB.append("\n");*/
@@ -414,6 +421,9 @@ public class Task extends TaskBase<Problem> {
 		if(isAncestorLogginEnabled)
 		{
 			tmpSolution.parents = parents;
+			tmpSolution.timeStamp = System.currentTimeMillis();
+			tmpSolution.generationNumber = this.getNumberOfIterations();
+			tmpSolution.evaluationNumner = this.getNumberOfEvaluations();
 		/*	ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";[");
 			for(int i = 0; i < parents.size(); i++)
 			{
@@ -470,4 +480,5 @@ public class Task extends TaskBase<Problem> {
 	public DoubleSolution eval(DoubleSolution newSolution) throws StopCriteriaException {
 		return newSolution = eval(newSolution.getDoubleVariables());
 	}
+
 }

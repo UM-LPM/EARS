@@ -121,7 +121,6 @@ public class GWO extends Algorithm{
 			updateABD();
 			task.incrementNumberOfIterations();
 		}
-//		System.out.println(task.getNumberOfIterations());
 		return alpha;
 	}
 

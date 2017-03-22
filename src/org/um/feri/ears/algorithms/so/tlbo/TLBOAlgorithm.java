@@ -138,7 +138,7 @@ public class TLBOAlgorithm extends Algorithm {
                     // on random place change value
                     stat.getCurrent_g().incDouple();
                     int pos = Util.rnd.nextInt(num_var);
-                    tmp3 = population[j].getNewVariables();
+                    tmp3 = population[j].getDoubleVariables();
 
                     tmp3[pos] = Util.nextDouble(lowerLimit[pos], upperLimit[pos]);
                     StopCriteriaException.id =" 3";
@@ -190,7 +190,7 @@ public class TLBOAlgorithm extends Algorithm {
             M = mean();
             if (test)
                 System.out.println("mean M=" + Arrays.toString(M));
-            new_mean = population[0].getNewVariables();
+            new_mean = population[0].getDoubleVariables();
             // Keep not in paper
             for (int k = 0; k < Keep; k++)
                 keepList.add(new DoubleSolution(population[k]));

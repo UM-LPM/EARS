@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 /**
@@ -69,9 +70,8 @@ public class ProblemB2  extends Problem{
 	}
 
 	@Override
-	public double eval(List<Double> ds) {
-		double v = ds.get(0)*ds.get(0) + 2*ds.get(1)*ds.get(1) - 0.3*Math.cos(3*Math.PI*ds.get(0))-0.4*Math.cos(4*Math.PI*ds.get(1)) + 0.7;
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double getOptimumEval() {
@@ -80,9 +80,8 @@ public class ProblemB2  extends Problem{
 
 	
 	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x<eval_y;
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
+		return eval_x < eval_y;
 	}
 
 	

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 /**
@@ -84,21 +85,15 @@ public class ProblemGoldSteinAndPrice  extends Problem{
 	}
 	
 	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x<eval_y;
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
+		return eval_x < eval_y;
 	}
 
 
 
 	@Override
-	public double eval(List<Double> ds) {
-		double a,b;
-		a = 1+Math.pow(ds.get(0)+ds.get(1)+1,2)*(19-14*ds.get(0)+3*ds.get(0)*ds.get(0)-14*ds.get(1)+6*ds.get(0)*ds.get(1)+3*ds.get(1)*ds.get(1));
-		b = 30+Math.pow(2*ds.get(0)-3*ds.get(1),2)*(18-32*ds.get(0)+12*ds.get(0)*ds.get(0)+48*ds.get(1)-36*ds.get(0)*ds.get(1)+27*ds.get(1)*ds.get(1));
-		double v = a*b;
-		return v;
-
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 }

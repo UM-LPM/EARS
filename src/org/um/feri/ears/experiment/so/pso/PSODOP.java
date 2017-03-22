@@ -72,16 +72,16 @@ public class PSODOP extends Algorithm {
 
 				double Pd[] = new double[taskProblem.getNumberOfDimensions()];
 				for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
-					Pd[d] = Pk.getVariables().get(d) - Pj.getVariables().get(d);
+					Pd[d] = Pk.getVariables()[d] - Pj.getVariables()[d];
 				}
 
 				v = new double[taskProblem.getNumberOfDimensions()];
 				for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();
-					double sigma = c1 * (P.getPbest().getVariables().get(d) - P.getVariables().get(d));
+					double sigma = c1 * (P.getPbest().getVariables()[d] - P.getVariables()[d]);
 					if (Util.rnd.nextDouble() < cr) {
-						v[d] = w * (P.getV()[d]) + sigma * r1 + c2 * r2 * (PgBest.getVariables().get(d) - P.getVariables().get(d));
+						v[d] = w * (P.getV()[d]) + sigma * r1 + c2 * r2 * (PgBest.getVariables()[d] - P.getVariables()[d]);
 					} else {
 						v[d] = P.getV()[d];
 					}

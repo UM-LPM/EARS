@@ -59,7 +59,6 @@ import org.um.feri.ears.problems.unconstrained.ProblemSphere;
 //TODO calculate CD for rating
 public class RatingRPUOed30 extends RatingBenchmark {
     public static final String name="Real Parameter Unconstrained Optimization Problems with maximum evaluation condition";
-    int dim;
     public boolean resultEqual(DoubleSolution a, DoubleSolution b) {
         if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
@@ -74,7 +73,7 @@ public class RatingRPUOed30 extends RatingBenchmark {
         super();
         maxEvaluations=30000;
         maxIterations = 0;
-        dim = D;
+        dimension = D;
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,String.valueOf(D));
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
@@ -93,13 +92,13 @@ public class RatingRPUOed30 extends RatingBenchmark {
      */
     @Override
     protected void initFullProblemList() {
-        registerTask(new ProblemAckley(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemGriewank(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemRastrigin(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemRosenbrock(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemSchwefel(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemSchwefelRidge(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemSphere(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new ProblemAckley(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new ProblemGriewank(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new ProblemRastrigin(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new ProblemRosenbrock(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new ProblemSchwefel(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new ProblemSchwefelRidge(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new ProblemSphere(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
     }
         
     /* (non-Javadoc)

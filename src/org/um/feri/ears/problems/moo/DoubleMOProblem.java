@@ -24,8 +24,7 @@ public abstract class DoubleMOProblem extends MOProblemBase<Double> {
 	}
 
 	public void evaluate(MOSolutionBase<Double> solution) {
-		List<Double> decisionVariables = solution.getVariables();
-		double obj[] = evaluate(decisionVariables.toArray(new Double[decisionVariables.size()]));
+		double obj[] = evaluate(solution.getVariables());
 		solution.setObjectives(obj);
 	}
 	

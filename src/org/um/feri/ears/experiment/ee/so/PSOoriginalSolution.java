@@ -47,7 +47,7 @@ public class PSOoriginalSolution extends DoubleSolution {
 	}
 
 	public PSOoriginalSolution update(Task t, double v[]) throws StopCriteriaException {
-		double x[] = getNewVariables();
+		double x[] = getDoubleVariables();
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.setFeasible(x[i] + v[i], i);
 		}
@@ -62,7 +62,7 @@ public class PSOoriginalSolution extends DoubleSolution {
 	}
 	
 	public PSOoriginalSolution updateP(Task t, double sigma) throws StopCriteriaException {
-		double x[] = getNewVariables();
+		double x[] = getDoubleVariables();
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.setFeasible(x[i] + sigma * Util.rnd.nextDouble(), i);
 		}
@@ -78,7 +78,7 @@ public class PSOoriginalSolution extends DoubleSolution {
 	}
 	
 	public PSOoriginalSolution updatePa(Task t, double sigma) throws StopCriteriaException {
-		double x[] = getNewVariables();
+		double x[] = getDoubleVariables();
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.setFeasible(x[i] + sigma * Util.rnd.nextDouble(), i);
 		}

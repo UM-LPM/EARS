@@ -63,11 +63,11 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param ds vector of possible solution
 	 * @return
 	 */
-    public boolean areDimensionsInFeasableInterval(List<Double> ds) {
+    public boolean areDimensionsInFeasableInterval(Double[] ds) {
 	    for (int i=0; i<numberOfDimensions; i++) {
-        if (ds.get(i) < lowerLimit.get(i))
+        if (ds[i] < lowerLimit.get(i))
             return false;
-        if (ds.get(i) > upperLimit.get(i))
+        if (ds[i] > upperLimit.get(i))
             return false;
 	    }
         return true;
@@ -97,10 +97,10 @@ public abstract class Problem extends ProblemBase<Double> {
 		return d;
 	}
 	
-	public List<Double> setFeasible(List<Double> d) {
-		for(int i = 0; i < d.size();i++)
+	public Double[] setFeasible(Double[] d) {
+		for(int i = 0; i < d.length;i++)
 		{
-			d.set(i, setFeasible(d.get(i).doubleValue(), i));
+			d[i] = setFeasible(d[i], i);
 		}
 		return d;
 	}
@@ -232,7 +232,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @return
 	 * @deprecated 
 	 */
-	public abstract double eval(List<Double> ds);
+	public abstract double eval(Double[] ds);
 	
 	/**
 	 * with no evaluations just checks
@@ -284,7 +284,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param x
 	 * @return
 	 */
-	public double[] calc_constrains(List<Double> x) {
+	public double[] calc_constrains(Double[] x) {
 		double[] tmp = new double[0];
 		return tmp;
 	}
@@ -300,7 +300,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param x - solution
 	 * @return
 	 */
-	public double constrainsEvaluations(List<Double> x) {
+	public double constrainsEvaluations(Double[] x) {
 		if (numberOfConstraints == 0)
 			return 0;
 		double[] g = calc_constrains(x); //calculate for every constrain (problem depended)
@@ -319,9 +319,9 @@ public abstract class Problem extends ProblemBase<Double> {
 	
 	public DoubleSolution getRandomSolution()
 	{
-		List<Double> var=new ArrayList<Double>(numberOfDimensions);
+		Double[] var=new Double[numberOfDimensions];
 		for (int j = 0; j < numberOfDimensions; j++) {
-			var.add(Util.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
+			var[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
 		}
 		DoubleSolution sol = new DoubleSolution(var, eval(var), calc_constrains(var), upperLimit, lowerLimit);
 		return sol;
@@ -336,7 +336,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param eval_y
 	 * @return
 	 */
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,
 			double eval_y) {
 		double cons_x = constrainsEvaluations(x);
 		double cons_y = constrainsEvaluations(y);

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 /**
@@ -68,10 +69,8 @@ public class ProblemEasom  extends Problem{
 	}
 	
 	@Override
-	public double eval(List<Double> ds) {
-		double v=
-				-Math.cos(ds.get(0))*Math.cos(ds.get(1))*Math.exp(-Math.pow((ds.get(0)-Math.PI),2)-Math.pow(ds.get(1)-Math.PI,2));
-		return v;
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double[][] getOptimalVector() {
@@ -83,8 +82,7 @@ public class ProblemEasom  extends Problem{
 		return -1.;
 	}
 	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x<eval_y;
+	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
+		return eval_x < eval_y;
 	}
 }

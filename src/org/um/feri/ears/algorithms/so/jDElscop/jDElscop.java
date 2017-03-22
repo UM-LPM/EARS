@@ -95,7 +95,7 @@ public class jDElscop extends Algorithm {
 				else
 					strategy = StrategyDE.STRATEGY_jDEexp;
 				// jDe
-				tmp = pop_x[i].getNewVariables();
+				tmp = pop_x[i].getDoubleVariables();
 				tmp_par = pop_x[i].getNewPara();
 				do {
 					r1 = Util.rnd.nextInt(pop_size);
@@ -144,9 +144,9 @@ public class jDElscop extends Algorithm {
 					{
 						if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
 							tmp[n] = F
-									* (g.getVariables().get(n))
+									* (g.getVariables()[n])
 									+ F
-									* (pop_x[r2].getVariables().get(n) - pop_x[r3].getVariables().get(n));
+									* (pop_x[r2].getVariables()[n] - pop_x[r3].getVariables()[n]);
 						}
 						n = (n + 1) % D;
 					}
@@ -159,8 +159,8 @@ public class jDElscop extends Algorithm {
 					L = 0;
 					// F = 0.5; CR=0.9;
 					do {
-						tmp[n] = pop_x[r1].getVariables().get(n) + F
-								* (pop_x[r2].getVariables().get(n) - pop_x[r3].getVariables().get(n));
+						tmp[n] = pop_x[r1].getVariables()[n] + F
+								* (pop_x[r2].getVariables()[n] - pop_x[r3].getVariables()[n]);
 						n = (n + 1) % D;
 						L++;
 					} while ((Util.rnd.nextDouble() < CR) && (L < D));
@@ -174,9 +174,9 @@ public class jDElscop extends Algorithm {
 					for (L = 0; L < D; L++) /* perform D binomial trials */
 					{
 						if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
-							tmp[n] = pop_x[r1].getVariables().get(n)
+							tmp[n] = pop_x[r1].getVariables()[n]
 									+ F
-									* (pop_x[r2].getVariables().get(n) - pop_x[r3].getVariables().get(n));
+									* (pop_x[r2].getVariables()[n] - pop_x[r3].getVariables()[n]);
 						}
 						n = (n + 1) % D;
 					}

@@ -8,9 +8,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.AlgorithmInfo;
+import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.benchmark.MORatingBenchmark;
 import org.um.feri.ears.benchmark.RatingBenchmarkBase;
+import org.um.feri.ears.experiment.ee.so.PSOoriginalLogging;
 
 public abstract class TaskBase<T extends ProblemBase> {
 	
@@ -140,6 +145,65 @@ public abstract class TaskBase<T extends ProblemBase> {
 					
 				}
 				bw.write("\n");
+			}
+			
+			bw.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void saveGraphingFile(String fileName, Algorithm alg) {
+		
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName+".txt");
+			OutputStreamWriter osw = new OutputStreamWriter(fos);
+			BufferedWriter bw = new BufferedWriter(osw);
+			
+			AlgorithmInfo info = alg.getAlgorithmInfo();
+			Map<EnumAlgorithmParameters, String> algParams = info.getParameters();
+
+			StringBuffer sb = new StringBuffer();
+			for (EnumAlgorithmParameters t:algParams.keySet()) {
+				sb.append("\""+algParams.get(t)+"\",");
+			}
+			String algorithmParams = sb.toString();
+			algorithmParams = algorithmParams.substring(0, algorithmParams.length()-2);
+		    
+			bw.write("'"+alg.getID()+";"+info.getPublishedAcronym()+";["+algorithmParams+"];"+getProblemName()+";"+getNumberOfDimensions()+";["+stopCriteria+"];'+\n");
+			
+			for(int i = 0; i < ancestors.size(); ++i)
+			{
+				List<DoubleSolution> parents = ancestors.get(i).parents;
+				
+				bw.write("'{"+ancestors.get(i).getID()+";"+ancestors.get(i).getGenerationNumber()+";");
+				
+				if(parents != null)
+				{
+					bw.write("[");
+					for(int j = 0; j < parents.size(); ++j)
+					{
+						bw.write(""+parents.get(j).getID());
+						if(j+1 < parents.size())
+							bw.write(",");
+					}
+					bw.write("];");
+					
+				}
+				else
+				{
+					bw.write("[-1,-1];");
+				}
+
+				bw.write(ancestors.get(i).getTimeStamp()+";"+ancestors.get(i).getEvaluationNumner()+";"+ancestors.get(i).getEval()+";"+Arrays.toString(ancestors.get(i).getDoubleVariables())+"}'");
+				
+				if(i+1 < ancestors.size()){
+					bw.write("+\n");
+				}
+				else{
+					bw.write(";");
+				}
 			}
 			
 			bw.close();

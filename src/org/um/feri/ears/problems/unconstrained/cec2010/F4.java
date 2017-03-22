@@ -1,87 +1,53 @@
 package org.um.feri.ears.problems.unconstrained.cec2010;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.unconstrained.cec2010.base.EllipticRotated;
-import org.um.feri.ears.problems.unconstrained.cec2010.base.EllipticShifted;
+import org.um.feri.ears.problems.unconstrained.cec.Functions;
 import org.um.feri.ears.util.Util;
 
-/**
- * Problem function!
- * 
- * @author Niki Vecek
- * @version 1
- * 
- **/
-
-public class F4 extends Problem {
+public class F4 extends CEC2010{
 	
-	int[] P;
-	int m;
-	public double[][] rot_matrix;
-	EllipticShifted elliptic_shifted;
-	EllipticRotated elliptic_rotated;
-	
-	// F4 CEC 2010
-	// Single-group Shifted and m-rotated Elliptic Function
 	public F4(int d) {
-		super(d,0);
-		elliptic_shifted = new EllipticShifted(numberOfDimensions);
-		elliptic_rotated= new EllipticRotated(numberOfDimensions);
-		
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+		super(d, 4);
 		
 		name = "F04 Single-group Shifted and m-rotated Elliptic Function";
 		
 		P = new int[numberOfDimensions];
-		int rand_place = 0;
-		for (int i=numberOfDimensions-1; i>0; i--){
-			rand_place = Util.nextInt(numberOfDimensions);
-			P[i] = rand_place;			
+		P = Util.randomPermutation(numberOfDimensions);
+		OShift = new double[numberOfDimensions];
+
+		for (int i=0; i<numberOfDimensions; i++){
+			OShift[i] = i;
 		}
 		
-		m = 2;
-		
-		rot_matrix = new double[m][m];
+		M = new double[m*m];
 		
 		DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, Util.rnd);
 		
 		for (int i=0; i<m; i++){
 			for (int j=0; j<m; j++){
-				rot_matrix[i][j] = A.get(i, j);
+				M[i * m + j] = A.get(i, j);
 			}
 		}
-		
+	}
+
+	@Override
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
 	}
 	
 	public double eval(double x[]) {
 		double F = 0;
-		F = elliptic_rotated.eval(x,P,0,m,rot_matrix)*1000000 + elliptic_shifted.eval(x,P,m+1,numberOfDimensions);	
+		double[] p1 = getPermutatedIndices(x,P,0,m);
+		double[] p2 = getPermutatedIndices(x,P,m,numberOfDimensions - m);
+		double[] s1 = getPermutatedIndices(OShift,P,0,m);
+		double[] s2 = getPermutatedIndices(OShift,P,m,numberOfDimensions - m);
+		
+		F = Functions.ellips_func(p1, m, s1, M, 1, 1) * 1000000 + Functions.ellips_func(p2, numberOfDimensions - m, s2, M, 1, 0);
 		return F;
-	}
-	
-	@Override
-	public double eval(List<Double> ds) {
-		double F = 0;
-		F = elliptic_rotated.eval(ds,P,0,m,rot_matrix)*1000000 + elliptic_shifted.eval(ds,P,m+1,numberOfDimensions);	
-		return F;
-	}
-
-	public double getOptimumEval() {
-		return 0;
-	}
-
-	@Override
-	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-			double eval_y) {
-		return eval_x < eval_y;
 	}
 
 }

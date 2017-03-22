@@ -65,7 +65,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 		this.upperLimit = upperLimit;
 		this.lowerLimit = lowerLimit;
 		
-		variable = new ArrayList<Type>(Arrays.asList(var)); 
+		System.arraycopy(var, 0, variable, 0, var.length);
 		
  		//System.arraycopy(x, 0, this.variable, 0, x.size());
 		this.eval = new double[eval.length];
@@ -86,9 +86,9 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 	 * @param x
 	 * @param eval
 	 */
-	public MOSolutionBase(List<Type> x, double[] eval) {
+	public MOSolutionBase(Type[] var, double[] eval) {
 
-		variable = new ArrayList<Type>(x);
+		System.arraycopy(var, 0, variable, 0, var.length);
  		//System.arraycopy(x, 0, this.variable, 0, x.size());
 		this.eval = new double[eval.length];
 		System.arraycopy(eval, 0, this.eval, 0, eval.length);

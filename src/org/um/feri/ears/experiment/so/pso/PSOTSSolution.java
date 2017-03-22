@@ -42,8 +42,8 @@ public class PSOTSSolution extends DoubleSolution {
 	}
 	
 	public PSOTSSolution Cross(PSOTSSolution Parent, Task tsk) throws StopCriteriaException {
-		double pozicija[] = this.Pbest.getNewVariables();
-		double pozicija2[] = Parent.Pbest.getNewVariables();
+		double pozicija[] = this.Pbest.getDoubleVariables();
+		double pozicija2[] = Parent.Pbest.getDoubleVariables();
 		
 		for (int i=0; i<pozicija.length; i++) {
 			pozicija[i] = (pozicija[i]+pozicija2[i])/2;
@@ -68,7 +68,7 @@ public class PSOTSSolution extends DoubleSolution {
 	}
 
 	public PSOTSSolution update(Task t, double v[]) throws StopCriteriaException {
-		double x[] = getNewVariables();
+		double x[] = getDoubleVariables();
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.setFeasible(x[i] + v[i], i);
 		}
