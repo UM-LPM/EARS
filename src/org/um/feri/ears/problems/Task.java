@@ -413,6 +413,18 @@ public class Task extends TaskBase<Problem> {
 		}
 		
 	}
+	
+	public void addAncestors(DoubleSolution solution, List<DoubleSolution> parents)
+	{
+		if(isAncestorLogginEnabled)
+		{
+			solution.parents = parents;
+			solution.timeStamp = System.currentTimeMillis();
+			solution.generationNumber = this.getNumberOfIterations();
+			solution.evaluationNumner = this.getNumberOfEvaluations();
+			ancestors.add(solution);
+		}
+	}
 
 	public DoubleSolution eval(double[] x, List<DoubleSolution> parents) throws StopCriteriaException {
 		

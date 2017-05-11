@@ -2,6 +2,10 @@ package org.um.feri.ears.experiment.ee.so;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
@@ -50,36 +54,41 @@ import org.um.feri.ears.problems.Task;
  *          POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-public class RandomWalkAlgorithm extends Algorithm {
+public class RandomWalkAlgorithmLogging extends Algorithm {
 	DoubleSolution i;
 	Task task;
 	
 	boolean debug=false;
-	public RandomWalkAlgorithm() {
+	public RandomWalkAlgorithmLogging() {
 		this.debug = false;
 		ai = new AlgorithmInfo("RWSi","","RWSi","Random Walk Simple");
 		au =  new Author("matej", "matej.crepinsek at uni-mb.si");
 	}
-	public RandomWalkAlgorithm(boolean d) {
+	public RandomWalkAlgorithmLogging(boolean d) {
 	    this();
 		setDebug(d); 
 	}
 	
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException{
+	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
 		task = taskProblem;
 		DoubleSolution ii;
-			i = taskProblem.getRandomSolution();
-			if (debug) System.out.println(taskProblem.getNumberOfEvaluations()+" "+i);
-			while (!taskProblem.isStopCriteria()) {
-				
-				ii = taskProblem.getRandomSolution();
-				if (taskProblem.isFirstBetter(ii, i)) {
-					i = ii;
-					if (debug) System.out.println(taskProblem.getNumberOfEvaluations()+" "+i);
-				}
-				task.incrementNumberOfIterations();
+		List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
+		i = taskProblem.getRandomSolution();
+		if (debug)
+			System.out.println(taskProblem.getNumberOfEvaluations() + " " + i);
+		while (!taskProblem.isStopCriteria()) {
+
+			ii = taskProblem.getRandomSolution();
+			parents.add(i);
+			taskProblem.addAncestors(ii, parents);
+			if (taskProblem.isFirstBetter(ii, i)) {
+				i = ii;
+				if (debug)
+					System.out.println(taskProblem.getNumberOfEvaluations() + " " + i);
 			}
+			task.incrementNumberOfIterations();
+		}
 		return i;
 
 	}

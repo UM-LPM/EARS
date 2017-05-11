@@ -1,8 +1,5 @@
-package org.um.feri.ears.experiment.ee;
+package org.um.feri.ears.experiment.ee.so;
 
-import org.um.feri.ears.experiment.ee.so.DEAlgorithmLogging;
-import org.um.feri.ears.experiment.ee.so.JADELogging;
-import org.um.feri.ears.experiment.ee.so.PSOoriginalLogging;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriteriaException;
@@ -20,7 +17,7 @@ public class SORatingExample {
         Util.rnd.setSeed(System.currentTimeMillis());
         
         Problem[] problems = new Problem[5];
-        int[] dimmensions = {10};
+        int[] dimmensions = {50};
         PSOoriginalLogging psoLogging = new PSOoriginalLogging();
         JADELogging jadeLogging = new JADELogging();
         DEAlgorithmLogging deLogging = new DEAlgorithmLogging(DEAlgorithmLogging.DE_best_1_bin);
