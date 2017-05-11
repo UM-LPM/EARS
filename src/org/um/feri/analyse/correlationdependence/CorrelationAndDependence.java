@@ -2,6 +2,9 @@ package org.um.feri.analyse.correlationdependence;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Comparator;
 
 import org.um.feri.analyse.util.MersenneTwister;
 import org.um.feri.ears.problems.*;
@@ -131,4 +134,29 @@ public class CorrelationAndDependence {
 		}
 		return sb.toString();
 	}
+	
+	public int getGraphArea(int x, int y)
+	{
+		int area = 0;
+		 
+		int polje[][] = new int[x+1][y+1];
+		double dx = max_x/x;
+		double dy = max_y/y;
+		for (int i=0; i<size; i++) {
+			polje[(int)(all[i].getX()/dx)][(int)(all[i].getY()/dy)]++;
+		}
+		
+		for (int i=0; i<x; i++) {
+			for (int j=0; j<y; j++) {
+				if (polje[i][j] != 0) {
+					area++;
+				}
+			}
+		}
+		
+		return area;
+	}
 }
+
+
+
