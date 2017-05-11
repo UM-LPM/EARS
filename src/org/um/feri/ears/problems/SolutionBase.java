@@ -22,7 +22,7 @@ public abstract class SolutionBase <Type> {
 	protected static long currentID = 1;
 	protected long timeStamp;
 	protected int generationNumber;
-	protected long evaluationNumner;
+	protected long evaluationNumber;
 
 	public SolutionBase() {
 		ID = currentID++;
@@ -40,8 +40,8 @@ public abstract class SolutionBase <Type> {
 		return generationNumber;
 	}
 
-	public long getEvaluationNumner() {
-		return evaluationNumner;
+	public long getEvaluationNumber() {
+		return evaluationNumber;
 	}
 
 	public SolutionBase(SolutionBase<Type> s) {

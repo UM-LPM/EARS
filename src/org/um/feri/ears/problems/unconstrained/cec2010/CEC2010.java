@@ -18,7 +18,7 @@ public abstract class CEC2010 extends Problem {
 		super(d, 0);
 		
 		shortName = "F"+func_num;
-		benchmarkName = "CEC20010";
+		benchmarkName = "CEC2010";
 		
 		
 	    //Search Range

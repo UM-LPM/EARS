@@ -169,9 +169,9 @@ public abstract class TaskBase<T extends ProblemBase> {
 				sb.append("\""+algParams.get(t)+"\",");
 			}
 			String algorithmParams = sb.toString();
-			algorithmParams = algorithmParams.substring(0, algorithmParams.length()-2);
+			algorithmParams = algorithmParams.substring(0, algorithmParams.length()-1);
 		    
-			bw.write("'"+alg.getID()+";"+info.getPublishedAcronym()+";["+algorithmParams+"];"+getProblemName()+";"+getNumberOfDimensions()+";["+stopCriteria+"];'+\n");
+			bw.write("'"+alg.getID()+";"+info.getPublishedAcronym()+";["+algorithmParams+"];"+getProblemName()+";"+getNumberOfDimensions()+";[\""+stopCriteria+"\"];'+\n");
 			
 			for(int i = 0; i < ancestors.size(); ++i)
 			{
@@ -196,7 +196,7 @@ public abstract class TaskBase<T extends ProblemBase> {
 					bw.write("[-1,-1];");
 				}
 
-				bw.write(ancestors.get(i).getTimeStamp()+";"+ancestors.get(i).getEvaluationNumner()+";"+ancestors.get(i).getEval()+";"+Arrays.toString(ancestors.get(i).getDoubleVariables())+"}'");
+				bw.write(ancestors.get(i).getTimeStamp()+";"+ancestors.get(i).getEvaluationNumber()+";"+ancestors.get(i).getEval()+";"+Arrays.toString(ancestors.get(i).getDoubleVariables())+"}'");
 				
 				if(i+1 < ancestors.size()){
 					bw.write("+\n");

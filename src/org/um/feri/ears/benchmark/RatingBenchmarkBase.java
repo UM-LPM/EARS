@@ -28,10 +28,10 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     protected ArrayList<T2> listOfAlgorithmsPlayers;
     protected boolean recheck = false;
     protected boolean displayRatingIntervalChart = true;
-    public static boolean printSingleRunDuration = false;
+    public static boolean printSingleRunDuration = true;
     
    	// Default benchmark settings
-    protected EnumStopCriteria stopCriteria = EnumStopCriteria.EVALUATIONS; 
+    protected EnumStopCriteria stopCriteria = EnumStopCriteria.STAGNATION; 
     protected int maxEvaluations = 1500;
     protected long timeLimit = TimeUnit.MILLISECONDS.toNanos(500); //milliseconds
     protected int maxIterations = 500;
@@ -67,6 +67,16 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
         }
         return a;
     }
+    
+    /**
+     * Remove algorithm from benchmark
+     * @param al
+     */
+    public void unregisterAlgorithm(AlgorithmBase al) {
+        listOfAlgorithmsPlayers.remove(al);
+        results.remove(al);
+    }
+    
     public String getParams() {
         StringBuffer sb = new StringBuffer();
         sb.append("Parameters:\n");
@@ -161,6 +171,12 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);
         plot.setVisible(true);
+    }
+    
+    public void allPlayed(){
+    	for (AlgorithmBase al: listOfAlgorithmsPlayers) {
+        	al.setPlayed(true);
+        }
     }
     
 	protected boolean isCheating() {

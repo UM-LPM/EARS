@@ -14,9 +14,11 @@ public class DummyAlgorithm extends Algorithm{
 	
 	HashMap<String, double[]> results;
 	HashMap<String, Integer> positions; //stores the position of the current result of the current problem
+	String filesDir = "D:/Results/";
 	
-	public DummyAlgorithm(String name)
+	public DummyAlgorithm(String name, String filesDir)
 	{
+		this.filesDir = filesDir;
 		ai = new AlgorithmInfo(name,"",name, name);
 		fillResults(name);
 		
@@ -27,18 +29,17 @@ public class DummyAlgorithm extends Algorithm{
 		results = new HashMap<String, double[]>();
 		positions = new HashMap<String, Integer>();
 		
-		File folder = new File("D:/Results/");
+		File folder = new File(filesDir);
 		File[] listOfFiles = folder.listFiles();
 		
-		String pathName = name+"_";
 		String problemName, fileName, value;
 		
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
 				fileName = file.getName().toLowerCase();
-				if(fileName.toLowerCase().contains(pathName.toLowerCase()))
+				if(fileName.toLowerCase().indexOf(name.toLowerCase()+"_") == 0)
 				{
-					problemName = fileName.substring(fileName.indexOf(pathName)+pathName.length()+1,fileName.length()-4);
+					problemName = fileName.substring(name.length()+1,fileName.length()-4);
 					double[] resultArray = new double[10000];
 					int index = 0;
 					try(BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {

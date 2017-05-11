@@ -106,5 +106,9 @@ public class BankOfResults {
 		}
 		return sb.toString();
 	}
+	public void removeAlgorithm(AlgorithmBase al) {
+		all.remove(al);
+		
+	}
 
 }

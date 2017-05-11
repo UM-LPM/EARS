@@ -354,4 +354,12 @@ public abstract class Problem extends ProblemBase<Double> {
 		return cons_x < cons_y; // less constrain is better
 
 	}
+
+	public double[] getRandomVariables() {
+		double[] var=new double[numberOfDimensions];
+		for (int j = 0; j < numberOfDimensions; j++) {
+			var[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
+		}
+		return var;
+	}
 }

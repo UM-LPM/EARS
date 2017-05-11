@@ -29,18 +29,27 @@ public class SoilModelProblem extends Problem{
 	int layers;
 	double xx[];
 	double y1[];
+	boolean simplified = false;
 	Map<Double, Integer> freq = new HashMap<Double, Integer>();
 	int call = 1;
 	
-	public SoilModelProblem(int numberOfDimensions, int numberOfConstraints, int layers, String filename) {
-		this(numberOfDimensions, numberOfConstraints);
+	//simplified two-layered model
+	public SoilModelProblem(int numberOfDimensions, String filename){
+		this(numberOfDimensions, 0);
+		
+		this.simplified = true;
+		this.layers = 2;
+		loadData(filename);
+	}
+	
+	public SoilModelProblem(int numberOfDimensions, int layers, String filename) {
+		this(numberOfDimensions, 0);
 		
 		xx = new double[15000]; // velikost?
 		y1 = new double[15000]; // velikost?
 		
 		this.layers = layers;
 		loadData(filename);
-		
 	}
 
 	public SoilModelProblem(int numberOfDimensions, int numberOfConstraints) {
@@ -69,7 +78,64 @@ public class SoilModelProblem extends Problem{
 
 	@Override
 	public double eval(Double[] ds) {
+		
+		if(simplified)
+		{
+			return simplifiedModel(ds);
+		}
+		else
+		{
+			return nLayerModel(ds);
+		}
+	}
+	
+	private double simplifiedModel(Double[] ds) {
+		
+		double k1 = (ds[2] -ds[0]) / (ds[2] + ds[0]);
+		
+		double RI[] = new double[d.length];
+		boolean isEnd;
+		int n, stk;
+		double a,b,dro,ro;
+		for(int k = 0; k < d.length; k++)
+		{
+			isEnd = true;
+			n = 0;
+			stk = 0;
+			ro = ds[0];
+			while(isEnd && n < 1e6){
+				n++;
+				a = 1 + Math.pow(2 * n * ds[1] / d[k], 2);
+				b = a + 3;
+				dro = ds[0] * 4 * Math.pow(k1, n) * (1 / Math.sqrt(a) - 1 / Math.sqrt(b));
+				ro+=dro;
+				if(Math.abs(dro)<1e-6){
+					stk++;
+				}
+				else{
+					stk = 0;
+				}
+				if(stk >= 20){
+					isEnd = false;
+				}
+			}
+			RI[k] = ro;
+		}
+		
+		// Calculate difference
+		double CF = 0.0;
+		for(int i = 0; i < RI.length; i++)
+		{
+			//CF+= Math.abs((RI[i] - RM[i]) * (RI[i] - RM[i])); /// RM[i];
+			CF+= Math.abs(RI[i] - RM[i])  / RM[i];
+		}
+		
+		CF = (CF / RI.length) * 100;
+		return CF;
+	}
 
+	private double nLayerModel(Double[] ds) {
+		
 		int j = 0;
 		
 		double R[] = new double[numberOfDimensions]; // layer resistance
@@ -96,7 +162,7 @@ public class SoilModelProblem extends Problem{
 		
 		double RI[] = new double[d.length];
 
-		for(int k = 0; k < d.length;k++)
+		for(int k = 0; k < d.length; k++)
 		{
 			lambda = -step;
 			isEnd = true;
@@ -155,7 +221,7 @@ public class SoilModelProblem extends Problem{
 		CF = (CF / RI.length) * 100;
 		return CF;
 	}
-	
+
 	private void loadData(String filename) {
 		
 		if(filename != null && !filename.isEmpty())

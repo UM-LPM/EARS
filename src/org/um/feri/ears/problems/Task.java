@@ -92,6 +92,10 @@ public class Task extends TaskBase<Problem> {
 		}
 		return interval;
 	}
+	
+	public double[] getRandomVariables() {
+		return p.getRandomVariables();
+	}
 
 
 	public DoubleSolution getRandomSolution() throws StopCriteriaException {
@@ -107,7 +111,7 @@ public class Task extends TaskBase<Problem> {
 			{
 				tmpSolution.timeStamp = System.currentTimeMillis();
 				tmpSolution.generationNumber = this.getNumberOfIterations();
-				tmpSolution.evaluationNumner = this.getNumberOfEvaluations();
+				tmpSolution.evaluationNumber = this.getNumberOfEvaluations();
 				ancestors.add(tmpSolution);
 				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
 				ancestorSB.append("\n");*/
@@ -392,7 +396,7 @@ public class Task extends TaskBase<Problem> {
 			{
 				tmpSolution.timeStamp = System.currentTimeMillis();
 				tmpSolution.generationNumber = this.getNumberOfIterations();
-				tmpSolution.evaluationNumner = this.getNumberOfEvaluations();
+				tmpSolution.evaluationNumber = this.getNumberOfEvaluations();
 				ancestors.add(tmpSolution);
 				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
 				ancestorSB.append("\n");*/
@@ -423,7 +427,7 @@ public class Task extends TaskBase<Problem> {
 			tmpSolution.parents = parents;
 			tmpSolution.timeStamp = System.currentTimeMillis();
 			tmpSolution.generationNumber = this.getNumberOfIterations();
-			tmpSolution.evaluationNumner = this.getNumberOfEvaluations();
+			tmpSolution.evaluationNumber = this.getNumberOfEvaluations();
 		/*	ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";[");
 			for(int i = 0; i < parents.size(); i++)
 			{

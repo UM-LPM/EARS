@@ -34,6 +34,22 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
     protected AlgorithmInfo tmpAi;
     protected AlgorithmRunTime art;
     
+    //Tuning
+    protected int age;
+    protected ArrayList<Double> controlParameters;
+    protected boolean played=false;
+    
+    public void setPlayed(boolean aBool){
+    	this.played = aBool;
+    }
+    public boolean getPlayed(){
+    	return played;
+    }
+    
+    public ArrayList<Double> getControlParameters(){
+    	return this.controlParameters;
+    }
+    
     /**
      * Adds total run time of the algorithm and the execution time without function evaluations.
      * @param totalRunTime total run time of the algorithm
@@ -175,5 +191,15 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
     public static Cache getCaching()
     {
     	return caching;
+    }
+
+    public int getAge(){
+    	return this.age;
+    }
+    public void setAge(int aAge){
+    	this.age = aAge;
+    }
+    public void increaseAge(){
+    	this.age = this.age + 1;
     }
 }

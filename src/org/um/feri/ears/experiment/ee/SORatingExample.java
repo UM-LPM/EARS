@@ -41,6 +41,7 @@ public class SORatingExample {
                 	t.enableAncestorLogging();
         			psoLogging.execute(t);
         			t.saveAncestorLogging(psoLogging.getID()+"_"+p.getName());
+        			t.saveGraphingFile(psoLogging.getID()+"_"+p.getName(),psoLogging);
         		} catch (StopCriteriaException e) {
         			e.printStackTrace();
         		}

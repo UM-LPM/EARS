@@ -152,5 +152,9 @@ public class ResultArena {
 		}
 		return unevaluatedGames;
 	}
-	
+
+	public void removePlayer(String id) {
+		players.remove(id);
+		
+	}
 }

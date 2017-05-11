@@ -1,57 +1,69 @@
 package org.um.feri.ears.benchmark.example;
 
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.so.abc.ABC;
 import org.um.feri.ears.algorithms.so.cro.CRO;
+import org.um.feri.ears.algorithms.so.cs.CS;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
-import org.um.feri.ears.algorithms.so.jDElscop.jDElscop.StrategyDE;
+import org.um.feri.ears.algorithms.so.fwa.FWA;
+import org.um.feri.ears.algorithms.so.goa.GOA;
+import org.um.feri.ears.algorithms.so.gsav2.GSA;
+import org.um.feri.ears.algorithms.so.gwo.GWO;
+import org.um.feri.ears.algorithms.so.hc.HillClimbing;
+import org.um.feri.ears.algorithms.so.ica.ICA;
+import org.um.feri.ears.algorithms.so.jade.JADE;
+import org.um.feri.ears.algorithms.so.mbf.MBF;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
+import org.um.feri.ears.algorithms.so.rmo.RMO;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.benchmark.RatingCEC2014;
+import org.um.feri.ears.benchmark.RatingCEC2010;
 import org.um.feri.ears.benchmark.RatingCEC2015;
 import org.um.feri.ears.benchmark.RatingRPUOed2;
 import org.um.feri.ears.benchmark.RatingRPUOed30;
-import org.um.feri.ears.experiment.ee.so.PSOoriginalLogging;
-import org.um.feri.ears.experiment.so.pso.PSOCBCW;
-import org.um.feri.ears.experiment.so.pso.PSODOP;
-import org.um.feri.ears.experiment.so.pso.PSOFS;
-import org.um.feri.ears.experiment.so.pso.PSOIS;
-import org.um.feri.ears.experiment.so.pso.PSOIWD;
-import org.um.feri.ears.experiment.so.pso.PSOIWS;
-import org.um.feri.ears.experiment.so.pso.PSOM;
-import org.um.feri.ears.experiment.so.pso.PSOPBC;
-import org.um.feri.ears.experiment.so.pso.PSOQ;
-import org.um.feri.ears.experiment.so.pso.PSOS;
-import org.um.feri.ears.experiment.so.pso.PSOTS;
-import org.um.feri.ears.experiment.so.pso.PSOoriginal;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.results.BankOfResults;
-import org.um.feri.ears.problems.unconstrained.ProblemAckley;
 import org.um.feri.ears.problems.unconstrained.ProblemSphere;
-import org.um.feri.ears.problems.unconstrained.cec2010.base.Sphere;
-import org.um.feri.ears.problems.unconstrained.cec2015.CEC2015;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.ResultArena;
-import org.um.feri.ears.util.MersenneTwister;
 import org.um.feri.ears.util.Util;
 
 public class SORatingExample {
 	
     public static void main(String[] args) {
-        Util.rnd.setSeed(System.currentTimeMillis());
-
+        Util.rnd.setSeed(10);
         
+		MBF goa = new MBF();
+		
+		try {
+			DoubleSolution best = goa.execute(new Task(EnumStopCriteria.EVALUATIONS,3000,500,1000,0.001,new ProblemSphere(15)));//ProblemSphere(15) ProblemGriewank(3,2)
+			System.out.println(best.getEval());
+		} catch (StopCriteriaException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+       
         RatingBenchmark.debugPrint = false; //prints one on one results
         ArrayList<Algorithm> players = new ArrayList<Algorithm>();
-        players.add(new PSOTS());
+        //players.add(new PSOTS());
+        players.add(new ABC());
         players.add(new CRO());
+        players.add(new GWO());
+       // players.add(new BA());
+        players.add(new GOA());
+//        players.add(new FPA());
+        players.add(new CS());
+        players.add(new FWA());
+        players.add(new ICA());
+        players.add(new RMO());
+        players.add(new GSA());
+        players.add(new org.um.feri.ears.algorithms.so.gsa.GSA());
+        players.add(new HillClimbing(0.01));
 //        players.add(new PSOS());
 //        players.add(new PSOQ());
 //        players.add(new PSOPBC());
@@ -65,42 +77,36 @@ public class SORatingExample {
 //        players.add(new PSOCBCW()); 
         //players.add(new ES1p1sAlgorithm());
         players.add(new TLBOAlgorithm());
+       // players.add(new ITLBO());
         players.add(new RandomWalkAlgorithm());
         players.add(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin));
+        players.add(new JADE());
         ResultArena ra = new ResultArena(100); 
         RatingRPUOed2 rpuoed2 = new RatingRPUOed2(); //Create banchmark
         RatingRPUOed30 rpuoed30 = new RatingRPUOed30();
         RatingCEC2015 cec = new RatingCEC2015();
         
+        RatingCEC2010 cec10 = new RatingCEC2010();
+        
         //RatingCEC2014 suopm = new RatingCEC2014();
         rpuoed2.registerAlgorithms(players);
         rpuoed30.registerAlgorithms(players);
         cec.registerAlgorithms(players);
-
+        cec10.registerAlgorithms(players);
         
         for (Algorithm al:players) {
             ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
         }
         BankOfResults ba = new BankOfResults();
-        //rpuoed2.run(ra, ba, 50);
+        
+        //rpuoed2.run(ra, ba, 10);
         //rpuoed30.run(ra, ba, 10);
+        //cec.run(ra, ba, 10);
         cec.run(ra, ba, 10);
+        
         ArrayList<Player> list = new ArrayList<Player>();
-        list.addAll(ra.calculteRatings());
+        list.addAll(ra.getPlayers());
         for (Player p: list) System.out.println(p);
-        
-        /*
-        //rpuoed30.run(ra, ba, 10);
-        list.addAll(ra.calculteRatings()); //new rangs
-        for (Player p: list) System.out.println(p); //print rangs
-        System.out.println("\n ----------------------------------------------------------------- \n");
-        list.clear();
-        
-        list.addAll(ra.recalcRatings()); //new rangs
-        for (Player p: list) System.out.println(p); //print rangs
-        
-        
-        //System.out.println(rpuoed30.getParams());
-         */
+
     }
 }
