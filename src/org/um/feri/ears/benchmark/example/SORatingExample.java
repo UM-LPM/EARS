@@ -9,7 +9,7 @@ import org.um.feri.ears.algorithms.so.cs.CS;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.fwa.FWA;
 import org.um.feri.ears.algorithms.so.goa.GOA;
-import org.um.feri.ears.algorithms.so.gsav2.GSA;
+import org.um.feri.ears.algorithms.so.gsa.GSA;
 import org.um.feri.ears.algorithms.so.gwo.GWO;
 import org.um.feri.ears.algorithms.so.hc.HillClimbing;
 import org.um.feri.ears.algorithms.so.ica.ICA;
@@ -62,7 +62,7 @@ public class SORatingExample {
         players.add(new ICA());
         players.add(new RMO());
         players.add(new GSA());
-        players.add(new org.um.feri.ears.algorithms.so.gsa.GSA());
+        players.add(new org.um.feri.ears.algorithms.so.gsa.GSAv2());
         players.add(new HillClimbing(0.01));
 //        players.add(new PSOS());
 //        players.add(new PSOQ());

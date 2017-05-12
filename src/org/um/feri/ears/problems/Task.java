@@ -425,7 +425,7 @@ public class Task extends TaskBase<Problem> {
 			solution.parents = parents;
 			solution.timeStamp = System.currentTimeMillis();
 			solution.generationNumber = this.getNumberOfIterations();
-			solution.evaluationNumner = this.getNumberOfEvaluations();
+			solution.evaluationNumber = this.getNumberOfEvaluations();
 			ancestors.add(solution);
 		}
 	}
