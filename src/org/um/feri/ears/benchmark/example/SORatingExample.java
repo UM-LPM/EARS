@@ -14,7 +14,6 @@ import org.um.feri.ears.algorithms.so.gwo.GWO;
 import org.um.feri.ears.algorithms.so.hc.HillClimbing;
 import org.um.feri.ears.algorithms.so.ica.ICA;
 import org.um.feri.ears.algorithms.so.jade.JADE;
-import org.um.feri.ears.algorithms.so.mbf.MBF;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.rmo.RMO;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
@@ -38,7 +37,7 @@ public class SORatingExample {
     public static void main(String[] args) {
         Util.rnd.setSeed(10);
         
-		MBF goa = new MBF();
+		GOA goa = new GOA();
 		
 		try {
 			DoubleSolution best = goa.execute(new Task(EnumStopCriteria.EVALUATIONS,3000,500,1000,0.001,new ProblemSphere(15)));//ProblemSphere(15) ProblemGriewank(3,2)
