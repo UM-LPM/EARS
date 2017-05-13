@@ -51,8 +51,20 @@ import org.um.feri.ears.util.Util;
 */
 public abstract class Problem extends ProblemBase<Double> {
 	
-    public Problem(int numberOfDimensions, int numberOfConstraints) {
+	protected double[][] optimum;
+	protected int numberOfGlobalOptima = 1;
+	
+	public Problem(int numberOfDimensions, int numberOfConstraints, int numberOfGlobalOptima) {
 		super(numberOfDimensions, numberOfConstraints);
+		
+		this.numberOfGlobalOptima = numberOfGlobalOptima;
+		
+		optimum = new double[numberOfGlobalOptima][numberOfDimensions];
+		Arrays.fill(optimum[0], 0); // default global optimum is [0, 0, ...., 0, 0]
+	}
+	
+    public Problem(int numberOfDimensions, int numberOfConstraints) {
+		this(numberOfDimensions, numberOfConstraints,1);
 	}
 	
 	/**
@@ -129,9 +141,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @return global optimum
 	 */
 	public double[][] getOptimalVector() {
-		double[][] v = new double[1][numberOfDimensions];
-		Arrays.fill(v[0], 0); // default is [0, 0, ...., 0, 0]
-		return v;
+		return optimum;
 	}
 
 	/**
@@ -139,8 +149,8 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * 
 	 * @return number of global optimum-s
 	 */
-	public int getNumberOfGlobalOpt() {
-		return 1;
+	public int getNumberOfGlobalOptima() {
+		return numberOfGlobalOptima;
 	}
 	
 	/**
