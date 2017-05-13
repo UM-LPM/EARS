@@ -44,17 +44,17 @@
  */
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.ProblemAckley;
-import org.um.feri.ears.problems.unconstrained.ProblemGriewank;
-import org.um.feri.ears.problems.unconstrained.ProblemRastrigin;
-import org.um.feri.ears.problems.unconstrained.ProblemRosenbrock;
-import org.um.feri.ears.problems.unconstrained.ProblemSchwefel;
-import org.um.feri.ears.problems.unconstrained.ProblemSchwefelRidge;
-import org.um.feri.ears.problems.unconstrained.ProblemSphere;
+import org.um.feri.ears.problems.unconstrained.Ackley;
+import org.um.feri.ears.problems.unconstrained.Griewank;
+import org.um.feri.ears.problems.unconstrained.Rastrigin;
+import org.um.feri.ears.problems.unconstrained.Rosenbrock_DeJong2;
+import org.um.feri.ears.problems.unconstrained.Schwefel;
+import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
+import org.um.feri.ears.problems.unconstrained.Sphere;
 
 //TODO calculate CD for rating
 public class RatingRPUOed30 extends RatingBenchmark {
@@ -92,13 +92,13 @@ public class RatingRPUOed30 extends RatingBenchmark {
      */
     @Override
     protected void initFullProblemList() {
-        registerTask(new ProblemAckley(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemGriewank(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemRastrigin(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemRosenbrock(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemSchwefel(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemSchwefelRidge(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new ProblemSphere(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new Ackley(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new Griewank(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new Rastrigin(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new Rosenbrock_DeJong2(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new Schwefel(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new SchwefelRidge(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new Sphere(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
     }
         
     /* (non-Javadoc)

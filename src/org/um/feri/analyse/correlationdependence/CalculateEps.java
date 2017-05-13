@@ -4,9 +4,24 @@ import java.util.Random;
 import java.util.stream.DoubleStream;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.*;
-import org.um.feri.ears.problems.unconstrained.ProblemGriewank;
-import org.um.feri.ears.problems.unconstrained.cec2014.*;
+import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.unconstrained.Griewank;
+import org.um.feri.ears.problems.unconstrained.cec2014.F1;
+import org.um.feri.ears.problems.unconstrained.cec2014.F10;
+import org.um.feri.ears.problems.unconstrained.cec2014.F11;
+import org.um.feri.ears.problems.unconstrained.cec2014.F12;
+import org.um.feri.ears.problems.unconstrained.cec2014.F13;
+import org.um.feri.ears.problems.unconstrained.cec2014.F14;
+import org.um.feri.ears.problems.unconstrained.cec2014.F15;
+import org.um.feri.ears.problems.unconstrained.cec2014.F16;
+import org.um.feri.ears.problems.unconstrained.cec2014.F2;
+import org.um.feri.ears.problems.unconstrained.cec2014.F3;
+import org.um.feri.ears.problems.unconstrained.cec2014.F4;
+import org.um.feri.ears.problems.unconstrained.cec2014.F5;
+import org.um.feri.ears.problems.unconstrained.cec2014.F6;
+import org.um.feri.ears.problems.unconstrained.cec2014.F7;
+import org.um.feri.ears.problems.unconstrained.cec2014.F8;
+import org.um.feri.ears.problems.unconstrained.cec2014.F9;
 
 public class CalculateEps {
 	
@@ -249,7 +264,7 @@ public class CalculateEps {
 			}
 			default:
 			{
-				Problem problem = new ProblemGriewank(dimm);
+				Problem problem = new Griewank(dimm);
 				dist = calculateDistanceBetweenMin(problem);
 				System.out.println(problem.getName()+" distance is "+dist);
 				break;

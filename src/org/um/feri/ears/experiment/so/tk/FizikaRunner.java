@@ -1,19 +1,10 @@
 package org.um.feri.ears.experiment.so.tk;
 
 
-import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
-import org.um.feri.ears.algorithms.so.gsa.GSA;
-import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.ProblemBranin;
-import org.um.feri.ears.problems.unconstrained.ProblemSphere;
-import org.um.feri.ears.problems.unconstrained.cec2010.F1;
-import org.um.feri.ears.problems.unconstrained.cec2010.F10;
-import org.um.feri.ears.problems.unconstrained.cec2010.F11;
-
+import org.um.feri.ears.problems.unconstrained.Branin;
 import org.um.feri.ears.util.Util;
 
 //MAIN za testiranje algoritmov fizikalnih fenomenov (posamièno delovanje)
@@ -68,7 +59,7 @@ public class FizikaRunner {
 			CSS a = new CSS();
 			
 		
-			Task t = new Task(EnumStopCriteria.EVALUATIONS, 200000, 500, 300, 0.0001, new ProblemBranin());  
+			Task t = new Task(EnumStopCriteria.EVALUATIONS, 200000, 500, 300, 0.0001, new Branin());  
 
 			try 		    
 			{		

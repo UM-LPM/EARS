@@ -5,12 +5,25 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.um.feri.analyse.util.Util;
-import org.um.feri.ears.problems.*;
-import org.um.feri.ears.problems.unconstrained.ProblemSphere;
-import org.um.feri.ears.problems.unconstrained.cec2014.*;
+import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.unconstrained.cec2014.F1;
+import org.um.feri.ears.problems.unconstrained.cec2014.F10;
+import org.um.feri.ears.problems.unconstrained.cec2014.F11;
+import org.um.feri.ears.problems.unconstrained.cec2014.F12;
+import org.um.feri.ears.problems.unconstrained.cec2014.F13;
+import org.um.feri.ears.problems.unconstrained.cec2014.F14;
+import org.um.feri.ears.problems.unconstrained.cec2014.F15;
+import org.um.feri.ears.problems.unconstrained.cec2014.F16;
+import org.um.feri.ears.problems.unconstrained.cec2014.F2;
+import org.um.feri.ears.problems.unconstrained.cec2014.F3;
+import org.um.feri.ears.problems.unconstrained.cec2014.F4;
+import org.um.feri.ears.problems.unconstrained.cec2014.F5;
+import org.um.feri.ears.problems.unconstrained.cec2014.F6;
+import org.um.feri.ears.problems.unconstrained.cec2014.F7;
+import org.um.feri.ears.problems.unconstrained.cec2014.F8;
+import org.um.feri.ears.problems.unconstrained.cec2014.F9;
 
 public class TestCD4Plot {
 	private static final String out_dir = "D:/Doktorat/OutPutEars/CF/cec2014/";

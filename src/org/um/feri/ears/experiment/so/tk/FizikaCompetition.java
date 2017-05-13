@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.so.cro.CRO;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
-import org.um.feri.ears.algorithms.so.gsa.GSA;
+import org.um.feri.ears.algorithms.so.gsa.GSAv2;
 import org.um.feri.ears.algorithms.so.pso.PSO;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
@@ -68,7 +68,7 @@ public class FizikaCompetition {
 		players.add(new EM());
 		players.add(new ECBO());
 		players.add(new LSA());
-		players.add(new GSA());
+		players.add(new GSAv2());
 		
 		ResultArena ra = new ResultArena(100); 
 		//RatingRPUOed2 rpuoed2 = new RatingRPUOed2(); //Create banchmark

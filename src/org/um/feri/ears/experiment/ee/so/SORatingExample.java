@@ -4,11 +4,11 @@ import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.ProblemGriewank;
-import org.um.feri.ears.problems.unconstrained.ProblemRastrigin;
-import org.um.feri.ears.problems.unconstrained.ProblemRosenbrock;
-import org.um.feri.ears.problems.unconstrained.ProblemSchwefel;
-import org.um.feri.ears.problems.unconstrained.ProblemSphere;
+import org.um.feri.ears.problems.unconstrained.Griewank;
+import org.um.feri.ears.problems.unconstrained.Rastrigin;
+import org.um.feri.ears.problems.unconstrained.Rosenbrock_DeJong2;
+import org.um.feri.ears.problems.unconstrained.Schwefel;
+import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.Util;
 
 public class SORatingExample {
@@ -24,11 +24,11 @@ public class SORatingExample {
         
         for (int i = 0; i < dimmensions.length; ++i)
         {
-        	problems[0] = new ProblemSphere(dimmensions[i]);
-        	problems[1] = new ProblemGriewank(dimmensions[i]);
-        	problems[2] = new ProblemRastrigin(dimmensions[i]);
-        	problems[3] = new ProblemRosenbrock(dimmensions[i]);
-        	problems[4] = new ProblemSchwefel(dimmensions[i]);
+        	problems[0] = new Sphere(dimmensions[i]);
+        	problems[1] = new Griewank(dimmensions[i]);
+        	problems[2] = new Rastrigin(dimmensions[i]);
+        	problems[3] = new Rosenbrock_DeJong2(dimmensions[i]);
+        	problems[4] = new Schwefel(dimmensions[i]);
         	
         	for(int pr = 0; pr < problems.length; ++pr)
         	{

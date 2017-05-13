@@ -1,22 +1,15 @@
 package org.um.feri.ears.graphing.tests;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
-
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.benchmark.RatingRPUOed2;
-import org.um.feri.ears.graphing.GraphEARS;
-import org.um.feri.ears.graphing.GraphEARSStatic;
 import org.um.feri.ears.graphing.GraphSet;
-import org.um.feri.ears.graphing.PlotColorScheme;
 import org.um.feri.ears.graphing.PlotType;
-import org.um.feri.ears.graphing.data.*;
-import org.um.feri.ears.graphing.recording.*;
-import org.um.feri.ears.problems.unconstrained.ProblemAckley;
+import org.um.feri.ears.graphing.data.GraphDataManager;
+import org.um.feri.ears.graphing.data.GraphDataSet;
 import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.run.RunMainBestAlgSettings;
 import org.um.feri.ears.util.Util;

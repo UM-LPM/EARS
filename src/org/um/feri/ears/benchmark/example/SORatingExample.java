@@ -27,7 +27,7 @@ import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.results.BankOfResults;
-import org.um.feri.ears.problems.unconstrained.ProblemSphere;
+import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Util;
@@ -40,7 +40,7 @@ public class SORatingExample {
 		GOA goa = new GOA();
 		
 		try {
-			DoubleSolution best = goa.execute(new Task(EnumStopCriteria.EVALUATIONS,3000,500,1000,0.001,new ProblemSphere(15)));//ProblemSphere(15) ProblemGriewank(3,2)
+			DoubleSolution best = goa.execute(new Task(EnumStopCriteria.EVALUATIONS,3000,500,1000,0.001,new Sphere(15)));//Sphere(15) Griewank(3,2)
 			System.out.println(best.getEval());
 		} catch (StopCriteriaException e1) {
 			// TODO Auto-generated catch block
