@@ -76,7 +76,6 @@ public class PSOQSolution extends DoubleSolution {
 		try {
 			tmp = new PSOQSolution(taskProblem.eval(x));
 		} catch (StopCriteriaException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (taskProblem.isFirstBetter(tmp, Pbest)) {

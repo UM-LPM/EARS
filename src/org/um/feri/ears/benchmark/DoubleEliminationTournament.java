@@ -321,7 +321,6 @@ public class DoubleEliminationTournament {
 						bestByALg = al.execute(task);
 						task.resetCounter();
 					} catch (StopCriteriaException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					results.add(new MOAlgorithmEvalResult(bestByALg, al)); 
@@ -374,7 +373,6 @@ public class DoubleEliminationTournament {
 						bestByALg = al.execute(task);
 						task.resetCounter();
 					} catch (StopCriteriaException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					participants.add(new MOAlgorithmEvalResult(bestByALg, al)); 

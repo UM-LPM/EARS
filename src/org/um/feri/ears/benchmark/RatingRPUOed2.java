@@ -64,7 +64,6 @@ import org.um.feri.ears.problems.unconstrained.Schwefel;
 import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 
-//TODO calculate CD for rating
 public class RatingRPUOed2 extends RatingBenchmark {
     public static final String name="Real Parameter Unconstrained Optimization Problems with maximum evaluation condition";
     

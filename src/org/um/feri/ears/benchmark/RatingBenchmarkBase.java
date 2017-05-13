@@ -147,8 +147,6 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     public abstract String getInfo(); //some explanation
     
     /**
-     * TODO  this function can be done parallel - asynchrony
-     * 
      * @param task
      * @param allSingleProblemRunResults 
      */

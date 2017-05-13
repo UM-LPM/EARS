@@ -210,7 +210,6 @@ public class JADE extends Algorithm {
 
 	@Override
 	public void resetDefaultsBeforNewRun() {
-		// TODO Auto-generated method stub
 		// by paper p is in [0.05-0.2]
 		// by paper c is in [0.05-0.2]
 		// by paper pop_size (D < 10) = 30; (D=30) = 100; (D=100) = 400

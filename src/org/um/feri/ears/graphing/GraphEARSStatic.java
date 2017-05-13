@@ -492,7 +492,6 @@ public class GraphEARSStatic extends GraphEARS
 		try {
 			boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
 

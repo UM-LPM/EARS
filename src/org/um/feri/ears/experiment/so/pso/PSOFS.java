@@ -115,7 +115,6 @@ public class PSOFS extends Algorithm {
 
 	@Override
 	public void resetDefaultsBeforNewRun() {
-		// TODO Auto-generated method stub
 
 	}
 }

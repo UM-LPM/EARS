@@ -43,7 +43,6 @@ public class MaximumParetoFrontError<T extends Number> extends QualityIndicator<
 
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

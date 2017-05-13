@@ -22,7 +22,6 @@ public class PSOPBCSolution extends DoubleSolution {
 	
 	public PSOPBCSolution(DoubleSolution i) {
 		super(i);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public PSOPBCSolution(Task tsk) throws StopCriteriaException {

@@ -66,12 +66,10 @@ import org.um.feri.ears.rating.Game;
 import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Util;
 
-//TODO calculate CD for rating
 public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm,AlgorithmEvalResult> {
     
     
     /**
-     * TODO  this function can be done parallel - asynchrony
      * 
      * @param task
      * @param allSingleProblemRunResults 

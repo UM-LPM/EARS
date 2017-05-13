@@ -190,8 +190,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
 	@Override
 	public void resetDefaultsBeforNewRun() {
-		// TODO Auto-generated method stub
-		
+	
 	}
 
 	/**

@@ -43,7 +43,6 @@ public class SORatingExample {
 			DoubleSolution best = goa.execute(new Task(EnumStopCriteria.EVALUATIONS,3000,500,1000,0.001,new Sphere(15)));//Sphere(15) Griewank(3,2)
 			System.out.println(best.getEval());
 		} catch (StopCriteriaException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
        

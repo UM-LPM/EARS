@@ -77,7 +77,6 @@ public class HillClimbing extends Algorithm {
 
 	@Override
 	public void resetDefaultsBeforNewRun() {
-		// TODO Auto-generated method stub
 		
 	}
 

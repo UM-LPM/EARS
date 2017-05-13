@@ -136,7 +136,6 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task, DoubleSol
 	}
 	@Override
 	public void setCurrentSolution(MOSolutionBase<Double> current) {
-		// TODO Auto-generated method stub
 		
 	}
 	

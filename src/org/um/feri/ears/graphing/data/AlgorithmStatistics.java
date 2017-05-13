@@ -118,7 +118,7 @@ public class AlgorithmStatistics
 			fitnessSD[i2] = Math.sqrt(sum2/iterCount);
 		}
 		
-		//TODO
+		//
 		/*System.err.println("+");System.err.println("+");
 		System.err.println("Average;StandardDeviation;Worst;Best");
 		for (int i=0; i<fitnessAverage.length; i++)

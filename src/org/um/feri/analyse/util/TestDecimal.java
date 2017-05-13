@@ -10,7 +10,6 @@ public class TestDecimal {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		double d1 = 0.000001234;
 		double d2 = 1230.000001234;
 		System.out.println(df1.format(d1));

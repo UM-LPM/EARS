@@ -54,7 +54,6 @@ import org.um.feri.ears.problems.constrained.TLBOBenchmarkFunction3;
 import org.um.feri.ears.problems.constrained.TLBOBenchmarkFunction4;
 import org.um.feri.ears.problems.constrained.TLBOBenchmarkFunction5;
 
-//TODO calculate CD for rating
 public class RatingRPCOe1 extends RatingBenchmark {
     public static final String name="Solving Real parameter Constrained Optimization with maximum evaluation condition";
 

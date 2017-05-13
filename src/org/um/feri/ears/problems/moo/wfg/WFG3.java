@@ -182,7 +182,6 @@ public class WFG3 extends WFG {
 
 	@Override
 	public void evaluateConstraints(MOSolutionBase<Double> solution) {
-		// TODO Auto-generated method stub
 
 	}
 }

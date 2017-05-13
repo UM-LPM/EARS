@@ -42,7 +42,6 @@ public class TournamentSelection  implements SelectionOperator<DoubleSolution, L
 
 	@Override
 	public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

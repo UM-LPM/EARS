@@ -96,7 +96,6 @@ public class R3<T extends Number> extends RIndicator<T> {
 
 	@Override
 	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

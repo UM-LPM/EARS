@@ -110,13 +110,11 @@ public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOA
 
 	@Override
 	protected void init() throws StopCriteriaException {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	protected void start() throws StopCriteriaException {
-		// TODO Auto-generated method stub
 		
 	}
 

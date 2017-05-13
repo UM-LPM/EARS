@@ -280,7 +280,6 @@ a=E.*G; %note that Mp(i)/Mi(i)=1
 	
 	@Override
 	public void resetDefaultsBeforNewRun() {
-		// TODO Auto-generated method stub
 		
 	}
 
