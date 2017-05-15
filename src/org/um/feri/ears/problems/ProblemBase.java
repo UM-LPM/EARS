@@ -19,6 +19,7 @@ public abstract class ProblemBase <Type> {
 	protected String name;
 	protected String shortName;
 	protected String benchmarkName;
+	protected String description;
 	
 	protected String version = "1.0";
 	public static final int CONSTRAINED_TYPE_COUNT=1;

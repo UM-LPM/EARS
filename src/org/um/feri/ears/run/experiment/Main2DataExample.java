@@ -98,7 +98,7 @@ public class Main2DataExample {
         Rating tmpr;
         for (Algorithm al : players) {
             // ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0);
-            tmpr = new Rating(1500, 350, 0.06); // TODO Read from file
+            tmpr = new Rating(1500, 350, 0.06); // Read from file
             tmp = new PlayerAlgorithmExport(al, tmpr, 0, 0, 0);
             listAll.add(tmp);
             ra.addPlayer(tmp);
