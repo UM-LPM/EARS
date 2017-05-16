@@ -61,7 +61,7 @@ public class Ozyczka2 extends DoubleMOProblem{
 	@Override
 	public void evaluate(MOSolutionBase<Double> solution) {
 		
-		double[] x = ArrayUtils.toPrimitive(solution.getVariables());
+		double[] x = solution.getVariables().stream().mapToDouble(i->i).toArray();
 
 		double obj[] = new double[functions.size()];
 		for (int i = 0; i < obj.length; i++) {
@@ -75,7 +75,7 @@ public class Ozyczka2 extends DoubleMOProblem{
 	public void evaluateConstraints(MOSolutionBase<Double> solution) {
 		double[] constraints = new double[numberOfConstraints];
 		
-		double[] dv = ArrayUtils.toPrimitive(solution.getVariables());
+		double[] dv = solution.getVariables().stream().mapToDouble(i->i).toArray();
 		
 		double x1,x2,x3,x4,x5,x6;
 	    x1 = dv[0];

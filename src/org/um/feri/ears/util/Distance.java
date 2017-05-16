@@ -114,13 +114,13 @@ public class Distance<Type extends Number> {
 		
 		if ((solutionI.getVariables() != null)
 				&& (solutionJ.getVariables() != null)) {
-			Type[] decisionVariableI = solutionI.getVariables();
-			Type[] decisionVariableJ = solutionJ.getVariables();
+			List<Type> decisionVariableI = solutionI.getVariables();
+			List<Type> decisionVariableJ = solutionJ.getVariables();
 
 			double diff; // Auxiliar var
 			// -> Calculate the Euclidean distance
-			for (int i = 0; i < decisionVariableI.length; i++) {
-				diff = decisionVariableI[i].doubleValue() - decisionVariableJ[i].doubleValue();
+			for (int i = 0; i < decisionVariableI.size(); i++) {
+				diff = decisionVariableI.get(i).doubleValue() - decisionVariableJ.get(i).doubleValue();
 				distance += Math.pow(diff, 2.0);
 			}
 		}

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public abstract class SolutionBase <Type> {
 	
-	protected Type[] variable;
+	protected List<Type> variable;
 	protected double[] constraints; //TODO refactor 2 types of individual for constrained optimization
 	protected boolean feasible = true; //Feasible checks constrains
 	protected double  overallConstraintViolation_ ;
@@ -45,8 +45,8 @@ public abstract class SolutionBase <Type> {
 	}
 
 	public SolutionBase(SolutionBase<Type> s) {
-		variable = Arrays.copyOf(s.variable,s.variable.length); 
-		//new ArrayList<Type>(s.variable);
+		//variable = Arrays.copyOf(s.variable,s.variable.length); 
+		variable = new ArrayList<Type>(s.variable);
 		
 		this.feasible = s.feasible;
 		if (s.constraints!=null) {
@@ -65,7 +65,8 @@ public abstract class SolutionBase <Type> {
 		return feasible;
 	}
 
-	public Type[] getVariables() {
+	public List<Type> getVariables() {
+		
 		return variable;
 	}
 	
@@ -77,14 +78,14 @@ public abstract class SolutionBase <Type> {
 	}
 	
 	public int numberOfVariables() {
-		return variable.length;
+		return variable.size();
 	}
 
 	public void setValue(int i, Type c) {
-		variable[i] = c;
+		variable.set(i, c);
 	}
 	
-	public void setVariables(Type[] var) {
+	public void setVariables(List<Type> var) {
 		this.variable = var;
 		/*if(var.length != variable.size())
 		{
@@ -98,7 +99,7 @@ public abstract class SolutionBase <Type> {
 	}
 
 	public Type getValue(int i) {
-		return variable[i];
+		return variable.get(i);
 	}
 	
 	public List<Type> getUpperLimit() {

@@ -79,9 +79,4 @@ public class RosenbrockD2b  extends Problem{
 	public double getOptimumEval() {
 		return 0;
 	}
-
-	@Override
-	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,	double eval_y) {
-		return eval_x < eval_y;
-	}
 }

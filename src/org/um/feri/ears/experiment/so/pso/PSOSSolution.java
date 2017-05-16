@@ -26,7 +26,7 @@ public class PSOSSolution extends DoubleSolution implements Comparable<PSOSSolut
 	}
 
 	@SuppressWarnings("deprecation")
-	public PSOSSolution(Double[] list, double eval)
+	public PSOSSolution(List<Double> list, double eval)
 	{
 		//super(x, eval,new double[0]);
 		super(list, eval);
@@ -69,7 +69,7 @@ public class PSOSSolution extends DoubleSolution implements Comparable<PSOSSolut
 	
 	}
 	
-	public static PSOSSolution update(Double[] list, double v[], PSOSSolution p, double eval) throws StopCriteriaException
+	public static PSOSSolution update(List<Double> list, double v[], PSOSSolution p, double eval) throws StopCriteriaException
 	{
 		PSOSSolution tmp = new PSOSSolution(list, eval);
 		tmp.v = v;

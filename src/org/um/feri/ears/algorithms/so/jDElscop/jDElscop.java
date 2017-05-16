@@ -144,9 +144,9 @@ public class jDElscop extends Algorithm {
 					{
 						if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
 							tmp[n] = F
-									* (g.getVariables()[n])
+									* (g.getValue(n))
 									+ F
-									* (pop_x[r2].getVariables()[n] - pop_x[r3].getVariables()[n]);
+									* (pop_x[r2].getValue(n) - pop_x[r3].getValue(n));
 						}
 						n = (n + 1) % D;
 					}
@@ -159,8 +159,8 @@ public class jDElscop extends Algorithm {
 					L = 0;
 					// F = 0.5; CR=0.9;
 					do {
-						tmp[n] = pop_x[r1].getVariables()[n] + F
-								* (pop_x[r2].getVariables()[n] - pop_x[r3].getVariables()[n]);
+						tmp[n] = pop_x[r1].getValue(n) + F
+								* (pop_x[r2].getValue(n) - pop_x[r3].getValue(n));
 						n = (n + 1) % D;
 						L++;
 					} while ((Util.rnd.nextDouble() < CR) && (L < D));
@@ -174,9 +174,9 @@ public class jDElscop extends Algorithm {
 					for (L = 0; L < D; L++) /* perform D binomial trials */
 					{
 						if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
-							tmp[n] = pop_x[r1].getVariables()[n]
+							tmp[n] = pop_x[r1].getValue(n)
 									+ F
-									* (pop_x[r2].getVariables()[n] - pop_x[r3].getVariables()[n]);
+									* (pop_x[r2].getValue(n) - pop_x[r3].getValue(n));
 						}
 						n = (n + 1) % D;
 					}

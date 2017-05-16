@@ -53,8 +53,8 @@ public class PSOIS extends Algorithm {
 				for (int d = 0; d < task.getNumberOfDimensions(); d++) {
 					double r1 = Util.rnd.nextDouble();
 					double r2 = Util.rnd.nextDouble();
-					v[d] = w * (P.getV()[d]) + c1 * r1 * (P.getPbest().getVariables()[d] - P.getVariables()[d])
-							+ c2 * r2 * (PgBest.getVariables()[d] - P.getVariables()[d]);
+					v[d] = w * (P.getV()[d]) + c1 * r1 * (P.getPbest().getValue(d) - P.getValue(d))
+							+ c2 * r2 * (PgBest.getValue(d) - P.getValue(d));
 				}
 				
 				if (task.isStopCriteria())

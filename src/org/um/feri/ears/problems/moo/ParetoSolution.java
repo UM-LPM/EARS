@@ -257,8 +257,8 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	}
 	
 	@Override
-	public Type[] getVariables() {
-		Type[] x = null; //TODO check
+	public List<Type> getVariables() {
+		List<Type> x = null; //TODO check
 		return x;
 	}
 
@@ -473,10 +473,10 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 			BufferedWriter bw = new BufferedWriter(osw);
 
 			if (solutions.size() > 0) {
-				int numberOfVariables = solutions.get(0).getVariables().length;
+				int numberOfVariables = solutions.get(0).getVariables().size();
 				for (MOSolutionBase<Type> aSolutionsList : solutions) {
 					for (int j = 0; j < numberOfVariables; j++)
-						bw.write(aSolutionsList.getVariables()[j] + " ");
+						bw.write(aSolutionsList.getValue(j) + " ");
 					bw.newLine();
 				}
 			}

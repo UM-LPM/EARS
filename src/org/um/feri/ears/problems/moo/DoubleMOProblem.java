@@ -56,13 +56,24 @@ public abstract class DoubleMOProblem extends MOProblemBase<Double> {
 		return obj;
 	}
 	
+	private double[] evaluate(List<Double> variables) {
+		double[] x = new double[numberOfDimensions];
+		for (int i = 0; i < numberOfDimensions; i++)
+			x[i] = variables.get(i);
+		double obj[] = new double[functions.size()];
+		for (int i = 0; i < obj.length; i++) {
+			obj[i] = functions.get(i).eval(x);
+		}
+		return obj;
+	}
+	
 	@Override
 	public MOSolutionBase<Double> getRandomSolution() {
 
-		//List<Double> var=new ArrayList<Double>(numberOfDimensions);
-		Double[] var = new Double[numberOfDimensions];
+		List<Double> var=new ArrayList<Double>(numberOfDimensions);
+		//Double[] var = new Double[numberOfDimensions];
 		for (int j = 0; j < numberOfDimensions; j++) {
-			var[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
+			var.add(j, Util.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
 		}
 		MOSolutionBase<Double> sol = new MOSolutionBase<Double>(var, evaluate(var), upperLimit, lowerLimit);
 		evaluateConstraints(sol);

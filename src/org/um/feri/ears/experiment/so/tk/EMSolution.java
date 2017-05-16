@@ -22,7 +22,7 @@ public class EMSolution extends DoubleSolution
 	{
 		super(eval);
 		Q = 0.0;
-		Fi = new double[eval.getVariables().length];
+		Fi = new double[eval.getVariables().size()];
 		
 	}
 	

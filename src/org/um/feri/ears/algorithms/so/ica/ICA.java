@@ -5,6 +5,7 @@ package org.um.feri.ears.algorithms.so.ica;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.algorithms.Algorithm;
@@ -391,12 +392,12 @@ public class ICA extends Algorithm{
 
 		for(int i=0; i<numOfColonies; i++)
 		{
-			Double[] newColony = new Double[task.getNumberOfDimensions()];
+			List<Double> newColony = new ArrayList<Double>();
 			for(int j=0; j<task.getNumberOfDimensions(); j++)
 			{
 				//TODO 2 * beta -> matlab samo beta = 1.5
-				newColony[j] = empire.colonies[i].getValue(j) + 2 * assimilationCoefficient * Util.nextDouble() * (empire.imperialist.getValue(j) - empire.colonies[i].getValue(j));
-				newColony[j] = task.setFeasible(newColony[j],j);
+				newColony.add(empire.colonies[i].getValue(j) + 2 * assimilationCoefficient * Util.nextDouble() * (empire.imperialist.getValue(j) - empire.colonies[i].getValue(j)));
+				newColony.set(j, task.setFeasible(newColony.get(j),j));
 			}
 			empire.colonies[i].setVariables(newColony);
 		}

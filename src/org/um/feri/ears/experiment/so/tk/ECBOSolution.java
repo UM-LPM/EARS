@@ -21,8 +21,8 @@ public class ECBOSolution extends DoubleSolution
 	public ECBOSolution(DoubleSolution eval) 
 	{
 		super(eval);	
-		v = new double[eval.getVariables().length];	
-		v_after = new double[eval.getVariables().length];
+		v = new double[eval.getVariables().size()];	
+		v_after = new double[eval.getVariables().size()];
 	}
 	
 	public ECBOSolution(ECBOSolution eval) 

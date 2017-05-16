@@ -68,10 +68,10 @@ public class PSOTS extends Algorithm {
 					double r2A = Util.rnd.nextDouble();
 					double r1B = Util.rnd.nextDouble();
 					double r2B = Util.rnd.nextDouble();
-					vA[d] = w * (PA.getV()[d]) + c1 * r1A * (PA.getPbest().getVariables()[d] - PA.getVariables()[d])
-							+ c2 * r2A * (PgBestA.getVariables()[d] - PA.getVariables()[d]);
-					vB[d] = w * (PB.getV()[d]) + c1 * r1B * (PB.getPbest().getVariables()[d] - PB.getVariables()[d])
-							+ c2 * r2B * (PgBestB.getVariables()[d] - PB.getVariables()[d]);
+					vA[d] = w * (PA.getV()[d]) + c1 * r1A * (PA.getPbest().getValue(d) - PA.getValue(d))
+							+ c2 * r2A * (PgBestA.getValue(d) - PA.getValue(d));
+					vB[d] = w * (PB.getV()[d]) + c1 * r1B * (PB.getPbest().getValue(d) - PB.getValue(d))
+							+ c2 * r2B * (PgBestB.getValue(d) - PB.getValue(d));
 				}
 				
 				if (task.isStopCriteria())

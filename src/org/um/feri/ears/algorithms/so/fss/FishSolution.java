@@ -25,7 +25,7 @@ public class FishSolution extends DoubleSolution{
 		neighbor = new DoubleSolution(s);
 		best = new DoubleSolution(s);
 		 
-		delta_x = new double[s.getVariables().length];
+		delta_x = new double[s.getVariables().size()];
 		//init fish weight
 		weight_now = Util.nextDouble(FSS.fish_weight_min,FSS.fish_weight_max);
 		weight_past = weight_now;

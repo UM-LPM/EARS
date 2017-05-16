@@ -79,7 +79,7 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOS
 		double alpha, beta, betaq;
 		double valueX1, valueX2;
 
-		int numberOfVariables = parent1.getVariables().length;
+		int numberOfVariables = parent1.getVariables().size();
 
 		if (Util.rnd.nextDouble() <= probability) {
 			for (i = 0; i < numberOfVariables; i++) {

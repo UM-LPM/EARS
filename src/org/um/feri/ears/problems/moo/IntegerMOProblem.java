@@ -31,6 +31,19 @@ public abstract class IntegerMOProblem extends MOProblemBase<Integer>{
 
 		return obj;
 	}
+	
+	public double[] evaluate(List<Integer> ds) {
+		
+		double[] x = new double[numberOfDimensions];
+		for (int i = 0; i < numberOfDimensions; i++)
+			x[i] = ds.get(i);
+		double obj[] = new double[functions.size()];
+		for (int i = 0; i < obj.length; i++) {
+			obj[i] = functions.get(i).eval(x);
+		}
+
+		return obj;
+	}
 
 	@Override
 	public void evaluateConstraints(MOSolutionBase<Integer> solution) {
@@ -39,8 +52,8 @@ public abstract class IntegerMOProblem extends MOProblemBase<Integer>{
 	@Override
 	public MOSolutionBase<Integer> getRandomSolution() {
 
-		//List<Integer> var = new ArrayList<Integer>(numberOfDimensions);
-		Integer[] var = new Integer[numberOfDimensions];
+		List<Integer> var = new ArrayList<Integer>(numberOfDimensions);
+		//Integer[] var = new Integer[numberOfDimensions];
 		List<Integer> randomSequence = new ArrayList<>(numberOfDimensions);
 
 		for (int j = 0; j < numberOfDimensions; j++) {
@@ -50,7 +63,8 @@ public abstract class IntegerMOProblem extends MOProblemBase<Integer>{
 		Util.shuffle(randomSequence);
 
 		for (int i = 0; i < numberOfDimensions; i++) {
-			var[i]= randomSequence.get(i);
+			//var[i]= randomSequence.get(i);
+			var.add(randomSequence.get(i));
 		}
 
 		MOSolutionBase<Integer> sol = new MOSolutionBase<Integer>(var, evaluate(var), upperLimit, lowerLimit);

@@ -76,9 +76,10 @@ public class DoubleSolution extends SolutionBase<Double>{
 	 * @param eval
 	 * @deprecated
 	 */
-	public DoubleSolution(Double[] x, double eval) {
+	public DoubleSolution(List<Double> x, double eval) {
 		
-		variable = Arrays.copyOf(x,x.length);
+		//variable = Arrays.copyOf(x,x.length);
+		variable = new ArrayList<Double>(x);
 		this.eval = eval;
 		feasible = true;
 	}
@@ -91,19 +92,21 @@ public class DoubleSolution extends SolutionBase<Double>{
 	 * @param upperLimit 
 	 * @param lowerLimit 
 	 */
-	public DoubleSolution(Double[] x, double eval, double[] constrains, List<Double> upperLimit, List<Double> lowerLimit) {
-	       	
-			variable = Arrays.copyOf(x,x.length);
-			//System.arraycopy(x, 0, this.variable, 0, x.length);
-			
-			upperLimit = new ArrayList<Double>(upperLimit);
-			lowerLimit = new ArrayList<Double>(lowerLimit);
-	        setFeasible(constrains);
-	        this.eval = eval;
+	public DoubleSolution(List<Double> x, double eval, double[] constrains, List<Double> upperLimit, List<Double> lowerLimit) {
+
+		//variable = Arrays.copyOf(x,x.length);
+		//System.arraycopy(x, 0, this.variable, 0, x.length);
+
+		variable = new ArrayList<Double>(x);
+
+		upperLimit = new ArrayList<Double>(upperLimit);
+		lowerLimit = new ArrayList<Double>(lowerLimit);
+		setFeasible(constrains);
+		this.eval = eval;
 	}
 
     public DoubleSolution(double[] ds, double eval2, double[] calc_constrains, List<Double> upperLimit, List<Double> lowerLimit) {
-		this(ArrayUtils.toObject(ds), eval2, calc_constrains, upperLimit, lowerLimit);
+		this(Arrays.asList(ArrayUtils.toObject(ds)), eval2, calc_constrains, upperLimit, lowerLimit);
 	}
 
 	private void setFeasible(double[] constrains) {
@@ -122,7 +125,9 @@ public class DoubleSolution extends SolutionBase<Double>{
      * @return the variables in an array of primitives.
      */
 	public double[] getDoubleVariables() {
-		return ArrayUtils.toPrimitive(variable);
+
+		return variable.stream().mapToDouble(i->i).toArray();
+		//return  ArrayUtils.toPrimitive(variable);
 	}
 
 	public double getEval() {

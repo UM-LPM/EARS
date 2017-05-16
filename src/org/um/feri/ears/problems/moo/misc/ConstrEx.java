@@ -52,7 +52,7 @@ public class ConstrEx extends DoubleMOProblem{
 	@Override
 	public void evaluate(MOSolutionBase<Double> solution) {
 		
-		double[] x = ArrayUtils.toPrimitive(solution.getVariables());
+		double[] x = solution.getVariables().stream().mapToDouble(i->i).toArray();
 
 
 		double obj[] = new double[functions.size()];
@@ -67,7 +67,7 @@ public class ConstrEx extends DoubleMOProblem{
 	public void evaluateConstraints(MOSolutionBase<Double> solution) {
 		double[] constraints = new double[numberOfConstraints];
 		
-		double[] dv = ArrayUtils.toPrimitive(solution.getVariables());
+		double[] dv = solution.getVariables().stream().mapToDouble(i->i).toArray();
 		
 	    constraints[0] =  (dv[1] + 9*dv[0]-6.0) ;
 	    constraints[1] =  (-dv[1] + 9*dv[0] -1.0);

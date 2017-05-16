@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -75,11 +76,11 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param ds vector of possible solution
 	 * @return
 	 */
-    public boolean areDimensionsInFeasableInterval(Double[] ds) {
+    public boolean areDimensionsInFeasableInterval(List<Double> ds) {
 	    for (int i=0; i<numberOfDimensions; i++) {
-        if (ds[i] < lowerLimit.get(i))
+        if (ds.get(i) < lowerLimit.get(i))
             return false;
-        if (ds[i] > upperLimit.get(i))
+        if (ds.get(i) > upperLimit.get(i))
             return false;
 	    }
         return true;
@@ -109,10 +110,10 @@ public abstract class Problem extends ProblemBase<Double> {
 		return d;
 	}
 	
-	public Double[] setFeasible(Double[] d) {
-		for(int i = 0; i < d.length;i++)
+	public List<Double> setFeasible(List<Double> d) {
+		for(int i = 0; i < d.size();i++)
 		{
-			d[i] = setFeasible(d[i], i);
+			d.set(i,setFeasible(d.get(i), i));
 		}
 		return d;
 	}
@@ -240,9 +241,16 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * Implement problem! 
 	 * @param ds
 	 * @return
-	 * @deprecated 
 	 */
-	public abstract double eval(Double[] ds);
+	public abstract double eval(double[] ds);
+	
+	public double eval(List<Double> ds) {
+		return eval(ds.stream().mapToDouble(i->i).toArray());
+	}
+	
+	public double eval(Double[] ds) {
+		return eval(ArrayUtils.toPrimitive(ds));
+	}
 	
 	/**
 	 * with no evaluations just checks
@@ -294,7 +302,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param x
 	 * @return
 	 */
-	public double[] calc_constrains(Double[] x) {
+	public double[] calc_constrains(List<Double> x) {
 		double[] tmp = new double[0];
 		return tmp;
 	}
@@ -310,7 +318,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param x - solution
 	 * @return
 	 */
-	public double constrainsEvaluations(Double[] x) {
+	public double constrainsEvaluations(List<Double> x) {
 		if (numberOfConstraints == 0)
 			return 0;
 		double[] g = calc_constrains(x); //calculate for every constrain (problem depended)
@@ -326,12 +334,17 @@ public abstract class Problem extends ProblemBase<Double> {
 		}
 		return d;
 	}
-	
+	/**
+	 * Generates a random non evaluated solution.
+	 * @return generated solution
+	 */
 	public DoubleSolution getRandomSolution()
 	{
-		Double[] var=new Double[numberOfDimensions];
+		//Double[] var=new Double[numberOfDimensions];
+		ArrayList<Double> var = new ArrayList<Double>();
 		for (int j = 0; j < numberOfDimensions; j++) {
-			var[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
+			//var[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
+			var.add(Util.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
 		}
 		DoubleSolution sol = new DoubleSolution(var, eval(var), calc_constrains(var), upperLimit, lowerLimit);
 		return sol;
@@ -346,7 +359,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param eval_y
 	 * @return
 	 */
-	public boolean isFirstBetter(Double[] x, double eval_x, Double[] y,
+	public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
 			double eval_y) {
 		double cons_x = constrainsEvaluations(x);
 		double cons_y = constrainsEvaluations(y);

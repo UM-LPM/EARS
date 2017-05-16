@@ -76,7 +76,6 @@ public class Schaffer extends DoubleMOProblem{
 
 	@Override
 	public void evaluateConstraints(MOSolutionBase<Double> solution) {
-		// TODO Auto-generated method stub
 		
 	}
 	

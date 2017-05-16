@@ -50,7 +50,7 @@ public class HillClimbing extends Algorithm {
 					tmpSolution = task.eval(x);
 					if (task.isFirstBetter(tmpSolution, best)) {
 						best = tmpSolution;
-						print(task.getNumberOfEvaluations(),best,i+"");
+						//print(task.getNumberOfEvaluations(),best,i+"");
 						better=true;
 					}
 					if (task.isStopCriteria()) break;
@@ -58,7 +58,7 @@ public class HillClimbing extends Algorithm {
 					tmpSolution = task.eval(x);
 					if (task.isFirstBetter(tmpSolution, best)) {
 						best = tmpSolution;
-						print(task.getNumberOfEvaluations(),best,i+"");
+						//print(task.getNumberOfEvaluations(),best,i+"");
 						 better=true;
 					}
 					if (task.isStopCriteria()) break;

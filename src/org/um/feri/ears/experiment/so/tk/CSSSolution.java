@@ -13,8 +13,8 @@ public class CSSSolution extends DoubleSolution
 	public CSSSolution(DoubleSolution i) 
 	{
 		super(i);
-		v = new double[i.getVariables().length]; //zacetni velocity na nulo
-		F = new double[i.getVariables().length];
+		v = new double[i.getVariables().size()]; //zacetni velocity na nulo
+		F = new double[i.getVariables().size()];
 		Q = 0.0;
 	}
 	

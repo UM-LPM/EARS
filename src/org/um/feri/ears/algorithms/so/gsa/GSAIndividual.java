@@ -48,7 +48,7 @@ public class GSAIndividual extends DoubleSolution{
 	}
 	public GSAIndividual(DoubleSolution eval) {
 		super(eval);	
-		int D = eval.getVariables().length;
+		int D = eval.getVariables().size();
 		v = new double[D]; //init V=zeros(N,dim);
 		a = new double[D]; //init
 		E = new double[D]; //init

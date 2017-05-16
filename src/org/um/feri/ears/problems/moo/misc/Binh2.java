@@ -80,7 +80,7 @@ public class Binh2 extends DoubleMOProblem{
 	   */
 	public void evaluate(MOSolutionBase<Double> solution) {
 
-		double[] x = ArrayUtils.toPrimitive(solution.getVariables());
+		double[] x = solution.getVariables().stream().mapToDouble(i->i).toArray();
 
 		double obj[] = new double[functions.size()];
 		for (int i = 0; i < obj.length; i++) {
@@ -92,7 +92,7 @@ public class Binh2 extends DoubleMOProblem{
 	public void evaluateConstraints(MOSolutionBase<Double> solution) {
 		double[] constraints = new double[numberOfConstraints];
 		
-		double[] dv = ArrayUtils.toPrimitive(solution.getVariables());
+		double[] dv = solution.getVariables().stream().mapToDouble(i->i).toArray();
 
 		constraints[0] = -Math.pow(dv[0] - 5.0, 2.0) - Math.pow(dv[1], 2.0) + 25.0;
 		constraints[1] = Math.pow(dv[0] - 8.0, 2.0) + Math.pow(dv[1] + 3.0, 2.0) - 7.7;

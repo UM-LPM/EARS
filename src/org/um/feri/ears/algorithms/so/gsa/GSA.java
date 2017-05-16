@@ -242,14 +242,14 @@ a=E.*G; %note that Mp(i)/Mi(i)=1
 					//R=norm(X(i,:)-X(j,:),Rnorm); %Euclidian distanse Rnorm=2.
 					tmp = 0;
 					for (int d=0; d<D; d++) {
-						tm = pop_x.get(i).getVariables()[d]-pop_x.get(ii).getVariables()[d];
+						tm = pop_x.get(i).getValue(d)-pop_x.get(ii).getValue(d);
 						tmp+=tm*tm;
 					}
 					R = Math.sqrt(tmp);
 					//end of Euclidian distanse
 					for (int d=0; d<D; d++) {
 						// E(i,k)=E(i,k)+rand*(M(j))*((X(j,k)-X(i,k))/(R^Rpower+eps));
-						pop_x.get(i).getE()[d] +=Util.rnd.nextDouble()*pop_x.get(ii).getMass()*(pop_x.get(ii).getVariables()[d]-pop_x.get(i).getVariables()[d])/(Math.pow(R,Rpower)+eps);
+						pop_x.get(i).getE()[d] +=Util.rnd.nextDouble()*pop_x.get(ii).getMass()*(pop_x.get(ii).getValue(d)-pop_x.get(i).getValue(d))/(Math.pow(R,Rpower)+eps);
 					}
 				}
 			}

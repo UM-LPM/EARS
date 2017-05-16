@@ -56,8 +56,8 @@ public class PSOOmega extends Algorithm  {
 					//omega different formula omega multiplies with 
 					v[d] = omega*(
 							x.get(i).getV()[d]+
-							phiP* Util.rnd.nextDouble()*(x.get(i).getP().getVariables()[d]-x.get(i).getVariables()[d])+
-							phiG* Util.rnd.nextDouble()*(g.getVariables()[d]-x.get(i).getVariables()[d]));
+							phiP* Util.rnd.nextDouble()*(x.get(i).getP().getValue(d)-x.get(i).getValue(d))+
+							phiG* Util.rnd.nextDouble()*(g.getValue(d)-x.get(i).getValue(d)));
 					//if (v[d]>(taskProblem.getIntervalLength()[d])) v[d]=taskProblem.getIntervalLength()[d]; 
 					//if (v[d]<(taskProblem.getIntervalLength()[d])) v[d]=-taskProblem.getIntervalLength()[d]; 
 				}

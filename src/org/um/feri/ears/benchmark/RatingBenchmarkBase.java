@@ -31,7 +31,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     public static boolean printSingleRunDuration = true;
     
    	// Default benchmark settings
-    protected EnumStopCriteria stopCriteria = EnumStopCriteria.STAGNATION; 
+    protected EnumStopCriteria stopCriteria = EnumStopCriteria.EVALUATIONS; 
     protected int maxEvaluations = 1500;
     protected long timeLimit = TimeUnit.MILLISECONDS.toNanos(500); //milliseconds
     protected int maxIterations = 500;

@@ -59,13 +59,17 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 			normalizedObjective_[i] = s.getNormalizedObjective(i);
 		}
 	}
-
-	public MOSolutionBase(Type[] var, double[] eval, List<Type> upperLimit, List<Type> lowerLimit) {
+	
+	
+	public MOSolutionBase(List<Type> var, double[] eval, List<Type> upperLimit, List<Type> lowerLimit) {
 
 		this.upperLimit = upperLimit;
 		this.lowerLimit = lowerLimit;
 		
-		System.arraycopy(var, 0, variable, 0, var.length);
+		
+		variable = new ArrayList<Type>(var);
+		
+		//System.arraycopy(var, 0, variable, 0, var.length);
 		
  		//System.arraycopy(x, 0, this.variable, 0, x.size());
 		this.eval = new double[eval.length];

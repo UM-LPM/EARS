@@ -11,7 +11,7 @@ public class DummyProblem extends Problem{
 	}
 
 	@Override
-	public double eval(Double[] ds) {
+	public double eval(double[] ds) {
 		return 0;
 	}
 

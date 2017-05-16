@@ -100,7 +100,7 @@ public class ECBO extends Algorithm {
 			for (int i = pop_size / 2; i < pop_size; i++) // Premikajoci se delci v CB, enacba 2
 			{
 				for (int j = 0; j < taskProblem.getNumberOfDimensions(); j++)
-					CB.get(i).v[j] = CB.get(i - pop_size / 2).getVariables()[j] - CB.get(i).getVariables()[j];
+					CB.get(i).v[j] = CB.get(i - pop_size / 2).getValue(j) - CB.get(i).getValue(j);
 			}
 
 			// enacba 6
@@ -248,7 +248,7 @@ public class ECBO extends Algorithm {
 
 			for (int j = 0; j < taskProb.getNumberOfDimensions(); j++) {
 				double rand = Util.nextDouble() * 2 - 1; // med -1 in 1
-				double new_value = CB.get(i).getVariables()[j] + rand * CB.get(i).v_after[j];
+				double new_value = CB.get(i).getValue(j) + rand * CB.get(i).v_after[j];
 
 				CB.get(i).new_x[j] = taskProb.setFeasible(new_value, j);
 			}
@@ -271,7 +271,7 @@ public class ECBO extends Algorithm {
 			for (int j = 0; j < taskProb.getNumberOfDimensions(); j++) {
 				double rand = Util.nextDouble() * 2 - 1; // med -1 in 1
 
-				double new_value = CB.get(i - pop_size / 2).getVariables()[j] + rand * CB.get(i).v_after[j];
+				double new_value = CB.get(i - pop_size / 2).getValue(j) + rand * CB.get(i).v_after[j];
 
 				CB.get(i).new_x[j] = taskProb.setFeasible(new_value, j);
 			}

@@ -58,7 +58,7 @@ public class StatisticGeneration {
 		return generationID+"\t"+best.getEval()+"\t"+(getTotalEval())+"\t"+dup_cound;
 	}
 	public String toStringFull() {
-		return generationID+"\t"+best.getEval()+"\t"+Util.arrayToString(ArrayUtils.toPrimitive(best.getVariables()))+"\t"+getTotalEval();
+		return generationID+"\t"+best.getEval()+"\t"+Util.arrayToString(best.getVariables())+"\t"+getTotalEval();
 	}
 	public void incDouple() {
 		dup_cound++;

@@ -86,8 +86,8 @@ public class PSOPBC extends Algorithm {
 
 					for (int j = 0; j < task.getNumberOfDimensions(); j++) {
 						velocity[j] = w * population.get(i).getV()[j]
-								+ c1 * RAND1 * (population.get(i).getPbest().getVariables()[j] - population.get(i).getVariables()[j])
-								+ c2 * RAND2 * (Gbest.getVariables()[j] - population.get(i).getVariables()[j]);
+								+ c1 * RAND1 * (population.get(i).getPbest().getValue(j) - population.get(i).getValue(j))
+								+ c2 * RAND2 * (Gbest.getValue(j) - population.get(i).getValue(j));
 					}
 					
 					if (task.isStopCriteria()) {

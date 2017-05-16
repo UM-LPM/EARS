@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.SpecialFunction;
 import org.um.feri.ears.util.TrapezoidalRule;
@@ -81,15 +82,15 @@ public class SoilModelProblem extends Problem{
 		
 		if(simplified)
 		{
-			return simplifiedModel(ds);
+			return simplifiedModel(ArrayUtils.toPrimitive(ds));
 		}
 		else
 		{
-			return nLayerModel(ds);
+			return nLayerModel(ArrayUtils.toPrimitive(ds));
 		}
 	}
 	
-	private double simplifiedModel(Double[] ds) {
+	private double simplifiedModel(double[] ds) {
 		
 		double k1 = (ds[2] -ds[0]) / (ds[2] + ds[0]);
 		
@@ -134,7 +135,7 @@ public class SoilModelProblem extends Problem{
 		return CF;
 	}
 
-	private double nLayerModel(Double[] ds) {
+	private double nLayerModel(double[] ds) {
 		
 		int j = 0;
 		
@@ -265,6 +266,18 @@ public class SoilModelProblem extends Problem{
 		else
 		{
 			System.out.println("The file name containg the measured data is not valid.");
+		}
+	}
+
+	@Override
+	public double eval(double[] ds) {
+		if(simplified)
+		{
+			return simplifiedModel(ds);
+		}
+		else
+		{
+			return nLayerModel(ds);
 		}
 	}
 }

@@ -130,7 +130,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 		MOSolutionBase<Double> xCurrent = currentSolution;
 		MOSolutionBase<Double> xChild = child;
 
-		int numberOfVariables = xParent0.getVariables().length;
+		int numberOfVariables = xParent0.getVariables().size();
 		jrand = Util.rnd.nextInt(numberOfVariables - 1);
 
 		// STEP 4. Checking the DE variant

@@ -60,8 +60,8 @@ public class PSOFS extends Algorithm {
 					rg = Util.rnd.nextDouble();
 
 					v[d] = w * population.get(i).getV()[d]
-							+ c1 * rp * (population.get(i).getP().getVariables()[d] - population.get(i).getVariables()[d])
-							+ c2 * rg * (PgBest.getVariables()[d] - population.get(i).getVariables()[d]);
+							+ c1 * rp * (population.get(i).getP().getValue(d) - population.get(i).getValue(d))
+							+ c2 * rg * (PgBest.getValue(d) - population.get(i).getValue(d));
 
 				}
 				

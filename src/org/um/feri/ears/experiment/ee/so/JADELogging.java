@@ -149,10 +149,10 @@ public class JADELogging extends Algorithm {
 								.setFeasible(
 										tmp[d]
 												+ pop_x[i].F
-												* (elite.get(pBest).getVariables()[d] - tmp[d])
+												* (elite.get(pBest).getValue(d) - tmp[d])
 												+ pop_x[i].F
-												* (pop_x[r1].getVariables()[d] - in_r2
-														.getVariables()[d]), d);
+												* (pop_x[r1].getValue(d) - in_r2
+														.getValue(d)), d);
 					}
 				}
 				List<DoubleSolution> parents = new ArrayList<DoubleSolution>();

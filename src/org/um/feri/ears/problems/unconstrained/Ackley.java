@@ -22,6 +22,7 @@ public class Ackley extends Problem {
 		name = "Ackley";
 	}
 	
+	@Override
 	public double eval(double x[]) {
 		double v = 0;
 		double sphere_sum=0;
@@ -38,7 +39,6 @@ public class Ackley extends Problem {
 		return 0;
 	}
 
-	@Override
 	public double eval(Double[] ds) {
 		return eval(ArrayUtils.toPrimitive(ds));
 	}

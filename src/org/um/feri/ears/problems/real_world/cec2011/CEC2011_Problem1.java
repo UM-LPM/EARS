@@ -4,6 +4,7 @@ package org.um.feri.ears.problems.real_world.cec2011;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -67,9 +68,9 @@ public class CEC2011_Problem1 extends Problem {
 	@Override
 	public DoubleSolution getRandomSolution() {
 		//initialization range=[0,6.35]
-		Double[] var=new Double[numberOfDimensions];
+		List<Double> var=new ArrayList<Double>();
 		for (int j = 0; j < numberOfDimensions; j++) {
-			var[j] = Util.nextDouble(0, 6.35);
+			var.add(Util.nextDouble(0, 6.35));
 		}
 		DoubleSolution sol = new DoubleSolution(var, eval(var), calc_constrains(var), upperLimit, lowerLimit);
 		return sol;

@@ -252,7 +252,7 @@ public class Task extends TaskBase<Problem> {
      * @param ds vector of possible solution
      * @return
      */
-	public boolean areDimensionsInFeasableInterval(Double[] ds) {
+	public boolean areDimensionsInFeasableInterval(List<Double> ds) {
 	    return p.areDimensionsInFeasableInterval(ds);
 	}
 
@@ -263,7 +263,7 @@ public class Task extends TaskBase<Problem> {
 	 * @param ds real vector to be evaluated (just calc constraints)
 	 * @return
 	 */
-	public double[] calcConstrains(Double[] ds) {
+	public double[] calcConstrains(List<Double> ds) {
 	    return p.calc_constrains(ds);
 	}
 
@@ -327,8 +327,8 @@ public class Task extends TaskBase<Problem> {
 	
 	public DoubleSolution eval(double[] x) throws StopCriteriaException {
 		
-		Double[] ds = ArrayUtils.toObject(x);
-		//List<Double> ds = Arrays.asList(inputBoxed);
+		//Double[] ds = ArrayUtils.toObject(x);
+		List<Double> ds = Arrays.asList(ArrayUtils.toObject(x));
 		
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
 			incEvaluate();
