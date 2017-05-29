@@ -332,7 +332,7 @@ public class ATMetrics {
 
 			bestFit = (fit < bestFit) ? fit : bestFit;
 		}
-		System.out.println("Best fitness: "+bestFit);
+		//System.out.println("Best fitness: "+bestFit);
 		return bestFit;
 	}
 

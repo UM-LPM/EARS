@@ -23,10 +23,14 @@ public class SORatingCEC2014 {
         }
         
         RandomWalkAlgorithmLogging randomLog = new RandomWalkAlgorithmLogging();
+        HillClimbingLogging hillClimb = new HillClimbingLogging(0.001);
         JADELogging jadeLogging = new JADELogging();
         DEAlgorithmLogging deLogging = new DEAlgorithmLogging(DEAlgorithmLogging.DE_best_1_bin);
         jDElscopLogging jDElscopLog = new jDElscopLogging();
         TLBOAlgorithmLogging TLBOLog = new TLBOAlgorithmLogging();
+        
+        System.out.println(randomLog.getID()+ " "+ hillClimb.getID()+" "+jadeLogging.getID()+" "+
+        		          deLogging.getID()+" "+ jDElscopLog.getID() +" "+TLBOLog.getID());
         
         for(int run = 0; run < 10; ++run)
         {
@@ -49,7 +53,7 @@ public class SORatingCEC2014 {
         	
         	for(int pr = 0; pr < problems.length; ++pr)
         	{
-        		Problem p = problems[pr];
+        	/*	Problem p = problems[pr];
         		try {
                 	Task t = new Task(EnumStopCriteria.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
@@ -60,6 +64,16 @@ public class SORatingCEC2014 {
         		}
         		
                 Task.resetLoggingID();
+                try {
+                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
+                	t.enableAncestorLogging();
+                	hillClimb.execute(t);
+        			t.saveAncestorLogging(hillClimb.getID()+"_"+p.getName()+"D"+dimm+"R"+run);
+        		} catch (StopCriteriaException e) {
+        			e.printStackTrace();
+        		}
+        		
+              /*  Task.resetLoggingID();
                 try {
                 	Task t = new Task(EnumStopCriteria.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
@@ -97,7 +111,7 @@ public class SORatingCEC2014 {
                 	t.saveAncestorLogging(TLBOLog.getID().replaceAll("/", "-")+"_"+p.getName()+"D"+dimm+"R"+run);
                 } catch (StopCriteriaException e){
                 	e.printStackTrace();
-                }
+                }*/
                 Task.resetLoggingID();
 
         	}
