@@ -73,12 +73,11 @@ public class RandomWalkAlgorithmLogging extends Algorithm {
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
 		task = taskProblem;
 		DoubleSolution ii;
-		List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
 		i = taskProblem.getRandomSolution();
 		if (debug)
 			System.out.println(taskProblem.getNumberOfEvaluations() + " " + i);
 		while (!taskProblem.isStopCriteria()) {
-
+			List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
 			ii = taskProblem.getRandomSolution();
 			parents.add(i);
 			taskProblem.addAncestors(ii, parents);

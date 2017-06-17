@@ -33,6 +33,9 @@ public class MeanStDev {
 	public double getMean() {
 		return mean;
 	}
+	public double getStDev() {
+		return stdev;
+	}
 	public ArrayList<Double> getLista() {
 		return lista;
 	}

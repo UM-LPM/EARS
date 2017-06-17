@@ -1,7 +1,8 @@
-package org.um.feri.ears.algorithms.so.hc;
+package org.um.feri.ears.experiment.ee.so;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
@@ -11,11 +12,11 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 
-public class HillClimbing extends Algorithm {
+public class HillClimbingLogging extends Algorithm {
 	String algName;
 	String datoteka;
 	double dxProcent;
-    public HillClimbing(double dxProcent) {
+    public HillClimbingLogging(double dxProcent) {
 		ai = new AlgorithmInfo(
 				"HillClimbing",
 				"HillClimbing",
@@ -34,7 +35,7 @@ public class HillClimbing extends Algorithm {
 		DoubleSolution tmpSolution;
 		double interval[] = task.getInterval();
 		ArrayList<DoubleSolution> list = new ArrayList<>();
-		double x[], bst[] ;
+		double tmp[],  x[], bst[] ;
 		boolean better=false;
 		while (!task.isStopCriteria()) {
 			while (!task.isStopCriteria()) { //is improvement
@@ -42,20 +43,26 @@ public class HillClimbing extends Algorithm {
 				bst = best.getDoubleVariables();
 				better=false;
 				for (int i=0; i< task.getNumberOfDimensions(); i++) {
+					List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
 					if (i==2) {
 						//System.out.println("i:"+i);
 					}
 					x = Arrays.copyOf(bst, bst.length);
 					x[i]+=interval[i]*dxProcent;
-					tmpSolution = task.eval(x);
+					parents.add(bestGlobal);
+					parents.add(best);
+					tmpSolution = task.eval(x, parents);
 					if (task.isFirstBetter(tmpSolution, best)) {
 						best = tmpSolution;
 						//print(task.getNumberOfEvaluations(),best,i+"");
 						better=true;
 					}
+					parents.clear();
+					parents.add(bestGlobal);
+					parents.add(best);
 					if (task.isStopCriteria()) break;
 					x[i]-=interval[i]*dxProcent;
-					tmpSolution = task.eval(x);
+					tmpSolution = task.eval(x, parents);
 					if (task.isFirstBetter(tmpSolution, best)) {
 						best = tmpSolution;
 						//print(task.getNumberOfEvaluations(),best,i+"");
