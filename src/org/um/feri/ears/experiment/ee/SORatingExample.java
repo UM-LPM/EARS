@@ -52,6 +52,7 @@ public class SORatingExample {
                 	t.enableAncestorLogging();
                 	jadeLogging.execute(t);
         			t.saveAncestorLogging(jadeLogging.getID()+"_"+p.getName());
+        			t.saveGraphingFile(jadeLogging.getID()+"_"+p.getName(),jadeLogging);
         		} catch (StopCriteriaException e) {
         			e.printStackTrace();
         		}

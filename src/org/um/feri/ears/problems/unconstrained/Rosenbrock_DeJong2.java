@@ -16,7 +16,7 @@ public class Rosenbrock_DeJong2 extends Problem {
 		super(d,0);
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -2.048));
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 2.048));
-		name = "Rosenbrock / De Jong's function 2";
+		name = "Rosenbrock - De Jong's function 2";
 		
 		Arrays.fill(optimum[0], 1);
 	}
