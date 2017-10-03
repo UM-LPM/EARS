@@ -41,12 +41,12 @@ public class RandomWalkAlgorithm extends Algorithm { //needs to me extended
 	@Override  
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException{ //EARS main evaluation loop 
 		DoubleSolution ii;
-		i = taskProblem.getRandomIndividual(); //EARS Helper for creating random solution, it takes one evaluation (eval++)
+		i = taskProblem.getRandomSolution(); //EARS Helper for creating random solution, it takes one evaluation (eval++)
 		//user can use its own representation for example double[] and in fase of evaluation calls taskProblem.eval that creates individual
 		System.out.println(taskProblem.getNumberOfEvaluations()+" "+i); //prints number of evaluations
 
 		while (!taskProblem.isStopCriteria()) {   //EARS user needs to take care about number of evaluations
-			ii = taskProblem.getRandomIndividual();
+			ii = taskProblem.getRandomSolution();
 			if (taskProblem.isFirstBetter(ii, i)) { //EARS primary function it takes care if we are searching minimum or maximum, if solution is valit etc.
 				i = ii;
 				if (debug) System.out.println(taskProblem.getNumberOfEvaluations()+" "+i);
@@ -60,7 +60,6 @@ public class RandomWalkAlgorithm extends Algorithm { //needs to me extended
 	public void resetDefaultsBeforNewRun() {
 		i=null;
 	}
-
 }
 ```
 Run it on single task:
@@ -72,11 +71,11 @@ Example:
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.ProblemSphere;
+import org.um.feri.ears.problems.unconstrained.Sphere;
 
 public class Main4Run {
 	public static void main(String[] args) {
-		Task t = new Task(EnumStopCriteria.EVALUATIONS, 5000, 0.0001, new ProblemSphere(5)); //run problem Sphere Dimension 5, 3000 evaluations
+		Task t = new Task(EnumStopCriteria.EVALUATIONS, 5000, 0, 0, 0.0001, new Sphere(5)); //run problem Sphere Dimension 5, 3000 evaluations
 		RandomWalkAlgorithm test = new RandomWalkAlgorithm();
 		try {
 			System.out.println(test.execute(t)); //prints best result afrer 3000 runs
@@ -94,8 +93,8 @@ Example:
 ```java
 import java.util.ArrayList;
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.es.ES1p1sAlgorithm;
-import org.um.feri.ears.algorithms.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
+import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.benchmark.RatingRPUOed2;
 import org.um.feri.ears.problems.results.BankOfResults;
@@ -106,6 +105,7 @@ import org.um.feri.ears.util.Util;
 public class MainBenchMarkTest {
 	public static void main(String[] args) {
 		Util.rnd.setSeed(System.currentTimeMillis());
+		
 		RatingBenchmark.debugPrint = true; //prints one on one results
 		ArrayList<Algorithm> players = new ArrayList<Algorithm>();
 		players.add(new ES1p1sAlgorithm()); //EARS exampels
@@ -113,14 +113,14 @@ public class MainBenchMarkTest {
 		players.add(new RandomWalkAlgorithm());
 		ResultArena ra = new ResultArena(100); 
 		RatingRPUOed2 suopm = new RatingRPUOed2(); //Create banchmark
+		suopm.setDisplayRatingIntervalChart(false);
 		for (Algorithm al:players) {
 			ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
 			suopm.registerAlgorithm(al);
 		}
 		BankOfResults ba = new BankOfResults();
-		suopm.run(ra, ba, 50); //repeat competition 50X
-		ArrayList<Player> list = new ArrayList<Player>();
-		list.addAll(ra.recalcRangs()); //new rangs
+		suopm.run(ra, ba, 20); //repeat competition 20X
+		ArrayList<Player> list = ra.getPlayers();
 		for (Player p: list) System.out.println(p); //print rangs
 	}
 }
