@@ -65,7 +65,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 	// Vector<Vector<Double>> lambda_ ;
 	double[][] lambda;
 	/**
-	 * T: neighbour size
+	 * T: neighbor size
 	 */
 	int T = 20;
 	/**
@@ -73,7 +73,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 	 */
 	int[][] neighborhood;
 	/**
-	 * delta: probability that parent solutions are selected from neighbourhood
+	 * delta: probability that parent solutions are selected from neighborhood
 	 */
 	double delta = 0.9;
 	/**

@@ -208,7 +208,6 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 					start = System.nanoTime();
 					
 					GraphDataRecorder.SetContext(al,task);
-					task.startTimer();
 					
 					ParetoSolution<T> bestByALg = al.execute(task); //check if result is fake!
 					

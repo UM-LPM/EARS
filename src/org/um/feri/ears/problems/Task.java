@@ -297,7 +297,6 @@ public class Task extends TaskBase<Problem> {
     
 
     /**
-     * @deprecated
      * @param d
      * @param bestEvalCond
      * @return

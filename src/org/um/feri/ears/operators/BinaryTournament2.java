@@ -69,17 +69,20 @@ public class BinaryTournament2<Type extends Number> {
   */
 	public MOSolutionBase<Type> execute(ParetoSolution<Type> object) {
 		ParetoSolution<Type> population = object;
-		if (index == 0) // zgeneriramo polje permutacij indexov
+		if (index == 0) // generate a permutation of indices
 		{
 			a = (new PermutationUtility()).intPermutation(population.size());
 		}
 
 		MOSolutionBase<Type> solution1, solution2;
 		solution1 = population.get(a[index]);
-		solution2 = population.get(a[index + 1]);
+		if(index + 1 == population.size())
+			solution2 = population.get(a[1]);
+		else
+			solution2 = population.get(a[index + 1]);
 
 		index = (index + 2) % population.size();
-
+		
 		int flag = dominance_.compare(solution1, solution2);
 		if (flag == -1)
 			return solution1;

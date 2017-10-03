@@ -261,8 +261,11 @@ public abstract class TaskBase<T extends ProblemBase> {
 	
 	public boolean hasTheCPUTimeBeenExceeded()
 	{
-		if(System.nanoTime() - timerStart > allowedCPUTime)
-		{
+		if(numberOfEvaluations == 0){ //set start time if 0 evaluations
+			this.startTimer();
+		}
+		
+		if(System.nanoTime() - timerStart > allowedCPUTime){
 			isStop = true;
 			return true;
 		}

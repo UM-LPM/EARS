@@ -62,7 +62,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
         this.random = random;
         this.draw_limit = draw_limit;
         maxEvaluations=300000;
-        stopCriteria = EnumStopCriteria.CPU_TIME;
+        stopCriteria = EnumStopCriteria.EVALUATIONS;
         maxIterations = 500;
         timeLimit = 5000; //millisecnods
         initFullProblemList();
