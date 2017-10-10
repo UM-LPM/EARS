@@ -120,7 +120,7 @@ public class MainBenchMarkTest {
 		}
 		BankOfResults ba = new BankOfResults();
 		suopm.run(ra, ba, 20); //repeat competition 20X
-		ArrayList<Player> list = ra.getPlayers();
+		ArrayList<Player> list = ra.recalcRatings();
 		for (Player p: list) System.out.println(p); //print rangs
 	}
 }
