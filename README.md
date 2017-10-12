@@ -136,3 +136,6 @@ ____
 * Search for main methods in EARS source code for more examples.
 * All problem data (Dimension, Bounds, etc...) can be obtaint by Task in method public Individual run(Task taskProblem).
 * Check taskProblem.isStopCriteria() after every evaluation.
+
+
+*The authors acknowledge the financial support from the Slovenian Research Agency (research core funding No. P2-0041 COMPUTER SYSTEMS, METHODOLOGIES, AND INTELLIGENT SERVICES)* http://p2-0041.feri.um.si/en/
