@@ -1,6 +1,8 @@
 Evolutionary Algorithms Rating System 2.0
 =====================================
 
+Theory: "A chess rating system for evolutionary algorithms: A new method for the comparison and ranking of evolutionary algorithms" http://www.sciencedirect.com/science/article/pii/S002002551400276X
+
 EARS in action http://earatingsystem.appspot.com
 
 What is included:
