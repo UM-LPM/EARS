@@ -91,9 +91,9 @@ public class TLBOAlgorithm extends Algorithm {
         stat = new Statistic(task);
         init();
         try {
-        aTeacher();
+        	aTeacher();
         } catch(StopCriteriaException e) {
-            System.out.println("KDO?"+e);
+            System.out.println(e);
         }
         return stat.getCurrent_g().best;
     }
@@ -160,14 +160,24 @@ public class TLBOAlgorithm extends Algorithm {
         population = new DoubleSolution[pop_size];
         lowerLimit = task.getLowerLimit();
         upperLimit = task.getUpperLimit();
-        for (int i = 0; i < pop_size; i++) {
+        DoubleSolution best = task.getRandomSolution();
+        population[0] = best;
+        for (int i = 1; i < pop_size; i++) {
             population[i] = task.getRandomSolution();
-            if (task.isStopCriteria())
-                break;
+            if(task.isFirstBetter(population[i], best))
+            	best = population[i];
+            	
+            if (task.isStopCriteria()){
+            	//set best if global optimum reached or not enough evaluations to init population
+            	stat.getCurrent_g().setBest(best);
+            	return;
+            }
         }
+        
         if (TLBOAlgorithm.removeDuplicates) {
             clearDups(); // stop condition inside
         }
+        
         // printAllPopulation();
         sortByFirstBetterCondition();
         stat.getCurrent_g().setBest(population[0]);

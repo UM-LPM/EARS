@@ -330,49 +330,25 @@ public class Task extends TaskBase<Problem> {
 		List<Double> ds = Arrays.asList(ArrayUtils.toObject(x));
 		
 		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
-			incEvaluate();
-			long start = System.nanoTime();
-			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
-			checkIfGlobalReached(tmpSolution.getEval());
-			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-			return tmpSolution;
+			return performEvaluation(ds);
 		}
 		else if(stopCriteria == EnumStopCriteria.ITERATIONS)
 		{
 			if(isStop)
 				throw new StopCriteriaException("Max iterations");
-			incEvaluate();
-			long start = System.nanoTime();
-			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
-			evaluationTime +=  System.nanoTime() - start;
-			checkIfGlobalReached(tmpSolution.getEval());
-			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-			return tmpSolution;
+			return performEvaluation(ds);
 		}
 		else if(stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
 			if (isGlobal)
 				throw new StopCriteriaException("Global optimum already found");
-			incEvaluate();
-			long start = System.nanoTime();
-			double d = p.eval(ds);
-			evaluationTime +=  System.nanoTime() - start;
-			checkIfGlobalReached(d);
-			DoubleSolution tmpSolution = new DoubleSolution(ds,d,p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
-			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-			return tmpSolution;
+			return performEvaluation(ds);
 		}
 		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
 		{
 			if(!isStop)
 			{
 				hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
-				incEvaluate();
-				long start = System.nanoTime();
-				DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
-				evaluationTime +=  System.nanoTime() - start;
-				checkIfGlobalReached(tmpSolution.getEval());
-				GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-				return tmpSolution;
+				return performEvaluation(ds);
 			}
 			else
 			{
@@ -384,13 +360,7 @@ public class Task extends TaskBase<Problem> {
 			if(isStop)
 				throw new StopCriteriaException("Solution stagnation");
 			
-			incEvaluate();
-			long start = System.nanoTime();
-			DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
-			evaluationTime +=  System.nanoTime() - start;
-			checkIfGlobalReached(tmpSolution.getEval());
-			checkImprovment(tmpSolution.getEval());
-			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+			DoubleSolution tmpSolution = performEvaluation(ds);
 			if(isAncestorLogginEnabled)
 			{
 				tmpSolution.timeStamp = System.currentTimeMillis();
@@ -407,6 +377,17 @@ public class Task extends TaskBase<Problem> {
 		
 		assert false; // Execution should never reach this point!
 		return null; //error
+	}
+	
+	private DoubleSolution performEvaluation(List<Double> ds) throws StopCriteriaException{
+		
+		incEvaluate();
+		long start = System.nanoTime();
+		DoubleSolution tmpSolution = new DoubleSolution(ds,p.eval(ds),p.calc_constrains(ds),p.upperLimit,p.lowerLimit);
+		evaluationTime +=  System.nanoTime() - start;
+		checkIfGlobalReached(tmpSolution.getEval());
+		GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+		return tmpSolution;
 	}
 
 	private void checkIfGlobalReached(double d) {
