@@ -46,18 +46,12 @@ package org.um.feri.ears.benchmark;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.export.data.EDBenchmark;
-import org.um.feri.ears.export.data.EDTask;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
@@ -131,7 +125,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
             if (arg0.getBest()!=null) {
                 if (arg1.getBest()!=null){
                 	
-                    //if global optimum first check if draw the compare number of evaluations
+                    //if global optimum first check if draw then compare number of evaluations
                 	if(stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS)
                 	{
                 		// if results are equal check number of evaluations
@@ -144,6 +138,9 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
                 			}
                 			return 0;
                 		}
+                	}
+                	if(resultEqual(arg0.getBest(), arg1.getBest())){
+                		return 0;
                 	}
                     if (t.isFirstBetter(arg0.getBest(), arg1.getBest())) {
                     	return -1;
