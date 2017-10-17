@@ -122,34 +122,21 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
         }
         @Override
         public int compare(AlgorithmEvalResult arg0, AlgorithmEvalResult arg1) {
+       	
             if (arg0.getBest()!=null) {
                 if (arg1.getBest()!=null){
                 	
-                    //if global optimum first check if draw then compare number of evaluations
-                	if(stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS)
-                	{
-                		// if results are equal check number of evaluations
-                		if(resultEqual(arg0.getBest(), arg1.getBest())){
-                			if(arg0.numEvaluations < arg1.numEvaluations){
-                				return -1;
-                			}
-                			if(arg0.numEvaluations > arg1.numEvaluations){
-                				return 1;
-                			}
-                			return 0;
-                		}
-                	}
-                	if(resultEqual(arg0.getBest(), arg1.getBest())){
-                		return 0;
-                	}
+                	//first better
                     if (t.isFirstBetter(arg0.getBest(), arg1.getBest())) {
                     	return -1;
                     }
-                    
-                    else return 1;
+                    //second better
+                    if (t.isFirstBetter(arg1.getBest(), arg0.getBest())) {
+                    	return 1;
+                    }
                 } else return -1; //second is null
             } else if (arg1.getBest()!= null) return 1; //first null
-            return 0; //both equal
+            return 0; //both null or equal
         }
     }
     
@@ -194,6 +181,16 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task,Algorithm
         if (!a.isFeasible()&&b.isFeasible()) return false;
         if (a.isFeasible()&&!b.isFeasible()) return false;
         if (!a.isFeasible()&&!b.isFeasible()) return true;
+        
+        //TODO global optimum (requires number of evaluations)
+        //if global optimum first check if draw then compare number of evaluations
+    	/*if(stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS)
+    	{
+    		// if results are equal check number of evaluations
+    		if(Math.abs(a.getEval()-b.getEval())<draw_limit){
+    		}
+    	}*/
+        
         if (Math.abs(a.getEval()-b.getEval())<draw_limit) return true;
         return false;
     }
