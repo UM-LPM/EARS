@@ -213,36 +213,6 @@ public class Task extends TaskBase<Problem> {
 	}
 	
 
-	/**
-	 * This function is not ok, because you do not get informations about
-	 * constrains, etc.. Just value
-	 *  
-	 * @see org.um.feri.ears.problems.Task#eval(double[])
-	 * @deprecated
-	 * @param ds
-	 * @return
-	 * @throws StopCriteriaException
-	 */
-	/*public double justEval(double[] ds) throws StopCriteriaException {
-        if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
-            incEvaluate();
-            return p.eval(ds);
-        }
-        if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
-            if (isGlobal)
-                throw new StopCriteriaException("Global optimum already found");
-            incEvaluate();
-            double d = p.eval(ds);
-            if (Math.abs(d - p.getOptimumEval()) <= epsilon) {
-                isGlobal = true;
-            }
-            return d;
-        }
-        assert false; // Execution should never reach this point!
-        return Double.MAX_VALUE; //error
-    }*/
-	
-
 	 /**
      * with no evaluations just checks
      * if algorithm result is in interval.
