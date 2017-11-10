@@ -18,7 +18,7 @@ import org.um.feri.ears.util.DominanceComparator;
  * 
  * Reference: K. C. Tan, T. H. Lee, and E. F. Khor, "Evolutionary algorithms for multiobjective
  * optimization: Performance assessments and comparisons,"
- * Artificial Intell. Rev., vol. 17, no. 4, pp. 253–290, 2002.
+ * Artificial Intell. Rev., vol. 17, no. 4, pp. 253-290, 2002.
  */
 public class RatioOfNondominatedIndividuals<T extends Number> extends QualityIndicator<T>{
 

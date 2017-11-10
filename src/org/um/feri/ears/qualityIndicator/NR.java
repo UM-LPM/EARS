@@ -14,7 +14,7 @@ import org.um.feri.ears.util.SolutionComparator;
 
  * Reference: C. K. Goh and K. C. Tan. A competitive-cooperative coevolutionary
  * paradigm for dynamic multiobjective optimization. IEEE Transactions
- * on Evolutionary Computation, 13(1), 103–-127, 2009.
+ * on Evolutionary Computation, 13(1), 103-127, 2009.
  */
 public class NR<T extends Number> extends QualityIndicator<T>{
 	

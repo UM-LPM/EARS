@@ -31,6 +31,7 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Cache;
+import org.um.feri.ears.util.InitWeight;
 import org.um.feri.ears.util.RandomGenerator;
 import org.um.feri.ears.util.Ranking;
 import org.um.feri.ears.util.Util;
@@ -236,6 +237,9 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	}
 
 	public void initUniformWeight() {
+		
+		lambda = InitWeight.generate(num_obj, populationSize, true);
+		/*
 		if ((num_obj == 2) && (populationSize <= 100)) {
 			for (int n = 0; n < populationSize; n++) {
 				double a = 1.0 * n / (populationSize - 1);
@@ -284,7 +288,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				 
 				lambda = rg.generate();
 			}
-		}
+		}*/
 	}
 
 	public void initNeighborhood() {

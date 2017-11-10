@@ -56,6 +56,13 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
         }
         return false;
 	}
+	
+    public BIOMABenchmark(){
+    	this(null, 0.0000001, true);
+    	List<IndicatorName> indicators = new ArrayList<IndicatorName>();
+        indicators.add(IndicatorName.IGD); //Default indicator
+        this.indicators = indicators;
+    }
     
     public BIOMABenchmark(List<IndicatorName> indicators, double draw_limit, boolean random) {
         super(indicators);
@@ -68,7 +75,6 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
-
     }
     
     

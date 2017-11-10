@@ -2,6 +2,7 @@ package org.um.feri.ears.algorithms;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -159,6 +160,7 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
 	    noAlternative.add(this);
 	    return noAlternative;
 	}
+	
     public void resetDuration() {
         art = new AlgorithmRunTime();
     }

@@ -47,6 +47,13 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
         }
         return false;
 	}
+	
+    public CITOBenchmark(){
+    	this(null, 0.0000001, true);
+    	List<IndicatorName> indicators = new ArrayList<IndicatorName>();
+        indicators.add(IndicatorName.IGD); //Default indicator
+        this.indicators = indicators;
+    }
     
     public CITOBenchmark(List<IndicatorName> indicators, double draw_limit, boolean random) {
         super(indicators);

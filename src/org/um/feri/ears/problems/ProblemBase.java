@@ -78,6 +78,10 @@ public abstract class ProblemBase <Type> {
 		this.numberOfDimensions = dim;
 	}
 	
+	public String getProblemInfoCSV() {
+		return "name:"+name+";numberOfDimensions:"+numberOfDimensions+";numberOfConstraints:"+numberOfConstraints+";version:"+version+";";
+	}
+	
 	
 	/**
 	 * Important! Do not use this function for constrained problems,

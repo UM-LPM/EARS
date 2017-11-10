@@ -112,7 +112,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 			}
 		}
 				
-		String key = getCacheKey(task.taskInfo());
+		String key = getCacheKey(task.getTaskInfo());
 		
 		if(all_solutions.containsKey(key))
 		{
@@ -209,7 +209,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			Util.addParetoToJSON(getCacheKey(task.taskInfo()),task.getBenchmarkName(), ai.getPublishedAcronym(), best);
+			Util.addParetoToJSON(getCacheKey(task.getTaskInfo()),task.getBenchmarkName(), ai.getPublishedAcronym(), best);
 		}
 		
 		return best;

@@ -68,6 +68,14 @@ import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem6
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem7;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
+import org.um.feri.ears.problems.moo.wfg.WFG1;
+import org.um.feri.ears.problems.moo.wfg.WFG2;
+import org.um.feri.ears.problems.moo.wfg.WFG3;
+import org.um.feri.ears.problems.moo.wfg.WFG4;
+import org.um.feri.ears.problems.moo.wfg.WFG5;
+import org.um.feri.ears.problems.moo.wfg.WFG6;
+import org.um.feri.ears.problems.moo.wfg.WFG7;
+import org.um.feri.ears.problems.moo.wfg.WFG8;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
@@ -98,6 +106,13 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
         }
         return false;
 	}
+	
+    public RatingEnsemble(){
+    	this(null, 0.0000001, true, true);
+    	List<IndicatorName> indicators = new ArrayList<IndicatorName>();
+        indicators.add(IndicatorName.IGD); //Default indicator
+        this.indicators = indicators;
+    }
     
     public RatingEnsemble(List<IndicatorName> indicators, double draw_limit, boolean random, boolean runInParalel) {
         super(indicators);
@@ -239,22 +254,22 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     	problems.add(new WFG2(5));
     	problems.add(new DTLZ1(10));*/
     	
-    	/*problems.add(new ZDT1());
-    	problems.add(new ZDT2());
-    	problems.add(new ZDT3());
-    	problems.add(new ZDT4());
-    	problems.add(new ZDT6());*/
+//    	problems.add(new ZDT1());
+//    	problems.add(new ZDT2());
+//    	problems.add(new ZDT3());
+//    	problems.add(new ZDT4());
+//    	problems.add(new ZDT6());
     	    	
     	
-    	/*problems.add(new WFG1(2));
-    	problems.add(new WFG2(2));
-    	problems.add(new WFG3(2));
-    	problems.add(new WFG4(2));
-    	problems.add(new WFG5(2));
-    	problems.add(new WFG6(2));
-    	problems.add(new WFG7(2));
-    	problems.add(new WFG8(2));
-    	problems.add(new WFG9(2));*/
+//    	problems.add(new WFG1(2));
+//    	problems.add(new WFG2(2));
+//    	problems.add(new WFG3(2));
+//    	problems.add(new WFG4(2));
+//    	problems.add(new WFG5(2));
+//    	problems.add(new WFG6(2));
+//    	problems.add(new WFG7(2));
+//    	problems.add(new WFG8(2));
+//    	problems.add(new WFG9(2));
     	
     	
     	problems.add(new UnconstrainedProblem1());

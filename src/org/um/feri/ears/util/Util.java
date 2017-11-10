@@ -45,9 +45,12 @@ package org.um.feri.ears.util;
  */
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -378,6 +381,14 @@ public class Util {
 	}
 	public static double nextGaussian() {
 		return rnd.nextGaussian();
+	}
+	public static void writeToFile(String fileLocation, String data) {
+		try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileLocation)))) {
+			bw.write(data);
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 

@@ -13,7 +13,7 @@ import org.um.feri.ears.problems.moo.MOProblemBase;
  * Reference:
  * E. Zitzler, L. Thiele, and K. Deb, "Comparison of multiobjective
  * evolutionary algorithms: Empirical results,"" IEEE Trans. Evol. Comput.,
- * vol. 8, no. 2, pp. 173–195, Jun. 2000.
+ * vol. 8, no. 2, pp. 173-195, Jun. 2000.
  */
 public class MaximumSpread<T extends Number> extends QualityIndicator<T> {
 

@@ -245,6 +245,10 @@ public abstract class TaskBase<T extends ProblemBase> {
 		return allowedCPUTime - System.nanoTime();
 	}
 	
+	public int getMaxEvaluationsBeforStagnation() {
+		return maxEvaluationsBeforStagnation;
+	}
+	
 	public long getUsedCPUTime() {
 		return System.nanoTime() - timerStart;
 	}
@@ -354,11 +358,15 @@ public abstract class TaskBase<T extends ProblemBase> {
                 + precisionOfRealNumbersInDecimalPlaces + ", p=" + p + "]";
     }
     
+    public String getTaskInfoCSV(){
+        return  p.getProblemInfoCSV() + "stopCriteria:" + stopCriteria + ";maxEvaluations:" + maxEvaluations + ";epsilon:"+ epsilon + ";";
+    }
+    
     /**
      * Returns a string containing all the tasks information that doesen't change.
      * @return
      */
-    public String taskInfo() {
+    public String getTaskInfo() {
 
     	if(stopCriteria == EnumStopCriteria.EVALUATIONS) {
     		return "Task = " + p +" stopCriteria=" + stopCriteria + ", maxEvaluations=" + maxEvaluations + ", epsilon="

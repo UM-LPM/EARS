@@ -10,7 +10,7 @@ import org.um.feri.ears.util.DominanceComparator;
 /**
  * This class implements the ONVG (Overall Nondominated Vector Generation) indicator.
  * The metric measures the number of nondominated individuals found in an
- * approximation front during MOEA evolution. Too few individuals in PF_known make the front’s
+ * approximation front during MOEA evolution. Too few individuals in PF_known make the frontï¿½s
  * representation poor and too many vectors may overwhelm
  * the decision maker. It should be noted that if algorithm A
  * outperforms B on this metric does not necessarily imply

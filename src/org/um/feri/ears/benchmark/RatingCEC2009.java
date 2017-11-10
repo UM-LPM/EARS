@@ -95,6 +95,13 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
         }
         return false;
 	}
+	
+    public RatingCEC2009(){
+    	this(null, 0.0000001);
+    	List<IndicatorName> indicators = new ArrayList<IndicatorName>();
+        indicators.add(IndicatorName.IGD); //Default indicator
+        this.indicators = indicators;
+    }
     
     public RatingCEC2009(List<IndicatorName> indicators, double draw_limit) {
         super(indicators);

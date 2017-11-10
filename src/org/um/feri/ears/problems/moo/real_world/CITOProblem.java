@@ -28,9 +28,10 @@ public class CITOProblem extends IntegerMOProblem{
 		super(problemReader.getNumberOfUnits(), 0, 2);
 		this.numberOfUnits = problemReader.getNumberOfUnits();
 		this.aspects = problemReader.getAspects();
-		this.attributeCouplingMatrix = problemReader.getAttributeCouplingMatrix();
 		this.constraintMatrix = problemReader.getConstraintMatrix();
 		this.dependencyMatrix = problemReader.getDependencyMatrix();
+		
+		this.attributeCouplingMatrix = problemReader.getAttributeCouplingMatrix();
 		this.methodCouplingMatrix = problemReader.getMethodCouplingMatrix();
 		this.methodParamTypeMatrix = problemReader.getMethodParamTypeMatrix();
 		this.methodReturnTypeMatrix = problemReader.getMethodReturnTypeMatrix();
@@ -89,6 +90,11 @@ public class CITOProblem extends IntegerMOProblem{
 		obj[1] = fitness1;
 		
 		return obj;
+	}
+	
+	public double[] evaluate(List<Integer> ds) {
+		
+		return this.evaluate(ds.toArray(new Integer[0]));
 	}
 
 	public int getPermutationLength() {

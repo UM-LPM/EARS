@@ -7,6 +7,8 @@
 
 package org.um.feri.ears.algorithms.moo.nsga2;
 
+import java.util.HashMap;
+
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
@@ -195,4 +197,5 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	public void resetDefaultsBeforNewRun() {
 
 	}
+	
 }

@@ -1,14 +1,19 @@
 package org.um.feri.ears.problems.moo.real_world;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StreamTokenizer;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.um.feri.ears.problems.unconstrained.cec2015.input_data.DataReader;
 
 public class CITOReader {
 
@@ -25,18 +30,20 @@ public class CITOReader {
 	public CITOReader(String softwareName) {
     	
     	this.softwareName = softwareName;
-    	String filePath = "problems/" + softwareName + ".txt";
         try {
-            readProblem(filePath);
+            readProblem();
         } catch (IOException ex) {
             Logger.getLogger(CITOReader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void readProblem(String filePath) throws IOException {
+    private void readProblem() throws IOException {
+    	
+		InputStream dataFile = CITOReader.class.getResourceAsStream(softwareName + ".txt");
+    	
         Reader inputFile = new BufferedReader(
                 new InputStreamReader(
-                        new FileInputStream(filePath)));
+                		dataFile));
         StreamTokenizer token = new StreamTokenizer(inputFile);
         int lineNumber;
 
