@@ -158,21 +158,21 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 		}
     }
     
-    /**
-     * Fill all data!
-     *  
-     * @param arena needs to be filed with players and their ratings
-     * @param allSingleProblemRunResults 
-     * @param repetition
-     */
+	/**
+	 * Run the benchmark with default number of runs
+	 * 
+	 * @param arena needs to be filed with players and their ratings
+	 * @param allSingleProblemRunResults
+	 * @param repetition
+	 */
 	@Override
-    public void run(ResultArena arena, BankOfResults allSingleProblemRunResults, int repetition) {
-        duelNumber = repetition;
-        parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, ""+repetition);
+    public void run(ResultArena arena, BankOfResults allSingleProblemRunResults) {
+        duelNumber = numberOfRuns;
+        parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, ""+numberOfRuns);
         long start = System.nanoTime();
         for (Task t:listOfProblems) {
         	System.out.println("Current problem: "+t.getProblemName());
-            for (int i=0; i<repetition; i++) {
+            for (int i=0; i<numberOfRuns; i++) {
             	System.out.println("Current duel: "+ (i+1));
                 runOneProblem(t,allSingleProblemRunResults);
                 setWinLoseFromResultList(arena,t);

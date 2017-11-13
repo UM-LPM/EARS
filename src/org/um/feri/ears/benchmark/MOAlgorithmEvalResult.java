@@ -12,7 +12,12 @@ public class MOAlgorithmEvalResult {
         this.best = best;
         this.al = al;
     }
-    public ParetoSolution getBest() {
+    public MOAlgorithmEvalResult(MOAlgorithmEvalResult res) {
+		this.evaluated = res.evaluated;
+		this.best = new ParetoSolution(res.best);
+		this.al = res.al;
+	}
+	public ParetoSolution getBest() {
         return best;
     }
     public void setBest(ParetoSolution best) {

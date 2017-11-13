@@ -54,6 +54,9 @@ import java.util.List;
 import org.um.feri.ears.benchmark.AlgorithmEvalResult;
 import org.um.feri.ears.rating.*;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class ResultArena {
 	private HashMap<String,Player> players;
 	private List<Game> allGames;
@@ -72,6 +75,11 @@ public class ResultArena {
 	public void addPlayer(String id, double rating, double RD, double ratingVolatility, int w, int l, int d){
 		players.put(id, new Player(id,new Rating(rating, RD, ratingVolatility),w,l,d));
 	}
+	
+	public Player getPlayer(String id){
+		return players.get(id);
+	}
+	
 	/**
 	 * Players need to be in arena!
 	 * 
@@ -156,5 +164,19 @@ public class ResultArena {
 	public void removePlayer(String id) {
 		players.remove(id);
 		
+	}
+
+	public String getPlayersJson() {
+		
+		JsonPlayer[] jsonPlayers = new JsonPlayer[players.size()];
+		int index = 0;
+		for (Player p : players.values()) {
+			jsonPlayers[index++] = p.toJson();
+		}
+		
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    	String json = gson.toJson(jsonPlayers);
+	
+		return json;
 	}
 }

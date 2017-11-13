@@ -73,7 +73,7 @@ public class ControlParameter {
 		double value = 0;
 		double start = lower_bound;
 		double end = upper_bound;
-		if (type.compareTo("int")==0){
+		if (type.toLowerCase().equals("int")){
 			value = (int)(start) + Util.rnd.nextInt((int)(end - start + 1));
 			value = Math.round(value/precision) * (int)precision;
 			if (value < lower_bound) value = lower_bound;
@@ -91,7 +91,7 @@ public class ControlParameter {
 		double start = a;
 		double end = b;
 		if (start == end) return start;
-		if (type.compareTo("int")==0){
+		if (type.toLowerCase().equals("int")){
 			value = (int)(start) + Util.rnd.nextInt((int)(end - start + 1));
 			value = Math.round(value/precision) * (int)precision;
 		}else{

@@ -77,7 +77,13 @@ public class Player {
         this(playerId, new Rating(1500, 350, 0.06),0,0,0); // default from org. paper
     }
 
-    /**
+    public Player(Player p) {
+		this.playerId = p.playerId;
+		this.r = new Rating(r);
+		this.sumWinLossDraw = new WinLossDraw(sumWinLossDraw);
+	}
+
+	/**
      * Adds new game
      * 
      * @param newone
@@ -179,5 +185,17 @@ public class Player {
         }
     }
 
+	public JsonPlayer toJson() {
+		
+		JsonPlayer jp = new JsonPlayer();
+		jp.playerId = playerId;
+		jp.rating = r.getRating();
+		jp.RD = r.getRD();
+		jp.ratingIntervalLeft = jp.rating - 2 * jp.RD;
+		jp.ratingIntervalRight = jp.rating + 2 * jp.RD;
+		jp.ratingVolatility = r.getRatingVolatility();
+		jp.sumWinLossDraw = sumWinLossDraw.toString()+" Against:"+wldPlayers.toString()+" Problems:"+wldProblems.toString() + ((wldIndicator.size() == 0)? "" : " Indicators:"+wldIndicator.toString());
+		return jp;
+	}
 
 }

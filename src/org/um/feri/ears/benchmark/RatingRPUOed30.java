@@ -105,7 +105,7 @@ public class RatingRPUOed30 extends RatingBenchmark {
      */
     @Override
     public String getName() {
-        return name;
+        return name + "("+ getParameters().get(EnumBenchmarkInfoParameters.DIMENSION)+")";
     }
 
     /* (non-Javadoc)

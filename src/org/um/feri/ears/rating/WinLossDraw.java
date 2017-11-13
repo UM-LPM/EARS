@@ -9,7 +9,12 @@ public class WinLossDraw {
         this.loss = loss;
         this.draw = draw;
     }
-    public void incLoss() {
+    public WinLossDraw(WinLossDraw wld) {
+    	this.win = wld.win;
+        this.loss = wld.loss;
+        this.draw = wld.draw;
+	}
+	public void incLoss() {
         this.loss++;
     }
     public void incDraw() {
