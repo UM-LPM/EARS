@@ -47,7 +47,7 @@ public class BenchmarkRunner {
 				t.resetCounter();
 			}
 			
-			fileName = algorithm.getID()+"_"+t.getProblemName()+".txt";
+			fileName = algorithm.getID().replace("_", " ")+"_"+t.getProblemName()+".txt";
 			
 			try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+fileName)))) {
 				bw.write(sb.toString());
