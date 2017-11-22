@@ -2,6 +2,7 @@ package org.um.feri.ears.algorithms;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;

@@ -79,8 +79,8 @@ public class Player {
 
     public Player(Player p) {
 		this.playerId = p.playerId;
-		this.r = new Rating(r);
-		this.sumWinLossDraw = new WinLossDraw(sumWinLossDraw);
+		this.r = new Rating(p.r);
+		this.sumWinLossDraw = new WinLossDraw(p.sumWinLossDraw);
 	}
 
 	/**
