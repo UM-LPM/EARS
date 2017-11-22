@@ -5,9 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 
-import org.um.feri.ears.problems.DummySolution;
-import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DummySolution;
 import org.um.feri.ears.problems.Task;
 
 public class DummyAlgorithm extends Algorithm{
@@ -20,23 +19,27 @@ public class DummyAlgorithm extends Algorithm{
 	{
 		this.filesDir = filesDir;
 		ai = new AlgorithmInfo(name,"",name, name);
+		results = new HashMap<String, double[]>();
+		positions = new HashMap<String, Integer>();
 		fillResults(name);
 		
 	}
 
-	private void fillResults(String name) {
-		
+	public DummyAlgorithm(String name) {
+		ai = new AlgorithmInfo(name,"",name, name);
 		results = new HashMap<String, double[]>();
 		positions = new HashMap<String, Integer>();
+	}
+
+	private void fillResults(String name) {
 		
 		File folder = new File(filesDir);
 		File[] listOfFiles = folder.listFiles();
 		
 		String problemName, fileName, value;
-		
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
-				fileName = file.getName().toLowerCase();
+				fileName = file.getName();
 				if(fileName.toLowerCase().indexOf(name.toLowerCase()+"_") == 0)
 				{
 					problemName = fileName.substring(name.length()+1,fileName.length()-4);
@@ -46,7 +49,10 @@ public class DummyAlgorithm extends Algorithm{
 						String line = br.readLine();
 
 						while (line != null && index < resultArray.length) {
-							
+							if(index == 0 && line.indexOf(';') > 0) {//ignore first line containing info
+								line = br.readLine();
+								continue;
+							}
 							resultArray[index] = Double.parseDouble(line);
 							line = br.readLine();
 							index++;
@@ -56,11 +62,14 @@ public class DummyAlgorithm extends Algorithm{
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
 				}
-
 			}
 		}
+	}
+	
+	public void addProblemresults(String problemName, double[] resultArray){
+		results.put(problemName.toLowerCase(), resultArray);
+		positions.put(problemName.toLowerCase(), 0);
 	}
 
 	@Override

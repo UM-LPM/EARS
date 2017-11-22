@@ -117,5 +117,4 @@ public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOA
 	protected void start() throws StopCriteriaException {
 		
 	}
-
 }

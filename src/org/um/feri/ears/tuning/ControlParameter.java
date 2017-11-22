@@ -11,34 +11,33 @@ public class ControlParameter {
 	public double upper_bound;
 	public double epsilon_neighbourhood;
 	public double factor;
-	public double precision;
 	
-	public ControlParameter(String name, String type, double suggested_value, double lower_bound, double upper_bound, double epsilon_neighbourhood, double precision) {
+	public ControlParameter(String name, String type, double suggested_value, double lower_bound, double upper_bound, double epsilon_neighbourhood) {
 		this.name = name;
 		this.type = type;
 		this.suggested_value = suggested_value;
 		this.lower_bound = lower_bound;
 		this.upper_bound = upper_bound;
 		this.epsilon_neighbourhood = epsilon_neighbourhood;
-		this.precision = precision;
 		this.factor = (upper_bound-lower_bound)/(3.9+Util.rnd.nextDouble()); // for initialisation to the interval [1,5]
 	}
+
 	
-	public ControlParameter(String name, String type, double lower_bound, double upper_bound, double precision) {
+	
+	public ControlParameter(String name, String type, double lower_bound, double upper_bound) {
 		this.name = name;
 		this.type = type;
 		this.suggested_value = 0;
 		this.lower_bound = lower_bound;
 		this.upper_bound = upper_bound;
 		this.epsilon_neighbourhood = 0;
-		this.precision = precision;
 		this.factor = (upper_bound-lower_bound)/(3.9+Util.rnd.nextDouble()); // for initialisation to the interval [1,5]
 	}
 	
-	public double correctValue(double aValue){
-		double value = Math.round(aValue/precision) * precision;	
-		if (value<lower_bound) value = lower_bound;
-		if (value>upper_bound) value = upper_bound;
+	public double correctValue(double value){
+		if(type.equalsIgnoreCase("int"))
+			value = Math.round(value);
+		value = Math.min(upper_bound, Math.max(value, lower_bound));
 		return value;
 	}
 	public double randomNeighbour(double aValue){
@@ -74,29 +73,20 @@ public class ControlParameter {
 		double start = lower_bound;
 		double end = upper_bound;
 		if (type.toLowerCase().equals("int")){
-			value = (int)(start) + Util.rnd.nextInt((int)(end - start + 1));
-			value = Math.round(value/precision) * (int)precision;
-			if (value < lower_bound) value = lower_bound;
-			if (value > upper_bound) value = upper_bound;
+			value = Util.nextInt((int)start, (int)end);
 		}else{
-			value = (start) + (end - start)*Util.rnd.nextDouble();
-			value = Math.round(value/precision) * precision;
-			if (value < lower_bound) value = lower_bound;
-			if (value > upper_bound) value = upper_bound;
+			value = Util.nextDouble(start, end);
 		}
 		return value;		
 	}
-	public double randomValue(double a, double b){
+	
+	public double randomValue(double start, double end){
 		double value = 0;
-		double start = a;
-		double end = b;
 		if (start == end) return start;
 		if (type.toLowerCase().equals("int")){
-			value = (int)(start) + Util.rnd.nextInt((int)(end - start + 1));
-			value = Math.round(value/precision) * (int)precision;
-		}else{
-			value = (start) + (end - start)*Util.rnd.nextDouble();
-			value = Math.round(value/precision) * precision;
+			value = Util.nextInt((int)start, (int)end);
+			}else{
+				value = Util.nextDouble(start, end);
 		}
 		return value;		
 	}
