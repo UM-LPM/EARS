@@ -8,8 +8,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -19,10 +20,8 @@ import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
-import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.IntegerMOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
@@ -39,8 +38,9 @@ import org.um.feri.ears.util.Util;
 public class MOCRSTuning {
 
 	CRSSolution[] population;
+	CRSSolution[] bestInGeneration;
 	int numOfRuns = 8;
-	int pop_size = 20; //30 for DE
+	int pop_size = 15; //30 for DE
 	
 	int D; //number of dimensions
 
@@ -70,6 +70,7 @@ public class MOCRSTuning {
     
 	int num_eval = 0;
 	int max_eval = 1000;
+	int max_gen = 10;
 	
 	CRSSolution best;
 	CRSSolution bestit;
@@ -81,6 +82,8 @@ public class MOCRSTuning {
 	ArrayList<IntegerMOTask> tasks = new ArrayList<IntegerMOTask>();
 	
 	double draw_limit = 1e-7;
+	
+	List<IndicatorName> indicators;
 	
 	
 	public void tune(Class<? extends AlgorithmBase> classAlg, String algName, ArrayList<ControlParameter> controlParameters) {
@@ -94,6 +97,14 @@ public class MOCRSTuning {
 		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem("OA_AJHsqldb")));
 		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem("OO_BCEL")));
 		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem("OO_MyBatis")));
+		
+		indicators = new ArrayList<IndicatorName>();
+		
+	    indicators.add(IndicatorName.IGDPlus);
+	    indicators.add(IndicatorName.NativeHV);
+	    indicators.add(IndicatorName.Epsilon);
+	    indicators.add(IndicatorName.MaximumSpread);
+	    indicators.add(IndicatorName.R2);
 
 		execute();
 		//remove significantly worse and replace with new ones?
@@ -108,16 +119,17 @@ public class MOCRSTuning {
 		pold = population; // old population (generation G)
         pnew = new CRSSolution[pop_size]; // new population (generation G+1)
         tmp = new double[D];
+        bestInGeneration = new CRSSolution[max_gen];
 		
         if(pop_size < 4) {
         	System.err.println("Population must contain at least 4 members");
         	return;
         }
-        int gen = 1;
-		while(num_eval < max_eval){
+        int gen = 0;
+		while(gen < max_gen){
 			
             System.out.println("Current generation: "+gen);
-            System.out.println("Evaulations used: "+num_eval+"/"+max_eval);
+            System.out.println("Evaulations used: "+num_eval);
 			
             for (int i = 0; i < pop_size; i++) /* Start of loop through ensemble */
             {
@@ -170,12 +182,7 @@ public class MOCRSTuning {
 	            CRSSolution trial_cost = new CRSSolution(br, tmpF, tmpCR);
 	            if (isFirstBetter(trial_cost, pold[i])) {
 	                pnew[i] = trial_cost;
-	                if (isFirstBetter(trial_cost, best)) {
-	                    best = new CRSSolution(trial_cost);
-	                    System.out.println("New best solution:");
-	                    System.out.println(best.name);
-	                    System.out.println("Rating: "+best.p.getRatingData().getRating());
-	                }
+	                System.out.println("New improvment");
 	
 	            } else {
 	                pnew[i] = new CRSSolution(pold[i]);
@@ -183,19 +190,49 @@ public class MOCRSTuning {
             
             }/* End mutation loop through pop. */
 
-            bestit = new CRSSolution(best);
+            //recalculate rating for the new population
+            createPlayers(pnew, null, -1);
+            
+            findBestSolution(pnew);
+            
+            bestInGeneration[gen] = new CRSSolution(best);
+            
+            bestit = best;
             pswap = pold;
             pold = pnew;
-            pnew = pswap;
+            pnew = pswap;         
+            
             gen++;
 		}
 		
+		System.out.println("Best solution by generation:");
+		for (int j = 0; j < bestInGeneration.length; j++) {
+			System.out.println("Generation "+(j+1)+": "+bestInGeneration[j].name +" "+bestInGeneration[j].getEval());
+		} 
+		
         System.out.println("Best solution found:");
         System.out.println(best.name);
-        System.out.println("Rating: "+best.p.getRatingData().getRating());
+        System.out.println("Rating: "+best.getEval());
 	}
 	
-    private CRSSolution evaluate(double[] newValue, CRSSolution[] pop, int index) {
+    private void findBestSolution(CRSSolution[] pop) {
+		
+    	best = pop[0];
+    	
+    	for(int i = 1; i < pop.length; i++) {
+    		if(isFirstBetter(pop[i], best)) {
+    			best = pop[i];
+    		}
+    	}
+		
+        System.out.println("New best solution:");
+        System.out.println(best.name);
+        System.out.println("Rating: "+best.getEval());
+        System.out.println("RD: "+best.p.getRatingData().getRD());
+    	
+	}
+
+	private CRSSolution evaluate(double[] newValue, CRSSolution[] pop, int index) {
      	
     	String newName = algName+"_";
     	HashMap<String, Double> params = new HashMap<String, Double>();
@@ -211,7 +248,7 @@ public class MOCRSTuning {
 
 	private boolean isFirstBetter(CRSSolution first, CRSSolution second) {
 		
-		return first.p.getRatingData().getRating() > second.p.getRatingData().getRating();
+		return first.getEval() > second.getEval();
 	}
 
 	private double setFeasible(double value, int paramIndex) {
@@ -252,12 +289,12 @@ public class MOCRSTuning {
 		//save best solution
 		CRSSolution currentBest = population[0];
 		for (int i = 1; i < population.length; i++) {
-			if(population[i].p.getRatingData().getRating() > currentBest.p.getRatingData().getRating()){
+			if(isFirstBetter(population[i], currentBest)){
 				currentBest = population[i];
 			}
 		}
-		best = new CRSSolution(currentBest);
-		bestit = new CRSSolution(currentBest);
+		best = currentBest;
+		bestit = currentBest;
 	}
 	
 	
@@ -348,6 +385,7 @@ public class MOCRSTuning {
 
 	private CRSSolution fillPlayerGameList(String name, HashMap<String, Double> params) {
 		
+		long gamesTime = System.currentTimeMillis();
 		//create default object
 		MOAlgorithm defaultObject = createObject(name);
     	setParameters(defaultObject, params);
@@ -357,7 +395,7 @@ public class MOCRSTuning {
 		CRSSolution sol = new CRSSolution();
 		for(IntegerMOTask task : tasks){
 			task.resetCounter();
-			System.out.println("Current task: "+task.getProblemName());
+			//System.out.println("Current task: "+task.getProblemName());
 			try {
 				ExecutorService service = Executors.newFixedThreadPool(threads);
 
@@ -375,7 +413,6 @@ public class MOCRSTuning {
 				for (Future<FutureResult<IntegerMOTask, Integer>> future : set) {
 
 					FutureResult<IntegerMOTask, Integer> res = future.get();
-
 					sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.result, defaultObject));
 				}
 
@@ -395,12 +432,33 @@ public class MOCRSTuning {
 				e.printStackTrace();
 			}
 		}
+		long estimatedTime = (System.currentTimeMillis() - gamesTime) / 1000;
+		System.out.println("Filling games time: "+estimatedTime + "s");
 		return sol;
 	}
 	
+	private HashMap<IndicatorName, Double> evaluateWithQI(IntegerMOTask task, ParetoSolution<Integer> result) {
+		
+		HashMap<IndicatorName, Double> indicatorValues = new HashMap<IndicatorName, Double>();
+		
+		for (IndicatorName indicatorName : indicators) {
+			QualityIndicator qi = IndicatorFactory.createIndicator(indicatorName, task.getNumberOfObjectives(), task.getProblemFileName());
+			try {
+				result.evaluate(qi);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			indicatorValues.put(indicatorName, result.getEval());
+		}
+		
+		return indicatorValues;
+	}
+
 	// Creates evaluated player for provided solution, if you want to create players for the whole population
 	// set solution to null and inedx to -1
 	private void createPlayers(CRSSolution[] population, CRSSolution newSolution, int solIndex){
+		
+		long evalTime = System.currentTimeMillis();
 		
 		if(newSolution != null)
 			System.out.println("Creating player for: "+newSolution.name);
@@ -428,37 +486,42 @@ public class MOCRSTuning {
 						sameGameResults.add(population[i].allGamesPlayed.get(index));
 				}
 
-				FitnessComparator fc;
-				QualityIndicator qi = IndicatorFactory.createIndicator(IndicatorName.IGD, task.getNumberOfObjectives(), task.getProblemFileName());
-				fc = new FitnessComparator(task, qi);
-				
-				MOAlgorithmEvalResult win;
-				MOAlgorithmEvalResult lose;
-				Collections.sort(sameGameResults, fc); //best first
-				for (int i=0; i < sameGameResults.size()-1; i++) {
-					win = sameGameResults.get(i);
-					for (int j=i+1; j<sameGameResults.size(); j++) {
-						lose = sameGameResults.get(j);
-						if (resultEqual(win.getBest(), lose.getBest(), qi)) {
-							arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), task.getProblemName(), qi.getName());
-						} else {
-							if (win.getAl()==null) {
-								System.out.println("NULL ID "+win.getClass().getName());
+				for (IndicatorName indicatorName : indicators) {
+
+					FitnessComparator fc;
+
+					QualityIndicator qi = IndicatorFactory.createIndicator(indicatorName, task.getNumberOfObjectives(), task.getProblemFileName());
+
+					fc = new FitnessComparator(task, qi);
+
+					MOAlgorithmEvalResult win;
+					MOAlgorithmEvalResult lose;
+					Collections.sort(sameGameResults, fc); //best first
+					for (int i=0; i < sameGameResults.size()-1; i++) {
+						win = sameGameResults.get(i);
+						for (int j=i+1; j<sameGameResults.size(); j++) {
+							lose = sameGameResults.get(j);
+							if (resultEqual(win.getBest(), lose.getBest(), qi)) {
+								arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), task.getProblemName(), qi.getName());
+							} else {
+								if (win.getAl()==null) {
+									System.out.println("NULL ID "+win.getClass().getName());
+								}
+								if (win.getBest()==null) {
+									System.out.println(win.getAl().getID()+" NULL");
+								}                    
+								if (lose.getAl()==null) {
+									System.out.println("NULL ID "+lose.getClass().getName());
+								}
+								if (lose.getBest()==null) {
+									System.out.println(lose.getAl().getID()+" NULL");
+								}                     
+								arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), task.getProblemName(), qi.getName());
 							}
-							if (win.getBest()==null) {
-								System.out.println(win.getAl().getID()+" NULL");
-							}                    
-							if (lose.getAl()==null) {
-								System.out.println("NULL ID "+lose.getClass().getName());
-							}
-							if (lose.getBest()==null) {
-								System.out.println(lose.getAl().getID()+" NULL");
-							}                     
-							arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), task.getProblemName(), qi.getName());
 						}
 					}
 				}
-				
+
 				index++;
 			}
 		}
@@ -466,17 +529,23 @@ public class MOCRSTuning {
 		arena.calculteRatings();
 
 		//set players
+	
+		long estimatedTime = (System.currentTimeMillis() - evalTime) / 1000;
 
 		if(solIndex == -1) { //update all players
 			for(CRSSolution sol : population){
 				num_eval++;
 				sol.p = arena.getPlayer(sol.name);
 			}
+			System.out.println("Evaluation time for all players: "+estimatedTime + "s");
 
 		} else {
 			newSolution.p = arena.getPlayer(newSolution.name);
+			System.out.println("Evaluation for one player: "+estimatedTime + "s");
 			num_eval++;
 		}
+		
+		
 	}
 	
 	public boolean resultEqual(ParetoSolution<Integer> a, ParetoSolution<Integer> b, QualityIndicator<Integer> qi) {
@@ -510,8 +579,8 @@ public class MOCRSTuning {
                 	if(qi.getIndicatorType() == IndicatorType.Unary)
                 	{
                 		try {
-							arg0.getBest().evaluate(qi);
-							arg1.getBest().evaluate(qi);
+							arg0.getBest().evaluate(qi, true);
+							arg1.getBest().evaluate(qi, true);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

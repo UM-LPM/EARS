@@ -223,7 +223,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
     		QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, num_obj, file_name);
     		if(qi.getIndicatorType() == IndicatorType.Unary)
     		{
-    			this.evaluate(qi);
+    			this.evaluate(qi, true);
     		}
     	}
     }

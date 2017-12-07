@@ -1,5 +1,6 @@
 package org.um.feri.ears.benchmark;
 
+
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
@@ -7,16 +8,20 @@ public class MOAlgorithmEvalResult {
 	private ParetoSolution best;
     private MOAlgorithm al;
     private boolean evaluated = false;
+    
+    
     public MOAlgorithmEvalResult(ParetoSolution best, MOAlgorithm al) {
         super();
         this.best = best;
         this.al = al;
     }
+    
     public MOAlgorithmEvalResult(MOAlgorithmEvalResult res) {
 		this.evaluated = res.evaluated;
 		this.best = new ParetoSolution(res.best);
 		this.al = res.al;
 	}
+    
 	public ParetoSolution getBest() {
         return best;
     }

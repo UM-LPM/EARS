@@ -49,6 +49,10 @@ public class CRSSolution {
         	allGamesPlayed.add(new MOAlgorithmEvalResult(res));
         }  
     }
+    
+    public double getEval() {
+    	return p.getRatingData().getRating();
+    }
 	
     public double getF() {
         return F;
