@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="Weight"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math3-3.4.1.jar"/>
@@ -19,5 +20,18 @@
 	<classpathentry kind="lib" path="lib/orsonpdf-1.6-eval.jar"/>
 	<classpathentry kind="lib" path="lib/servlet.jar"/>
 	<classpathentry kind="lib" path="lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="lib/cisd-args4j.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang.jar"/>
+	<classpathentry kind="lib" path="lib/hdf5-linux-intel.jar"/>
+	<classpathentry kind="lib" path="lib/hdf5-macosx-intel.jar"/>
+	<classpathentry kind="lib" path="lib/hdf5-windows-intel.jar"/>
+	<classpathentry kind="lib" path="lib/sis-base.jar"/>
+	<classpathentry kind="lib" path="lib/sis-jhdf5-core.jar"/>
+	<classpathentry kind="lib" path="lib/sis-jhdf5-tools.jar"/>
+	<classpathentry kind="lib" path="lib/sis-jhdf5.jar"/>
+	<classpathentry kind="lib" path="lib/reflections-0.9.10.jar"/>
+	<classpathentry kind="lib" path="lib/guava-20.0.jar"/>
+	<classpathentry kind="lib" path="lib/javassist-3.18.2-GA.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
