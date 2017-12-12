@@ -35,7 +35,7 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
 	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 
-	public static final int TOURNAMENTS_ROUNDS = 1;
+	public int tournamentRounds = 1;
 
 	public SPEA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
 		this.populationSize = populationSize;
@@ -101,7 +101,8 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
 	@Override
 	protected void start() throws StopCriteriaException {
-
+		
+		archiveSize = populationSize;
 		ParetoSolution<Type> offspringPopulation;
 
 		BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
@@ -128,12 +129,12 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				do {
 					j++;
 					parents[0] = bt2.execute(archive);
-				} while (j < SPEA2.TOURNAMENTS_ROUNDS);
+				} while (j < tournamentRounds);
 				int k = 0;
 				do {
 					k++;
 					parents[1] = bt2.execute(archive);
-				} while (k < SPEA2.TOURNAMENTS_ROUNDS);
+				} while (k < tournamentRounds);
 
 				// make the crossover
 				MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
