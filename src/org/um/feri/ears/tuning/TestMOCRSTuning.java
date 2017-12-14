@@ -16,20 +16,22 @@ public class TestMOCRSTuning {
 	public static void main(String[] args) {
 		
 		
-		System.out.println(System.currentTimeMillis());
-		
-	    //Util.rnd.setSeed(657034);
+	    Util.rnd.setSeed(System.currentTimeMillis());
+	    
     	ArrayList<ControlParameter> control_parameters = new ArrayList<ControlParameter>();
-        control_parameters.add(new ControlParameter("populationSize", "int", 10, 200));
+    	ControlParameter populationSize = new ControlParameter("populationSize", "int", 10, 200);
+        control_parameters.add(populationSize);
         control_parameters.add(new ControlParameter("crossoverProbability", "double", 0.1, 1));
         control_parameters.add(new ControlParameter("mutationProbability", "double", 0.1, 1));
-        control_parameters.add(new ControlParameter("tournamentRounds", "int", 1, 10));
-        
+        control_parameters.add(new ControlParameter("delta", "double", 0.1, 1));
+        control_parameters.add(new ControlParameter("T", "int", 1, populationSize));
+        control_parameters.add(new ControlParameter("nr", "int", 1, populationSize));
+                
         
         long initTime = System.currentTimeMillis();
         try {
         	MOCRSTuning m = new MOCRSTuning();        	
-        	m.tune(I_SPEA2.class, "SPEA2", control_parameters);
+        	m.tune(I_MOEAD.class, "MOEAD", control_parameters);
         	//m.tune(runs,control_parameters,"org.um.feri.ears.algorithms.de3.DEAlgorithm","DE",decimals);
         	
 		} catch (Exception e) {

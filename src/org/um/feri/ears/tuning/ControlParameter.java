@@ -11,6 +11,7 @@ public class ControlParameter {
 	public double upper_bound;
 	public double epsilon_neighbourhood;
 	public double factor;
+	public ControlParameter dependency; // control parameter on which the upper bound is dependent on
 	
 	public ControlParameter(String name, String type, double suggested_value, double lower_bound, double upper_bound, double epsilon_neighbourhood) {
 		this.name = name;
@@ -34,6 +35,21 @@ public class ControlParameter {
 		this.factor = (upper_bound-lower_bound)/(3.9+Util.rnd.nextDouble()); // for initialisation to the interval [1,5]
 	}
 	
+	public ControlParameter(String name, String type, double lower_bound, ControlParameter dependency) {
+		this.name = name;
+		this.type = type;
+		this.suggested_value = 0;
+		this.lower_bound = lower_bound;
+		this.dependency = dependency;
+		this.epsilon_neighbourhood = 0;
+		this.factor = (upper_bound-lower_bound)/(3.9+Util.rnd.nextDouble());
+	}
+
+
+	public ControlParameter getDependency() {
+		return this.dependency;
+	}
+
 	public double correctValue(double value){
 		if(type.equalsIgnoreCase("int"))
 			value = Math.round(value);

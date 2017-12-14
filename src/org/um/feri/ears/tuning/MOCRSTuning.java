@@ -131,21 +131,21 @@ public class MOCRSTuning {
             System.out.println("Current generation: "+gen);
             System.out.println("Evaulations used: "+num_eval);
 			
-            for (int i = 0; i < pop_size; i++) /* Start of loop through ensemble */
+            for (int i = 0; i < pop_size; i++)
             {
                 if (num_eval >= max_eval)
                     break;
 			
 	            do {
-	                r1 = Util.rnd.nextInt(pop_size); // (int) (Util.rnd.nextDouble() * NP);
+	                r1 = Util.rnd.nextInt(pop_size);
 	            } while (r1 == i);
 	
 	            do {
-	                r2 = Util.rnd.nextInt(pop_size); // (int) (Util.rnd.nextDouble() * NP);
+	                r2 = Util.rnd.nextInt(pop_size);
 	            } while ((r2 == i) || (r2 == r1));
 	
 	            do {
-	                r3 = Util.rnd.nextInt(pop_size); // (int) (Util.rnd.nextDouble() * NP);
+	                r3 = Util.rnd.nextInt(pop_size);
 	            } while ((r3 == i) || (r3 == r1) || (r3 == r2));
 			
 			
@@ -172,11 +172,11 @@ public class MOCRSTuning {
 	                }
 	                n = (n + 1) % D;
 	            }
-            
-            
-	            for (int kk = 0; kk < D; kk++) {
-	                tmp[kk] = setFeasible(tmp[kk], kk);
-	            }
+
+	            /*for (int kk = 0; kk < D; kk++) {
+	            	setFeasible(tmp[kk], kk);
+				}*/
+	            
 	            
 	            CRSSolution br = evaluate(tmp, pold, i);
 	            CRSSolution trial_cost = new CRSSolution(br, tmpF, tmpCR);
@@ -188,7 +188,7 @@ public class MOCRSTuning {
 	                pnew[i] = new CRSSolution(pold[i]);
 	            }
             
-            }/* End mutation loop through pop. */
+            }
 
             //recalculate rating for the new population
             createPlayers(pnew, null, -1);
@@ -238,6 +238,14 @@ public class MOCRSTuning {
     	HashMap<String, Double> params = new HashMap<String, Double>();
     	for (int i = 0; i < controlParameters.size(); i++){
     		ControlParameter cp = controlParameters.get(i);
+    		ControlParameter dep = cp.getDependency();
+    		if(dep != null) {
+    			double nweUpperBound = params.get(dep.name);
+    			cp.upper_bound = nweUpperBound;
+    		}
+    		
+    		newValue[i] = setFeasible(newValue[i], i);
+
      		newName += controlParameters.get(i).name+"("+newValue[i]+")";
     		params.put(cp.name, newValue[i]);
     	}
@@ -251,9 +259,9 @@ public class MOCRSTuning {
 		return first.getEval() > second.getEval();
 	}
 
-	private double setFeasible(double value, int paramIndex) {
+	private double setFeasible(double value, int index) {
 		
-    	ControlParameter cp = controlParameters.get(paramIndex);
+    	ControlParameter cp = controlParameters.get(index);
     	return cp.correctValue(value);
 	}
 
@@ -273,6 +281,13 @@ public class MOCRSTuning {
         	double[] solParams = new double[controlParameters.size()];
         	int ind = 0;
         	for (ControlParameter cp : controlParameters){
+        		
+        		ControlParameter dep = cp.getDependency();
+        		if(dep != null) {
+        			double nweUpperBound = params.get(dep.name);
+        			cp.upper_bound = nweUpperBound;
+        		}
+        		
         		double value = cp.randomValue();
          		newName+=cp.name+"("+value+")";
         		params.put(cp.name, value);
