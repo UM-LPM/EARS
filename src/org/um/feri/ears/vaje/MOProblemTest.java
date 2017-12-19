@@ -17,6 +17,7 @@ import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.problems.moo.zdt.ZDT6;
 import org.um.feri.ears.qualityIndicator.InvertedGenerationalDistance;
 
 public class MOProblemTest {
@@ -39,14 +40,13 @@ public class MOProblemTest {
 
     	try {
     		
-    		//ZDT6 p = new ZDT6(10);
-    		Schaffer p = new Schaffer();
+    		ZDT6 p = new ZDT6(10);
   		
     		
     		DoubleMOTask task = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 30000, 5000, 100, 0.0001, p);
-    		task.startTimer();
 			ParetoSolution best = moead.execute(task);
-			best.displayData("MOEA/D", "Schaffer");
+			//best.displayData("MOEA/D", "ZDT");
+			best.printObjectivesToCSVFile("test");
 
 			//best.evaluate(new InvertedGenerationalDistance(p.getNumberOfObjectives(), p.getFileName()));
 			
