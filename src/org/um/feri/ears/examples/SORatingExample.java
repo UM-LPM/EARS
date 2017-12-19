@@ -1,4 +1,4 @@
-package org.um.feri.ears.benchmark.example;
+package org.um.feri.ears.examples;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,7 @@ import org.um.feri.ears.algorithms.so.abc.ABC;
 import org.um.feri.ears.algorithms.so.cro.CRO;
 import org.um.feri.ears.algorithms.so.cs.CS;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.ff.FireflyAlgorithm;
 import org.um.feri.ears.algorithms.so.fwa.FWA;
 import org.um.feri.ears.algorithms.so.goa.GOA;
 import org.um.feri.ears.algorithms.so.gsa.GSA;
@@ -14,6 +15,7 @@ import org.um.feri.ears.algorithms.so.gwo.GWO;
 import org.um.feri.ears.algorithms.so.hc.HillClimbing;
 import org.um.feri.ears.algorithms.so.ica.ICA;
 import org.um.feri.ears.algorithms.so.jade.JADE;
+import org.um.feri.ears.algorithms.so.laf.LaF;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.rmo.RMO;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
@@ -35,33 +37,57 @@ import org.um.feri.ears.util.Util;
 public class SORatingExample {
 	
     public static void main(String[] args) {
-        Util.rnd.setSeed(10);
+        Util.rnd.setSeed(System.currentTimeMillis());
+    	
         
-		GOA goa = new GOA();
+        
+    	Task t = new Task(EnumStopCriteria.CPU_TIME, 5000, 5000, 0, 0.0001, new Sphere(5)); //run problem Sphere Dimension 5, 3000 evaluations
+    	RandomWalkAlgorithm test = new RandomWalkAlgorithm();
+    	try {
+    		System.out.println(test.execute(t)); //prints best result afrer 3000 runs
+    	} catch (StopCriteriaException e) {
+    		e.printStackTrace();
+    	}
+        
+    	
+        //LaF laf = new LaF();
+        
+		//GOA goa = new GOA();
 		
-		try {
-			DoubleSolution best = goa.execute(new Task(EnumStopCriteria.EVALUATIONS,3000,500,1000,0.001,new Sphere(15)));//Sphere(15) Griewank(3,2)
+		/*try {
+			DoubleSolution best = laf.execute(new Task(EnumStopCriteria.ITERATIONS,3000,500,5000,0.001,new Sphere(5)));//Sphere(15) Griewank(3,2)
 			System.out.println(best.getEval());
 		} catch (StopCriteriaException e1) {
 			e1.printStackTrace();
-		}
+		}*/
        
+        
+		//DEAlgorithm de = new DEAlgorithm(DEAlgorithm.DE_rand_1_bin);
+    	/*JADE de = new JADE();
+    	
+		try {
+			DoubleSolution best = de.execute(new Task(EnumStopCriteria.EVALUATIONS,30000,500,1000,0.001, new Sphere(15)));//Sphere(15) Griewank(3,2)
+			System.out.println(best.getEval());
+		} catch (StopCriteriaException e1) {
+			e1.printStackTrace();
+		}*/
+        
         RatingBenchmark.debugPrint = false; //prints one on one results
         ArrayList<Algorithm> players = new ArrayList<Algorithm>();
         //players.add(new PSOTS());
-        players.add(new ABC());
+//        players.add(new ABC());
         players.add(new CRO());
         players.add(new GWO());
        // players.add(new BA());
-        players.add(new GOA());
+//        players.add(new GOA());
 //        players.add(new FPA());
-        players.add(new CS());
+//        players.add(new CS());
         players.add(new FWA());
         players.add(new ICA());
-        players.add(new RMO());
-        players.add(new GSA());
-        players.add(new org.um.feri.ears.algorithms.so.gsa.GSAv2());
-        players.add(new HillClimbing(0.01));
+//        players.add(new RMO());
+//        players.add(new GSA());
+//        players.add(new org.um.feri.ears.algorithms.so.gsa.GSAv2());
+//        players.add(new HillClimbing(0.01));
 //        players.add(new PSOS());
 //        players.add(new PSOQ());
 //        players.add(new PSOPBC());
@@ -75,10 +101,12 @@ public class SORatingExample {
 //        players.add(new PSOCBCW()); 
         //players.add(new ES1p1sAlgorithm());
         players.add(new TLBOAlgorithm());
+        players.add(new LaF());
+        players.add(new FireflyAlgorithm());
        // players.add(new ITLBO());
         players.add(new RandomWalkAlgorithm());
         players.add(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin));
-        players.add(new JADE());
+//        players.add(new JADE());
         ResultArena ra = new ResultArena(100); 
         RatingRPUOed2 rpuoed2 = new RatingRPUOed2(); //Create banchmark
         RatingRPUOed30 rpuoed30 = new RatingRPUOed30();
