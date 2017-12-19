@@ -17,7 +17,6 @@ import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.zdt.ZDT6;
 import org.um.feri.ears.util.Util;
-import org.um.feri.ears.vaje.Izdelek;
 
 public class MOSingleRun {
 
