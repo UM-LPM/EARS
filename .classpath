@@ -33,5 +33,6 @@
 	<classpathentry kind="lib" path="lib/reflections-0.9.10.jar"/>
 	<classpathentry kind="lib" path="lib/guava-20.0.jar"/>
 	<classpathentry kind="lib" path="lib/javassist-3.18.2-GA.jar"/>
+	<classpathentry kind="lib" path="lib/scala-library-2.12.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
