@@ -210,7 +210,7 @@ public class SolutionListUtils {
 		} else {
 			Collection<Integer> positions = new HashSet<>(numberOfSolutionsToBeReturned);
 			while (positions.size() < numberOfSolutionsToBeReturned) {
-				int nextPosition = Util.nextInt(0, solutionList.size() - 1);
+				int nextPosition = Util.nextInt(0, solutionList.size());
 				if (!positions.contains(nextPosition)) {
 					positions.add(nextPosition);
 					resultList.add(solutionList.get(nextPosition));
@@ -301,7 +301,7 @@ public class SolutionListUtils {
 		  } else {
 			  Collection<Integer> positions = new HashSet<>(numberOfSolutionsToBeReturned);
 			  while (positions.size() < numberOfSolutionsToBeReturned) {
-				  int nextPosition = Util.nextInt(0, source.size() - 1);
+				  int nextPosition = Util.nextInt(0, source.size());
 				  if (!positions.contains(nextPosition)) {
 					  positions.add(nextPosition);
 					  resultList.add(source.get(nextPosition));

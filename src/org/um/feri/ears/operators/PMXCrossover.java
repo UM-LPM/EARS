@@ -52,10 +52,10 @@ public class PMXCrossover implements CrossoverOperator<Integer, IntegerMOTask, M
 			int cuttingPoint2;
 
 			// STEP 1: Get two cutting points
-			cuttingPoint1 = Util.nextInt(0, permutationLength - 1);
-			cuttingPoint2 = Util.nextInt(0, permutationLength - 1);
+			cuttingPoint1 = Util.nextInt(0, permutationLength);
+			cuttingPoint2 = Util.nextInt(0, permutationLength);
 			while (cuttingPoint2 == cuttingPoint1)
-				cuttingPoint2 = Util.nextInt(0, permutationLength - 1);
+				cuttingPoint2 = Util.nextInt(0, permutationLength);
 
 			if (cuttingPoint1 > cuttingPoint2) {
 				int swap;

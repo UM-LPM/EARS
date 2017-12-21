@@ -11,8 +11,8 @@ public class Foxholes extends Problem {
 	
 	public double[][] a;
 	
-	public Foxholes(int d) {
-		super(d,0);
+	public Foxholes() {
+		super(2,0);
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -65.536));
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 65.536));
 		name = "Shekel's Foxholes";

@@ -148,16 +148,16 @@ public class CRO extends Algorithm {
 		int quantity = (int) (rho * N * M);
 		coralReef = new ArrayList<>(N * M);
 		CoralSolution newCoral = new CoralSolution(task.getRandomSolution());
-		Coordinate co = new Coordinate(Util.nextInt(0, N - 1), Util.nextInt(0, M - 1));
+		Coordinate co = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M ));
 		newCoral.setCoralPosition(co);
 		coralReef.add(newCoral);
 		
 		for (int i = 1; i < quantity; i++) {
 			newCoral = new CoralSolution(task.getRandomSolution());
-			co = new Coordinate(Util.nextInt(0, N - 1), Util.nextInt(0, M - 1));
+			co = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M));
 			while(getCoralFromPosition(co) != null)
 			{
-				co = new Coordinate(Util.nextInt(0, N - 1), Util.nextInt(0, M - 1));
+				co = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M));
 			}
 			newCoral.setCoralPosition(co);
 			coralReef.add(newCoral);
@@ -248,7 +248,7 @@ public class CRO extends Algorithm {
 		for (DoubleSolution larva : larvae) {
 
  			for (int attempt = 0; attempt < attempts; attempt++) {
-				Coordinate C = new Coordinate(Util.nextInt(0, N - 1), Util.nextInt(0, M - 1));
+				Coordinate C = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M));
 
 				// Add larva to the reef
 				CoralSolution coral = getCoralFromPosition(C);

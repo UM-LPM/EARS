@@ -272,7 +272,7 @@ public class Util {
 	 *         {@code 0} (inclusive) and {@code n} (exclusive).
 	 */
 	public static int nextInt(int lowerBound, int upperBound) {
-		return lowerBound + rnd.nextInt((upperBound - lowerBound + 1)) ;
+		return lowerBound + rnd.nextInt(upperBound - lowerBound) ;
 	}
 	
 	public static double nextDouble() {

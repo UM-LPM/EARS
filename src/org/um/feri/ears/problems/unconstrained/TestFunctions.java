@@ -69,7 +69,7 @@ public class TestFunctions {
 		System.out.println(p13.getOptimumEval());
 		System.out.println(p13.eval(p13.getOptimalVector()[0]));
 		
-		Foxholes p14 = new Foxholes(2);
+		Foxholes p14 = new Foxholes();
 		System.out.println(p14.getName());
 		System.out.println(p14.getOptimumEval());
 		System.out.println(p14.eval(p14.getOptimalVector()[0]));

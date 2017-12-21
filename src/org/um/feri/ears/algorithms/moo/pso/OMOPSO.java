@@ -126,8 +126,8 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 			//Select a global localBest for calculate the speed of particle i, bestGlobal
 			MOSolutionBase<Double> one ;
 			MOSolutionBase<Double> two;
-			int pos1 = Util.nextInt(0, leaderArchive.getSolutionList().size() - 1);
-			int pos2 = Util.nextInt(0, leaderArchive.getSolutionList().size() - 1);
+			int pos1 = Util.nextInt(0, leaderArchive.getSolutionList().size());
+			int pos2 = Util.nextInt(0, leaderArchive.getSolutionList().size());
 			one = leaderArchive.getSolutionList().get(pos1);
 			two = leaderArchive.getSolutionList().get(pos2);
 

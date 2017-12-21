@@ -36,14 +36,14 @@ public class PermutationSwapMutation implements MutationOperator<Integer, Intege
 
 	    if ((permutationLength != 0) && (permutationLength != 1)) {
 	      if (Util.rnd.nextDouble() < mutationProbability) {
-	        int pos1 = Util.nextInt(0, permutationLength - 1);
-	        int pos2 = Util.nextInt(0, permutationLength - 1);
+	        int pos1 = Util.nextInt(0, permutationLength);
+	        int pos2 = Util.nextInt(0, permutationLength);
 
 	        while (pos1 == pos2) {
 	          if (pos1 == (permutationLength - 1))
-	            pos2 = Util.nextInt(0, permutationLength - 2);
+	            pos2 = Util.nextInt(0, permutationLength - 1);
 	          else
-	            pos2 = Util.nextInt(pos1, permutationLength - 1);
+	            pos2 = Util.nextInt(pos1, permutationLength);
 	        }
 
 	        Integer temp = solution.getValue(pos1);
