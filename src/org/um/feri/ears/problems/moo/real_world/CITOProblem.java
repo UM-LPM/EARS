@@ -19,6 +19,19 @@ public class CITOProblem extends IntegerMOProblem{
 	private int[][] methodCouplingMatrix;
 	private int[][] methodReturnTypeMatrix;
 	private int[][] methodParamTypeMatrix;
+
+	public enum Problems
+	{
+		OA_AJHotDraw,
+		OA_AJHsqldb,
+		OA_HealthWatcher,
+		OA_TollSystems,
+		OO_BCEL,
+		OO_JBoss,
+		OO_JHotDraw,
+		OO_MyBatis;
+	}
+
 	
 	public CITOProblem(String softwareName) {
 		this(new CITOReader(softwareName));

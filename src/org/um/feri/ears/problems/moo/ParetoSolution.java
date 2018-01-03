@@ -409,11 +409,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	
 	public void loadObjectivesFromFile(String fileName)
 	{
-		try {
-			/* Open the file */
-			FileInputStream fis = new FileInputStream(fileName);
-			InputStreamReader isr = new InputStreamReader(fis);
-			BufferedReader br = new BufferedReader(isr);
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))){
 			solutions.clear();
 			//ParetoSolution solutionSet = new NonDominatedSolutionList();
 
@@ -430,9 +426,8 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 				solutions.add(solution);
 				aux = br.readLine();
 			}
-			br.close();
 		} catch (Exception e) {
-			System.out.println("jmetal.qualityIndicator.util.readNonDominatedSolutionSet: " + fileName);
+			System.out.println("readNonDominatedSolutionSet: " + fileName);
 			e.printStackTrace();
 		}
 	}
@@ -442,20 +437,13 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
      * @param file_name The name of the file.
      */
 	public void printObjectivesToCSVFile(String file_name) {
-		try {
-			/* Open the file */
-			FileOutputStream fos = new FileOutputStream(file_name + ".csv");
-			OutputStreamWriter osw = new OutputStreamWriter(fos);
-			BufferedWriter bw = new BufferedWriter(osw);
-
+		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_name + ".csv")))){
 			for (MOSolutionBase<Type> aSolutionsList_ : solutions) {
 				// if (this.vector[i].getFitness()<1.0) {
 				bw.write(aSolutionsList_.toStringCSV());
 				bw.newLine();
 				// }
 			}
-			/* Close the file */
-			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -467,11 +455,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
      */
 	public void printVariablesToFile(String file_name) {
 
-		try {
-			FileOutputStream fos = new FileOutputStream(file_name);
-			OutputStreamWriter osw = new OutputStreamWriter(fos);
-			BufferedWriter bw = new BufferedWriter(osw);
-
+		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_name)))){
 			if (solutions.size() > 0) {
 				int numberOfVariables = solutions.get(0).getVariables().size();
 				for (MOSolutionBase<Type> aSolutionsList : solutions) {
@@ -480,7 +464,6 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 					bw.newLine();
 				}
 			}
-			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -491,16 +474,11 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
      * @param file_name The name of the file.
      */
 	public void printFeasibleFUN(String file_name) {
-		try {
-			FileOutputStream fos = new FileOutputStream(file_name);
-			OutputStreamWriter osw = new OutputStreamWriter(fos);
-			BufferedWriter bw = new BufferedWriter(osw);
-
+		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_name)))){
 			for (MOSolutionBase<Type> aSolutionsList : solutions) {
 				bw.write(aSolutionsList.toString());
 				bw.newLine();
 			}
-			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

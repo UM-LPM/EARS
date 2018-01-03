@@ -39,8 +39,8 @@ public class MOCRSTuning {
 
 	CRSSolution[] population;
 	CRSSolution[] bestInGeneration;
-	int numOfRuns = 8;
-	int pop_size = 15; //30 for DE
+	int numOfRuns = 1;
+	int pop_size = 20; //30 for DE
 	
 	int D; //number of dimensions
 
@@ -70,7 +70,7 @@ public class MOCRSTuning {
     
 	int num_eval = 0;
 	int max_eval = 1000;
-	int max_gen = 10;
+	int max_gen = 20;
 	
 	CRSSolution best;
 	CRSSolution bestit;
@@ -85,6 +85,8 @@ public class MOCRSTuning {
 	
 	List<IndicatorName> indicators;
 	
+	boolean threadRuns = false;
+	
 	
 	public void tune(Class<? extends AlgorithmBase> classAlg, String algName, ArrayList<ControlParameter> controlParameters) {
 		
@@ -94,9 +96,14 @@ public class MOCRSTuning {
 		
 		//Player algorithm = new Player("IBEA", new Rating(1500, 350, 0.06),0,0,0);
 		
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem("OA_AJHsqldb")));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem("OO_BCEL")));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem("OO_MyBatis")));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_TollSystems.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_BCEL.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JBoss.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JHotDraw.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_MyBatis.name())));
 		
 		indicators = new ArrayList<IndicatorName>();
 		
@@ -408,38 +415,71 @@ public class MOCRSTuning {
 		System.out.println("Fill player game list for: "+name);
 		int threads = Runtime.getRuntime().availableProcessors();
 		CRSSolution sol = new CRSSolution();
-		for(IntegerMOTask task : tasks){
-			task.resetCounter();
+		
+		if(threadRuns)
+		{
+			for(IntegerMOTask task : tasks){
+				task.resetCounter();
+				//System.out.println("Current task: "+task.getProblemName());
+				try {
+					ExecutorService service = Executors.newFixedThreadPool(threads);
+
+					Set<Future<FutureResult<IntegerMOTask, Integer>>> set = new HashSet<Future<FutureResult<IntegerMOTask, Integer>>>();
+					for (int i = 0; i < numOfRuns; i++) {
+
+						//create new object for each thread
+						MOAlgorithm object = createObject(name);
+						setParameters(object, params);
+
+						Future<FutureResult<IntegerMOTask, Integer>> future = service.submit(object.createRunnable(object, new IntegerMOTask(task)));
+						set.add(future);
+					}
+
+					for (Future<FutureResult<IntegerMOTask, Integer>> future : set) {
+
+						FutureResult<IntegerMOTask, Integer> res = future.get();
+						sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.result, defaultObject, res.task));
+					}
+
+					service.shutdown();
+					service.awaitTermination(10, TimeUnit.HOURS);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		else {
+			
 			//System.out.println("Current task: "+task.getProblemName());
+			List<FutureResult<IntegerMOTask, Integer>> futureResults = new ArrayList<FutureResult<IntegerMOTask, Integer>>();
 			try {
 				ExecutorService service = Executors.newFixedThreadPool(threads);
 
 				Set<Future<FutureResult<IntegerMOTask, Integer>>> set = new HashSet<Future<FutureResult<IntegerMOTask, Integer>>>();
-				for (int i = 0; i < numOfRuns; i++) {
-					
+				for(IntegerMOTask task : tasks){
+					task.resetCounter();
 					//create new object for each thread
 					MOAlgorithm object = createObject(name);
-			    	setParameters(object, params);
-					
+					setParameters(object, params);
+
 					Future<FutureResult<IntegerMOTask, Integer>> future = service.submit(object.createRunnable(object, new IntegerMOTask(task)));
 					set.add(future);
 				}
 
 				for (Future<FutureResult<IntegerMOTask, Integer>> future : set) {
-
 					FutureResult<IntegerMOTask, Integer> res = future.get();
-					sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.result, defaultObject));
+					futureResults.add(res);
 				}
 
-				/*for (int i = 0; i < numOfRuns; i++) {
-					try {
-						ParetoSolution bestByALg;
-						bestByALg = object.execute(task);
-						sol.allGamesPlayed.add(new MOAlgorithmEvalResult(bestByALg, object));
-					} catch (StopCriteriaException e) {
-						e.printStackTrace();
+				//Order results by tasks
+				for(IntegerMOTask task : tasks) {
+					for(FutureResult<IntegerMOTask, Integer> res: futureResults) {
+						if(task.getProblemName().equals(res.task.getProblemName())) {
+							sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.result, defaultObject, res.task));
+							break;
+						}
 					}
-				}*/
+				}
 
 				service.shutdown();
 				service.awaitTermination(10, TimeUnit.HOURS);
@@ -500,7 +540,7 @@ public class MOCRSTuning {
 					else
 						sameGameResults.add(population[i].allGamesPlayed.get(index));
 				}
-
+				//TODO check if task in allGamesPlayed is the same as task
 				for (IndicatorName indicatorName : indicators) {
 
 					FitnessComparator fc;

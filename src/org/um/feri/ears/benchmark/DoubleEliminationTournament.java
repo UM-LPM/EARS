@@ -303,7 +303,7 @@ public class DoubleEliminationTournament {
 		        	try {
 		        		FutureResult<DoubleMOTask, Double> res = future.get();
 
-		        		results.add(new MOAlgorithmEvalResult(res.result, res.algorithm)); 
+		        		results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
 
 
 					} catch (InterruptedException | ExecutionException e) {
@@ -356,7 +356,7 @@ public class DoubleEliminationTournament {
 		        	try {
 		        		FutureResult<DoubleMOTask, Double> res = future.get();
 
-		        		participants.add(new MOAlgorithmEvalResult(res.result, res.algorithm)); 
+		        		participants.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
 
 
 					} catch (InterruptedException | ExecutionException e) {

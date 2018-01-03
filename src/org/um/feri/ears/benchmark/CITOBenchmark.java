@@ -139,12 +139,12 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
         		//reset(task); //for one eval!
         		if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.None) {
 
-        			results.add(new MOAlgorithmEvalResult(res.result, res.algorithm)); 
+        			results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
         			allSingleProblemRunResults.add(task, res.result, res.algorithm);
         		}
         		else {
         			System.err.println(res.algorithm.getAlgorithmInfo().getVersionAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
-        			results.add(new MOAlgorithmEvalResult(null, res.algorithm)); // this can be done parallel - asynchrony                    
+        			results.add(new MOAlgorithmEvalResult(null, res.algorithm, res.task)); // this can be done parallel - asynchrony                    
         		}
         		
         		//reset(task);

@@ -222,16 +222,16 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 					reset(task); //for one eval!
 					if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(bestByALg)) || MOAlgorithm.getCaching() != Cache.None) {
 
-						results.add(new MOAlgorithmEvalResult(bestByALg, al)); 
+						results.add(new MOAlgorithmEvalResult(bestByALg, al, task)); 
 						allSingleProblemRunResults.add(task, bestByALg, al);
 					}
 					else {
 						System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemName());
-						results.add(new MOAlgorithmEvalResult(null, al)); // this can be done parallel - asynchrony                    
+						results.add(new MOAlgorithmEvalResult(null, al, task)); // this can be done parallel - asynchrony                    
 					}
 				} catch (StopCriteriaException e) {
 					System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" StopCriteriaException for:"+task+"\n"+e);
-					results.add(new MOAlgorithmEvalResult(null, al));
+					results.add(new MOAlgorithmEvalResult(null, al, task));
 				}
 			}
 

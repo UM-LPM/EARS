@@ -8,10 +8,12 @@ public class FutureResult <T extends MOTask, Type extends Number> {
 	
 	public MOAlgorithm<T, Type> algorithm;
 	public ParetoSolution<Type> result;
+	public MOTask task;
 
-	public FutureResult(MOAlgorithm<T, Type> al, ParetoSolution<Type> res) {
+	public FutureResult(MOAlgorithm<T, Type> al, ParetoSolution<Type> res, MOTask task) {
 		this.algorithm = al;
 		this.result = res;
+		this.task = task;
 	}
 
 }

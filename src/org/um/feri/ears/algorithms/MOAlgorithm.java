@@ -55,7 +55,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 
 				duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - duration);
                 al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
-				FutureResult<T, Type> future = new FutureResult(al, res);
+				FutureResult<T, Type> future = new FutureResult(al, res, taskProblem);
 				
 				return future;
 			}

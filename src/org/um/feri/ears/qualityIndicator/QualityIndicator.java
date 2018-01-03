@@ -52,7 +52,7 @@ public abstract class QualityIndicator<Type extends Number> {
 	 */
 	double[][] normalizedReference;
 	
-	public QualityIndicator(int num_obj, String file_name, ParetoSolution<Type> population)
+	public QualityIndicator(int num_obj, String file_name, ParetoSolution<Type> referenceSet)
 	{
 
 		this.numberOfObjectives = num_obj;
@@ -61,9 +61,9 @@ public abstract class QualityIndicator<Type extends Number> {
 		minimumValue = new double[numberOfObjectives];
 		maximumValue = new double[numberOfObjectives];
 		referencePoint = getReferencePoint(problem_file);
-		referencePopulation = population;
-		this.referenceSet = population.writeObjectivesToMatrix();
-		normalizedReference = normalize(population);
+		referencePopulation = referenceSet;
+		this.referenceSet = referenceSet.writeObjectivesToMatrix();
+		normalizedReference = normalize(referenceSet);
 	}
 	/**
 	 * Quality Indicator constructor for indicators without reference sets
@@ -84,9 +84,9 @@ public abstract class QualityIndicator<Type extends Number> {
 	
 	private double[][] normalize(ParetoSolution<Type> population) {
 		
-		if (population.solutions.size() < 2) {
+		/*if (population.solutions.size() < 2) {
 			throw new IllegalArgumentException("requires at least two solutions");
-		}
+		}*/
 		
 		for (int i = 0; i < numberOfObjectives; i++) {
 			minimumValue[i] = Double.POSITIVE_INFINITY;
@@ -106,16 +106,16 @@ public abstract class QualityIndicator<Type extends Number> {
 			}
 		}
 		
+		if(referencePoint != null) {
+			for (int i = 0; i < numberOfObjectives; i++) {
+				if(referencePoint[i] > maximumValue[i])
+					maximumValue[i] = referencePoint[i];
+			}
+		}
+		
 		checkRanges();
 		
-		if(referencePoint != null)
-			maximumValue = referencePoint;
-		
-		double[][] normalizedReference;
-
-		normalizedReference = MetricsUtil.getNormalizedFront(referenceSet, maximumValue, minimumValue);
-		
-		return normalizedReference;
+		return MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
 	}
 	
 	/**

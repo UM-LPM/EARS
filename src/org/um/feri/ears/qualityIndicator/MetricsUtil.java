@@ -273,6 +273,12 @@ public final class MetricsUtil<T> {
 		for (int i = 0; i < front.length; i++) {
 			normalizedFront[i] = new double[front[i].length];
 			for (int j = 0; j < front[i].length; j++) {
+				if(front[i][j] < minimumValue[j]) {
+					System.err.println("Warning: when performing normaliazation, objective "+(j+1) +" value "+front[i][j]+ " is smaller than min "+minimumValue[j]+"");
+				}
+				if(front[i][j] > maximumValue[j]) {
+					System.err.println("Warning: when performing normaliazation, objective "+(j+1) +" value "+front[i][j]+ " is largeer than max "+maximumValue[j]+"");
+				}
 				normalizedFront[i][j] = (front[i][j] - minimumValue[j]) / (maximumValue[j] - minimumValue[j]);
 			}
 		}
@@ -442,7 +448,7 @@ public final class MetricsUtil<T> {
 				if(st.hasMoreTokens())
 					name = new String(st.nextToken());
 				
-				if(problemName.equals(name))
+				if(problemName.toLowerCase().equals(name.toLowerCase()))
 				{
 					referencePoint = new double[st.countTokens()];
 
