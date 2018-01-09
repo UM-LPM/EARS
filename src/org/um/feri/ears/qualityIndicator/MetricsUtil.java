@@ -24,6 +24,7 @@ package org.um.feri.ears.qualityIndicator;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.problems.moo.real_world.CITOReader;
 import org.um.feri.ears.util.EuclideanDistance;
 import org.um.feri.ears.util.ManhattanDistance;
 import org.um.feri.ears.util.NonDominatedSolutionList;
@@ -268,6 +270,9 @@ public final class MetricsUtil<T> {
      **/
 	public static double[][] getNormalizedFront(double[][] front, double[] maximumValue, double[] minimumValue) {
 
+		if(maximumValue == null || minimumValue == null)
+			return front;
+		
 		double[][] normalizedFront = new double[front.length][];
 
 		for (int i = 0; i < front.length; i++) {
@@ -398,13 +403,17 @@ public final class MetricsUtil<T> {
      * @return A solution set
      */
 	public static <T extends Number> ParetoSolution<T> readNonDominatedSolutionSet(String path) {
-		try {
-			/* Open the file */
-			FileInputStream fis = new FileInputStream(path);
-			InputStreamReader isr = new InputStreamReader(fis);
-			BufferedReader br = new BufferedReader(isr);
 
-			ParetoSolution<T> solutionSet = new NonDominatedSolutionList<T>();
+		InputStream inputStream = MetricsUtil.class.getResourceAsStream(path);
+		if (inputStream == null)
+		{
+			System.out.println("\n Error: Cannot open input file for reading ");
+		}
+
+		ParetoSolution<T> solutionSet = null;
+		try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))){
+
+			solutionSet = new NonDominatedSolutionList<T>();
 
 			String aux = br.readLine();
 			while (aux != null) {
@@ -419,12 +428,10 @@ public final class MetricsUtil<T> {
 				solutionSet.add(solution);
 				aux = br.readLine();
 			}
-			br.close();
-			return solutionSet;
-		} catch (Exception e) {
+		}	catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return solutionSet;
 	}
 	
 	/**
@@ -433,13 +440,15 @@ public final class MetricsUtil<T> {
      * @return A solution set
      */
 	public static double[] readReferencePoint(String path, String problemName) {
-		try {
-			/* Open the file */
-			FileInputStream fis = new FileInputStream(path);
-			InputStreamReader isr = new InputStreamReader(fis);
-			BufferedReader br = new BufferedReader(isr);
-
-			double[] referencePoint = null;
+		
+		InputStream inputStream = MetricsUtil.class.getResourceAsStream(path);
+		if (inputStream == null)
+		{
+			System.out.println("\n Error: Cannot open input file for reading ");
+		}
+		double[] referencePoint = null;
+		
+		try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))){
 			String name = "";
 			
 			String aux = br.readLine();
@@ -463,12 +472,11 @@ public final class MetricsUtil<T> {
 
 				aux = br.readLine();
 			}
-			br.close();
-			return referencePoint;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return referencePoint;
 	}
   
 	/**

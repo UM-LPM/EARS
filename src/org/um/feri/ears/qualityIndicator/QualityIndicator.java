@@ -58,8 +58,8 @@ public abstract class QualityIndicator<Type extends Number> {
 		this.numberOfObjectives = num_obj;
 		this.problem_file = file_name;
 
-		minimumValue = new double[numberOfObjectives];
-		maximumValue = new double[numberOfObjectives];
+		/*minimumValue = new double[numberOfObjectives];
+		maximumValue = new double[numberOfObjectives];*/
 		referencePoint = getReferencePoint(problem_file);
 		referencePopulation = referenceSet;
 		this.referenceSet = referenceSet.writeObjectivesToMatrix();
@@ -72,9 +72,6 @@ public abstract class QualityIndicator<Type extends Number> {
 	public QualityIndicator(int num_obj)
 	{
 		this.numberOfObjectives = num_obj;
-		
-		minimumValue = new double[numberOfObjectives];
-		maximumValue = new double[numberOfObjectives];
 	}
 	
 	public double getEpsilon()
@@ -88,11 +85,19 @@ public abstract class QualityIndicator<Type extends Number> {
 			throw new IllegalArgumentException("requires at least two solutions");
 		}*/
 		
+		//no reference set given return unchanged front
+		if(referenceSet == null) {
+			return population.writeObjectivesToMatrix();
+		}
+		
+		minimumValue = new double[numberOfObjectives];
+		maximumValue = new double[numberOfObjectives];
+		
 		for (int i = 0; i < numberOfObjectives; i++) {
 			minimumValue[i] = Double.POSITIVE_INFINITY;
 			maximumValue[i] = Double.NEGATIVE_INFINITY;
 		}
-
+			
 		for (int i = 0; i < referenceSet.length; i++) {
 			MOSolutionBase<Type> solution = population.get(i);
 			
@@ -140,7 +145,7 @@ public abstract class QualityIndicator<Type extends Number> {
 
 		if(fileName != null && !fileName.isEmpty())
 		{
-			referenceSet = MetricsUtil.<T>readNonDominatedSolutionSet("pf_data/"+ fileName +".dat");
+			referenceSet = MetricsUtil.<T>readNonDominatedSolutionSet("/org/um/feri/ears/problems/moo/pf_data/"+ fileName +".dat");
 		}
 		else
 		{
@@ -154,7 +159,7 @@ public abstract class QualityIndicator<Type extends Number> {
 	{
 		double[] referencePoint;
 
-		referencePoint = MetricsUtil.readReferencePoint("pf_data/ReferencePoint.dat", problemName);
+		referencePoint = MetricsUtil.readReferencePoint("/org/um/feri/ears/problems/moo/pf_data/ReferencePoint.dat", problemName);
 
 		return referencePoint;
 	}
