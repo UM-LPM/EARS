@@ -164,11 +164,15 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
     protected void initFullProblemList() {
     	
     	ArrayList<IntegerMOProblem> problems = new ArrayList<IntegerMOProblem>();
-
-    	problems.add(new CITOProblem("OA_AJHsqldb"));
-    	problems.add(new CITOProblem("OO_BCEL"));
-    	problems.add(new CITOProblem("OO_MyBatis"));
-    	
+   	
+    	problems.add(new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name()));
+    	problems.add(new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name()));
+    	problems.add(new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name()));
+    	problems.add(new CITOProblem(CITOProblem.Problems.OA_TollSystems.name()));
+    	problems.add(new CITOProblem(CITOProblem.Problems.OO_BCEL.name()));
+    	problems.add(new CITOProblem(CITOProblem.Problems.OO_JBoss.name()));
+    	problems.add(new CITOProblem(CITOProblem.Problems.OO_JHotDraw.name()));
+		problems.add(new CITOProblem(CITOProblem.Problems.OO_MyBatis.name()));
     	
     	for (IntegerMOProblem moProblem : problems) {
     		registerTask(stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
