@@ -37,6 +37,7 @@ public class TestMOCRSTuning {
 	    int popSize = 20;
 	    int maxGen = 30;
 	    int problemNumEval = 60000;
+	    int tuningRuns = 8;
         
     	ArrayList<MOTask> tasks = new ArrayList<MOTask>();
     	List<IndicatorName> indicators = new ArrayList<IndicatorName>();
@@ -54,14 +55,14 @@ public class TestMOCRSTuning {
 		TollSystems		188				53			24			2496
     	*/
     	
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_MyBatis.name())));
+//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name())));
+//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name())));
+//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_MyBatis.name())));
 		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JHotDraw.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JBoss.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_BCEL.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_TollSystems.name())));
+//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JBoss.name())));
+//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name())));
+//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_BCEL.name())));
+//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_TollSystems.name())));
 
 	    indicators.add(IndicatorName.IGDPlus);
 	    indicators.add(IndicatorName.NativeHV);
@@ -70,16 +71,25 @@ public class TestMOCRSTuning {
 	    indicators.add(IndicatorName.R2);
         
         long initTime = System.currentTimeMillis();
+        ArrayList<CRSSolution> bestSolutions = new ArrayList<CRSSolution>();
         try {
-        	MOCRSTuning m = new MOCRSTuning();        	
-        	m.tune(I_MOEAD.class, "MOEA/D", control_parameters, tasks, indicators, popSize, maxGen);
-        	
+        	for (int i = 0; i < tuningRuns; i++) {
+            	MOCRSTuning m = new MOCRSTuning();        	
+            	CRSSolution best = m.tune(I_MOEAD.class, "MOEA/D", control_parameters, tasks, indicators, popSize, maxGen);
+            	bestSolutions.add(best);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         
 		long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
 		System.out.println("Total execution time: "+estimatedTime + "s");
+		
+		for(CRSSolution solution : bestSolutions) {
+			System.out.println(solution.name);
+			System.out.println(solution.getEval());
+		}
 
 	}
 

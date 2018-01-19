@@ -89,7 +89,7 @@ public class MOCRSTuning {
 	boolean threadForEachRun = false;
 	
 	
-	public void tune(Class<? extends AlgorithmBase> classAlg, String algName, ArrayList<ControlParameter> controlParameters, ArrayList<MOTask> tasks, List<IndicatorName> indicators, int popSize, int maxGen) {
+	public CRSSolution tune(Class<? extends AlgorithmBase> classAlg, String algName, ArrayList<ControlParameter> controlParameters, ArrayList<MOTask> tasks, List<IndicatorName> indicators, int popSize, int maxGen) {
 		
 		this.classAlg = classAlg;
 		this.algName = algName;
@@ -105,6 +105,7 @@ public class MOCRSTuning {
 		//remove significantly worse and replace with new ones?
 		
 		//JDE_rand_1_bin
+		return best;
 	}
 	
 	private void execute() {
