@@ -29,7 +29,7 @@ public class ReadmeExample {
 		RatingRPUOed2 suopm = new RatingRPUOed2(); //Create banchmark
 		suopm.setDisplayRatingIntervalChart(false);
 		for (Algorithm al:players) {
-		    ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+		    ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
 		    suopm.registerAlgorithm(al);
 		}
 		BankOfResults ba = new BankOfResults();

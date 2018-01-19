@@ -25,13 +25,16 @@ public class BenchmarkRunner {
 		//RandomWalkAlgorithm algorithm = new RandomWalkAlgorithm();
 		TLBOAlgorithm algorithm = new TLBOAlgorithm();
 		RatingRPUOed2 benchmark = new RatingRPUOed2(); // Create banchmark
+		
+		algorithm.addCustomInfo("submissionAuthor", "author");
+		algorithm.addCustomInfo("submissionId", "id");
 
 		ArrayList<Task> tasks = benchmark.getAllTasks();
 		int numberOfRuns = benchmark.getNumberOfRuns();
 		
 		for (Task t: tasks) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(t.getTaskInfoCSV());
+			sb.append(algorithm.getAlgorithmInfoCSV()+";"+t.getTaskInfoCSV());
 			sb.append("\n");
 			for (int i = 0; i < numberOfRuns; i++) {
 				DoubleSolution result;

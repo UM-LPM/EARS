@@ -359,7 +359,7 @@ public abstract class TaskBase<T extends ProblemBase> {
     }
     
     public String getTaskInfoCSV(){
-        return  p.getProblemInfoCSV() + "stopCriteria:" + stopCriteria + ";maxEvaluations:" + maxEvaluations + ";epsilon:"+ epsilon + ";";
+        return  p.getProblemInfoCSV() + "task stop criteria:" + stopCriteria + ",maxEvaluations:" + maxEvaluations + ",epsilon:"+ epsilon + ",";
     }
     
     /**

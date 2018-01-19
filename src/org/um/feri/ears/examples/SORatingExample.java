@@ -1,5 +1,9 @@
 package org.um.feri.ears.examples;
 
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 
 import org.um.feri.ears.algorithms.Algorithm;
@@ -34,13 +38,34 @@ import org.um.feri.ears.util.Util;
 
 public class SORatingExample {
 	
+	private static boolean hasParameterlessPublicConstructor(String algorithmDir, String algorithmName) {
+		
+		try{
+			File f = new File(algorithmDir);
+			URL[] cp = {f.toURI().toURL()};
+			URLClassLoader urlcl = new URLClassLoader(cp);
+			Class<?> clazz = urlcl.loadClass(algorithmName);
+
+			for (Constructor<?> constructor : clazz.getConstructors()) {
+				// In Java 7-, use getParameterTypes and check the length of the array returned
+				if (constructor.getParameterCount() == 0) { 
+					return true;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+}
+	
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis());
-    	
-        
-        
+       
     	Task t = new Task(EnumStopCriteria.CPU_TIME, 5000, 5000, 0, 0.0001, new Sphere(5)); //run problem Sphere Dimension 5, 3000 evaluations
     	RandomWalkAlgorithm test = new RandomWalkAlgorithm();
+    	test.getImplementationAuthor();
     	try {
     		System.out.println(test.execute(t)); //prints best result afrer 3000 runs
     	} catch (StopCriteriaException e) {
@@ -119,7 +144,7 @@ public class SORatingExample {
         cec10.registerAlgorithms(players);
         
         for (Algorithm al:players) {
-            ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+            ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
         }
         BankOfResults ba = new BankOfResults();
         

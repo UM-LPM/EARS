@@ -20,13 +20,16 @@ public class BenchmarkRunner {
 		
 		@ALGORITHM_NAME algorithm = new @ALGORITHM_CONSTRUCTOR;
 		@BENCHMARK_NAME benchmark = new @BENCHMARK_NAME(); // Create banchmark
+		
+		algorithm.addCustomInfo("submissionAuthor", "@SUBMISSION_AUTHOR");
+		algorithm.addCustomInfo("submissionId", "@SUBMISSION_ID");
 
 		ArrayList<Task> tasks = benchmark.getAllTasks();
 		int numberOfRuns = benchmark.getNumberOfRuns();
 		
 		for (Task t: tasks) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(t.getTaskInfoCSV());
+			sb.append(algorithm.getAlgorithmInfoCSV()+";"+t.getTaskInfoCSV());
 			sb.append("\n");
 			for (int i = 0; i < numberOfRuns; i++) {
 				DoubleSolution result;

@@ -2,6 +2,7 @@ package org.um.feri.ears.algorithms;
 
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -61,6 +62,21 @@ public class AlgorithmInfo {
     private String linkURL_original; // what is different from original
     private String linkURL_internal; // what is different from original
     private int selectedParameterCombination;
+    private EnumMap<EnumAlgorithmParameters,String> parameters; //add all specific parameters
+    
+    private HashMap<String,String> customInfo = new HashMap<String,String>();
+    
+    public void addCustomInfo(String key, String value) {
+    	customInfo.put(key, value);
+    }
+
+    public String getCustomInfoByKey(String key) {
+    	return customInfo.get(key);
+    }
+    
+    public HashMap<String,String> getCustomInfo() {
+    	return customInfo;
+    }
     
     public int getSelectedParameterCombination() {
         return selectedParameterCombination;
@@ -73,7 +89,7 @@ public class AlgorithmInfo {
     
     public String paramsToString() {
     	StringBuffer sb = new StringBuffer();
-    	for (EnumAlgorithmParameters t:parameters.keySet()) {
+    	for (EnumAlgorithmParameters t : parameters.keySet()) {
     		sb.append(t.getShortName()+" = "+parameters.get(t)).append("\n");
     	}
     	return sb.toString();
@@ -95,7 +111,6 @@ public class AlgorithmInfo {
         this.linkURL_internal = linkURL_internal;
     }
 
-    private EnumMap<EnumAlgorithmParameters,String> parameters; //add all specific parameters
 
     //returns parameters
     public Map<EnumAlgorithmParameters,String> getParameters(){

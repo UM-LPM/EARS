@@ -48,9 +48,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.benchmark.AlgorithmEvalResult;
 
 public class Player {
+    protected AlgorithmBase algorithm;
     protected String playerId; // name
     protected Rating r; // current rating
     protected ArrayList<Rating> ratingHistory;
@@ -60,8 +62,9 @@ public class Player {
     public HashMap<String,WinLossDraw> wldProblems; //id is problem
     public HashMap<String,WinLossDraw> wldIndicator; //id is indicator
 
-    public Player(String playerId, Rating r, int w, int l, int d) {
+    public Player(AlgorithmBase algorithm, String playerId, Rating r, int w, int l, int d) {
         super();
+        this.algorithm = algorithm;
         wldPlayers = new HashMap<String, WinLossDraw>();
         wldProblems = new HashMap<String, WinLossDraw>();
         wldIndicator = new HashMap<String, WinLossDraw>();
@@ -74,10 +77,11 @@ public class Player {
     }
 
     public Player(String playerId) {
-        this(playerId, new Rating(1500, 350, 0.06),0,0,0); // default from org. paper
+        this(null, playerId, new Rating(1500, 350, 0.06),0,0,0); // default from org. paper
     }
 
     public Player(Player p) {
+    	this.algorithm = p.algorithm;
 		this.playerId = p.playerId;
 		this.r = new Rating(p.r);
 		this.sumWinLossDraw = new WinLossDraw(p.sumWinLossDraw);
@@ -195,6 +199,11 @@ public class Player {
 		jp.ratingIntervalRight = jp.rating + 2 * jp.RD;
 		jp.ratingVolatility = r.getRatingVolatility();
 		jp.sumWinLossDraw = sumWinLossDraw.toString()+" Against:"+wldPlayers.toString()+" Problems:"+wldProblems.toString() + ((wldIndicator.size() == 0)? "" : " Indicators:"+wldIndicator.toString());
+		if(algorithm != null) {		
+			jp.submissionAuthor = algorithm.getCustomInfoByKey("submissionAuthor");
+			jp.submissionId = algorithm.getCustomInfoByKey("submissionId");
+			
+		}
 		return jp;
 	}
 

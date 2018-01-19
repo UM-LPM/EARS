@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
@@ -49,6 +50,21 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
     
     public ArrayList<Double> getControlParameters(){
     	return this.controlParameters;
+    }
+    
+    public void addCustomInfo(String key, String value) {
+    	if(ai != null)
+    		ai.addCustomInfo(key, value);
+    }
+    
+    public HashMap<String,String> getCustomInfo() {
+    	return ai.getCustomInfo();
+    }
+    
+    public String getCustomInfoByKey(String key) {
+    	if(ai != null)
+    		return ai.getCustomInfoByKey(key);
+    	return "";
     }
     
     /**
@@ -100,9 +116,10 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
 		
 		for(Entry<EnumAlgorithmParameters, String> entry : ai.getParameters().entrySet())
 		{
-			info+= entry.getKey().getShortName() + ": " + entry.getValue()+", ";
+			info+= entry.getKey().getShortName() + ":" + entry.getValue()+",";
 		}
 		
+		//remove last comma
 		if(info.length() > 1)
 			info = info.substring(0, info.length() - 2);
 		
@@ -123,6 +140,18 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
 		
 		return info;
 	}
+	
+    public String getAlgorithmInfoCSV(){
+    	
+    	HashMap<String, String> customInfo = getCustomInfo();
+    	String customInfoCSV = "";
+    	
+		for(Map.Entry<String, String> entry: customInfo.entrySet()) {
+			customInfoCSV+=entry.getKey()+":"+entry.getValue()+",";
+		}
+    	
+        return  "algorithm name:"+ai.getPublishedAcronym()+",algorithm version:"+version+","+shortAlgorithmInfo()+","+customInfoCSV;
+    }
 	
 	/**
 	 * It is called every time before every run! 

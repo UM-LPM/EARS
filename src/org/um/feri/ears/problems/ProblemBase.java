@@ -79,7 +79,7 @@ public abstract class ProblemBase <Type> {
 	}
 	
 	public String getProblemInfoCSV() {
-		return "name:"+name+";numberOfDimensions:"+numberOfDimensions+";numberOfConstraints:"+numberOfConstraints+";version:"+version+";";
+		return "problem name:"+name+",problem number of dimensions:"+numberOfDimensions+",problem number of constraints:"+numberOfConstraints+",problem version:"+version+",";
 	}
 	
 	

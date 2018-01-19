@@ -58,7 +58,7 @@ public class PlayerAlgorithmExport<T extends AlgorithmBase> extends Player {
     Rating start;
     T alg; 
     public PlayerAlgorithmExport(T a, Rating start, int win, int l, int d){
-        super(a.getID(), start, win, l, d);
+        super(null, a.getID(), start, win, l, d);
         this.start = new Rating(start);
         alg = a;     
     }

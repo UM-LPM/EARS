@@ -97,7 +97,7 @@ public class RunBenchmarkFromFile {
        
         
         for (DummyAlgorithm al:players) {
-        	ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+        	ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
         	dr.registerAlgorithm(al);
         }
         BankOfResults ba = new BankOfResults();

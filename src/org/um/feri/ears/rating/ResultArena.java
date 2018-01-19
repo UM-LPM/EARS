@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.benchmark.AlgorithmEvalResult;
 import org.um.feri.ears.rating.*;
 
@@ -72,8 +73,8 @@ public class ResultArena {
         players.put(p.getPlayerId(),p);
     }
     
-	public void addPlayer(String id, double rating, double RD, double ratingVolatility, int w, int l, int d){
-		players.put(id, new Player(id,new Rating(rating, RD, ratingVolatility),w,l,d));
+	public void addPlayer(AlgorithmBase algorithm, String id, double rating, double RD, double ratingVolatility, int w, int l, int d){
+		players.put(id, new Player(algorithm, id,new Rating(rating, RD, ratingVolatility),w,l,d));
 	}
 	
 	public Player getPlayer(String id){

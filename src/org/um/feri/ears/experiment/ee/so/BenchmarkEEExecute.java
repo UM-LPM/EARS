@@ -52,7 +52,7 @@ public class BenchmarkEEExecute {
     	BenchmarkEE suopm = new BenchmarkEE(); //Create banchmark
     	//RatingCEC2015 suopm = new RatingCEC2015();
     	for (Algorithm al:players) {
-    		ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+    		ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
     		suopm.registerAlgorithm(al);
     	}
     	BankOfResults ba = new BankOfResults();

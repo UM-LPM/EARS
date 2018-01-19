@@ -17,6 +17,8 @@ public class DummyAlgorithm extends Algorithm{
 	
 	public DummyAlgorithm(String name, String filesDir)
 	{
+		ai = new AlgorithmInfo(name);
+		
 		this.filesDir = filesDir;
 		ai = new AlgorithmInfo(name,"",name, name);
 		results = new HashMap<String, double[]>();
@@ -49,13 +51,19 @@ public class DummyAlgorithm extends Algorithm{
 						String line = br.readLine();
 
 						while (line != null && index < resultArray.length) {
-							if(index == 0 && line.indexOf(';') > 0) {//ignore first line containing info
+							//First line may contain metadata
+							if(index == 0 && line.indexOf(';') > 0) {
+								readAlgorithmInfo(line);
 								line = br.readLine();
 								continue;
 							}
 							resultArray[index] = Double.parseDouble(line);
 							line = br.readLine();
 							index++;
+							if(index >= 10000) {
+								System.err.println("The file "+fileName+" has more than 10000 results. Skipping to end of file.");
+								break;
+							}
 						}
 						results.put(problemName.toLowerCase(), resultArray);
 						positions.put(problemName.toLowerCase(), 0);
@@ -67,6 +75,22 @@ public class DummyAlgorithm extends Algorithm{
 		}
 	}
 	
+	private void readAlgorithmInfo(String metadata) {
+		
+		String[] allInfo = metadata.split(";");
+		for(String inf: allInfo) {
+			if(inf.contains("algorithm name")) {
+				String[] subInfo = inf.split(",");
+				for(String info : subInfo) {
+					String[] split = info.split(":");
+					if(split.length != 2)
+						continue;
+					addCustomInfo(split[0], split[1]);	
+				}
+			}
+		}
+	}
+
 	public void addProblemresults(String problemName, double[] resultArray){
 		results.put(problemName.toLowerCase(), resultArray);
 		positions.put(problemName.toLowerCase(), 0);

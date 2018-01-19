@@ -53,19 +53,21 @@ import com.google.gson.reflect.TypeToken;
 public class ExecuteTournaments {
 
 	//Only for testing
-	static String tournamentDir = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"tournaments";
-	static String earsFolder = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"EARS";
-	static String earsPath = earsFolder+File.separator+"ears.jar";
+//	static String tournamentDir = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"tournaments";
+//	static String earsFolder = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"EARS";
+//	static String earsPath = earsFolder+File.separator+"ears.jar";
 	
-//	static String tournamentDir;
-//	static String earsPath;
-//	static String earsFolder;
+	static String tournamentDir;
+	static String earsPath;
+	static String earsFolder;
 
 	static final String DEST_FOLDER = "@DEST_FOLDER";
 	static final String ALGORITHM_NAME = "@ALGORITHM_NAME";
 	static final String ALGORITHM_CONSTRUCTOR = "@ALGORITHM_CONSTRUCTOR";
 	static final String BENCHMARK_NAME = "@BENCHMARK_NAME";
-	static final String TEMPLATE_FILENAME = "BenchmarkRunnerTemplate";
+	static final String SUBMISSION_AUTHOR = "@SUBMISSION_AUTHOR";
+	static final String SUBMISSION_ID = "@SUBMISSION_ID";
+	static final String TEMPLATE_FILENAME = "BenchmarkRunnerTemplate"; //TODO read from resource?
 	static final String BENCHMARK_RUNNER_FILENAME = "BenchmarkRunner";
 	static final String TOURNAMENT_FILE = "list.json";
 	static final String SUBMISSION_FILE = "submission_list.json";
@@ -77,15 +79,15 @@ public class ExecuteTournaments {
 	static final String RESULTS_FILE = "results.json";
 	
 	static String inputBenchmarkId;
-	static boolean runOneTournament = false;
-	static boolean override = false;
+	static boolean runOneTournament = false; //if id of the tournament is provided only run that tournament and skip the rest
+	static boolean override = false; //run tournament even if results already exist
 
 	static long initTime;
 	
 	static Logger logger = Logger.getLogger(ExecuteTournaments.class.getName());
 
 	public static void main(String[] args) {
-			
+		
 		if(args.length == 1) {
 			if(args[0].equalsIgnoreCase("override")) {
 				override = true;
@@ -109,9 +111,9 @@ public class ExecuteTournaments {
 		boolean benchmarkFilesChanged = false;
 
 		final File f = new File(ExecuteTournaments.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-//		earsPath = f.getPath();
-//		earsFolder = f.getParent();
-//		tournamentDir = new File(earsFolder).getParent()+File.separator+"tournaments";
+		earsPath = f.getPath();
+		earsFolder = f.getParent();
+		tournamentDir = new File(earsFolder).getParent()+File.separator+"tournaments";
 		
 		FileHandler fileTxt;
 		SimpleFormatter formatterTxt;
@@ -181,11 +183,13 @@ public class ExecuteTournaments {
 				for (Submission sub : newestSubmission.values()) {
 					String algorithmFolder = sub.author.replace(' ', '_')+"_"+sub.timestamp;
 					String algorithmName = sub.algorithm;
+					String author = sub.author;
+					String id = sub.id;
 					String algorithmDir = tournamentDir +File.separator+ benchmarkId +File.separator+"submissions"+File.separator+algorithmFolder;		
 					
 					if(canExecuteBenchmark(algorithmDir) || override) {
 						
-						Future<Void> future = service.submit(createRunnable(algorithmDir,algorithmName, benchmarkName, benchmarkResultsDir));
+						Future<Void> future = service.submit(createRunnable(algorithmDir,algorithmName, benchmarkName, benchmarkResultsDir, author, id));
 
 				        try {
 				        	future.get(5, TimeUnit.HOURS);
@@ -342,7 +346,7 @@ public class ExecuteTournaments {
 		return false;
 	}
 	
-	public static Callable<Void> createRunnable(String algorithmDir, String algorithmName, String benchmarkName, String benchmarkResultsDir) {
+	public static Callable<Void> createRunnable(String algorithmDir, String algorithmName, String benchmarkName, String benchmarkResultsDir, String author, String id) {
 
 		Callable<Void> aRunnable = new Callable<Void>(){
 			@Override
@@ -371,6 +375,9 @@ public class ExecuteTournaments {
 					fileData = fileData.replaceAll(ALGORITHM_NAME, algorithmName);
 					fileData = fileData.replaceAll(ALGORITHM_CONSTRUCTOR, algorithmName+"()");
 					fileData = fileData.replaceAll(BENCHMARK_NAME, benchmarkName);
+					
+					fileData = fileData.replaceAll(SUBMISSION_AUTHOR, author);
+					fileData = fileData.replaceAll(SUBMISSION_ID, id);
 
 					//save template file to algorithm destination
 					FileWriter fw = new FileWriter(algorithmDir+File.separator+BENCHMARK_RUNNER_FILENAME+".java");
@@ -431,7 +438,15 @@ public class ExecuteTournaments {
 
 	private static boolean removePackageFromFiles(String algorithmDir) {
 
+		logger.log(Level.INFO,"Removing packages from files in folder: "+algorithmDir);
+		
 		File folder = new File(algorithmDir);
+		
+		if(!folder.exists()) {
+			logger.log(Level.SEVERE,"Folder does not exists: "+algorithmDir);
+			return false;
+		}
+		
 		File[] listOfFiles = folder.listFiles();
 		String fileName, line, fileData;
 		boolean hasPackage = false;
@@ -550,7 +565,7 @@ public class ExecuteTournaments {
 		}
 
 		for (DummyAlgorithm al:players) {
-			ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+			ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
 			dr.registerAlgorithm(al);
 		}
 		BankOfResults ba = new BankOfResults();
