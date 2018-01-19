@@ -33,7 +33,12 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
 	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 	
+
 	public PESAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+		this(crossover, mutation, populationSize, archiveSize, "PESAII");
+	}
+	
+	public PESAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize, String name) {
 		this.populationSize = populationSize;
 		this.archiveSize = archiveSize;
 		
@@ -42,9 +47,9 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 
 		au = new Author("miha", "miha.ravber at gamil.com");
 		ai = new AlgorithmInfo(
-				"PESAII",
+				name,
 				"\\bibitem{corne2001}\nD.W.~Corne,N.R.~Jerram,J.D.~Knowles,M.J.~Oates\n\\newblock PESA-II: Region-based Selection in Evolutionary Multiobjective Optimization.\n\\newblock \\emph{Proceedings of the Genetic and Evolutionary Computation Conference (GECCO-2001)}, 283--290, 2001.\n",
-				"PESAII", "Pareto Envelope-Based Selection Algorithm");
+				name, "Pareto Envelope-Based Selection Algorithm");
 		ai.addParameters(crossover.getOperatorParameters());
 		ai.addParameters(mutation.getOperatorParameters());
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");

@@ -24,11 +24,19 @@ public class MOCRSTuningBenchmark {
 		RatingBenchmark.debugPrint = true; //prints one on one results
 		ArrayList<MOAlgorithm> players = new ArrayList<MOAlgorithm>();
 
+		//default parameters
 		players.add(new I_MOEAD());
 		players.add(new I_NSGAII());
 		players.add(new I_SPEA2());
 		players.add(new I_PESAII());
 		players.add(new I_IBEA());
+		//tuned parameters
+		
+		players.add(new I_MOEAD(0.5, 0.98, 192, "MOEAD-tuned")); //this(new PMXCrossover(0.5), new PermutationSwapMutation(0.98), 192);
+		players.add(new I_NSGAII(1.0,0.86,108,"NSGAII-tuned")); //this(new PMXCrossover(1.0), new PermutationSwapMutation(0.86), 108);
+		players.add(new I_SPEA2(0.74, 0.87, 190, 100, "SPEA2-tuned")); //this(new PMXCrossover(0.74), new PermutationSwapMutation(0.87), 190, 190);
+		players.add(new I_PESAII(0.37, 1.0, 110, 100, "PESAII-tuned")); //this(new PMXCrossover(0.37), new PermutationSwapMutation(1.0), 110, 110);
+		players.add(new I_IBEA(0.63, 0.9, 173, 100, "IBEA-tuned")); //this(new PMXCrossover(0.63), new PermutationSwapMutation(0.9), 173, 100);
 
 		MOAlgorithm.setRunWithOptimalParameters(true);
 
@@ -47,7 +55,7 @@ public class MOCRSTuningBenchmark {
 		cb.setDisplayRatingIntervalChart(true);
 
 		for (MOAlgorithm al:players) {
-			ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+			ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
 			cb.registerAlgorithm(al);
 		}
 		

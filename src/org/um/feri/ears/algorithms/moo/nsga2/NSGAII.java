@@ -51,6 +51,10 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
 
 	public NSGAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
+		this(crossover, mutation, populationSize, "NSGAII");
+	}
+	
+	public NSGAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize, String name) {
 
 		this.cross = crossover;
 		this.mut = mutation;
@@ -58,9 +62,9 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 
 		au = new Author("miha", "miha.ravber at gamil.com");
 		ai = new AlgorithmInfo(
-				"NSGAII",
+				name,
 				"\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
-				"NSGAII", "Nondominated Sorting Genetic Algorithm II ");
+				name, "Nondominated Sorting Genetic Algorithm II ");
 		
 		ai.addParameters(crossover.getOperatorParameters());
 		ai.addParameters(mutation.getOperatorParameters());

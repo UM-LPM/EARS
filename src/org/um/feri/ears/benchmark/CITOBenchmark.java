@@ -124,16 +124,16 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
 	protected void runOneProblem(IntegerMOTask task, BankOfResults allSingleProblemRunResults) {
 
     	reset(task);
-    	ExecutorService pool = Executors.newFixedThreadPool(listOfAlgorithmsPlayers.size());
-        Set<Future<FutureResult<IntegerMOTask, Integer>>> set = new HashSet<Future<FutureResult<IntegerMOTask, Integer>>>();
+    	ExecutorService pool = Executors.newFixedThreadPool(5);//Executors.newFixedThreadPool(listOfAlgorithmsPlayers.size());
+        Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
         for (MOAlgorithm<IntegerMOTask, Integer> al: listOfAlgorithmsPlayers) {
-          Future<FutureResult<IntegerMOTask, Integer>> future = pool.submit(al.createRunnable(al, new IntegerMOTask(task)));
+          Future<FutureResult> future = pool.submit(al.createRunnable(al, new IntegerMOTask(task)));
           set.add(future);
         }
 
-        for (Future<FutureResult<IntegerMOTask, Integer>> future : set) {
+        for (Future<FutureResult> future : set) {
         	try {
-        		FutureResult<IntegerMOTask, Integer> res = future.get();
+        		FutureResult res = future.get();
 
         		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
         		//reset(task); //for one eval!

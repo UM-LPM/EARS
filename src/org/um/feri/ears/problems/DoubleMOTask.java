@@ -79,4 +79,9 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 		arr = p.upperLimit.toArray(arr);
 		return arr;
 	}
+
+	@Override
+	public MOTask returnCopy() {
+		return new DoubleMOTask(this);
+	}
 }

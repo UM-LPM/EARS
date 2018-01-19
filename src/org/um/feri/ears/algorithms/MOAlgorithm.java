@@ -40,11 +40,11 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 	protected int num_var;
 	protected int num_obj;
 	
-	public Callable<FutureResult<T, Type>> createRunnable(final MOAlgorithm<T, Type> al, final T taskProblem) {
+	public Callable<FutureResult> createRunnable(final MOAlgorithm al, final T taskProblem) {
 
-		Callable<FutureResult<T, Type>> aRunnable = new Callable<FutureResult<T, Type>>(){
+		Callable<FutureResult> aRunnable = new Callable<FutureResult>(){
 			@Override
-			public FutureResult<T, Type> call() throws Exception {
+			public FutureResult call() throws Exception {
 				
 				long duration = System.nanoTime();
 				
@@ -55,7 +55,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 
 				duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - duration);
                 al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
-				FutureResult<T, Type> future = new FutureResult(al, res, taskProblem);
+				FutureResult future = new FutureResult(al, res, taskProblem);
 				
 				return future;
 			}

@@ -68,8 +68,11 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	 */
 	private double maxIndicatorValue_;
 
-
 	public IBEA(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+		this(crossover, mutation, populationSize, archiveSize, "IBEA");
+	}
+
+	public IBEA(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize, String name) {
 		
 		this.cross = crossover;
 		this.mut = mutation;
@@ -79,9 +82,9 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		
 		au = new Author("miha", "miha.ravber at gamil.com");
 		ai = new AlgorithmInfo(
-				"IBEA",
+				name,
 				"\\bibitem{Zitzler2004}\nE.~Zitzler, S.~Kunzli\n\\newblock Indicator-Based Selection in Multiobjective Search.\n\\newblock \\emph{Parallel Problem Solving from Nature (PPSN VIII)}, 832--842, 2004.\n",
-				"IBEA", "Indicator-based evolutionary algorithm");
+				name, "Indicator-based evolutionary algorithm");
 		ai.addParameters(crossover.getOperatorParameters());
 		ai.addParameters(mutation.getOperatorParameters());
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");

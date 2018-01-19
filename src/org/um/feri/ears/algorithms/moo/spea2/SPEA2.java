@@ -38,6 +38,10 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	public int tournamentRounds = 1;
 
 	public SPEA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+		this(crossover, mutation, populationSize, archiveSize, "SPEA2");
+	}
+	
+	public SPEA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize, String name) {
 		this.populationSize = populationSize;
 		this.archiveSize = archiveSize;
 		
@@ -46,9 +50,9 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
 		au = new Author("miha", "miha.ravber at gamil.com");
 		ai = new AlgorithmInfo(
-				"SPEA2",
+				name,
 				"\\bibitem{Zitzler2002}\nE.~Zitzler,M.~Laumanns,L.~Thiele\n\\newblock SPEA2: Improving the Strength Pareto Evolutionary Algorithm for Multiobjective Optimization.\n\\newblock \\emph{EUROGEN 2001. Evolutionary Methods for Design, Optimization and Control with Applications to Industrial Problems}, 95--100, 2002.\n",
-				"SPEA2", "Strength Pareto Evolutionary Algorithm");
+				name, "Strength Pareto Evolutionary Algorithm");
 		ai.addParameters(crossover.getOperatorParameters());
 		ai.addParameters(mutation.getOperatorParameters());
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
@@ -92,6 +96,8 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			}
 		}
 		
+		//archiveSize = populationSize;
+		
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
 		
@@ -102,7 +108,6 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	@Override
 	protected void start() throws StopCriteriaException {
 		
-		archiveSize = populationSize;
 		ParetoSolution<Type> offspringPopulation;
 
 		BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();

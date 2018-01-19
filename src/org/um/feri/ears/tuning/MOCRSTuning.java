@@ -22,6 +22,7 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.IntegerMOTask;
+import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
@@ -79,39 +80,26 @@ public class MOCRSTuning {
 	String algName;
 	ArrayList<ControlParameter> controlParameters;
 	
-	ArrayList<IntegerMOTask> tasks = new ArrayList<IntegerMOTask>();
+	ArrayList<MOTask> tasks;
 	
 	double draw_limit = 1e-7;
 	
 	List<IndicatorName> indicators;
 	
-	boolean threadRuns = false;
+	boolean threadForEachRun = false;
 	
 	
-	public void tune(Class<? extends AlgorithmBase> classAlg, String algName, ArrayList<ControlParameter> controlParameters) {
+	public void tune(Class<? extends AlgorithmBase> classAlg, String algName, ArrayList<ControlParameter> controlParameters, ArrayList<MOTask> tasks, List<IndicatorName> indicators, int popSize, int maxGen) {
 		
 		this.classAlg = classAlg;
 		this.algName = algName;
 		this.controlParameters = controlParameters;
-		
+		this.tasks = tasks;
+		this.indicators = indicators;
+		this.pop_size = popSize;
+		this.max_gen = maxGen;
 		//Player algorithm = new Player("IBEA", new Rating(1500, 350, 0.06),0,0,0);
 		
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_TollSystems.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_BCEL.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JBoss.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JHotDraw.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, 300000, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_MyBatis.name())));
-		
-		indicators = new ArrayList<IndicatorName>();
-		
-	    indicators.add(IndicatorName.IGDPlus);
-	    indicators.add(IndicatorName.NativeHV);
-	    indicators.add(IndicatorName.Epsilon);
-	    indicators.add(IndicatorName.MaximumSpread);
-	    indicators.add(IndicatorName.R2);
 
 		execute();
 		//remove significantly worse and replace with new ones?
@@ -416,28 +404,28 @@ public class MOCRSTuning {
 		int threads = Runtime.getRuntime().availableProcessors();
 		CRSSolution sol = new CRSSolution();
 		
-		if(threadRuns)
+		if(threadForEachRun)
 		{
-			for(IntegerMOTask task : tasks){
+			for(MOTask task : tasks){
 				task.resetCounter();
 				//System.out.println("Current task: "+task.getProblemName());
 				try {
 					ExecutorService service = Executors.newFixedThreadPool(threads);
 
-					Set<Future<FutureResult<IntegerMOTask, Integer>>> set = new HashSet<Future<FutureResult<IntegerMOTask, Integer>>>();
+					Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
 					for (int i = 0; i < numOfRuns; i++) {
 
 						//create new object for each thread
 						MOAlgorithm object = createObject(name);
 						setParameters(object, params);
 
-						Future<FutureResult<IntegerMOTask, Integer>> future = service.submit(object.createRunnable(object, new IntegerMOTask(task)));
+						Future<FutureResult> future = service.submit(object.createRunnable(object, task.returnCopy()));
 						set.add(future);
 					}
 
-					for (Future<FutureResult<IntegerMOTask, Integer>> future : set) {
+					for (Future<FutureResult> future : set) {
 
-						FutureResult<IntegerMOTask, Integer> res = future.get();
+						FutureResult res = future.get();
 						sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.result, defaultObject, res.task));
 					}
 
@@ -451,29 +439,29 @@ public class MOCRSTuning {
 		else {
 			
 			//System.out.println("Current task: "+task.getProblemName());
-			List<FutureResult<IntegerMOTask, Integer>> futureResults = new ArrayList<FutureResult<IntegerMOTask, Integer>>();
+			List<FutureResult> futureResults = new ArrayList<FutureResult>();
 			try {
 				ExecutorService service = Executors.newFixedThreadPool(threads);
 
-				Set<Future<FutureResult<IntegerMOTask, Integer>>> set = new HashSet<Future<FutureResult<IntegerMOTask, Integer>>>();
-				for(IntegerMOTask task : tasks){
+				Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
+				for(MOTask task : tasks){
 					task.resetCounter();
 					//create new object for each thread
 					MOAlgorithm object = createObject(name);
 					setParameters(object, params);
 
-					Future<FutureResult<IntegerMOTask, Integer>> future = service.submit(object.createRunnable(object, new IntegerMOTask(task)));
+					Future<FutureResult> future = service.submit(object.createRunnable(object, task.returnCopy()));
 					set.add(future);
 				}
 
-				for (Future<FutureResult<IntegerMOTask, Integer>> future : set) {
-					FutureResult<IntegerMOTask, Integer> res = future.get();
+				for (Future<FutureResult> future : set) {
+					FutureResult res = future.get();
 					futureResults.add(res);
 				}
 
 				//Order results by tasks
-				for(IntegerMOTask task : tasks) {
-					for(FutureResult<IntegerMOTask, Integer> res: futureResults) {
+				for(MOTask task : tasks) {
+					for(FutureResult res: futureResults) {
 						if(task.getProblemName().equals(res.task.getProblemName())) {
 							sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.result, defaultObject, res.task));
 							break;
@@ -492,7 +480,7 @@ public class MOCRSTuning {
 		return sol;
 	}
 	
-	private HashMap<IndicatorName, Double> evaluateWithQI(IntegerMOTask task, ParetoSolution<Integer> result) {
+	private HashMap<IndicatorName, Double> evaluateWithQI(MOTask task, ParetoSolution result) {
 		
 		HashMap<IndicatorName, Double> indicatorValues = new HashMap<IndicatorName, Double>();
 		
@@ -523,13 +511,13 @@ public class MOCRSTuning {
 		for(int i = 0; i < population.length; i++){
 			
 			if(i == solIndex)
-				arena.addPlayer(new Player(newSolution.name, new Rating(1500, 350, 0.06),0,0,0));
+				arena.addPlayer(new Player(null, newSolution.name, new Rating(1500, 350, 0.06),0,0,0));
 			else
-				arena.addPlayer(new Player(population[i].name, new Rating(1500, 350, 0.06),0,0,0));
+				arena.addPlayer(new Player(null, population[i].name, new Rating(1500, 350, 0.06),0,0,0));
 		}
 
 		int index = 0;
-		for(IntegerMOTask task : tasks){
+		for(MOTask task : tasks){
 
 			for (int k = 0; k < numOfRuns; k++) {
 
@@ -603,7 +591,7 @@ public class MOCRSTuning {
 		
 	}
 	
-	public boolean resultEqual(ParetoSolution<Integer> a, ParetoSolution<Integer> b, QualityIndicator<Integer> qi) {
+	public boolean resultEqual(ParetoSolution a, ParetoSolution b, QualityIndicator qi) {
 		if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
         if (b==null) return false;
@@ -620,9 +608,9 @@ public class MOCRSTuning {
 	}
 	
 	class FitnessComparator implements Comparator<MOAlgorithmEvalResult> {
-		IntegerMOTask t;
+		MOTask t;
         QualityIndicator qi;
-        public FitnessComparator(IntegerMOTask t, QualityIndicator qi) {
+        public FitnessComparator(MOTask t, QualityIndicator qi) {
             this.t = t;
             this.qi = qi;
         }

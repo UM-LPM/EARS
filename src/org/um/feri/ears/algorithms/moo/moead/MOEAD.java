@@ -100,17 +100,20 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
 	static String dataDirectory = "Weight";
 
-
 	public MOEAD(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
+		this(crossover, mutation, pop_size, "MOEAD");
+	}
+	
+	public MOEAD(CrossoverOperator crossover, MutationOperator mutation, int pop_size, String name) {
 		this.populationSize = pop_size;
 		this.cross = crossover;
 		this.mut = mutation;
 
 		au = new Author("miha", "miha.ravber at gamil.com");
 		ai = new AlgorithmInfo(
-				"MOEAD",
+				name,
 				"\\bibitem{Zhang2009}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock The Performance of a New Version of MOEA/D on CEC09 Unconstrained MOP Test Instances.\n\\newblock \\emph{IEEE Congress on Evolutionary Computation}, 203--208, 2009.\n",
-				"MOEAD", "Multiobjective Evolutionary Algorithm Based on Decomposition");
+				name, "Multiobjective Evolutionary Algorithm Based on Decomposition");
 		ai.addParameters(crossover.getOperatorParameters());
 		ai.addParameters(mutation.getOperatorParameters());
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");

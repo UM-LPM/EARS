@@ -293,15 +293,15 @@ public class DoubleEliminationTournament {
 				
 		    	task.resetCounter();
 		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
-		        Set<Future<FutureResult<DoubleMOTask, Double>>> set = new HashSet<Future<FutureResult<DoubleMOTask, Double>>>();
+		        Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
 		        for (MOAlgorithm<DoubleMOTask, Double> al: players) {
-		          Future<FutureResult<DoubleMOTask, Double>> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+		          Future<FutureResult> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
 		          set.add(future);
 		        }
 
-		        for (Future<FutureResult<DoubleMOTask, Double>> future : set) {
+		        for (Future<FutureResult> future : set) {
 		        	try {
-		        		FutureResult<DoubleMOTask, Double> res = future.get();
+		        		FutureResult res = future.get();
 
 		        		results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
 
@@ -346,15 +346,15 @@ public class DoubleEliminationTournament {
 				System.out.println("Run: "+i);
 		    	task.resetCounter();
 		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
-		        Set<Future<FutureResult<DoubleMOTask, Double>>> set = new HashSet<Future<FutureResult<DoubleMOTask, Double>>>();
+		        Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
 		        for (MOAlgorithm<DoubleMOTask, Double> al: players) {
-		          Future<FutureResult<DoubleMOTask, Double>> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+		          Future<FutureResult> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
 		          set.add(future);
 		        }
 
-		        for (Future<FutureResult<DoubleMOTask, Double>> future : set) {
+		        for (Future<FutureResult> future : set) {
 		        	try {
-		        		FutureResult<DoubleMOTask, Double> res = future.get();
+		        		FutureResult res = future.get();
 
 		        		participants.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
 

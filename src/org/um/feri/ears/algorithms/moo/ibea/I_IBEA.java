@@ -10,6 +10,9 @@ public class I_IBEA extends IBEA<IntegerMOTask, Integer> {
 	
 	public I_IBEA() {
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), 100, 100);
+		//this(new PMXCrossover(0.63), new PermutationSwapMutation(0.9), 173, 100);
+		//IBEA_populationSize(173.0)crossoverProbability(0.6276531739700488)mutationProbability(0.9068948829446266)
+		//this(new PMXCrossover(0.49008654478399677), new PermutationSwapMutation(0.8441849543755583), 176, 100);
 	}
 	
 	public I_IBEA(int populationSize) {
@@ -24,4 +27,7 @@ public class I_IBEA extends IBEA<IntegerMOTask, Integer> {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 	
+	public I_IBEA(double crossoverProbability, double mutationProbability, int populationSize, int archiveSize, String name) {
+		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize, archiveSize, name);
+	}
 }

@@ -10,6 +10,8 @@ public class I_MOEAD extends MOEAD<IntegerMOTask, Integer> {
 	
 	public I_MOEAD() {
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), 100);
+		//this(new PMXCrossover(0.5), new PermutationSwapMutation(0.98), 192);
+		//MOEAD_populationSize(192.0)crossoverProbability(0.5079362798258964)mutationProbability(0.9842448640408455)
 	}
 	
 	public I_MOEAD(int populationSize) {
@@ -19,6 +21,10 @@ public class I_MOEAD extends MOEAD<IntegerMOTask, Integer> {
 
 	public I_MOEAD(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
+	}
+	
+	public I_MOEAD(double crossoverProbability, double mutationProbability, int populationSize, String name) {
+		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize, name);
 	}
 	
 }

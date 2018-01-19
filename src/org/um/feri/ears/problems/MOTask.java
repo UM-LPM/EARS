@@ -130,6 +130,12 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 		}
 	}
 
+	/**
+	 * Returns a deep copy of the Task object 
+	 * @return
+	 */
+	abstract public MOTask returnCopy();
+
     /**
      * Works only for basic interval setting!
      * Sets interval!

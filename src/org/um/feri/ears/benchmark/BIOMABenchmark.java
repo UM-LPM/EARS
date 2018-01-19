@@ -132,15 +132,15 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     	//super.runOneProblem(task, allSingleProblemRunResults);
     	reset(task);
     	ExecutorService pool = Executors.newFixedThreadPool(listOfAlgorithmsPlayers.size());
-        Set<Future<FutureResult<DoubleMOTask, Double>>> set = new HashSet<Future<FutureResult<DoubleMOTask, Double>>>();
+        Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
         for (MOAlgorithm<DoubleMOTask, Double> al: listOfAlgorithmsPlayers) {
-          Future<FutureResult<DoubleMOTask, Double>> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+          Future<FutureResult> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
           set.add(future);
         }
 
-        for (Future<FutureResult<DoubleMOTask, Double>> future : set) {
+        for (Future<FutureResult> future : set) {
         	try {
-        		FutureResult<DoubleMOTask, Double> res = future.get();
+        		FutureResult res = future.get();
 
         		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
         		//reset(task); //for one eval!
