@@ -82,7 +82,7 @@ public class FizikaCompetition {
 
 
 		for (Algorithm al:players) {
-			ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+			ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
 		}
 		BankOfResults ba = new BankOfResults();
 		//rpuoed2.run(ra, ba, 50);
