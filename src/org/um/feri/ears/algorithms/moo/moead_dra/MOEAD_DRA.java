@@ -274,7 +274,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 						j = 0;
 						numberOfObjectives = st.countTokens();
 						while (st.hasMoreTokens()) {
-							double value = (new Double(st.nextToken()))
+							double value = (Double.parseDouble(st.nextToken()))
 									.doubleValue();
 							lambda[i][j] = value;
 							// System.out.println("lambda["+i+","+j+"] = " + value);

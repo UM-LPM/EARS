@@ -33,32 +33,32 @@ public class SoilModelProblem extends Problem{
 	boolean simplified = false;
 	Map<Double, Integer> freq = new HashMap<Double, Integer>();
 	int call = 1;
-	
+
 	//simplified two-layered model
 	public SoilModelProblem(int numberOfDimensions, String filename){
 		this(numberOfDimensions, 0);
-		
+
 		this.simplified = true;
 		this.layers = 2;
 		loadData(filename);
 	}
-	
+
 	public SoilModelProblem(int numberOfDimensions, int layers, String filename) {
 		this(numberOfDimensions, 0);
-		
+
 		xx = new double[15000]; // velikost?
 		y1 = new double[15000]; // velikost?
-		
+
 		this.layers = layers;
 		loadData(filename);
 	}
 
 	public SoilModelProblem(int numberOfDimensions, int numberOfConstraints) {
 		super(numberOfDimensions, numberOfConstraints);
-		
+
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-		
+
 		for(int i = 0; i < numberOfDimensions; i++)
 		{
 			if(i%2 == 0) // resistance
@@ -79,7 +79,7 @@ public class SoilModelProblem extends Problem{
 
 	@Override
 	public double eval(Double[] ds) {
-		
+
 		if(simplified)
 		{
 			return simplifiedModel(ArrayUtils.toPrimitive(ds));
@@ -89,11 +89,11 @@ public class SoilModelProblem extends Problem{
 			return nLayerModel(ArrayUtils.toPrimitive(ds));
 		}
 	}
-	
+
 	private double simplifiedModel(double[] ds) {
-		
+
 		double k1 = (ds[2] -ds[0]) / (ds[2] + ds[0]);
-		
+
 		double RI[] = new double[d.length];
 		boolean isEnd;
 		int n, stk;
@@ -122,7 +122,7 @@ public class SoilModelProblem extends Problem{
 			}
 			RI[k] = ro;
 		}
-		
+
 		// Calculate difference
 		double CF = 0.0;
 		for(int i = 0; i < RI.length; i++)
@@ -130,18 +130,18 @@ public class SoilModelProblem extends Problem{
 			//CF+= Math.abs((RI[i] - RM[i]) * (RI[i] - RM[i])); /// RM[i];
 			CF+= Math.abs(RI[i] - RM[i])  / RM[i];
 		}
-		
+
 		CF = (CF / RI.length) * 100;
 		return CF;
 	}
 
 	private double nLayerModel(double[] ds) {
-		
+
 		int j = 0;
-		
+
 		double R[] = new double[numberOfDimensions]; // layer resistance
 		double h[] = new double[numberOfDimensions]; // layer thickness
-		
+
 		for(int i = 0; i < numberOfDimensions; i+=2)
 		{
 			R[j] = ds[i];
@@ -156,11 +156,11 @@ public class SoilModelProblem extends Problem{
 		boolean isEnd = true;
 		int stk = 0;
 		double lambda = -step;
-		
+
 		double KN[] = new double[layers];
 		double alpha[] = new double[layers];
-		
-		
+
+
 		double RI[] = new double[d.length];
 
 		for(int k = 0; k < d.length; k++)
@@ -169,7 +169,7 @@ public class SoilModelProblem extends Problem{
 			isEnd = true;
 			j = 0;
 			stk = 0;
-	
+
 			while (isEnd && j < 1e6) { // j < 1e6 braked by xx.length
 
 				lambda += step;
@@ -199,18 +199,18 @@ public class SoilModelProblem extends Problem{
 
 				if (stk >= 100)
 					isEnd = false;
-				
+
 				j++;
 			}
-			
+
 			double f1 = 0.0;
-			
+
 			f1 = TrapezoidalRule.integrate(j,xx,y1);
 		    //System.out.println("num: "+j);
 		    RI[k]=R[0]*(1+2*d[k]*f1);
 
 		}
-		
+
 		// Calculate difference
 		double CF = 0.0;
 		for(int i = 0; i < RI.length; i++)
@@ -218,34 +218,34 @@ public class SoilModelProblem extends Problem{
 			//CF+= Math.abs((RI[i] - RM[i]) * (RI[i] - RM[i])); /// RM[i];
 			CF+= Math.abs(RI[i] - RM[i])  / RM[i];
 		}
-		
+
 		CF = (CF / RI.length) * 100;
 		return CF;
 	}
 
 	private void loadData(String filename) {
-		
+
 		if(filename != null && !filename.isEmpty())
 		{
-			
+
 			filename = "test_data/"+ filename +".txt";
 			ArrayList<Double> tempD = new ArrayList<>();
 			ArrayList<Double> tempRM = new ArrayList<>();
-			
+
 			try {
 				/* Open the file */
 				FileInputStream fis = new FileInputStream(filename);
 				InputStreamReader isr = new InputStreamReader(fis);
 				BufferedReader br = new BufferedReader(isr);
-				
+
 				String aux = br.readLine();
 				while (aux != null) {
 					StringTokenizer st = new StringTokenizer(aux);
-					
+
 					if(st.hasMoreTokens())
 					{
-						tempD.add(new Double(st.nextToken()));
-						tempRM.add(new Double(st.nextToken()));
+						tempD.add(Double.parseDouble(st.nextToken()));
+						tempRM.add(Double.parseDouble(st.nextToken()));
 					}
 					aux = br.readLine();
 				}
@@ -253,7 +253,7 @@ public class SoilModelProblem extends Problem{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			d = new double[tempD.size()];
 			RM = new double[tempD.size()];
 			for(int i = 0; i < tempD.size(); i++)
@@ -261,7 +261,7 @@ public class SoilModelProblem extends Problem{
 				d[i] = tempD.get(i);
 				RM[i] = tempRM.get(i);
 			}
-			
+
 		}
 		else
 		{

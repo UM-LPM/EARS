@@ -121,14 +121,14 @@ public class Friedman_2 {
 	    			if (roundToDecimals(rank[i][j].value,6) == roundToDecimals(rank[i][k].value,6) && !visto[k]) {
 	    				sum += rank[i][k].index;
 	    				ig++;
-	    				porVisitar.add(new Integer(k));
+	    				porVisitar.add(k);
 	    				visto[k] = true;
 	    			}
 	    		}
 	    		sum /= (double)ig;
 	    		rank[i][j].index = sum;
 	    		for (k=0; k<porVisitar.size(); k++) {
-	    			rank[i][((Integer)porVisitar.elementAt(k)).intValue()].index = sum;
+	    			rank[i][(Integer) porVisitar.elementAt(k)].index = sum;
 	    		}
 	    	}
 	    }
@@ -240,7 +240,7 @@ public class Friedman_2 {
 		/*For Bergmann-Hommel's procedure, 9 algorithms could suppose intense computation*/
 	    if (algoritmos.size() < 9) {
 		    for (i=0; i<algoritmos.size(); i++) {
-		    	index.add(new Integer(i));
+		    	index.add(i);
 		    }	    	
 	        exhaustiveI = obtainExhaustive(index);
 	        cuadro = new boolean[algoritmos.size()][algoritmos.size()];
@@ -506,9 +506,9 @@ public class Friedman_2 {
 			}
 			for (j=0; j<number.length; j++) {
 				if (number[j] == true) {
-					ind1.addElement(new Integer(((Integer)index.elementAt(j)).intValue()));					
+					ind1.addElement(index.elementAt(j));
 				} else {					
-					ind2.addElement(new Integer(((Integer)index.elementAt(j)).intValue()));					
+					ind2.addElement(index.elementAt(j));
 				}
 			}
 			res1 = obtainExhaustive (ind1);
@@ -562,13 +562,13 @@ public class Friedman_2 {
 		number = new Vector();
 		tmp = new Vector();
 		if (k <= 1) {			
-			number.addElement(new Integer(0));	
+			number.addElement(0);
 		} else {
 			for (j=1; j<=k; j++) {
 				tmp = trueHShaffer (k-j);
 				tmp2 = new Vector();
 				for (p=0; p<tmp.size(); p++) {
-					tmp2.addElement(((Integer)(tmp.elementAt(p))).intValue() + (int)combinatoria(2,j));
+					tmp2.addElement((Integer) (tmp.elementAt(p)) + (int)combinatoria(2,j));
 				}
 				number = unionVectores (number,tmp2);
 			}
@@ -582,7 +582,7 @@ public class Friedman_2 {
 		int i;
 		
 		for (i=0; i<b.size(); i++) {
-			if (a.contains(new Integer((Integer)(b.elementAt(i)))) == false) {
+			if (!a.contains(b.elementAt(i))) {
 				a.addElement(b.elementAt(i));
 			}			
 		}

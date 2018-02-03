@@ -22,6 +22,14 @@
 package org.um.feri.ears.qualityIndicator;
 
 
+import org.um.feri.ears.problems.moo.MOProblemBase;
+import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.EuclideanDistance;
+import org.um.feri.ears.util.ManhattanDistance;
+import org.um.feri.ears.util.NonDominatedSolutionList;
+import org.um.feri.ears.util.PointDistance;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -30,499 +38,492 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.real_world.CITOReader;
-import org.um.feri.ears.util.EuclideanDistance;
-import org.um.feri.ears.util.ManhattanDistance;
-import org.um.feri.ears.util.NonDominatedSolutionList;
-import org.um.feri.ears.util.PointDistance;
-
 /**
- * This class provides some utilities to compute quality indicators. 
+ * This class provides some utilities to compute quality indicators.
  **/
 public final class MetricsUtil<T> {
 
-	private MetricsUtil(){}
+    private MetricsUtil() {
+    }
 
-	
-	/**
-	 * This method reads a Pareto Front for a file.
-	 * @param path The path to the file that contains the pareto front
-	 * @return double [][] whit the pareto front
-	 **/
-	public static double[][] readFront(String path) {
-		try {
-			// Open the file
-			FileInputStream fis = new FileInputStream(path);
-			InputStreamReader isr = new InputStreamReader(fis);
-			BufferedReader br = new BufferedReader(isr);
 
-			List<double[]> list = new ArrayList<double[]>();
-			int numberOfObjectives = 0;
-			String aux = br.readLine();
-			while (aux != null) {
-				StringTokenizer st = new StringTokenizer(aux);
-				int i = 0;
-				numberOfObjectives = st.countTokens();
-				double[] vector = new double[st.countTokens()];
-				while (st.hasMoreTokens()) {
-					double value = new Double(st.nextToken());
-					vector[i] = value;
-					i++;
-				}
-				list.add(vector);
-				aux = br.readLine();
-			}
-
-			br.close();
-
-			double[][] front = new double[list.size()][numberOfObjectives];
-			for (int i = 0; i < list.size(); i++) {
-				front[i] = list.get(i);
-			}
-			return front;
-
-		} catch (Exception e) {
-			System.out.println("InputFacilities crashed reading for file: " + path);
-			e.printStackTrace();
-		}
-		return null;
-	}
-  
-	/**
-	 * Gets the maximun values for each objectives in a given pareto front
-	 * @param front The pareto front
-	 * @param noObjectives Number of objectives in the pareto front
-	 * @return double [] An array of noOjectives values whit the maximun values for each objective
-	 **/
-	public static double[] getMaximumValues(double[][] front, int noObjectives) {
-		double[] maximumValue = new double[noObjectives];
-		for (int i = 0; i < noObjectives; i++)
-			maximumValue[i] = Double.NEGATIVE_INFINITY;
-
-		for (double[] aFront : front) {
-			for (int j = 0; j < aFront.length; j++) {
-				if (aFront[j] > maximumValue[j])
-					maximumValue[j] = aFront[j];
-			}
-		}
-		return maximumValue;
-	}
-  
-  
-    /** Gets the minimun values for each objectives in a given pareto
-     *  front
-     *  @param front The pareto front
-     *  @param noObjectives Number of objectives in the pareto front
-     *  @return double [] An array of noOjectives values whit the minimum values
-     *  for each objective
+    /**
+     * This method reads a Pareto Front for a file.
+     *
+     * @param path The path to the file that contains the pareto front
+     * @return double [][] whit the pareto front
      **/
-	public static double[] getMinimumValues(double[][] front, int noObjectives) {
-		double[] minimumValue = new double[noObjectives];
-		for (int i = 0; i < noObjectives; i++)
-			minimumValue[i] = Double.MAX_VALUE;
+    public static double[][] readFront(String path) {
+        try {
+            // Open the file
+            FileInputStream fis = new FileInputStream(path);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
 
-		for (double[] aFront : front) {
-			for (int j = 0; j < aFront.length; j++) {
-				if (aFront[j] < minimumValue[j])
-					minimumValue[j] = aFront[j];
-			}
-		}
-		return minimumValue;
-	}
-  
-	
-	  /**
-	   * Gets the distance between a point and the nearest one in a given front. The Euclidean distance
-	   * is assumed
-	   *
-	   * @param point The point
-	   * @param front The front that contains the other points to calculate the
-	   *              distances
-	   * @return The minimum distance between the point and the front
-	 * @throws Exception 
-	   */
-	  public static double distanceToClosestPoint(double[] point, double[][] front) throws Exception {
-	    return distanceToClosestPoint(point, front, new EuclideanDistance()) ;
-	  }
-	
-	
-	  /**
-	   * Gets the distance between a point and the nearest one in a front. If a distance equals to 0
-	   * is found, that means that the point is in the front, so it is excluded
-	   *
-	   * @param point The point
-	   * @param front The front that contains the other points to calculate the distances
-	   * @return The minimum distance between the point and the front
-	 * @throws Exception 
-	   */
-	  public static double distanceToClosestPoint(double[] point, double[][] front, PointDistance distance) throws Exception {
-	    if (front == null) {
-	      throw new Exception("The front is null");
-	    } else if (front.length == 0) {
-	      throw new Exception("The front is empty");
-	    } else if (point == null) {
-	      throw new Exception("The point is null");
-	    }
-	
-	    double minDistance = Double.MAX_VALUE;
-	
-	    for (int i = 0; i < front.length; i++) {
-	      double aux = distance.compute(point, front[i]);
-	      if (aux < minDistance) {
-	        minDistance = aux;
-	      }
-	    }
-	
-	    return minDistance;
-	  }
-  
-	public static double distanceToNearestPoint(double[] point, double[][] front) throws Exception {
-		return distanceToNearestPoint(point, front, new EuclideanDistance());
-	}
-		
+            List<double[]> list = new ArrayList<double[]>();
+            int numberOfObjectives = 0;
+            String aux = br.readLine();
+            while (aux != null) {
+                StringTokenizer st = new StringTokenizer(aux);
+                int i = 0;
+                numberOfObjectives = st.countTokens();
+                double[] vector = new double[st.countTokens()];
+                while (st.hasMoreTokens()) {
+                    double value = Double.parseDouble(st.nextToken());
+                    vector[i] = value;
+                    i++;
+                }
+                list.add(vector);
+                aux = br.readLine();
+            }
+
+            br.close();
+
+            double[][] front = new double[list.size()][numberOfObjectives];
+            for (int i = 0; i < list.size(); i++) {
+                front[i] = list.get(i);
+            }
+            return front;
+
+        } catch (Exception e) {
+            System.out.println("InputFacilities crashed reading for file: " + path);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Gets the maximun values for each objectives in a given pareto front
+     *
+     * @param front        The pareto front
+     * @param noObjectives Number of objectives in the pareto front
+     * @return double [] An array of noOjectives values whit the maximun values for each objective
+     **/
+    public static double[] getMaximumValues(double[][] front, int noObjectives) {
+        double[] maximumValue = new double[noObjectives];
+        for (int i = 0; i < noObjectives; i++)
+            maximumValue[i] = Double.NEGATIVE_INFINITY;
+
+        for (double[] aFront : front) {
+            for (int j = 0; j < aFront.length; j++) {
+                if (aFront[j] > maximumValue[j])
+                    maximumValue[j] = aFront[j];
+            }
+        }
+        return maximumValue;
+    }
+
+
+    /**
+     * Gets the minimun values for each objectives in a given pareto
+     * front
+     *
+     * @param front        The pareto front
+     * @param noObjectives Number of objectives in the pareto front
+     * @return double [] An array of noOjectives values whit the minimum values
+     * for each objective
+     **/
+    public static double[] getMinimumValues(double[][] front, int noObjectives) {
+        double[] minimumValue = new double[noObjectives];
+        for (int i = 0; i < noObjectives; i++)
+            minimumValue[i] = Double.MAX_VALUE;
+
+        for (double[] aFront : front) {
+            for (int j = 0; j < aFront.length; j++) {
+                if (aFront[j] < minimumValue[j])
+                    minimumValue[j] = aFront[j];
+            }
+        }
+        return minimumValue;
+    }
+
+
+    /**
+     * Gets the distance between a point and the nearest one in a given front. The Euclidean distance
+     * is assumed
+     *
+     * @param point The point
+     * @param front The front that contains the other points to calculate the
+     *              distances
+     * @return The minimum distance between the point and the front
+     * @throws Exception
+     */
+    public static double distanceToClosestPoint(double[] point, double[][] front) throws Exception {
+        return distanceToClosestPoint(point, front, new EuclideanDistance());
+    }
+
+
+    /**
+     * Gets the distance between a point and the nearest one in a front. If a distance equals to 0
+     * is found, that means that the point is in the front, so it is excluded
+     *
+     * @param point The point
+     * @param front The front that contains the other points to calculate the distances
+     * @return The minimum distance between the point and the front
+     * @throws Exception
+     */
+    public static double distanceToClosestPoint(double[] point, double[][] front, PointDistance distance) throws Exception {
+        if (front == null) {
+            throw new Exception("The front is null");
+        } else if (front.length == 0) {
+            throw new Exception("The front is empty");
+        } else if (point == null) {
+            throw new Exception("The point is null");
+        }
+
+        double minDistance = Double.MAX_VALUE;
+
+        for (int i = 0; i < front.length; i++) {
+            double aux = distance.compute(point, front[i]);
+            if (aux < minDistance) {
+                minDistance = aux;
+            }
+        }
+
+        return minDistance;
+    }
+
+    public static double distanceToNearestPoint(double[] point, double[][] front) throws Exception {
+        return distanceToNearestPoint(point, front, new EuclideanDistance());
+    }
+
     /**
      * Gets the distance between a point and the nearest one in
      * a given front, and this distance is greater than 0.0
+     *
      * @param point The point
      * @param front The front that contains the other points to calculate the distances
      * @return The minimun distances greater than zero between the point and
      * the front
-     * @throws Exception 
+     * @throws Exception
      */
-	public static double distanceToNearestPoint(double[] point, double[][] front, PointDistance distance) throws Exception {
-		double minDistance = Double.MAX_VALUE;
+    public static double distanceToNearestPoint(double[] point, double[][] front, PointDistance distance) throws Exception {
+        double minDistance = Double.MAX_VALUE;
 
-		for (double[] aFront : front) {
-			double aux = distance.compute(point, aFront);
-			if ((aux < minDistance) && (aux > 0)) {
-				minDistance = aux;
-			}
-		}
+        for (double[] aFront : front) {
+            double aux = distance.compute(point, aFront);
+            if ((aux < minDistance) && (aux > 0)) {
+                minDistance = aux;
+            }
+        }
 
-		return minDistance;
-	}
-	
-	/**
-	 * Returns the Manhattan distance in objective space between the two
-	 * solutions.
-	 * 
-	 * @param task the problem
-	 * @param a the first solution
-	 * @param b the second solution
-	 * @return the Manhattan distance in objective space between the two
-	 *         solutions
-	 */
-	public static double manhattanDistance(double[] ds, double[] ds2) throws Exception {
-		return distance(ds, ds2, new ManhattanDistance());
-	}
+        return minDistance;
+    }
 
-	public static double distance(double[] ds, double[] ds2) throws Exception {
-		return distance(ds, ds2, new EuclideanDistance());
-	}
-	
-	public static double distance(double[] ds, double[] ds2, PointDistance distance) throws Exception
-	{
-		return distance.compute(ds, ds2);
-	}
-	
-	public static double distanceToNearestPoint(int index, double[][] front) throws Exception {
-		return distanceToNearestPoint(index,front, new EuclideanDistance());
-	}
-	
+    /**
+     * Returns the Manhattan distance in objective space between the two
+     * solutions.
+     *
+     * @param task the problem
+     * @param a    the first solution
+     * @param b    the second solution
+     * @return the Manhattan distance in objective space between the two
+     * solutions
+     */
+    public static double manhattanDistance(double[] ds, double[] ds2) throws Exception {
+        return distance(ds, ds2, new ManhattanDistance());
+    }
+
+    public static double distance(double[] ds, double[] ds2) throws Exception {
+        return distance(ds, ds2, new EuclideanDistance());
+    }
+
+    public static double distance(double[] ds, double[] ds2, PointDistance distance) throws Exception {
+        return distance.compute(ds, ds2);
+    }
+
+    public static double distanceToNearestPoint(int index, double[][] front) throws Exception {
+        return distanceToNearestPoint(index, front, new EuclideanDistance());
+    }
+
     /**
      * Gets the distance between a point with {@code index} and the nearest one in
      * the given front
+     *
      * @param point The point
      * @param front The front that contains the other points to calculate the distances
      * @return The minimun distances greater than zero between the point and
      * the front
-     * @throws Exception 
+     * @throws Exception
      */
-	public static double distanceToNearestPoint(int index, double[][] front, PointDistance distance) throws Exception {
-		double minDistance = Double.MAX_VALUE;
+    public static double distanceToNearestPoint(int index, double[][] front, PointDistance distance) throws Exception {
+        double minDistance = Double.MAX_VALUE;
 
-		for (int i = 0; i < front.length; i++) {
-			if (index == i)
-				continue;
-			double aux;
+        for (int i = 0; i < front.length; i++) {
+            if (index == i)
+                continue;
+            double aux;
 
-			aux = distance.compute(front[index], front[i]);
+            aux = distance.compute(front[index], front[i]);
 
-			if (aux < minDistance) {
-				minDistance = aux;
-			}
-		}
+            if (aux < minDistance) {
+                minDistance = aux;
+            }
+        }
 
-		return minDistance;
-	}
-  
-    /** 
+        return minDistance;
+    }
+
+    /**
      * This method receives a pareto front and two points, one whit maximum values
      * and the other with minimum values allowed, and returns a the normalized Pareto front.
-     * @param front A pareto front.
+     *
+     * @param front        A pareto front.
      * @param maximumValue The maximun values allowed
      * @param minimumValue The mininum values allowed
      * @return the normalized pareto front
      **/
-	public static double[][] getNormalizedFront(double[][] front, double[] maximumValue, double[] minimumValue) {
+    public static double[][] getNormalizedFront(double[][] front, double[] maximumValue, double[] minimumValue) {
 
-		if(maximumValue == null || minimumValue == null)
-			return front;
-		
-		double[][] normalizedFront = new double[front.length][];
+        if (maximumValue == null || minimumValue == null)
+            return front;
 
-		for (int i = 0; i < front.length; i++) {
-			normalizedFront[i] = new double[front[i].length];
-			for (int j = 0; j < front[i].length; j++) {
-				if(front[i][j] < minimumValue[j]) {
-					System.err.println("Warning: when performing normaliazation, objective "+(j+1) +" value "+front[i][j]+ " is smaller than min "+minimumValue[j]+"");
-				}
-				if(front[i][j] > maximumValue[j]) {
-					System.err.println("Warning: when performing normaliazation, objective "+(j+1) +" value "+front[i][j]+ " is largeer than max "+maximumValue[j]+"");
-				}
-				normalizedFront[i][j] = (front[i][j] - minimumValue[j]) / (maximumValue[j] - minimumValue[j]);
-			}
-		}
-		return normalizedFront;
-	}
-	
-    /** 
+        double[][] normalizedFront = new double[front.length][];
+
+        for (int i = 0; i < front.length; i++) {
+            normalizedFront[i] = new double[front[i].length];
+            for (int j = 0; j < front[i].length; j++) {
+                if (front[i][j] < minimumValue[j]) {
+                    System.err.println("Warning: when performing normaliazation, objective " + (j + 1) + " value " + front[i][j] + " is smaller than min " + minimumValue[j] + "");
+                }
+                if (front[i][j] > maximumValue[j]) {
+                    System.err.println("Warning: when performing normaliazation, objective " + (j + 1) + " value " + front[i][j] + " is largeer than max " + maximumValue[j] + "");
+                }
+                normalizedFront[i][j] = (front[i][j] - minimumValue[j]) / (maximumValue[j] - minimumValue[j]);
+            }
+        }
+        return normalizedFront;
+    }
+
+    /**
      * This method receives a pareto front and two points, one whit maximum values
      * and the other with minimum values allowed, and normalizes the objective values.
-     * @param front A pareto front.
+     *
+     * @param front        A pareto front.
      * @param maximumValue The maximun values allowed
      * @param minimumValue The mininum values allowed
      **/
-	public static <T extends Number> void normalizeFront(ParetoSolution<T> front, double[] maximumValue, double[] minimumValue) {
+    public static <T extends Number> void normalizeFront(ParetoSolution<T> front, double[] maximumValue, double[] minimumValue) {
 
-		MOSolutionBase<T> normSolution;
-		for (int i = 0; i < front.size(); i++) {
-			normSolution = front.get(i);
-			for (int j = 0; j < front.get(i).numberOfObjectives(); j++) {
-				normSolution.setObjective(j, (normSolution.getObjective(j) - minimumValue[j]) / (maximumValue[j] - minimumValue[j]));
-			}
-		}
-	}
-	
-	public static <T extends Number,P extends MOProblemBase<T>> double[][] getNormalizedFront(double[][] front, P problem){
-		
-		ParetoSolution<T> referenceSet = new ParetoSolution<T>(0);
-		String fileName = problem.getFileName(); 
-		double[][] normalizedFront = new double[front.length][];
-		
-		double[] maximumValue = new double[problem.getNumberOfObjectives()];
-		double[] minimumValue = new double[problem.getNumberOfObjectives()];
-		
-		if(fileName != null && !fileName.isEmpty())
-		{
-			referenceSet = MetricsUtil.readNonDominatedSolutionSet("pf_data/"+ fileName +".dat");
-		}
-		else
-		{
-			System.out.println("The file name containg the Paret front is not valid.");
-		}
+        MOSolutionBase<T> normSolution;
+        for (int i = 0; i < front.size(); i++) {
+            normSolution = front.get(i);
+            for (int j = 0; j < front.get(i).numberOfObjectives(); j++) {
+                normSolution.setObjective(j, (normSolution.getObjective(j) - minimumValue[j]) / (maximumValue[j] - minimumValue[j]));
+            }
+        }
+    }
 
-		
-		for (int i = 0; i < problem.getNumberOfObjectives(); i++) {
-			minimumValue[i] = Double.POSITIVE_INFINITY;
-			maximumValue[i] = Double.NEGATIVE_INFINITY;
-		}
+    public static <T extends Number, P extends MOProblemBase<T>> double[][] getNormalizedFront(double[][] front, P problem) {
 
-		for (int i = 0; i < referenceSet.size(); i++) {
-			MOSolutionBase<T> solution = referenceSet.get(i);
-			
-			if (solution.violatesConstraints()) {
-				continue;
-			}
-			
-			for (int j = 0; j < problem.getNumberOfObjectives(); j++) {
-				minimumValue[j] = Math.min(minimumValue[j], solution.getObjective(j));
-				maximumValue[j] = Math.max(maximumValue[j], solution.getObjective(j));
-			}
-		}
+        ParetoSolution<T> referenceSet = new ParetoSolution<T>(0);
+        String fileName = problem.getFileName();
+        double[][] normalizedFront = new double[front.length][];
 
-		for (int i = 0; i < front.length; i++) {
-			normalizedFront[i] = new double[front[i].length];
-			for (int j = 0; j < front[i].length; j++) {
-				normalizedFront[i][j] = (front[i][j] - minimumValue[j]) / (maximumValue[j] - minimumValue[j]);
-			}
-		}
-		return normalizedFront;
-		
-	}
-  
-  
+        double[] maximumValue = new double[problem.getNumberOfObjectives()];
+        double[] minimumValue = new double[problem.getNumberOfObjectives()];
+
+        if (fileName != null && !fileName.isEmpty()) {
+            referenceSet = MetricsUtil.readNonDominatedSolutionSet("pf_data/" + fileName + ".dat");
+        } else {
+            System.out.println("The file name containg the Paret front is not valid.");
+        }
+
+
+        for (int i = 0; i < problem.getNumberOfObjectives(); i++) {
+            minimumValue[i] = Double.POSITIVE_INFINITY;
+            maximumValue[i] = Double.NEGATIVE_INFINITY;
+        }
+
+        for (int i = 0; i < referenceSet.size(); i++) {
+            MOSolutionBase<T> solution = referenceSet.get(i);
+
+            if (solution.violatesConstraints()) {
+                continue;
+            }
+
+            for (int j = 0; j < problem.getNumberOfObjectives(); j++) {
+                minimumValue[j] = Math.min(minimumValue[j], solution.getObjective(j));
+                maximumValue[j] = Math.max(maximumValue[j], solution.getObjective(j));
+            }
+        }
+
+        for (int i = 0; i < front.length; i++) {
+            normalizedFront[i] = new double[front[i].length];
+            for (int j = 0; j < front[i].length; j++) {
+                normalizedFront[i][j] = (front[i][j] - minimumValue[j]) / (maximumValue[j] - minimumValue[j]);
+            }
+        }
+        return normalizedFront;
+
+    }
+
+
     /**
      * This method receives a normalized pareto front and return the inverted one.
      * This operation needed for minimization problems
+     *
      * @param front The pareto front to inverse
      * @return The inverted pareto front
      **/
-	public static double[][] invertedFront(double[][] front) {
-		double[][] invertedFront = new double[front.length][];
+    public static double[][] invertedFront(double[][] front) {
+        double[][] invertedFront = new double[front.length][];
 
-		for (int i = 0; i < front.length; i++) {
-			invertedFront[i] = new double[front[i].length];
-			for (int j = 0; j < front[i].length; j++) {
-				if (front[i][j] <= 1.0 && front[i][j] >= 0.0) {
-					invertedFront[i][j] = 1.0 - front[i][j];
-				} else if (front[i][j] > 1.0) {
-					invertedFront[i][j] = 0.0;
-				} else if (front[i][j] < 0.0) {
-					invertedFront[i][j] = 1.0;
-				}
-			}
-		}
-		return invertedFront;
-	}
-	
-	public static <T extends Number> void invertedFront(ParetoSolution<T> population) {
-		
-		for (MOSolutionBase<T> sol : population) {
-			for (int i = 0; i < sol.numberOfObjectives(); i++) {
-				double value = sol.getObjective(i);
-				if (value < 0.0) {
-					value = 0.0;
-				} else if (value > 1.0) {
-					value = 1.0;
-				}
-				sol.setObjective(i, 1.0 - value);
-			}
-		}
-	}
-	
-	
-  
+        for (int i = 0; i < front.length; i++) {
+            invertedFront[i] = new double[front[i].length];
+            for (int j = 0; j < front[i].length; j++) {
+                if (front[i][j] <= 1.0 && front[i][j] >= 0.0) {
+                    invertedFront[i][j] = 1.0 - front[i][j];
+                } else if (front[i][j] > 1.0) {
+                    invertedFront[i][j] = 0.0;
+                } else if (front[i][j] < 0.0) {
+                    invertedFront[i][j] = 1.0;
+                }
+            }
+        }
+        return invertedFront;
+    }
+
+    public static <T extends Number> void invertedFront(ParetoSolution<T> population) {
+
+        for (MOSolutionBase<T> sol : population) {
+            for (int i = 0; i < sol.numberOfObjectives(); i++) {
+                double value = sol.getObjective(i);
+                if (value < 0.0) {
+                    value = 0.0;
+                } else if (value > 1.0) {
+                    value = 1.0;
+                }
+                sol.setObjective(i, 1.0 - value);
+            }
+        }
+    }
+
+
     /**
      * Reads a set of non dominated solutions from a file
+     *
      * @param path The path of the file containing the data
      * @return A solution set
      */
-	public static <T extends Number> ParetoSolution<T> readNonDominatedSolutionSet(String path) {
+    public static <T extends Number> ParetoSolution<T> readNonDominatedSolutionSet(String path) {
 
-		InputStream inputStream = MetricsUtil.class.getResourceAsStream(path);
-		if (inputStream == null)
-		{
-			System.out.println("\n Error: Cannot open input file for reading ");
-		}
+        InputStream inputStream = MetricsUtil.class.getResourceAsStream(path);
+        if (inputStream == null) {
+            System.out.println("\n Error: Cannot open input file for reading ");
+        }
 
-		ParetoSolution<T> solutionSet = null;
-		try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))){
+        ParetoSolution<T> solutionSet = null;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
 
-			solutionSet = new NonDominatedSolutionList<T>();
+            solutionSet = new NonDominatedSolutionList<T>();
 
-			String aux = br.readLine();
-			while (aux != null) {
-				StringTokenizer st = new StringTokenizer(aux);
-				int i = 0;
-				MOSolutionBase<T> solution = new MOSolutionBase<T>(st.countTokens());
-				while (st.hasMoreTokens()) {
-					double value = new Double(st.nextToken());
-					solution.setObjective(i, value);
-					i++;
-				}
-				solutionSet.add(solution);
-				aux = br.readLine();
-			}
-		}	catch (Exception e) {
-			e.printStackTrace();
-		}
-		return solutionSet;
-	}
-	
-	/**
+            String aux = br.readLine();
+            while (aux != null) {
+                StringTokenizer st = new StringTokenizer(aux);
+                int i = 0;
+                MOSolutionBase<T> solution = new MOSolutionBase<T>(st.countTokens());
+                while (st.hasMoreTokens()) {
+                    double value = Double.parseDouble(st.nextToken());
+                    solution.setObjective(i, value);
+                    i++;
+                }
+                solutionSet.add(solution);
+                aux = br.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return solutionSet;
+    }
+
+    /**
      * Reads reference point from file if available
+     *
      * @param path The path of the file containing the data
      * @return A solution set
      */
-	public static double[] readReferencePoint(String path, String problemName) {
-		
-		InputStream inputStream = MetricsUtil.class.getResourceAsStream(path);
-		if (inputStream == null)
-		{
-			System.out.println("\n Error: Cannot open input file for reading ");
-		}
-		double[] referencePoint = null;
-		
-		try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))){
-			String name = "";
-			
-			String aux = br.readLine();
-			while (aux != null) {
-				StringTokenizer st = new StringTokenizer(aux);
-				if(st.hasMoreTokens())
-					name = new String(st.nextToken());
-				
-				if(problemName.toLowerCase().equals(name.toLowerCase()))
-				{
-					referencePoint = new double[st.countTokens()];
+    public static double[] readReferencePoint(String path, String problemName) {
 
-					int i = 0;
-					while (st.hasMoreTokens()) {
-						double value = new Double(st.nextToken());
-						referencePoint[i] = value;
-						i++;
-					}
-					break;
-				}
+        InputStream inputStream = MetricsUtil.class.getResourceAsStream(path);
+        if (inputStream == null) {
+            System.out.println("\n Error: Cannot open input file for reading ");
+        }
+        double[] referencePoint = null;
 
-				aux = br.readLine();
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return referencePoint;
-	}
-  
-	/**
-	 * Reads a set of non dominated solutions from a file
-	 * and store it in a existing non dominated solution set
-	 * @param path The path of the file containing the data
-	 * @return A solution set
-	 */
-	public static <T> void readNonDominatedSolutionSet(String path, NonDominatedSolutionList solutionSet) {
-		try {
-			/* Open the file */
-			FileInputStream fis = new FileInputStream(path);
-			InputStreamReader isr = new InputStreamReader(fis);
-			BufferedReader br = new BufferedReader(isr);
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String name = "";
 
-			String aux = br.readLine();
-			while (aux != null) {
-				StringTokenizer st = new StringTokenizer(aux);
-				int i = 0;
-				MOSolutionBase<T> solution = new MOSolutionBase<T>(st.countTokens());
+            String aux = br.readLine();
+            while (aux != null) {
+                StringTokenizer st = new StringTokenizer(aux);
+                if (st.hasMoreTokens())
+                    name = new String(st.nextToken());
 
-				while (st.hasMoreTokens()) {
-					double value = new Double(st.nextToken());
-					solution.setObjective(i, value);
-					i++;
-				}
-				solutionSet.add(solution);
-				aux = br.readLine();
-			}
-			br.close();
-		} catch (Exception e) {
-			System.out.println("jmetal.qualityIndicator.util.readNonDominatedSolutionSet: " + path);
-			e.printStackTrace();
-		}
-	}
+                if (problemName.toLowerCase().equals(name.toLowerCase())) {
+                    referencePoint = new double[st.countTokens()];
 
+                    int i = 0;
+                    while (st.hasMoreTokens()) {
+                        double value = Double.parseDouble(st.nextToken());
+                        referencePoint[i] = value;
+                        i++;
+                    }
+                    break;
+                }
+
+                aux = br.readLine();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return referencePoint;
+    }
+
+    /**
+     * Reads a set of non dominated solutions from a file
+     * and store it in a existing non dominated solution set
+     *
+     * @param path The path of the file containing the data
+     * @return A solution set
+     */
+    public static <T> void readNonDominatedSolutionSet(String path, NonDominatedSolutionList solutionSet) {
+        try {
+            /* Open the file */
+            FileInputStream fis = new FileInputStream(path);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+
+            String aux = br.readLine();
+            while (aux != null) {
+                StringTokenizer st = new StringTokenizer(aux);
+                int i = 0;
+                MOSolutionBase<T> solution = new MOSolutionBase<T>(st.countTokens());
+
+                while (st.hasMoreTokens()) {
+                    double value = Double.parseDouble(st.nextToken());
+                    solution.setObjective(i, value);
+                    i++;
+                }
+                solutionSet.add(solution);
+                aux = br.readLine();
+            }
+            br.close();
+        } catch (Exception e) {
+            System.out.println("jmetal.qualityIndicator.util.readNonDominatedSolutionSet: " + path);
+            e.printStackTrace();
+        }
+    }
 
 
-	
-	/**
-	 * Calculates how much hypervolume each point dominates exclusively. The points
-	 * have to be transformed beforehand, to accommodate the assumptions of Zitzler's
-	 * hypervolume code.
-	 * @param front transformed objective values
-	 * @return HV contributions
-	 */
+    /**
+     * Calculates how much hypervolume each point dominates exclusively. The points
+     * have to be transformed beforehand, to accommodate the assumptions of Zitzler's
+     * hypervolume code.
+     * @param front transformed objective values
+     * @return HV contributions
+     */
 /*	public static double[] hvContributions(int numberOfobjectives, double[][] front) {
 		Hypervolume hypervolume = new Hypervolume();
 		int numberOfObjectives = numberOfobjectives;
@@ -545,15 +546,15 @@ public final class MetricsUtil<T> {
 		}
 		return contributions;
 	}*/
-	  
-	  
-	/**
-	 * Calculates the hv contribution of different populations.
-	 * Receives an array of populations and computes the contribution to HV of the
-	 * population consisting in the union of all of them
-	 * @param populations, consisting in all the populatoins
-	 * @return HV contributions of each population
-	 **//*
+
+
+    /**
+     * Calculates the hv contribution of different populations.
+     * Receives an array of populations and computes the contribution to HV of the
+     * population consisting in the union of all of them
+     * @param populations, consisting in all the populatoins
+     * @return HV contributions of each population
+     **//*
 	public static double[] hvContributions(MOParetoIndividual[] populations) {
 		boolean empty = true;
 		for (MOParetoIndividual population2 : populations)
@@ -672,12 +673,12 @@ public final class MetricsUtil<T> {
 	}
 	  
 	*//**
-	 * Calculates the hv contribution of different populations.
-	 * Receives an array of populations and computes the contribution to HV of the
-	 * population consisting in the union of all of them
-	 * @param populations, consisting in all the populatoins
-	 * @return HV contributions of each population
-	 **//*
+     * Calculates the hv contribution of different populations.
+     * Receives an array of populations and computes the contribution to HV of the
+     * population consisting in the union of all of them
+     * @param populations, consisting in all the populatoins
+     * @return HV contributions of each population
+     **//*
 	public static double[] hvContributions(MOParetoIndividual archive, MOParetoIndividual[] populations) {
 
 		MOParetoIndividual union;
@@ -806,5 +807,5 @@ public final class MetricsUtil<T> {
 
 		return contribution;
 	}*/
-	
+
 }
