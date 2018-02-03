@@ -20,7 +20,7 @@ public class CSSSolution extends DoubleSolution
 	
 	public CSSSolution(Task t) throws StopCriteriaException {
 		super(t.getRandomSolution());
-		v = new double[t.getNumberOfDimensions()]; //zaËetni velocity na 0
+		v = new double[t.getNumberOfDimensions()]; //zaƒçetni velocity na 0
 		F = new double[t.getNumberOfDimensions()];  //init force na 0
 		Q =  0.0; // masa nabitega delca
 	

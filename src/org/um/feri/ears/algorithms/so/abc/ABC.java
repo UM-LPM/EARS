@@ -179,7 +179,7 @@ public class ABC extends Algorithm{
 			
 			phi = Util.nextDouble(-1,1);
 			
-			//TODO pomnoûi samo z phi
+			//TODO pomno≈æi samo z phi
 			newValue = population.get(i).getValue(param2change) + (population.get(i).getValue(param2change) - population.get(neighbour).getValue(param2change)) * (phi-0.5)*2;
 			newValue = task.setFeasible(newValue, param2change);
 			

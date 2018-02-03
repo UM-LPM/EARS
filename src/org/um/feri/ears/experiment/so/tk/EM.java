@@ -16,7 +16,7 @@ import org.um.feri.ears.util.Util;
 //Vir1: https://www.mathworks.com/matlabcentral/fileexchange/47064-a-multilevel-thresholding-algorithm-using-electromagnetism-optimization/content/MTEMO/EMO_KAPUR/EMO.m
 //Vir2: http://www.codeforge.com/read/212138/EM.cpp__html
 
-//klasiËni EML po prvotnem Ëlanku
+//klasiƒçni EML po prvotnem ƒçlanku
 public class EM extends Algorithm {
 	// Dimenzija problema
 	private int N;
@@ -24,13 +24,13 @@ public class EM extends Algorithm {
 	// Velikost populacije
 	private int M;
 
-	// ätevilo lokalnih iskanj (koliko ovrednotenj porabi za lokalno iskanje).
+	// ≈†tevilo lokalnih iskanj (koliko ovrednotenj porabi za lokalno iskanje).
 	private int LS;
 
 	// Parameter lokalnega iskanja.
 	private double DELTA;
 
-	// Trenutno najboljöi ion.
+	// Trenutno najbolj≈°i ion.
 	private int best_idx;
 
 	// Populacija ionov.
@@ -59,7 +59,7 @@ public class EM extends Algorithm {
 		this(30, 10, 0.001);
 	}
 
-	//V Ëlanku 3.1. GENERAL SCHEME FOR EM
+	//V ÔøΩlanku 3.1. GENERAL SCHEME FOR EM
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
 		N = taskProblem.getNumberOfDimensions();
@@ -74,7 +74,7 @@ public class EM extends Algorithm {
 
 		}
 
-		// Najde najboljöega preden vrne najboljöo reöitev.
+		// Najde najboljÔøΩega preden vrne najboljÔøΩo reÔøΩitev.
 		for (int i = 0; i < this.M; i++) {
 			if (taskProblem.isFirstBetter(ions.get(i), ions.get(best_idx))) {
 				//best = ions.get(i);
@@ -93,7 +93,7 @@ public class EM extends Algorithm {
 
 	}
 
-	// V Ëlanku 3.2. INITIALIZATION
+	// V ÔøΩlanku 3.2. INITIALIZATION
 	void Initialize(Task t) throws StopCriteriaException {
 		ions = null;
 		ions = new ArrayList<>();
@@ -116,7 +116,7 @@ public class EM extends Algorithm {
 		}
 	}
 
-	// V Ëlanku 3.3. LOCAL SEARCH (Ëe toËno kot v Ëlanku, potem deluje slabo, sem uporabil local search od Vir1)
+	// V ÔøΩlanku 3.3. LOCAL SEARCH (ÔøΩe toÔøΩno kot v ÔøΩlanku, potem deluje slabo, sem uporabil local search od Vir1)
 	// Simple random local search algorithm.
 	void Local(Task t) throws StopCriteriaException {
 		int count;
@@ -171,7 +171,7 @@ public class EM extends Algorithm {
 		}
 	}
 
-	// V Ëlanku 3.4. CALCULATION OF TOTAL FORCE VECTOR
+	// V ÔøΩlanku 3.4. CALCULATION OF TOTAL FORCE VECTOR
 	void CalcF(Task t) {
 		double dist, temp;
 		double totdif = 0.0;
@@ -201,7 +201,7 @@ public class EM extends Algorithm {
 
 					aij = SCAMUL(temp, aij, N);
 
-					// dodaö k force
+					// dodaÔøΩ k force
 					ions.get(i).Fi = VECADD(ions.get(i).Fi, aij, N);
 				}
 				// Repulsion
@@ -213,14 +213,14 @@ public class EM extends Algorithm {
 
 					aij = SCAMUL(temp, aij, N);
 
-					// odöteje force
+					// odÔøΩteje force
 					ions.get(i).Fi = VECSUB(ions.get(i).Fi, aij, N);
 				}
 			} // end for j
 		} // end for i
 	}
 
-	// V Ëlanku 3.5. MOVEMENT ACCORDING TO THE TOTAL FORCE
+	// V ÔøΩlanku 3.5. MOVEMENT ACCORDING TO THE TOTAL FORCE
 	void Move(Task t) throws StopCriteriaException {
 		int i, j;
 		double norm, Tiny;

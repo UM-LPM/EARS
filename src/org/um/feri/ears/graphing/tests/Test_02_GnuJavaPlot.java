@@ -93,11 +93,11 @@ public class Test_02_GnuJavaPlot
     }
 
 
-    // Bi ölo overridat source iz drugega projekta?
+    // Bi ≈°lo overridat source iz drugega projekta?
     public static void Test4_OverrideJavaClasses()
     {
     	//RunMain r =  new RunMain(false, false, null);
     	//System.out.println(r.isPrintDebug());
-    	// Drotpiröna = OK!
+    	// Drotpir≈°na = OK!
     }
 }

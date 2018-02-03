@@ -48,7 +48,7 @@ public class PSOPBC extends Algorithm {
 			permutations.add(i);
 		}
 	}
-//Algoritem PSO z uporabo kriûanja
+//Algoritem PSO z uporabo kri≈æanja
 	
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
