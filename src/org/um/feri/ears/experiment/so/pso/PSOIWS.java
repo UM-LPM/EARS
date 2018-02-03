@@ -38,7 +38,7 @@ public class PSOIWS extends Algorithm {
 		ai.addParameter(EnumAlgorithmParameters.W_INTERIA, w + "");
 		au = new Author("Robnik", "aleksander.robnik@student.um.si");
 	}
-//Algoritem PSO z uporabo statiËne vztrajnostne uteûi
+//Algoritem PSO z uporabo statiƒçne vztrajnostne ute≈æi
 	
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {

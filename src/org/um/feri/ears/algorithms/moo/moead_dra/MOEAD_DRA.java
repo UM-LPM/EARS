@@ -398,7 +398,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 		List<Integer> selected = new ArrayList<Integer>();
 		List<Integer> candidate = new ArrayList<Integer>();
 
-		// vzamemo najboljöe gled na uteûi?
+		// vzamemo najbolj≈°e gled na ute≈æi?
 		for (int k = 0; k < num_obj; k++)
 			selected.add(k); // WARNING! HERE YOU HAVE TO USE THE WEIGHT
 								// PROVIDED BY QINGFU (NOT SORTED!!!!)

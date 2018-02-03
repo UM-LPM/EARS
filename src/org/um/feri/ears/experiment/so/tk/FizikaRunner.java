@@ -7,7 +7,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.Branin;
 import org.um.feri.ears.util.Util;
 
-//MAIN za testiranje algoritmov fizikalnih fenomenov (posamiËno delovanje)
+//MAIN za testiranje algoritmov fizikalnih fenomenov (posamiƒçno delovanje)
 public class FizikaRunner {
 
 	//run metoda main

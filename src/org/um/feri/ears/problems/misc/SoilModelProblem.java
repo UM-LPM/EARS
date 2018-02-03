@@ -150,8 +150,8 @@ public class SoilModelProblem extends Problem{
 			j++;
 		}
 
-		double step = 1e-2; // korak toèk izraèuna vrednosti funkcije (v odvisnosti od števila plasti!)
-		double minValue = 1e-6; // ko je vrednost funkcije v 100 zaporednih toèkah manj od minvrednost je izraèun konèan
+		double step = 1e-2; // korak toÄk izraÄuna vrednosti funkcije (v odvisnosti od Å¡tevila plasti!)
+		double minValue = 1e-6; // ko je vrednost funkcije v 100 zaporednih toÄkah manj od minvrednost je izraÄun konÄan
 
 		boolean isEnd = true;
 		int stk = 0;

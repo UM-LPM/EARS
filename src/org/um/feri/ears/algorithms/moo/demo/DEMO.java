@@ -75,7 +75,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		au = new Author("miha", "miha.ravber at gamil.com");
 		ai = new AlgorithmInfo(
 				"DEMO",
-				"\\bibitem{Robic2005}\nT.~Robiè, B.~Filipiè\n\\newblock DEMO: Differential Evolution for Multiobjective Optimization.\n\\newblock \\emph{Evolutionary Multi-Criterion Optimization}, 520-533, 2005.\n",
+				"\\bibitem{Robic2005}\nT.~RobiÄ, B.~FilipiÄ\n\\newblock DEMO: Differential Evolution for Multiobjective Optimization.\n\\newblock \\emph{Evolutionary Multi-Criterion Optimization}, 520-533, 2005.\n",
 				"DEMO", "Differential Evolution for Multiobjective Optimization");
 		
 		ai.addParameters(crossover.getOperatorParameters());
@@ -161,8 +161,8 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
         
             /* Environmental selection
-             * Demo modifikacija: PARETO OPTIMALNE FRONTE + METRIKE NAKOPIÈENOSTI
-             * Demo mora omogoèat, da to delamo na 3 naèine in sicer: - NSGA 2
+             * Demo modifikacija: PARETO OPTIMALNE FRONTE + METRIKE NAKOPIï¿½ENOSTI
+             * Demo mora omogoÄat, da to delamo na 3 naÄine in sicer: - NSGA 2
              *                                                        - IBEA
              *                                                        - SPEA 2                                                        
              */

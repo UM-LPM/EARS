@@ -38,7 +38,7 @@ public class PSOIWD extends Algorithm {
 		ai.addParameter(EnumAlgorithmParameters.W_INTERIA, w + "");
 		au = new Author("Robnik", "aleksander.robnik@student.um.si");
 	}
-//Algoritem PSO z uporabo dinamiËne vztrajnostne uteûi
+//Algoritem PSO z uporabo dinamiƒçne vztrajnostne ute≈æi
 	
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
