@@ -30,7 +30,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	int archiveSize = 100;
 	int bisections = 5;
 	
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
 	public PAES(MutationOperator mutation, int populationSize) {
 		

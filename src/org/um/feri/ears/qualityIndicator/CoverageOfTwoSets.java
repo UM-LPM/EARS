@@ -34,7 +34,7 @@ public class CoverageOfTwoSets<Type extends Number> extends QualityIndicator<Typ
 	/**
 	 * stores a <code>Comparator</code> for dominance checking
 	 */
-	private static final Comparator<MOSolutionBase> dominance_ = new DominanceComparator();
+	private final Comparator<MOSolutionBase<Type>> dominance_ = new DominanceComparator<>();
 	
 	@Override
 	public double evaluate(ParetoSolution<Type> front) {

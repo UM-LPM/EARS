@@ -21,25 +21,22 @@
 
 package org.um.feri.ears.algorithms.moo.gde3;
 
-import java.util.Comparator;
-
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
-import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.DifferentialEvolutionSelection;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
-import org.um.feri.ears.util.Util;
+
+import java.util.Comparator;
 
 /**
  * This class implements the GDE3 algorithm. 
@@ -52,9 +49,9 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	
 	int populationSize;
 	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
 
-	public GDE3(CrossoverOperator crossover, int populationSize) {
+	public GDE3(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, int populationSize) {
 		this.populationSize = populationSize;
 		this.cross = crossover;
 
@@ -88,8 +85,8 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		Distance<Type> distance;
 		Comparator<MOSolutionBase<Type>> dominance;
 
-		distance = new Distance();
-		dominance = new DominanceComparator();
+		distance = new Distance<>();
+		dominance = new DominanceComparator<>();
 
 		MOSolutionBase<Type> parent[] = null;
 
@@ -177,7 +174,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 			if (remain > 0) { // front contains individuals to insert
 				while (front.size() > remain) {
 					distance.crowdingDistanceAssignment(front, num_obj);
-					front.remove(front.indexWorst(new CrowdingComparator()));
+					front.remove(front.indexWorst(new CrowdingComparator<>()));
 				}
 				for (int k = 0; k < front.size(); k++) {
 					population.add(front.get(k));
@@ -188,7 +185,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		}
 		
 		// Return the first non-dominated front
-		Ranking ranking = new Ranking(population);
+		Ranking<Type> ranking = new Ranking<>(population);
 		best = ranking.getSubfront(0);
 	}
 }

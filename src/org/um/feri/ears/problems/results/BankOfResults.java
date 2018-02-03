@@ -43,7 +43,7 @@ public class BankOfResults {
 		Vector<String> algorithms = new Vector<String>();
 		Vector<String> datasets = new Vector<String>();
 		StringBuffer sb = new StringBuffer();
-		ArrayList<Algorithm> tmp = new ArrayList(all.keySet());
+		ArrayList<AlgorithmBase> tmp = new ArrayList<>(all.keySet());
 		ArrayList<TaskBase> tmpProblem; // = new ArrayList(all.keySet());
 		Hashtable<TaskBase,ArrayList<Double>> tmpA;
 		ArrayList<Double> tmpB;
@@ -53,11 +53,11 @@ public class BankOfResults {
 
 		int i=-1;
 		int j=-1;
-		for (Algorithm  a: tmp) {
+		for (AlgorithmBase a: tmp) {
 			i++;//
 			algorithms.add(a.getID());
 			tmpA =all.get(a);
-			tmpProblem = new ArrayList(tmpA.keySet());
+			tmpProblem = new ArrayList<>(tmpA.keySet());
 			//mean[i] = new double[tmpProblem.size()];
 			j=-1;
 			for (TaskBase  p: tmpProblem) {
@@ -87,14 +87,14 @@ public class BankOfResults {
 	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		ArrayList<Algorithm> tmp = new ArrayList(all.keySet());
+		ArrayList<AlgorithmBase> tmp = new ArrayList<>(all.keySet());
 		ArrayList<TaskBase> tmpProblem; // = new ArrayList(all.keySet());
 		Hashtable<TaskBase,ArrayList<Double>> tmpA;
 		ArrayList<Double> tmpB;
 		DoubleSolution tmpC;
-		for (Algorithm  a: tmp) {
+		for (AlgorithmBase  a: tmp) {
 			tmpA =all.get(a);
-			tmpProblem = new ArrayList(tmpA.keySet());
+			tmpProblem = new ArrayList<>(tmpA.keySet());
 			for (TaskBase  p: tmpProblem) {
 				tmpB = tmpA.get(p);
 				for (Double in:tmpB) {

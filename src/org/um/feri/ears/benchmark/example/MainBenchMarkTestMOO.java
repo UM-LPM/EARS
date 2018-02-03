@@ -11,6 +11,7 @@ import org.um.feri.ears.algorithms.moo.nsga2.D_NSGAII;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.benchmark.RatingCEC2009;
+import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.rating.Player;
@@ -23,7 +24,7 @@ public class MainBenchMarkTestMOO {
 		
         Util.rnd.setSeed(System.currentTimeMillis());
         RatingBenchmark.debugPrint = true; //prints one on one results
-        ArrayList<MOAlgorithm> players = new ArrayList<MOAlgorithm>();
+        ArrayList<MOAlgorithm<DoubleMOTask,Double>> players = new ArrayList<>();
         players.add(new D_MOEAD_DRA());
         players.add(new D_NSGAII());
         players.add(new D_SPEA2());
@@ -36,7 +37,7 @@ public class MainBenchMarkTestMOO {
         indicators.add(IndicatorName.IGD); // add quality indicator
         
         RatingCEC2009 cec = new RatingCEC2009(indicators, 0.0000001); //Create banchmark
-        for (MOAlgorithm al:players) {
+        for (MOAlgorithm<DoubleMOTask, Double> al:players) {
         	ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
         	cec.registerAlgorithm(al);
         }

@@ -63,7 +63,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     MOSolutionBase<Type> parents[] ;
     
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
     
 
 	public DEMO(CrossoverOperator crossover, int populationSize, int selectionProcedure) {

@@ -42,7 +42,7 @@ public class InvertedGenerationalDistance<T extends Number> extends QualityIndic
 	 * Constructor. Creates a new instance of the generational distance metric.
 	 */
 	public InvertedGenerationalDistance(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+		super(num_obj, file_name, getReferenceSet(file_name));
 		name = "Inverted Generational Distance";
 	}
   

@@ -81,7 +81,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 	}
 
 	public MOSolutionBase<Type> copy() {
-		return new MOSolutionBase(this);
+		return new MOSolutionBase<>(this);
 	}
 	
 	/**

@@ -42,7 +42,7 @@ public class DominanceComparator<Type> implements Comparator<MOSolutionBase<Type
 	}
 	
 	public DominanceComparator(double epsilon) {
-		violationConstraintComparator_ = new OverallConstraintViolationComparator();
+		violationConstraintComparator_ = new OverallConstraintViolationComparator<>();
 		this.epsilon = epsilon;
 	}
 	

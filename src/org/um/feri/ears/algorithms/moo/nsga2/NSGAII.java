@@ -47,14 +47,14 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	ParetoSolution<Type> union;
 
 	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
-	public NSGAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
+	public NSGAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize) {
 		this(crossover, mutation, populationSize, "NSGAII");
 	}
 	
-	public NSGAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize, String name) {
+	public NSGAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, String name) {
 
 		this.cross = crossover;
 		this.mut = mutation;
@@ -150,7 +150,7 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 			// Remain is less than front(index).size, insert only the best one
 			if (remain > 0) { // front contains individuals to insert
 				distance.crowdingDistanceAssignment(front, num_obj);
-				front.sort(new CrowdingComparator());
+				front.sort(new CrowdingComparator<>());
 				for (int k = 0; k < remain; k++) {
 					population.add(front.get(k));
 				}

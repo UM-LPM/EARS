@@ -14,7 +14,7 @@ public class SolutionUtils {
 	 * @param solution2
 	 * @return The best solution
 	 */
-	public static <T> MOSolutionBase<T> getBestSolution(MOSolutionBase<T> solution1, MOSolutionBase<T> solution2, Comparator comparator) {
+	public static <T> MOSolutionBase<T> getBestSolution(MOSolutionBase<T> solution1, MOSolutionBase<T> solution2, Comparator<MOSolutionBase<T>> comparator) {
 		MOSolutionBase<T> result ;
 		int flag = comparator.compare(solution1, solution2);
 		if (flag == -1) {

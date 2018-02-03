@@ -32,8 +32,8 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	ParetoSolution<Type> population;
 	ParetoSolution<Type> archive;
 	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
 	public int tournamentRounds = 1;
 

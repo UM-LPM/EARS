@@ -59,8 +59,8 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	int populationSize;
 	ParetoSolution<Type> population;
 	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
 	public VEGA(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
 		this.populationSize = pop_size;
