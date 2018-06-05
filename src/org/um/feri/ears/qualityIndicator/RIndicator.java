@@ -137,8 +137,7 @@ public abstract class RIndicator<T extends Number> extends QualityIndicator<T>{
 		int counter = 0;
 		int N = ArithmeticUtils.pow(s+1, k);
 		
-		double[][] weights = new double[
-				(int)CombinatoricsUtils.binomialCoefficient(s+k-1, k-1)][k];
+		double[][] weights = new double[(int)CombinatoricsUtils.binomialCoefficient(s+k-1, k-1)][k];
 		
 		for (int i = 0; i < N; i++) {
 			int sum = 0;

@@ -63,6 +63,10 @@ public class ResultArena {
 	private List<Game> allGames;
 	
 	int id_period;
+	public ResultArena(){
+		this(1);
+	}
+	
 	public ResultArena(int id_period) {
 		players = new HashMap<String, Player>();
 		allGames = new ArrayList<Game>();
@@ -72,6 +76,15 @@ public class ResultArena {
     public void addPlayer(Player p){
         players.put(p.getPlayerId(),p);
     }
+
+    //Default values
+	public void addPlayer(AlgorithmBase algorithm, String id){
+		addPlayer(algorithm, id, 1500, 350, 0.06, 0, 0, 0);
+	}
+    
+	public void addPlayer(AlgorithmBase algorithm, String id, double rating, double RD, double ratingVolatility){
+		addPlayer(algorithm, id, rating, RD, ratingVolatility, 0, 0, 0);
+	}
     
 	public void addPlayer(AlgorithmBase algorithm, String id, double rating, double RD, double ratingVolatility, int w, int l, int d){
 		players.put(id, new Player(algorithm, id,new Rating(rating, RD, ratingVolatility),w,l,d));
