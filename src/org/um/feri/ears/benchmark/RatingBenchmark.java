@@ -76,8 +76,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 				start = System.nanoTime();
 
 				GraphDataRecorder.SetContext(al, task);
-				DoubleSolution bestByALg = al.execute(task); // check if result
-																// is fake!
+				DoubleSolution bestByALg = al.execute(task);
 
 				duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
 				al.addRunDuration(duration, duration - task.getEvaluationTimeMs());

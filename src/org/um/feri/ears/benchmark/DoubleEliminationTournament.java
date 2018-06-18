@@ -49,7 +49,7 @@ public class DoubleEliminationTournament {
 		fillEnsemble(indicators);
 		
 		//generate approximations for the tournament
-		ArrayList<MOAlgorithmEvalResult> participants = getParticipants(tournamentSize, players, false);
+		ArrayList<MOAlgorithmEvalResult> participants = getParticipants(tournamentSize, players, true);
 		fillPlayers(players);
 		
 		
@@ -343,7 +343,7 @@ public class DoubleEliminationTournament {
 			
 			for (int i = 0; i < approxNum; i++) {
 				
-				System.out.println("Run: "+i);
+				//System.out.println("Run: "+i);
 		    	task.resetCounter();
 		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
 		        Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
