@@ -13,7 +13,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
 
-// V èlanku se zaène ta algoritem v poglavju 
+// V ï¿½lanku se zaï¿½ne ta algoritem v poglavju 
 // 2.2. Enhanced Colliding Bodies Optimization (ECBO)
 
 //ECBO
@@ -55,7 +55,7 @@ public class ECBO extends Algorithm {
 
 	}
 
-	// Parametri kot v èlanku.
+	// Parametri kot v ï¿½lanku.
 	public ECBO() {
 		this(20, 0.25);
 	}
@@ -88,7 +88,7 @@ public class ECBO extends Algorithm {
 
 			Saving(iter, taskProblem);
 
-			// Sortiranje po masi(veèja masa , boljši fitnes)
+			// Sortiranje po masi(veï¿½ja masa , boljï¿½i fitnes)
 			Collections.sort(CB, comparator);
 
 			// pre-update velocity
@@ -117,14 +117,14 @@ public class ECBO extends Algorithm {
 
 		}
 
-		// Poišèi najboljšo najdeno rešitev, preden jo vrneš.
+		// Poiï¿½ï¿½i najboljï¿½o najdeno reï¿½itev, preden jo vrneï¿½.
 		for (int i = 0; i < pop_size; i++) {
 			if (taskProblem.isFirstBetter(CB.get(i), best)) {
 				best = new ECBOSolution(CB.get(i));
 			}
 		}
 
-		return best; // Vrni najboljšo najdeno rešitev.
+		return best; // Vrni najboljï¿½o najdeno reï¿½itev.
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class ECBO extends Algorithm {
 	
 	
 	//Poglavje 2.2 Step1
-	// Ustvarjanje zaèetne populacije.
+	// Ustvarjanje zaï¿½etne populacije.
 	private void initPop(Task taskProb) throws StopCriteriaException {
 		for (int i = 0; i < pop_size; i++) {
 			CB.add(new ECBOSolution(taskProb));
@@ -154,7 +154,7 @@ public class ECBO extends Algorithm {
 	//Poglavj 2.2 Step2
 	//2.2 Step2 Defining mass
 	private void DefineMass(Task taskprob){
-		// Raèunanje mase delcev.
+		// Raï¿½unanje mase delcev.
 		double sum_spodaj = 0;
 
 		for (int i = 0; i < pop_size; i++) {
@@ -173,9 +173,9 @@ public class ECBO extends Algorithm {
 	//2.2 Step3 Saving - CM memory
 	private void Saving(double iter, Task taskProb){
 		// CM - coliding memory
-		// nekaj najboljših CB se shrani
-		// v naslednji iteraciji daš iz CM v glavno populacijo
-		// iz glavne jih toliko odstraniš kot si jih dal noter
+		// nekaj najboljï¿½ih CB se shrani
+		// v naslednji iteraciji daï¿½ iz CM v glavno populacijo
+		// iz glavne jih toliko odstraniï¿½ kot si jih dal noter
 
 		Collections.sort(CB, comparator);
 
@@ -192,17 +192,17 @@ public class ECBO extends Algorithm {
 
 			Collections.sort(CB, comparator);
 
-			// Izbriši toliko zadnjih najslabših iz CB populacije
+			// Izbriï¿½i toliko zadnjih najslabï¿½ih iz CB populacije
 			for (int i = 0; i < cMS; i++)
 				CB.remove(CB.size() - 1);
 
 			// shranimo za naslednjo iteracijo (zamenjava ce je boljsi)
-			// - zgodovinsko najboljši so v CM (skozi celotni proces)
+			// - zgodovinsko najboljï¿½i so v CM (skozi celotni proces)
 
 			Collections.sort(CM, comparator);
 
 			for (int j = 0; j < cMS; j++) {
-				// Èe že isti noter preskoèi.
+				// ï¿½e ï¿½e isti noter preskoï¿½i.
 				if (CM.contains(CB.get(j)))
 					continue;
 
@@ -288,11 +288,11 @@ public class ECBO extends Algorithm {
 			}
 		}
 
-		// Uporabi new_x za fitnes oceno CB delca (ocenitev rešitve)
+		// Uporabi new_x za fitnes oceno CB delca (ocenitev reï¿½itve)
 		for (int i = 0; i < pop_size; i++) {
 			ECBOSolution tmp = new ECBOSolution(taskProb.eval(CB.get(i).getNoviX()));
 
-			// Najdi boljšega od trenutno najboljšega delca.
+			// Najdi boljï¿½ega od trenutno najboljï¿½ega delca.
 			if (taskProb.isFirstBetter(tmp, best)) {
 				best = new ECBOSolution(tmp);
 			}

@@ -13,7 +13,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
 
-//Opis algoritma se zaène v poglavju 2.2 Presentation of charged search system
+//Opis algoritma se zaï¿½ne v poglavju 2.2 Presentation of charged search system
 public class CSS extends Algorithm {
 	//int counter_fail = 0;
 
@@ -43,7 +43,7 @@ public class CSS extends Algorithm {
 	// Charged memory - spominska populacija
 	private ArrayList<CSSSolution> CM;
 
-	// Najbojša rešitev in najslabša rešitev v celotnem zagonu
+	// Najbojï¿½a reï¿½itev in najslabï¿½a reï¿½itev v celotnem zagonu
 	private CSSSolution best, worst;
 
 	public CSS(int pop, double par, double cmcr) {	
@@ -56,7 +56,7 @@ public class CSS extends Algorithm {
 				"A. Kaveh, S. Talatahari, A novel heuristic optimization method: charged system search, Acta Mech 213, 2010",
 				"CSS",
 				"Physics-based metaheuristic algorithm");
-		au = new Author("Tadej Klakoèer", "tadej.klakocer@student.um.si");			
+		au = new Author("Tadej Klakoï¿½er", "tadej.klakocer@student.um.si");			
 
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
 		ai.addParameter(EnumAlgorithmParameters.UNNAMED1, CMS + "");
@@ -77,7 +77,7 @@ public class CSS extends Algorithm {
 		int itermax = (taskProblem.getMaxEvaluations() - pop_size) / pop_size;
 
 
-		//Enaèba 21
+		//Enaï¿½ba 21
 		/*
 		max = taskProblem.getUpperLimit()[0] - taskProblem.getLowerLimit()[0];
 		for (int d = 0; d < taskProblem.getDimensions(); d++) {
@@ -109,21 +109,21 @@ public class CSS extends Algorithm {
 
 			// RULE 4
 			// Electrical force acting on a CP
-			// po vseh dimenzijah ista dolžina intervala
+			// po vseh dimenzijah ista dolï¿½ina intervala
 			calcForce(taskProblem, Pij, rij);
 
 			// Rule 5, new positions and velocity of CPs
 			double kv = 0.5 * (1.0 - iter / itermax); // eksploracija
 			double ka = 0.5 * (1.0 + iter / itermax); // exploitacija
 
-			// Premakne delce, èe so izven mej jih popravi z HS
+			// Premakne delce, ï¿½e so izven mej jih popravi z HS
 			// Rule 5, 6 , 7 
 			moveParticles(taskProblem, kv, ka);
 
 			// Poisce novi best, poisce novi worst
 			findBestWorst(taskProblem);
 
-			// Update CM (èe boljši v CPs kot v CM, zamenjaj delce v CM)
+			// Update CM (ï¿½e boljï¿½i v CPs kot v CM, zamenjaj delce v CM)
 			refreshMemory(taskProblem);
 
 			iter++;
@@ -148,7 +148,7 @@ public class CSS extends Algorithm {
 			}
 		}
 
-		// Vrne najboljši najden cp
+		// Vrne najboljï¿½i najden cp
 		return best; 
 	}
 
@@ -212,18 +212,18 @@ public class CSS extends Algorithm {
 	}
 
 
-	// Izraèuna magnitude of charge
+	// Izraï¿½una magnitude of charge
 	private void calcMagnitude() {
 		// magnitude of charge
 		for (int i = 0; i < pop_size; i++) {
-			// Pride do deljenje z niè, ker sta worst in best enaka, zato + eps
+			// Pride do deljenje z niï¿½, ker sta worst in best enaka, zato + eps
 			CPs.get(i).Q = (CPs.get(i).getEval() - worst.getEval()) 
 					/ 
 					(best.getEval() - worst.getEval() + eps);
 		}	
 	}
 
-	// Izraèuna separation distance med delci
+	// Izraï¿½una separation distance med delci
 	private double[][] calcSepDistance(Task taskProblem) {
 		double rij[][] = new double[pop_size][pop_size];
 
@@ -246,7 +246,7 @@ public class CSS extends Algorithm {
 		return rij;
 	}
 
-	// Izraèuna verjetnosti da se privlaèita
+	// Izraï¿½una verjetnosti da se privlaï¿½ita
 	private double[][] calcProb(Task taskProblem) {
 		double[][] Pij = new double[pop_size][pop_size];
 
@@ -255,7 +255,7 @@ public class CSS extends Algorithm {
 				double pogoj = (CPs.get(i).getEval() - best.getEval())
 						/ (CPs.get(j).getEval() - CPs.get(i).getEval() + eps);
 
-				// Ali ima j delec boljši fitnes od delca i ( f(j) > f(i))
+				// Ali ima j delec boljï¿½i fitnes od delca i ( f(j) > f(i))
 				if ((pogoj > Util.nextDouble()) || taskProblem.isFirstBetter(CPs.get(j), CPs.get(i))) {
 					Pij[i][j] = 1.0;
 				} else
@@ -265,12 +265,12 @@ public class CSS extends Algorithm {
 		return Pij;
 	}
 
-	// Izraèuna total force, ki deluje na delec
+	// Izraï¿½una total force, ki deluje na delec
 	private void calcForce(Task taskProblem, double[][] Pij, double[][] rij) {
 
 		for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) 
 		{
-			//Enaèba 21, ampak deluje boljše èe je radij vsakega delca 1.0
+			//Enaï¿½ba 21, ampak deluje boljï¿½e ï¿½e je radij vsakega delca 1.0
 			double a = 1.0;
 
 			for (int j = 0; j < pop_size; j++) {
@@ -293,19 +293,19 @@ public class CSS extends Algorithm {
 
 					double part1 = (CPs.get(i).Q / Math.pow(a, 3)) * rij[j][i] * i1;
 
-					// +eps, kr pride do deljenja z niè in posledièno potem NaN
+					// +eps, kr pride do deljenja z niï¿½ in poslediï¿½no potem NaN
 					double part2 = (CPs.get(i).Q / (Math.pow(rij[j][i], 2) + eps)) * i2;
 
 					suma_dim = suma_dim + ((part1 + part2) * desno);
 				}
 
-				// Konèna vrednost za tega j-delca po d-dimenziji
+				// Konï¿½na vrednost za tega j-delca po d-dimenziji
 				CPs.get(j).F[d] = suma_dim;//* CPs.get(j).Q;
 			}
 		}
 	}
 
-	// Premakne delce , novi velocity, HS based algorithm èe izven meja
+	// Premakne delce , novi velocity, HS based algorithm ï¿½e izven meja
 	private void moveParticles(Task taskProblem, double kv, double ka) throws StopCriteriaException {
 		boolean[] harmonized = new boolean[pop_size];
 
@@ -322,7 +322,7 @@ public class CSS extends Algorithm {
 
 				double xj_new = (ka * rand1j * CPs.get(j).F[d]) + (kv * rand2j * CPs.get(j).v[d] + CPs.get(j).getValue(d));
 
-				// Èe je dimenzija izven meja problema, Harmony search varjanta za novo pozicijo na tej dimenziji
+				// ï¿½e je dimenzija izven meja problema, Harmony search varjanta za novo pozicijo na tej dimenziji
 				// RULE 7
 				if (taskProblem.isFeasible(xj_new, d) == false)
 				{
@@ -367,13 +367,13 @@ public class CSS extends Algorithm {
 				// Sortiranje ce je prislo do zamenjave
 				Collections.sort(CM, comparator);
 
-				// Zamenjava najslabšega v HM oz. CM.
+				// Zamenjava najslabï¿½ega v HM oz. CM.
 				if (taskProblem.isFirstBetter(tmp2, CM.get(CM.size() - 1))) 
 				{	
-					// Najslabšega zbriše.
+					// Najslabï¿½ega zbriï¿½e.
 					CM.remove(CM.size() - 1);
 
-					// Doda novega boljšega noter.
+					// Doda novega boljï¿½ega noter.
 					CM.add(tmp2);
 				}			
 			}
@@ -383,7 +383,7 @@ public class CSS extends Algorithm {
 		}
 	}
 
-	// Poišèe novega najboljšega in najslabšega.
+	// Poiï¿½ï¿½e novega najboljï¿½ega in najslabï¿½ega.
 	private void findBestWorst(Task taskProblem)
 	{
 		// reset worst
@@ -407,15 +407,15 @@ public class CSS extends Algorithm {
 	// Posodobi charge memory populacijo.
 	private void refreshMemory(Task taskProblem) {
 		for (int i = 0; i < CMS; i++) {
-			// update CM (èe boljši v CPs kot v CM, zamenjaj delce v CM)
+			// update CM (ï¿½e boljï¿½i v CPs kot v CM, zamenjaj delce v CM)
 			Collections.sort(CPs, comparator);
 
 			Collections.sort(CM, comparator);
 
 			if (taskProblem.isFirstBetter(CPs.get(i), CM.get(CMS - 1))) {
-				// po èlanku, èe sem dobro razumel
-				CM.remove(CMS - 1); // slabšega ven
-				CM.add(CPs.get(i)); // boljšega noter
+				// po ï¿½lanku, ï¿½e sem dobro razumel
+				CM.remove(CMS - 1); // slabï¿½ega ven
+				CM.add(CPs.get(i)); // boljï¿½ega noter
 			}
 		}
 

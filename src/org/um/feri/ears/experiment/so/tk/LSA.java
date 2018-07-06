@@ -10,7 +10,7 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-//Izvorna koda avtorjev spremenjena v Javo (ni specifièno doloèeno po korakih v èlanku)
+//Izvorna koda avtorjev spremenjena v Javo (ni specifiï¿½no doloï¿½eno po korakih v ï¿½lanku)
 //Vir1: https://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-
 //Vir2: http://www.mathworks.com/matlabcentral/fileexchange/54181-lightning-search-algorithm--lsa-/content/Standard%20LSA/LSA_Main.m
 
@@ -19,7 +19,7 @@ public class LSA extends Algorithm
 	// Velikost populacije
 	private int N;
 
-	//Število dimenzij v problemu
+	//ï¿½tevilo dimenzij v problemu
 	private int D;
 
 	//Glavna populacija
@@ -73,11 +73,11 @@ public class LSA extends Algorithm
 		//Glavna zanka algoritma
 		while (!taskProblem.isStopCriteria())
 		{
-			// Ovrednotenje populacije, prva iteracija že ovrednotena
+			// Ovrednotenje populacije, prva iteracija ï¿½e ovrednotena
 			if(iter > 0)
 			{
-				//tu se zgubi par evalvacij, ker so pri zamenjavi nekateri že pravilno ocenjeni 
-				//mogoèe potreba po svojem razredu z dodatnimi spremenljivkami - optimalno
+				//tu se zgubi par evalvacij, ker so pri zamenjavi nekateri ï¿½e pravilno ocenjeni 
+				//mogoï¿½e potreba po svojem razredu z dodatnimi spremenljivkami - optimalno
 				Evaluate(taskProblem);
 			}
 
@@ -95,13 +95,13 @@ public class LSA extends Algorithm
 
 			for (int i=0; i<N; i++) 
 			{	
-				// Poišèe global best
+				// Poiï¿½ï¿½e global best
 				if (taskProblem.isFirstBetter(pop.get(i), best)) 
 				{
 					best = pop.get(i);
 				}
 
-				// Poišèe global worst
+				// Poiï¿½ï¿½e global worst
 				if (taskProblem.isFirstBetter(worst, pop.get(i))) 
 				{
 					worst = pop.get(i);					
@@ -117,7 +117,7 @@ public class LSA extends Algorithm
 			// Update position
 			UpdatePositions(taskProblem, direct, Energy);
 
-			// Po psevdokdu iz èlanka (èe sta best in worst enaka)
+			// Po psevdokdu iz ï¿½lanka (ï¿½e sta best in worst enaka)
 			if(best.getEval() == worst.getEval())		
 				break;
 			
@@ -132,7 +132,7 @@ public class LSA extends Algorithm
 		//grandmin = min(fitness);	
 		worst = pop.get(0);
 
-		// Poišèe best in worst, preden vrne najboljšo rešitev. 
+		// Poiï¿½ï¿½e best in worst, preden vrne najboljï¿½o reï¿½itev. 
 		for(int i=0;i<N;i++)
 		{
 			if(taskProblem.isFirstBetter(pop.get(i), best))
@@ -196,7 +196,7 @@ public class LSA extends Algorithm
 		ch_time = ch_time + 1;
 	}
 
-	//Ustvari zaèetno populacijo.
+	//Ustvari zaï¿½etno populacijo.
 	private void initPopulation(Task taskProb) throws StopCriteriaException
 	{
 		pop = null;
