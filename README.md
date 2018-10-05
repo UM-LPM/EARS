@@ -109,9 +109,6 @@ import org.um.feri.ears.util.Util;
 
 public class MainBenchMarkTest {
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis());
         RatingBenchmark.debugPrint = true; //prints one on one results
