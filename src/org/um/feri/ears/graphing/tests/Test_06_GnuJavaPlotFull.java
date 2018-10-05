@@ -5,7 +5,7 @@ import java.io.*;
 
 import javax.imageio.ImageIO;
 
-import org.um.feri.ears.run.RunMain;
+import org.um.feri.ears.examples.RunMain;
 
 import com.panayotis.gnuplot.JavaPlot;
 import com.panayotis.gnuplot.plot.DataSetPlot;

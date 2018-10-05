@@ -261,11 +261,7 @@ public abstract class TaskBase<T extends ProblemBase> {
 		}
 		//System.out.println(isStop);
 		
-		//stop only if stop criteria set to global optimum
-		if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS && isGlobal)
-			return true;
-		
-		return isStop;
+		return isStop || isGlobal;
 	}
 	
 	public boolean hasTheCPUTimeBeenExceeded()

@@ -153,6 +153,8 @@ public class CRO extends Algorithm {
 		coralReef.add(newCoral);
 		
 		for (int i = 1; i < quantity; i++) {
+			if(task.isStopCriteria())
+				break;
 			newCoral = new CoralSolution(task.getRandomSolution());
 			co = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M));
 			while(getCoralFromPosition(co) != null)

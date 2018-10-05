@@ -53,7 +53,7 @@ public class SoilModelProblem extends Problem{
 		loadData(filename);
 	}
 
-	public SoilModelProblem(int numberOfDimensions, int numberOfConstraints) {
+	private SoilModelProblem(int numberOfDimensions, int numberOfConstraints) {
 		super(numberOfDimensions, numberOfConstraints);
 		
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
@@ -150,8 +150,8 @@ public class SoilModelProblem extends Problem{
 			j++;
 		}
 
-		double step = 1e-2; // korak toèk izraèuna vrednosti funkcije (v odvisnosti od števila plasti!)
-		double minValue = 1e-6; // ko je vrednost funkcije v 100 zaporednih toèkah manj od minvrednost je izraèun konèan
+		double step = 1e-2; // korak toï¿½k izraï¿½una vrednosti funkcije (v odvisnosti od ï¿½tevila plasti!)
+		double minValue = 1e-6; // ko je vrednost funkcije v 100 zaporednih toï¿½kah manj od minvrednost je izraï¿½un konï¿½an
 
 		boolean isEnd = true;
 		int stk = 0;

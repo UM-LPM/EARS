@@ -52,10 +52,10 @@ import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingCEC2010;
+import org.um.feri.ears.examples.RunMain;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.problems.results.FriedmanTransport;
 import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.run.RunMain;
 
 /**
  * @author Administrator

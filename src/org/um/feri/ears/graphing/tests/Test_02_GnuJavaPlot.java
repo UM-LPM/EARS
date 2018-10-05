@@ -3,7 +3,7 @@ package org.um.feri.ears.graphing.tests;
 import java.io.*;
 import javax.imageio.ImageIO;
 
-import org.um.feri.ears.run.RunMain;
+import org.um.feri.ears.examples.RunMain;
 
 import com.panayotis.gnuplot.JavaPlot;
 import com.panayotis.gnuplot.terminal.ImageTerminal;
@@ -93,11 +93,11 @@ public class Test_02_GnuJavaPlot
     }
 
 
-    // Bi šlo overridat source iz drugega projekta?
+    // Bi ï¿½lo overridat source iz drugega projekta?
     public static void Test4_OverrideJavaClasses()
     {
     	//RunMain r =  new RunMain(false, false, null);
     	//System.out.println(r.isPrintDebug());
-    	// Drotpiršna = OK!
+    	// Drotpirï¿½na = OK!
     }
 }

@@ -41,7 +41,7 @@
  *          POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.um.feri.ears.run.experiment;
+package org.um.feri.ears.examples;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +51,6 @@ import java.util.UUID;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
-import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
@@ -68,31 +67,32 @@ import org.um.feri.ears.export.data.EDStatPlayer2Player;
 import org.um.feri.ears.export.data.EDStatPlayer2Task;
 import org.um.feri.ears.export.data.EDStatPlayerMoreInfoList;
 import org.um.feri.ears.export.data.EDWinnLossDraw;
+import org.um.feri.ears.problems.results.BankOfResults;
+import org.um.feri.ears.problems.results.FriedmanTransport;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.rating.ResultArena;
-import org.um.feri.ears.run.RunMain;
 import org.um.feri.ears.util.Util;
 
 import com.google.gson.Gson;
+
 
 /**
  * @author Administrator
  * 
  */
-public class Experiment1 {
+public class ExperimentPrintResults {
     public static void main(String[] args) {
         RunMain m = new RunMain(false, false, new RatingRPUOed2()) ;
         m.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06));
-        m.addAlgorithm(new RandomWalkAMAlgorithm(),new Rating(1500, 350, 0.06));
-        m.addAlgorithm(new ES1p1sAlgorithm(),new Rating(1500, 350, 0.06));
-        //m.addAlgorithm(new SwarmAlgorithm(),new Rating(1500, 350, 0.06));
         //m.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));
-        m.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));
-        for (int k=1;k<11;k++)
-            m.addAlgorithm(new DEAlgorithm(k,20),new Rating(1500, 350, 0.06));
-        m.addAlgorithm(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin, 20),new Rating(1500, 350, 0.06));
+       // m.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));
+       // m.addAlgorithm(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin, 20),new Rating(1500, 350, 0.06));
         m.run(2);
+        BankOfResults br = m.getBankOfResults();
+        FriedmanTransport fr = br.calc4Friedman();
+        fr.print();
+        System.out.println(br);
         System.out.println(m);
     }
 }

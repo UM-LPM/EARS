@@ -1,4 +1,4 @@
-package org.um.feri.ears.run.experiment;
+package org.um.feri.ears.examples;
 
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
@@ -7,7 +7,6 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingRPUOed2;
 import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.run.RunMainBestAlgSettings;
 
 
 public class ExperimentAlgorithmWithBestSettings {

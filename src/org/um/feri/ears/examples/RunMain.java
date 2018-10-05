@@ -1,4 +1,4 @@
-package org.um.feri.ears.run;
+package org.um.feri.ears.examples;
 
 import java.util.ArrayList;
 import java.util.Collections;

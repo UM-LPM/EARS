@@ -4,12 +4,12 @@ import org.um.feri.ears.algorithms.so.pso.PSO;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.benchmark.RatingRPUOed2;
+import org.um.feri.ears.examples.RunMainBestAlgSettings;
 import org.um.feri.ears.graphing.GraphSet;
 import org.um.feri.ears.graphing.PlotType;
 import org.um.feri.ears.graphing.data.GraphDataManager;
 import org.um.feri.ears.graphing.data.GraphDataSet;
 import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.run.RunMainBestAlgSettings;
 import org.um.feri.ears.util.Util;
 
 

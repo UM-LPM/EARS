@@ -41,7 +41,6 @@ public class MOProblemTest {
     	try {
     		
     		ZDT6 p = new ZDT6(10);
-  		
     		
     		DoubleMOTask task = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 30000, 5000, 100, 0.0001, p);
 			ParetoSolution best = moead.execute(task);

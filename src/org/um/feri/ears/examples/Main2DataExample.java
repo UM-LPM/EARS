@@ -41,7 +41,7 @@
  *          POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.um.feri.ears.run.experiment;
+package org.um.feri.ears.examples;
 
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
@@ -50,7 +50,6 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingRPUOed30;
 import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.run.RunMain;
 
 /**
  * @author Administrator

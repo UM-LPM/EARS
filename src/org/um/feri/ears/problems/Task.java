@@ -264,8 +264,16 @@ public class Task extends TaskBase<Problem> {
 		
 		return p.isFeasble(x, d);
 	}
+	
+	public boolean isFeasible(DoubleSolution sol) {
+		
+		for (int i = 0; i < sol.numberOfVariables(); i++) {
+			if(!isFeasible(sol.getValue(i), i))
+				return false;
+		}
+		return true;
+	}
     
-
     /**
      * @param d
      * @param bestEvalCond

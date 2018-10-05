@@ -20,6 +20,8 @@ public abstract class CEC2010 extends Problem {
 		shortName = "F"+func_num;
 		benchmarkName = "CEC2010";
 		
+		if(d <= 50)
+			System.err.println("The number of diemnsions must be larger than 50!");
 		
 	    //Search Range
 	    if (func_num == 1 | func_num == 4 | func_num == 7 | func_num == 8 | func_num == 9 | func_num == 12 | 

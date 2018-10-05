@@ -50,19 +50,13 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.benchmark.RatingRPUOed2;
+import org.um.feri.ears.examples.RunMainBestAlgSettings;
 import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.run.RunMainBestAlgSettings;
 import org.um.feri.ears.util.Util;
 
-/**
- * @author Administrator
- *
- */
+
 public class MainBenchMarkTest {
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis());
         RatingBenchmark.debugPrint = true; //prints one on one results
