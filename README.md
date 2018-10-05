@@ -6,19 +6,19 @@ Theory: "A chess rating system for evolutionary algorithms: A new method for the
 EARS in action http://earatingsystem.appspot.com
 
 What is included:
-* some banchmarks with problem functions (Sphere, ...).
-* some already implemented test Alorithms
-* some simple test experiments
+* benchmarks with problem functions (Sphere, ...).
+* single and multi-pbjective evolutionary algorithms
+* test experiments
 
 
 How to use it!
 
-* All projects are Eclipse java projects.
-* Download it use git in eclipse.
+* All projects are Eclipse Java projects.
+* Download it using the git plugin in eclipse.
 * In same workspace create new java project.
 * Add Properties -> Java Build Path -> Projects -> EARS
 * Include your algorithm in the project.
-* Modify algorithm to work with EARS
+* Modify algorithm to work with EARS.
 
 Example:
 ```java
@@ -93,45 +93,50 @@ Compare:
 
 Example:
 ```java
-import java.util.ArrayList;
-import org.um.feri.ears.algorithms.Algorithm;
+package org.um.feri.ears.benchmark.example;
+
+import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
+import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
+import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.benchmark.RatingRPUOed2;
-import org.um.feri.ears.problems.results.BankOfResults;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.examples.RunMainBestAlgSettings;
+import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.util.Util;
 
+
 public class MainBenchMarkTest {
-	public static void main(String[] args) {
-		Util.rnd.setSeed(System.currentTimeMillis());
-		
-		RatingBenchmark.debugPrint = true; //prints one on one results
-		ArrayList<Algorithm> players = new ArrayList<Algorithm>();
-		players.add(new ES1p1sAlgorithm()); //EARS exampels
-		players.add(new TLBOAlgorithm()); //EARS examples
-		players.add(new RandomWalkAlgorithm());
-		ResultArena ra = new ResultArena(100); 
-		RatingRPUOed2 suopm = new RatingRPUOed2(); //Create banchmark
-		suopm.setDisplayRatingIntervalChart(false);
-		for (Algorithm al:players) {
-			ra.addPlayer(al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
-			suopm.registerAlgorithm(al);
-		}
-		BankOfResults ba = new BankOfResults();
-		suopm.run(ra, ba, 20); //repeat competition 20X
-		ArrayList<Player> list = ra.recalcRatings();
-		for (Player p: list) System.out.println(p); //print rangs
-	}
+
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        Util.rnd.setSeed(System.currentTimeMillis());
+        RatingBenchmark.debugPrint = true; //prints one on one results
+        RunMainBestAlgSettings rbs = new RunMainBestAlgSettings(true,false, new RatingRPUOed2());
+        rbs.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06));  
+        rbs.addAlgorithm(new RandomWalkAMAlgorithm(),new Rating(1500, 350, 0.06))  ;  
+        rbs.addAlgorithm(new ES1p1sAlgorithm(),new Rating(1500, 350, 0.06));  
+        //rbs.addAlgorithm(new SwarmAlgorithm(),new Rating(1500, 350, 0.06));  
+        //rbs.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));  
+        rbs.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));  
+        for (int k=1;k<11;k++)
+            rbs.addAlgorithm(new DEAlgorithm(k,20),new Rating(1500, 350, 0.06));  
+        rbs.addAlgorithm(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin,20),new Rating(1500, 350, 0.06));  
+        rbs.run(30);
+        System.out.println(rbs);
+ 
+    }
+
 }
 ```
 
 Tips
 ____
 
-* If you have special representation create your own individual by extending EARS Individual.
+* If you have special representation create your own individual by extending the Solution class in EARS.
 "class MySolution extends DoubleSolution"
 * Search for main methods in EARS source code for more examples.
 * All problem data (Dimension, Bounds, etc...) can be obtaint by Task in method public Individual run(Task taskProblem).
