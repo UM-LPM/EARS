@@ -231,9 +231,9 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 		addParameter(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, "" + numberOfRuns);
 		long start = System.nanoTime();
 		for (Task t : listOfProblems) {
-			System.out.println("Current problem: " + t.getProblemName());
+			if (debugPrint) System.out.println("Current problem: " + t.getProblemName());
 			for (int i = 0; i < numberOfRuns; i++) {
-				System.out.println("Current duel: " + (i + 1));
+				if (debugPrint) System.out.println("Current duel: " + (i + 1));
 				runOneProblem(t, allSingleProblemRunResults);
 				setWinLoseFromResultList(arena, t);
 				results.clear();
