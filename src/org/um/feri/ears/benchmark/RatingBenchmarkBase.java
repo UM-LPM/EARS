@@ -52,6 +52,14 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     	tb.resetCounter();
     }
 
+    public String toString() {
+    	StringBuffer sb = new StringBuffer();
+        for (T tw:listOfProblems) {
+            sb.append(tw.toString());
+        }
+        return sb.toString();
+    	
+    }
     public ArrayList<T> getAllTasks() {
         ArrayList<T> a = new  ArrayList<T>();
         for (T tw:listOfProblems) {

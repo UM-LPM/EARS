@@ -260,7 +260,10 @@ public abstract class TaskBase<T extends ProblemBase> {
 			hasTheCPUTimeBeenExceeded();
 		}
 		//System.out.println(isStop);
-		
+		if(stopCriteria == EnumStopCriteria.EVALUATIONS)
+		{
+			return isStop;
+		}
 		return isStop || isGlobal;
 	}
 	
