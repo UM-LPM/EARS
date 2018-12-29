@@ -8,14 +8,14 @@ import org.um.feri.ears.problems.Task;
 
 public class TaskWithMemory extends Task {
 	MemoryBankDoubleSolution mb;
-	int maxHits;
 	int xPrecision;
 	
 	public TaskWithMemory(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon,
-			Problem p, int xPrecision, int maxHits) {
+			Problem p, int xPrecision,  DuplicationRemovalStrategy strategy) {
 		super(stop, eval, allowedTime, maxIterations, epsilon, p);
 		this.xPrecision = xPrecision;
-		mb = new MemoryBankDoubleSolution(xPrecision, new DuplicationRemovalStrategyRandom(this, maxHits));
+		strategy.setTask(this);
+		mb = new MemoryBankDoubleSolution(xPrecision, strategy);
 	}
 	
 	public DoubleSolution evalOrg(double[] x) throws StopCriteriaException {
@@ -34,6 +34,14 @@ public class TaskWithMemory extends Task {
 		sb.append(mb);
 		return sb.toString();
 	}
+	public int getDuplicationHitSum() {
+		return mb.getDuplicationHitSum();
+	}
+
+	public int getDuplicationBeforeGlobal() {
+		return mb.getDuplicationBeforeGlobal();
+	}
+
 	
 
 }

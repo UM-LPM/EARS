@@ -44,6 +44,7 @@
  */
 package org.um.feri.ears.benchmark;
 
+import org.um.feri.ears.memory.DuplicationRemovalStrategyRandom;
 import org.um.feri.ears.memory.MemoryBankDoubleSolution;
 import org.um.feri.ears.memory.TaskWithMemory;
 import org.um.feri.ears.problems.DoubleSolution;
@@ -92,7 +93,8 @@ public class RatingRPUOed30Memory extends RatingBenchmark {
      */
     @Override
     protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations, double epsilon) {
-        listOfProblems.add(new TaskWithMemory(sc, eval, time, maxIterations, epsilon, p, precision, maxHits));
+   	
+        listOfProblems.add(new TaskWithMemory(sc, eval, time, maxIterations, epsilon, p, precision, new DuplicationRemovalStrategyRandom(maxHits)));
     }
     
     /* (non-Javadoc)

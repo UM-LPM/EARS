@@ -3,6 +3,7 @@ package org.um.feri.ears.problems.real_world.cec2011;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
@@ -72,24 +73,6 @@ public class CEC2011_Problem_11_4_ELD_13 extends Problem {
 		description = "RWP_11_4_ELD_13 Static Economic Load Dispatch (ELD) Problem ";
 	}
 	
-	private double produkt(double x[], double y[]) {
-		double t=0;
-		for (int i=0;i<x.length; i++) {
-			t+=x[i]*y[i];
-		}
-		return t;
-	}
-	private double[] produkt2(double x[],double y[][]) {
-		double t[]=new double[numberOfDimensions]; //dim??
-		for (int i=0;i<x.length; i++) {
-			double tt=0;
-			for (int ii=0;ii<x.length; ii++) {
-				tt+=x[i]*y[ii][i];
-			}
-			t[i]=tt;
-		}
-		return t;
-	}
 	protected double sum(double x[]) {
 		double tt=0;
 		for (int ii=0;ii<x.length; ii++) {
@@ -97,7 +80,16 @@ public class CEC2011_Problem_11_4_ELD_13 extends Problem {
 		}
 		return tt;
 	}
-	
+
+  @Override
+  public double[] calc_constrains(List<Double> x) {
+    return calc_constrains(x.stream().mapToDouble(i -> i).toArray());
+  }
+
+  public double[] calc_constrains(Double[] ds) {
+    return calc_constrains(ArrayUtils.toPrimitive(ds));
+  }
+	 
 	public double[] calc_constrains(double x[]) {
 		g_constrains = new double[numberOfConstraints];
 		double Power_Loss = 0;
@@ -122,8 +114,6 @@ public class CEC2011_Problem_11_4_ELD_13 extends Problem {
 	        	f+=Data1[i][a_data1_col]*x[i]*x[i]+Data1[i][b_data1_col]*x[i]+Data1[i][c_data1_col]+Math.abs(Data1[i][e_data1_col]*Math.sin(Data1[i][e_data1_col]*(Data1[i][Pmin_data1_col]-x[i])));
 	        }
 	       // System.out.println("f:"+f+" Total_Penalty:"+Total_Penalty);
-		
-	  
 
 		return f;
 	}

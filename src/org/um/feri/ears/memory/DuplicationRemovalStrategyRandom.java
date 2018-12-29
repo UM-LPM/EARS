@@ -4,14 +4,12 @@ import java.util.Arrays;
 
 import org.um.feri.ears.problems.Task;
 
-public class DuplicationRemovalStrategyRandom implements DuplicationRemovalStrategyInterface {
-	Task t;
+public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy {
 	int maxHits;
-	DuplicationRemovalStrategyRandom(Task t, int maxHits) {
-		this.t= t;
+	public DuplicationRemovalStrategyRandom(int maxHits) {
 		this.maxHits = maxHits;
 	}
-	
+
 	@Override
 	public void changeSolution(double[] x) {
 		double[] tmp = t.getRandomVariables();
