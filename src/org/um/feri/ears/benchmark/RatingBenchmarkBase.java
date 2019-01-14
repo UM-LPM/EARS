@@ -12,6 +12,8 @@ import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.ResultArena;
+import org.jfree.ui.RefineryUtilities;
+import org.um.feri.ears.util.RatingIntervalPlot;
 
 public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends AlgorithmBase, T3> {
     public static boolean debugPrint=false;
@@ -177,10 +179,10 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     
     public void displayRatingIntervalsChart(ArrayList<Player> list)
     {
-        /*RatingIntervalPlot plot = new RatingIntervalPlot("Rating Interval", list);
+        RatingIntervalPlot plot = new RatingIntervalPlot("Rating Interval", list);
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);
-        plot.setVisible(true);*/
+        plot.setVisible(true);
     }
     
     public void allPlayed(){
