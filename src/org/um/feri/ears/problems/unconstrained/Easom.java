@@ -29,7 +29,7 @@ public class Easom extends Problem {
 	}
 
 	public double getOptimumEval() {
-		return -1;
+		return -1.0;
 	}
 
 	@Override

@@ -55,14 +55,14 @@ public class TestMOCRSTuning {
 		TollSystems		188				53			24			2496
     	*/
     	
-//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name())));
-//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name())));
-//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_MyBatis.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_MyBatis.name())));
 		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JHotDraw.name())));
-//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JBoss.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JBoss.name())));
 //		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name())));
-//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_BCEL.name())));
-//		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_TollSystems.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_BCEL.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriteria.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_TollSystems.name())));
 
 	    indicators.add(IndicatorName.IGDPlus);
 	    indicators.add(IndicatorName.NativeHV);
@@ -74,6 +74,8 @@ public class TestMOCRSTuning {
         ArrayList<CRSSolution> bestSolutions = new ArrayList<CRSSolution>();
         try {
         	for (int i = 0; i < tuningRuns; i++) {
+        		System.out.println("/////////////////////////////////////////////////////////////////////////////////////////////////////////");
+        		System.out.println("RUN: "+(i+1));
             	MOCRSTuning m = new MOCRSTuning();        	
             	CRSSolution best = m.tune(I_MOEAD.class, "MOEA/D", control_parameters, tasks, indicators, popSize, maxGen);
             	bestSolutions.add(best);

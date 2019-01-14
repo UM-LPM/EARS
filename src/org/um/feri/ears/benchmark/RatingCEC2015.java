@@ -81,9 +81,9 @@ public class RatingCEC2015 extends RatingBenchmark{
         this.draw_limit = draw_limit;
         maxEvaluations= 300000; // 1500 exact evaluations
         dimension=30;
-        timeLimit = 5000;
-        maxIterations = 6000;
-        stopCriteria = EnumStopCriteria.CPU_TIME;
+        timeLimit = 2500;
+        maxIterations = 2500;
+        stopCriteria = EnumStopCriteria.EVALUATIONS;
         initFullProblemList();
         /*addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+stopCriteria);
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,""+dimension);
@@ -108,7 +108,7 @@ public class RatingCEC2015 extends RatingBenchmark{
     	
     	problems.add(new F1(dimension));
     	problems.add(new F2(dimension));
-    	problems.add(new F3(dimension));
+    	//problems.add(new F3(dimension));
     	problems.add(new F4(dimension));
     	problems.add(new F5(dimension));
     	problems.add(new F6(dimension));
@@ -120,7 +120,7 @@ public class RatingCEC2015 extends RatingBenchmark{
     	problems.add(new F12(dimension));
     	problems.add(new F13(dimension));
     	problems.add(new F14(dimension));
-    	problems.add(new F15(dimension));
+    	//problems.add(new F15(dimension));
     	
     	for(Problem p : problems)
     	{

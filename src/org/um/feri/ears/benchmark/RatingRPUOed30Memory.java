@@ -44,16 +44,26 @@
  */
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.memory.DuplicationRemovalStrategyRandom;
+import org.um.feri.ears.memory.MemoryBankDoubleSolution;
+import org.um.feri.ears.memory.TaskWithMemory;
 import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.cec2010.*;
+import org.um.feri.ears.problems.unconstrained.Ackley;
+import org.um.feri.ears.problems.unconstrained.Griewank;
+import org.um.feri.ears.problems.unconstrained.Rastrigin;
+import org.um.feri.ears.problems.unconstrained.Rosenbrock_DeJong2;
+import org.um.feri.ears.problems.unconstrained.Schwefel;
+import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
+import org.um.feri.ears.problems.unconstrained.Sphere;
 
-public class RatingCEC2010 extends RatingBenchmark{
-    public static final String name="Benchmark CEC 2010";
-    protected int dimension=1000; //recommended
-   
+public class RatingRPUOed30Memory extends RatingBenchmark {
+    public static final String name="Real Parameter Unconstrained Optimization Problems with maximum evaluation condition";
+    int precision;
+    int maxHits;
+    
     public boolean resultEqual(DoubleSolution a, DoubleSolution b) {
         if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
@@ -61,26 +71,30 @@ public class RatingCEC2010 extends RatingBenchmark{
         if (Math.abs(a.getEval()-b.getEval())<draw_limit) return true;
         return false;
     }
-    public RatingCEC2010(){
-    	this(0.0000001);
+    
+    public RatingRPUOed30Memory() {
+    	this(30,30000, 4, 4);
     }
-    public RatingCEC2010(double draw_limit) {
+    
+    public RatingRPUOed30Memory(int D, int EV, int prec, int maxHits) {
         super();
-        this.draw_limit = draw_limit;
-        stopCriteria = EnumStopCriteria.EVALUATIONS;
-        maxEvaluations= 10000; //(int) (1 * 1e6);
-        maxIterations = 0; 
+        maxEvaluations = EV;
+        maxIterations = 0;
+        dimension = D;
+        precision = prec;
         initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION,""+dimension);
+        addParameter(EnumBenchmarkInfoParameters.DIMENSION,String.valueOf(D));
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
     }
+    
     /* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
     protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations, double epsilon) {
-        listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
+   	
+        listOfProblems.add(new TaskWithMemory(sc, eval, time, maxIterations, epsilon, p, precision, new DuplicationRemovalStrategyRandom(maxHits)));
     }
     
     /* (non-Javadoc)
@@ -88,27 +102,13 @@ public class RatingCEC2010 extends RatingBenchmark{
      */
     @Override
     protected void initFullProblemList() {
-    	
-    	registerTask(new F1(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F2(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F3(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F4(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F5(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F6(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F7(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F8(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F9(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F10(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F11(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F12(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F13(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F14(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F15(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F16(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F17(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F18(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F19(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F20(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Ackley(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.0001);
+        registerTask(new Griewank(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.0001);
+        registerTask(new Rastrigin(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.0001);
+        registerTask(new Rosenbrock_DeJong2(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.0001);
+        registerTask(new Schwefel(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.0001);
+        registerTask(new SchwefelRidge(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.0001);
+        registerTask(new Sphere(dimension),stopCriteria, maxEvaluations, 0, maxIterations, 0.0001);
     }
         
     /* (non-Javadoc)
@@ -116,7 +116,7 @@ public class RatingCEC2010 extends RatingBenchmark{
      */
     @Override
     public String getName() {
-        return name;
+        return name + "("+ getParameters().get(EnumBenchmarkInfoParameters.DIMENSION)+")";
     }
 
     /* (non-Javadoc)
@@ -124,7 +124,7 @@ public class RatingCEC2010 extends RatingBenchmark{
      */
     @Override
     public String getAcronym() {
-        return "CEC2010";
+        return "RPUOed30Mem";
     }
     /* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#getInfo()

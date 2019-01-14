@@ -49,6 +49,25 @@ public class MeanStDev {
                 if (stdev<0.000000000001) return "{\\footnotesize $"+meanFormat.format(mean)+"\\pm 0$}";
                 return "{\\footnotesize $"+meanFormat.format(mean)+"\\pm"+stdFormat.format(stdev)+"$}";
         }
+        //{\footnotesize \begin{tabular}{@{}r@{}}  $4.432,7$ \\ $\pm75,4$ \end{tabular}}
+        public String toString2Lines() {
+          StringBuffer sb = new StringBuffer();
+          sb.append("\\begin{tabular}{@{}r@{}} ");
+          if (stdev<0.000000000001) sb.append("$").append(meanFormat.format(mean)+"$ \\\\ $\\pm 0$");
+          else
+            sb.append("$").append(meanFormat.format(mean)+"$ \\\\ $\\pm"+stdFormat.format(stdev)+"$");
+          sb.append("\\end{tabular}");
+          return sb.toString();
+        }
+        public String toString2LinesFootsize() {
+          StringBuffer sb = new StringBuffer();
+          sb.append("{\\footnotesize \\begin{tabular}{@{}r@{}} ");
+          if (stdev<0.000000000001) sb.append("$").append(meanFormat.format(mean)+"$ \\\\ $\\pm 0$");
+          else
+            sb.append("$").append(meanFormat.format(mean)+"$ \\\\ $\\pm"+stdFormat.format(stdev)+"$");
+          sb.append("\\end{tabular}}");
+          return sb.toString();
+        }
         public double getMean() {
                 return mean;
         }

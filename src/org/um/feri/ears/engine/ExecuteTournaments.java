@@ -53,13 +53,13 @@ import com.google.gson.reflect.TypeToken;
 public class ExecuteTournaments {
 
 	//Only for testing
-//	static String tournamentDir = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"tournaments";
-//	static String earsFolder = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"EARS";
-//	static String earsPath = earsFolder+File.separator+"ears.jar";
+	static String tournamentDir = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"tournaments";
+	static String earsFolder = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"EARS";
+	static String earsPath = earsFolder+File.separator+"ears.jar";
 	
-	static String tournamentDir;
-	static String earsPath;
-	static String earsFolder;
+//	static String tournamentDir;
+//	static String earsPath;
+//	static String earsFolder;
 
 	static final String DEST_FOLDER = "@DEST_FOLDER";
 	static final String ALGORITHM_NAME = "@ALGORITHM_NAME";
@@ -111,9 +111,9 @@ public class ExecuteTournaments {
 		boolean benchmarkFilesChanged = false;
 
 		final File f = new File(ExecuteTournaments.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-		earsPath = f.getPath();
-		earsFolder = f.getParent();
-		tournamentDir = new File(earsFolder).getParent()+File.separator+"tournaments";
+//		earsPath = f.getPath();
+//		earsFolder = f.getParent();
+//		tournamentDir = new File(earsFolder).getParent()+File.separator+"tournaments";
 		
 		FileHandler fileTxt;
 		SimpleFormatter formatterTxt;
@@ -256,6 +256,9 @@ public class ExecuteTournaments {
 				else
 					return true;
 
+			}
+			else {
+				logger.log(Level.SEVERE,"File "+COMPILE_REPORT_FILE +" not found in "+algorithmDir);
 			}
 		} catch (Exception e) {
 			logger.log(Level.SEVERE,"Exception in canExecuteBenchmark",e);

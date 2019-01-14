@@ -28,7 +28,7 @@ public class Goldstein_Price extends Problem {
 	}
 
 	public double getOptimumEval() {
-		return 3;
+		return 3.0;
 	}
 
 	@Override

@@ -26,8 +26,8 @@ public class RatingCEC2014 extends RatingBenchmark{
     public RatingCEC2014(double draw_limit) {
         super();
         this.draw_limit = draw_limit;
-        maxEvaluations=3000;
-        dimension=10;
+        maxEvaluations=30000;
+        dimension=30;
         timeLimit = 0;
         maxIterations = 0;
         initFullProblemList();

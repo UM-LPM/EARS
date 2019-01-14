@@ -135,6 +135,10 @@ public class DoubleSolution extends SolutionBase<Double>{
 	}
 	
 	public String toString() {
+	  if (constraints==null) return Util.dfcshort.format(eval)+" ["+Util.arrayToString(getDoubleVariables())+"] null?";
+	  if (constraints.length==0)
 		return Util.dfcshort.format(eval)+" ["+Util.arrayToString(getDoubleVariables())+"]";
+	  else 
+	    return Util.dfcshort.format(eval)+" ["+Util.arrayToString(getDoubleVariables())+"] cons:"+Arrays.toString(constraints);
 	}
 }

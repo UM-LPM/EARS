@@ -2,6 +2,7 @@ package org.um.feri.ears.problems;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,7 +46,8 @@ public abstract class SolutionBase <Type> {
 	}
 
 	public SolutionBase(SolutionBase<Type> s) {
-		//variable = Arrays.copyOf(s.variable,s.variable.length); 
+	 // variable = new ArrayList<Type>();
+	 // variable = Collections.copy(dest, src);
 		variable = new ArrayList<Type>(s.variable);
 		
 		this.feasible = s.feasible;

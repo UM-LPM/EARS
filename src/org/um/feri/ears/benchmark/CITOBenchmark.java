@@ -59,7 +59,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
         super(indicators);
         this.random = random;
         this.draw_limit = draw_limit;
-        maxEvaluations=300000;
+        maxEvaluations=60000;
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
@@ -165,14 +165,14 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
     	
     	ArrayList<IntegerMOProblem> problems = new ArrayList<IntegerMOProblem>();
    	
-    	problems.add(new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name()));
+//    	problems.add(new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name()));
     	problems.add(new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name()));
-    	problems.add(new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name()));
-    	problems.add(new CITOProblem(CITOProblem.Problems.OA_TollSystems.name()));
-    	problems.add(new CITOProblem(CITOProblem.Problems.OO_BCEL.name()));
-    	problems.add(new CITOProblem(CITOProblem.Problems.OO_JBoss.name()));
-    	problems.add(new CITOProblem(CITOProblem.Problems.OO_JHotDraw.name()));
-		problems.add(new CITOProblem(CITOProblem.Problems.OO_MyBatis.name()));
+//    	problems.add(new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name()));
+//    	problems.add(new CITOProblem(CITOProblem.Problems.OA_TollSystems.name()));
+//    	problems.add(new CITOProblem(CITOProblem.Problems.OO_BCEL.name()));
+//    	problems.add(new CITOProblem(CITOProblem.Problems.OO_JBoss.name()));
+//    	problems.add(new CITOProblem(CITOProblem.Problems.OO_JHotDraw.name()));
+//		problems.add(new CITOProblem(CITOProblem.Problems.OO_MyBatis.name()));
     	
     	for (IntegerMOProblem moProblem : problems) {
     		registerTask(stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
