@@ -50,11 +50,12 @@ import com.google.gson.reflect.TypeToken;
  * Reads list.json then executes the benchmark on all submitted algorithms and performs rating.
  *
  */
-public class ExecuteTournaments {
+public class ExecuteTournamentsTest {
 
-	static String tournamentDir;
-	static String earsPath;
-	static String earsFolder;
+	//Only for testing
+	static String tournamentDir = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"tournaments";
+	static String earsFolder = "C:"+File.separator+"Users"+File.separator+"Ravby"+File.separator+"Desktop"+File.separator+"platforma"+File.separator+"EARS";
+	static String earsPath = earsFolder+File.separator+"ears.jar";
 
 	static final String DEST_FOLDER = "@DEST_FOLDER";
 	static final String ALGORITHM_NAME = "@ALGORITHM_NAME";
@@ -104,11 +105,6 @@ public class ExecuteTournaments {
 		initTime = System.currentTimeMillis();
 		String benchmarkId, tournamentName;
 		boolean benchmarkFilesChanged = false;
-
-		final File f = new File(ExecuteTournaments.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-		earsPath = f.getPath();
-		earsFolder = f.getParent();
-		tournamentDir = new File(earsFolder).getParent()+File.separator+"tournaments";
 		
 		FileHandler fileTxt;
 		SimpleFormatter formatterTxt;

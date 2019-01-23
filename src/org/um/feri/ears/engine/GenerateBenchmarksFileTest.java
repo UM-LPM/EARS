@@ -22,22 +22,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-public class GenerateBenchmarksFile {
+public class GenerateBenchmarksFileTest {
 
 	static String earsPath;
 	static String earsFolder;
-	static String configDir;
+	
+	static String configDir = "C:\\Users\\Ravby\\Desktop\\platforma\\config";
 
 	static final String BENHCMARKS_FILE = "benchmarks.json";
 	static final String CONFIG_FOLDER = "config";
 	static final String BENCHMARK_PACKAGE = "org.um.feri.ears.benchmark";
 
 	public static void main(String[] args) {
-
-		final File f = new File(ExecuteTournaments.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-		earsPath = f.getPath();
-		earsFolder = f.getParent();
-		configDir = new File(earsFolder).getParent()+File.separator+CONFIG_FOLDER;
 
 		List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
 		classLoadersList.add(ClasspathHelper.contextClassLoader());
