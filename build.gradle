@@ -2,6 +2,11 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+}
 
 dependencies {
 	compile fileTree(dir: 'lib', include: ['*.jar'])
