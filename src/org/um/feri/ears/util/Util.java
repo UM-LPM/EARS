@@ -78,7 +78,7 @@ public class Util {
 	public static DecimalFormat dfc2 = new DecimalFormat("#,##0.##E0");
 	public static DecimalFormat dfcshort = new DecimalFormat("0.##E0");
 	public static DecimalFormat intf = new DecimalFormat("###,###,###");
-	public static long randomseed = 316227711; //to be able too repeat experiment
+	private static long randomseed = 316227711; //to be able too repeat experiment
 	public static Random rnd = new MersenneTwister(randomseed);
 	static final String JSON_DIR = "Cache\\Pareto_Cache_%s.json";
 
