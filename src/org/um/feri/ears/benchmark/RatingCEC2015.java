@@ -98,7 +98,12 @@ public class RatingCEC2015 extends RatingBenchmark{
         listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
     
-    /* (non-Javadoc)
+    @Override
+	public int getNumberOfRuns() {
+		//number of runs set to 8 to reduce server execution time
+		return 10;
+	}
+	/* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#initFullProblemList()
      */
     @Override

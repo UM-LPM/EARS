@@ -26,6 +26,7 @@ import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.DummyRating;
@@ -186,18 +187,18 @@ public class ExecuteTournaments {
 						
 						Future<Void> future = service.submit(createRunnable(algorithmDir,algorithmName, benchmarkName, benchmarkResultsDir, author, id));
 
-				        try {
+				        /*try {
 				        	future.get(5, TimeUnit.HOURS);
 				        } catch (TimeoutException e) {
 				        	future.cancel(true);
 				        	logger.log(Level.SEVERE,"Algorithm "+algorithmName+" exceeded execution time", e);
 				        	writeErrorToJson("Algorithm exceeded execution time", algorithmDir);
-				        }
+				        }*/
 						
 						benchmarkFilesChanged = true;
 					}
 				}
-				
+
 				service.shutdown();
 				service.awaitTermination(newestSubmission.size() * 5, TimeUnit.HOURS);
 				
@@ -393,18 +394,38 @@ public class ExecuteTournaments {
 				try {
 					String command = "javac "+"-sourcepath "+algorithmDir+" -cp "+earsPath+" "+algorithmDir+File.separator+BENCHMARK_RUNNER_FILENAME+".java";
 					//ProcessBuilder pb = new ProcessBuilder("javac","-sourcepath","\""+algorithmDir+"\"","-cp","\""+earsPath+"\"","\""+algorithmDir+File.separator+BENCHMARK_RUNNER_FILENAME+".java\"");
-					ProcessBuilder pb = new ProcessBuilder("javac","-sourcepath",algorithmDir,"-cp",earsPath,BENCHMARK_RUNNER_FILENAME+".java");
-					pb.directory(new File(algorithmDir));
-					//System.out.println(command);
-
-					//System.out.println(pb.command());
+					//ProcessBuilder pb = new ProcessBuilder("javac","-sourcepath",algorithmDir,"-cp",earsPath, BENCHMARK_RUNNER_FILENAME+".java");
 					
-					startProcess(pb, algorithmDir);
+					File folder = new File(algorithmDir);
+					
+					if(!folder.exists()) {
+						logger.log(Level.SEVERE,"Folder does not exists: "+algorithmDir);
+						return null;
+					}
+					
+					File[] listOfFiles = folder.listFiles();
+					String fileName;
+					for (File file : listOfFiles) {
+						if (file.isFile()) {
+							fileName = file.getName();
+							if(FilenameUtils.getExtension(fileName).equals("java"))
+							{
+								ProcessBuilder pb = new ProcessBuilder("javac","-sourcepath",algorithmDir,"-cp",earsPath, fileName);
+								pb.directory(new File(algorithmDir));
+								startProcess(pb, algorithmDir, algorithmName, benchmarkResultsDir);
+							}
+						}
+					}
+
+
+					//System.out.println(command);
+					//System.out.println(pb.command());
 
 				} catch (Exception e) {
 					//e.printStackTrace();
 					logger.log(Level.SEVERE,"Error while compiling benchmark runner file for algorithm: "+algorithmName, e);
 					writeErrorToJson(e.toString(), algorithmDir);
+					removeGeneratedFiles(benchmarkResultsDir, algorithmName);
 					return null;
 				}
 
@@ -419,10 +440,11 @@ public class ExecuteTournaments {
 						pb = new ProcessBuilder("java","-cp",earsPath+File.pathSeparator+algorithmDir+"/",BENCHMARK_RUNNER_FILENAME);
 					}
 
-					startProcess(pb, algorithmDir);
+					startProcess(pb, algorithmDir, algorithmName, benchmarkResultsDir);
 				} catch (Exception e) {
 					logger.log(Level.SEVERE,"Error while runing benchmark for algorithm: "+algorithmName, e);
 					writeErrorToJson(e.toString(), algorithmDir);
+					removeGeneratedFiles(benchmarkResultsDir, algorithmName);
 					return null;
 				}
 				writeStatusToJson(true, algorithmDir);
@@ -432,6 +454,33 @@ public class ExecuteTournaments {
 
 	    };
 	    return aRunnable;
+	}
+	
+	private static void removeGeneratedFiles(String benchmarkResultsDir, String algorithmName) {
+		logger.log(Level.INFO,"Removing generated benchmark files for algorithm: "+algorithmName);
+		
+		File folder = new File(benchmarkResultsDir);
+		
+		if(!folder.exists()) {
+			logger.log(Level.SEVERE,"Folder does not exists: "+benchmarkResultsDir);
+			return;
+		}
+		
+		File[] listOfFiles = folder.listFiles();
+		String fileName;
+		for (File file : listOfFiles) {
+			if (file.isFile()) {
+				fileName = file.getName();
+				if(fileName.substring(0, algorithmName.length()+1).equals(algorithmName+"_"))
+				{
+					try {
+						file.delete();					
+					} catch (Exception e) {
+						logger.log(Level.SEVERE,"Unable to delete file: "+fileName);
+					}
+				}
+			}
+		}
 	}
 
 	private static boolean removePackageFromFiles(String algorithmDir) {
@@ -476,27 +525,51 @@ public class ExecuteTournaments {
 						logger.log(Level.SEVERE,"Error while removing package files in directory: "+algorithmDir, e);
 						return false;
 					}
-
 				}
 			}
 		}
 		return true;
 	}
 
-	private static void startProcess(ProcessBuilder pb, String algorithmDir) throws Exception {
+	private static void startProcess(ProcessBuilder pb, String algorithmDir, String algorithmName, String benchmarkResultsDir) throws Exception {
 		Process p = pb.start();
-		BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
-		String s = null;
 		StringBuilder sbError = new StringBuilder();
-		// read any errors from the attempted command
-		while ((s = stdError.readLine()) != null) {
-			sbError.append(s);
-			sbError.append("\n");
-		}
-		s = sbError.toString();
-		if(s.length() > 0) {
-			throw new Exception(s);
+
+		new Thread(new Runnable() {
+			public void run() {
+				BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+				String line = null;
+				try {
+					while (p.isAlive() && (line = stdError.readLine()) != null) {
+						sbError.append(line);
+						sbError.append("\n");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						stdError.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				line = sbError.toString();
+				if(line.length() > 0) {
+					logger.log(Level.SEVERE,"Error while compiling benchmark runner file for algorithm: "+algorithmName + "\n" + line);
+					writeErrorToJson(line, algorithmDir);
+					removeGeneratedFiles(benchmarkResultsDir, algorithmName);
+				}
+			}
+		}).start();
+
+		
+		if(!p.waitFor(5, TimeUnit.HOURS)) {
+		    p.destroy();
+		    if (p.isAlive()) {
+		        p.destroyForcibly();
+		    }
+		    throw new Exception("Execution time exceeded");
 		}
 	}
 
@@ -557,6 +630,7 @@ public class ExecuteTournaments {
 		for(String name : problems){
 			dr.addDummyTask(name);
 		}
+		//TODO check if all algorithm has all problem files (get of list all problems from benchamrk object)
 		//add problems to benchmark
 		for(String name : algorithms){
 			players.add(new DummyAlgorithm(name, benchmarkResultsDir));
