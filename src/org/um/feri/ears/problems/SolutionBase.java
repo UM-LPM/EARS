@@ -117,6 +117,10 @@ public abstract class SolutionBase <Type> {
 	 *         getNumberOfConstraints()}
 	 */
 	public void setConstraints(double[] constraints) {
+		if (this.constraints == null) {
+			this.constraints = new double[constraints.length];
+		}
+		
 		if (constraints.length != this.constraints.length) {
 			throw new IllegalArgumentException("invalid number of constraints");
 		}
