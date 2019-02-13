@@ -38,7 +38,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 	ParetoSolution<Type> jointPopulation;
 	
 	
-	public MOEAD_STM(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
+	public MOEAD_STM(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int pop_size) {
 		super(crossover, mutation, pop_size);
 
 		au = new Author("miha", "miha.ravber at gamil.com");

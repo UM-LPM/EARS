@@ -86,10 +86,10 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 
 	static String dataDirectory = "Weight";
 
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
-	public MOEAD_DRA(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
+	public MOEAD_DRA(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int pop_size) {
 		this.populationSize = pop_size;
 
 		this.cross = crossover;

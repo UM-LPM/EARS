@@ -70,8 +70,8 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	 */
 	protected Map<Integer, List<MOSolutionBase<Type>>> gridMap;
 	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
 	public PESA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
 		this.populationSize = populationSize;

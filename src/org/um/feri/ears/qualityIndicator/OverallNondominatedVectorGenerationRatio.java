@@ -19,14 +19,14 @@ import org.um.feri.ears.util.DominanceComparator;
 public class OverallNondominatedVectorGenerationRatio<T extends Number> extends QualityIndicator<T> {
 
 	public OverallNondominatedVectorGenerationRatio(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+		super(num_obj, file_name, getReferenceSet(file_name));
 		name = "Overall Nondominated Vector Generation Ratio";
 	}
 	
 	/**
 	 * stores a <code>Comparator</code> for dominance checking
 	 */
-	private static final Comparator<MOSolutionBase> dominance_ = new DominanceComparator();
+	private final Comparator<MOSolutionBase<T>> dominance_ = new DominanceComparator<>();
 	
 	@Override
 	public double evaluate(ParetoSolution<T> population) {

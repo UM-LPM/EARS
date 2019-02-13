@@ -150,7 +150,7 @@ public class Distance<Type extends Number> {
     * @param solutionSet The <code>SolutionSet</code>.
     * @param nObjs Number of objectives.
     */
-	public void crowdingDistanceAssignment(ParetoSolution solutionSet, int nObjs) {
+	public void crowdingDistanceAssignment(ParetoSolution<Type> solutionSet, int nObjs) {
 		int size = solutionSet.size();
 
 		if (size == 0)
@@ -168,7 +168,7 @@ public class Distance<Type extends Number> {
 		}
 
 		// Use a new SolutionSet to evite alter original solutionSet
-		ParetoSolution front = new ParetoSolution(size);
+		ParetoSolution<Type> front = new ParetoSolution<>(size);
 		for (int i = 0; i < size; i++) {
 			front.add(solutionSet.get(i));
 		}
@@ -182,7 +182,7 @@ public class Distance<Type extends Number> {
 
 		for (int i = 0; i < nObjs; i++) {
 			// Sort the population by Obj n
-			front.sort(new ObjectiveComparator(i));
+			front.sort(new ObjectiveComparator<>(i));
 			objetiveMinn = front.get(0).getObjective(i);
 			objetiveMaxn = front.get(front.size() - 1).getObjective(i);
 

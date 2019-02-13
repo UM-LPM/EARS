@@ -20,7 +20,7 @@ public class MaximumParetoFrontError<T extends Number> extends QualityIndicator<
 	static final double pow_ = 2.0; // pow. This is the pow used for the distances
 
 	public MaximumParetoFrontError(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+		super(num_obj, file_name, getReferenceSet(file_name));
 		name = "Maximum Pareto Front Error";
 	}
 	

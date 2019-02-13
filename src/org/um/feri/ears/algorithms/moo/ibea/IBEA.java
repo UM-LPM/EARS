@@ -49,8 +49,8 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	ParetoSolution<Type> population;
 	ParetoSolution<Type> archive;
 	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 	
 	/**
 	 * Defines the number of tournaments for creating the mating pool
@@ -68,11 +68,11 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	 */
 	private double maxIndicatorValue_;
 
-	public IBEA(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+	public IBEA(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize) {
 		this(crossover, mutation, populationSize, archiveSize, "IBEA");
 	}
 
-	public IBEA(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize, String name) {
+	public IBEA(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize, String name) {
 		
 		this.cross = crossover;
 		this.mut = mutation;
@@ -109,7 +109,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		}
 
 		while (!task.isStopCriteria()) {
-	      ParetoSolution<Type> union = ((ParetoSolution<Type>)population).union(archive);
+	      ParetoSolution<Type> union = population.union(archive);
 	      calculateFitness(union);
 	      archive = union;
 	      
@@ -265,7 +265,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				B = new ParetoSolution<Type>(1);
 				B.add(solutionSet.get(i));
 
-				int flag = (new DominanceComparator()).compare(A.get(0), B.get(0));
+				int flag = (new DominanceComparator<Type>()).compare(A.get(0), B.get(0));
 
 				double value = 0.0;
 				if (flag == -1) {

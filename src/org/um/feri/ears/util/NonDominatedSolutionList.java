@@ -35,7 +35,7 @@ public class NonDominatedSolutionList<Type extends Number> extends ParetoSolutio
 	/**
 	* Stores a <code>Comparator</code> for dominance checking
 	*/
-	protected Comparator<MOSolutionBase<Type>> dominanceComparator = new DominanceComparator(); 
+	protected Comparator<MOSolutionBase<Type>> dominanceComparator = new DominanceComparator<>();
 
 	/**
 	* Stores a <code>Comparator</code> for checking if two solutions are equal

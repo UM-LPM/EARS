@@ -64,8 +64,8 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 	SBXCrossover sbx ;
 	PolynomialMutation plm;
 	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
 
 	public NSGAIII(CrossoverOperator crossover, MutationOperator mutation) {

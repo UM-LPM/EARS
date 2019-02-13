@@ -7,6 +7,7 @@ import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 public class D_PESAII extends PESAII<DoubleMOTask, Double> {
 	
@@ -22,7 +23,7 @@ public class D_PESAII extends PESAII<DoubleMOTask, Double> {
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0), populationSize, archiveSize);
 	}
 
-	public D_PESAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+	public D_PESAII(CrossoverOperator<Double, DoubleMOTask, MOSolutionBase<Double>> crossover, MutationOperator<Double, DoubleMOTask, MOSolutionBase<Double>> mutation, int populationSize, int archiveSize) {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 

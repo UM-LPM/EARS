@@ -118,8 +118,8 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	 */
 	private final int divisionsInner;
 	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 	
 	
 	public DBEA(CrossoverOperator crossover, MutationOperator mutation, MOTask problem) {

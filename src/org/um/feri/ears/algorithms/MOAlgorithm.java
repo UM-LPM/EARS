@@ -185,7 +185,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 		long estimatedTime = System.currentTimeMillis() - initTime;
 		//System.out.println("Total execution time: "+estimatedTime + "ms");
 
-		Ranking ranking = new Ranking(best);
+		Ranking<Type> ranking = new Ranking<>(best);
 		best = ranking.getSubfront(0);
 		
 		if(save_data)

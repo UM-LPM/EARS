@@ -14,14 +14,10 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PESA2Selection;
-import org.um.feri.ears.operators.PolynomialMutation;
-import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
-import org.um.feri.ears.util.Util;
 public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type>{
 
 	int populationSize = 100;
@@ -30,15 +26,15 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 	ParetoSolution<Type> population;
 	AdaptiveGridArchive<Type> archive;
 	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 	
 
-	public PESAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+	public PESAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize) {
 		this(crossover, mutation, populationSize, archiveSize, "PESAII");
 	}
 	
-	public PESAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize, String name) {
+	public PESAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize, String name) {
 		this.populationSize = populationSize;
 		this.archiveSize = archiveSize;
 		

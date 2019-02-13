@@ -34,7 +34,7 @@ public class CrowdingComparator<Type> extends DominanceComparator<Type> {
 	/**
 	 * stores a comparator for check the rank of solutions
 	 */
-	private static final Comparator<MOSolutionBase> comparator = new RankComparator();
+	private final Comparator<MOSolutionBase<Type>> comparator = new RankComparator<>();
 
 	/**
 	 * Compare two solutions.

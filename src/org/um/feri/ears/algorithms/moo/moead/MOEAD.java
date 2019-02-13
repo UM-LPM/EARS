@@ -51,7 +51,7 @@ import org.um.feri.ears.util.Util;
  * </ol>
  */
 public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
-	
+
 	List<Integer> twoDimfiles = asList(100, 300, 400, 500, 600, 800, 1000);
 	List<Integer> threeDimfiles = asList(500, 600, 800, 1000, 1200);
 	List<Integer> fiveDimfiles = asList(1000, 1200, 1500, 1800, 2000, 2500);
@@ -94,17 +94,17 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	MOSolutionBase<Type>[] indArray;
 	String functionType;
 	int gen;
-	
-	CrossoverOperator<Type, MOTask, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, MOTask, MOSolutionBase<Type>> mut;
+
+	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
 	static String dataDirectory = "Weight";
 
-	public MOEAD(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
+	public MOEAD(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int pop_size) {
 		this(crossover, mutation, pop_size, "MOEAD");
 	}
-	
-	public MOEAD(CrossoverOperator crossover, MutationOperator mutation, int pop_size, String name) {
+
+	public MOEAD(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int pop_size, String name) {
 		this.populationSize = pop_size;
 		this.cross = crossover;
 		this.mut = mutation;
@@ -121,7 +121,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
 	@Override
 	protected void init() throws StopCriteriaException {
-		
+
 		if(optimalParam)
 		{
 			switch(num_obj){
@@ -147,7 +147,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			}
 			}
 		}
-		
+
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
 
 		population = new ParetoSolution<Type>(populationSize);
@@ -179,7 +179,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
 	@Override
 	protected void start() throws StopCriteriaException {
-		
+
 		// STEP 2. Update
 		do {
 			int[] permutation = Util.randomPermutation(populationSize);
@@ -235,12 +235,12 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			task.incrementNumberOfIterations();
 		} while (!task.isStopCriteria());
 		//System.out.println(gen);
-		Ranking ranking = new Ranking(population);
+		Ranking<Type> ranking = new Ranking<>(population);
 		best = ranking.getSubfront(0);
 	}
 
 	public void initUniformWeight() {
-		
+
 		lambda = InitWeight.generate(num_obj, populationSize, true);
 		/*
 		if ((num_obj == 2) && (populationSize <= 100)) {
@@ -443,7 +443,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				maxFun = feval;
 			}
 		}
-		
+
 		fitness = maxFun;
 		/*if (individual.violatesConstraints()) {
 			fitness += 10000.0;

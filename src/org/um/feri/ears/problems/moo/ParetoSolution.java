@@ -50,7 +50,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		}
 		overallConstraintViolation_  = ps.getOverallConstraintViolation();
 		numberOfViolatedConstraints_ = ps.getNumberOfViolatedConstraint();
-		
+
 		solutions = new ArrayList<MOSolutionBase<Type>>();
 		for (MOSolutionBase<Type> sol : ps) {
 			solutions.add(sol.copy());
@@ -59,9 +59,9 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 
 	public List<MOSolutionBase<Type>> solutions;
 	private double pareto_eval;
-	
+
 	private HashMap<String,Double> qiEval = new HashMap<String,Double>();
-	
+
 	/**
 	 * Returns evaluations for all unary quality indicators.
 	 * @return all unary quality indicators evaluations.
@@ -69,7 +69,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	public HashMap<String, Double> getAllQiEval() {
 		return qiEval;
 	}
-	
+
 	public void setEvalForAllUnaryQIs(HashMap<String, Double> qiEval) {
 		this.qiEval = qiEval;
 	}
@@ -78,7 +78,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	 * Maximum size of the solution set
 	 */
 	private int capacity = 0;
-	
+
 	public ParetoSolution() {
 		solutions = new ArrayList<MOSolutionBase<Type>>();
 		capacity = 1000;
@@ -115,20 +115,20 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		solutions.add(solution);
 		return true;
 	}
-	
+
 	/**
 	 * Replaces the solution at the given index.
-	 * 
+	 *
 	 * @param index the index to replace
 	 * @param solution the new solution
 	 */
 	public void replace(int index, MOSolutionBase<Type> solution) {
 		solutions.set(index, solution);
 	}
-	
+
 	/**
 	 * Adds a collection of solutions to this population.
-	 * 
+	 *
 	 * @param iterable the collection of solutions to be added
 	 * @return {@code true} if the population was modified as a result of this
 	 *         method; {@code false} otherwise
@@ -142,9 +142,9 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 
 		return changed;
 	}
-	
+
 	public void addAll(List<MOSolutionBase<Type>> pop) {
-		
+
 		for (MOSolutionBase<Type> solution : pop) {
 			add(solution);
 		}
@@ -156,16 +156,16 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		}
 		return solutions.get(i);
 	}
-	
+
 	public void set(int index, MOSolutionBase<Type> solution)
 	{
 		solutions.set(index, solution);
 	}
-	
+
 	/**
 	 * Returns {@code true} if this population contains no solutions;
 	 * {@code false} otherwise.
-	 * 
+	 *
 	 * @return {@code true} if this population contains no solutions;
 	 *         {@code false} otherwise.
 	 */
@@ -185,12 +185,12 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 
 		return pareto_eval;
 	}
-	
-	public void evaluate(QualityIndicator qi) throws Exception
+
+	public void evaluate(QualityIndicator<Type> qi) throws Exception
 	{
 		this.evaluate(qi,false);
 	}
-	
+
 	/**
 	 * Evaluates the Pareto approximation with the given quality indicator. If {@code usecache} is set to true
 	 * and the Pareto approximation is already evaluated with the given {@code qi}, that value is used.
@@ -198,7 +198,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	 * @param usecache set to true to read from cache
 	 * @throws Exception if {@code qi} is null or an incorrect type
 	 */
-    public void evaluate(QualityIndicator qi, boolean usecache) throws Exception
+    public void evaluate(QualityIndicator<Type> qi, boolean usecache) throws Exception
     {
     	if(usecache)
     	{
@@ -208,15 +208,15 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
     			return;
     		}
     	}
-    	
+
     	// throw error if the indicator is null or not unary
     	if(qi == null || qi.getIndicatorType() != IndicatorType.Unary)
 			throw new Exception("Indicator is null or incorrect indicator type!");
 		pareto_eval = qi.evaluate(this);
-		
+
 		qiEval.put(qi.getName(), pareto_eval); //replace value
     }
-    
+
     public void evaluteWithAllUnaryQI(int num_obj, String file_name) throws Exception
     {
     	for (IndicatorName name : IndicatorName.values()) {
@@ -228,21 +228,21 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
     	}
     }
 
-	
-	public boolean isFirstBetter(ParetoSolution second, QualityIndicator qi) 
+
+	public boolean isFirstBetter(ParetoSolution<Type> second, QualityIndicator<Type> qi)
 	{
 		if(qi == null)
 		{
 			System.err.println("Indicator is null!");
 			return false;
 		}
-		
+
 		if(qi.getIndicatorType() == QualityIndicator.IndicatorType.Unary)
 		{
 		    if (qi.isMin())
 				return this.getEval() < second.getEval();
 			return this.getEval() > second.getEval();
-		    
+
 		}
 		else if(qi.getIndicatorType() == QualityIndicator.IndicatorType.Binary)
 		{
@@ -255,7 +255,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		}
 		return false;
 	}
-	
+
 	@Override
 	public List<Type> getVariables() {
 		List<Type> x = null; //TODO check
@@ -274,10 +274,10 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	public int size() {
 		return solutions.size();
 	}
-	
+
 	/**
 	 * Removes the solution at the specified index from this population.
-	 * 
+	 *
 	 * @param index the index of the solution to be removed
 	 * @throws IndexOutOfBoundsException if the index is out of range
 	 *         {@code (index < 0) || (index >= size())}
@@ -286,10 +286,10 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		modCount++;
 		solutions.remove(index);
 	}
-	
+
 	/**
 	 * Removes the specified solution from this population, if present.
-	 * 
+	 *
 	 * @param solution the solution to be removed
 	 * @return {@code true} if this population was modified as a result of this
 	 *         method; {@code false} otherwise
@@ -298,11 +298,11 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		modCount++;
 		return solutions.remove(solution);
 	}
-	
+
 	/**
 	 * Returns {@code true} if this population contains the specified solution;
 	 * {@code false} otherwise.
-	 * 
+	 *
 	 * @param solution the solution whose presence is tested
 	 * @return {@code true} if this population contains the specified
 	 *         solution; {@code false} otherwise
@@ -310,7 +310,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	public boolean contains(MOSolutionBase<Type> solution) {
 		return solutions.contains(solution);
 	}
-	
+
 	public void displayAllUnaryQulaityIndicators(int num_obj, String file_name)
 	{
 		 ArrayList<QualityIndicator<Type>> indicators = new ArrayList<QualityIndicator<Type>>();
@@ -321,19 +321,19 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 			  if(qi.getIndicatorType() == IndicatorType.Unary)
 				  indicators.add(qi);
 		 }
-		 
+
 		 System.out.println("Quality indicators\n");
 		 for (QualityIndicator<Type> qi : indicators) {
 			value = qi.evaluate(this);
 			System.out.println(qi.getName()+": " + value);
 		}
 	}
-	
-	 /** 
+
+	 /**
 	  * Returns the index of the worst Solution using a <code>Comparator</code>.
 	  * If there are more than one occurrences, only the index of the first one is returned
 	  * @param comparator <code>Comparator</code> used to compare solutions.
-	  * @return The index of the worst Solution attending to the comparator or 
+	  * @return The index of the worst Solution attending to the comparator or
 	  * <code>-1<code> if the SolutionSet is empty
 	  */
 	public int indexWorst(Comparator<MOSolutionBase<Type>> comparator) {
@@ -356,23 +356,23 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 
 		return index;
 	}
-	
-	/** 
+
+	/**
 	 * Returns a new <code>MOParetoIndividual</code> which is the result of the union
 	 * between the current solution set and the one passed as a parameter.
 	 * @param ParetoSolution MOParetoIndividual to join with the current MOParetoIndividual.
 	 * @return The result of the union operation.
 	 */
-	public ParetoSolution union(ParetoSolution solutionSet) {
+	public ParetoSolution<Type> union(ParetoSolution<Type> solutionSet) {
 		// Check the correct size. In development
 		int newSize = this.size() + solutionSet.size();
 		if (newSize < capacity)
 			newSize = capacity;
 
 		// Create a new population
-		ParetoSolution union = new ParetoSolution(newSize);
+		ParetoSolution<Type> union = new ParetoSolution<>(newSize);
 		for (int i = 0; i < this.size(); i++) {
-			union.add(this.get(i));
+			union.add(get(i));
 		}
 
 		for (int i = this.size(); i < (this.size() + solutionSet.size()); i++) {
@@ -388,7 +388,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 
 		Collections.sort(solutions, comparator);
 	}
-	
+
 	/**
    * Copies the objectives of the solution set to a matrix
    * @return A matrix containing the objectives
@@ -406,7 +406,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		}
 		return objectives;
 	}
-	
+
 	public void loadObjectivesFromFile(String fileName)
 	{
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))){
@@ -431,7 +431,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 			e.printStackTrace();
 		}
 	}
-	
+
     /**
      * Prints the objectives to a file in CSV format.
      * @param file_name The name of the file.
@@ -448,7 +448,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 			e.printStackTrace();
 		}
 	}
-	
+
 	 /**
      * Prints the variables to a file.
      * @param file_name The name of the file.
@@ -497,7 +497,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 
 		final String algorithm_name = algorithm.replace("_", "\\_");
 		final String problem_name = problemN.replace("_", "\\_");
-		
+
 		final double[][] front = this.writeObjectivesToMatrix();
 		Thread t = new Thread(new Runnable() {
 			public void run() {
@@ -528,7 +528,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	}
 
 	public void saveParetoImage(final String algorithm_name,final String problem_name) {
-		
+
 		final double[][] front = this.writeObjectivesToMatrix();
 		Thread t = new Thread(new Runnable() {
 	         public void run()
@@ -557,7 +557,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		});
 		t.start();
 	}
-	
+
 	/**
 	 * Returns an iterator for accessing the solutions in this population.
 	 */
@@ -565,13 +565,13 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	public Iterator<MOSolutionBase<Type>> iterator() {
 		return new PopulationIterator();
 	}
-	
+
 	/*
 	 * The following code is based on the Apache Commons Collections library.
 	 * This is to provide a similar iterator behavior to other collection
 	 * classes without requiring the Population to implement all collection
 	 * methods.  The license terms are provided below.
-	 * 
+	 *
 	 * Licensed to the Apache Software Foundation (ASF) under one or more
 	 * contributor license agreements.  See the NOTICE file distributed with
 	 * this work for additional information regarding copyright ownership.
@@ -587,7 +587,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	 * See the License for the specific language governing permissions and
 	 * limitations under the License.
 	 */
-	
+
 	/**
 	 * The modification count.
 	 */
@@ -617,13 +617,13 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
          * the operations.
          */
 		private int expectedModCount;
-		
+
 		/**
 		 * Constructs a population iterator.
 		 */
 		public PopulationIterator() {
 			super();
-			
+
 			nextIndex = 0;
 			currentIndex = -1;
 			expectedModCount = modCount;
@@ -637,11 +637,11 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		@Override
 		public MOSolutionBase<Type> next() {
 			checkModCount();
-			
+
 			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			
+
 			try {
 				MOSolutionBase<Type> value = get(nextIndex);
 				currentIndex = nextIndex++;
@@ -654,7 +654,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		@Override
 		public void remove() {
 			checkModCount();
-			
+
 			if (currentIndex == -1) {
 				throw new IllegalStateException();
 			}
@@ -672,7 +672,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		/**
          * Checks the modification count of the list is the value that this
          * object expects.
-         * 
+         *
          * @throws ConcurrentModificationException if the list's modification
          *         count is not the value that was expected
          */
