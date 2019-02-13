@@ -179,7 +179,7 @@ public class ATMetrics {
 	  ArrayList<Double> population = new ArrayList<Double>();
 		for (NodeEARS t : splitTrees) {
 			if (t.getParent()!=null) {
-				population.add(new Double(t.getIdGen()-getParentATree(t).getIdGen())); 
+				population.add((double) (t.getIdGen() - getParentATree(t).getIdGen()));
 			}
 		}
 	  return new MeanStDev(population);
@@ -189,7 +189,7 @@ public class ATMetrics {
 		  ArrayList<Double> population = new ArrayList<Double>();
 			for (NodeEARS t : splitTrees) {
 				if (t.getParent()!=null) {
-					population.add(new Double(getTreeDepth(t))); 
+					population.add((double) getTreeDepth(t));
 				}
 			}
 		  return new MeanStDev(population);
@@ -290,7 +290,7 @@ public class ATMetrics {
 		  ArrayList<Double> population = new ArrayList<Double>();
 			for (NodeEARS t : allNodes) {
 				if (t.getX()<x) { //explore condition
-					population.add(new Double(firstExploreParent(t))); //TODO Very slow...
+					population.add((double) firstExploreParent(t)); //TODO Very slow...
 				}
 			}
 		  return new MeanStDev(population);

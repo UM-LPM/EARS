@@ -419,7 +419,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 				int i = 0;
 				MOSolutionBase<Type> solution = new MOSolutionBase<Type>(st.countTokens());
 				while (st.hasMoreTokens()) {
-					double value = new Double(st.nextToken());
+					double value = Double.parseDouble(st.nextToken());
 					solution.setObjective(i, value);
 					i++;
 				}

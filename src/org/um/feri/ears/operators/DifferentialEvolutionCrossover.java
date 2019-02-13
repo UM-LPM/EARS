@@ -103,9 +103,9 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 	 */
 	//public DifferentialEvolutionCrossover(Properties properties) {
 	//	this();
-	//	CR_ = (new Double((String)properties.getProperty("CR_")));
-	//	F_  = (new Double((String)properties.getProperty("F_")));
-	//	K_  = (new Double((String)properties.getProperty("K_")));
+	//	CR_ = (Double.parseDouble((String)properties.getProperty("CR_")));
+	//	F_  = (Double.parseDouble((String)properties.getProperty("F_")));
+	//	K_  = (Double.parseDouble((String)properties.getProperty("K_")));
 	//	DE_Variant_ = properties.getProperty("DE_Variant_") ;
 	//} // Constructor
 
