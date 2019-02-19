@@ -113,7 +113,7 @@ public class RatingCEC2015 extends RatingBenchmark{
     	
     	problems.add(new F1(dimension));
     	problems.add(new F2(dimension));
-    	//problems.add(new F3(dimension));
+    	problems.add(new F3(dimension));
     	problems.add(new F4(dimension));
     	problems.add(new F5(dimension));
     	problems.add(new F6(dimension));
@@ -125,7 +125,7 @@ public class RatingCEC2015 extends RatingBenchmark{
     	problems.add(new F12(dimension));
     	problems.add(new F13(dimension));
     	problems.add(new F14(dimension));
-    	//problems.add(new F15(dimension));
+    	problems.add(new F15(dimension));
     	
     	for(Problem p : problems)
     	{
