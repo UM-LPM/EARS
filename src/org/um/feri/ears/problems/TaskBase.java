@@ -301,8 +301,8 @@ public abstract class TaskBase<T extends ProblemBase> {
         }
         return "not defined";
 	}
-	
-	protected void incEvaluate() throws StopCriteriaException {
+
+	public void incEvaluate() throws StopCriteriaException {
 		if (numberOfEvaluations >= maxEvaluations && stopCriteria == EnumStopCriteria.EVALUATIONS)
 			throw new StopCriteriaException("Max evaluations");
 		numberOfEvaluations++;

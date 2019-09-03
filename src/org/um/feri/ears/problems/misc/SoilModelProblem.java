@@ -24,7 +24,8 @@ import org.um.feri.ears.util.SpecialFunction;
 import org.um.feri.ears.util.TrapezoidalRule;
 
 public class SoilModelProblem extends Problem{
-
+	public static String FileNamePath = "test_data/";
+	//"C:\\Users\\Matej\\git\\EARSNew\\test_data\\"
 	double d[];
 	double RM[];
 	int layers;
@@ -206,8 +207,8 @@ public class SoilModelProblem extends Problem{
 			double f1 = 0.0;
 
 			f1 = TrapezoidalRule.integrate(j,xx,y1);
-		    //System.out.println("num: "+j);
-		    RI[k]=R[0]*(1+2*d[k]*f1);
+			//System.out.println("num: "+j);
+			RI[k]=R[0]*(1+2*d[k]*f1);
 
 		}
 
@@ -228,7 +229,7 @@ public class SoilModelProblem extends Problem{
 		if(filename != null && !filename.isEmpty())
 		{
 
-			filename = "test_data/"+ filename +".txt";
+			filename = SoilModelProblem.FileNamePath+ filename +".txt";
 			ArrayList<Double> tempD = new ArrayList<>();
 			ArrayList<Double> tempRM = new ArrayList<>();
 
@@ -244,8 +245,8 @@ public class SoilModelProblem extends Problem{
 
 					if(st.hasMoreTokens())
 					{
-						tempD.add(Double.parseDouble(st.nextToken()));
-						tempRM.add(Double.parseDouble(st.nextToken()));
+						tempD.add(new Double(st.nextToken()));
+						tempRM.add(new Double(st.nextToken()));
 					}
 					aux = br.readLine();
 				}

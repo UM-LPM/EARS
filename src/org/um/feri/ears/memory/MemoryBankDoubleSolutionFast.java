@@ -8,7 +8,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.report.Pair;
 import org.um.feri.ears.util.report.ReportBank;
 
-public class MemoryBankDoubleSolution {
+public class MemoryBankDoubleSolutionFast {
   public static final String FITNESS = "FIT";
   public static final String CONVERGENCE = "CON";
   public static final String CONVERGENCE_DUPLICATE = "CONdUP";
@@ -17,9 +17,8 @@ public class MemoryBankDoubleSolution {
   int precisionInDecimalPlaces;
   int duplicationHitSum;
   int duplicationBeforeGlobal;
-  StringBuilder sb;
-  private HashMap<String, DoubleSolution> hashMapMemory;
-  private HashMap<String, Integer> hashMapMemoryHits;
+  private HashMap<Long, DoubleSolution> hashMapMemory;
+  private HashMap<Long, Integer> hashMapMemoryHits;
   DuplicationRemovalStrategy updateStrategy;
   public static boolean converganceGraphDataCollect = false;
   DoubleSolution best4ConverganceGraph;
@@ -30,32 +29,28 @@ public class MemoryBankDoubleSolution {
   public static void convergenceGraphRecordStop() {
     converganceGraphDataCollect = false;
   }
-  private static final int POW10[] = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
 
-  public static String format(double val, int precision) {
-    StringBuilder sb = new StringBuilder();
-    if (val < 0) {
-      sb.append('-');
-      val = -val;
-    }
-    int exp = POW10[precision];
-    long lval = (long)(val * exp + 0.5);
-    sb.append(lval / exp).append('.');
-    long fval = lval % exp;
-    for (int p = precision - 1; p > 0 && fval < POW10[p]; p--) {
-      sb.append('0');
-    }
-    sb.append(fval);
-    return sb.toString();
-  }
+  private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
 
-  public MemoryBankDoubleSolution(int precisionInDecimalPlaces, DuplicationRemovalStrategy updateStrategy) {
+  /*
+   * public static String encodeBase64(long v) { char[] a =
+   * alphabet.toCharArray(); v = Math.abs(v); String s = ""; for (int i = 0; i <
+   * 11; i++) { long val = v & 63; s = a[(int) val] + s; v >>= 6; } while
+   * (s.startsWith("A") && s.length() > 1) s = s.substring(1, s.length()); return
+   * s; }
+   * 
+   * public static long decodeBase64(String s) { char[] a =
+   * alphabet.toCharArray(); Map<Character, Integer> map = new HashMap<>(); for
+   * (int i = 0; i < a.length; i++) map.put(a[i], i); char[] chars =
+   * s.toCharArray(); long v = 0; for (char c : chars) { v <<= 6; v = v |
+   * map.get(c); } return v; }
+   */
+  public MemoryBankDoubleSolutionFast(int precisionInDecimalPlaces, DuplicationRemovalStrategy updateStrategy) {
     this.precisionInDecimalPlaces = precisionInDecimalPlaces;
     this.updateStrategy = updateStrategy;
     precisionPower = (long) Math.pow(10, precisionInDecimalPlaces);
-    hashMapMemory = new HashMap<>(10000);
-    hashMapMemoryHits = new HashMap<>(10000);
-    sb = new StringBuilder();
+    hashMapMemory = new HashMap<>();
+    hashMapMemoryHits = new HashMap<>();
     reset();
   }
 
@@ -69,31 +64,17 @@ public class MemoryBankDoubleSolution {
     }
   }
 
-
-  public String encodeKeyPerc(double x[]) {
-    sb.setLength(0);
-    for (double d : x) {
-      sb.append(format(d,precisionInDecimalPlaces)).append(" ");
-      //sb.append("" + Double.toString(d)).append(".");
+  public long fastKeyNot100Unique(double x[]) {
+    long res = 0;
+    for (int i=0; i<x.length; i++) {
+    //for (double d : x) {
+      res+=(precisionPower * x[i])+Math.pow(10, i);
     }
-    return sb.toString();
+    return res;
 
   }
 
-
-  public String encodeKey(double x[]) {
-    sb.setLength(0);
-    for (double d : x) {
-      // sb.append(""+Double.toString(d)).append(".");
-      // TODO sb.append(""+Long.toString(Double.doubleToLongBits(d),
-      // Character.MAX_RADIX));
-      sb.append("" + Double.doubleToLongBits(d)).append(".");
-      //sb.append("" + Double.toString(d)).append(".");
-    }
-    return sb.toString();
-
-  }
-
+  
   public DoubleSolution getRandomSolution(TaskWithMemory task) throws StopCriteriaException {
     double[] d = task.getRandomVariables();
     return eval(task, d);
@@ -102,29 +83,15 @@ public class MemoryBankDoubleSolution {
    * public String encodeKey(double x[]) { StringBuffer sb = new StringBuffer();
    * for(double d:x) { sb.append(""+Double.doubleToLongBits(d)).append("."); }
    * return sb.toString();
-   *
+   * 
    * }
    */
 
   public DoubleSolution eval(TaskWithMemory task, double x[]) throws StopCriteriaException {
-    // round(x);
+    round(x);
     DoubleSolution ds;
-    String key = encodeKeyPerc(x);
-    if (1+duplicationHitSum+task.getNumberOfEvaluations() == task.getMaxEvaluations()) {
-      //Log
-      ReportBank.logMemory(ReportBank.MEMORY_END+ReportBank.MFES);
-
-      ReportBank.addDoubleValue(ReportBank.BEST+ReportBank.MFES, best4ConverganceGraph.getEval());
-      if (task.isGlobal()) {
-        ReportBank.addDoubleValue(ReportBank.SR+ReportBank.MFES, 1.);
-      } else
-        ReportBank.addDoubleValue(ReportBank.SR+ReportBank.MFES, 0.);
-
-      ReportBank.addDoubleValue(ReportBank.DUPLICATE_BEFORE_GLOBAL+ReportBank.MFES, task.getDuplicationBeforeGlobal());
-      ReportBank.addDoubleValue(ReportBank.DUPLICATE_ALL+ReportBank.MFES, task.getDuplicationHitSum());
-      ReportBank.logTime(ReportBank.TIME+ReportBank.MFES);
-    }
-    if (hashMapMemory.containsKey(key)) { //duplicate
+    Long key = fastKeyNot100Unique(x);
+    if (hashMapMemory.containsKey(key)) {
       duplicationHitSum++;
       if (!task.isGlobal()) {
         duplicationBeforeGlobal++;
@@ -138,9 +105,7 @@ public class MemoryBankDoubleSolution {
 
       if (updateStrategy.criteria4Change(hashMapMemoryHits.get(key))) {
         updateStrategy.changeSolution(x);
-        return eval(task, x);
-       /* round(x);
-        //hashMapMemoryHits.put(key, 1); // new one� ERROR
+        hashMapMemoryHits.put(key, 1); // new one�
         ds = task.evalOrg(x);
         if (converganceGraphDataCollect) {
           if (best4ConverganceGraph == null)
@@ -150,15 +115,11 @@ public class MemoryBankDoubleSolution {
         }
 
         hashMapMemory.put(key, ds);
-        */
       } else {
-        if (updateStrategy.forceIncEvaluation()) {
-          task.incEvaluate(); //no change but we...
-        }
         hashMapMemoryHits.put(key, hashMapMemoryHits.get(key) + 1);
       }
-      ds = new DoubleSolution(hashMapMemory.get(key)); //do I need new?
-  /*    if (converganceGraphDataCollect) {
+      ds = hashMapMemory.get(key);
+      if (converganceGraphDataCollect) {
         if (best4ConverganceGraph == null)
           best4ConverganceGraph = ds;
         else if (task.isFirstBetter(ds, best4ConverganceGraph))
@@ -166,27 +127,25 @@ public class MemoryBankDoubleSolution {
         ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConverganceGraph.getEval()));
         ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));
       }
-      */
       if (task.isStopCriteria()) { // TODO be careful clear here or in main?
         clearMemory();
       }
       return ds;
-    } else {
-      hashMapMemoryHits.put(key, 1); // new one�
-      ds = task.evalOrg(x);
+    }
+    hashMapMemoryHits.put(key, 1); // new one�
+    ds = task.evalOrg(x);
+    if (converganceGraphDataCollect) {
       if (best4ConverganceGraph == null)
         best4ConverganceGraph = ds;
       else if (task.isFirstBetter(ds, best4ConverganceGraph))
         best4ConverganceGraph = ds;
-      if (converganceGraphDataCollect) {
-        ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConverganceGraph.getEval()));
-        ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));
-      }
-      hashMapMemory.put(key, ds);
-      if (task.isStopCriteria())
-        clearMemory();
-      return ds;
+      ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConverganceGraph.getEval()));
+      ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));
     }
+    hashMapMemory.put(key, ds);
+    if (task.isStopCriteria())
+      clearMemory();
+    return ds;
   }
 
   public void reset() {
@@ -196,13 +155,7 @@ public class MemoryBankDoubleSolution {
     hashMapMemoryHits.clear();
   }
 
-  public boolean contains(DoubleSolution ds) {
-    return hashMapMemory.containsKey(encodeKey(ds.getDoubleVariables()));
-  }
-
   public void clearMemory() {
-    System.out.println(ReportBank.keyID+" Mem:"+(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
-    ReportBank.logMemory(ReportBank.MEMORY_END);
     hashMapMemory.clear();
     hashMapMemoryHits.clear();
     System.gc();

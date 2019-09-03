@@ -4,11 +4,11 @@ import java.util.Arrays;
 
 import org.um.feri.ears.problems.Task;
 
-public class DuplicationRemovalStrategyLeaveIt extends DuplicationRemovalStrategy {
+public class DuplicationRemovalStrategyLeaveIt2 extends DuplicationRemovalStrategy {
 	//This is strategy without strategy. It doesn't use knowledge about it
-	public DuplicationRemovalStrategyLeaveIt() {
+	public DuplicationRemovalStrategyLeaveIt2() {
 	}
-
+	
 	@Override
 	public void changeSolution(double[] x) {
 		//do not change it, it will take additional evaluation
@@ -17,10 +17,10 @@ public class DuplicationRemovalStrategyLeaveIt extends DuplicationRemovalStrateg
 	public boolean criteria4Change(int hits) {
 		return false; //always
 	}
-	@Override
-	public boolean forceIncEvaluation() {
-		return true;
-	}
+  @Override
+	 public boolean forceIncEvaluation() {
+	    return false;
+	  }
 
 	public String toString( ) {
 		StringBuffer sb = new StringBuffer();

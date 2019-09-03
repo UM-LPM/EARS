@@ -3,6 +3,7 @@ package org.um.feri.ears.memory;
 import java.util.Arrays;
 
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.util.Util;
 
 public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy {
 	int maxHits;
@@ -14,7 +15,8 @@ public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy
 	public void changeSolution(double[] x) {
 		double[] tmp = t.getRandomVariables();
 		for (int i=0; i < x.length; i++) {
-			x[i] = tmp[i];
+			if (Util.nextDouble()<0.2)
+				x[i] = tmp[i];
 		}
 
 	}
