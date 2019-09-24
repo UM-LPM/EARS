@@ -1,21 +1,17 @@
 package org.um.feri.ears.algorithms.so.mbf;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.JAXBElement.GlobalScope;
-
-import org.apache.commons.math3.exception.util.Localizable;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MBF extends Algorithm{
 	
