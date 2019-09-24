@@ -3,22 +3,40 @@ Evolutionary Algorithms Rating System 2.0
 
 Theory: "A chess rating system for evolutionary algorithms: A new method for the comparison and ranking of evolutionary algorithms" http://www.sciencedirect.com/science/article/pii/S002002551400276X
 
-EARS in action http://earatingsystem.appspot.com
+[EARS online](http://ears.um.si)
 
 What is included:
 * benchmarks with problem functions (Sphere, ...).
-* single and multi-pbjective evolutionary algorithms
+* single and multi-objective evolutionary algorithms
 * test experiments
 
 
-How to use it!
+How to use it:
 
-* All projects are Eclipse Java projects.
 * Download it using the git plugin in eclipse.
 * In same workspace create new java project.
 * Add Properties -> Java Build Path -> Projects -> EARS
 * Include your algorithm in the project.
 * Modify algorithm to work with EARS.
+
+Add dependency to EARS project in gradle:
+**settings.gradle**
+include ':EARS'
+project(':EARS').projectDir = new File('path to EARS') //example ../EARS
+
+**build.gradle**
+dependencies {
+    compile project(':EARS')
+}
+
+Tips
+____
+
+* If you have a special representation for your solution create your own by extending the Solution class in EARS.
+"class MySolution extends DoubleSolution"
+* Code examples can be found in package "org.um.feri.ears.examples"
+* All information of the given problem (dimensions, constraints, bounds, etc...) can be obtaint from the Task object public Individual run(Task taskProblem).
+* Before every evaluation check if the stopping criteria is reached by calling taskProblem.isStopCriteria().
 
 Example:
 ```java
@@ -148,15 +166,5 @@ public class SORatingExample {
     }
 }
 ```
-
-Tips
-____
-
-* If you have special representation create your own individual by extending the Solution class in EARS.
-"class MySolution extends DoubleSolution"
-* Search for main methods in EARS source code for more examples.
-* All problem data (Dimension, Bounds, etc...) can be obtaint by Task in method public Individual run(Task taskProblem).
-* Check taskProblem.isStopCriteria() after every evaluation.
-
 
 *The authors acknowledge the financial support from the Slovenian Research Agency (research core funding No. P2-0041 COMPUTER SYSTEMS, METHODOLOGIES, AND INTELLIGENT SERVICES)* http://p2-0041.feri.um.si/en/
