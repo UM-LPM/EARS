@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.um.feri.ears.problems.unconstrained.cec2014.F1;
 
-public class Testing {
+public class TestSOProblem {
 
 	public static void main(String[] args) {
 		
