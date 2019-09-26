@@ -1,8 +1,5 @@
 package org.um.feri.ears.experiment.ee;
 
-import org.um.feri.ears.experiment.ee.so.DEAlgorithmLogging;
-import org.um.feri.ears.experiment.ee.so.JADELogging;
-import org.um.feri.ears.experiment.ee.so.PSOoriginalLogging;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriteriaException;

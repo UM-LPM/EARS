@@ -1,4 +1,4 @@
-package org.um.feri.ears.experiment.ee.so;
+package org.um.feri.ears.experiment.ee;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
@@ -62,7 +62,7 @@ public class RandomWalkAlgorithmLogging extends Algorithm {
 	public RandomWalkAlgorithmLogging() {
 		this.debug = false;
 		ai = new AlgorithmInfo("RWSi","","RWSi","Random Walk Simple");
-		au =  new Author("matej", "matej.crepinsek at uni-mb.si");
+		au =  new Author("matej", "matej.crepinsek at um.si");
 	}
 	public RandomWalkAlgorithmLogging(boolean d) {
 	    this();
@@ -93,7 +93,7 @@ public class RandomWalkAlgorithmLogging extends Algorithm {
 	}
 
     @Override
-    public void resetDefaultsBeforNewRun() {
+    public void resetToDefaultsBeforeNewRun() {
         i=null;
         
     }

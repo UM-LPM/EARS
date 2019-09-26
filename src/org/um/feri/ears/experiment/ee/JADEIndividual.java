@@ -1,4 +1,4 @@
-package org.um.feri.ears.experiment.ee.so;
+package org.um.feri.ears.experiment.ee;
 import org.um.feri.ears.problems.DoubleSolution;
 
 public class JADEIndividual extends DoubleSolution{

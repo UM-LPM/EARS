@@ -13,9 +13,6 @@ import java.util.Map;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
-import org.um.feri.ears.benchmark.MORatingBenchmark;
-import org.um.feri.ears.benchmark.RatingBenchmarkBase;
-import org.um.feri.ears.experiment.ee.so.PSOoriginalLogging;
 
 public abstract class TaskBase<T extends ProblemBase> {
 	

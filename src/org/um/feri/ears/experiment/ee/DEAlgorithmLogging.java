@@ -1,4 +1,4 @@
-package org.um.feri.ears.experiment.ee.so;
+package org.um.feri.ears.experiment.ee;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -548,7 +548,7 @@ public class DEAlgorithmLogging extends Algorithm {
     }
 
     @Override
-    public void resetDefaultsBeforNewRun() {
+    public void resetToDefaultsBeforeNewRun() {
         this.F = memF;
         this.CR = memCR;
     }

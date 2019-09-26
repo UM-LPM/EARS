@@ -42,7 +42,7 @@
  *          POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.um.feri.ears.experiment.ee.so;
+package org.um.feri.ears.experiment.ee;
 
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.benchmark.RatingBenchmark;

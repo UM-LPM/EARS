@@ -1,4 +1,4 @@
-package org.um.feri.ears.experiment.ee.so;
+package org.um.feri.ears.experiment.ee;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,7 +83,7 @@ public class HillClimbingLogging extends Algorithm {
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 		
 	}
 

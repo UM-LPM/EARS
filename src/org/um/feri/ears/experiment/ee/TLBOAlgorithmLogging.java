@@ -1,9 +1,7 @@
-package org.um.feri.ears.experiment.ee.so;
+package org.um.feri.ears.experiment.ee;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -12,13 +10,10 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
-import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.MersenneTwister;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.algorithms.so.tlbo.*;
@@ -67,7 +62,7 @@ public class TLBOAlgorithmLogging extends Algorithm {
     public TLBOAlgorithmLogging(int Keep, int pop_size) {
         this.Keep = Keep;
         this.pop_size = pop_size;
-        au = new Author("matej", "matej.crepinsek at uni-mb.si");
+        au = new Author("matej", "matej.crepinsek at um.si");
         ai = new AlgorithmInfo(
                 "TLBO",
                 "\\bibitem{Rao2011}\nR.V.~Rao, V.J.~Savsani, D.P.~Vakharia.\n\\newblock Teaching-learning-based optimization: A novel method for constrained mechanical design optimization problems.\n\\newblock \\emph{Computer-Aided Design}, 43(3):303--315, 2011.\n",
@@ -296,7 +291,7 @@ public class TLBOAlgorithmLogging extends Algorithm {
     }
 
     @Override
-    public void resetDefaultsBeforNewRun() {
+    public void resetToDefaultsBeforeNewRun() {
         // it sets in init!
     }
 

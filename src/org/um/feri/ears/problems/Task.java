@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.experiment.ee.so.PSOoriginalLogging;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 
 
