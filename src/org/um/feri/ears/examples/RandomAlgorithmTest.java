@@ -15,7 +15,7 @@ public class RandomAlgorithmTest {
 	 */
 	public static void main(String[] args) {
 		Task sphere=new Task(EnumStopCriteria.EVALUATIONS,1000, 0, 0, 0.001,new Sphere(4));
-		Algorithm test = new RandomWalkAlgorithm(true);
+		Algorithm test = new RandomWalkAlgorithm();
 		DoubleSolution best;
         try {
             best = test.execute(sphere);
