@@ -59,7 +59,7 @@ public class RandomWalkAMAlgorithm extends Algorithm {
     public RandomWalkAMAlgorithm() {
         this.debug = false;
         ai = new AlgorithmInfo("RWS", "", "RWAM", "Random Walk Arithmetic");
-        au = new Author("matej", "matej.crepinsek at uni-mb.si");
+        au = new Author("matej", "matej.crepinsek at um.si");
     }
 
 
@@ -116,7 +116,7 @@ public class RandomWalkAMAlgorithm extends Algorithm {
 
 
     @Override
-    public void resetDefaultsBeforNewRun() {
+    public void resetToDefaultsBeforeNewRun() {
       i = null;
         
     }

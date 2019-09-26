@@ -156,7 +156,7 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
 	/**
 	 * It is called every time before every run! 
 	 */
-	public abstract void resetDefaultsBeforNewRun();
+	public abstract void resetToDefaultsBeforeNewRun();
 	public boolean isDebug() {
         return debug;
 	}
@@ -179,9 +179,8 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
 	 * maxCombinations is usually set to 8!
 	 * If maxCombinations==1 than return combination that is expected to perform best!
 	 * 
-	 * NOTE not static because jave doesnt support abstract static!
+	 * NOTE not static because java doesn't support abstract static!
 	 * 
-	 * @param taskProblem
 	 * @return
 	 */
 	public List<AlgorithmBase> getAlgorithmParameterTest(EnumMap<EnumBenchmarkInfoParameters, String> parameters, int maxCombinations) {

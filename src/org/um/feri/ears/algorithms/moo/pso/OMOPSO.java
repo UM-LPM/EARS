@@ -317,7 +317,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 
 }

@@ -73,15 +73,15 @@ public class ES1p1sAlgorithm extends Algorithm {
         this.k = k;
         mem_c = c;
         this.c= c;
-        au = new Author("matej", "matej.crepinsek at uni-mb.si");
-        resetDefaultsBeforNewRun();        
+        au = new Author("matej", "matej.crepinsek at um.si");
+        resetToDefaultsBeforeNewRun();
         ai = new AlgorithmInfo("ES", "@book{Rechenberg1973,\n author = {Rechenberg, I.}, \n publisher = {Frommann-Holzboog}, \n title = {Evolutionsstrategie: optimierung technischer systeme nach prinzipien der biologischen evolution},\n year = {1973}}", "ES(1+1)", "ES(1+1) 1/5 rule");
         ai.addParameter(EnumAlgorithmParameters.K_ITERATIONS, ""+k);
         ai.addParameter(EnumAlgorithmParameters.C_FACTOR, ""+c);
         
     }
     @Override
-    public void resetDefaultsBeforNewRun() {
+    public void resetToDefaultsBeforeNewRun() {
         k = mem_k; //every k is recalculated
         c = mem_c;  //0.8<=c<=1
         varianceOne = 1.;
@@ -100,7 +100,7 @@ public class ES1p1sAlgorithm extends Algorithm {
 
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
-        resetDefaultsBeforNewRun(); //usually no need for this call 
+        resetToDefaultsBeforeNewRun(); //usually no need for this call
         task = taskProblem;
         DoubleSolution ii;
         one = taskProblem.getRandomSolution();

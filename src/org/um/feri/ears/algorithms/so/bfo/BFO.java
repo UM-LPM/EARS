@@ -170,6 +170,6 @@ public class BFO extends Algorithm {
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 }

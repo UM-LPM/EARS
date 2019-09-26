@@ -273,7 +273,7 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 		
 	}
 

@@ -174,7 +174,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 
 	@Override

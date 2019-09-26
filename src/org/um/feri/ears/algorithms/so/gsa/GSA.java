@@ -279,7 +279,7 @@ a=E.*G; %note that Mp(i)/Mi(i)=1
 	}
 	
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 		
 	}
 

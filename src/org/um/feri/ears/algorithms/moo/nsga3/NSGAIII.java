@@ -272,7 +272,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 	
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 
 	}
 }

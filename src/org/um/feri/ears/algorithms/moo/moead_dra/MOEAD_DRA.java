@@ -169,7 +169,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 
 	protected void start() throws StopCriteriaException {

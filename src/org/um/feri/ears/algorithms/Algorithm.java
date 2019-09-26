@@ -1,15 +1,7 @@
 package org.um.feri.ears.algorithms;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-
-import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.TaskBase;
 
 /**
  * Every new algorithm needs to implement this interface.

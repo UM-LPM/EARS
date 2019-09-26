@@ -66,7 +66,7 @@ public class TLBOAlgorithm extends Algorithm {
     public TLBOAlgorithm(int Keep, int pop_size) {
         this.Keep = Keep;
         this.pop_size = pop_size;
-        au = new Author("matej", "matej.crepinsek at uni-mb.si");
+        au = new Author("matej", "matej.crepinsek at um.si");
         ai = new AlgorithmInfo(
                 "TLBO",
                 "\\bibitem{Rao2011}\nR.V.~Rao, V.J.~Savsani, D.P.~Vakharia.\n\\newblock Teaching-learning-based optimization: A novel method for constrained mechanical design optimization problems.\n\\newblock \\emph{Computer-Aided Design}, 43(3):303--315, 2011.\n",
@@ -297,7 +297,7 @@ public class TLBOAlgorithm extends Algorithm {
     }
 
     @Override
-    public void resetDefaultsBeforNewRun() {
+    public void resetToDefaultsBeforeNewRun() {
         // it sets in init!
     }
 

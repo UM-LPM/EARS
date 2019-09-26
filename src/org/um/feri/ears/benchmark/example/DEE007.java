@@ -72,7 +72,7 @@ public class DEE007 extends Algorithm {
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 		// TODO Auto-generated method stub
 		
 	}

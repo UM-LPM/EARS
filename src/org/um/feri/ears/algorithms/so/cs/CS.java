@@ -175,7 +175,7 @@ public class CS extends Algorithm{
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 
 }

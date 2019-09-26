@@ -22,7 +22,7 @@ public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOA
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 		
 	}
 

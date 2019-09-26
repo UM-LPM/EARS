@@ -147,7 +147,7 @@ public class GWO extends Algorithm{
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 
 }

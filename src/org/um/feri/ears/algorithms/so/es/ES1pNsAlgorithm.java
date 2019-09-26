@@ -75,8 +75,8 @@ public class ES1pNsAlgorithm extends Algorithm {
         mem_k = k;
         mem_c = c;
         this.n = n;
-        au = new Author("matej", "matej.crepinsek at uni-mb.si");
-        resetDefaultsBeforNewRun();
+        au = new Author("matej", "matej.crepinsek at um.si");
+        resetToDefaultsBeforeNewRun();
         ai = new AlgorithmInfo(
                 "ES",
                 "@book{Rechenberg1973,\n author = {Rechenberg, I.}, \n publisher = {Frommann-Holzboog}, \n title = {Evolutionsstrategie: optimierung technischer systeme nach prinzipien der biologischen evolution},\n year = {1973}}",
@@ -88,7 +88,7 @@ public class ES1pNsAlgorithm extends Algorithm {
     }
 
     @Override
-    public void resetDefaultsBeforNewRun() {
+    public void resetToDefaultsBeforeNewRun() {
         k = mem_k; // every k is recalculated
         c = mem_c; // 0.8<=c<=1
         varianceOne = 1.;
@@ -102,7 +102,7 @@ public class ES1pNsAlgorithm extends Algorithm {
 
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
-        resetDefaultsBeforNewRun(); // usually no need for this call
+        resetToDefaultsBeforeNewRun(); // usually no need for this call
         task = taskProblem;
         DoubleSolution ii;
         one = taskProblem.getRandomSolution();

@@ -360,7 +360,7 @@ public class FSS extends Algorithm{
 	
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 
 }

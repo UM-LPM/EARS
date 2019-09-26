@@ -85,7 +85,7 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 	
 	public void initPopulation() throws StopCriteriaException {

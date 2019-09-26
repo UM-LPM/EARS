@@ -88,6 +88,6 @@ public class MFO extends Algorithm{
 
 	
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 }

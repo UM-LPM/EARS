@@ -168,7 +168,7 @@ public class RMO extends Algorithm
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 		
 	}
 

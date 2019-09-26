@@ -155,7 +155,7 @@ public class FPA extends Algorithm{
 	
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 
 }

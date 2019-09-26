@@ -508,7 +508,7 @@ public class DEAlgorithm extends Algorithm {
     }
 
     @Override
-    public void resetDefaultsBeforNewRun() {
+    public void resetToDefaultsBeforeNewRun() {
         this.F = memF;
         this.CR = memCR;
     }

@@ -41,7 +41,12 @@
  *          POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.um.feri.ears.rating;
+package org.um.feri.ears.examples;
+
+import org.um.feri.ears.rating.Game;
+import org.um.feri.ears.rating.Player;
+import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.rating.RatingCalculations;
 
 import java.util.ArrayList;
 import java.util.HashMap;

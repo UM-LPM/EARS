@@ -295,7 +295,7 @@ public class CRO extends Algorithm {
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 
 	}
 

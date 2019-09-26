@@ -91,7 +91,7 @@ public class LaF extends Algorithm {
 	}
 
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 	
 	

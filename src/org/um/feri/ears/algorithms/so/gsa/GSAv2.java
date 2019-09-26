@@ -191,7 +191,7 @@ public class GSAv2 extends Algorithm {
     }
 
     @Override
-    public void resetDefaultsBeforNewRun() {
+    public void resetToDefaultsBeforeNewRun() {
 
     }
 }
