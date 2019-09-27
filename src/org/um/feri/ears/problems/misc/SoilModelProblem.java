@@ -1,12 +1,6 @@
 package org.um.feri.ears.problems.misc;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,8 +18,7 @@ import org.um.feri.ears.util.SpecialFunction;
 import org.um.feri.ears.util.TrapezoidalRule;
 
 public class SoilModelProblem extends Problem{
-	public static String FileNamePath = "test_data/";
-	//"C:\\Users\\Matej\\git\\EARSNew\\test_data\\"
+
 	double d[];
 	double RM[];
 	int layers;
@@ -151,8 +144,8 @@ public class SoilModelProblem extends Problem{
 			j++;
 		}
 
-		double step = 1e-2; // korak to�k izra�una vrednosti funkcije (v odvisnosti od �tevila plasti!)
-		double minValue = 1e-6; // ko je vrednost funkcije v 100 zaporednih to�kah manj od minvrednost je izra�un kon�an
+		double step = 1e-2; // korak tock izracuna vrednosti funkcije (v odvisnosti od stevila plasti!)
+		double minValue = 1e-6; // ko je vrednost funkcije v 100 zaporednih tockah manj od minvrednost je izracun koncan
 
 		boolean isEnd = true;
 		int stk = 0;
@@ -228,15 +221,14 @@ public class SoilModelProblem extends Problem{
 
 		if(filename != null && !filename.isEmpty())
 		{
+			InputStream inputStream = SoilModelProblem.class.getClassLoader().getResourceAsStream(filename +".txt");
 
-			filename = SoilModelProblem.FileNamePath+ filename +".txt";
 			ArrayList<Double> tempD = new ArrayList<>();
 			ArrayList<Double> tempRM = new ArrayList<>();
 
 			try {
 				/* Open the file */
-				FileInputStream fis = new FileInputStream(filename);
-				InputStreamReader isr = new InputStreamReader(fis);
+				InputStreamReader isr = new InputStreamReader(inputStream);
 				BufferedReader br = new BufferedReader(isr);
 
 				String aux = br.readLine();
@@ -262,11 +254,10 @@ public class SoilModelProblem extends Problem{
 				d[i] = tempD.get(i);
 				RM[i] = tempRM.get(i);
 			}
-
 		}
 		else
 		{
-			System.out.println("The file name containg the measured data is not valid.");
+			System.out.println("The file name containing the measured data is not valid.");
 		}
 	}
 
