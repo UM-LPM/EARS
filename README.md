@@ -15,21 +15,29 @@ EARS is a free and open-source Java-based framework for ranking, developing and 
 
 ## How to use
 
-* Download it using the git plugin in eclipse.
-* In same workspace create new java project.
-* Add Properties -> Java Build Path -> Projects -> EARS
-* Include your algorithm in the project.
-* Modify algorithm to work with EARS.
+### Intellij
 
-### Add dependency to EARS project in gradle
+* Go to: `File` - > `New` -> `Project from Version Control` -> `Git`
+* Set URL to https://github.com/UM-LPM/EARS.git
+* Select the directory where you want to dave the project (example: "path to my projects/EARS")
+* Import Gradle project
+
+**Gradle Include Dependency to EARS project**
+
 In file **settings.gradle** add:
+
+```
 include ':EARS'
 project(':EARS').projectDir = new File('path to EARS') //example ../EARS
+```
 
 In file  **build.gradle** add:
+
+```
 dependencies {
     compile project(':EARS')
 }
+```
 
 ## Tips
 
