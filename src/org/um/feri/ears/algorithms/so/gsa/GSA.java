@@ -148,7 +148,7 @@ M=M./sum(M); %eq. 16.
 		//Add moveFit CM 
 		double moveFit=0;
 		if (((best.getEval()<0) && (worst.getEval()>0))|| ((best.getEval()>0) && (worst.getEval()<0))){ //-3, -2, .., 3, 4 or 3, 2, .., -3, -4
-			if (t.isMaximize())
+			if (!t.isMinimize())
 				moveFit=-worst.getEval();
 			else
 			  moveFit=+worst.getEval();

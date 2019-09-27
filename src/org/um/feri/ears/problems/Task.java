@@ -80,7 +80,7 @@ public class Task extends TaskBase<Problem> {
         this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
         
         // set initial best eval
-        bestEval = p.isMinimum()? Double.MAX_VALUE : Double.MIN_VALUE;  
+        bestEval = p.isMinimize()? Double.MAX_VALUE : Double.MIN_VALUE;
     }
     
 
@@ -106,7 +106,7 @@ public class Task extends TaskBase<Problem> {
 			evaluationTime +=  System.nanoTime() - start;
 			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-			if(isAncestorLogginEnabled)
+			if(isAncestorLoggingEnabled)
 			{
 				tmpSolution.timeStamp = System.currentTimeMillis();
 				tmpSolution.generationNumber = this.getNumberOfIterations();
@@ -127,7 +127,7 @@ public class Task extends TaskBase<Problem> {
 			evaluationTime +=  System.nanoTime() - start;
 			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-			if(isAncestorLogginEnabled)
+			if(isAncestorLoggingEnabled)
 			{
 				ancestors.add(tmpSolution);
 				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
@@ -146,7 +146,7 @@ public class Task extends TaskBase<Problem> {
 			evaluationTime +=  System.nanoTime() - start;
 			checkIfGlobalReached(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-			if(isAncestorLogginEnabled)
+			if(isAncestorLoggingEnabled)
 			{
 				ancestors.add(tmpSolution);
 				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
@@ -167,7 +167,7 @@ public class Task extends TaskBase<Problem> {
 				evaluationTime +=  System.nanoTime() - start;
 				checkIfGlobalReached(tmpSolution.getEval());
 				GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-				if(isAncestorLogginEnabled)
+				if(isAncestorLoggingEnabled)
 				{
 					ancestors.add(tmpSolution);
 					/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
@@ -191,9 +191,9 @@ public class Task extends TaskBase<Problem> {
 			DoubleSolution tmpSolution = p.getRandomSolution();
 			evaluationTime +=  System.nanoTime() - start;
 			checkIfGlobalReached(tmpSolution.getEval());
-			checkImprovment(tmpSolution.getEval());
+			checkImprovement(tmpSolution.getEval());
 			GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-			if(isAncestorLogginEnabled)
+			if(isAncestorLoggingEnabled)
 			{
 				ancestors.add(tmpSolution);
 				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
@@ -222,7 +222,7 @@ public class Task extends TaskBase<Problem> {
      * @return
      */
 	public boolean areDimensionsInFeasableInterval(List<Double> ds) {
-	    return p.areDimensionsInFeasableInterval(ds);
+	    return p.areDimensionsInFeasibleInterval(ds);
 	}
 
 	/**
@@ -261,7 +261,7 @@ public class Task extends TaskBase<Problem> {
     
 	public boolean isFeasible(double x, int d) {
 		
-		return p.isFeasble(x, d);
+		return p.isFeasible(x, d);
 	}
 	
 	public boolean isFeasible(DoubleSolution sol) {
@@ -338,7 +338,7 @@ public class Task extends TaskBase<Problem> {
 				throw new StopCriteriaException("Solution stagnation");
 			
 			DoubleSolution tmpSolution = performEvaluation(ds);
-			if(isAncestorLogginEnabled)
+			if(isAncestorLoggingEnabled)
 			{
 				tmpSolution.timeStamp = System.currentTimeMillis();
 				tmpSolution.generationNumber = this.getNumberOfIterations();
@@ -377,7 +377,7 @@ public class Task extends TaskBase<Problem> {
 	
 	public void addAncestors(DoubleSolution solution, List<DoubleSolution> parents)
 	{
-		if(isAncestorLogginEnabled)
+		if(isAncestorLoggingEnabled)
 		{
 			solution.parents = parents;
 			solution.timeStamp = System.currentTimeMillis();
@@ -391,7 +391,7 @@ public class Task extends TaskBase<Problem> {
 		
 		DoubleSolution tmpSolution = eval(x);
 		
-		if(isAncestorLogginEnabled)
+		if(isAncestorLoggingEnabled)
 		{
 			tmpSolution.parents = parents;
 			tmpSolution.timeStamp = System.currentTimeMillis();
@@ -412,9 +412,9 @@ public class Task extends TaskBase<Problem> {
 		return tmpSolution;
 	}
 	
-	protected void checkImprovment(double eval)
+	protected void checkImprovement(double eval)
 	{
-		if(p.isMinimum())
+		if(p.isMinimize())
 		{
 			if(eval < bestEval)
 			{
@@ -439,7 +439,7 @@ public class Task extends TaskBase<Problem> {
 			}
 		}
 		
-		if(stagnationTrials >= maxEvaluationsBeforStagnation)
+		if(stagnationTrials >= maxEvaluationsBeforeStagnation)
 		{
 			isStop = true;
 		}

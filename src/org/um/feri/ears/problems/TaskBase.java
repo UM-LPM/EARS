@@ -17,9 +17,9 @@ import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 public abstract class TaskBase<T extends ProblemBase> {
 	
 	protected EnumStopCriteria stopCriteria;
-	protected int maxEvaluations; // for Stop criteria
-	protected int numberOfEvaluations = 0; // for Stop criteria
-	protected double epsilon; // Stop criteria for global optimum
+	protected int maxEvaluations; // for Stop criterion
+	protected int numberOfEvaluations = 0; // for Stop criterion
+	protected double epsilon; // Stop criterion for global optimum
 	protected boolean isStop;
 	protected boolean isGlobal;
 	protected int precisionOfRealNumbersInDecimalPlaces; //used only for discreet problem presentation (bit presentation in GA)
@@ -31,7 +31,7 @@ public abstract class TaskBase<T extends ProblemBase> {
 	protected long allowedCPUTime; // nanoseconds
 	protected int numberOfIterations = 0;
 	protected int maxIterations;
-    protected int maxEvaluationsBeforStagnation = 10000;
+    protected int maxEvaluationsBeforeStagnation = 10000;
     protected int stagnationTrials = 0;
 	/**
 	 * Keeps track of the best solution found.
@@ -40,7 +40,7 @@ public abstract class TaskBase<T extends ProblemBase> {
 	
 	//protected StringBuilder ancestorSB;
 	protected static List<DoubleSolution> ancestors;
-	protected boolean isAncestorLogginEnabled = false;
+	protected boolean isAncestorLoggingEnabled = false;
 	
 	
 	
@@ -108,13 +108,13 @@ public abstract class TaskBase<T extends ProblemBase> {
 	
 	public void enableAncestorLogging()
 	{
-		isAncestorLogginEnabled = true;
+		isAncestorLoggingEnabled = true;
 		ancestors = new ArrayList<DoubleSolution>();
 	}
 
 	public void disableAncestorLogging()
 	{
-		isAncestorLogginEnabled = false;
+		isAncestorLoggingEnabled = false;
 		ancestors.clear();
 	}
 	
@@ -242,8 +242,8 @@ public abstract class TaskBase<T extends ProblemBase> {
 		return allowedCPUTime - System.nanoTime();
 	}
 	
-	public int getMaxEvaluationsBeforStagnation() {
-		return maxEvaluationsBeforStagnation;
+	public int getMaxEvaluationsBeforeStagnation() {
+		return maxEvaluationsBeforeStagnation;
 	}
 	
 	public long getUsedCPUTime() {
@@ -308,19 +308,16 @@ public abstract class TaskBase<T extends ProblemBase> {
 	}
 	
 	/**
-	 * @deprecated
-	 * Deprecated is because it is better to use individuals and
-	 * isFirstBetter that already is influenced by this parameter.
-	 * Returns true id global maximum searching!
+	 * Use to check if the problem is to be minimized.
 	 * 
-	 * @return
+	 * @return true if the problem is to be minimized
 	 */
-	public boolean isMaximize() {
-	    return !p.minimum;
+	public boolean isMinimize() {
+	    return p.isMinimize();
 	}
 	
     /**
-     * @return
+     * @return name of the problem
      */
     public String getProblemName() {
         return p.getName();
@@ -359,8 +356,8 @@ public abstract class TaskBase<T extends ProblemBase> {
     }
     
     /**
-     * Returns a string containing all the tasks information that doesen't change.
-     * @return
+     * Returns a string containing all the tasks information that doesn't change.
+     * @return string containing all information about the task
      */
     public String getTaskInfo() {
 

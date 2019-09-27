@@ -76,7 +76,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param ds vector of possible solution
 	 * @return
 	 */
-    public boolean areDimensionsInFeasableInterval(List<Double> ds) {
+    public boolean areDimensionsInFeasibleInterval(List<Double> ds) {
 	    for (int i=0; i<numberOfDimensions; i++) {
         if (ds.get(i) < lowerLimit.get(i))
             return false;
@@ -118,7 +118,7 @@ public abstract class Problem extends ProblemBase<Double> {
 		return d;
 	}
 	
-	public boolean isFeasble(double d, int i) {
+	public boolean isFeasible(double d, int i) {
 		if (d < lowerLimit.get(i))
 			return false;
 		if (d > upperLimit.get(i))
@@ -260,7 +260,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @param ds vector of possible solution
 	 * @return
 	 */
-	/*public boolean areDimensionsInFeasableInterval(double[] ds) {
+	/*public boolean areDimensionsInFeasibleInterval(double[] ds) {
 	    for (int i=0; i<numberOfDimensions; i++) {
         if (ds[i] < lowerLimit.get(i))
             return false;
@@ -280,7 +280,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	 * @return
 	 */
 	public boolean isFirstBetter(double a, double b) {
-		if (minimum)
+		if (minimize)
 			return a < b;
 		return a > b;
 	}
@@ -335,7 +335,7 @@ public abstract class Problem extends ProblemBase<Double> {
 		return d;
 	}
 	/**
-	 * Generates a random non evaluated solution.
+	 * Generates a random evaluated solution.
 	 * @return generated solution
 	 */
 	public DoubleSolution getRandomSolution()
@@ -351,7 +351,7 @@ public abstract class Problem extends ProblemBase<Double> {
 	}
 	
 	/**
-	 * Not just fitness value but also constrained. 
+	 * Compares fitness values and constraints
 	 * 
 	 * @param x
 	 * @param eval_x
@@ -365,7 +365,7 @@ public abstract class Problem extends ProblemBase<Double> {
 		double cons_y = constrainsEvaluations(y);
 		if (cons_x == 0) {
 			if (cons_y == 0) {
-				if (minimum)
+				if (minimize)
 					return eval_x < eval_y;
 				return eval_x > eval_y;
 			}

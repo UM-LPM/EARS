@@ -221,7 +221,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
 		case CPU_TIME:
 			return Long.toString(timeLimit);
 		case STAGNATION:
-			return Integer.toString(listOfProblems.get(0).getMaxEvaluationsBeforStagnation()); //TODO stagnation trials
+			return Integer.toString(listOfProblems.get(0).getMaxEvaluationsBeforeStagnation()); //TODO stagnation trials
 		case GLOBAL_OPTIMUM_OR_EVALUATIONS:
 			return Integer.toString(maxEvaluations);
 

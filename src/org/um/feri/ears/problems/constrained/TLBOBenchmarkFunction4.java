@@ -1,9 +1,7 @@
 package org.um.feri.ears.problems.constrained;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
@@ -64,7 +62,7 @@ public class TLBOBenchmarkFunction4 extends Problem {
 	
 	public TLBOBenchmarkFunction4() {
 		super(8,6);
-		minimum = true;
+		minimize = true;
 		
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));

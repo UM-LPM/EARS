@@ -1,14 +1,10 @@
 package org.um.feri.ears.problems.constrained;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.util.Util;
 
 
 /**
@@ -61,7 +57,7 @@ public class TLBOBenchmarkFunction1 extends Problem {
 
 	public TLBOBenchmarkFunction1() {
 		super(13,9);
-		minimum = true;
+		minimize = true;
 		max_constraints = new Double[numberOfConstraints];
 		min_constraints = new Double[numberOfConstraints];
 		count_constraints  = new Double[numberOfConstraints];

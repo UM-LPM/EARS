@@ -2,14 +2,12 @@ package org.um.feri.ears.problems;
 
 import java.util.List;
 
-import org.um.feri.ears.util.Util;
-
 public abstract class ProblemBase <Type> {
 	
 	public List<Type> upperLimit;
 	public List<Type> lowerLimit;
 	protected int numberOfDimensions;
-	protected boolean minimum = true;
+	protected boolean minimize = true;
 	public int numberOfConstraints = 0;
 	public Type max_constraints[]; 
 	public Type min_constraints[]; 
@@ -42,8 +40,8 @@ public abstract class ProblemBase <Type> {
 		this.name = name;
 	}
 		
-	public boolean isMinimum() {
-		return minimum;
+	public boolean isMinimize() {
+		return minimize;
 	}
 	public String getShortName() {
 		return shortName;
@@ -92,7 +90,7 @@ public abstract class ProblemBase <Type> {
 	 * @return
 	 */
 	public boolean isFirstBetter(double a, double b) {
-		if (minimum)
+		if (minimize)
 			return a < b;
 		return a > b;
 	}
