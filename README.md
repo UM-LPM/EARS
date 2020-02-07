@@ -19,7 +19,7 @@ EARS is a free and open-source Java-based framework for ranking, developing and 
 
 * Go to: `File` - > `New` -> `Project from Version Control` -> `Git`
 * Set URL to https://github.com/UM-LPM/EARS.git
-* Select the directory where you want to dave the project (example: "path to my projects/EARS")
+* Select the directory where you want to save the project (example: "path to my projects/EARS")
 * Import Gradle project
 
 **Gradle Include Dependency to EARS project**
