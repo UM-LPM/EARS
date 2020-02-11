@@ -8,6 +8,10 @@ idea {
     }
 }
 
+//compatibility for reflection support
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
 	compile fileTree(dir: 'lib', include: ['*.jar'])
 	compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'

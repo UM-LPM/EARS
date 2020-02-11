@@ -44,7 +44,7 @@ public class TestFunctions {
 		System.out.println(p8.getOptimumEval());
 		System.out.println(p8.eval(p8.getOptimalVector()[0]));
 		
-		Dixon_Price p9 = new Dixon_Price(2);
+		DixonPrice p9 = new DixonPrice(2);
 		System.out.println(p9.getName());
 		System.out.println(p9.getOptimumEval());
 		System.out.println(p9.eval(p9.getOptimalVector()[0]));
@@ -99,14 +99,14 @@ public class TestFunctions {
 		System.out.println(p19.getOptimumEval());
 		System.out.println(p19.eval(p19.getOptimalVector()[0]));
 		
-		Langerman2 p20 = new Langerman2();
+		ModifiedLangermann2 p20 = new ModifiedLangermann2();
 		System.out.println(p20.getName());
 		System.out.println(p20.getOptimumEval());
 		System.out.println(p20.eval(p20.getOptimalVector()[0]));
 		double[] sol = {2.00299219,1.006096};
 		System.out.println(p20.eval(sol));
 		
-		Langerman5 p21 = new Langerman5();
+		ModifiedLangermann5 p21 = new ModifiedLangermann5();
 		System.out.println(p21.getName());
 		System.out.println(p21.getOptimumEval());
 		System.out.println(p21.eval(p21.getOptimalVector()[0]));
@@ -171,7 +171,7 @@ public class TestFunctions {
 		System.out.println(p33.getOptimumEval());
 		System.out.println(p33.eval(p33.getOptimalVector()[0]));
 		
-		Rosenbrock_DeJong2 p34 = new Rosenbrock_DeJong2(2);
+		RosenbrockDeJong2 p34 = new RosenbrockDeJong2(2);
 		System.out.println(p34.getName());
 		System.out.println(p34.getOptimumEval());
 		System.out.println(p34.eval(p34.getOptimalVector()[0]));
@@ -191,7 +191,7 @@ public class TestFunctions {
 		System.out.println(p37.getOptimumEval());
 		System.out.println(p37.eval(p37.getOptimalVector()[0]));
 		
-		Schwefel p38 = new Schwefel(6);
+		Schwefel2_26 p38 = new Schwefel2_26(6);
 		System.out.println(p38.getName());
 		System.out.println(p38.getOptimumEval());
 		System.out.println(p38.eval(p38.getOptimalVector()[0]));

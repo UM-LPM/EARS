@@ -55,12 +55,11 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.Ackley;
 import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.Rastrigin;
-import org.um.feri.ears.problems.unconstrained.Rosenbrock_DeJong2;
+import org.um.feri.ears.problems.unconstrained.RosenbrockDeJong2;
 import org.um.feri.ears.problems.unconstrained.Schaffer;
-import org.um.feri.ears.problems.unconstrained.Schwefel;
+import org.um.feri.ears.problems.unconstrained.Schwefel2_26;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.problems.unconstrained.Step;
-import org.um.feri.ears.problems.unconstrained.cec2010.*;
 
 public class TuningBenchmark extends RatingBenchmark{
     public static final String name="Tuning 1";
@@ -118,11 +117,11 @@ public class TuningBenchmark extends RatingBenchmark{
     @Override
     protected void initFullProblemList() {
     	registerTask(new Sphere(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);      // f1
-  	    registerTask(new Rosenbrock_DeJong2(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);  // f2
+  	    registerTask(new RosenbrockDeJong2(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);  // f2
   	    registerTask(new Step(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);        // f3
     	registerTask(new Schaffer(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);    // f4
     	registerTask(new Rastrigin(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);   // f5
-    	registerTask(new Schwefel(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);    // f6
+    	registerTask(new Schwefel2_26(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);    // f6
     	registerTask(new Griewank(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);    // f7
     	registerTask(new Ackley(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);      // f8
     }

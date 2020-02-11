@@ -11,11 +11,13 @@ import org.um.feri.ears.problems.Problem;
  * https://www.sfu.ca/~ssurjano/rosen.html
  * http://www.geatbx.com/ver_3_5/fcnfun2.html
  */
-public class Rosenbrock_DeJong2 extends Problem {
-	public Rosenbrock_DeJong2(int d) {
+public class RosenbrockDeJong2 extends Problem {
+	public RosenbrockDeJong2(int d) {
 		super(d,0);
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -2.048));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 2.048));
+		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
+		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+		//lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -2.048));
+		//upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 2.048));
 		name = "Rosenbrock - De Jong's function 2";
 		
 		Arrays.fill(optimum[0], 1);

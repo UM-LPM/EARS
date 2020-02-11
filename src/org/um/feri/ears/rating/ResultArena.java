@@ -153,7 +153,6 @@ public class ResultArena {
 		ap.addAll(players.values());
 		Collections.sort(ap, new Player.RatingComparator());
 		return ap;
-		
 	}
 	
 	public ArrayList<Player> getPlayers() {

@@ -7,8 +7,8 @@ import java.util.Collections;
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
-public class Dixon_Price extends Problem {
-	public Dixon_Price(int d) {
+public class DixonPrice extends Problem {
+	public DixonPrice(int d) {
 		super(d,0);
 		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));

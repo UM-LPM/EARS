@@ -59,8 +59,8 @@ import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.MartinAndGaddy;
 import org.um.feri.ears.problems.unconstrained.PowellBadlyScaledFunction;
 import org.um.feri.ears.problems.unconstrained.Rastrigin;
-import org.um.feri.ears.problems.unconstrained.Rosenbrock_DeJong2;
-import org.um.feri.ears.problems.unconstrained.Schwefel;
+import org.um.feri.ears.problems.unconstrained.RosenbrockDeJong2;
+import org.um.feri.ears.problems.unconstrained.Schwefel2_26;
 import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 
@@ -109,8 +109,8 @@ public class RatingRPUOed2 extends RatingBenchmark {
         registerTask(new MartinAndGaddy(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new PowellBadlyScaledFunction(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new Rastrigin(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Rosenbrock_DeJong2(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Schwefel(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new RosenbrockDeJong2(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Schwefel2_26(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new SchwefelRidge(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new Sphere(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
     }
