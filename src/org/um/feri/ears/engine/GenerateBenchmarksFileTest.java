@@ -1,8 +1,20 @@
 package org.um.feri.ears.engine;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
+import org.um.feri.ears.benchmark.DummyRating;
+import org.um.feri.ears.benchmark.MORatingBenchmark;
+import org.um.feri.ears.benchmark.RatingBenchmark;
+import org.um.feri.ears.benchmark.RatingBenchmarkBase;
+
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -10,93 +22,80 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
-import org.um.feri.ears.benchmark.RatingBenchmarkBase;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 
 public class GenerateBenchmarksFileTest {
 
-	static String earsPath;
-	static String earsFolder;
-	
-	static String configDir = "C:\\Users\\Ravby\\Desktop\\platforma\\config";
+    static String earsPath;
+    static String earsFolder;
 
-	static final String BENHCMARKS_FILE = "benchmarks.json";
-	static final String CONFIG_FOLDER = "config";
-	static final String BENCHMARK_PACKAGE = "org.um.feri.ears.benchmark";
+    static String configDir = "D:\\VSCodeProjects\\platforma\\config";
 
-	public static void main(String[] args) {
+    private static final String BENCHMARKS_FILE = "benchmarks.json";
+    private static final String CONFIG_FOLDER = "config";
+    private static final String BENCHMARK_PACKAGE = "org.um.feri.ears.benchmark";
+    private static final String DUMMY_RATING_CLASS_NAME = DummyRating.class.getSimpleName();
+    private static final String MO_BENCHMARK_CLASS_NAME = MORatingBenchmark.class.getSimpleName();
+    private static final String SO_BENCHMARK_CLASS_NAME = RatingBenchmark.class.getSimpleName();
 
-		List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
-		classLoadersList.add(ClasspathHelper.contextClassLoader());
-		classLoadersList.add(ClasspathHelper.staticClassLoader());
+    public static void main(String[] args) {
 
-		Reflections reflections = new Reflections(new ConfigurationBuilder()
-		    .setScanners(new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner())
-		    .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
-		    .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(BENCHMARK_PACKAGE))));
-	
+        List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
+        classLoadersList.add(ClasspathHelper.contextClassLoader());
+        classLoadersList.add(ClasspathHelper.staticClassLoader());
 
-		Set<Class<?>> classes = reflections.getSubTypesOf(Object.class);
-		List<BenchmarkJson> benchmarks = new ArrayList<BenchmarkJson>();
-		for(Class<? extends Object> clazz : classes) {
-			if(!clazz.getName().contains("$")) {
-				
-				if(Modifier.isAbstract(clazz.getModifiers()) || clazz.getSimpleName().equals("DummyRating")) //check if class is abstract or DummyRating
-					continue;
-				
-				try {
-					if(clazz.getSuperclass()!=null){
-						if(clazz.getSuperclass().getSimpleName().equals("MORatingBenchmark")){
-							System.out.println("Multi-Objective: "+clazz.getName());
-							Object benchmark = clazz.newInstance();
-							BenchmarkJson b = new BenchmarkJson();
-							b.name = ((RatingBenchmarkBase) benchmark).getName();
-							b.fileName = clazz.getSimpleName();
-							b.numberOfRuns = ((RatingBenchmarkBase) benchmark).getNumberOfRuns();
-							b.type = "Multi-Objective";
-							b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriteria().toString();
-							b.stopCondition = ((RatingBenchmarkBase) benchmark).getStopCondition();
-							b.problems = ((RatingBenchmarkBase) benchmark).getProblems();
-							benchmarks.add(b);
-							
-						}
-						else if(clazz.getSuperclass().getSimpleName().equals("RatingBenchmark")){
-							System.out.println("Single-Objective: "+clazz.getName());
-							Object benchmark = clazz.newInstance();
-							BenchmarkJson b = new BenchmarkJson();
-							b.name = ((RatingBenchmarkBase) benchmark).getName();
-							b.fileName = clazz.getSimpleName();
-							b.numberOfRuns = ((RatingBenchmarkBase) benchmark).getNumberOfRuns();
-							b.type = "Single-Objective";
-							b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriteria().toString();
-							b.stopCondition = ((RatingBenchmarkBase) benchmark).getStopCondition();
-							b.problems = ((RatingBenchmarkBase) benchmark).getProblems();
-							benchmarks.add(b);
-						}
-					}
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setScanners(new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner())
+                .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
+                .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(BENCHMARK_PACKAGE))));
 
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		try (Writer writer = new FileWriter(configDir+File.separator+BENHCMARKS_FILE)) {
-			Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-		    gson.toJson(benchmarks, writer);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
+        Set<Class<?>> classes = reflections.getSubTypesOf(Object.class);
+        List<BenchmarkJson> benchmarks = new ArrayList<BenchmarkJson>();
+        for (Class<? extends Object> clazz : classes) {
+            if (!clazz.getName().contains("$")) {
+
+                if (Modifier.isAbstract(clazz.getModifiers()) || clazz.getSimpleName().equals(DUMMY_RATING_CLASS_NAME)) //check if class is abstract or DummyRating
+                    continue;
+
+                try {
+                    if (clazz.getSuperclass() != null) {
+                        if (clazz.getSuperclass().getSimpleName().equals(MO_BENCHMARK_CLASS_NAME)) {
+                            System.out.println("Multi-Objective: " + clazz.getName());
+                            Object benchmark = clazz.newInstance();
+                            BenchmarkJson b = new BenchmarkJson();
+                            b.name = ((RatingBenchmarkBase) benchmark).getName();
+                            b.fileName = clazz.getSimpleName();
+                            b.numberOfRuns = ((RatingBenchmarkBase) benchmark).getNumberOfRuns();
+                            b.type = "Multi-Objective";
+                            b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriteria().toString();
+                            b.stopCondition = ((RatingBenchmarkBase) benchmark).getStopCondition();
+                            b.problems = ((RatingBenchmarkBase) benchmark).getProblems();
+                            benchmarks.add(b);
+
+                        } else if (clazz.getSuperclass().getSimpleName().equals(SO_BENCHMARK_CLASS_NAME)) {
+                            System.out.println("Single-Objective: " + clazz.getName());
+                            Object benchmark = clazz.newInstance();
+                            BenchmarkJson b = new BenchmarkJson();
+                            b.name = ((RatingBenchmarkBase) benchmark).getName();
+                            b.fileName = clazz.getSimpleName();
+                            b.numberOfRuns = ((RatingBenchmarkBase) benchmark).getNumberOfRuns();
+                            b.type = "Single-Objective";
+                            b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriteria().toString();
+                            b.stopCondition = ((RatingBenchmarkBase) benchmark).getStopCondition();
+                            b.problems = ((RatingBenchmarkBase) benchmark).getProblems();
+                            benchmarks.add(b);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        try (Writer writer = new FileWriter(configDir + File.separator + BENCHMARKS_FILE)) {
+            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            gson.toJson(benchmarks, writer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
