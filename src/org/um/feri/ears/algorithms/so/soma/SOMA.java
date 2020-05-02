@@ -193,15 +193,15 @@ public class SOMA extends Algorithm {
         boolean[] prtVector = createPrtVector();
         for (int i = 0; i < task.getNumberOfDimensions(); i++) {
             if (prtVector[i]) {
-                newSolution[i] = jumpingSolution.getVariables().get(i) + (towardsSolution.getVariables().get(i) - jumpingSolution.getVariables().get(i)) * jump;
-                while (newSolution[i] < task.getLowerLimit()[i]) {
-                    newSolution[i] += task.getUpperLimit()[i] - task.getLowerLimit()[i];
+                newSolution[i] = jumpingSolution.getValue(i) + (towardsSolution.getValue(i) - jumpingSolution.getValue(i)) * jump;
+                while (newSolution[i] < task.getLowerLimit(i)) {
+                    newSolution[i] += task.getUpperLimit(i) - task.getLowerLimit()[i];
                 }
-                while (newSolution[i] > task.getUpperLimit()[i]) {
-                    newSolution[i] -= task.getUpperLimit()[i] - task.getLowerLimit()[i];
+                while (newSolution[i] > task.getUpperLimit(i)) {
+                    newSolution[i] -= task.getUpperLimit(i) - task.getLowerLimit()[i];
                 }
             } else {
-                newSolution[i] = jumpingSolution.getVariables().get(i);
+                newSolution[i] = jumpingSolution.getValue(i);
             }
         }
         return task.eval(newSolution);
