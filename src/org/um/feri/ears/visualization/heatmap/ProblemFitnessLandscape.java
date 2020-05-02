@@ -2,6 +2,7 @@ package org.um.feri.ears.visualization.heatmap;
 
 import org.um.feri.ears.problems.unconstrained.*;
 import org.um.feri.ears.problems.Problem;
+
 import java.io.*;
 
 public class ProblemFitnessLandscape {
@@ -10,25 +11,38 @@ public class ProblemFitnessLandscape {
 
     public static void main(String[] args) {
 
-        Problem problem = new Schwefel2_26(2);
+        Problem problem = new WayburnSeader3();
 
+        double fit = problem.eval(problem.getOptimalVector()[0]);
+        double global = problem.getGlobalOptimum();
+        double min = fit;
+        System.out.println("Closeness to global: " + (global - fit));
         int numOfPartitions = 1000;
-        double lowerBound = problem.lowerLimit.get(0);
-        double upperBound = problem.upperLimit.get(0);
-
 
         double[][] data = new double[numOfPartitions][numOfPartitions];
 
-        double[] partitions = GeneratePartitions(lowerBound, upperBound, numOfPartitions);
+        double[] partitionsX1 = GeneratePartitions(problem.lowerLimit.get(0), problem.upperLimit.get(0), numOfPartitions);
+        double[] partitionsX2 = GeneratePartitions(problem.lowerLimit.get(1), problem.upperLimit.get(1), numOfPartitions);
 
         for (int x = 0; x < numOfPartitions; x++) {
             for (int y = 0; y < numOfPartitions; y++) {
-                data[x][y] = problem.eval(new double[]{partitions[x], partitions[y]});
+                fit = problem.eval(new double[]{partitionsX1[x], partitionsX2[y]});
+                if(Double.isNaN(fit))
+                    System.out.println("Nan at "+partitionsX1[x]+" "+partitionsX2[y]);
+                if(Double.isInfinite(fit))
+                    System.out.println("Infinite at "+partitionsX1[x]+" "+partitionsX2[y]);
+                if(min >= fit){
+                    min = fit;
+                    System.out.println(min);
+                    System.out.println(partitionsX1[x]+" "+partitionsX2[y]);
+                }
+                /*if(Math.abs(fit - global) <= 0.001)
+                    System.out.println("global");*/
+                data[x][y] = fit;
             }
         }
 
         String text = ArrayToString(data);
-
         //System.getProperty("user.dir") + "/ProblemLandscapes";
 
         String fileName = problem.getName() + "_" + numOfPartitions + ".txt";
@@ -36,6 +50,11 @@ public class ProblemFitnessLandscape {
         File file = new File(folderLocation + "/" + fileName);
 
         try {
+            File directory = new File(folderLocation);
+            if (! directory.exists()){
+                directory.mkdir();
+            }
+
             if (!file.exists()) {
                 file.createNewFile();
             }

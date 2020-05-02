@@ -1,5 +1,6 @@
 package org.um.feri.ears.visualization.heatmap;
 
+import org.um.feri.ears.problems.unconstrained.Levy13;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.unconstrained.*;
 
@@ -82,7 +83,172 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                            Gradient.GRADIENT_PARULA,
                            Gradient.GRADIENT_VIRDIS};
 
-    Problem[] problems = {new Ackley(2),
+    Problem[] problems = {
+            new WayburnSeader3(),
+            new Tsoulo(),
+            new ThreeCylinders(),
+            new Storn(),
+            new Stenger(),
+            new Schaffer6(),
+            new Schaffer7(),
+            new Sawtoothxy(),
+            new S2(),
+            new S3(),
+            new Rump(),
+            new Peaks(),
+            new MullerBrown(),
+            new Mineshaft3(),
+            new Kearfott(),
+            new H1(),
+            new GramacyLee2(),
+            new GramacyLee3(),
+            new F26(),
+            new Engvall(),
+            new DownhillStep(),
+            new Davis(),
+            new Complex(),
+            new ChensVfunction(),
+            new ChensBird(),
+            new Camel(),
+            new BananaShape(),
+            new HappyCat(),
+            new Ackley2(),
+            new Ackley3(),
+            new Ackley4(),
+            new Zimmerman(),
+            new AluffiPentiniZirilli(),
+            new YaoLiu4(),
+            new YaoLiu9(),
+            new XinSheYang1(),
+            new XinSheYang2(),
+            new XinSheYang3(),
+            new XinSheYang4(),
+            new Whitley(),
+            new Weierstrass(),
+            new WayburnSeader1(),
+            new WayburnSeader2(),
+            new Wavy(),
+            new Vincent(),
+            new VenterSobiezcczanskiSobieski(),
+            new Ursem1(),
+            new Ursem3(),
+            new Ursem4(),
+            new UrsemWaves(),
+            new StretchedVSineWave(),
+            new SineEnvelope(),
+            new Shubert1(2),
+            new Shubert3(2),
+            new Shubert4(2),
+            new Schwefel1(),
+            new Schwefel12(),
+            new Schwefel24(),
+            new Schwefel26(),
+            new Schwefel220(),
+            new Schwefel221(),
+            new Schwefel222(2),
+            new Schwefel226(2),
+            new Schwefel236(),
+            new Schaffer1(),
+            new Schaffer2(),
+            new Schaffer3(),
+            new Schaffer4(),
+            new Sargan(),
+            new Salomon(),
+            new RotatedEllipse1(),
+            new RotatedEllipse2(),
+            new Ripple1(),
+            new Ripple25(),
+            new Rana(),
+            new Quintic(),
+            new Quadratic(),
+            new Qing(),
+            new Price1(),
+            new Price2(),
+            new Price3(),
+            new Price4(),
+            new Perm1(2),
+            new Perm2(2),
+            new Penalized(2),
+            new Penalized2(2),
+            new Parsopoulos(),
+            new NeedleEye(),
+            new Mishra1(),
+            new Mishra2(),
+            new Mishra3(),
+            new Mishra4(),
+            new Mishra5(),
+            new Mishra6(),
+            new Mishra7(),
+            new Mishra8(),
+            new Mishra10(),
+            new Langermann(),
+            new Keane(),
+            new Katsuura(),
+            new Judge(),
+            new JennrichSampson(),
+            new Hosaki(),
+            new HimmelBlau(),
+            new FreudensteinRoth(),
+            new Exponential(),
+            new BiggsExp2(),
+            new ElAttarVidyasagarDutta(),
+            new EggCrate(),
+            new DeflectedCorrugatedSpring(),
+            new DeckkersAarts(),
+            new Deb1(),
+            new Deb2(),
+            new Damavandi(),
+            new Cube(),
+            new Csendes(),
+            new CrownedCross(),
+            new CrossLegTable(),
+            new CrossInTray(),
+            new Cigar(),
+            new Chichinadze(),
+            new CarromTable(),
+            new Bukin2(),
+            new Bukin4(),
+            new Bukin6(),
+            new Brown(),
+            new Brent(),
+            new Branin1(),
+            new Branin2(),
+            new Bird(),
+            new BartelsConn(),
+            new Mishra11(),
+            new Alpine1(),
+            new Alpine2(),
+            new Adjiman(),
+            new Zettl(),
+            new ZeroSum(),
+            new Trigonometric1(),
+            new Trigonometric2(),
+            new Trefethen(),
+            new Treccani(),
+            new TestTubeHolder(),
+            new ReduxSum(),
+            new Giunta(),
+            new Tripod(),
+            new PenHolder(),
+            new Pathological(),
+            new Plateau(),
+            new StyblinskiTang(2),
+            new Michalewicz2(),
+            new DeJong5(),
+            new ThreeHumpCamel(),
+            new McCormick(),
+            new Trid2(),
+            new PowellSum(2),
+            new Leon(),
+            new Levy3(),
+            new Levy5(),
+            new Levy13(),
+            new Bukin6(),
+            new Eggholder(),
+            new SharpRidge(2),
+            new DifferentPowers(2),
+            new LinearSlope(2),
+            new Ackley1(2),
             new Beale(),
             new CrossInTray(),
             new DixonPrice(2),
@@ -93,9 +259,9 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
             new Matyas(),
             new Rastrigin(2),
             new RosenbrockDeJong2(2),
-            new Schwefel(2),
-            new Schwefel2_26(2),
-            new Shubert(2),
+            new Schwefel226(2),
+            new Schwefel226(2),
+            new Shubert1(2),
             new Sphere(2),
             new SumSquares(2),
             new Zakharov(2)};
@@ -326,12 +492,12 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
         panel.setTitle(selectedProblem.getName());
         textTitle.setText(selectedProblem.getName());
 
-        panel.setCoordinateBounds(selectedProblem.lowerLimit.get(0), selectedProblem.upperLimit.get(0), selectedProblem.lowerLimit.get(0), selectedProblem.upperLimit.get(0));
+        panel.setCoordinateBounds(selectedProblem.lowerLimit.get(0), selectedProblem.upperLimit.get(0), selectedProblem.lowerLimit.get(1), selectedProblem.upperLimit.get(1));
 
         textXMin.setText(selectedProblem.lowerLimit.get(0)+"");
         textXMax.setText(selectedProblem.upperLimit.get(0)+"");
-        textYMin.setText(selectedProblem.lowerLimit.get(0)+"");
-        textYMax.setText(selectedProblem.upperLimit.get(0)+"");
+        textYMin.setText(selectedProblem.lowerLimit.get(1)+"");
+        textYMax.setText(selectedProblem.upperLimit.get(1)+"");
 
         panel.setDrawXTicks(true);
         panel.setDrawYTicks(true);
@@ -507,12 +673,12 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
         panel.setTitle(selectedProblem.getName());
         textTitle.setText(selectedProblem.getName());
 
-        panel.setCoordinateBounds(selectedProblem.lowerLimit.get(0), selectedProblem.upperLimit.get(0), selectedProblem.lowerLimit.get(0), selectedProblem.upperLimit.get(0));
+        panel.setCoordinateBounds(selectedProblem.lowerLimit.get(0), selectedProblem.upperLimit.get(0), selectedProblem.lowerLimit.get(1), selectedProblem.upperLimit.get(1));
 
         textXMin.setText(selectedProblem.lowerLimit.get(0)+"");
         textXMax.setText(selectedProblem.upperLimit.get(0)+"");
-        textYMin.setText(selectedProblem.lowerLimit.get(0)+"");
-        textYMax.setText(selectedProblem.upperLimit.get(0)+"");
+        textYMin.setText(selectedProblem.lowerLimit.get(1)+"");
+        textYMax.setText(selectedProblem.upperLimit.get(1)+"");
     }
     
     // this function will be run from the EDT
