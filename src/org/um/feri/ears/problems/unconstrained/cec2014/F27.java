@@ -6,23 +6,19 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 
 public class F27 extends CEC2014 {
-	
-	public F27(int d) {
-		super(d,27);
 
-		name = "F27 Composition Function 5";
-	}
+    public F27(int d) {
+        super(d, 27);
 
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
-	public double eval(double x[]) {
-		double F;
-		F = Functions.cf05(x,numberOfDimensions,OShift,M,1);
-		F+=2700.0;
-		return F;
-	}
+        name = "F27 Composition Function 5";
+    }
+
+    @Override
+    public double eval(double[] x) {
+        double F;
+        F = Functions.cf05(x, numberOfDimensions, OShift, M, 1);
+        F += 2700.0;
+        return F;
+    }
 
 }

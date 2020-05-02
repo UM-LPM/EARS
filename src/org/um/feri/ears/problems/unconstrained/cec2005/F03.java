@@ -42,10 +42,6 @@ public class F03 extends CEC2005Base {
 		constant = Math.pow(1.0e6, 1.0/(d-1.0));
 	}
 
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-
 	@Override
 	public double eval(double[] x) {
 

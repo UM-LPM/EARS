@@ -50,10 +50,6 @@ public class F05 extends CEC2005Base {
 		Ax(m_B, m_A, m_o);
 	}
 
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-
 	@Override
 	public double eval(double[] x) {
 

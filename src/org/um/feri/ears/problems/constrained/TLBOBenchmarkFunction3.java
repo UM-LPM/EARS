@@ -121,13 +121,7 @@ public class TLBOBenchmarkFunction3  extends Problem{
 		v=a1+a2+a3+a4+a5+a6+a7-a8-a9-a10;
 		return v;
 	}
-	
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-
-	public double getOptimumEval() {
+	public double getGlobalOptimum() {
 		return 680.6300573;
 	}
 }

@@ -1,10 +1,6 @@
 package org.um.feri.analyse.correlationdependence;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.Comparator;
 
 import org.um.feri.analyse.util.MersenneTwister;
 import org.um.feri.ears.problems.*;
@@ -60,7 +56,7 @@ public class CorrelationAndDependence {
 	public void generateAndFillNewRandom() {
 		int dim = problem.getNumberOfDimensions();
 		double best[][] = problem.getOptimalVector();
-		double bestf = problem.getOptimumEval(); 
+		double bestf = problem.getGlobalOptimum();
 		Double ind[] = new Double[dim];
 		ArrayList<Double> individual;
 		double sx=0;

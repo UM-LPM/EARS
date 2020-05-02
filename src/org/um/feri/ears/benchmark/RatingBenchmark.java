@@ -83,7 +83,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 				if (printSingleRunDuration)
 					System.out.println(al.getID() + ": " + duration / 1000.0);
 				reset(task); // for one eval!
-				if (task.areDimensionsInFeasableInterval(bestByALg.getVariables())) {
+				if (task.areDimensionsInFeasibleInterval(bestByALg.getVariables())) {
 
 					results.add(new AlgorithmEvalResult(bestByALg, al, task.getNumberOfEvaluations()));
 					allSingleProblemRunResults.add(task, bestByALg, al);

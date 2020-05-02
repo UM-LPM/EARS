@@ -70,20 +70,6 @@ public class SoilModelProblem extends Problem{
 		name="Earth Model";
 	}
 
-
-	@Override
-	public double eval(Double[] ds) {
-
-		if(simplified)
-		{
-			return simplifiedModel(ArrayUtils.toPrimitive(ds));
-		}
-		else
-		{
-			return nLayerModel(ArrayUtils.toPrimitive(ds));
-		}
-	}
-
 	private double simplifiedModel(double[] ds) {
 
 		double k1 = (ds[2] -ds[0]) / (ds[2] + ds[0]);

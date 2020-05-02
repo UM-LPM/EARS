@@ -32,22 +32,8 @@ public class F06 extends CEC2005Base {
 		// Do the "(o - 1)" part first
 		for (int i = 0 ; i < d ; i ++) {
 			m_o[i] -= 1.0;
+			optimum[0][i] = m_o[i] + 1.0;
 		}
-	}
-	
-	@Override
-	public double[][] getOptimalVector() {
-		
-		double[][] optimal = new double [1][numberOfDimensions];
-		for (int i = 0 ; i < numberOfDimensions ; i ++) {
-			optimal[0][i] = m_o[i] + 1.0;
-		}
-		
-		return optimal;
-	}
-
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
 	}
 
 	@Override

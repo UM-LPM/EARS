@@ -13,12 +13,8 @@ public class F10 extends CEC2015 {
 		name = "F10 Hybrid Function 1";
 	}
 
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
 	@Override
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double F;
 		F = Functions.hf01(x, numberOfDimensions, OShift, M, SS, 1, 1);
 		F+= 100 * func_num;

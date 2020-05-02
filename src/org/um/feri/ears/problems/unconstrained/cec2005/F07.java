@@ -38,10 +38,6 @@ public class F07 extends CEC2005Base {
 		loadMatrixFromFile(DEFAULT_FILE_MX_PREFIX + d + DEFAULT_FILE_MX_SUFFIX, d, d, m_matrix);
 	}
 
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-
 	@Override
 	public double eval(double[] x) {
 		double result = 0.0;

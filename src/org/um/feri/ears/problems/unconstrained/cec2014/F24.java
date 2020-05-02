@@ -14,11 +14,7 @@ public class F24 extends CEC2014 {
 	}
 
 	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double F;
 		F = Functions.cf02(x,numberOfDimensions,OShift,M,1);
 		F+=2400.0;

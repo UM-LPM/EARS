@@ -38,8 +38,7 @@ public abstract class CEC2010 extends Problem {
 			lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
 			upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.0));
 	    }
-		
-
+		optimum[0] = OShift;
 	}
 	
 	protected List<Double> getPermutatedIndices(List<Double> x, int[] perm, int start, int length) {
@@ -51,8 +50,7 @@ public abstract class CEC2010 extends Problem {
 		
 		return s;
 	}
-	
-	
+
 	protected double[] getPermutatedIndices(double[] x, int[] perm, int start, int length) {
 		double[] s = new double[length];
 		int k = 0;
@@ -62,19 +60,4 @@ public abstract class CEC2010 extends Problem {
 		
 		return s;
 	}
-	
-	@Override
-	public double getOptimumEval() {
-
-		return 0;
-	}
-
-	@Override
-	public double[][] getOptimalVector() {
-		
-		double[][] optimal = new double [1][numberOfDimensions];
-		optimal[0] = OShift;
-		return optimal;
-	}
-
 }

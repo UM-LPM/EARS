@@ -85,11 +85,6 @@ public class TLBOBenchmarkFunction2 extends Problem {
 		return v;
 	}
 	
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-
 	public double[] calc_constrains(double x[]) {
 		double[] g = new double[numberOfConstraints];
 		double d = -1;
@@ -120,7 +115,7 @@ public class TLBOBenchmarkFunction2 extends Problem {
 		return "0 OK";
 	}
 
-	public double getOptimumEval() {
+	public double getGlobalOptimum() {
 		return 1;
 	}
 }

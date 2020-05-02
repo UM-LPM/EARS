@@ -35,11 +35,7 @@ public class F8 extends CEC2010{
 	}
 
 	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double F = 0;
 		double[] p1 = getPermutatedIndices(x,P,0,m);
 		double[] p2 = getPermutatedIndices(x,P,m,numberOfDimensions - m);

@@ -34,12 +34,7 @@ public class F18 extends CEC2010{
 		}
 	}
 
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double F = 0;
 		int max = (numberOfDimensions / (m << 1));
 		int from, to;

@@ -7,7 +7,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.Rastrigin;
 import org.um.feri.ears.problems.unconstrained.RosenbrockDeJong2;
-import org.um.feri.ears.problems.unconstrained.Schwefel2_26;
+import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.Util;
 
@@ -28,7 +28,7 @@ public class SORatingExample2 {
         	problems[1] = new Griewank(dimmensions[i]);
         	problems[2] = new Rastrigin(dimmensions[i]);
         	problems[3] = new RosenbrockDeJong2(dimmensions[i]);
-        	problems[4] = new Schwefel2_26(dimmensions[i]);
+        	problems[4] = new Schwefel226(dimmensions[i]);
         	
         	for(int pr = 0; pr < problems.length; ++pr)
         	{

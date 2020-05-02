@@ -27,13 +27,8 @@ public class F3 extends CEC2010{
 		
 	}
 
-	
 	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double F = 0;
 		F = Functions.ackley_func(x, numberOfDimensions, OShift, M, 1, 0);
 		return F;

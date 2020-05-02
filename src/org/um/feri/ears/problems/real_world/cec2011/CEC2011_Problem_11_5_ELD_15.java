@@ -219,14 +219,4 @@ public class CEC2011_Problem_11_5_ELD_15 extends Problem {
 
     return f;
   }
-
-  @Override
-  public double eval(Double[] ds) {
-    return eval(ArrayUtils.toPrimitive(ds));
-  }
-
-  public double getOptimumEval() {
-    return 0; // OK
-  }
-
 }

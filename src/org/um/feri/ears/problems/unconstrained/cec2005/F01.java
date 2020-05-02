@@ -30,10 +30,6 @@ public class F01 extends CEC2005Base {
 		// Load the shifted global optimum
 		loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
 	}
-	
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
 
 	@Override
 	public double eval(double[] x) {
