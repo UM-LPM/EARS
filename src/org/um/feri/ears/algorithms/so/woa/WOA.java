@@ -19,6 +19,8 @@ import org.um.feri.ears.util.FakeRandomGenerator; // Fake Random numbers
 public class WOA extends Algorithm{
 	DoubleSolution bestSolution;
 	
+	boolean useFakeGenerator = false;
+	
 	int pop_size;
 	Task task;
 	
@@ -38,24 +40,28 @@ public class WOA extends Algorithm{
 	
 	ArrayList<DoubleSolution> population;
 	
-	FakeRandomGenerator Util;
+	FakeRandomGenerator FakeGenerator;
 	
-	public WOA(boolean d)
-	{
+	public WOA() {
 		this(30);
-		setDebug(d);
 	}
 	
-	public WOA(int pop_size)
-	{
+	public WOA(int popSize) {
+		this(popSize, false, false);
+	}
+	
+	public WOA(int pop_size, boolean useFakeRandom, boolean debug) {
 		super();
 		this.pop_size = pop_size;
+		this.useFakeGenerator = useFakeRandom;
+		setDebug(debug);
 		
 		au = new Author("janez", "janezk7@gmail.com");
 		ai = new AlgorithmInfo("WOA", "mirjalili stuff article", "WOA", "Whale Optimization Algorithm");
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");	
 		
-		Util = new FakeRandomGenerator();
+		// Initialize fake random generator
+		FakeGenerator = new FakeRandomGenerator();
 	}
 	
 	@Override
@@ -64,8 +70,7 @@ public class WOA extends Algorithm{
 		initPopulation();
 		int maxIt = 10000;
 		
-		
-		bestSolution = taskProblem.getRandomSolution();
+		bestSolution = population.get(0);
 		
 		if(task.getStopCriteria() == EnumStopCriteria.ITERATIONS)
 		{
@@ -84,25 +89,23 @@ public class WOA extends Algorithm{
 			a2= -1 + task.getNumberOfIterations() * ((-1) / maxIt);
 			
 			// For each search agent
-			for(int index = 0; index < pop_size; index++ )
-			{
+			for(int index = 0; index < pop_size; index++ ){
 				DoubleSolution CurrentAgent = population.get(index);
 				double[] newPosition = new double[task.getNumberOfDimensions()];
 				
-				
 				// Randoms for A and C 
-				r1 = Util.nextDouble();
-				r2 = Util.nextDouble();
+				r1 = nextDouble();
+				r2 = nextDouble();
 				
 				A = (2*a*r1)-a; // Random value on the interval of shrinking a 
 				C = 2*r2;
 				
 				// Eq 2.5 parameters
 				b = 1;
-				l = (a2-1) * (Util.nextDouble() + 1);
+				l = (a2-1) * (nextDouble() + 1);
 				
 				// Get p 
-				p = Util.nextDouble();
+				p = nextDouble();
 				
 				// For each dimension 
 				for(int i = 0; i < task.getNumberOfDimensions(); i++) 
@@ -114,7 +117,7 @@ public class WOA extends Algorithm{
 						{
 							// Exploration
 							// Select random agent and update position of current (Eq. 2.8)
-							int randAgentIndex = Util.nextInt(0, pop_size-1);
+							int randAgentIndex = nextInt(0, pop_size-1);
 							DoubleSolution X_rand = population.get(randAgentIndex);
 							double D_X_rand = Math.abs(C * X_rand.getValue(i) - CurrentAgent.getValue(i));
 							newPosition[i] = X_rand.getValue(i) - A * D_X_rand;
@@ -150,6 +153,8 @@ public class WOA extends Algorithm{
 				//	population.set(index,  newWhale);
 			}
 			updateBest();
+			if(debug)
+				System.out.println(population);
 			task.incrementNumberOfIterations();
 		}
 		
@@ -157,14 +162,55 @@ public class WOA extends Algorithm{
 	}
 
 	private void initPopulation() throws StopCriteriaException {
+		int numberOfDimensions = task.getNumberOfDimensions();
+		double[] lowerLimit = task.getLowerLimit();
+		double[] upperLimit = task.getUpperLimit();
 		population = new ArrayList<DoubleSolution>();
 	
 		for (int i = 0; i < pop_size; i++) {
-			population.add(task.getRandomSolution());
+			if(this.useFakeGenerator){
+				// Generate solution via fake random generator
+				double[] pos = new double[numberOfDimensions];
+				for (int j = 0; j < numberOfDimensions; j++) {
+					pos[j] = nextDouble(lowerLimit[j], upperLimit[j]);
+				}
+				DoubleSolution solution = task.eval(pos);
+				population.add(solution);
+			}
+			else {
+				// Generate random solution
+				population.add(task.getRandomSolution());
+			}
+			
 			if (task.isStopCriteria())
 				break;
 		}
 	}
+	
+/**
+ * Get random numbers
+ */
+
+private double nextDouble() {
+	double r = this.useFakeGenerator ? 
+			FakeGenerator.nextDouble() 
+			: org.um.feri.ears.util.Util.nextDouble();
+	return r;
+}
+
+private double nextDouble(double lowerBound, double upperBound) {
+	double r = this.useFakeGenerator ? 
+			FakeGenerator.nextDouble(lowerBound, upperBound) 
+			: org.um.feri.ears.util.Util.nextDouble();
+	return r;
+}
+
+private int nextInt(int lowerBound, int upperBound) {
+	int r = this.useFakeGenerator ? 
+			FakeGenerator.nextInt(lowerBound, upperBound) 
+			: org.um.feri.ears.util.Util.nextInt(lowerBound, upperBound);
+	return r;
+}
 	
 	/**
 	 * Update best solution so far 
@@ -175,6 +221,6 @@ public class WOA extends Algorithm{
 	}
 	
 	@Override
-	public void resetDefaultsBeforNewRun() {
+	public void resetToDefaultsBeforeNewRun() {
 	}
 }

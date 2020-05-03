@@ -32,6 +32,14 @@ public class FakeRandomGenerator {
 		return numbers.get(index++);
 	}
 	
+	public double nextDouble(double min, double max) {
+		if (index >= numbers.size())
+			index = 0;
+		double random = numbers.get(index++);
+		double range = max - min;
+		return min + (random * range);
+	}
+	
 	public int nextInt(int min, int max) {
 		if (index >= numbers.size())
 			index = 0;
