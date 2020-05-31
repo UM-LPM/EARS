@@ -70,7 +70,8 @@ public class WOA extends Algorithm{
 		initPopulation();
 		int maxIt = 10000;
 		
-		bestSolution = population.get(0);
+		//bestSolution = population.get(0);
+		updateBest();
 		
 		if(task.getStopCriteria() == EnumStopCriteria.ITERATIONS)
 		{
@@ -216,8 +217,9 @@ private int nextInt(int lowerBound, int upperBound) {
 	 * Update best solution so far 
 	 */
 	private void updateBest() {
-		population.sort(new TaskComparator(task));
-		bestSolution = population.get(0);
+		ArrayList<DoubleSolution> popCopy = new ArrayList<DoubleSolution>(population);
+		popCopy.sort(new TaskComparator(task));
+		bestSolution = popCopy.get(0);
 	}
 	
 	@Override

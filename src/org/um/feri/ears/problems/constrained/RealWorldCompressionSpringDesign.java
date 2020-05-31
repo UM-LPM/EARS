@@ -22,7 +22,6 @@ import org.um.feri.ears.problems.Problem;
 * 
 */
 public class RealWorldCompressionSpringDesign extends Problem {
-
 	public RealWorldCompressionSpringDesign() {
 		// Stevilo spremenljivk in omejitev
 		super(3,4);
@@ -33,14 +32,10 @@ public class RealWorldCompressionSpringDesign extends Problem {
 		count_constraints  = new Double[numberOfConstraints];
 		sum_constraints  = new Double[numberOfConstraints];
 		normalization_constraints_factor = new Double[numberOfConstraints];
-		
-		upperLimit = 
-				new ArrayList<Double>(
+		upperLimit = new ArrayList<Double>(
 						Collections.nCopies(numberOfDimensions, 0.0));
-		lowerLimit = 
-				new ArrayList<Double>(
+		lowerLimit = new ArrayList<Double>(
 						Collections.nCopies(numberOfDimensions, 0.0));
-
 		// Diameter zice
 		lowerLimit.set(0, 0.05);
 		upperLimit.set(0, 2.00);
@@ -53,8 +48,7 @@ public class RealWorldCompressionSpringDesign extends Problem {
 	}
 
 	public double eval(double x[]) {
-		double v = 0;
-		v = (x[2] + 2) * x[1] * Math.pow(x[0], 2);
+		double v = (x[2] + 2) * x[1] * Math.pow(x[0], 2);
 		return v;
 	}
 	
@@ -65,17 +59,13 @@ public class RealWorldCompressionSpringDesign extends Problem {
 
 	public double[] calc_constrains(double x[]) {
 		double[] g = new double[numberOfConstraints];
-		
 		g[0] = 1 - ((Math.pow(x[1], 3) * x[2]) / (71785 * Math.pow(x[0], 4)));
 		// TODO: Look into it. Velika razhajanja iz constrainta v clanku in definiciji constrainta v http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page5161.htm
 		g[1] = (4 * Math.pow(x[1], 2) - x[0] * x[1]) 
 				/ (12566 * (x[1] * Math.pow(x[0], 3) - Math.pow(x[0], 4))) 
 				+ (1 / (5108 * Math.pow(x[0], 2)));
-		
 		g[2] = 1 - (140.45 * x[0] / (Math.pow(x[1], 2) * x[2]));
-		
 		g[3] = (x[0] + x[1]) / 1.5 - 1;
-		
 		return g;
 	}
 	
