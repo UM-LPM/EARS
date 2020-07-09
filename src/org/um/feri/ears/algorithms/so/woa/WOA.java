@@ -1,5 +1,6 @@
 package org.um.feri.ears.algorithms.so.woa;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -67,8 +68,11 @@ public class WOA extends Algorithm{
 	@Override
 	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
 		task = taskProblem;
+		
 		initPopulation();
-		int maxIt = 10000;
+		
+		//getHardcodedRastriginPopulation();
+		int maxIt = 200;
 		
 		//bestSolution = population.get(0);
 		updateBest();
@@ -84,10 +88,10 @@ public class WOA extends Algorithm{
 		}
 		
 		if (debug)
-			System.out.println(taskProblem.getNumberOfEvaluations() + " start " + bestSolution);
+			System.out.println("E: " + bestSolution.getEval());
 		while(!task.isStopCriteria()) {
 			a = 2.0 - task.getNumberOfIterations() * (2.0 / maxIt);
-			a2= -1 + task.getNumberOfIterations() * ((-1) / maxIt);
+			a2= -1.0 + task.getNumberOfIterations() * ((-1.0) / maxIt);
 			
 			// For each search agent
 			for(int index = 0; index < pop_size; index++ ){
@@ -98,12 +102,12 @@ public class WOA extends Algorithm{
 				r1 = nextDouble();
 				r2 = nextDouble();
 				
-				A = (2*a*r1)-a; // Random value on the interval of shrinking a 
-				C = 2*r2;
+				A = (2.0*a*r1)-a; // Random value on the interval of shrinking a 
+				C = 2.0*r2;
 				
 				// Eq 2.5 parameters
-				b = 1;
-				l = (a2-1) * (nextDouble() + 1);
+				b = 1.0;
+				l = (a2-1.0) * nextDouble() + 1.0;
 				
 				// Get p 
 				p = nextDouble();
@@ -118,7 +122,7 @@ public class WOA extends Algorithm{
 						{
 							// Exploration
 							// Select random agent and update position of current (Eq. 2.8)
-							int randAgentIndex = nextInt(0, pop_size-1);
+							int randAgentIndex = (int)(pop_size*nextDouble());//nextInt(0, pop_size-1);
 							DoubleSolution X_rand = population.get(randAgentIndex);
 							double D_X_rand = Math.abs(C * X_rand.getValue(i) - CurrentAgent.getValue(i));
 							newPosition[i] = X_rand.getValue(i) - A * D_X_rand;
@@ -136,7 +140,7 @@ public class WOA extends Algorithm{
 					{
 						// Spiral model (Eq 2.5)
 						double D_X_leader = Math.abs(bestSolution.getValue(i)-CurrentAgent.getValue(i));
-						newPosition[i] = D_X_leader * Math.exp(b*l) * Math.cos(l*2*Math.PI) + bestSolution.getValue(i);
+						newPosition[i] = D_X_leader * Math.exp(b*l) * Math.cos(l*2.0*Math.PI) + bestSolution.getValue(i);
 						
 					}
 				}
@@ -155,11 +159,43 @@ public class WOA extends Algorithm{
 			}
 			updateBest();
 			if(debug)
-				System.out.println(population);
+				System.out.println(bestSolution.getEval());
 			task.incrementNumberOfIterations();
 		}
 		
 		return bestSolution;
+	}
+	
+	private void getHardcodedSpherePopulation() throws StopCriteriaException {
+		// Dimensions = 2
+		// Popsize = 10
+		population = new ArrayList<DoubleSolution>();
+		population.add(task.eval(new double[] {62.9400, -68.4800}));
+		population.add(task.eval(new double[] {81.1600, 94.1200}));
+		population.add(task.eval(new double[] {-74.6000, 91.4300}));
+		population.add(task.eval(new double[] {82.6800, -2.9200}));
+		population.add(task.eval(new double[] {26.4700, 60.0600}));
+		population.add(task.eval(new double[] {-80.4900, -71.6200}));
+		population.add(task.eval(new double[] {-44.3000, -15.6500}));
+		population.add(task.eval(new double[] {9.3800, 83.1500}));
+		population.add(task.eval(new double[] {91.5000, 58.4400}));
+		population.add(task.eval(new double[] {92.9800, 91.9000}));
+	}
+	
+	private void getHardcodedRastriginPopulation() throws StopCriteriaException {
+		// Dimensions = 2
+		// Popsize = 10
+		population = new ArrayList<DoubleSolution>();
+		population.add(task.eval(new double[] {-3.34450060166138,	-2.13008302119204}));
+		population.add(task.eval(new double[] {-1.11679690420495,	-0.699892016653105 }));
+		population.add(task.eval(new double[] {3.39332856667207,	-4.96141183348717 }));
+		population.add(task.eval(new double[] {3.10645137000899,	4.95681253764254 }));
+		population.add(task.eval(new double[] {-4.50077512530029,	-3.40819548247392 }));
+		population.add(task.eval(new double[] {-1.03160042891698,	-4.03234462793048 }));
+		population.add(task.eval(new double[] {0.275208504404950,	-1.30652426183130 }));
+		population.add(task.eval(new double[] {-0.851973448388742,	-3.09126755795994 }));
+		population.add(task.eval(new double[] {1.60624528357076,	-0.105598586715915 }));
+		population.add(task.eval(new double[] {1.31044719810667,	-1.64358744687864 }));
 	}
 
 	private void initPopulation() throws StopCriteriaException {
@@ -188,30 +224,30 @@ public class WOA extends Algorithm{
 		}
 	}
 	
-/**
- * Get random numbers
- */
-
-private double nextDouble() {
-	double r = this.useFakeGenerator ? 
-			FakeGenerator.nextDouble() 
-			: org.um.feri.ears.util.Util.nextDouble();
-	return r;
-}
-
-private double nextDouble(double lowerBound, double upperBound) {
-	double r = this.useFakeGenerator ? 
-			FakeGenerator.nextDouble(lowerBound, upperBound) 
-			: org.um.feri.ears.util.Util.nextDouble();
-	return r;
-}
-
-private int nextInt(int lowerBound, int upperBound) {
-	int r = this.useFakeGenerator ? 
-			FakeGenerator.nextInt(lowerBound, upperBound) 
-			: org.um.feri.ears.util.Util.nextInt(lowerBound, upperBound);
-	return r;
-}
+	/**
+	 * Get random numbers
+	 */
+	
+	private double nextDouble() {
+		double r = this.useFakeGenerator ? 
+				FakeGenerator.nextDouble() 
+				: org.um.feri.ears.util.Util.nextDouble();
+		return r;
+	}
+	
+	private double nextDouble(double lowerBound, double upperBound) {
+		double r = this.useFakeGenerator ? 
+				FakeGenerator.nextDouble(lowerBound, upperBound) 
+				: org.um.feri.ears.util.Util.nextDouble();
+		return r;
+	}
+	
+	private int nextInt(int lowerBound, int upperBound) {
+		int r = this.useFakeGenerator ? 
+				FakeGenerator.nextInt(lowerBound, upperBound) 
+				: org.um.feri.ears.util.Util.nextInt(lowerBound, upperBound);
+		return r;
+	}
 	
 	/**
 	 * Update best solution so far 
@@ -219,7 +255,8 @@ private int nextInt(int lowerBound, int upperBound) {
 	private void updateBest() {
 		ArrayList<DoubleSolution> popCopy = new ArrayList<DoubleSolution>(population);
 		popCopy.sort(new TaskComparator(task));
-		bestSolution = popCopy.get(0);
+		if(bestSolution == null || popCopy.get(0).getEval() < bestSolution.getEval())
+			bestSolution = popCopy.get(0);
 	}
 	
 	@Override
