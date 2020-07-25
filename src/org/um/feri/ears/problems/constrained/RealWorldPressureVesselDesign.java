@@ -69,10 +69,10 @@ public class RealWorldPressureVesselDesign extends Problem {
 
 	public double[] calc_constrains(double x[]) {
 		double[] g = new double[numberOfConstraints];
-		g[0] = (-1 * x[0]) + (0.0193 * x[2]);
-		g[1] = (-1 * x[1]) + (0.00954 * x[2]); // Napaka v WOA clanku! ni -x3 ampak -x2!!!
-		g[2] = ((-1 * Math.PI) * Math.pow(x[2], 2) * x[3])
-				- ((4/3) * Math.PI * Math.pow(x[2], 3))
+		g[0] = (-1.0 * x[0]) + (0.0193 * x[2]);
+		g[1] = (-1.0 * x[1]) + (0.00954 * x[2]); // Napaka v WOA clanku! ni -x3 ampak -x2!!!
+		g[2] = ((-1.0 * Math.PI) * Math.pow(x[2], 2) * x[3])
+				- ((4.0/3.0) * Math.PI * Math.pow(x[2], 3))
 				+ 1296000;
 		g[3] = x[3] - 240;
 		
