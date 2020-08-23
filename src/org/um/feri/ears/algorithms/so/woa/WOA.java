@@ -15,12 +15,12 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 //import org.um.feri.ears.util.Util; // Random numbers
-import org.um.feri.ears.util.FakeRandomGenerator; // Fake Random numbers
+import org.um.feri.ears.util.MockRandomGenerator; // Fake Random numbers
 
 public class WOA extends Algorithm{
 	DoubleSolution bestSolution;
 	
-	boolean useFakeGenerator = false;
+	boolean useMockRandomGenerator = false;
 	
 	int pop_size;
 	Task task;
@@ -41,7 +41,7 @@ public class WOA extends Algorithm{
 	
 	ArrayList<DoubleSolution> population;
 	
-	FakeRandomGenerator FakeGenerator;
+	MockRandomGenerator MockRandom;
 	
 	public WOA() {
 		this(30);
@@ -51,18 +51,18 @@ public class WOA extends Algorithm{
 		this(popSize, false, false);
 	}
 	
-	public WOA(int pop_size, boolean useFakeRandom, boolean debug) {
+	public WOA(int pop_size, boolean useMockRandom, boolean debug) {
 		super();
 		this.pop_size = pop_size;
-		this.useFakeGenerator = useFakeRandom;
+		this.useMockRandomGenerator = useMockRandom;
 		setDebug(debug);
 		
 		au = new Author("janez", "janezk7@gmail.com");
 		ai = new AlgorithmInfo("WOA", "mirjalili stuff article", "WOA", "Whale Optimization Algorithm");
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");	
 		
-		// Initialize fake random generator
-		FakeGenerator = new FakeRandomGenerator();
+		// Initialize mocked random generator
+		MockRandom = new MockRandomGenerator();
 	}
 	
 	@Override
@@ -71,6 +71,7 @@ public class WOA extends Algorithm{
 		
 		initPopulation();
 		
+		//getHardcodedSpherePopulation();
 		//getHardcodedRastriginPopulation();
 		int maxIt = 200;
 		
@@ -205,11 +206,11 @@ public class WOA extends Algorithm{
 		population = new ArrayList<DoubleSolution>();
 	
 		for (int i = 0; i < pop_size; i++) {
-			if(this.useFakeGenerator){
+			if(this.useMockRandomGenerator){
 				// Generate solution via fake random generator
 				double[] pos = new double[numberOfDimensions];
 				for (int j = 0; j < numberOfDimensions; j++) {
-					pos[j] = nextDouble(lowerLimit[j], upperLimit[j]);
+					pos[j] = Math.floor(nextDouble(lowerLimit[j], upperLimit[j]));
 				}
 				DoubleSolution solution = task.eval(pos);
 				population.add(solution);
@@ -229,22 +230,22 @@ public class WOA extends Algorithm{
 	 */
 	
 	private double nextDouble() {
-		double r = this.useFakeGenerator ? 
-				FakeGenerator.nextDouble() 
+		double r = this.useMockRandomGenerator ? 
+				MockRandom.nextDouble() 
 				: org.um.feri.ears.util.Util.nextDouble();
 		return r;
 	}
 	
 	private double nextDouble(double lowerBound, double upperBound) {
-		double r = this.useFakeGenerator ? 
-				FakeGenerator.nextDouble(lowerBound, upperBound) 
+		double r = this.useMockRandomGenerator ? 
+				MockRandom.nextDouble(lowerBound, upperBound) 
 				: org.um.feri.ears.util.Util.nextDouble();
 		return r;
 	}
 	
 	private int nextInt(int lowerBound, int upperBound) {
-		int r = this.useFakeGenerator ? 
-				FakeGenerator.nextInt(lowerBound, upperBound) 
+		int r = this.useMockRandomGenerator ? 
+				MockRandom.nextInt(lowerBound, upperBound) 
 				: org.um.feri.ears.util.Util.nextInt(lowerBound, upperBound);
 		return r;
 	}

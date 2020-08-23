@@ -6,16 +6,16 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FakeRandomGenerator {
+public class MockRandomGenerator {
 	private int index;
 	private List<Double> numbers;
 	private final static String numbersFilePath = "D://TestNumbers2.txt";
 	
-	public FakeRandomGenerator() {
+	public MockRandomGenerator() {
 		this(numbersFilePath);
 	}
 	
-	public FakeRandomGenerator(String filePath) {
+	public MockRandomGenerator(String filePath) {
 		index = 0;
 		try {
 			numbers = Files.lines(Paths.get(filePath))
