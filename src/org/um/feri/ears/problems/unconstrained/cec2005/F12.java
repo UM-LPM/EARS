@@ -56,10 +56,6 @@ public class F12 extends CEC2005Base {
 		}
 	}
 
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-
 	@Override
 	public double eval(double[] x) {
 		double sum = 0.0;

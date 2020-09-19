@@ -15,12 +15,8 @@ public class F1 extends CEC2015  {
 		name = "F01 Bent Cigar";
 	}
 
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
 	@Override
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double F;
 		F = Functions.bent_cigar_func(x, numberOfDimensions, OShift, M, 1, 1);
 		F+= 100 * func_num;

@@ -94,7 +94,7 @@ public class Validathor {
 			}
 
 		} catch (Exception e) {
-			System.err.println("Error when checking for paramterelss public constructor at: "+algorithmDir);
+			System.err.println("Error when checking for paramterless public constructor at: "+algorithmDir);
 			e.printStackTrace();
 		}
 		

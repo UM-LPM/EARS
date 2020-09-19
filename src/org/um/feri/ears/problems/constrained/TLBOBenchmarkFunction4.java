@@ -117,11 +117,6 @@ public class TLBOBenchmarkFunction4 extends Problem {
 		double v = x[0] + x[1] + x[2];
 		return v;
 	}
-	
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
 
 	/*
 	 * @Override public boolean isFirstBetter(double[] x, double eval_x,
@@ -171,7 +166,7 @@ public class TLBOBenchmarkFunction4 extends Problem {
 	 * (x[1]*x[3]-x[1]*x[6]-1250*x[3]+1250*x[4]>0.0000001) d+=1; if
 	 * (x[2]*x[4]-x[2]*x[7]-2500*x[4]+1250000>0.0000001) d+=1; return d; }
 	 */
-	public double getOptimumEval() {
+	public double getGlobalOptimum() {
 		return 7049.3307;
 	}
 

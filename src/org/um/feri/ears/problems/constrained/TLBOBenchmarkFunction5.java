@@ -74,11 +74,6 @@ public class TLBOBenchmarkFunction5  extends Problem{
 		return v;
 	}
 	
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
 	/*
 	@Override
 	public boolean isFirstBetter(double[] x, double eval_x, double[] y,
@@ -146,7 +141,7 @@ public class TLBOBenchmarkFunction5  extends Problem{
 		return (mindx1*mindx1+mindx2*mindx2+mindx3*mindx3); //constraints
 	}
 	
-	public double getOptimumEval() {
+	public double getGlobalOptimum() {
 		return 1;
 	}
 }

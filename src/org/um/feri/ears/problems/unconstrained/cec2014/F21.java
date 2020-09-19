@@ -14,11 +14,7 @@ public class F21 extends CEC2014 {
 	}
 
 	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double F;
 		F = Functions.hf05(x,numberOfDimensions,OShift,M,SS,1,1);
 		F+=2100.0;

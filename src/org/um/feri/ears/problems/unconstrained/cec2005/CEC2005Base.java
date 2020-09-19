@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -51,7 +52,8 @@ public abstract class CEC2005Base extends Problem {
 		if (!((d == 2) || (d == 10) || (d == 30) || (d == 50))) {
             System.out.println("\nError: CEC2005 has predifend values only for D = 2, 10, 30, 50.");
         }
-		
+
+
 		m_biases = new double[NUM_TEST_FUNC];
 		m_iSqrt = new double[MAX_SUPPORT_DIM];
 
@@ -60,23 +62,16 @@ public abstract class CEC2005Base extends Problem {
 		for (int i = 0 ; i < MAX_SUPPORT_DIM ; i ++) {
 			m_iSqrt[i] = Math.sqrt(((double )i) + 1.0);
 		}
-		
+
+		optimum[0] = m_o;
 	}
 	
 	@Override
-	public double getOptimumEval() {
+	public double getGlobalOptimum() {
 
 		return  m_biases[func_num - 1];
 	}
-	
-	@Override
-	public double[][] getOptimalVector() {
-		
-		double[][] optimal = new double [1][numberOfDimensions];
-		optimal[0] = m_o;
-		return optimal;
-	}
-	
+
 	//
 	// Basic functions
 	//

@@ -14,15 +14,10 @@ public class F10 extends CEC2014 {
 	}
 
 	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double F;
 		F = Functions.schwefel_func(x,numberOfDimensions,OShift,M,1,0);
 		F+=1000.0;
 		return F;
 	}
-
 }

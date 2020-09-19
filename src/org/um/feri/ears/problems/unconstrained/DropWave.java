@@ -6,8 +6,11 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- * https://www.sfu.ca/~ssurjano/drop.html
+import static java.lang.Math.*;
+
+/*
+https://www.sfu.ca/~ssurjano/drop.html
+http://benchmarkfcns.xyz/benchmarkfcns/dropwavefcn.html
  */
 public class DropWave extends Problem {
 
@@ -15,21 +18,17 @@ public class DropWave extends Problem {
         super(2, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.12));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.12));
-        name = "Drop-Wave";
-    }
-
-    public double eval(double x[]) {
-        double x1 = x[0];
-        double x2 = x[1];
-        return -((1.0 + Math.cos(12.0 * Math.sqrt((x1 * x1) + (x2 * x2)))) / ((((x1 * x1) + (x2 * x2)) / 2.0) + 2.0));
-    }
-
-    public double getOptimumEval() {
-        return -1.0;
+        name = "DropWave";
     }
 
     @Override
-    public double eval(Double[] ds) {
-        return eval(ArrayUtils.toPrimitive(ds));
+    public double eval(double[] x) {
+        double fitness = -((1.0 + cos(12.0 * sqrt(pow(x[0], 2) + pow(x[1], 2)))) / (((pow(x[0], 2) + pow(x[1], 2)) / 2.0) + 2.0));
+        return fitness;
+    }
+
+    @Override
+    public double getGlobalOptimum() {
+        return -1.0;
     }
 }

@@ -62,21 +62,12 @@ public abstract class CEC2015 extends Problem {
 
         /* Load Shuffle_data****************************************** */
         SS = DataReader.readShuffleData(func_num, d);
-
+        optimum[0] = OShift;
 	}
 
 	@Override
-	public double getOptimumEval() {
+	public double getGlobalOptimum() {
 
 		return func_num * 100;
 	}
-
-	@Override
-	public double[][] getOptimalVector() {
-		
-		double[][] optimal = new double [1][numberOfDimensions];
-		optimal[0] = OShift;
-		return optimal;
-	}
-	
 }

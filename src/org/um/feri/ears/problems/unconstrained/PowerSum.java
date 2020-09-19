@@ -1,45 +1,40 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import static java.lang.Math.*;
+
+/*
+https://www.sfu.ca/~ssurjano/powersum.html
+ */
+
 public class PowerSum extends Problem {
-	
-	public double[] b;
-	
-	public PowerSum() {
-		super(4,0);
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, numberOfDimensions*1.0));
-		name = "PowerSum";
-		b = new double[] {8,18,44,114};
 
-	}
-	
-	public double eval(double x[]) {
-		double v = 0;
-		double v_1 = 0;
-		for (int i = 0; i < numberOfDimensions; i++){
-			v_1 = 0;
-			for (int j = 0; j < numberOfDimensions; j++){
-			   v_1 = v_1 + Math.pow(x[j],i+1);
-			}
-			v = v + Math.pow(v_1 - b[i], 2);
-		}
-		return v;
-	}
+    public double[] b;
 
-	public double getOptimumEval() {
-		return 0;
-	}
+    public PowerSum() {
+        super(4, 0);
+        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, numberOfDimensions * 1.0));
+        name = "PowerSum";
+        b = new double[]{8, 18, 44, 114};
 
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
+        optimum[0] = new double[]{1.0, 2.0, 2.0, 3.0};
+    }
 
+    @Override
+    public double eval(double[] x) {
+        double fitness = 0;
+        double sum;
+        for (int i = 0; i < numberOfDimensions; i++) {
+            sum = 0;
+            for (int j = 0; j < numberOfDimensions; j++) {
+                sum += pow(x[j], i + 1);
+            }
+            fitness += pow(sum - b[i], 2);
+        }
+        return fitness;
+    }
 }

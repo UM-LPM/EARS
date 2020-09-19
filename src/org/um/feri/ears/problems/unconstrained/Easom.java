@@ -1,40 +1,36 @@
 package org.um.feri.ears.problems.unconstrained;
 
+import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
+import static java.lang.Math.*;
 
-/**
- * https://www.sfu.ca/~ssurjano/easom.html
- *
- */
+/*
+https://www.sfu.ca/~ssurjano/easom.html
+http://benchmarkfcns.xyz/benchmarkfcns/easomfcn.html
+*/
 public class Easom extends Problem {
-	
-	public Easom() {
-		super(2,0);
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
-		name = "Easom";
-		
-		Arrays.fill(optimum[0], Math.PI);
-	}
-	
-	public double eval(double x[]) {
-		double v = 0;
-		v = -1*Math.cos(x[0])*Math.cos(x[1])*Math.exp(-1*Math.pow(x[0]-Math.PI, 2)-Math.pow(x[1]-Math.PI, 2));
-		return v;
-	}
 
-	public double getOptimumEval() {
-		return -1.0;
-	}
+    public Easom() {
+        super(2, 0);
+        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        name = "Easom";
 
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
+        Arrays.fill(optimum[0], PI);
+    }
 
+    @Override
+    public double eval(double[] x) {
+        double fitness = -1 * cos(x[0]) * cos(x[1]) * exp(-1 * pow(x[0] - PI, 2) - pow(x[1] - PI, 2));
+        return fitness;
+    }
+
+    @Override
+    public double getGlobalOptimum() {
+        return -1.0;
+    }
 }

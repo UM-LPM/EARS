@@ -50,11 +50,11 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.Ackley;
+import org.um.feri.ears.problems.unconstrained.Ackley1;
 import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.Rastrigin;
 import org.um.feri.ears.problems.unconstrained.RosenbrockDeJong2;
-import org.um.feri.ears.problems.unconstrained.Schwefel2_26;
+import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 
@@ -94,11 +94,11 @@ public class BenchmarkEE extends RatingBenchmark {
      */
     @Override
     protected void initFullProblemList() {
-        registerTask(new Ackley(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new Ackley1(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
         registerTask(new Griewank(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
         registerTask(new Rastrigin(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
         registerTask(new RosenbrockDeJong2(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new Schwefel2_26(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
+        registerTask(new Schwefel226(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
         registerTask(new SchwefelRidge(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
         registerTask(new Sphere(dim),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
     }

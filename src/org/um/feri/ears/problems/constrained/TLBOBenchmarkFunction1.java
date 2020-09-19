@@ -125,15 +125,7 @@ public class TLBOBenchmarkFunction1 extends Problem {
 	}
 
 
-	public double getOptimumEval() {
+	public double getGlobalOptimum() {
 		return -15;
 	}
-
-
-
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
 }

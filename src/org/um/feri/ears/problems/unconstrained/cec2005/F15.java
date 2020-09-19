@@ -94,6 +94,8 @@ public class F15 extends CEC2005Base {
 			m_fmax[i] = Math.abs(hcData.basicFunc(i, m_testPointM));
 		}
 		hcData.fmax = m_fmax;
+
+		optimum = m_o;
 	}
 
 	private class LocalHCData extends HybridCompositionData {
@@ -126,15 +128,6 @@ public class F15 extends CEC2005Base {
 			}
 			return result;
 		}
-	}
-	
-	@Override
-	public double[][] getOptimalVector() {
-		return m_o;
-	}
-
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
 	}
 
 	@Override

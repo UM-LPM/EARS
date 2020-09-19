@@ -1,43 +1,35 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
-/**
- * https://www.sfu.ca/~ssurjano/rastr.html
- *
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static java.lang.Math.*;
+
+/*
+ https://www.sfu.ca/~ssurjano/rastr.html
+ http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.Rastrigin
+ http://benchmarkfcns.xyz/benchmarkfcns/rastriginfcn.html
  */
 public class Rastrigin extends Problem {
-	
-	public double[][] a;
-	
-	public Rastrigin(int d) {
-		super(d,0);
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.12));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.12));
-		name = "Rastrigin";
-	}
-	
-	public double eval(double x[]) {
-		double v = 0;
-		for (int i = 0; i < numberOfDimensions; i++){
-			v += x[i]*x[i] - 10*Math.cos(2*Math.PI*x[i]);
-		}
-		v += 10 * numberOfDimensions;
-		return v;
-	}
 
-	public double getOptimumEval() {
-		return 0;
-	}
+    public double[][] a;
 
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
+    public Rastrigin(int d) {
+        super(d, 0);
+        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.12));
+        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.12));
+        name = "Rastrigin";
+    }
 
+    @Override
+    public double eval(double[] x) {
+        double fitness = 0;
+        for (int i = 0; i < numberOfDimensions; i++) {
+            fitness += pow(x[i], 2) - 10 * cos(2 * PI * x[i]);
+        }
+        fitness += 10 * numberOfDimensions;
+        return fitness;
+    }
 }

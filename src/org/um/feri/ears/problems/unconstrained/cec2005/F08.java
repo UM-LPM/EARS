@@ -42,10 +42,6 @@ public class F08 extends CEC2005Base {
 		}
 	}
 
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-
 	@Override
 	public double eval(double[] x) {
 

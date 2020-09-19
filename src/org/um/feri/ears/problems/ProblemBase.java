@@ -24,8 +24,6 @@ public abstract class ProblemBase <Type> {
 	public static final int CONSTRAINED_TYPE_SUM=2;
 	public static final int CONSTRAINED_TYPE_NORMALIZATION=3;
 	public static int constrained_type = CONSTRAINED_TYPE_SUM;
-	public static final int NOT_SHIFTED=0;
-	public static final int SHIFTED=1;
 
 	public ProblemBase(int numberOfDimensions, int numberOfConstraints)
 	{
@@ -34,7 +32,7 @@ public abstract class ProblemBase <Type> {
 	}
 	/**
 	 * Allows to set different name. That can be used in report generating process.
-	 * @param name
+	 * @param name of the problem
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -57,11 +55,10 @@ public abstract class ProblemBase <Type> {
 		this.numberOfConstraints = numberOfConstraints;
 	}
 
-	public int countConstraintViolation(double tmp_constrains[]) {
+	public int countConstraintViolation(double[] constraints) {
 		int c = 0;
-
 		for (int i = 0; i < numberOfConstraints; i++) {
-			if (tmp_constrains[i] > 0) {
+			if (constraints[i] > 0) {
 				c++;
 			}
 		}
@@ -72,15 +69,10 @@ public abstract class ProblemBase <Type> {
 		return numberOfDimensions;
 	}
 
-	public void setNumberOfDimensions(int dim) {
-		this.numberOfDimensions = dim;
-	}
-	
 	public String getProblemInfoCSV() {
 		return "problem name:"+name+",problem number of dimensions:"+numberOfDimensions+",problem number of constraints:"+numberOfConstraints+",problem version:"+version+",";
 	}
-	
-	
+
 	/**
 	 * Important! Do not use this function for constrained problems,
 	 * if fitness is not reflecting feasibility of the solution.
@@ -105,6 +97,4 @@ public abstract class ProblemBase <Type> {
 	public void setBenchmarkName(String benchmarkName) {
 		this.benchmarkName = benchmarkName;
 	}
-	@Override
-	public abstract String toString();
 }

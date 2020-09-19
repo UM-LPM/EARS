@@ -1,48 +1,44 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import static java.lang.Math.*;
+
+/*
+https://www.sfu.ca/~ssurjano/trid.html
+ */
+
 public class Trid10 extends Problem {
-	
-	public Trid10() {
-		super(10,0);
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -Math.pow(numberOfDimensions, numberOfDimensions)));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, Math.pow(numberOfDimensions, numberOfDimensions)));
-		name = "Trid10";
-		
-		for (int i = 0; i < numberOfDimensions; i++) {
-			optimum[0][i] = (i+1) * (numberOfDimensions + 1 - (i+1));
-		}
-	}
-	
-	public double eval(double x[]) {
-		double v = 0;
-		double v_1 = 0, v_2 = 0;
-		for (int i = 0; i < numberOfDimensions; i++) {
-			v_1 = v_1 + Math.pow((x[i]-1),2);
-		}
-		for (int i = 1; i < numberOfDimensions; i++) {
-			v_2 = v_2 + x[i]*x[i-1];
-		}
-		v = v_1 - v_2;
-		return v;
-	}
 
-	public double getOptimumEval() {
-		
-		double opt = - (numberOfDimensions*(numberOfDimensions+4) * (numberOfDimensions-1)) / 6;
-		return opt;
-	}
+    public Trid10() {
+        super(10, 0);
+        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -pow(numberOfDimensions, numberOfDimensions)));
+        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, pow(numberOfDimensions, numberOfDimensions)));
+        name = "Trid10";
 
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
+        for (int i = 0; i < numberOfDimensions; i++) {
+            optimum[0][i] = (i + 1) * (numberOfDimensions + 1 - (i + 1));
+        }
+    }
 
+    @Override
+    public double eval(double[] x) {
+        double fitness = 0;
+        double sum1 = 0, sum2 = 0;
+        for (int i = 0; i < numberOfDimensions; i++) {
+            sum1 += pow((x[i] - 1), 2);
+        }
+        for (int i = 1; i < numberOfDimensions; i++) {
+            sum2 += x[i] * x[i - 1];
+        }
+        fitness = sum1 - sum2;
+        return fitness;
+    }
+
+    @Override
+    public double getGlobalOptimum() {
+        return -(numberOfDimensions * (numberOfDimensions + 4.0) * (numberOfDimensions - 1.0)) / 6.0;
+    }
 }

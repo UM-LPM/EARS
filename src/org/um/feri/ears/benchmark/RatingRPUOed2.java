@@ -48,21 +48,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.Ackley;
-import org.um.feri.ears.problems.unconstrained.B2;
-import org.um.feri.ears.problems.unconstrained.Beale;
-import org.um.feri.ears.problems.unconstrained.Booth;
-import org.um.feri.ears.problems.unconstrained.Branin;
-import org.um.feri.ears.problems.unconstrained.Easom;
-import org.um.feri.ears.problems.unconstrained.Goldstein_Price;
-import org.um.feri.ears.problems.unconstrained.Griewank;
-import org.um.feri.ears.problems.unconstrained.MartinAndGaddy;
-import org.um.feri.ears.problems.unconstrained.PowellBadlyScaledFunction;
-import org.um.feri.ears.problems.unconstrained.Rastrigin;
-import org.um.feri.ears.problems.unconstrained.RosenbrockDeJong2;
-import org.um.feri.ears.problems.unconstrained.Schwefel2_26;
-import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
-import org.um.feri.ears.problems.unconstrained.Sphere;
+import org.um.feri.ears.problems.unconstrained.*;
 
 public class RatingRPUOed2 extends RatingBenchmark {
     public static final String name="Real Parameter Unconstrained Optimization Problems with maximum evaluation condition";
@@ -98,19 +84,19 @@ public class RatingRPUOed2 extends RatingBenchmark {
      */
     @Override
     protected void initFullProblemList() {
-        registerTask(new Ackley(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new B2(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Ackley1(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Bohachevsky1(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new Beale(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new Booth(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Branin(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Branin1(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new Easom(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Goldstein_Price(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new GoldsteinPrice(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new Griewank(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new MartinAndGaddy(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new PowellBadlyScaledFunction(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new Rastrigin(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new RosenbrockDeJong2(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Schwefel2_26(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Schwefel226(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new SchwefelRidge(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
         registerTask(new Sphere(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
     }

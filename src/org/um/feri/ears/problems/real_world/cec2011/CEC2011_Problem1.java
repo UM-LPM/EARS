@@ -48,7 +48,7 @@ public class CEC2011_Problem1 extends Problem {
 		return f;
 	}
 
-	public double getOptimumEval() {
+	public double getGlobalOptimum() {
 		return 0; //OK
 	}
 	
@@ -75,11 +75,4 @@ public class CEC2011_Problem1 extends Problem {
 		DoubleSolution sol = new DoubleSolution(var, eval(var), calc_constrains(var), upperLimit, lowerLimit);
 		return sol;
 	}
-
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
-
 }

@@ -14,11 +14,7 @@ public class F2 extends CEC2014 {
 	}
 
 	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-	
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double F;
 		F = Functions.bent_cigar_func(x,numberOfDimensions,OShift,M,1,1);
 		F+=200.0;

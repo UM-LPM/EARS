@@ -29,10 +29,6 @@ public class F09 extends CEC2005Base {
 		loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
 	}
 
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
-
 	@Override
 	public double eval(double[] x) {
 
