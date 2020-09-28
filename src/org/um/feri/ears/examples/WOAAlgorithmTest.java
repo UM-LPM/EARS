@@ -15,7 +15,6 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.constrained.RealWorldCompressionSpringDesign;
 import org.um.feri.ears.problems.constrained.RealWorldPressureVesselDesign;
 import org.um.feri.ears.problems.unconstrained.Sphere;
-import org.um.feri.ears.util.FakeRandomGenerator;
 import org.um.feri.ears.util.Util;
 
 public class WOAAlgorithmTest {

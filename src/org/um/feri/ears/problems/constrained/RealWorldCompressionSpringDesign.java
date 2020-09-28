@@ -68,9 +68,4 @@ public class RealWorldCompressionSpringDesign extends Problem {
 		g[3] = (x[0] + x[1]) / 1.5 - 1;
 		return g;
 	}
-	
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
 }

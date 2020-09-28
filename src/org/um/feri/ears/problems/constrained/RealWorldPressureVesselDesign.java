@@ -78,9 +78,4 @@ public class RealWorldPressureVesselDesign extends Problem {
 		
 		return g;
 	}
-	
-	@Override
-	public double eval(Double[] ds) {
-		return eval(ArrayUtils.toPrimitive(ds));
-	}
 }
