@@ -36,6 +36,7 @@ public class F14 extends CEC2005Base {
 		loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
 		// Load the matrix
 		loadMatrixFromFile(DEFAULT_FILE_MX_PREFIX + d + DEFAULT_FILE_MX_SUFFIX, d, d, m_matrix);
+		optimum[0] = m_o;
 	}
 
 	@Override

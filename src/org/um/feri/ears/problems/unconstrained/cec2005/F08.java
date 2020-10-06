@@ -40,6 +40,7 @@ public class F08 extends CEC2005Base {
 		for (int i = 0 ; i < d ; i += 2) {
 			m_o[i] = -32.0;
 		}
+		optimum[0] = m_o;
 	}
 
 	@Override

@@ -60,6 +60,8 @@ public class F05 extends CEC2005Base {
             m_B = new double[] {-11700.0,-1500.0};
         else
             Ax(m_B, m_A, m_o);
+
+        optimum[0] = m_o;
     }
 
     @Override

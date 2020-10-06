@@ -63,12 +63,10 @@ public abstract class CEC2005Base extends Problem {
 			m_iSqrt[i] = Math.sqrt(((double )i) + 1.0);
 		}
 
-		optimum[0] = m_o;
 	}
 	
 	@Override
 	public double getGlobalOptimum() {
-
 		return  m_biases[func_num - 1];
 	}
 

@@ -27,6 +27,7 @@ public class F09 extends CEC2005Base {
 
 		// Load the shifted global optimum
 		loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
+		optimum[0] = m_o;
 	}
 
 	@Override
