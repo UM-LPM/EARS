@@ -29,7 +29,6 @@ public class MBF extends Algorithm{
 	double ASDP; //Additional Surrounding Dispersion of Wild
 	double ASDN;                   //Additional Surrounding Dispersion of Mother
 
-	
 	int nCrossover = 2;
 	int n_Shark;
 	int nm;
@@ -41,9 +40,8 @@ public class MBF extends Algorithm{
 	int checkpoint = 0;
 	int kk = 1;
 	
-	int effectOfSharkAttack[][];
-	
-	
+	int[][] effectOfSharkAttack;
+
 	ArrayList<CichlidsSolution> population;
 	CichlidsSolution[] NatureForce;
 	CichlidsSolution[] SharkAttack;

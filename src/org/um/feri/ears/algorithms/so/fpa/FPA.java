@@ -4,19 +4,18 @@
  */
 package org.um.feri.ears.algorithms.so.fpa;
 
-import java.util.ArrayList;
-
 import org.apache.commons.math3.special.Gamma;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
+
+import java.util.ArrayList;
 
 public class FPA extends Algorithm{
 	
@@ -26,7 +25,7 @@ public class FPA extends Algorithm{
 	Task task;
 	
 	private double lambda;
-	private double switchProhability;
+	private double switchProbability;
 	// ND: Normal distribution
 	private static final double meanND = 0.0;
 	private static final double stdDevND = 1.0;
@@ -39,12 +38,12 @@ public class FPA extends Algorithm{
 		this(20,1.5,0.8);
 	}
 	
-	public FPA(int pop_size, double lambda, double switchProhability)
+	public FPA(int pop_size, double lambda, double switchProbability)
 	{
 		super();
 		this.pop_size = pop_size;
 		this.lambda = lambda;
-		this.switchProhability = switchProhability;
+		this.switchProbability = switchProbability;
 		
 		au = new Author("miha", "miha.ravber@um.si");
 		ai = new AlgorithmInfo("FPA",
@@ -74,7 +73,7 @@ public class FPA extends Algorithm{
 			for(int i = 0; i < pop_size; i++) {
 			
 				candidate = new double[task.getNumberOfDimensions()];
-				if (Util.nextDouble() > switchProhability) {
+				if (Util.nextDouble() > switchProbability) {
 					/* Global Pollination */
 					levy = levy();
 

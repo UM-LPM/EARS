@@ -17,7 +17,7 @@ public class CS extends Algorithm{
 	
 	DoubleSolution best;
 	
-	int pop_size;
+	int popSize;
 	Task task;
 	double pa = 0.25; //Discovery rate of alien eggs/solutions
 
@@ -28,10 +28,10 @@ public class CS extends Algorithm{
 		this(25);
 	}
 	
-	public CS(int pop_size)
+	public CS(int popSize)
 	{
 		super();
-		this.pop_size = pop_size;
+		this.popSize = popSize;
 		
 		au = new Author("miha", "miha.ravber@um.si");
 		ai = new AlgorithmInfo("CS",
@@ -43,7 +43,7 @@ public class CS extends Algorithm{
 				+ "year={2009},"
 				+ "organization={IEEE}}",
 				"CS", "Cuckoo Search");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class CS extends Algorithm{
 	
 	private void setBest(ArrayList<DoubleSolution> offspringPopulation) {
 		
-		for(int i = 0; i < pop_size; i++)
+		for(int i = 0; i < popSize; i++)
 		{
 			if(i >= offspringPopulation.size())
 				return;
@@ -95,11 +95,11 @@ public class CS extends Algorithm{
 		//A fraction of worse nests are discovered with probability pa
 		ArrayList<DoubleSolution> offspringPopulation = new ArrayList<DoubleSolution>();
 		
-		int[] per1 = Util.randomPermutation(pop_size);
-		int[] per2 = Util.randomPermutation(pop_size);
+		int[] per1 = Util.randomPermutation(popSize);
+		int[] per2 = Util.randomPermutation(popSize);
 		
 		double stepsize;
-		for (int i = 0; i < pop_size; i++) {
+		for (int i = 0; i < popSize; i++) {
 			
 			if(Util.nextDouble() > pa)
 			{
@@ -138,7 +138,7 @@ public class CS extends Algorithm{
 		double beta = 3.0/2.0;
 		double sigma = Math.pow((Gamma.gamma(1+beta)*Math.sin(Math.PI*beta/2)/(Gamma.gamma((1+beta)/2) * beta * Math.pow(2, (beta-1)/2) )),(1/beta));
 		
-		for (int i = 0; i < pop_size; i++) {
+		for (int i = 0; i < popSize; i++) {
 			
 			DoubleSolution s = nest.get(i);
 			double u,v,step,stepsize;
@@ -165,7 +165,7 @@ public class CS extends Algorithm{
 	private void initPopulation() throws StopCriteriaException {
 		nest = new ArrayList<DoubleSolution>();
 	
-		for (int i = 0; i < pop_size; i++) {
+		for (int i = 0; i < popSize; i++) {
 			nest.add(task.getRandomSolution());
 			if (task.isStopCriteria())
 				break;

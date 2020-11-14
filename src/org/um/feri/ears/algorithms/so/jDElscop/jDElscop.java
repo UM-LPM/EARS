@@ -26,19 +26,19 @@ public class jDElscop extends Algorithm {
 	 * static final int STRATEGY_jDEexp=2;
 	 */
 	private int pop_size;
-	jDElscopSolution pop_x[]; // population
+	jDElscopSolution[] popX; // population
 	jDElscopSolution g; // global best
 	Task task; // set it in run
 
 	private void initPopulation() throws StopCriteriaException {
-		pop_x = new jDElscopSolution[pop_size];
+		popX = new jDElscopSolution[pop_size];
 		for (int i = 0; i < pop_size; i++) {
-			pop_x[i] = jDElscopSolution.setInitState(task
+			popX[i] = jDElscopSolution.setInitState(task
 					.getRandomSolution());
 			if (i == 0)
-				g = pop_x[0];
-			else if (task.isFirstBetter(pop_x[i], g))
-				g = pop_x[i];
+				g = popX[0];
+			else if (task.isFirstBetter(popX[i], g))
+				g = popX[i];
 			if (task.isStopCriteria())
 				break;
 		}
@@ -71,19 +71,19 @@ public class jDElscop extends Algorithm {
 		// int iteration=0;
 		StrategyDE strategy; // =StrategyDE.STRATEGY_jDEbest;
 		int MaxFES = task.getMaxEvaluations();
-		int NumReduce = 3; // 7.2.2010 pmax := NumReduce+1 ==> pmax = 3+1 = 4
+		int numReduce = 3; // 7.2.2010 pmax := numReduce+1 ==> pmax = 3+1 = 4
 		int pop_size = this.pop_size; // variable population sizebased on
-										// NumReduce
+										// numReduce
 		int r1, r2, r3;
 		double tau1 = 0.1;
 		double tau2 = 0.1;
 		double F, CR;
 		int L, n;
-		double tmp[];
-		double tmp_par[];
+		double[] tmp;
+		double[] tmpPar;
 		int odmik;
 		int D = task.getNumberOfDimensions();
-		jDElscopSolution pop_tmp[] = new jDElscopSolution[pop_size];
+		jDElscopSolution[] popTmp = new jDElscopSolution[pop_size];
 		while (!task.isStopCriteria()) {
 			// iteration++;
 			for (int i = 0; i < pop_size; i++) {
@@ -95,8 +95,8 @@ public class jDElscop extends Algorithm {
 				else
 					strategy = StrategyDE.STRATEGY_jDEexp;
 				// jDe
-				tmp = pop_x[i].getDoubleVariables();
-				tmp_par = pop_x[i].getNewPara();
+				tmp = popX[i].getDoubleVariables();
+				tmpPar = popX[i].getNewPara();
 				do {
 					r1 = Util.rnd.nextInt(pop_size);
 				} while (r1 == i);
@@ -127,16 +127,16 @@ public class jDElscop extends Algorithm {
 				}// jDEbest
 					// *** LOWER and UPPER values for strategies ***
 				if (Util.rnd.nextDouble() < tau1) {
-					tmp_par[odmik] = F = F_l + Util.rnd.nextDouble()
+					tmpPar[odmik] = F = F_l + Util.rnd.nextDouble()
 							* (1. - F_l);
 				} else {
-					F = tmp_par[odmik];
+					F = tmpPar[odmik];
 				}
 				if (Util.rnd.nextDouble() < tau2) {
-					tmp_par[1 + odmik] = CR = CR_l + Util.rnd.nextDouble()
+					tmpPar[1 + odmik] = CR = CR_l + Util.rnd.nextDouble()
 							* (CR_u - CR_l);
 				} else {
-					CR = tmp_par[1 + odmik];
+					CR = tmpPar[1 + odmik];
 				}
 				switch (strategy) {
 				case STRATEGY_jDEbest:
@@ -146,21 +146,21 @@ public class jDElscop extends Algorithm {
 							tmp[n] = F
 									* (g.getValue(n))
 									+ F
-									* (pop_x[r2].getValue(n) - pop_x[r3].getValue(n));
+									* (popX[r2].getValue(n) - popX[r3].getValue(n));
 						}
 						n = (n + 1) % D;
 					}
 					break;
 				case STRATEGY_jDEexp:
 					if (Util.rnd.nextDouble() < 0.75
-							&& task.isFirstBetter(pop_x[r3], pop_x[r2]))
+							&& task.isFirstBetter(popX[r3], popX[r2]))
 						F = -F;
 
 					L = 0;
 					// F = 0.5; CR=0.9;
 					do {
-						tmp[n] = pop_x[r1].getValue(n) + F
-								* (pop_x[r2].getValue(n) - pop_x[r3].getValue(n));
+						tmp[n] = popX[r1].getValue(n) + F
+								* (popX[r2].getValue(n) - popX[r3].getValue(n));
 						n = (n + 1) % D;
 						L++;
 					} while ((Util.rnd.nextDouble() < CR) && (L < D));
@@ -168,15 +168,15 @@ public class jDElscop extends Algorithm {
 					break;
 				case STRATEGY_jDEbin:
 					if (Util.rnd.nextDouble() < 0.75
-							&& task.isFirstBetter(pop_x[r3], pop_x[r2]))
+							&& task.isFirstBetter(popX[r3], popX[r2]))
 						F = -F;
 
 					for (L = 0; L < D; L++) /* perform D binomial trials */
 					{
 						if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
-							tmp[n] = pop_x[r1].getValue(n)
+							tmp[n] = popX[r1].getValue(n)
 									+ F
-									* (pop_x[r2].getValue(n) - pop_x[r3].getValue(n));
+									* (popX[r2].getValue(n) - popX[r3].getValue(n));
 						}
 						n = (n + 1) % D;
 					}
@@ -186,12 +186,12 @@ public class jDElscop extends Algorithm {
 					tmp[j] = task.setFeasible(tmp[j], j); // in bounds
 				}
 				DoubleSolution tmpI = task.eval(tmp);
-				if (task.isFirstBetter(pop_x[i], tmpI)) { // old is better
-					pop_tmp[i] = pop_x[i];
+				if (task.isFirstBetter(popX[i], tmpI)) { // old is better
+					popTmp[i] = popX[i];
 				} else {
-					pop_tmp[i] = jDElscopSolution.setParamState(tmpI, tmp_par);
-					if (task.isFirstBetter(pop_tmp[i], g)) {
-						g = pop_tmp[i];
+					popTmp[i] = jDElscopSolution.setParamState(tmpI, tmpPar);
+					if (task.isFirstBetter(popTmp[i], g)) {
+						g = popTmp[i];
 						if (debug) {
 							System.out.println("time:"
 									+ task.getNumberOfEvaluations() + " " + g);
@@ -202,24 +202,24 @@ public class jDElscop extends Algorithm {
 					break;
 			}
 			/*
-			 * if (NumReduce > 0 && task.getNumberOfEvaluations() % (MaxFES /
-			 * (NumReduce + 1)) == (MaxFES / (NumReduce + 1) - 1) && pop_size >
+			 * if (numReduce > 0 && task.getNumberOfEvaluations() % (MaxFES /
+			 * (numReduce + 1)) == (MaxFES / (numReduce + 1) - 1) && pop_size >
 			 * 10 && task.getNumberOfEvaluations() < MaxFES - 1) {
 			 */
-			if (NumReduce > 0
+			if (numReduce > 0
 					&& (task.getNumberOfEvaluations()
-							% (MaxFES / (NumReduce + 1)) == 0) && pop_size > 10) {
+							% (MaxFES / (numReduce + 1)) == 0) && pop_size > 10) {
 				/*
-				 * ASK Not used imin ASK NumReduce--? if (imin < pop_size / 2)
+				 * ASK Not used imin ASK numReduce--? if (imin < pop_size / 2)
 				 * imin = imin / 2; else imin = (imin - NP / 2) / 2;
 				 */
 				for (int ii = 0; ii < pop_size / 2; ii++) { // take best
 															// half!
-					if (task.isFirstBetter(pop_tmp[pop_size / 2 + ii],
-							pop_tmp[ii])) {
-						pop_x[ii] = pop_tmp[pop_size / 2 + ii];
+					if (task.isFirstBetter(popTmp[pop_size / 2 + ii],
+							popTmp[ii])) {
+						popX[ii] = popTmp[pop_size / 2 + ii];
 					} else {
-						pop_x[ii] = pop_tmp[ii];
+						popX[ii] = popTmp[ii];
 					}
 
 				}
@@ -230,7 +230,7 @@ public class jDElscop extends Algorithm {
 
 			} else {
 				for (int ii = 0; ii < pop_size; ii++) { // take best half!
-					pop_x[ii] = pop_tmp[ii];
+					popX[ii] = popTmp[ii];
 
 				}
 			}

@@ -101,16 +101,17 @@ public class DEAlgorithm extends Algorithm {
     public static final int DE_best_2_bin = 9;
     public static final int DE_rand_2_bin = 10;
     public static final int JDE_rand_1_bin = 20;
-    IndividualSA c[], d[]; // double c[MAXPOP][MAXDIM], d[MAXPOP][MAXDIM];
-    IndividualSA pold[]; // double pold[MAXPOP][MAXDIM]
-    IndividualSA pnew[]; // pnew[MAXPOP][MAXDIM]
-    IndividualSA pswap[]; // (*pswap)[MAXPOP][MAXDIM];
-    double inibound_h[];
-    double inibound_l[];
+    IndividualSA[] c;
+    IndividualSA[] d; // double c[MAXPOP][MAXDIM], d[MAXPOP][MAXDIM];
+    IndividualSA[] pold; // double pold[MAXPOP][MAXDIM]
+    IndividualSA[] pnew; // pnew[MAXPOP][MAXDIM]
+    IndividualSA[] pswap; // (*pswap)[MAXPOP][MAXDIM];
+    double[] inibound_h;
+    double[] inibound_l;
     Task task; // double extern evaluate(int D, double tmp[], long *nfeval); /*
                // obj. funct. */
 
-    String strat[] = /* strategy-indicator */
+    String[] strat = /* strategy-indicator */
     { "", "DE/best/1/exp", "DE/rand/1/exp", "DE/rand-to-best/1/exp", "DE/best/2/exp", "DE/rand/2/exp", "DE/best/1/bin", "DE/rand/1/bin",
             "DE/rand-to-best/1/bin", "DE/best/2/bin", "DE/rand/2/bin", "-11-", "-12-", "-13-", "-14-", "-15-", "-16-", "-17-", "-18-", "-19-",
             "JDE/rand/1/bin", /* s7+self-adaptive ==> s20,jDE */
@@ -131,7 +132,7 @@ public class DEAlgorithm extends Algorithm {
     double trial_cost; /* buffer variable */
     // double inibound_h; /* upper parameter bound */
     // double inibound_l; /* lower parameter bound */
-    double tmp[]; // , best[], bestit[]; /* members MAXDIM*/
+    double[] tmp; // , best[], bestit[]; /* members MAXDIM*/
     double tmpF, tmpCR, tmp3;
     // double cost[]; /* obj. funct. valuesMAXPOP */
     double cvar; /* computes the cost variance */
@@ -527,7 +528,7 @@ public class DEAlgorithm extends Algorithm {
             }
             int counter = 0;
             if (strategy == JDE_rand_1_bin) { //self adaptive no need for CR and F parameter
-                int paramCombinations[] = { 25,50,15,75,100, 10, 30, 40};
+                int[] paramCombinations = { 25,50,15,75,100, 10, 30, 40};
                 for (int i = 0; (i < paramCombinations.length) && (counter < maxCombinations); i++) {
                     alternative.add(new DEAlgorithm(strategy, paramCombinations[i]));
                     counter++;
@@ -536,7 +537,7 @@ public class DEAlgorithm extends Algorithm {
 
             } else
             {
-                double paramCombinations[][] = { // {k, c}
+                double[][] paramCombinations = { // {k, c}
                         {10 * dim, 0.5, 0.9}, {10 * dim, 0.5, 0.85}, {25, 0.5, 0.9},  {50, 0.5, 0.9 }, 
                         {10, 0.5, 0.9},  {50, 0.5, 0.9 } , {25, 0.5, 0.8},  {25, 0.5, 0.9 }};
                 

@@ -6,7 +6,6 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
-import org.um.feri.ears.algorithms.so.jade.JADESolution;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.StopCriteriaException;
@@ -18,7 +17,7 @@ public class GWO extends Algorithm{
 	
 	DoubleSolution alpha, beta, delta;
 	
-	int pop_size;
+	int popSize;
 	Task task;
 	
 	double r1;
@@ -27,7 +26,6 @@ public class GWO extends Algorithm{
 	double C;
 	double X1, X2, X3;
 	
-	
 	ArrayList<DoubleSolution> population;
 	
 	public GWO()
@@ -35,10 +33,10 @@ public class GWO extends Algorithm{
 		this(30);
 	}
 	
-	public GWO(int pop_size)
+	public GWO(int popSize)
 	{
 		super();
-		this.pop_size = pop_size;
+		this.popSize = popSize;
 		
 		au = new Author("miha", "miha.ravber@um.si");
 		ai = new AlgorithmInfo("GWO",
@@ -51,7 +49,7 @@ public class GWO extends Algorithm{
 				+ "  year={2014},"
 				+ "  publisher={Elsevier}}",
 				"GWO", "Gray Wolf Optimizer");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
 	@Override
@@ -66,14 +64,14 @@ public class GWO extends Algorithm{
 		
 		if(task.getStopCriteria() == EnumStopCriteria.EVALUATIONS)
 		{
-			maxIt = task.getMaxEvaluations() / pop_size;
+			maxIt = task.getMaxEvaluations() / popSize;
 		}
 		
 		
 		while (!task.isStopCriteria()) {
 			double a = 2.0 - task.getNumberOfIterations() * (2.0 / maxIt);
 			
-			for(int index = 0; index < pop_size; index++)
+			for(int index = 0; index < popSize; index++)
 			{
 				DoubleSolution wolf = population.get(index);
 				double[] newPosition = new double[task.getNumberOfDimensions()];
@@ -127,7 +125,7 @@ public class GWO extends Algorithm{
 	private void initPopulation() throws StopCriteriaException {
 		population = new ArrayList<DoubleSolution>();
 	
-		for (int i = 0; i < pop_size; i++) {
+		for (int i = 0; i < popSize; i++) {
 			population.add(task.getRandomSolution());
 			if (task.isStopCriteria())
 				break;

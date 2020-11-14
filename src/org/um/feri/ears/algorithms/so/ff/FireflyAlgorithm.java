@@ -8,7 +8,6 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
-import org.um.feri.ears.algorithms.so.abc.ABCSolution;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
@@ -26,12 +25,12 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 	private double betamin = 0.2;   // beta parameter. copy value from C++ and Matlab version
 	private double gamma = 1.0;		// gamma parameter. copy value from C++ and Matlab version
 
-	private int pop_size;
+	private int popSize;
 	
     double [] ub;
     double [] lb;
 	
-	public FireflyAlgorithm(int pop_size, int dimension) { 
+	public FireflyAlgorithm(int popSize, int dimension) {
 		
 		super();
 		setDebug(debug);  //EARS prints some debug info
@@ -47,8 +46,8 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 				"FA", "Firefly algorithm");
 		au =  new Author("alex", "shliu@mail.fresnostate.edu"); //EARS author info
 		
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
-		this.pop_size = pop_size;
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
+		this.popSize = popSize;
 	}
 	
 	public FireflyAlgorithm() { 
@@ -95,7 +94,7 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 		firefly.setIntensity(1.0);
 		population.add(firefly);
 		best = firefly;
-		for (int i = 0; i < pop_size - 1; i++) {
+		for (int i = 0; i < popSize - 1; i++) {
 			FireflySolution newFirefly = new FireflySolution(task.getRandomSolution());
 			newFirefly.setAttractiveness(1.0);
 			newFirefly.setIntensity(1.0);
@@ -118,7 +117,7 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 	//not available in C++ version
 	public void update_eval() throws StopCriteriaException
 	{
-		for (int i = 0; i < pop_size; i++)
+		for (int i = 0; i < popSize; i++)
 		{
 			if (task.isStopCriteria())
 				break;
@@ -138,7 +137,7 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 	    int i, j;
 	    
 	    // initialization of indexes
-	    for(i=0;i< pop_size;i++)
+	    for(i=0; i< popSize; i++)
 	    	population.get(i).setIndex(i);
 	    
 	    // sort the population by fitness value
@@ -166,10 +165,10 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 	    double scale;
 	    double r, beta;
 	    
-	    for(i=0;i< pop_size;i++)
+	    for(i=0; i< popSize; i++)
 	    {
 	    
-	        for(j=0;j<pop_size;j++)
+	        for(j=0; j< popSize; j++)
 	        {
 	            double distance = 0.0; //it was called r in C++ version
 	            double [] ffa_i = population.get(i).getDoubleVariables();

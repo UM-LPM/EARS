@@ -11,7 +11,6 @@ import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.operators.PolynomialMutationSO;
 import org.um.feri.ears.operators.SBXCrossoverSO;
 import org.um.feri.ears.operators.TournamentSelection;
-import org.um.feri.ears.algorithms.so.cro.CoralSolution;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
@@ -26,7 +25,7 @@ public class CRO extends Algorithm {
 	private double Fa, Fd; // Percentage of budders and depredated corals
 	private double Pd; // Probability of depredation
 	private int attemptsToSettle;
-	int pop_size;
+	int popSize;
 	Task task;
 
 	TaskComparator comparator;
@@ -72,7 +71,7 @@ public class CRO extends Algorithm {
 		Fd = Fa;
 		Pd = pd;
 		this.attemptsToSettle = attemptsToSettle;
-		pop_size = N * M;
+		popSize = N * M;
 
 		au = new Author("miha", "miha.ravber@um.si");
 		ai = new AlgorithmInfo("CRO",
@@ -81,7 +80,7 @@ public class CRO extends Algorithm {
 				+ "author={Salcedo-Sanz, S and Del Ser, J and Landa-Torres, I and Gil-L{\'o}pez, S and Portilla-Figueras, JA}, "
 				+ "journal={The Scientific World Journal}, volume={2014},year={2014},publisher={Hindawi Publishing Corporation}}",
 				"CRO", "Coral Reefs Optimization");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package org.um.feri.ears.algorithms.so.rmo;
 
-import java.util.*;
-
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
@@ -13,17 +11,17 @@ import org.um.feri.ears.util.Util;
 public class RMO extends Algorithm
 {
 	//Algorithm parameters
-	int pop_size;
+	int popSize;
 	double C1, C2, k;
 	double[][] X;
 	double[] cp;
 	DoubleSolution cp_s;
 	double[][] V;
 	
-	public RMO(int pop_size, double C1, double C2, double k)
+	public RMO(int popSize, double C1, double C2, double k)
 	{
 		super();
-		this.pop_size = pop_size;
+		this.popSize = popSize;
 		this.C1 = C1;
 		this.C2 = C2;
 		this.k = k;
@@ -36,7 +34,7 @@ public class RMO extends Algorithm
 	{
 		super();
 		
-		this.pop_size = 100;
+		this.popSize = 100;
 		this.C1 = 0.7;
 		this.C2 = 0.8;
 		this.k = 10;
@@ -52,10 +50,10 @@ public class RMO extends Algorithm
 		DoubleSolution globalBest_s = null;
 		
 		//Generate initial pop
-		X = new double[pop_size][taskProblem.getNumberOfDimensions()];
-		V = new double[pop_size][taskProblem.getNumberOfDimensions()];
+		X = new double[popSize][taskProblem.getNumberOfDimensions()];
+		V = new double[popSize][taskProblem.getNumberOfDimensions()];
 		
-		for (int i = 0; i < pop_size; ++i)
+		for (int i = 0; i < popSize; ++i)
 		{
 			//Random values
 			for (int j = 0; j < X[i].length; ++j)
@@ -100,7 +98,7 @@ public class RMO extends Algorithm
 			DoubleSolution currentBest_s = null;
 			
 			//Calculate velocity vectors and move particles
-			for (int i = 0; i < pop_size; ++i)
+			for (int i = 0; i < popSize; ++i)
 			{
 				for (int j = 0; j < V[i].length; ++j)
 				{
@@ -143,7 +141,7 @@ public class RMO extends Algorithm
 					cp[j] = cp[j] + C2 * (currentBest[j] - cp[j]);
 				}
 				
-				globalBest = currentBest.clone();
+				globalBest =  currentBest.clone();
 				globalBest_s = new DoubleSolution(currentBest_s);
 			}
 			else

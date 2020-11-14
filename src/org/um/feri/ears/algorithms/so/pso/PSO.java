@@ -1,18 +1,15 @@
 package org.um.feri.ears.algorithms.so.pso;
 
-import java.util.ArrayList;
-
-
-
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
-import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+
+import java.util.ArrayList;
 
 public class PSO extends Algorithm  {
 
@@ -46,7 +43,7 @@ public class PSO extends Algorithm  {
 		task = taskProblem;
 		initPopulation();
 		//double rp, rg;
-		double v[];
+		double[] v;
 		while (!task.isStopCriteria()) {
 			for (int i=0; i<pop_size; i++) {
 				//rp = Util.rnd.nextDouble(); better to use vector of real numbers

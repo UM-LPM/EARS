@@ -16,7 +16,7 @@ public class JADE extends Algorithm {
 	private int elite_size; // calculated by p*pop_size pbest
 	// private double F,CR;
 	private ArrayList<JADESolution> elite; // pbest
-	private JADESolution pop_x[]; // population
+	private JADESolution[] popX; // population
 	private ArrayList<JADESolution> arch_x; // population
 	private JADESolution g; // global best
 
@@ -52,10 +52,10 @@ public class JADE extends Algorithm {
 	}
 
 	private void initPopulation() throws StopCriteriaException {
-		pop_x = new JADESolution[pop_size];
+		popX = new JADESolution[pop_size];
 		for (int i = 0; i < pop_size; i++) {
-			pop_x[i] = new JADESolution(task.getRandomSolution(), 0.5, 0.5);
-			updateEliteAndGlobalBest(pop_x[i]);
+			popX[i] = new JADESolution(task.getRandomSolution(), 0.5, 0.5);
+			updateEliteAndGlobalBest(popX[i]);
 			if (task.isStopCriteria())
 				break;
 		}
@@ -98,8 +98,8 @@ public class JADE extends Algorithm {
 		task = taskProblem;
 		elite.clear();
 		arch_x.clear();
-		JADESolution pop_new[] = new JADESolution[pop_size];
-		double tmp[];
+		JADESolution[] pop_new = new JADESolution[pop_size];
+		double[] tmp;
 		int j_rand;
 		int D = task.getNumberOfDimensions();
 		int r1, r2, pBest;
@@ -116,7 +116,7 @@ public class JADE extends Algorithm {
 			SCR.clear();
 			for (int i = 0; i < pop_size; i++) {
 				// Generate CRi
-				pop_x[i].setCR(Util.rnd.nextGaussian() * 0.1 + muCR);
+				popX[i].setCR(Util.rnd.nextGaussian() * 0.1 + muCR);
 				// http://introcs.cs.princeton.edu/java/stdlib/StdRandom.java.html
 				// cauchy
 				// Generate Fi
@@ -125,11 +125,11 @@ public class JADE extends Algorithm {
 							* Math.tan(Math.PI * (Util.rnd.nextDouble() - 0.5))
 							+ muF;
 				} while (Fpom <= 0);
-				pop_x[i].setF(Fpom);
+				popX[i].setF(Fpom);
 				// System.out.print(
 				// "("+pop_x[i].getCR()+", "+pop_x[i].getF()+") ");
 				j_rand = Util.rnd.nextInt(D);
-				tmp = pop_x[i].getDoubleVariables();
+				tmp = popX[i].getDoubleVariables();
 				do {
 					r1 = Util.rnd.nextInt(pop_size);
 				} while (r1 == i);
@@ -138,38 +138,38 @@ public class JADE extends Algorithm {
 							+ Math.min(arch_x.size(), pop_size));
 				} while (r2 == i || r2 == r1);
 				if (r2 < pop_size)
-					in_r2 = pop_x[r2];
+					in_r2 = popX[r2];
 				else
 					in_r2 = arch_x.get(r2 - pop_size);
 				pBest = Util.rnd.nextInt(elite_size);
 				for (int d = 0; d < D; d++) {
-					if ((Util.rnd.nextDouble() < pop_x[i].CR) || (d == j_rand)) {
+					if ((Util.rnd.nextDouble() < popX[i].CR) || (d == j_rand)) {
 						tmp[d] = task
 								.setFeasible(
 										tmp[d]
-												+ pop_x[i].F
+												+ popX[i].F
 												* (elite.get(pBest).getValue(d) - tmp[d])
-												+ pop_x[i].F
-												* (pop_x[r1].getValue(d) - in_r2
+												+ popX[i].F
+												* (popX[r1].getValue(d) - in_r2
 														.getValue(d)), d);
 					}
 				}
-				tmpIn = new JADESolution(task.eval(tmp), pop_x[i].CR,
-						pop_x[i].F);
-				if (task.isFirstBetter(tmpIn, pop_x[i])) {
+				tmpIn = new JADESolution(task.eval(tmp), popX[i].CR,
+						popX[i].F);
+				if (task.isFirstBetter(tmpIn, popX[i])) {
 					SCR.add(tmpIn.CR); // save successful parameters
 					SF.add(tmpIn.F);
-					arch_x.add(pop_x[i]); // save old; good
+					arch_x.add(popX[i]); // save old; good
 					pop_new[i] = tmpIn;
 					updateEliteAndGlobalBest(tmpIn);
 				} else {
-					pop_new[i] = pop_x[i]; // old is in new population
+					pop_new[i] = popX[i]; // old is in new population
 				}
 				if (task.isStopCriteria())
 					break;
 			}
 			for (int i = 0; i < pop_size; i++) { // new generation
-				pop_x[i] = pop_new[i];
+				popX[i] = pop_new[i];
 			}
 			// empty archive if it is too big
 			while (arch_x.size() > pop_size)

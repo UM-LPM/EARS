@@ -54,7 +54,6 @@ public class HillClimbing extends Algorithm {
                     newPosition[i] -= interval[i] * dxPercent;
 
                     if (checkImprovement(newPosition)) {
-                        System.out.println(currentBest);
                         if (task.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
@@ -65,7 +64,6 @@ public class HillClimbing extends Algorithm {
                     newPosition[i] += interval[i] * dxPercent;
 
                     if (checkImprovement(newPosition)) {
-                        System.out.println(currentBest);
                         if (task.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
@@ -84,7 +82,6 @@ public class HillClimbing extends Algorithm {
                     newPosition[i] -= interval[i] * dxPercent;
 
                     if (checkImprovement(newPosition)) {
-                        System.out.println(currentBest);
                         if (task.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
@@ -94,7 +91,6 @@ public class HillClimbing extends Algorithm {
                     newPosition[i] += interval[i] * dxPercent;
 
                     if (checkImprovement(newPosition)) {
-                        System.out.println(currentBest);
                         if (task.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
@@ -111,7 +107,6 @@ public class HillClimbing extends Algorithm {
                     newPosition[i] -= interval[i] * dxPercent;
 
                     if (checkImprovement(newPosition)) {
-                        System.out.println(currentBest);
                         if (task.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
@@ -121,7 +116,6 @@ public class HillClimbing extends Algorithm {
                     newPosition[i] += interval[i] * dxPercent;
 
                     if (checkImprovement(newPosition)) {
-                        System.out.println(currentBest);
                         if (task.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;

@@ -13,7 +13,7 @@ import org.um.feri.ears.util.Util;
 
 public class BA extends Algorithm{
 
-	int pop_size; //typically 10 to 40
+	int popSize; //typically 10 to 40
 	Task task;
 	
     double A; //Loudness  (constant or decreasing)
@@ -31,10 +31,10 @@ public class BA extends Algorithm{
 		this(30, 0.5, 0.5, 0, 2, 0.9, 0.9);
 	}
 	
-	public BA(int pop_size, double A, double r, double  Qmin, double Qmax, double alpha, double gamma)
+	public BA(int popSize, double A, double r, double  Qmin, double Qmax, double alpha, double gamma)
 	{
 		super();
-		this.pop_size = pop_size;
+		this.popSize = popSize;
 		this.A = A;
 		this.r = r;
 		this.Qmin = Qmin;
@@ -52,7 +52,7 @@ public class BA extends Algorithm{
 				+ "year={2010},"
 				+ "publisher={Springer}}",
 				"BA", "Bat Algorithm");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class BA extends Algorithm{
 			
 			double avgA; //average loudness
 			double sumA = 0.0;
-			for (int i = 0; i < pop_size; i++) {
+			for (int i = 0; i < popSize; i++) {
 				
 				
 				//Generate new solutions by adjusting frequency, and updating velocities and locations/solutions [Eq.(2) to(4)]
@@ -116,11 +116,8 @@ public class BA extends Algorithm{
 					//System.out.println(best.getEval());
 					best = new BatSolution(newBat);
 				}
-				
 			}
-			
 		}
-		
 		return best;
 	}
 
@@ -130,7 +127,7 @@ public class BA extends Algorithm{
 		best = new BatSolution(task.getRandomSolution());
 		best.v = new double[task.getNumberOfDimensions()];
 		population.add(best);
-		for (int i = 1; i < pop_size; i++) {
+		for (int i = 1; i < popSize; i++) {
 			
 			BatSolution newSolution = new BatSolution(task.getRandomSolution());
 			newSolution.v = new double[task.getNumberOfDimensions()];

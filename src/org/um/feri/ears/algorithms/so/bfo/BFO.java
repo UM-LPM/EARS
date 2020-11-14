@@ -118,7 +118,7 @@ public class BFO extends Algorithm {
 			swarm.set(i + Sr, new Bacteria(swarm.get(i)));
 	}
 	
-	public double getAvgDistance(double x[], double y[]) {
+	public double getAvgDistance(double[] x, double[] y) {
 		double sum = 0;
 		for (int i = 0; i < x.length; i++) {
 			sum += Math.abs(x[i] - y[i]);

@@ -240,8 +240,14 @@ public class Util {
         return a / b;
     }
 
-    public static int nextInt(int n) {
-        return rnd.nextInt(n);
+    /**
+     *
+     * @param upperBound
+     * @return the next random, uniformly distributed {@code int} value between
+     *         {@code 0} (inclusive) and {@code upperBound} (exclusive).
+     */
+    public static int nextInt(int upperBound) {
+        return rnd.nextInt(upperBound);
     }
 
     public static int nextInt() {
@@ -253,7 +259,7 @@ public class Util {
      * {@code 0} (inclusive) and {@code n} (exclusive).
      *
      * @return the next random, uniformly distributed {@code int} value between
-     *         {@code 0} (inclusive) and {@code n} (exclusive).
+     *         {@code lowerBound} (inclusive) and {@code upperBound} (exclusive).
      */
     public static int nextInt(int lowerBound, int upperBound) {
         return lowerBound + rnd.nextInt(upperBound - lowerBound);
@@ -269,13 +275,13 @@ public class Util {
 
     /**
      * Returns the next random, uniformly distributed {@code double} value
-     * between {@code min} and {@code max}.
+     * between {@code lowerBound} and {@code upperBound}.
      *
      * @return the next random, uniformly distributed {@code double} value
-     *         between {@code min} and {@code max}
+     *         between {@code lowerBound} and {@code upperBound}
      */
-    public static double nextDouble(double min, double max) {
-        return min + rnd.nextDouble() * (max - min);
+    public static double nextDouble(double lowerBound, double upperBound) {
+        return lowerBound + rnd.nextDouble() * (upperBound - lowerBound);
     }
 
     public static double nextFloat() {

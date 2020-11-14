@@ -4,7 +4,6 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
-import org.um.feri.ears.algorithms.so.fdo.Bee;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
@@ -202,8 +201,8 @@ public class AAA extends Algorithm {
 
     void normalization(double[] friction) {
         ArrayList<Double> sortedScores = new ArrayList<Double>();
-        for (int i = 0; i < friction.length; i++) {
-            sortedScores.add(friction[i]);
+        for (double f : friction) {
+            sortedScores.add(f);
         }
         Collections.sort(sortedScores);
         double maxValue = sortedScores.get(sortedScores.size() - 1);

@@ -137,8 +137,7 @@ public class LaF extends Algorithm {
 		}
 		
 		result = task.setFeasible(result); //fixes upper and lower bound
-		DoubleSolution trail = task.eval(result);
-		return trail;
+		return task.eval(result);
 	}
 	
 	DoubleSolution findMedianSolution(ArrayList<DoubleSolution> mArrayList)
@@ -165,7 +164,7 @@ public class LaF extends Algorithm {
 		
 		for (int i = 0; i < pop_size; i++)
 		{
-			int pick2 [] = randomSample(selected);
+			int[] pick2 = randomSample(selected);
 			int winner_index = compete(merged, pick2);
 			selectedLeaders.add(merged.get(winner_index));
 			selected[winner_index] = true;
@@ -187,16 +186,16 @@ public class LaF extends Algorithm {
 		return min_index;
 	}
 	//return an array w/ two int that are not selected before
-	int [] randomSample(boolean selected []) 
+	int [] randomSample(boolean[] selected)
 	{
-		int pick2[] = {0,0};
+		int[] pick2 = {0,0};
 		int r1 = Util.nextInt(selected.length);
-		while (selected[r1] != false){
+		while (selected[r1]){
 			r1 = Util.nextInt(selected.length);
 		}
 		
 		int r2 = Util.nextInt(selected.length);
-		while (selected[r2] != false){
+		while (selected[r2]){
 			r2 = Util.nextInt(selected.length);
 		}
 		pick2[0] = r1;

@@ -75,7 +75,6 @@ public class SimulatedAnnealing extends Algorithm {
                     if (Util.nextDouble() <= P)
                         currentBest = neighbor;
                 }
-                System.out.println(currentBest);
             }
             // Decreases T, cooling phase
             T *= alpha;

@@ -16,7 +16,7 @@ public class MFO extends Algorithm{
 	
 	DoubleSolution bestFlame;
 	
-	int pop_size;
+	int popSize;
 	double flameNum;
 	
 	Task task;
@@ -28,10 +28,10 @@ public class MFO extends Algorithm{
 		this(20);
 	}
 	
-	public MFO(int pop_size)
+	public MFO(int popSize)
 	{
 		super();
-		this.pop_size = pop_size;
+		this.popSize = popSize;
 		
 		au = new Author("miha", "miha.ravber@um.si");
 		ai = new AlgorithmInfo("MFO",
@@ -44,13 +44,13 @@ public class MFO extends Algorithm{
 				  +"year={2015},"
 				  +"publisher={Elsevier}}",
 				"MFO", "Moth Flame Optimization");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 	
 	private void initPopulation() throws StopCriteriaException {
 		population = new ArrayList<DoubleSolution>();
 	
-		for (int i = 0; i < pop_size; i++) {
+		for (int i = 0; i < popSize; i++) {
 			population.add(task.getRandomSolution());
 			if (task.isStopCriteria())
 				break;
@@ -74,11 +74,11 @@ public class MFO extends Algorithm{
 		
 		if(task.getStopCriteria() == EnumStopCriteria.EVALUATIONS)
 		{
-			maxIt = task.getMaxEvaluations() / pop_size;
+			maxIt = task.getMaxEvaluations() / popSize;
 		}
 		
 		while (!task.isStopCriteria()) {
-			flameNum = Math.round(pop_size - task.getNumberOfIterations() * ((pop_size-1) / maxIt));
+			flameNum = Math.round(popSize - task.getNumberOfIterations() * ((popSize -1) / maxIt));
 
 			task.incrementNumberOfIterations();
 		}

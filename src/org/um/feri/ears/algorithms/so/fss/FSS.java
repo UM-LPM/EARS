@@ -6,8 +6,6 @@
  */
 package org.um.feri.ears.algorithms.so.fss;
 
-import java.util.ArrayList;
-
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
@@ -17,15 +15,15 @@ import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.qualityIndicator.MetricsUtil;
-import org.um.feri.ears.util.EuclideanDistance;
-import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
+
+import java.util.ArrayList;
 
 public class FSS extends Algorithm{
 	
 	DoubleSolution best;
 	
-	int pop_size; //school size
+	int popSize; //school size
 	Task task;
 	
 	
@@ -47,10 +45,10 @@ public class FSS extends Algorithm{
 		this(100);
 	}
 	
-	public FSS(int pop_size)
+	public FSS(int popSize)
 	{
 		super();
-		this.pop_size = pop_size;
+		this.popSize = popSize;
 		
 		au = new Author("miha", "miha.ravber@um.si");
 		ai = new AlgorithmInfo("FSS",
@@ -62,7 +60,7 @@ public class FSS extends Algorithm{
 				+ "year={2008},"
 				+ "organization={IEEE}}",
 				"FSS", "Fish School Search");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
 	@Override
@@ -328,7 +326,7 @@ public class FSS extends Algorithm{
 	private void initPopulation() throws StopCriteriaException {
 		school = new ArrayList<FishSolution>();
 
-		for (int i = 0; i < pop_size; i++) {
+		for (int i = 0; i < popSize; i++) {
 			if (task.isStopCriteria())
 				break;
 			FishSolution newSolution = new FishSolution(task.getRandomSolution());

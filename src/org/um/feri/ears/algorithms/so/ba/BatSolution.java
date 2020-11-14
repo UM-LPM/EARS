@@ -9,7 +9,6 @@ public class BatSolution extends DoubleSolution{
 	public double A; //Loudness
 	public double r; //pulse rate
 	
-	
 	public BatSolution(BatSolution s) {
 		super(s);
 		this.v = s.v;
@@ -22,5 +21,4 @@ public class BatSolution extends DoubleSolution{
 		super(s);
 		Q = 0.0;
 	}
-
 }

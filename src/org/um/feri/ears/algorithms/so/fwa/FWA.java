@@ -119,9 +119,9 @@ public class FWA extends Algorithm{
 		}
 
 		//get amplitude of explosion for all fireworks
-		double ampExplosition [] = new double [pop_size];
+		double[] ampExplosion = new double [pop_size];
 		for(i = 0;i < pop_size;i++) {
-			ampExplosition[i] =(fireworks[i].getEval() - minvalue + eps) / (summindiff + eps) * numMaxAmplitude;
+			ampExplosion[i] =(fireworks[i].getEval() - minvalue + eps) / (summindiff + eps) * numMaxAmplitude;
 		}
 
 		//generate sparks for all fireworks
@@ -148,15 +148,15 @@ public class FWA extends Algorithm{
 				int tmprand;
 				while(randomcount < numExplosionDirections) {
 					tmprand = Util.nextInt(task.getNumberOfDimensions());
-					if(randflag[tmprand] == false) {
+					if(!randflag[tmprand]) {
 						randflag[tmprand] = true;
 						randomcount ++;
 					}
 				}
 				//explode
-				double displacement = ampExplosition[i] * (Util.nextDouble() - 0.5) * 2;
+				double displacement = ampExplosion[i] * (Util.nextDouble() - 0.5) * 2;
 				for(j = 0 ;j < task.getNumberOfDimensions();j ++) {
-					if(randflag[j] == true) {
+					if(randflag[j]) {
 						tmppos[j] = fireworkpos[j] + displacement;
 						//out of bound
 						if(tmppos[j] < minbound[j] || tmppos[j] > maxbound[j]) {
@@ -201,16 +201,16 @@ public class FWA extends Algorithm{
 			int tmprand;
 			while(randomcount < numExplosionDirections) {
 				tmprand = Math.abs(Util.nextInt()) % task.getNumberOfDimensions();
-				if(randflag[tmprand] == false) {
+				if(!randflag[tmprand]) {
 					randflag[tmprand] = true;
 					randomcount ++;
 				}
 			}
 			//explode
-			double gaussiancoef = 1.0 + Util.nextGaussian();
+			double gaussianCoef = 1.0 + Util.nextGaussian();
 			for(j = 0 ;j < task.getNumberOfDimensions();j ++) {
-				if(randflag[j] == true) {
-					tmppos[j] = fireworkpos[j] * gaussiancoef;
+				if(randflag[j]) {
+					tmppos[j] = fireworkpos[j] * gaussianCoef;
 					//out of bound
 					if(tmppos[j] < minbound[j] || tmppos[j] > maxbound[j]) {
 						double abspos = Math.abs(tmppos[j]);
@@ -337,7 +337,7 @@ public class FWA extends Algorithm{
 				}
 				idx ++;
 			}
-			if(breakflag == true) {
+			if(breakflag) {
 				continue;
 			}
 			for(i = 0;i < pop_size;i ++) {
@@ -349,11 +349,11 @@ public class FWA extends Algorithm{
 					}
 					idx ++;
 				}
-				if(breakflag == true) {
+				if(breakflag) {
 					break;
 				}
 			}
-			if(breakflag == true) {
+			if(breakflag) {
 				continue;
 			}
 			for(i = 0;i < numGaussianSparks;i ++) {

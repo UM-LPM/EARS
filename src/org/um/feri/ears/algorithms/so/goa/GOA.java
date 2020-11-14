@@ -1,9 +1,5 @@
 package org.um.feri.ears.algorithms.so.goa;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
@@ -19,12 +15,11 @@ public class GOA extends Algorithm{
 	
 	DoubleSolution best;
 	
-	int pop_size;
+	int popSize;
 	Task task;
 	
 	double cMax = 1;
 	double cMin = 0.00001;
-	
 	
 	ArrayList<DoubleSolution> population;
 	ArrayList<DoubleSolution> offspringPopulation;
@@ -34,10 +29,10 @@ public class GOA extends Algorithm{
 		this(20);
 	}
 	
-	public GOA(int pop_size)
+	public GOA(int popSize)
 	{
 		super();
-		this.pop_size = pop_size;
+		this.popSize = popSize;
 		
 		au = new Author("miha", "miha.ravber@um.si");
 		ai = new AlgorithmInfo("GOA",
@@ -50,7 +45,7 @@ public class GOA extends Algorithm{
 				+ "  year={2017},"
 				+ "  publisher={Elsevier}}",
 				"GOA", "Grasshopper Optimisation Algorithm");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
 	@Override
@@ -65,7 +60,7 @@ public class GOA extends Algorithm{
 		
 		if(task.getStopCriteria() == EnumStopCriteria.EVALUATIONS)
 		{
-			maxIt = task.getMaxEvaluations() / pop_size;
+			maxIt = task.getMaxEvaluations() / popSize;
 		}
 		
 		double dist,r_ij1,r_ij2;
@@ -78,13 +73,13 @@ public class GOA extends Algorithm{
 			double xj_xi,s_ij1,s_ij2;
 			double [] S_total;
 			offspringPopulation = new ArrayList<DoubleSolution>();
-			for(int i = 0; i < pop_size; i++)
+			for(int i = 0; i < popSize; i++)
 			{
 				double[] temp_i = population.get(i).getDoubleVariables();
 				double[] newPosition = new double[task.getNumberOfDimensions()];
 				S_total = new double[task.getNumberOfDimensions()];
 				for(int k= 0; k < task.getNumberOfDimensions(); k+=2) {
-					for(int j = 0; j < pop_size; j++)
+					for(int j = 0; j < popSize; j++)
 					{
 						if(i==j)
 							continue;
@@ -167,7 +162,7 @@ public class GOA extends Algorithm{
 	private void initPopulation() throws StopCriteriaException {
 		population = new ArrayList<DoubleSolution>();
 
-		for (int i = 0; i < pop_size; i++) {
+		for (int i = 0; i < popSize; i++) {
 			if (task.isStopCriteria())
 				break;
 			DoubleSolution newSolution = task.getRandomSolution();
