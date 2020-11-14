@@ -1,83 +1,158 @@
 package org.um.feri.ears.algorithms.so.hc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 
 public class HillClimbing extends Algorithm {
-	String algName;
-	String datoteka;
-	double dxProcent;
-    public HillClimbing(double dxProcent) {
-		ai = new AlgorithmInfo(
-				"HillClimbing",
-				"HillClimbing",
-				"HillClimbing", "HillClimbing"); // EARS add algorithm name
-		this.dxProcent=dxProcent;
-		au = new Author("Matej", "matej.crepinsek at um.si"); // EARS author
+
+    public enum HillClimbingStrategy {ANY_ASCENT, STEEPEST_ASCENT, RANDOM_RESTART}
+
+    DoubleSolution globalBest, currentBest;
+    Task task;
+    double dxPercent;
+    HillClimbingStrategy strategy;
+
+    public HillClimbing() {
+        this(HillClimbingStrategy.RANDOM_RESTART, 0.001);
     }
 
-    public static void print(int eval, DoubleSolution s,String a) {
-    	System.out.println(eval+";"+s.getEval()+" "+Arrays.toString(s.getDoubleVariables())+a);
+    public HillClimbing(HillClimbingStrategy strategy, double dxPercent) {
+        super();
+        this.strategy = strategy;
+        this.dxPercent = dxPercent;
+        au = new Author("miha", "miha.ravber@um.si");
+        ai = new AlgorithmInfo("HC",
+                "@article{russell2002artificial," +
+                        "title={Artificial intelligence: a modern approach}," +
+                        "author={Russell, Stuart and Norvig, Peter}," +
+                        "year={2002}" +
+                        "}",
+                "HC_" + strategy.name(), "Hill Climbing");
     }
-	@Override
-	public DoubleSolution execute(Task task) throws StopCriteriaException {
-		DoubleSolution bestGlobal = task.getRandomSolution();
-		DoubleSolution best = new DoubleSolution(bestGlobal); //clone
-		DoubleSolution tmpSolution;
-		double interval[] = task.getInterval();
-		ArrayList<DoubleSolution> list = new ArrayList<>();
-		double x[], bst[] ;
-		boolean better=false;
-		while (!task.isStopCriteria()) {
-			while (!task.isStopCriteria()) { //is improvement
-				list.clear();
-				bst = best.getDoubleVariables();
-				better=false;
-				for (int i=0; i< task.getNumberOfDimensions(); i++) {
-					if (i==2) {
-						//System.out.println("i:"+i);
-					}
-					x = Arrays.copyOf(bst, bst.length);
-					x[i]+=interval[i]*dxProcent;
-					tmpSolution = task.eval(x);
-					if (task.isFirstBetter(tmpSolution, best)) {
-						best = tmpSolution;
-						//print(task.getNumberOfEvaluations(),best,i+"");
-						better=true;
-					}
-					if (task.isStopCriteria()) break;
-					x[i]-=interval[i]*dxProcent;
-					tmpSolution = task.eval(x);
-					if (task.isFirstBetter(tmpSolution, best)) {
-						best = tmpSolution;
-						//print(task.getNumberOfEvaluations(),best,i+"");
-						 better=true;
-					}
-					if (task.isStopCriteria()) break;
-				}
-				if (!better) break;
-			}
-			if (task.isFirstBetter(best,bestGlobal)) {
-				bestGlobal = best;
-			}
-			if (task.isStopCriteria()) break;
-			best = task.getRandomSolution();	
-			System.out.println("New start");
-		}
-		return bestGlobal;
-	}
 
-	@Override
-	public void resetToDefaultsBeforeNewRun() {
-		
-	}
+    @Override
+    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+        task = taskProblem;
 
+        double[] interval = task.getInterval();
+        globalBest = task.getRandomSolution();
+        currentBest = new DoubleSolution(globalBest);
+        boolean improvement;
+
+        while (!task.isStopCriteria()) {
+            improvement = false;
+            if (strategy == HillClimbingStrategy.ANY_ASCENT) {
+
+                double[] currentPosition = currentBest.getDoubleVariables();
+
+                for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+                    double[] newPosition = currentPosition.clone();
+                    newPosition[i] -= interval[i] * dxPercent;
+
+                    if (checkImprovement(newPosition)) {
+                        System.out.println(currentBest);
+                        if (task.isFirstBetter(currentBest, globalBest))
+                            globalBest = currentBest;
+                        improvement = true;
+                        break;
+                    }
+
+                    newPosition = currentPosition.clone();
+                    newPosition[i] += interval[i] * dxPercent;
+
+                    if (checkImprovement(newPosition)) {
+                        System.out.println(currentBest);
+                        if (task.isFirstBetter(currentBest, globalBest))
+                            globalBest = currentBest;
+                        improvement = true;
+                        break;
+                    }
+                }
+                //stop the search if no improvement
+                if (!improvement)
+                    return globalBest;
+            } else if (strategy == HillClimbingStrategy.STEEPEST_ASCENT) {
+
+                double[] currentPosition = currentBest.getDoubleVariables();
+
+                for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+                    double[] newPosition = currentPosition.clone();
+                    newPosition[i] -= interval[i] * dxPercent;
+
+                    if (checkImprovement(newPosition)) {
+                        System.out.println(currentBest);
+                        if (task.isFirstBetter(currentBest, globalBest))
+                            globalBest = currentBest;
+                        improvement = true;
+                    }
+
+                    newPosition = currentPosition.clone();
+                    newPosition[i] += interval[i] * dxPercent;
+
+                    if (checkImprovement(newPosition)) {
+                        System.out.println(currentBest);
+                        if (task.isFirstBetter(currentBest, globalBest))
+                            globalBest = currentBest;
+                        improvement = true;
+                    }
+                }
+                //stop the search if no improvement
+                if (!improvement)
+                    return globalBest;
+            } else if (strategy == HillClimbingStrategy.RANDOM_RESTART) {
+                double[] currentPosition = currentBest.getDoubleVariables();
+
+                for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+                    double[] newPosition = currentPosition.clone();
+                    newPosition[i] -= interval[i] * dxPercent;
+
+                    if (checkImprovement(newPosition)) {
+                        System.out.println(currentBest);
+                        if (task.isFirstBetter(currentBest, globalBest))
+                            globalBest = currentBest;
+                        improvement = true;
+                    }
+
+                    newPosition = currentPosition.clone();
+                    newPosition[i] += interval[i] * dxPercent;
+
+                    if (checkImprovement(newPosition)) {
+                        System.out.println(currentBest);
+                        if (task.isFirstBetter(currentBest, globalBest))
+                            globalBest = currentBest;
+                        improvement = true;
+                    }
+                }
+                //restart search if no improvement
+                if (!improvement) {
+                    if (!task.isStopCriteria())
+                        currentBest = task.getRandomSolution();
+                }
+            }
+        }
+        return globalBest;
+    }
+
+    private boolean checkImprovement(double[] newPosition) throws StopCriteriaException {
+
+        if (task.isFeasible(newPosition)) {
+            if (!task.isStopCriteria()) {
+                DoubleSolution newSolution = task.eval(newPosition);
+                if (task.isFirstBetter(newSolution, currentBest)) {
+                    currentBest = newSolution;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
+
+    }
 }
