@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 public class SOMA extends Algorithm {
 
+    public enum Strategy {ALL_TO_ALL, ALL_TO_ALL_ADAPTIVE, ALL_TO_ONE, ALL_TO_ONE_RANDOM}
+
     Strategy strategy;
     DoubleSolution best;
     int leaderId; //index of the best solution
@@ -25,6 +27,10 @@ public class SOMA extends Algorithm {
 
     DoubleSolution[] population;
 
+    public SOMA() {
+        this(Strategy.ALL_TO_ONE);
+    }
+    
     public SOMA(Strategy strategy) {
         this(strategy, 50);
     }
