@@ -13,26 +13,27 @@ import java.util.ArrayList;
 
 public class PSO extends Algorithm  {
 
-	int pop_size;
-	ArrayList<MyPSOSolution> pop_x; //population
+	int popSize;
+	ArrayList<MyPSOSolution> population;
 	MyPSOSolution g; //global best
+	// C1- cognitive coefficient, C2 - social coefficient, omega- inertia weight
 	double omega, phiG, phiP;
 	Task task;
 	public PSO() {
 		this(10,0.7, 2, 2);
 	}
 
-	public PSO(int pop_size, double om, double p1, double p2) {
+	public PSO(int popSize, double om, double c1, double c2) {
 		super();
-		this.pop_size = pop_size;
+		this.popSize = popSize;
 		this.omega = om;
-		this.phiP = p1;
-		this.phiG = p2;
+		this.phiP = c1;
+		this.phiG = c2;
 	    setDebug(debug);  //EARS prints some debug info
         ai = new AlgorithmInfo("Wiki","Wiki","PSO","My Wiki PSO");  //EARS add algorithm name
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
-        ai.addParameter(EnumAlgorithmParameters.C1, p1 + "");
-        ai.addParameter(EnumAlgorithmParameters.C2, p2 + "");
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
+        ai.addParameter(EnumAlgorithmParameters.C1, c1 + "");
+        ai.addParameter(EnumAlgorithmParameters.C2, c2 + "");
         ai.addParameter(EnumAlgorithmParameters.UNNAMED1, om + "");
         //ai.addParameter(EnumAlgorithmParameters., F + "");
         au =  new Author("Matej", "matej.crepinsek at um.si"); //EARS author info
@@ -45,21 +46,21 @@ public class PSO extends Algorithm  {
 		//double rp, rg;
 		double[] v;
 		while (!task.isStopCriteria()) {
-			for (int i=0; i<pop_size; i++) {
+			for (int i = 0; i< popSize; i++) {
 				//rp = Util.rnd.nextDouble(); better to use vector of real numbers
 				//rg = Util.rnd.nextDouble(); 
 				v = new double[task.getNumberOfDimensions()];
 				// r*vec(x) double r = Util.rnd.nextDouble();
 				for (int d=0; d<task.getNumberOfDimensions(); d++) {
 					v[d] = omega*(
-							pop_x.get(i).getV()[d])+
-							phiP* Util.rnd.nextDouble()*(pop_x.get(i).getP().getValue(d)-pop_x.get(i).getValue(d))+
-							phiG* Util.rnd.nextDouble()*(g.getValue(d)-pop_x.get(i).getValue(d));
+							population.get(i).getV()[d])+
+							phiP* Util.rnd.nextDouble()*(population.get(i).getP().getValue(d)- population.get(i).getValue(d))+
+							phiG* Util.rnd.nextDouble()*(g.getValue(d)- population.get(i).getValue(d));
 					//if (v[d]>(taskProblem.getIntervalLength()[d])) v[d]=taskProblem.getIntervalLength()[d]; 
 					//if (v[d]<(taskProblem.getIntervalLength()[d])) v[d]=-taskProblem.getIntervalLength()[d]; 
 				}
-				pop_x.set(i, pop_x.get(i).update(taskProblem,v));
-				if (task.isFirstBetter(pop_x.get(i), g)) g = pop_x.get(i); 
+				population.set(i, population.get(i).update(taskProblem,v));
+				if (task.isFirstBetter(population.get(i), g)) g = population.get(i);
 				if (task.isStopCriteria()) break;
 			}
 			task.incrementNumberOfIterations();
@@ -68,11 +69,11 @@ public class PSO extends Algorithm  {
 	}
 	
 	private void initPopulation() throws StopCriteriaException {
-		pop_x = new ArrayList<>();
-		for (int i=0; i<pop_size; i++) {
-			pop_x.add(new MyPSOSolution(task));
-			if (i==0) g = pop_x.get(0);
-			else if (task.isFirstBetter(pop_x.get(i), g)) g=pop_x.get(i);
+		population = new ArrayList<>();
+		for (int i = 0; i< popSize; i++) {
+			population.add(new MyPSOSolution(task));
+			if (i==0) g = population.get(0);
+			else if (task.isFirstBetter(population.get(i), g)) g= population.get(i);
 			if (task.isStopCriteria()) break;
 		}
 	}

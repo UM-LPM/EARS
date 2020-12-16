@@ -182,7 +182,7 @@ public class GSAv2 extends Algorithm {
             		|| taskProblem.getStopCriteria() == EnumStopCriteria.STAGNATION)
             	nextGeneration(taskProblem, generation, taskProblem.getMaxEvaluations()/pop_size);
             if(taskProblem.getStopCriteria() == EnumStopCriteria.ITERATIONS)
-            	nextGeneration(taskProblem, generation, taskProblem.getMaxIteratirons());
+            	nextGeneration(taskProblem, generation, taskProblem.getMaxIterations());
            //TODO stop criteria stagnation 	
             generation++;
             taskProblem.incrementNumberOfIterations();

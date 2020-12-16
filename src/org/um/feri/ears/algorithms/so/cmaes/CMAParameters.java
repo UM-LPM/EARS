@@ -153,7 +153,7 @@ public class CMAParameters implements java.io.Serializable {
 			if(task.getStopCriteria() == EnumStopCriteria.EVALUATIONS)
 				opt = task.getMaxEvaluations() / lambda;
 			if(task.getStopCriteria() == EnumStopCriteria.ITERATIONS)
-				opt = task.getMaxIteratirons();
+				opt = task.getMaxIterations();
 			
 			damps = (1 + 2 * Math.max(0, Math.sqrt((mueff - 1.) / (N + 1.)) - 1)) * Math.max(0.3, 1 - N / (1e-6 + opt)) + cs;
 		}

@@ -69,7 +69,7 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 		
 		while (!task.isStopCriteria()) {
 			
-			alpha = alpha_new(alpha, task.getMaxIteratirons());
+			alpha = alpha_new(alpha, task.getMaxIterations());
 			move_ffa();
 			//evaluate new solution
 			update_eval();

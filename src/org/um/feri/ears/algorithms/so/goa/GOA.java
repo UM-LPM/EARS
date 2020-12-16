@@ -55,7 +55,7 @@ public class GOA extends Algorithm{
 		int maxIt = 10000;
 		if(task.getStopCriteria() == EnumStopCriteria.ITERATIONS)
 		{
-			maxIt = task.getMaxIteratirons();
+			maxIt = task.getMaxIterations();
 		}
 		
 		if(task.getStopCriteria() == EnumStopCriteria.EVALUATIONS)

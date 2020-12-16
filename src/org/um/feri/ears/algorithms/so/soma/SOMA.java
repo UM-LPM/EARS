@@ -30,7 +30,7 @@ public class SOMA extends Algorithm {
     public SOMA() {
         this(Strategy.ALL_TO_ONE);
     }
-    
+
     public SOMA(Strategy strategy) {
         this(strategy, 50);
     }
