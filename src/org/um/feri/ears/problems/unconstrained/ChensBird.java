@@ -24,12 +24,10 @@ public class ChensBird extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double b = 0.001;
-        fitness = (b / (pow(b, 2) + pow(pow(x[0], 2) + pow(x[1], 2) - 1, 2)))
+        return (b / (pow(b, 2) + pow(pow(x[0], 2) + pow(x[1], 2) - 1, 2)))
                 + (b / (pow(b, 2) + pow(pow(x[0], 2) + pow(x[1], 2) - 0.5, 2)))
                 + (b / (pow(b, 2) + pow(x[0] - x[1], 2)));
-        return fitness;
     }
 
     @Override

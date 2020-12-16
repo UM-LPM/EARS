@@ -81,16 +81,7 @@ public class CEC2011_Problem_11_4_ELD_13 extends Problem {
 		return tt;
 	}
 
-  @Override
-  public double[] calc_constrains(List<Double> x) {
-    return calc_constrains(x.stream().mapToDouble(i -> i).toArray());
-  }
-
-  public double[] calc_constrains(Double[] ds) {
-    return calc_constrains(ArrayUtils.toPrimitive(ds));
-  }
-	 
-	public double[] calc_constrains(double x[]) {
+	public double[] computeConstraints(double x[]) {
 		g_constrains = new double[numberOfConstraints];
 		double Power_Loss = 0;
 		double  Power_Balance_Penalty = Math.abs(Power_Demand + Power_Loss - sum(x));

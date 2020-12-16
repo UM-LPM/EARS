@@ -25,9 +25,7 @@ public class Eggholder extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -(x[1] + 47.0) * sin(sqrt(abs(x[1] + x[0] / 2.0 + 47.0)))
-                - x[0] * sin(sqrt(abs(x[0] - (x[1] + 47.0))));
-        return fitness;
+        return -(x[1] + 47.0) * sin(sqrt(abs(x[1] + x[0] / 2.0 + 47.0))) - x[0] * sin(sqrt(abs(x[0] - (x[1] + 47.0))));
     }
 
     @Override

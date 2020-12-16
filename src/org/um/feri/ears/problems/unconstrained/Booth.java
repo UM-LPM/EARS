@@ -26,8 +26,6 @@ public class Booth extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0] + 2 * x[1] - 7, 2)
-                + pow(2 * x[0] + x[1] - 5, 2);
-        return fitness;
+        return pow(x[0] + 2 * x[1] - 7, 2) + pow(2 * x[0] + x[1] - 5, 2);
     }
 }

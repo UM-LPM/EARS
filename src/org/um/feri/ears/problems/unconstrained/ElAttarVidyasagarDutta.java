@@ -24,8 +24,7 @@ public class ElAttarVidyasagarDutta extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(pow(x[0], 2) + x[1] - 10, 2) + pow(x[0] + pow(x[1], 2) - 7, 2) + pow(pow(x[0], 2) + pow(x[1], 3) - 1, 2);
-        return fitness;
+        return pow(pow(x[0], 2) + x[1] - 10, 2) + pow(x[0] + pow(x[1], 2) - 7, 2) + pow(pow(x[0], 2) + pow(x[1], 3) - 1, 2);
     }
 
     @Override

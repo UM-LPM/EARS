@@ -23,8 +23,7 @@ public class DropWave extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -((1.0 + cos(12.0 * sqrt(pow(x[0], 2) + pow(x[1], 2)))) / (((pow(x[0], 2) + pow(x[1], 2)) / 2.0) + 2.0));
-        return fitness;
+        return -((1.0 + cos(12.0 * sqrt(pow(x[0], 2) + pow(x[1], 2)))) / (((pow(x[0], 2) + pow(x[1], 2)) / 2.0) + 2.0));
     }
 
     @Override

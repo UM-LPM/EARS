@@ -124,16 +124,7 @@ public class CEC2011_Problem_11_5_ELD_15 extends Problem {
     return tt;
   }
 
-  @Override
-  public double[] calc_constrains(List<Double> x) {
-    return calc_constrains(x.stream().mapToDouble(i -> i).toArray());
-  }
-
-  public double[] calc_constrains(Double[] ds) {
-    return calc_constrains(ArrayUtils.toPrimitive(ds));
-  }
-
-  public double[] calc_constrains(double x[]) {
+  public double[] computeConstraints(double x[]) {
     g_constrains = new double[numberOfConstraints];
     double Power_Loss = produkt(produkt2(x, B1), x) + produkt(B2, x) + B3;
     Power_Loss = Math.round(Power_Loss * 10000) / 10000;

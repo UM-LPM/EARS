@@ -22,7 +22,6 @@ public class EggCrate extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0], 2) + pow(x[1], 2) + 25 * (pow(sin(x[0]), 2) + pow(sin(x[1]), 2));
-        return fitness;
+        return pow(x[0], 2) + pow(x[1], 2) + 25 * (pow(sin(x[0]), 2) + pow(sin(x[1]), 2));
     }
 }

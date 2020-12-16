@@ -1,11 +1,9 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static java.lang.Math.*;
 
@@ -27,15 +25,13 @@ public class Ackley1 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double a = 20.0, b = 0.2, c = 2 * PI;
         double sum1 = 0, sum2 = 0;
 
         for (int i = 0; i < numberOfDimensions; i++) {
             sum1 += pow(x[i], 2);
-            sum2 += Math.cos(2 * Math.PI * x[i]);
+            sum2 += cos(2 * PI * x[i]);
         }
-        fitness = -a * Math.exp(-b * sqrt(1.0 / numberOfDimensions * sum1)) - exp(1.0 / numberOfDimensions * sum2) + a + E;
-        return fitness;
+        return -a * exp(-b * sqrt(1.0 / numberOfDimensions * sum1)) - exp(1.0 / numberOfDimensions * sum2) + a + E;
     }
 }

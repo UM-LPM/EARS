@@ -23,8 +23,7 @@ public class Complex extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(pow(x[0], 3) - 3 * x[0] * pow(x[1], 2) - 1, 2)
+        return pow(pow(x[0], 3) - 3 * x[0] * pow(x[1], 2) - 1, 2)
                 + pow(3 * x[1] * pow(x[0], 2) - pow(x[1], 3), 2);
-        return fitness;
     }
 }

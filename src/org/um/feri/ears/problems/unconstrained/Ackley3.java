@@ -24,8 +24,7 @@ public class Ackley3 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -200.0 * exp(-0.02 * sqrt(pow(x[0], 2) + pow(x[1], 2))) + 5 * exp(cos(3 * x[0]) + sin(3 * x[1]));
-        return fitness;
+        return -200.0 * exp(-0.02 * sqrt(pow(x[0], 2) + pow(x[1], 2))) + 5 * exp(cos(3 * x[0]) + sin(3 * x[1]));
     }
 
     @Override

@@ -32,7 +32,6 @@ public class Bukin4 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 100.0 * pow(x[1], 2) + 0.01 * abs(x[0] + 10);
-        return fitness;
+        return 100.0 * pow(x[1], 2) + 0.01 * abs(x[0] + 10);
     }
 }

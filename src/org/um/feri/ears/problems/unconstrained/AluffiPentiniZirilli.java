@@ -23,8 +23,7 @@ public class AluffiPentiniZirilli extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0.25 * pow(x[0], 4) - 0.5 * pow(x[0], 2) + 0.1 * x[0] + 0.5 * pow(x[1], 2);
-        return fitness;
+        return 0.25 * pow(x[0], 4) - 0.5 * pow(x[0], 2) + 0.1 * x[0] + 0.5 * pow(x[1], 2);
     }
 
     @Override

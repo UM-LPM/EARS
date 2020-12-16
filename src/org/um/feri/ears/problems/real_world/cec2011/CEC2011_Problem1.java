@@ -2,15 +2,11 @@ package org.um.feri.ears.problems.real_world.cec2011;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.unconstrained.cec2010.base.EllipticShifted;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -72,7 +68,7 @@ public class CEC2011_Problem1 extends Problem {
 		for (int j = 0; j < numberOfDimensions; j++) {
 			var.add(Util.nextDouble(0, 6.35));
 		}
-		DoubleSolution sol = new DoubleSolution(var, eval(var), calc_constrains(var), upperLimit, lowerLimit);
+		DoubleSolution sol = new DoubleSolution(var, eval(var), computeConstraints(var), upperLimit, lowerLimit);
 		return sol;
 	}
 }

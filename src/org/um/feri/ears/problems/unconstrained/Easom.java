@@ -25,8 +25,7 @@ public class Easom extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -1 * cos(x[0]) * cos(x[1]) * exp(-1 * pow(x[0] - PI, 2) - pow(x[1] - PI, 2));
-        return fitness;
+        return -1 * cos(x[0]) * cos(x[1]) * exp(-1 * pow(x[0] - PI, 2) - pow(x[1] - PI, 2));
     }
 
     @Override

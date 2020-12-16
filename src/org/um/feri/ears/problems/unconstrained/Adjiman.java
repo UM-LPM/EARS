@@ -27,8 +27,7 @@ public class Adjiman extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness =  Math.cos(x[0]) * Math.sin(x[1]) - x[0] / (1 + Math.pow(x[1], 2));
-        return fitness;
+        return Math.cos(x[0]) * Math.sin(x[1]) - x[0] / (1 + Math.pow(x[1], 2));
     }
 
     @Override

@@ -27,8 +27,7 @@ public class Camel extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -((-pow(x[0], 4) + 4.5 * pow(x[0], 2) + 2) / (exp(2 * pow(x[1], 2))));
-        return fitness;
+        return -((-pow(x[0], 4) + 4.5 * pow(x[0], 2) + 2) / (exp(2 * pow(x[1], 2))));
     }
 
     @Override

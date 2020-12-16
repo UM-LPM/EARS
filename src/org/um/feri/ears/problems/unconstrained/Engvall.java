@@ -24,7 +24,6 @@ public class Engvall extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0], 4) + pow(x[1], 4) + 2 * pow(x[0], 2) * pow(x[1], 2) - 4 * x[0] + 3;
-        return fitness;
+        return pow(x[0], 4) + pow(x[1], 4) + 2 * pow(x[0], 2) * pow(x[1], 2) - 4 * x[0] + 3;
     }
 }

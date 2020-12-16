@@ -25,8 +25,7 @@ public class CarromTable extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = (-1.0 / 30.0) * exp(2 * abs(1 - (sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI))) * pow(cos(x[0]), 2) * pow(cos(x[1]), 2);
-        return fitness;
+        return (-1.0 / 30.0) * exp(2 * abs(1 - (sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI))) * pow(cos(x[0]), 2) * pow(cos(x[1]), 2);
     }
 
     @Override

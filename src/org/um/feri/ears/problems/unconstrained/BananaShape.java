@@ -26,8 +26,7 @@ public class BananaShape extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -(100 / (10 * pow(pow(x[0] + 1, 2) - (x[1] + 1), 2) + pow(x[0], 2) + 4));
-        return fitness;
+        return -(100 / (10 * pow(pow(x[0] + 1, 2) - (x[1] + 1), 2) + pow(x[0], 2) + 4));
     }
 
     @Override

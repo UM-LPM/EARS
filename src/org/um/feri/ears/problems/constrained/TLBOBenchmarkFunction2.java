@@ -85,7 +85,7 @@ public class TLBOBenchmarkFunction2 extends Problem {
 		return v;
 	}
 	
-	public double[] calc_constrains(double x[]) {
+	public double[] computeConstraints(double x[]) {
 		double[] g = new double[numberOfConstraints];
 		double d = -1;
 		for (int i = 0; i < numberOfDimensions; i++) {
