@@ -17,12 +17,16 @@ EARS is a free and open-source Java-based framework for ranking, developing and 
 
 ### Intellij
 
+**First Download EARS project**
+
 * Go to: `File` - > `New` -> `Project from Version Control` -> `Git`
 * Set URL to https://github.com/UM-LPM/EARS.git
 * Select the directory where you want to save the project (example: "path to my projects/EARS")
 * Import Gradle project
 
-**Gradle Include Dependency to EARS project**
+**Second create new project and set EARS Project dependency**
+
+*Gradle*
 
 In file **settings.gradle** add:
 
