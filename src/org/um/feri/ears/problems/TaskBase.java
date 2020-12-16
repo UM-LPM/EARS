@@ -222,7 +222,7 @@ public abstract class TaskBase<T extends ProblemBase> {
         return maxEvaluations;
     }
 	
-	public int getMaxIteratirons() {
+	public int getMaxIterations() {
 		return maxIterations;
 	}
 	
@@ -286,7 +286,7 @@ public abstract class TaskBase<T extends ProblemBase> {
         }
         if(stopCriteria == EnumStopCriteria.ITERATIONS)
         {
-        	return "ITERATIONS="+getMaxIteratirons();
+        	return "ITERATIONS="+ getMaxIterations();
         }
         if(stopCriteria == EnumStopCriteria.CPU_TIME)
         {

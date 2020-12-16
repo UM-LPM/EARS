@@ -136,9 +136,7 @@ public abstract class Problem extends ProblemBase<Double> {
      * @return true if value feasible, false otherwise
      */
     public boolean isFeasible(double value, int dimension) {
-        if (value < lowerLimit.get(dimension))
-            return false;
-        if (value > upperLimit.get(dimension))
+        if (value < lowerLimit.get(dimension) || value > upperLimit.get(dimension))
             return false;
         return true;
     }
@@ -200,93 +198,31 @@ public abstract class Problem extends ProblemBase<Double> {
     }
 
     /**
-     * @param tmp_constrains
-     */
-    public void setMaxConstrains(double tmp_constrains[]) {
-        for (int i = 0; i < numberOfConstraints; i++) {
-            if (tmp_constrains[i] > max_constraints[i]) {
-                max_constraints[i] = tmp_constrains[i];
-            }
-        }
-    }
-
-    public void setSumConstrains(double tmp_constrains[]) {
-        for (int i = 0; i < numberOfConstraints; i++) {
-            if (tmp_constrains[i] > 0) {
-                sum_constraints[i] += tmp_constrains[i];
-            }
-        }
-    }
-
-    public void setMinConstrains(double tmp_constrains[]) {
-        for (int i = 0; i < numberOfConstraints; i++) {
-            if (tmp_constrains[i] > 0) {
-                if ((tmp_constrains[i] < min_constraints[i])
-                        || (min_constraints[i] == 0)) {
-                    min_constraints[i] = tmp_constrains[i];
-                }
-            }
-        }
-    }
-
-    public void setCountConstrains(double tmp_constrains[]) {
-        for (int i = 0; i < numberOfConstraints; i++) {
-            if (tmp_constrains[i] > 0) {
-
-                count_constraints[i]++;
-            }
-
-        }
-    }
-
-    public void countConstrains(double tmp_constrains[]) {
-        // if (max_constrains==null) max_constrains = new double[constrains];
-        for (int i = 0; i < numberOfConstraints; i++) {
-            if (tmp_constrains[i] > max_constraints[i]) {
-                max_constraints[i]++;
-            } else {
-                max_constraints[i]--;
-                if (max_constraints[i] < 0) {
-                    max_constraints[i] = 0.0;
-                }
-            }
-
-        }
-    }
-
-    public double[] normalizeConstrain(double tmp_constrains[]) {
-        for (int i = 0; i < numberOfConstraints; i++) {
-
-            tmp_constrains[i] = tmp_constrains[i] / max_constraints[i];
-        }
-        return tmp_constrains;
-    }
-
-    /**
-     * Default it sets to zero!
-     * This method needs to be override in constrained based problems.
+     * Override this method if the problem has constraints.
      *
-     * @param x
-     * @return
+     * @param x variables for which the constraints will be evaluated
+     * @return computed constraints
      */
-    public double[] calc_constrains(List<Double> x) {
-        double[] tmp = new double[0];
-        return tmp;
+    public double[] computeConstraints(double[] x) {
+        return new double[0];
     }
 
-    public double[] calc_constrains(double[] x) {
-        double[] tmp = new double[0];
-        return tmp;
+    public final double[] computeConstraints(List<Double> x) {
+        return computeConstraints(x.stream().mapToDouble(i -> i).toArray());
+    }
+
+    public final double[] computeConstraints(Double[] x) {
+        return computeConstraints(ArrayUtils.toPrimitive(x));
     }
 
     /**
      * @param x - solution
      * @return
      */
-    public double constrainsEvaluations(List<Double> x) {
+    public double evaluateConstraints(List<Double> x) {
         if (numberOfConstraints == 0)
             return 0;
-        double[] g = calc_constrains(x); //calculate for every constrain (problem depended)
+        double[] g = computeConstraints(x); //calculate for every constrain (problem depended)
         double d = 0;
         for (int j = 0; j < numberOfConstraints; j++) {
             if (g[j] > 0) {
@@ -312,7 +248,7 @@ public abstract class Problem extends ProblemBase<Double> {
             //var[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
             var.add(Util.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
         }
-        return new DoubleSolution(var, eval(var), calc_constrains(var), upperLimit, lowerLimit);
+        return new DoubleSolution(var, eval(var), computeConstraints(var), upperLimit, lowerLimit);
     }
 
     /**
@@ -331,28 +267,27 @@ public abstract class Problem extends ProblemBase<Double> {
     /**
      * Compares fitness values and constraints
      *
-     * @param x
-     * @param eval_x
-     * @param y
-     * @param eval_y
+     * @param first
+     * @param firstEval
+     * @param second
+     * @param secondEval
      * @return
      */
-    public boolean isFirstBetter(List<Double> x, double eval_x, List<Double> y,
-                                 double eval_y) {
-        double cons_x = constrainsEvaluations(x);
-        double cons_y = constrainsEvaluations(y);
-        if (cons_x == 0) {
-            if (cons_y == 0) {
+    public boolean isFirstBetter(List<Double> first, double firstEval, List<Double> second, double secondEval) {
+        double firstCons = evaluateConstraints(first);
+        double secondCons = evaluateConstraints(second);
+        if (firstCons == 0) {
+            if (secondCons == 0) {
                 if (minimize)
-                    return eval_x < eval_y;
-                return eval_x > eval_y;
+                    return firstEval < secondEval;
+                return firstEval > secondEval;
             }
-            return true; // y is not feasible
+            return true; // second is not feasible
         }
-        if (cons_y == 0) {
+        if (secondCons == 0) {
             return false;
         }
-        return cons_x < cons_y; // less constraints is better
+        return firstCons < secondCons; // less constraints is better
 
     }
 }

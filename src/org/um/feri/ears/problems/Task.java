@@ -7,49 +7,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 
-
-/**
- * Task is main class, for communication between algorithm and problem
- * <p>
- *
- * @author Matej Crepinsek
- * @version 1
- *
- * <h3>License</h3>
- * <p>
- * Copyright (c) 2011 by Matej Crepinsek. <br>
- * All rights reserved. <br>
- *
- * <p>
- * ution and use in source and binary forms, with or without
- * ion, are permitted provided that the following conditions
- * are met:
- * <ul>
- * <li>Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- * <li>Redistributions in binary form must reproduce the above
- * copyright notice, this list of conditions and the following
- * disclaimer in the documentation and/or other materials provided with
- * the distribution.
- * <li>Neither the name of the copyright owners, their employers, nor
- * the names of its contributors may be used to endorse or promote
- * products derived from this software without specific prior written
- * permission.
- * </ul>
- * <p>
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
 public class Task extends TaskBase<Problem> {
 
     /**
@@ -81,9 +38,8 @@ public class Task extends TaskBase<Problem> {
         bestEval = p.isMinimize() ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
-
     public double[] getInterval() {
-        double interval[] = new double[p.upperLimit.size()];
+        double[] interval = new double[p.upperLimit.size()];
         for (int i = 0; i < interval.length; i++) {
             interval[i] = p.upperLimit.get(i) - p.lowerLimit.get(i);
         }
@@ -93,7 +49,6 @@ public class Task extends TaskBase<Problem> {
     public double[] getRandomVariables() {
         return p.getRandomVariables();
     }
-
 
     public DoubleSolution getRandomSolution() throws StopCriteriaException {
 
@@ -189,12 +144,6 @@ public class Task extends TaskBase<Problem> {
         return null;
     }
 
-
-    public boolean isFirstBetter(DoubleSolution x, DoubleSolution y) {
-        return p.isFirstBetter(x.getVariables(), x.getEval(), y.getVariables(), y.getEval());
-    }
-
-
     /**
      * Checks if the provided vector is inside the interval given by the upper and lower limits
      *
@@ -213,7 +162,7 @@ public class Task extends TaskBase<Problem> {
      * @deprecated
      */
     public double[] calcConstrains(List<Double> ds) {
-        return p.calc_constrains(ds);
+        return p.computeConstraints(ds);
     }
 
     /**
@@ -243,19 +192,30 @@ public class Task extends TaskBase<Problem> {
         return p.isFeasible(x, d);
     }
 
-    public boolean isFeasible(DoubleSolution sol) {
+    public boolean isFeasible(DoubleSolution solution) {
 
-        for (int i = 0; i < sol.numberOfVariables(); i++) {
-            if (!isFeasible(sol.getValue(i), i))
+        for (int i = 0; i < solution.numberOfVariables(); i++) {
+            if (!isFeasible(solution.getValue(i), i))
                 return false;
         }
         return true;
     }
 
+    public boolean isFeasible(double[] solution) {
+        for (int i = 0; i < solution.length; i++) {
+            if (!isFeasible(solution[i], i))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean isFirstBetter(DoubleSolution first, DoubleSolution second) {
+        return p.isFirstBetter(first.getVariables(), first.getEval(), second.getVariables(), second.getEval());
+    }
+
     public boolean isFirstBetter(double a, double b) {
         return p.isFirstBetter(a, b);
     }
-
 
     public double[] getLowerLimit() {
 
@@ -281,7 +241,6 @@ public class Task extends TaskBase<Problem> {
     public double getUpperLimit(int i) {
         return p.upperLimit.get(i);
     }
-
 
     public DoubleSolution eval(double[] x) throws StopCriteriaException {
 
@@ -331,7 +290,7 @@ public class Task extends TaskBase<Problem> {
 
         incEvaluate();
         long start = System.nanoTime();
-        DoubleSolution tmpSolution = new DoubleSolution(ds, p.eval(ds), p.calc_constrains(ds), p.upperLimit, p.lowerLimit);
+        DoubleSolution tmpSolution = new DoubleSolution(ds, p.eval(ds), p.computeConstraints(ds), p.upperLimit, p.lowerLimit);
         evaluationTime += System.nanoTime() - start;
         checkIfGlobalReached(tmpSolution.getEval());
         GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
@@ -408,7 +367,6 @@ public class Task extends TaskBase<Problem> {
     }
 
     public DoubleSolution eval(DoubleSolution newSolution) throws StopCriteriaException {
-        return newSolution = eval(newSolution.getDoubleVariables());
+        return eval(newSolution.getDoubleVariables());
     }
-
 }
