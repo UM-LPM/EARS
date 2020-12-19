@@ -102,7 +102,7 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.Util;
 
-public class SOSingleRun {
+public class EA_SOP_VisualizationExample {
 
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run

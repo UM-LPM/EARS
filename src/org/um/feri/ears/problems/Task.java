@@ -246,21 +246,21 @@ public class Task extends TaskBase<Problem> {
 
         //Double[] ds = ArrayUtils.toObject(x);
         List<Double> ds = Arrays.asList(ArrayUtils.toObject(x));
-
+        DoubleSolution tmpSolution = null;
         if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
-            return performEvaluation(ds);
+            tmpSolution =  performEvaluation(ds);
         } else if (stopCriteria == EnumStopCriteria.ITERATIONS) {
             if (isStop)
                 throw new StopCriteriaException("Max iterations");
-            return performEvaluation(ds);
+            tmpSolution = performEvaluation(ds);
         } else if (stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
             if (isGlobal)
                 throw new StopCriteriaException("Global optimum already found");
-            return performEvaluation(ds);
+            tmpSolution =  performEvaluation(ds);
         } else if (stopCriteria == EnumStopCriteria.CPU_TIME) {
             if (!isStop) {
                 hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
-                return performEvaluation(ds);
+                tmpSolution = performEvaluation(ds);
             } else {
                 throw new StopCriteriaException("CPU Time");
             }
@@ -268,7 +268,9 @@ public class Task extends TaskBase<Problem> {
             if (isStop)
                 throw new StopCriteriaException("Solution stagnation");
 
-            DoubleSolution tmpSolution = performEvaluation(ds);
+            tmpSolution = performEvaluation(ds);
+        }
+        if (tmpSolution!=null) {
             if (isAncestorLoggingEnabled) {
                 tmpSolution.timeStamp = System.currentTimeMillis();
                 tmpSolution.generationNumber = this.getNumberOfIterations();
@@ -277,13 +279,12 @@ public class Task extends TaskBase<Problem> {
 				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
 				ancestorSB.append("\n");*/
             }
-
             return tmpSolution;
+        } else {
+            assert false; // Execution should never reach this point!
+            throw new StopCriteriaException("Not evaluated");
         }
 
-
-        assert false; // Execution should never reach this point!
-        return null; //error
     }
 
     private DoubleSolution performEvaluation(List<Double> ds) throws StopCriteriaException {

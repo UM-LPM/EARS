@@ -117,7 +117,53 @@ public abstract class TaskBase<T extends ProblemBase> {
 		isAncestorLoggingEnabled = false;
 		ancestors.clear();
 	}
-	
+
+	public void saveAncestorLogging4Visualization(String path, Algorithm alg,  int runID) {
+		String algID = alg.getID();
+		algID=algID.replaceAll("_","");
+		algID=algID.replaceAll("\\\\","");
+		algID=algID.replaceAll("/","");
+		String fileName= path+"\\"+algID+"_"+getProblemName()+"_D"+getNumberOfDimensions();
+
+		String pop_size=alg.getAlgorithmInfo().getParameters().get(EnumAlgorithmParameters.POP_SIZE);
+		StringBuffer head= new StringBuffer();
+		if (pop_size==null)  pop_size="1";
+		head.append(alg.getID()).append(";").append(alg.getAlgorithmInfo().getPublishedAcronym()).append(";[\"").append(pop_size).append("\"];").append(runID).append(";"); //X id
+		head.append(getProblemName()).append(";").append(getNumberOfDimensions()).append(";[").append(getMaxEvaluations()).append("];").append("\n");
+
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName+".txt");
+			OutputStreamWriter osw = new OutputStreamWriter(fos);
+			BufferedWriter bw = new BufferedWriter(osw);
+			bw.write(head.toString()); //first line
+			for(int i = 0; i < ancestors.size(); ++i)
+			{
+				List<DoubleSolution> parents = ancestors.get(i).parents;
+				bw.write("{");
+				bw.write(ancestors.get(i).getID()+";"+ancestors.get(i).getGenerationNumber()+";");
+				bw.write("[");
+				if(parents != null)
+				{
+					for(int j = 0; j < parents.size(); ++j)
+					{
+						bw.write(""+parents.get(j).getID());
+						if(j+1 < parents.size())
+							bw.write(",");
+					}
+
+				}
+				bw.write("];0;");
+				bw.write(ancestors.get(i).getID()+";"+ancestors.get(i).getEval()+";"+Arrays.toString(ancestors.get(i).getDoubleVariables()));
+				bw.write("}\n");
+			}
+
+			bw.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void saveAncestorLogging(String fileName) {
 		
 		try {

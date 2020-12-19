@@ -88,10 +88,14 @@ public class AlgorithmInfo {
     }
     
     public String paramsToString() {
-    	StringBuffer sb = new StringBuffer();
+    	StringBuffer sb = new StringBuffer("[");
+    	boolean first=true;
     	for (EnumAlgorithmParameters t : parameters.keySet()) {
-    		sb.append(t.getShortName()+" = "+parameters.get(t)).append("\n");
+    	    if (first) first = false;
+    	    else sb.append(",");
+    		sb.append(t.getShortName()+" = "+parameters.get(t));
     	}
+    	sb.append("]");
     	return sb.toString();
     }
 
@@ -146,7 +150,7 @@ public class AlgorithmInfo {
      * Version name needs to be similar to publishedName name. For example:
      * publishedName PSO my name PSO+ or PSOS, ...
      * 
-     * @param versionAcronym
+     * @param versionName
      */
     public AlgorithmInfo(String versionName) {
         super();

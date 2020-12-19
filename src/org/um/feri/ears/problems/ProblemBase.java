@@ -42,6 +42,7 @@ public abstract class ProblemBase <Type> {
 		return minimize;
 	}
 	public String getShortName() {
+		if (shortName==null) return name;
 		return shortName;
 	}
 	public void setShortName(String shortName) {
