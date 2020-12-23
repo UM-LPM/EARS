@@ -20,38 +20,35 @@ import org.um.feri.ears.util.Util;
 
 public class MainBenchMarkTestMOO {
 
-	public static void main(String[] args) {
-		
+    public static void main(String[] args) {
+
         Util.rnd.setSeed(System.currentTimeMillis());
         RatingBenchmark.debugPrint = true; //prints one on one results
-        ArrayList<MOAlgorithm<DoubleMOTask,Double>> players = new ArrayList<>();
+        ArrayList<MOAlgorithm<DoubleMOTask, Double>> players = new ArrayList<>();
         players.add(new D_MOEAD_DRA());
         players.add(new D_NSGAII());
         players.add(new D_SPEA2());
         players.add(new D_GDE3());
 
-        
-        ResultArena ra = new ResultArena(100);
+        ResultArena ra = new ResultArena();
 
         List<IndicatorName> indicators = new ArrayList<IndicatorName>();
         indicators.add(IndicatorName.IGD); // add quality indicator
-        
-        RatingCEC2009 cec = new RatingCEC2009(indicators, 0.0000001); //Create banchmark
-        for (MOAlgorithm<DoubleMOTask, Double> al:players) {
-        	ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
-        	cec.registerAlgorithm(al);
+
+        RatingCEC2009 cec = new RatingCEC2009(indicators, 0.0000001); //Create benchmark
+        for (MOAlgorithm<DoubleMOTask, Double> al : players) {
+            ra.addPlayer(al, al.getID(), 1500, 350, 0.06, 0, 0, 0); //init rating 1500
+            cec.registerAlgorithm(al);
         }
-        BankOfResults ba = new BankOfResults();
+
         long initTime = System.currentTimeMillis();
-        cec.run(ra, ba, 20); //repeat competition 20X
+        cec.run(ra, new BankOfResults(), 20); //repeat competition 20X
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
-        System.out.println("Benchmark execution time: "+estimatedTime + "s");
+        System.out.println("Benchmark execution time: " + estimatedTime + "s");
         ArrayList<Player> list = new ArrayList<Player>();
         list.addAll(ra.calculteRatings()); //new ranks
 
 
-        for (Player p: list) System.out.println(p); //print ranks
-
-	}
-
+        for (Player p : list) System.out.println(p); //print ranks
+    }
 }

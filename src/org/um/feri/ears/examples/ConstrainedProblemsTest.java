@@ -17,10 +17,10 @@ import org.um.feri.ears.problems.constrained.RealWorldPressureVesselDesign;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.Util;
 
-public class WOAAlgorithmTest {
+public class ConstrainedProblemsTest {
 	
 	public static void main(String[] args) {
-		Sphere sphereProblem = new Sphere(2);
+
 		RealWorldCompressionSpringDesign springProblem = new RealWorldCompressionSpringDesign();
 		RealWorldPressureVesselDesign vesselProblem = new RealWorldPressureVesselDesign();
 		ArrayList<DoubleSolution> bests = TestWOAWithProblem(springProblem,5);
@@ -33,8 +33,7 @@ public class WOAAlgorithmTest {
 		for(int i = 0; i < repetitions; i++) {
 			Task problem = new Task(EnumStopCriteria.EVALUATIONS, 10000, 0, 0, 0.001, prob);
 			int populationSize = 30;
-			boolean useFakeGenerator = false;
-			Algorithm woa = new WOA(populationSize, useFakeGenerator, false);
+			Algorithm woa = new WOA(populationSize, false);
 			try {
 				DoubleSolution best = woa.execute(problem);
 				listOfBests.add(best);
@@ -45,36 +44,5 @@ public class WOAAlgorithmTest {
 		}
 		
 		return listOfBests;
-	}
-	
-	public static void FakeRandomGeneratorTest() {
-		Util.rnd.setSeed(System.currentTimeMillis());
-		
-		// Definicija problema 
-		int maxEval = 10000;
-		int numDimensions = 2;
-		EnumStopCriteria stopCriteria = EnumStopCriteria.EVALUATIONS;
-		Sphere problem = new Sphere(numDimensions);
-		Task problem1 = new Task(stopCriteria, maxEval, 0, 0, 0.001, problem);
-		Task problem2 = new Task(stopCriteria, maxEval, 0, 0, 0.001, problem);
-		
-		// Definicija algoritma za resevanje problema
-		int populationSize = 30;
-		boolean useFakeGenerator = false;
-		Algorithm woa1 = new WOA(populationSize, useFakeGenerator, false);
-		Algorithm woa2 = new WOA(populationSize, useFakeGenerator, false);
-		
-		// Optimizacija problema
-		try {
-		    DoubleSolution best_woa1 = woa1.execute(problem1);
-		    DoubleSolution best_woa2 = woa2.execute(problem2);
-		    
-		    System.out.println("WOA 1 Best: "+ best_woa1.getEval()); 
-		    System.out.println("WOA 2 Best: "+ best_woa2.getEval()); 
-		    // WOA 1 Best: 1.5796177249618618E-6
-		    // WOA 2 Best: 1.5796177249618618E-6
-		} catch (StopCriteriaException e) {
-		    e.printStackTrace();
-		}
 	}
 }
