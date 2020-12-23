@@ -40,10 +40,10 @@ public class WOA extends Algorithm {
     }
 
     public WOA(int popSize) {
-        this(popSize, false, false);
+        this(popSize, false);
     }
 
-    public WOA(int pop_size, boolean useMockRandom, boolean debug) {
+    public WOA(int pop_size, boolean debug) {
         super();
         this.popSize = pop_size;
         setDebug(debug);
