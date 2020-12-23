@@ -68,14 +68,6 @@ import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem6
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem7;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
-import org.um.feri.ears.problems.moo.wfg.WFG1;
-import org.um.feri.ears.problems.moo.wfg.WFG2;
-import org.um.feri.ears.problems.moo.wfg.WFG3;
-import org.um.feri.ears.problems.moo.wfg.WFG4;
-import org.um.feri.ears.problems.moo.wfg.WFG5;
-import org.um.feri.ears.problems.moo.wfg.WFG6;
-import org.um.feri.ears.problems.moo.wfg.WFG7;
-import org.um.feri.ears.problems.moo.wfg.WFG8;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
@@ -96,10 +88,10 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
         if (a==null) return false;
         if (b==null) return false;
         if(qi.getIndicatorType() == IndicatorType.Unary)
-        	return a.isEqual(b,draw_limit); 
+        	return a.isEqual(b, drawLimit);
         else if(qi.getIndicatorType() == IndicatorType.Binary)
         {
-			if(qi.compare(a, b, draw_limit) == 0)
+			if(qi.compare(a, b, drawLimit) == 0)
 			{
 				return true;
 			}
@@ -118,7 +110,7 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
         super(indicators);
         this.random = random;
         this.runInParalel = runInParalel;
-        this.draw_limit = draw_limit;
+        this.drawLimit = draw_limit;
         maxEvaluations=300000;
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
@@ -129,7 +121,7 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
         super(indicators, weights);
         this.random = random;
         this.runInParalel = runInParalel;
-        this.draw_limit = draw_limit;
+        this.drawLimit = draw_limit;
         maxEvaluations=300000;
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));

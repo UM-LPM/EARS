@@ -209,7 +209,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 		 * if(Math.abs(a.getEval()-b.getEval())<draw_limit){ } }
 		 */
 
-		if (Math.abs(a.getEval() - b.getEval()) < draw_limit)
+		if (Math.abs(a.getEval() - b.getEval()) < drawLimit)
 			return true;
 		return false;
 	}

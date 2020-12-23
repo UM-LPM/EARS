@@ -47,7 +47,6 @@ package org.um.feri.ears.benchmark;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
@@ -72,14 +71,15 @@ public class RatingCEC2015 extends RatingBenchmark{
     public static final String name="Benchmark CEC 2015";
     protected boolean calculateTime = false;
     protected int warmupIterations = 10000;
+    private double optimumEpsilon = 0.000001;
 
     public RatingCEC2015(){
-    	this(0.0000001);
+    	this(1e-7);
     }
-    public RatingCEC2015(double draw_limit) {
+    public RatingCEC2015(double drawLimit) {
         super();
-        this.draw_limit = draw_limit;
-        maxEvaluations= 300000; // 1500 exact evaluations
+        this.drawLimit = drawLimit;
+        maxEvaluations= 300000;
         dimension=30;
         timeLimit = 2500;
         maxIterations = 2500;
@@ -88,7 +88,7 @@ public class RatingCEC2015 extends RatingBenchmark{
         /*addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+stopCriteria);
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,""+dimension);
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);*/
+        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+drawLimit);*/
     }
     /* (non-Javadoc)
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
@@ -100,7 +100,7 @@ public class RatingCEC2015 extends RatingBenchmark{
     
     @Override
 	public int getNumberOfRuns() {
-		//number of runs set to 8 to reduce server execution time
+		//number of runs set to 10 to reduce server execution time
 		return 10;
 	}
 	/* (non-Javadoc)
@@ -121,11 +121,11 @@ public class RatingCEC2015 extends RatingBenchmark{
     	problems.add(new F8(dimension));
     	problems.add(new F9(dimension));
     	problems.add(new F10(dimension));
-    	problems.add(new F11(dimension));
-    	problems.add(new F12(dimension));
-    	problems.add(new F13(dimension));
-    	problems.add(new F14(dimension));
-    	problems.add(new F15(dimension));
+		problems.add(new F11(dimension));
+		problems.add(new F12(dimension));
+		problems.add(new F13(dimension));
+		problems.add(new F14(dimension));
+		problems.add(new F15(dimension));
     	
     	for(Problem p : problems)
     	{
@@ -143,7 +143,7 @@ public class RatingCEC2015 extends RatingBenchmark{
     			}
     		}
     		
-    		registerTask(p, stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
+    		registerTask(p, stopCriteria, maxEvaluations, timeLimit, maxIterations, optimumEpsilon);
     	}
     }
         

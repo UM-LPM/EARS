@@ -66,7 +66,7 @@ public class RatingRPUOed30Memory extends RatingBenchmark {
         if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
         if (b==null) return false;
-        if (Math.abs(a.getEval()-b.getEval())<draw_limit) return true;
+        if (Math.abs(a.getEval()-b.getEval())< drawLimit) return true;
         return false;
     }
     
@@ -83,7 +83,7 @@ public class RatingRPUOed30Memory extends RatingBenchmark {
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,String.valueOf(D));
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
+        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+ drawLimit);
     }
     
     /* (non-Javadoc)

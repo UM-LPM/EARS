@@ -58,7 +58,7 @@ public class DummyRating extends RatingBenchmark{
         if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
         if (b==null) return false;
-        if (Math.abs(a.getEval()-b.getEval())<draw_limit) return true;
+        if (Math.abs(a.getEval()-b.getEval())< drawLimit) return true;
         return false;
     }
     public DummyRating(){
@@ -66,7 +66,7 @@ public class DummyRating extends RatingBenchmark{
     }
     public DummyRating(double draw_limit) {
         super();
-        this.draw_limit = 1e-6;
+        this.drawLimit = 1e-6;
         maxEvaluations=3000;
         dimension=3;
         maxIterations = 0;

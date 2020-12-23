@@ -38,7 +38,7 @@ import org.um.feri.ears.util.Util;
 public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T, P>, P extends MOProblemBase<T>> extends RatingBenchmarkBase<Task, MOAlgorithm<Task, T>, MOAlgorithmEvalResult> {
 	
 	protected List<IndicatorName> indicators;
-    private double indicatorWeights[];
+    private double[] indicatorWeights;
     protected boolean runInParalel = false;
     
 	
@@ -69,7 +69,6 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
     @Override
 	public void registerAlgorithms(ArrayList<MOAlgorithm<Task, T>> algorithms) {
     	listOfAlgorithmsPlayers.addAll(algorithms);
-		
 	}
     
 	protected IndicatorName getRandomIndicator()
@@ -163,7 +162,6 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 	 * 
 	 * @param arena needs to be filed with players and their ratings
 	 * @param allSingleProblemRunResults
-	 * @param repetition
 	 */
 	@Override
     public void run(ResultArena arena, BankOfResults allSingleProblemRunResults) {
@@ -190,51 +188,47 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
         
         if(displayRatingIntervalChart)
         {
-
         	displayRatingIntervalsChart(arena.getPlayers());
         }
-        
     }
 
 	@Override
 	protected void runOneProblem(Task task, BankOfResults allSingleProblemRunResults) {
 
-			long start=0;
-			long duration=0;
-			for (MOAlgorithm<Task, T> al: listOfAlgorithmsPlayers) {
+		long start=0;
+		long duration=0;
+		for (MOAlgorithm<Task, T> al: listOfAlgorithmsPlayers) {
 
-				reset(task); //number of evaluations  
-				try {
-					start = System.nanoTime();
-					
-					GraphDataRecorder.SetContext(al,task);
-					
-					ParetoSolution<T> bestByALg = al.execute(task); //check if result is fake!
-					
-	                GraphDataRecorder.SetParetoSolution(bestByALg);
+			reset(task); //number of evaluations
+			try {
+				start = System.nanoTime();
 
-					duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-start);
-					if (printSingleRunDuration) {
-						System.out.println(al.getID()+": "+(duration/1000.0));
-					}
-					al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
+				GraphDataRecorder.SetContext(al,task);
 
-					reset(task); //for one eval!
-					if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(bestByALg)) || MOAlgorithm.getCaching() != Cache.None) {
+				ParetoSolution<T> bestByALg = al.execute(task); //check if result is fake!
 
-						results.add(new MOAlgorithmEvalResult(bestByALg, al, task)); 
-						allSingleProblemRunResults.add(task, bestByALg, al);
-					}
-					else {
-						System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemName());
-						results.add(new MOAlgorithmEvalResult(null, al, task)); // this can be done parallel - asynchrony                    
-					}
-				} catch (StopCriteriaException e) {
-					System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" StopCriteriaException for:"+task+"\n"+e);
-					results.add(new MOAlgorithmEvalResult(null, al, task));
+				GraphDataRecorder.SetParetoSolution(bestByALg);
+
+				duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-start);
+				if (printSingleRunDuration) {
+					System.out.println(al.getID()+": "+(duration/1000.0));
 				}
-			}
+				al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
 
+				reset(task); //for one eval!
+				if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(bestByALg)) || MOAlgorithm.getCaching() != Cache.None) {
+
+					results.add(new MOAlgorithmEvalResult(bestByALg, al, task));
+					allSingleProblemRunResults.add(task, bestByALg, al);
+				}
+				else {
+					System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemName());
+					results.add(new MOAlgorithmEvalResult(null, al, task)); // this can be done parallel - asynchrony
+				}
+			} catch (StopCriteriaException e) {
+				System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" StopCriteriaException for:"+task+"\n"+e);
+				results.add(new MOAlgorithmEvalResult(null, al, task));
+			}
+		}
 	}
-	
 }

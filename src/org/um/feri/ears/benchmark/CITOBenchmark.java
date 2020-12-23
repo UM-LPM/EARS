@@ -10,7 +10,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.IntegerMOProblem;
@@ -37,10 +36,10 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
         if (a==null) return false;
         if (b==null) return false;
         if(qi.getIndicatorType() == IndicatorType.Unary)
-        	return a.isEqual(b,draw_limit); 
+        	return a.isEqual(b, drawLimit);
         else if(qi.getIndicatorType() == IndicatorType.Binary)
         {
-			if(qi.compare(a, b, draw_limit) == 0)
+			if(qi.compare(a, b, drawLimit) == 0)
 			{
 				return true;
 			}
@@ -55,14 +54,14 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
         this.indicators = indicators;
     }
     
-    public CITOBenchmark(List<IndicatorName> indicators, double draw_limit, boolean random) {
+    public CITOBenchmark(List<IndicatorName> indicators, double drawLimit, boolean random) {
         super(indicators);
         this.random = random;
-        this.draw_limit = draw_limit;
+        this.drawLimit = drawLimit;
         maxEvaluations=60000;
         initFullProblemList();
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
+        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+drawLimit);
 
     }
     /* (non-Javadoc)

@@ -28,7 +28,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     protected int maxEvaluations = 1500;
     protected long timeLimit = TimeUnit.MILLISECONDS.toNanos(500); //milliseconds
     protected int maxIterations = 500;
-    public double draw_limit = 1e-7;
+    public double drawLimit = 1e-7;
     protected int dimension = 2;
     protected int numberOfRuns = 15;
     
@@ -55,7 +55,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     }
 
     public String toString() {
-    	StringBuffer sb = new StringBuffer();
+    	StringBuilder sb = new StringBuilder();
         for (T tw:listOfProblems) {
             sb.append(tw.toString());
         }
@@ -63,11 +63,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     	
     }
     public ArrayList<T> getAllTasks() {
-        ArrayList<T> a = new  ArrayList<T>();
-        for (T tw:listOfProblems) {
-            a.add(tw);
-        }
-        return a;
+        return new ArrayList<T>(listOfProblems);
     }
     
     public int getNumberOfRuns(){
@@ -88,7 +84,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     }
     
     public String getParams() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("Parameters:\n");
         for (EnumBenchmarkInfoParameters a : parameters.keySet()) {
             sb.append(a.getShortName()).append(" = ").append(parameters.get(a)).append("\t").append("(").append(a.getDescription()).append(")\n");
@@ -102,7 +98,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.CPU_TIME,String.valueOf(timeLimit));
         addParameter(EnumBenchmarkInfoParameters.ITTERATIONS,String.valueOf(maxIterations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
+        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+ drawLimit);
     }
     public EDBenchmark export() {
         updateParameters();

@@ -58,15 +58,15 @@ public class RatingCEC2010 extends RatingBenchmark{
         if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
         if (b==null) return false;
-        if (Math.abs(a.getEval()-b.getEval())<draw_limit) return true;
+        if (Math.abs(a.getEval()-b.getEval())< drawLimit) return true;
         return false;
     }
     public RatingCEC2010(){
-    	this(0.0000001);
+    	this(1e-7);
     }
     public RatingCEC2010(double draw_limit) {
         super();
-        this.draw_limit = draw_limit;
+        this.drawLimit = draw_limit;
         stopCriteria = EnumStopCriteria.EVALUATIONS;
         maxEvaluations= 10000; //(int) (1 * 1e6);
         maxIterations = 0; 
