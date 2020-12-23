@@ -1,9 +1,12 @@
 package org.um.feri.ears.problems.unconstrained;
 
 import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import static java.lang.Math.*;
+
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/167-ex3-csendes-or-infinity-function
@@ -20,10 +23,10 @@ public class Csendes extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double result = 0;
+        double fitness = 0;
         for (int i = 0; i < numberOfDimensions; i++) {
-            result += pow(x[i],6) * (2 + sin(1.0 / x[i]));
+            fitness += pow(x[i], 6) * (2 + sin(1.0 / x[i]));
         }
-        return result;
+        return fitness;
     }
 }

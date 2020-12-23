@@ -1,6 +1,5 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;

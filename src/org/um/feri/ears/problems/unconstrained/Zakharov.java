@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.sfu.ca/~ssurjano/zakharov.html
@@ -25,7 +25,6 @@ public class Zakharov extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double sum1 = 0, sum2 = 0, sum3 = 0;
         for (int i = 0; i < numberOfDimensions; i++) {
             sum1 += pow(x[i], 2);
@@ -38,7 +37,6 @@ public class Zakharov extends Problem {
             sum3 += 0.5 * (i + 1) * x[i];
         }
         sum3 = pow(sum3, 4);
-        fitness = sum1 + sum2 + sum3;
-        return fitness;
+        return sum1 + sum2 + sum3;
     }
 }

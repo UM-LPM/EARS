@@ -21,8 +21,7 @@ public class BartelsConn extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = Math.abs(Math.pow(x[0], 2) + Math.pow(x[1], 2) + x[0] * x[1]) + Math.abs(Math.sin(x[0])) + Math.abs(Math.cos(x[1]));
-        return fitness;
+        return Math.abs(Math.pow(x[0], 2) + Math.pow(x[1], 2) + x[0] * x[1]) + Math.abs(Math.sin(x[0])) + Math.abs(Math.cos(x[1]));
     }
 
     @Override

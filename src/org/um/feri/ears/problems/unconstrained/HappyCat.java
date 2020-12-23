@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+
 /*
 http://benchmarkfcns.xyz/benchmarkfcns/happycatfcn.html
  */
@@ -23,14 +24,12 @@ public class HappyCat extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double alpha = 0.5;
         double sum = 0.0, power = 0.0;
         for (int i = 0; i < numberOfDimensions; i++) {
             sum += x[i];
-            power += pow(x[i],2);
+            power += pow(x[i], 2);
         }
-        fitness = Math.pow(power - numberOfDimensions, 2 * alpha) + (0.5 * power + sum) / numberOfDimensions + 0.5;
-        return fitness;
+        return Math.pow(power - numberOfDimensions, 2 * alpha) + (0.5 * power + sum) / numberOfDimensions + 0.5;
     }
 }

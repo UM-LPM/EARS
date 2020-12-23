@@ -5,8 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
-import static java.lang.Math.PI;
+import static java.lang.Math.pow;
+
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/102-storn-s-function
  */
@@ -49,8 +49,7 @@ public class Storn extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(10, m) * pow(x[0], 2) + pow(x[1], 2) - pow(pow(x[0], 2) + pow(x[1], 2), 2) + pow(10, -m) * pow(pow(x[0], 2) + pow(x[1], 2), 4);
-        return fitness;
+        return pow(10, m) * pow(x[0], 2) + pow(x[1], 2) - pow(pow(x[0], 2) + pow(x[1], 2), 2) + pow(10, -m) * pow(pow(x[0], 2) + pow(x[1], 2), 4);
     }
 
     @Override

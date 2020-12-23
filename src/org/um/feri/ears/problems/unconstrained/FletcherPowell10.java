@@ -1,10 +1,9 @@
 package org.um.feri.ears.problems.unconstrained;
 
+import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
 
 import static java.lang.Math.*;
 
@@ -88,8 +87,8 @@ public class FletcherPowell10 extends Problem {
                 2.9449};
     }
 
-	@Override
-    public double eval(double x[]) {
+    @Override
+    public double eval(double[] x) {
         double fitness = 0;
         double[] A = new double[numberOfDimensions];
         double[] B = new double[numberOfDimensions];
@@ -104,7 +103,7 @@ public class FletcherPowell10 extends Problem {
         }
 
         for (int i = 0; i < numberOfDimensions; i++) {
-            fitness = fitness + pow(A[i] - B[i], 2);
+            fitness += pow(A[i] - B[i], 2);
         }
 
         return fitness;

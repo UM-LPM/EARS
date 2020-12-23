@@ -1,13 +1,11 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
-import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static java.lang.Math.abs;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Schwefel22
@@ -24,13 +22,11 @@ public class Schwefel222 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double sum = 0, prod = 1.0;
         for (int i = 0; i < numberOfDimensions; i++) {
-            sum = sum + abs(x[i]);
-            prod = prod * abs(x[i]);
+            sum += abs(x[i]);
+            prod *= abs(x[i]);
         }
-        fitness = sum + prod;
-        return fitness;
+        return sum + prod;
     }
 }

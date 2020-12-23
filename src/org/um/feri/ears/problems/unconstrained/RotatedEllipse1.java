@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.RotatedEllipse01
@@ -22,7 +23,6 @@ public class RotatedEllipse1 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 7 * pow(x[0], 2) - 6 * sqrt(3) * x[0] * x[1] + 13 * pow(x[1], 2);
-        return fitness;
+        return 7 * pow(x[0], 2) - 6 * sqrt(3) * x[0] * x[1] + 13 * pow(x[1], 2);
     }
 }

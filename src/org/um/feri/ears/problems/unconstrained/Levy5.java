@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
 
 /*
 infinity77.net/global_optimization/test_functions_nd_L.html#go_benchmark.Levy05
@@ -25,15 +26,13 @@ public class Levy5 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double sum1 = 0, sum2 = 0;
 
         for (int i = 1; i < 6; i++) {
             sum1 += i * cos((i - 1) * x[0] + i);
             sum2 += i * cos((i + 1) * x[1] + i);
         }
-        fitness = sum1 * sum2 + pow(x[0] + 1.42513, 2) + pow(x[1] + 0.80032, 2);
-        return fitness;
+        return sum1 * sum2 + pow(x[0] + 1.42513, 2) + pow(x[1] + 0.80032, 2);
     }
 
     @Override

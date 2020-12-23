@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_W.html#go_benchmark.Whitley

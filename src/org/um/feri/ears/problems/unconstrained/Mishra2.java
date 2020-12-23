@@ -24,14 +24,12 @@ public class Mishra2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double sum = 0;
         for (int i = 0; i < numberOfDimensions - 1; i++) {
             sum += (x[i] + x[i + 1]) / 2.0;
         }
         sum = numberOfDimensions - sum;
-        fitness = pow(1 + sum, sum);
-        return fitness;
+        return pow(1 + sum, sum);
     }
 
     @Override

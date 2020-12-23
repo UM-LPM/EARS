@@ -4,7 +4,8 @@ import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import static java.lang.Math.*;
+
+import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_C.html#go_benchmark.Cigar
@@ -24,7 +25,6 @@ public class Cigar extends Problem {
         for (int i = 1; i < numberOfDimensions; i++) {
             fitness += pow(x[i], 2);
         }
-        fitness = pow(x[0], 2) + pow(10, 6) * fitness;
-        return fitness;
+        return pow(x[0], 2) + pow(10, 6) * fitness;
     }
 }

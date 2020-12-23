@@ -24,8 +24,7 @@ public class Chichinadze extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0], 2) - 12 * x[0] + 8 * sin(5 * PI * x[0] / 2) + 10 * cos(PI * x[0] / 2) + 11 - (0.2 * sqrt(5) / exp(0.5 * (pow(x[1] - 0.5, 2))));
-        return fitness;
+        return pow(x[0], 2) - 12 * x[0] + 8 * sin(5 * PI * x[0] / 2) + 10 * cos(PI * x[0] / 2) + 11 - (0.2 * sqrt(5) / exp(0.5 * (pow(x[1] - 0.5, 2))));
     }
 
     @Override

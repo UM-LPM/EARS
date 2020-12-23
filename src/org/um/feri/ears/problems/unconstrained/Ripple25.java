@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static java.lang.Math.*;
-import static java.lang.Math.exp;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.Ripple25

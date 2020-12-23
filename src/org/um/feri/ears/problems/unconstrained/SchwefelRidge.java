@@ -1,12 +1,11 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 public class SchwefelRidge extends Problem {
     // Rosenbrock
@@ -20,7 +19,7 @@ public class SchwefelRidge extends Problem {
         name = "SchwefelRigle(" + d + ")";
     }
 
-	@Override
+    @Override
     public double eval(double[] x) {
         double fitness = 0;
         double sum = 0;

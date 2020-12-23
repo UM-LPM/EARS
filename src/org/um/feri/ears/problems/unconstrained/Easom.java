@@ -11,6 +11,9 @@ import static java.lang.Math.*;
 /*
 https://www.sfu.ca/~ssurjano/easom.html
 http://benchmarkfcns.xyz/benchmarkfcns/easomfcn.html
+
+Different equation at: http://infinity77.net/global_optimization/test_functions_nd_E.html#go_benchmark.Easom
+
 */
 public class Easom extends Problem {
 

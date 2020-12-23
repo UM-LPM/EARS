@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.exp;
+import static java.lang.Math.pow;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/115-mineshaft-function-no-3
@@ -23,9 +24,8 @@ public class Mineshaft3 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -5 * exp(-1000 * pow(x[0] - 0.5, 2) - 1000 * pow(x[1] - 0.3, 2))
+        return -5 * exp(-1000 * pow(x[0] - 0.5, 2) - 1000 * pow(x[1] - 0.3, 2))
                 - 7 * exp(-2000 * pow(x[0] - 0.8, 2) - 2000 * pow(x[1] - 1.3, 2));
-        return fitness;
     }
 
     @Override

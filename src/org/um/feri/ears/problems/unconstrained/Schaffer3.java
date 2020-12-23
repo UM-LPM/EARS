@@ -23,9 +23,8 @@ public class Schaffer3 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0.5 + (pow(sin(cos(abs(pow(x[0], 2) - pow(x[1], 2)))), 2) - 0.5) /
+        return 0.5 + (pow(sin(cos(abs(pow(x[0], 2) - pow(x[1], 2)))), 2) - 0.5) /
                 (1 + 0.001 * pow((pow(x[0], 2) + pow(x[1], 2)), 2));
-        return fitness;
     }
 
     @Override

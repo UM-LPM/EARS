@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/109-zettl-s-function
@@ -25,8 +25,7 @@ public class Zettl extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0.25 * x[0] + pow(pow(x[0], 2) - 2 * x[0] + pow(x[1], 2), 2);
-        return fitness;
+        return 0.25 * x[0] + pow(pow(x[0], 2) - 2 * x[0] + pow(x[1], 2), 2);
     }
 
     @Override

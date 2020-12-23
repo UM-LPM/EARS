@@ -26,9 +26,8 @@ public class Beale extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double result = pow(1.5 - x[0] + x[0] * x[1], 2)
+        return pow(1.5 - x[0] + x[0] * x[1], 2)
                 + pow(2.250 - x[0] + x[0] * x[1] * x[1], 2)
                 + pow(2.625 - x[0] + x[0] * x[1] * x[1] * x[1], 2);
-        return result;
     }
 }

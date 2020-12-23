@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.sin;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_A.html#go_benchmark.Alpine01
 http://benchmarkfcns.xyz/benchmarkfcns/alpinen1fcn.html

@@ -5,7 +5,9 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+
 /*
 http://infinity77.net/global_optimization/test_functions_nd_E.html#go_benchmark.EggCrate
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/122-egg-crate-function

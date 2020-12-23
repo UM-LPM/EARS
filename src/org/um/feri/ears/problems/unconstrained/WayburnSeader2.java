@@ -25,7 +25,6 @@ public class WayburnSeader2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(1.613 - 4 * pow(x[0] - 0.3125, 2) - 4 * pow(x[1] - 1.625, 2), 2) + pow(x[1] - 1, 2);
-        return fitness;
+        return pow(1.613 - 4 * pow(x[0] - 0.3125, 2) - 4 * pow(x[1] - 1.625, 2), 2) + pow(x[1] - 1, 2);
     }
 }

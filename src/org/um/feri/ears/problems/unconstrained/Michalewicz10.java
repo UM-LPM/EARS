@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.*;
+
 /*
 https://www.sfu.ca/~ssurjano/michal.html
 

@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_V.html#go_benchmark.VenterSobiezcczanskiSobieski
@@ -21,12 +22,10 @@ public class VenterSobiezcczanskiSobieski extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double u = pow(x[0], 2.0) - 100.0 * pow(cos(x[0]), 2.0);
         double v = -100.0 * cos(pow(x[0], 2.0) / 30.0) + pow(x[1], 2.0);
         double w = -100.0 * pow(cos(x[1]), 2.0) - 100.0 * cos(pow(x[1], 2.0) / 30.0);
-        fitness = u + v + w;
-        return fitness;
+        return u + v + w;
     }
 
     @Override

@@ -3,10 +3,10 @@ package org.um.feri.ears.problems.unconstrained;
 import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 /*
 Black-Box Optimization Benchmarking
@@ -33,8 +33,6 @@ public class SharpRidge extends Problem {
         for (int i = 1; i < numberOfDimensions; i++) {
             fitness += pow(x[i], 2);
         }
-        fitness = pow(x[0], 2) + alpha * sqrt(fitness);
-
-        return fitness;
+        return pow(x[0], 2) + alpha * sqrt(fitness);
     }
 }

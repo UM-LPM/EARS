@@ -1,7 +1,6 @@
 package org.um.feri.ears.problems.unconstrained;
 
 import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,14 +22,11 @@ public class XinSheYang2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double sum1 = 0, sum2 = 0;
         for (int i = 0; i < numberOfDimensions; i++) {
             sum1 += abs(x[i]);
             sum2 += sin(pow(x[i], 2));
         }
-        fitness = sum1 * exp(-sum2);
-
-        return fitness;
+        return sum1 * exp(-sum2);
     }
 }

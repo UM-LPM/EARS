@@ -26,9 +26,8 @@ public class Trefethen extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0.25 * pow(x[0], 2) + 0.25 * pow(x[1], 2) + exp(sin(50.0 * x[0])) - sin(10.0 * x[0] +
+        return 0.25 * pow(x[0], 2) + 0.25 * pow(x[1], 2) + exp(sin(50.0 * x[0])) - sin(10.0 * x[0] +
                 10.0 * x[1]) + sin(60.0 * exp(x[1])) + sin(70.0 * sin(x[0])) + sin(sin(80.0 * x[1]));
-        return fitness;
     }
 
     @Override

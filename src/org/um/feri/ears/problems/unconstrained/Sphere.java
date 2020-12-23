@@ -1,12 +1,11 @@
 package org.um.feri.ears.problems.unconstrained;
 
+import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
-
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.sfu.ca/~ssurjano/spheref.html
@@ -21,7 +20,7 @@ public class Sphere extends Problem {
         name = "Sphere";
     }
 
-	@Override
+    @Override
     public double eval(double[] x) {
         double fitness = 0;
         for (int i = 0; i < numberOfDimensions; i++) {

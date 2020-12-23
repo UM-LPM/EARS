@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static java.lang.Math.*;
+
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/260-gramacy-lee-s-function-no-03
  */
@@ -23,11 +24,9 @@ public class GramacyLee3 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness;
-        double f1 = exp(-pow(x[0] - 1,2)) + exp(-0.8 * pow(x[0] + 1,2)) - 0.05 * sin(8 * (x[0] + 0.1));
-        double f2 = exp(-pow(x[1] - 1,2)) + exp(-0.8 * pow(x[1] + 1,2)) - 0.05 * sin(8 * (x[1] + 0.1));
-        fitness = -f1 * f2;
-        return fitness;
+        double f1 = exp(-pow(x[0] - 1, 2)) + exp(-0.8 * pow(x[0] + 1, 2)) - 0.05 * sin(8 * (x[0] + 0.1));
+        double f2 = exp(-pow(x[1] - 1, 2)) + exp(-0.8 * pow(x[1] + 1, 2)) - 0.05 * sin(8 * (x[1] + 0.1));
+        return -f1 * f2;
     }
 
     @Override

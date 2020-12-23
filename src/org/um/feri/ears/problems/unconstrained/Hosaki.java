@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.exp;
+import static java.lang.Math.pow;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/58-hosaki-s-function
@@ -24,8 +25,7 @@ public class Hosaki extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = (1 - 8 * x[0] + 7 * pow(x[0], 2) - (7.0 / 3.0) * pow(x[0], 3) + (1.0 / 4.0) * pow(x[0], 4)) * pow(x[1], 2) * exp(-x[1]);
-        return fitness;
+        return (1 - 8 * x[0] + 7 * pow(x[0], 2) - (7.0 / 3.0) * pow(x[0], 3) + (1.0 / 4.0) * pow(x[0], 4)) * pow(x[1], 2) * exp(-x[1]);
     }
 
     @Override

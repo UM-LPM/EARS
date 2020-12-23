@@ -28,9 +28,8 @@ public class Ursem3 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -sin(2.2 * PI * x[0] + 0.5 * PI) * ((3 - abs(x[0])) / 2) * ((2 - abs(x[1])) / 2) -
+        return -sin(2.2 * PI * x[0] + 0.5 * PI) * ((3 - abs(x[0])) / 2) * ((2 - abs(x[1])) / 2) -
                 sin(0.5 * PI * pow(x[1], 2) + 0.5 * PI) * ((2 - abs(x[0])) / 2) * ((2 - abs(x[1])) / 2);
-        return fitness;
     }
 
     @Override

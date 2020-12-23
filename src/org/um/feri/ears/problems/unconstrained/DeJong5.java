@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.sfu.ca/~ssurjano/dejong5.html
@@ -32,12 +32,10 @@ public class DeJong5 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double sum = 0;
         for (int i = 0; i < 25; i++) {
             sum += 1.0 / (i + 1 + pow(x[0] - a[0][i], 6) + pow(x[1] - a[1][i], 6));
         }
-        fitness = 1.0 / (0.002 + sum);
-        return fitness;
+        return 1.0 / (0.002 + sum);
     }
 }

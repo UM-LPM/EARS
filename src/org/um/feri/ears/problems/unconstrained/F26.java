@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/253-f26-function
  */
@@ -22,8 +23,7 @@ public class F26 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0.25 * pow(x[0], 4) - 0.5 * pow(x[0], 2) - 0.1 * x[0] + 0.5 * pow(x[1], 2);
-        return fitness;
+        return 0.25 * pow(x[0], 4) - 0.5 * pow(x[0], 2) - 0.1 * x[0] + 0.5 * pow(x[1], 2);
     }
 
     @Override

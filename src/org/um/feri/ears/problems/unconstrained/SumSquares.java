@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.sfu.ca/~ssurjano/sumsqu.html

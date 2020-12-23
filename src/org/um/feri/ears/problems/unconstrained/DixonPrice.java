@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.sfu.ca/~ssurjano/dixonpr.html
@@ -30,7 +30,6 @@ public class DixonPrice extends Problem {
         for (int i = 1; i < numberOfDimensions; i++) {
             fitness += (i + 1) * pow(2 * x[i] * x[i] - x[i - 1], 2);
         }
-        fitness = pow(x[0] - 1, 2) + fitness;
-        return fitness;
+        return pow(x[0] - 1, 2) + fitness;
     }
 }

@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+
 /*
 http://infinity77.net/global_optimization/test_functions_nd_M.html#go_benchmark.Mishra01
  */
@@ -23,14 +24,12 @@ public class Mishra1 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double sum = 0;
         for (int i = 0; i < numberOfDimensions - 1; i++) {
             sum += x[i];
         }
         sum = numberOfDimensions - sum;
-        fitness = pow(1 + sum, sum);
-        return fitness;
+        return pow(1 + sum, sum);
     }
 
     @Override

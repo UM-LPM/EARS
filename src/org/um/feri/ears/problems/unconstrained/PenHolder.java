@@ -25,8 +25,7 @@ public class PenHolder extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -exp(-1 / abs(cos(x[0]) * cos(x[1]) * exp(abs(1 - sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI))));
-        return fitness;
+        return -exp(-1 / abs(cos(x[0]) * cos(x[1]) * exp(abs(1 - sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI))));
     }
 
     @Override

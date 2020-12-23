@@ -23,10 +23,9 @@ public class Bohachevsky2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double result = pow(x[0], 2)
+        return pow(x[0], 2)
                 + 2 * pow(x[1], 2)
                 - 0.3 * cos(3 * PI * x[0]) * cos(4 * PI * x[1])
                 + 0.3;
-        return result;
     }
 }

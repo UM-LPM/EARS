@@ -5,7 +5,9 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/157-three-cylinders-function
  */

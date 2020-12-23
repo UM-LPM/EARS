@@ -25,7 +25,6 @@ public class Deb1 extends Problem {
         for (int i = 0; i < numberOfDimensions; i++) {
             fitness += pow(sin(5 * PI * x[i]), 6);
         }
-        fitness = -(1.0 / numberOfDimensions) * fitness;
-        return fitness;
+        return -(1.0 / numberOfDimensions) * fitness;
     }
 }

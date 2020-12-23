@@ -29,9 +29,9 @@ public class AttractiveSector extends Problem {
         double fitness = 0.0;
         for (int i = 0; i < numberOfDimensions; ++i) {
             if (optimum[0][i] * x[i] > 0.0) {
-                fitness += pow(100.0,2)  * pow(x[i],2);
+                fitness += pow(100.0, 2) * pow(x[i], 2);
             } else {
-                fitness += pow(x[i],2);
+                fitness += pow(x[i], 2);
             }
         }
         return fitness;

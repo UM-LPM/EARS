@@ -10,10 +10,13 @@ https://sites.google.com/site/gotestfunctions/multimodal-function-list/onelastra
 public class ReduxSum extends Problem {
 
     public ReduxSum() {
-        super(2, 0);
+        super(2, 0,2);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -1.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.0));
         name = "ReduxSum";
+
+        optimum[0] = new double[]{-1.0, 8.743006318923108E-16};
+        optimum[1] = new double[]{8.743006318923108E-16, -1.0};
     }
 
     @Override
@@ -27,7 +30,15 @@ public class ReduxSum extends Problem {
         for (int j = 0; j < numberOfDimensions; j++) {
             fitness += sum / x[j];
         }
+        if(Double.isNaN(fitness))
+            return Double.MAX_VALUE;
+
         return fitness;
     }
-    //TODO check optimum
+
+    @Override
+    public double getGlobalOptimum() {
+        return -1.143771333935362E15;
+    }
 }
+

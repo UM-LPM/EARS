@@ -22,8 +22,7 @@ public class CrossLegTable extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -1 / (pow(abs(exp(abs(100 - (sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI))) * sin(x[0]) * sin(x[1])) + 1, 0.1));
-        return fitness;
+        return -1 / (pow(abs(exp(abs(100 - (sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI))) * sin(x[0]) * sin(x[1])) + 1, 0.1));
     }
 
     @Override

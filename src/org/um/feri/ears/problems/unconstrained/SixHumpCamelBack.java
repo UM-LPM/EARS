@@ -1,13 +1,11 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
-import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.SixHumpCamel
@@ -32,14 +30,12 @@ public class SixHumpCamelBack extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
-        fitness = 4 * pow(x[0], 2)
+        return 4 * pow(x[0], 2)
                 - 2.1 * pow(x[0], 4)
                 + (1.0 / 3.0) * pow(x[0], 6)
                 + x[0] * x[1]
                 - 4 * pow(x[1], 2)
                 + 4 * pow(x[1], 4);
-        return fitness;
     }
 
     @Override

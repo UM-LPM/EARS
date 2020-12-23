@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/56-himmelblau-s-function
@@ -28,7 +28,6 @@ public class HimmelBlau extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0] + pow(x[1], 2) - 7, 2) + pow(pow(x[0], 2) + x[1] - 11, 2);
-        return fitness;
+        return pow(x[0] + pow(x[1], 2) - 7, 2) + pow(pow(x[0], 2) + x[1] - 11, 2);
     }
 }

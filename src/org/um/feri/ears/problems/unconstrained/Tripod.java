@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/71-tripod-function
@@ -25,8 +25,7 @@ public class Tripod extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = p(x[1]) * (1 + p(x[0])) + abs(x[0] + 50 * p(x[1]) * (1 - 2 * p(x[0]))) + abs(x[1] + 50 * (1 - 2 * p(x[1])));
-        return fitness;
+        return p(x[1]) * (1 + p(x[0])) + abs(x[0] + 50 * p(x[1]) * (1 - 2 * p(x[0]))) + abs(x[1] + 50 * (1 - 2 * p(x[1])));
     }
 
     private int p(double x) {

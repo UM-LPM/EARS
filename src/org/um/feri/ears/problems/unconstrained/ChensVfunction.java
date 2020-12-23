@@ -3,14 +3,16 @@ package org.um.feri.ears.problems.unconstrained;
 import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static java.lang.Math.pow;
+
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/110-chen-s-v-function
  */
 public class ChensVfunction extends Problem {
+
+    double b = 0.001;
 
     public ChensVfunction() {
         super(2, 0);
@@ -24,11 +26,8 @@ public class ChensVfunction extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
-        double b = 0.001;
-        fitness = (b / (pow(b, 2) + pow(x[0] - 0.4 * x[1] - 0.1, 2)))
+        return (b / (pow(b, 2) + pow(x[0] - 0.4 * x[1] - 0.1, 2)))
                 + (b / (pow(b, 2) + pow(2 * x[0] + x[1] - 1.5, 2)));
-        return fitness;
     }
 
     @Override

@@ -3,7 +3,6 @@ package org.um.feri.ears.problems.unconstrained;
 import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static java.lang.Math.*;
@@ -27,11 +26,8 @@ public class Mishra3 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         //result = sqrt(abs(cos(sqrt(abs(pow(x[0], 2) + pow(x[1], 2)))))) + 0.01 * (x[0] + x[1]);
-
-        fitness = pow(abs(cos(sqrt(abs(pow(x[0], 2) + x[1])))), 0.5) + (x[0] + x[1]) / 100.0;
-        return fitness;
+        return pow(abs(cos(sqrt(abs(pow(x[0], 2) + x[1])))), 0.5) + (x[0] + x[1]) / 100.0;
     }
 
     @Override

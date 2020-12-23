@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_T.html#go_benchmark.Trigonometric02

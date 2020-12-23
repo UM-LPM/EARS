@@ -5,8 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
 import static java.lang.Math.pow;
+import static java.lang.Math.sin;
 
 /*
 http://benchmarkfcns.xyz/benchmarkfcns/schaffern2fcn.html
@@ -22,8 +22,7 @@ public class Schaffer2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0.5 + (pow(sin(pow(pow(x[0], 2) - pow(x[1], 2), 2)), 2) - 0.5) /
+        return 0.5 + (pow(sin(pow(pow(x[0], 2) - pow(x[1], 2), 2)), 2) - 0.5) /
                 (1 + 0.001 * pow((pow(x[0], 2) + pow(x[1], 2)), 2));
-        return fitness;
     }
 }

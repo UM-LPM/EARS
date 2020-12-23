@@ -5,7 +5,6 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
 import static java.lang.Math.pow;
 
 /*
@@ -23,7 +22,7 @@ public class Schwefel12 extends Problem {
     @Override
     public double eval(double[] x) {
         double fitness = 0;
-        double sum = 0;
+        double sum;
         for (int i = 0; i < numberOfDimensions; i++) {
             sum = 0;
             for (int j = 0; j < i; j++) {

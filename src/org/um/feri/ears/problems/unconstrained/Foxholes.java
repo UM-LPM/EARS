@@ -1,13 +1,12 @@
 package org.um.feri.ears.problems.unconstrained;
 
+import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
-
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://al-roomi.org/benchmarks/unconstrained/2-dimensions/7-shekel-s-foxholes-function
@@ -67,8 +66,7 @@ public class Foxholes extends Problem {
             fitness += 1.0 / sum;
         }
         fitness += 1.0 / 500.0;
-        fitness = pow(fitness, -1);
-        return fitness;
+        return pow(fitness, -1);
     }
 
     @Override

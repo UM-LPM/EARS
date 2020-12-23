@@ -25,18 +25,16 @@ public class Penalized2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
-        double v1 = 0, sum1 = 0, v3 = 0, sum2 = 0;
-        v1 = pow(sin(PI * x[0]), 2);
+        double sum1 = 0, sum2 = 0, k1, k2;
+        k1 = pow(sin(PI * x[0]), 2);
         for (int i = 0; i < numberOfDimensions - 1; i++) {
             sum1 += pow(x[i] - 1, 2) * (1 + pow(sin(3 * PI * x[i + 1]), 2));
         }
-        v3 = pow(x[numberOfDimensions - 1] - 1, 2) * (1 + pow(sin(1 * PI * x[numberOfDimensions - 1]), 2));
+        k2 = pow(x[numberOfDimensions - 1] - 1, 2) * (1 + pow(sin(1 * PI * x[numberOfDimensions - 1]), 2));
         for (int i = 0; i < numberOfDimensions; i++) {
             sum2 += u(x[i], 5, 100, 4);
         }
-        fitness = PI / numberOfDimensions * (v1 + sum1 + v3) + sum2;
-        return fitness;
+        return PI / numberOfDimensions * (k1 + sum1 + k2) + sum2;
     }
 
     private double u(double x, double a, double k, double m) {

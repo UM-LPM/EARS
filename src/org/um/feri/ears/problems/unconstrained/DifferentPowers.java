@@ -4,6 +4,7 @@ import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import static java.lang.Math.*;
 
 /*
@@ -25,13 +26,11 @@ public class DifferentPowers extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness;
         double sum = 0.0;
         for (int i = 0; i < numberOfDimensions; ++i) {
             double exponent = 2.0 + 4.0 * (double) i / ((double) numberOfDimensions - 1.0);
             sum += pow(abs(x[i]), exponent);
         }
-        fitness = sqrt(sum);
-        return fitness;
+        return sqrt(sum);
     }
 }

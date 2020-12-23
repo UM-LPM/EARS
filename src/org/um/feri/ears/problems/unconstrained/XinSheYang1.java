@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.sin;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_X.html#go_benchmark.XinSheYang01

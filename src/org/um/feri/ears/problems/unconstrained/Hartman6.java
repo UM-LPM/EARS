@@ -1,13 +1,12 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
-import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static java.lang.Math.exp;
+import static java.lang.Math.pow;
 
 public class Hartman6 extends Problem {
 
@@ -51,8 +50,7 @@ public class Hartman6 extends Problem {
             }
             fitness += c[i] * exp(sum * (-1));
         }
-        fitness *= -1.0;
-        return fitness;
+        return fitness * -1.0;
     }
 
     @Override

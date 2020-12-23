@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/156-quadratic-function
@@ -25,8 +25,7 @@ public class Quadratic extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -3803.84 - 138.08 * x[0] - 232.92 * x[1] + 128.08 * pow(x[0], 2) + 203.64 * pow(x[1], 2) + 182.25 * x[0] * x[1];
-        return fitness;
+        return -3803.84 - 138.08 * x[0] - 232.92 * x[1] + 128.08 * pow(x[0], 2) + 203.64 * pow(x[1], 2) + 182.25 * x[0] * x[1];
     }
 
     @Override

@@ -5,8 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
-import static java.lang.Math.PI;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/59-kearfott-s-function
@@ -28,7 +28,6 @@ public class Kearfott extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(pow(x[0], 2) + pow(x[1], 2) - 2, 2) + pow(pow(x[0], 2) - pow(x[1], 2) - 1, 2);
-        return fitness;
+        return pow(pow(x[0], 2) + pow(x[1], 2) - 2, 2) + pow(pow(x[0], 2) - pow(x[1], 2) - 1, 2);
     }
 }

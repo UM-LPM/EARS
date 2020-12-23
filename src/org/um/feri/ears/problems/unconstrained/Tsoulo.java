@@ -5,7 +5,9 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/106-tsoulos-function
  */
@@ -20,8 +22,7 @@ public class Tsoulo extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0], 2) + pow(x[1], 2) - cos(18 * x[0]) - cos(18 * x[1]);
-        return fitness;
+        return pow(x[0], 2) + pow(x[1], 2) - cos(18 * x[0]) - cos(18 * x[1]);
     }
 
     @Override

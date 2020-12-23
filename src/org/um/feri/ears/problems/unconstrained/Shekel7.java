@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Shekel07
@@ -43,7 +43,7 @@ public class Shekel7 extends Problem {
     @Override
     public double eval(double[] x) {
         double fitness = 0;
-        double sum = 0;
+        double sum;
         for (int i = 0; i < 7; i++) {
             sum = 0;
             for (int j = 0; j < numberOfDimensions; j++) {

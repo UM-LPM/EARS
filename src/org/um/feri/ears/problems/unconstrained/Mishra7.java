@@ -6,7 +6,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/181-mishra-function-no-7-or-factorial-function
@@ -23,14 +23,12 @@ public class Mishra7 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double fact = CombinatoricsUtils.factorial(numberOfDimensions);
         double prod = 1.0;
         for (int i = 0; i < numberOfDimensions; i++) {
             prod *= x[i];
         }
-        fitness = pow(prod - fact, 2);
 
-        return fitness;
+        return pow(prod - fact, 2);
     }
 }

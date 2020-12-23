@@ -5,7 +5,9 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.exp;
+import static java.lang.Math.pow;
+
 /*
 Efficient and Robust Gradient Enhanced Kriging Emulators
  */

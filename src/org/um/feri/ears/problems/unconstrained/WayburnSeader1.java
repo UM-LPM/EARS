@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_W.html#go_benchmark.WayburnSeader01
@@ -25,7 +25,6 @@ public class WayburnSeader1 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(pow(x[0], 6) + pow(x[1], 4) - 17, 2) + pow(2 * x[0] + x[1] - 4, 2);
-        return fitness;
+        return pow(pow(x[0], 6) + pow(x[1], 4) - 17, 2) + pow(2 * x[0] + x[1] - 4, 2);
     }
 }

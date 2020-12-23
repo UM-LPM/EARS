@@ -4,7 +4,9 @@ import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import static java.lang.Math.*;
+
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
 
 /*
 https://www.sfu.ca/~ssurjano/mccorm.html
@@ -31,8 +33,7 @@ public class McCormick extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = sin(x[0] + x[1]) + pow(x[0] - x[1], 2) + -1.5 * x[0] + 2.5 * x[1] + 1;
-        return fitness;
+        return sin(x[0] + x[1]) + pow(x[0] - x[1], 2) + -1.5 * x[0] + 2.5 * x[1] + 1;
     }
 
     @Override

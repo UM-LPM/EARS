@@ -1,12 +1,11 @@
 package org.um.feri.ears.problems.unconstrained;
 
+import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.Rosenbrock
 http://benchmarkfcns.xyz/benchmarkfcns/rosenbrockfcn.html

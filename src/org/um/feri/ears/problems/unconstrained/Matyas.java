@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.sfu.ca/~ssurjano/matya.html
@@ -23,7 +23,6 @@ public class Matyas extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0.26 * (pow(x[0], 2) + pow(x[1], 2)) - 0.48 * x[0] * x[1];
-        return fitness;
+        return 0.26 * (pow(x[0], 2) + pow(x[1], 2)) - 0.48 * x[0] * x[1];
     }
 }

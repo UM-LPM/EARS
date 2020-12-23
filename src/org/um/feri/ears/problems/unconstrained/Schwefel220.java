@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
 
 /*
 http://benchmarkfcns.xyz/benchmarkfcns/schwefel220fcn.html

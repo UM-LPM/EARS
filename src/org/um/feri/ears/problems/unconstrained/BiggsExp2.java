@@ -5,7 +5,9 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.exp;
+import static java.lang.Math.pow;
+
 /*
 https://al-roomi.org/benchmarks/unconstrained/2-dimensions/123-biggs-exp2-function
 http://infinity77.net/global_optimization/test_functions_nd_E.html#go_benchmark.Exp2
@@ -23,12 +25,12 @@ public class BiggsExp2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double result = 0;
+        double fitness = 0;
 
         for (int k = 0; k < 9; k++) {
-            result += pow(exp(-k * x[0] / 10.0) - 5 * exp(-k * x[1] / 10.0) - exp(-k / 10.0) + 5 * exp(-k), 2);
+            fitness += pow(exp(-k * x[0] / 10.0) - 5 * exp(-k * x[1] / 10.0) - exp(-k / 10.0) + 5 * exp(-k), 2);
         }
 
-        return result;
+        return fitness;
     }
 }

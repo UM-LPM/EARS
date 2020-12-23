@@ -22,8 +22,7 @@ public class Schwefel236 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -x[0] * x[1] * (72 - 2 * x[0] - 2 * x[1]);
-        return fitness;
+        return -x[0] * x[1] * (72 - 2 * x[0] - 2 * x[1]);
     }
 
     @Override

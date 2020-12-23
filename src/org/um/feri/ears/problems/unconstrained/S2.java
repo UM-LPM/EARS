@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/117-s2-function
@@ -22,8 +22,7 @@ public class S2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 2 + pow(x[1] - 0.7, 2);
-        return fitness;
+        return 2 + pow(x[1] - 0.7, 2);
     }
 
     @Override

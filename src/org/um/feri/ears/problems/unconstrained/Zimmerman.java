@@ -6,7 +6,8 @@ import org.um.feri.ears.util.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.signum;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_Z.html#go_benchmark.Zimmerman
@@ -24,16 +25,13 @@ public class Zimmerman extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
-
         double p1 = zh1(x);
         double p2 = zp(zh2(x)) * signum(zh2(x));
         double p3 = zp(zh3(x)) * signum(zh3(x));
         double p4 = zp(-x[0]) * signum(x[0]);
         double p5 = zp(-x[1]) * signum(x[1]);
 
-        fitness = Util.max(p1, p2, p3, p4, p5);
-        return fitness;
+        return Util.max(p1, p2, p3, p4, p5);
     }
 
     private double zh1(double[] x) {

@@ -1,12 +1,10 @@
 package org.um.feri.ears.problems.unconstrained;
 
+import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
 
 /*
     http://www.geatbx.com/docu/fcnindex-01.html#P86_3059
@@ -26,11 +24,11 @@ public class RosenbrockD2b extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double result = 0;
+        double fitness = 0;
         for (int i = 0; i < (numberOfDimensions - 1); i++) {
-            result += 100 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1 - x[i]) * (1 - x[i]);
+            fitness += 100 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1 - x[i]) * (1 - x[i]);
             //v+=Math.pow(1-ds[i],2)+100*Math.pow(ds[i+1]-ds[i]*ds[i],2);
         }
-        return result;
+        return fitness;
     }
 }

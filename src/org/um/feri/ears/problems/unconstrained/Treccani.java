@@ -4,7 +4,8 @@ import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import static java.lang.Math.*;
+
+import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_T.html#go_benchmark.Treccani
@@ -26,7 +27,6 @@ public class Treccani extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0], 4) + 4 * pow(x[0], 3) + 4 * pow(x[0], 2) + pow(x[1], 2);
-        return fitness;
+        return pow(x[0], 4) + 4 * pow(x[0], 3) + 4 * pow(x[0], 2) + pow(x[1], 2);
     }
 }

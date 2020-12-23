@@ -25,7 +25,6 @@ public class Levy3 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
 
         double[] y = new double[numberOfDimensions];
         for (int i = 0; i < numberOfDimensions; i++) {
@@ -37,9 +36,6 @@ public class Levy3 extends Problem {
             sum += pow(y[i] - 1, 2) * (1 + 10 * pow(Math.sin(PI * y[i] + 1), 2));
         }
 
-        fitness = pow(sin(PI * y[0]), 2) + sum
-                + pow(y[numberOfDimensions - 1] - 1, 2); //* (1 + Math.pow(Math.sin(2 * Math.PI * y[numberOfDimensions - 1]), 2))
-
-        return fitness;
+        return pow(sin(PI * y[0]), 2) + sum + pow(y[numberOfDimensions - 1] - 1, 2); //* (1 + Math.pow(Math.sin(2 * Math.PI * y[numberOfDimensions - 1]), 2))
     }
 }

@@ -27,7 +27,6 @@ public class Schwefel1 extends Problem {
         for (int i = 0; i < numberOfDimensions; i++) {
             fitness += pow(x[i], 2);
         }
-        fitness = pow(fitness, alpha);
-        return fitness;
+        return pow(fitness, alpha);
     }
 }

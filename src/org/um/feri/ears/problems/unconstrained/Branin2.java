@@ -24,9 +24,8 @@ public class Branin2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[1] - (5.1 / (4 * PI * PI)) * x[0] * x[0] + (5.0 / PI) * x[0] - 6, 2) + 10 * (1 - 1.0 / (8.0 * PI)) * cos(x[0])
+        return pow(x[1] - (5.1 / (4 * PI * PI)) * x[0] * x[0] + (5.0 / PI) * x[0] - 6, 2) + 10 * (1 - 1.0 / (8.0 * PI)) * cos(x[0])
                 * cos(x[1]) + log(pow(x[0], 2) + pow(x[1], 2) + 1) + 10;
-        return fitness;
     }
 
     @Override

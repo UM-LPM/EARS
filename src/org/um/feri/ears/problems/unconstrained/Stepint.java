@@ -1,13 +1,13 @@
 package org.um.feri.ears.problems.unconstrained;
 
+import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
+import static java.lang.Math.floor;
 
-import static java.lang.Math.*;
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/195-stepint-function
  */
@@ -29,8 +29,7 @@ public class Stepint extends Problem {
         for (int i = 0; i < numberOfDimensions; i++) {
             fitness += floor(x[i]);
         }
-        fitness = fitness + 25.0;
-        return fitness;
+        return fitness + 25.0;
     }
 
     @Override

@@ -29,7 +29,6 @@ public class Rastrigin extends Problem {
         for (int i = 0; i < numberOfDimensions; i++) {
             fitness += pow(x[i], 2) - 10 * cos(2 * PI * x[i]);
         }
-        fitness += 10 * numberOfDimensions;
-        return fitness;
+        return fitness + 10 * numberOfDimensions;
     }
 }

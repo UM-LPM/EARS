@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /*
 http://benchmarkfcns.xyz/benchmarkfcns/alpinen2fcn.html

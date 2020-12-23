@@ -22,13 +22,11 @@ public class Mishra11 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double sum = 0, prod = 1.0;
         for (int i = 0; i < numberOfDimensions; i++) {
             sum += Math.abs(x[i]);
             prod *= Math.abs(x[i]);
         }
-        fitness = Math.pow((1.0 / numberOfDimensions) * sum - Math.pow(prod, 1.0 / numberOfDimensions), 2);
-        return fitness;
+        return Math.pow((1.0 / numberOfDimensions) * sum - Math.pow(prod, 1.0 / numberOfDimensions), 2);
     }
 }

@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.pow;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/28-becker-lago-s-function
@@ -27,7 +28,6 @@ public class Price1 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(abs(x[0]) - 5, 2) + pow(abs(x[1]) - 5, 2);
-        return fitness;
+        return pow(abs(x[0]) - 5, 2) + pow(abs(x[1]) - 5, 2);
     }
 }

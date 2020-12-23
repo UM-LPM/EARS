@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.*;
-import static java.lang.Math.pow;
+
 /*
 http://benchmarkfcns.xyz/benchmarkfcns/ackleyn3fcn.html
  */

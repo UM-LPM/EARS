@@ -1,11 +1,9 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static java.lang.Math.*;
 
@@ -21,10 +19,9 @@ public class Bohachevsky3 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0], 2)
+        return pow(x[0], 2)
                 + 2 * pow(x[1], 2)
                 - 0.3 * cos(3 * PI * x[0] + 4 * PI * x[1])
                 + 0.3;
-        return fitness;
     }
 }

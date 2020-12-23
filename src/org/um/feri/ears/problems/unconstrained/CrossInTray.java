@@ -28,14 +28,10 @@ public class CrossInTray extends Problem {
 
     @Override
     public double eval(double[] x) {
-
-        double fitness = 0, fact1 = 0, fact2 = 0;
-        double x1 = x[0];
-        double x2 = x[1];
-        fact1 = sin(x1) * sin(x2);
-        fact2 = exp(abs(100 - sqrt(pow(x1, 2) + pow(x2, 2)) / PI));
-        fitness = -0.0001 * pow((abs(fact1 * fact2) + 1), 0.1);
-        return fitness;
+        double fact1, fact2;
+        fact1 = sin(x[0]) * sin(x[1]);
+        fact2 = exp(abs(100 - sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI));
+        return -0.0001 * pow((abs(fact1 * fact2) + 1), 0.1);
     }
 
     @Override

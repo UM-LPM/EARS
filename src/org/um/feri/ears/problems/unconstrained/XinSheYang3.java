@@ -22,7 +22,6 @@ public class XinSheYang3 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double beta = 15.0;
         int m = 5; //3
         double sum1 = 0, sum2 = 0, prod = 1.0;
@@ -31,8 +30,7 @@ public class XinSheYang3 extends Problem {
             sum2 += pow(x[i], 2);
             prod *= pow(cos(x[i]), 2);
         }
-        fitness = exp(-sum1) - (2 * exp(-sum2)) * prod;
-        return fitness;
+        return exp(-sum1) - (2 * exp(-sum2)) * prod;
     }
 
     @Override

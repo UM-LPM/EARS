@@ -3,11 +3,9 @@ package org.um.feri.ears.problems.unconstrained;
 import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static java.lang.Math.*;
-import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_M.html#go_benchmark.Mishra04
@@ -27,8 +25,7 @@ public class Mishra4 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(abs(sin(sqrt(abs(pow(x[0], 2) + x[1])))), 0.5) + (x[0] + x[1]) / 100.0;
-        return fitness;
+        return pow(abs(sin(sqrt(abs(pow(x[0], 2) + x[1])))), 0.5) + (x[0] + x[1]) / 100.0;
     }
 
     @Override

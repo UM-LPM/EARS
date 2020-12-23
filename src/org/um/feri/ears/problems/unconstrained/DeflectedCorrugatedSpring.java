@@ -35,8 +35,7 @@ public class DeflectedCorrugatedSpring extends Problem {
         for (int i = 0; i < numberOfDimensions; i++) {
             fitness += pow(x[i] - alpha, 2) - cos(k * sqrt(sum));
         }
-        fitness *= 0.1;
-        return fitness;
+        return fitness * 0.1;
     }
 
     @Override

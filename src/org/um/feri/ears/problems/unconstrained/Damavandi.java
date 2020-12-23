@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
 import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,7 +24,7 @@ public class Damavandi extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
+        double fitness;
         double frac, numerator, denominator;
         numerator = sin(PI * (x[0] - 2)) * sin(PI * (x[1] - 2));
         denominator = (pow(PI, 2) * (x[0] - 2) * (x[1] - 2));
@@ -31,11 +32,9 @@ public class Damavandi extends Problem {
             frac = 1;
         else
             frac = numerator / denominator;
-        fitness = (1 - pow(abs(frac), 5)) * (2 + pow(x[0] - 7, 2) + 2 * pow(x[1] - 7, 2));
-
         // original equation causes NaN - division by 0
         /*result = (1 - pow(abs((sin(PI * (x[0] - 2)) * sin(PI * (x[1] - 2))) / (pow(PI, 2) * (x[0] - 2) * (x[1] - 2))), 5)) *
                 (2 + pow(x[0] - 7, 2) + 2 * pow(x[1] - 7, 2));*/
-        return fitness;
+        return (1 - pow(abs(frac), 5)) * (2 + pow(x[0] - 7, 2) + 2 * pow(x[1] - 7, 2));
     }
 }

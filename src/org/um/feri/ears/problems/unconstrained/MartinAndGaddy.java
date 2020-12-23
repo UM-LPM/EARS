@@ -1,15 +1,12 @@
 package org.um.feri.ears.problems.unconstrained;
 
+import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
-
-import static java.lang.Math.*;
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 public class MartinAndGaddy extends Problem {
     public MartinAndGaddy() {
@@ -23,7 +20,6 @@ public class MartinAndGaddy extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0] - x[1], 2) + pow((x[0] + x[1] - 10.) / 3., 2);
-        return fitness;
+        return pow(x[0] - x[1], 2) + pow((x[0] + x[1] - 10.) / 3., 2);
     }
 }

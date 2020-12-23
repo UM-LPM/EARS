@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import static java.lang.Math.*;
+
+import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_C.html#go_benchmark.Cube
@@ -24,7 +25,6 @@ public class Cube extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 100 * pow(x[1] - pow(x[0], 3), 2) + pow(1 - x[0], 2);
-        return fitness;
+        return 100 * pow(x[1] - pow(x[0], 3), 2) + pow(1 - x[0], 2);
     }
 }

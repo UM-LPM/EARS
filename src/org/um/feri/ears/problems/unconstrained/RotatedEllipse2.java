@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.RotatedEllipse02
@@ -23,7 +22,6 @@ public class RotatedEllipse2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0], 2) - x[0] * x[1] + pow(x[1], 2);
-        return fitness;
+        return pow(x[0], 2) - x[0] * x[1] + pow(x[1], 2);
     }
 }

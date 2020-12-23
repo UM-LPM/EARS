@@ -1,11 +1,9 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static java.lang.Math.*;
 
@@ -66,7 +64,6 @@ public class ModifiedLangermann10 extends Problem {
             }
             fitness += c[i] * (exp((-1.0 / PI) * sum) * cos(PI * sum));
         }
-        fitness = fitness * (-1);
-        return fitness;
+        return fitness * -1.0;
     }
 }

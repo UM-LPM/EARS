@@ -1,13 +1,12 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
-import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static java.lang.Math.pow;
+
 /*
 http://infinity77.net/global_optimization/test_functions_nd_K.html#go_benchmark.Kowalik
  */
@@ -32,8 +31,8 @@ public class Kowalik extends Problem {
 
     }
 
-	@Override
-    public double eval(double x[]) {
+    @Override
+    public double eval(double[] x) {
         double fitness = 0;
         for (int i = 0; i < 11; i++) {
             fitness += pow(a[i] - (x[0] * ((1.0 / b[i]) * (1.0 / b[i]) + (1.0 / b[i]) * x[1])) / ((1.0 / b[i]) * (1.0 / b[i]) + (1.0 / b[i]) * x[2] + x[3]), 2);
@@ -41,7 +40,7 @@ public class Kowalik extends Problem {
         return fitness;
     }
 
-	@Override
+    @Override
     public double getGlobalOptimum() {
         return 0.00030749;
     }

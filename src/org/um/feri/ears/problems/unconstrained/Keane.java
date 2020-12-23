@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.*;
+
 /*
 http://benchmarkfcns.xyz/benchmarkfcns/kealefcn.html
 https://al-roomi.org/benchmarks/unconstrained/2-dimensions/135-keane-s-function
@@ -25,13 +26,11 @@ public class Keane extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double numerator = (pow(sin(x[0] - x[1]), 2) * pow(sin(x[0] + x[1]), 2));
         double denominator = (sqrt(pow(x[0], 2) + pow(x[1], 2)));
         if (denominator == 0)
             denominator = 0.0000001;
-        fitness = numerator / denominator;
-        return fitness;
+        return numerator / denominator;
     }
 
     @Override

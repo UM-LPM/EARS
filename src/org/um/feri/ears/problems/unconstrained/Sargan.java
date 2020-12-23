@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Sargan
@@ -22,7 +22,6 @@ public class Sargan extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 2 * (pow(x[0], 2) + 0.4 * (x[0] * x[1])) + 2 * (pow(x[1], 2) + 0.4 * (pow(x[1], 2)));
-        return fitness;
+        return 2 * (pow(x[0], 2) + 0.4 * (x[0] * x[1])) + 2 * (pow(x[1], 2) + 0.4 * (pow(x[1], 2)));
     }
 }

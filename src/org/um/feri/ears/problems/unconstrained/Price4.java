@@ -26,7 +26,6 @@ public class Price4 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(2 * pow(x[0], 3) * x[1] - pow(x[1], 3), 2) + pow(6 * x[0] - pow(x[1], 2) + x[1], 2);
-        return fitness;
+        return pow(2 * pow(x[0], 3) * x[1] - pow(x[1], 3), 2) + pow(6 * x[0] - pow(x[1], 2) + x[1], 2);
     }
 }

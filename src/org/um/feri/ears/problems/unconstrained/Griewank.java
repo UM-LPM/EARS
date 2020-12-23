@@ -1,13 +1,12 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 
-import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static java.lang.Math.cos;
+import static java.lang.Math.sqrt;
 
 /*
 https://www.sfu.ca/~ssurjano/griewank.html
@@ -24,15 +23,13 @@ public class Griewank extends Problem {
     }
 
     @Override
-    public double eval(double x[]) {
-        double fitness = 0;
+    public double eval(double[] x) {
         double sum = 0;
         double prod = 1;
         for (int i = 0; i < numberOfDimensions; i++) {
             sum += x[i] * x[i];
             prod = prod * cos(x[i] / sqrt(i + 1));
         }
-        fitness = (1.0 / 4000.0) * sum - prod + 1;
-        return fitness;
+        return (1.0 / 4000.0) * sum - prod + 1;
     }
 }

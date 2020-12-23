@@ -4,7 +4,9 @@ import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import static java.lang.Math.*;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.floor;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.Plateau

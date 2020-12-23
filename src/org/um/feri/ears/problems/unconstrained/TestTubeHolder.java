@@ -25,8 +25,7 @@ public class TestTubeHolder extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -4 * abs(exp(abs(cos((pow(x[0], 2) + pow(x[1], 2)) / 200))) * sin(x[0]) * cos(x[1]));
-        return fitness;
+        return -4 * abs(exp(abs(cos((pow(x[0], 2) + pow(x[1], 2)) / 200))) * sin(x[0]) * cos(x[1]));
     }
 
     @Override

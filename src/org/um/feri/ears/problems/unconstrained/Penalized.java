@@ -1,10 +1,10 @@
 package org.um.feri.ears.problems.unconstrained;
 
+import org.um.feri.ears.problems.Problem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-
-import org.um.feri.ears.problems.Problem;
 
 import static java.lang.Math.*;
 
@@ -24,8 +24,7 @@ public class Penalized extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
-        double sum1 = 0, sum2 = 0, k2 = 0, k1 = 0;
+        double sum1 = 0, sum2 = 0, k2, k1;
         double[] y = new double[numberOfDimensions];
         for (int i = 0; i < numberOfDimensions; i++) {
             y[i] = 1 + (1.0 / 4.0) * (x[i] + 1);
@@ -38,8 +37,7 @@ public class Penalized extends Problem {
         for (int i = 0; i < numberOfDimensions; i++) {
             sum2 += u(x[i], 10, 100, 4);
         }
-        fitness = PI / numberOfDimensions * (k1 + sum1 + k2) + sum2;
-        return fitness;
+        return PI / numberOfDimensions * (k1 + sum1 + k2) + sum2;
     }
 
     private double u(double x, double a, double k, double m) {

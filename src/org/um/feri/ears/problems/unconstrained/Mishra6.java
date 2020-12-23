@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.*;
-import static java.lang.Math.sin;
 
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/151-mishra-s-function-no-6
@@ -25,8 +24,7 @@ public class Mishra6 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = -log(pow(pow(sin(pow(cos(x[0]) + cos(x[1]), 2)), 2) - pow(cos(pow(sin(x[0]) + sin(x[1]), 2)), 2) + x[0], 2)) + 0.1 * (pow(x[0] - 1, 2) + pow(x[1] - 1, 2));
-        return fitness;
+        return -log(pow(pow(sin(pow(cos(x[0]) + cos(x[1]), 2)), 2) - pow(cos(pow(sin(x[0]) + sin(x[1]), 2)), 2) + x[0], 2)) + 0.1 * (pow(x[0] - 1, 2) + pow(x[1] - 1, 2));
     }
 
     @Override

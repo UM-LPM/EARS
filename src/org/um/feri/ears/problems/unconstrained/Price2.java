@@ -23,8 +23,7 @@ public class Price2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 1 + pow(sin(x[0]), 2) + pow(sin(x[1]), 2) - 0.1 * exp(-pow(x[0], 2) - pow(x[1], 2));
-        return fitness;
+        return 1 + pow(sin(x[0]), 2) + pow(sin(x[1]), 2) - 0.1 * exp(-pow(x[0], 2) - pow(x[1], 2));
     }
 
     @Override

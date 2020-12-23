@@ -5,7 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
 
 /*
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.StretchedV

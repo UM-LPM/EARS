@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.*;
+
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/184-salomon-s-function
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Salomon
@@ -22,13 +23,11 @@ public class Salomon extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
         double norm = 0;
         for (int i = 0; i < numberOfDimensions; i++) {
-            norm += pow(x[i],2);
+            norm += pow(x[i], 2);
         }
         norm = sqrt(norm);
-        fitness = 1 - cos(2 * PI * norm) + 0.1 * norm;
-        return fitness;
+        return 1 - cos(2 * PI * norm) + 0.1 * norm;
     }
 }

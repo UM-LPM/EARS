@@ -49,8 +49,7 @@ public class Hartman3 extends Problem {
             }
             fitness += c[i] * exp(sum * (-1));
         }
-        fitness *= -1;
-        return fitness;
+        return fitness * -1;
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.um.feri.ears.problems.Problem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import static java.lang.Math.*;
 
 /*
@@ -21,8 +22,7 @@ public class CrownedCross extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0.0001 * pow(abs(exp(abs(100 - (sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI))) * sin(x[0]) * sin(x[1])) + 1, 0.1);
-        return fitness;
+        return 0.0001 * pow(abs(exp(abs(100 - (sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI))) * sin(x[0]) * sin(x[1])) + 1, 0.1);
     }
 
     @Override

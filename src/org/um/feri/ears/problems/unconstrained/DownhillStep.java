@@ -21,8 +21,7 @@ public class DownhillStep extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = floor(10.0 * (10.0 - exp(-pow(x[0], 2) - 3 * pow(x[1], 2)))) / 10.0;
-        return fitness;
+        return floor(10.0 * (10.0 - exp(-pow(x[0], 2) - 3 * pow(x[1], 2)))) / 10.0;
     }
 
     @Override

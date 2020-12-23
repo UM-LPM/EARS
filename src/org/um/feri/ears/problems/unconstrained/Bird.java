@@ -25,8 +25,7 @@ public class Bird extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = pow(x[0] - x[1], 2) + exp(pow(1 - sin(x[0]), 2)) * cos(x[1]) + exp(pow(1 - cos(x[1]), 2)) * sin(x[0]);
-        return fitness;
+        return pow(x[0] - x[1], 2) + exp(pow(1 - sin(x[0]), 2)) * cos(x[1]) + exp(pow(1 - cos(x[1]), 2)) * sin(x[0]);
     }
 
     @Override

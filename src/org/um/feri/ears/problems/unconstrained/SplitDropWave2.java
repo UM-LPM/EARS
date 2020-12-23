@@ -5,6 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static java.lang.Math.*;
+
 public class SplitDropWave2 extends Problem {
     public SplitDropWave2() {
         super(2, 0);
@@ -15,10 +17,6 @@ public class SplitDropWave2 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
-
-        fitness = Math.cos(Math.pow(x[0],2) + Math.pow(x[1],2)) + 2 * Math.exp(-10 * Math.pow(x[1],2)) + 0.5 * x[1];
-
-        return fitness;
+        return cos(pow(x[0], 2) + pow(x[1], 2)) + 2 * exp(-10 * pow(x[1], 2)) + 0.5 * x[1];
     }
 }

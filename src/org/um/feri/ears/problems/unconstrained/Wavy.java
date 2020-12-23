@@ -27,7 +27,6 @@ public class Wavy extends Problem {
         for (int i = 0; i < numberOfDimensions; i++) {
             fitness += cos(k * x[i]) * exp(-pow(x[i], 2) * 0.5);
         }
-        fitness = 1 - (1.0 / numberOfDimensions) * fitness;
-        return fitness;
+        return 1 - (1.0 / numberOfDimensions) * fitness;
     }
 }

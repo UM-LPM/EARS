@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.*;
-import static java.lang.Math.exp;
 
 /*
 http://benchmarkfcns.xyz/benchmarkfcns/xinsheyangn4fcn.html
@@ -23,16 +22,13 @@ public class XinSheYang4 extends Problem {
 
     @Override
     public double eval(double[] x) {
-        double fitness = 0;
-        double sum1 = 0, sum2 = 0;
+        double sum1 = 0, sum2 = 0, sum3 = 0;
         for (int i = 0; i < numberOfDimensions; i++) {
-            sum1 += pow(x[i], 2);
-            sum2 += pow(sin(sqrt(abs(x[i]))), 2);
+            sum1 += pow(sin(x[i]), 2);
+            sum2 += pow(x[i], 2);
+            sum3 += pow(sin(sqrt(abs(x[i]))), 2);
         }
-        for (int i = 0; i < numberOfDimensions; i++) {
-            fitness = (pow(sin(x[i]), 2) - exp(-sum1)) * exp(-sum2);
-        }
-        return fitness;
+        return (sum1 - exp(-sum2)) * exp(-sum3);
     }
 
     @Override
