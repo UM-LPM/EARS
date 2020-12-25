@@ -13,12 +13,12 @@ import org.um.feri.ears.util.Util;
 
 public class ABC extends Algorithm {
 
-    int cs; // The number of colony size (employed bees + onlooker bees)
-    int foodNumber;
-    Task task;
-    ABCSolution best;
-    int limit;
-    ArrayList<ABCSolution> population;
+    private int cs; // The number of colony size (employed bees + onlooker bees)
+    private int foodNumber;
+    private Task task;
+    private ABCSolution best;
+    private int limit;
+    private ArrayList<ABCSolution> population;
 
     public ArrayList<ABCSolution> getPopulaton() {
         return population;

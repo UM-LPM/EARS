@@ -25,17 +25,15 @@ public class CRO extends Algorithm {
 	private double Fa, Fd; // Percentage of budders and depredated corals
 	private double Pd; // Probability of depredation
 	private int attemptsToSettle;
-	int popSize;
-	Task task;
+	private int popSize;
+	private Task task;
 
-	TaskComparator comparator;
-	protected TournamentSelection selectionOperator;
-	protected SBXCrossoverSO crossoverOperator = new SBXCrossoverSO(0.9, 20.0);
-	protected PolynomialMutationSO mutationOperator = new PolynomialMutationSO(1.0 / 10, 20.0);
+	private TaskComparator comparator;
+	private TournamentSelection selectionOperator;
+	private SBXCrossoverSO crossoverOperator = new SBXCrossoverSO(0.9, 20.0);
+	private PolynomialMutationSO mutationOperator = new PolynomialMutationSO(1.0 / 10, 20.0);
 
-	protected List<CoralSolution> coralReef;
-
-	CoralSolution best;
+	private List<CoralSolution> coralReef;
 
 	public CRO() {
 		this(10, 10, 0.6, 0.9, 0.1, 0.1, 3);
@@ -126,7 +124,7 @@ public class CRO extends Algorithm {
 
 			
 			// Asexual reproduction (budding)
-			Collections.sort(coralReef, comparator);
+			coralReef.sort(comparator);
 			budders = new ArrayList<DoubleSolution>((int) (Fa * coralReef.size()));
 			for (int i = 0; i < budders.size(); i++) {
 				budders.add(coralReef.get(i));
@@ -134,15 +132,15 @@ public class CRO extends Algorithm {
 			coralReef = larvaeSettlementPhase(budders, coralReef);
 
 			// Depredation in Polyp Phase
-			Collections.sort(coralReef, comparator);
+			coralReef.sort(comparator);
 			coralReef = depredation(coralReef);
 			task.incrementNumberOfIterations();
 		}
-		Collections.sort(coralReef, comparator);
+		coralReef.sort(comparator);
 		return coralReef.get(0);
 	}
 
-	protected void createInitialPopulation() throws StopCriteriaException {
+	private void createInitialPopulation() throws StopCriteriaException {
 		// At inizialiazation populate only part of the coral reef (rho)
 		int quantity = (int) (rho * N * M);
 		coralReef = new ArrayList<>(N * M);
@@ -178,7 +176,7 @@ public class CRO extends Algorithm {
 		return null;
 	}
 
-	protected void selectBroadcastSpawners(int quantity, List<DoubleSolution> spawners, List<DoubleSolution> brooders) {
+	private void selectBroadcastSpawners(int quantity, List<DoubleSolution> spawners, List<DoubleSolution> brooders) {
 
 		int[] per = Util.randomPermutation(coralReef.size());
 
@@ -195,7 +193,7 @@ public class CRO extends Algorithm {
 		}
 	}
 
-	protected List<DoubleSolution> sexualReproduction(List<DoubleSolution> broadcastSpawners)
+	private List<DoubleSolution> sexualReproduction(List<DoubleSolution> broadcastSpawners)
 			throws StopCriteriaException {
 		DoubleSolution[] parents = new DoubleSolution[2];
 		List<DoubleSolution> larvae = new ArrayList<DoubleSolution>(broadcastSpawners.size() / 2);
@@ -226,7 +224,7 @@ public class CRO extends Algorithm {
 		return larvae;
 	}
 
-	protected List<DoubleSolution> asexualReproduction(List<DoubleSolution> brooders) throws StopCriteriaException {
+	private List<DoubleSolution> asexualReproduction(List<DoubleSolution> brooders) throws StopCriteriaException {
 		int sz = brooders.size();
 
 		List<DoubleSolution> larvae = new ArrayList<DoubleSolution>(sz);
@@ -243,7 +241,7 @@ public class CRO extends Algorithm {
 		return larvae;
 	}
 
-	protected List<CoralSolution> larvaeSettlementPhase(List<DoubleSolution> larvae, List<CoralSolution> population) {
+	private List<CoralSolution> larvaeSettlementPhase(List<DoubleSolution> larvae, List<CoralSolution> population) {
 
 		int attempts = attemptsToSettle;
 		for (DoubleSolution larva : larvae) {
@@ -274,7 +272,7 @@ public class CRO extends Algorithm {
 		return population;
 	}
 
-	protected List<CoralSolution> depredation(List<CoralSolution> population) {
+	private List<CoralSolution> depredation(List<CoralSolution> population) {
 		int popSize = population.size();
 		int quantity = (int) (Fd * popSize);
 

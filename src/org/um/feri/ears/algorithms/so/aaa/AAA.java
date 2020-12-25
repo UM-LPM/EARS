@@ -14,14 +14,14 @@ import java.util.Collections;
 
 public class AAA extends Algorithm {
 
-    DoubleSolution best;
-    Task task;
-    int popSize;
+    private DoubleSolution best;
+    private Task task;
+    private int popSize;
     private Alga[] population;
 
-    double cutting = 2.0;
-    double energyLoss = 0.3;
-    double adaptationConstant = 0.5;
+    private double cutting = 2.0;
+    private double energyLoss = 0.3;
+    private double adaptationConstant = 0.5;
 
     public AAA() {
         this(50);
@@ -128,7 +128,7 @@ public class AAA extends Algorithm {
         return best;
     }
 
-    void calculateGreatness() {
+    private void calculateGreatness() {
         ArrayList<Double> sortedScores = new ArrayList<Double>();
         for (int i = 0; i < popSize; i++) {
             sortedScores.add(population[i].getEval());
@@ -149,7 +149,7 @@ public class AAA extends Algorithm {
         }
     }
 
-    void calculateEnergy() {
+    private void calculateEnergy() {
         int[] sort = new int[popSize];
         double[] fGreatSurface = new double[popSize];
         for (int i = 0; i < popSize; i++) {
@@ -175,7 +175,7 @@ public class AAA extends Algorithm {
         }
     }
 
-    int[] minMaxIndex(double[] iArray) {
+    private int[] minMaxIndex(double[] iArray) {
         int maxIndex = 0;
         int minIndex = 0;
         for (int i = 1; i < iArray.length; i++) {
@@ -189,7 +189,7 @@ public class AAA extends Algorithm {
         return new int[]{minIndex, maxIndex};
     }
 
-    void frictionForce() {
+    private void frictionForce() {
         double[] friction = new double[popSize];
         for (int i = 0; i < popSize; i++) {
             double r = (double) (population[i].getColonySize() * 3) / (double) (4 * Math.PI);
@@ -199,7 +199,7 @@ public class AAA extends Algorithm {
         normalization(friction);
     }
 
-    void normalization(double[] friction) {
+    private void normalization(double[] friction) {
         ArrayList<Double> sortedScores = new ArrayList<Double>();
         for (double f : friction) {
             sortedScores.add(f);
@@ -212,7 +212,7 @@ public class AAA extends Algorithm {
         }
     }
 
-    int tournamentMethod() {
+    private int tournamentMethod() {
         int colonyOne = (int) ((popSize - 1) * Util.nextDouble());
         int colonyTwo = (int) ((popSize - 1) * Util.nextDouble());
         while (colonyOne == colonyTwo) {

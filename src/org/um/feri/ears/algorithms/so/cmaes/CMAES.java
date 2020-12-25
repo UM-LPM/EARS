@@ -31,34 +31,34 @@ import org.um.feri.ears.util.Util;
 
 public class CMAES extends Algorithm {
 
-	int pop_size;
-	Task task;
-	int N;
+	private int popSize;
+	private Task task;
+	private int N;
 
-	DoubleSolution best;
+	private DoubleSolution best;
 
-	final MyMath math = new MyMath();
-	double axisratio; 
+	private final MyMath math = new MyMath();
+	private double axisratio;
 
-	double sigma = 0.0;
-	double[] typicalX; // eventually used to set initialX
-	double[] initialX; // set in the end of init()
-	double[] xmean;
-	double[] pc;
-	double[] ps;
-	double[][] C;
-	double maxsqrtdiagC;
-	double minsqrtdiagC;
-	double[][] B;
-	double[] diagD;
-	boolean flgdiag; // 0 == full covariance matrix
+	private double sigma = 0.0;
+	private double[] typicalX; // eventually used to set initialX
+	private double[] initialX; // set in the end of init()
+	private double[] xmean;
+	private double[] pc;
+	private double[] ps;
+	private double[][] C;
+	private double maxsqrtdiagC;
+	private double minsqrtdiagC;
+	private double[][] B;
+	private double[] diagD;
+	private boolean flgdiag; // 0 == full covariance matrix
 
 	/* init information */
-	double[] startsigma;
-	double maxstartsigma;
-	double minstartsigma;
+	private double[] startsigma;
+	private double maxstartsigma;
+	private double minstartsigma;
 
-	boolean iniphase;
+	private boolean iniphase;
 
 	/**
 	 * state (postconditions):
@@ -69,35 +69,35 @@ public class CMAES extends Algorithm {
 	 *   2.5 updateSingle
 	 *   3 updateDistribution
 	 */
-	double state = -1;
-	int lockDimension = 0;
-	long countCupdatesSinceEigenupdate;
-	int idxRecentOffspring; 
+	private double state = -1;
+	private int lockDimension = 0;
+	private long countCupdatesSinceEigenupdate;
+	private int idxRecentOffspring;
 
-	DoubleSolution[] arx; //current population
+	private DoubleSolution[] arx; //current population
 	/** recent population, no idea whether this is useful to be public */
-	DoubleSolution[] population; // offspring population
-	double[] xold;
+	private DoubleSolution[] population; // offspring population
+	private double[] xold;
 
-	double[] BDz;
-	double[] artmp;
+	private double[] BDz;
+	private double[] artmp;
 
-	Timing timings;
+	private Timing timings;
 	/** options that can be changed (fields can be assigned) at any time to control 
 	 * the running behavior
 	 * */
-	CMAOptions options;
-	CMAParameters sp;
+	private CMAOptions options;
+	private CMAParameters sp;
 
 	public CMAES()
 	{
 		this(30);
 	}
 
-	public CMAES(int pop_size)
+	public CMAES(int popSize)
 	{
 		super();
-		this.pop_size = pop_size;
+		this.popSize = popSize;
 
 		au = new Author("miha", "miha.ravber@um.si");
 		ai = new AlgorithmInfo("CMAES",
@@ -111,7 +111,7 @@ public class CMAES extends Algorithm {
 						+ "	  year={2003},"
 						+ "	  publisher={MIT Press}}",
 						"CMAES", "Covariance Matrix Adaptation Evolutionary Strategy");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
 	public void init() {
@@ -262,7 +262,7 @@ public class CMAES extends Algorithm {
 		options = new CMAOptions();
 		sp = new CMAParameters();
 
-		sp.setPopulationSize(pop_size);
+		sp.setPopulationSize(popSize);
 		N = task.getNumberOfDimensions();
 		xmean = new double[]{0.05}; //setInitialX in each dimension, also setTypicalX can be used
 		startsigma = new double[]{0.2}; // also a mandatory setting 
@@ -304,7 +304,7 @@ public class CMAES extends Algorithm {
 		return best;
 	}
 
-	public void resampleSingle(int index) {
+	private void resampleSingle(int index) {
 		int i,j;
 		double sum;
 		if (state != 1)
@@ -357,7 +357,7 @@ public class CMAES extends Algorithm {
 		/* re-calculate diagonal flag */
 		flgdiag = (options.diagonalCovarianceMatrix == 1 || options.diagonalCovarianceMatrix >= task.getNumberOfIterations()); 
 		if (options.diagonalCovarianceMatrix == -1) // options might have been re-read
-			flgdiag = (task.getNumberOfIterations() <= 1 * 150 * N / sp.lambda);  // CAVE: duplication of "default"
+			flgdiag = (task.getNumberOfIterations() <= 150 * N / sp.lambda);  // CAVE: duplication of "default"
 
 		/* calculate xmean and BDz~N(0,C) */
 		for (i = 0; i < N; ++i) {
@@ -460,13 +460,11 @@ public class CMAES extends Algorithm {
 
 	/**
 	 * Samples the recent search distribution lambda times
-	 * @return double[][] population, lambda times dimension array of sampled solutions, 
-	 *   where <code>lambda == parameters.getPopulationSize()</code> 
 	 * @see #resampleSingle(int)
-	 * @see #updateDistribution(double[])
+	 * @see #updateDistribution()
 	 * @see CMAParameters#getPopulationSize()
 	 */
-	public void samplePopulation() {
+	private void samplePopulation() {
 		double sum;
 
 		if (state < 3 && state > 2)
@@ -531,7 +529,7 @@ public class CMAES extends Algorithm {
 		//population = genoPhenoTransformation(arx, population);  
 	}
 
-	void testAndCorrectNumerics() { // not much left here
+	private void testAndCorrectNumerics() { // not much left here
 
 		/* Flat Fitness, Test if function values are identical */
 		if (task.getNumberOfIterations() > 1 || (task.getNumberOfIterations() == 1 && state >= 3)) {
@@ -598,7 +596,7 @@ public class CMAES extends Algorithm {
 			timings.eigendecomposition += System.currentTimeMillis() - firsttime;
 
 			if (options.checkEigenSystem > 0) //TODO remove
-				checkEigenSystem(N, C, diagD, B); // for debugging 
+				checkEigenSystem(N, C, diagD, B); // for debugging
 
 			// assign diagD to eigenvalue square roots
 			for (i = 0; i < N; ++i) {
@@ -615,7 +613,7 @@ public class CMAES extends Algorithm {
 	}
 
 	// Symmetric Householder reduction to tridiagonal form, taken from JAMA package.
-	private void tred2 (int n, double V[][], double d[], double e[]) {
+	private void tred2 (int n, double[][] V, double[] d, double[] e) {
 
 		//  This is derived from the Algol procedures tred2 by
 		//  Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
@@ -725,7 +723,7 @@ public class CMAES extends Algorithm {
 	} 
 
 	// Symmetric tridiagonal QL algorithm, taken from JAMA package.
-	private void tql2 (int n, double d[], double e[], double V[][]) {
+	private void tql2 (int n, double[] d, double[] e, double[][] V) {
 
 		//  This is derived from the Algol procedures tql2, by
 		//  Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
@@ -844,7 +842,7 @@ public class CMAES extends Algorithm {
     produces error  
     returns number of detected inaccuracies 
 	 */
-	int checkEigenSystem(int N, double C[][], double diag[], double Q[][]) 
+	private int checkEigenSystem(int N, double[][] C, double[] diag, double[][] Q)
 	{
 		/* compute Q diag Q^T and Q Q^T to check */
 		int i, j, k, res = 0;
@@ -874,7 +872,7 @@ public class CMAES extends Algorithm {
 		return res; 
 	}
 
-	public void setInitialX(double[] x) {
+	private void setInitialX(double[] x) {
 		/*if (state >= 0)
 			System.out.println("initial x cannot be set anymore");*/
 		if (x.length == 1) { // to make properties work
@@ -887,12 +885,11 @@ public class CMAES extends Algorithm {
 			N = x.length;
 		assert N == x.length;
 		xmean = new double[N];
-		for (int i = 0; i < N; ++i)
-			xmean[i] = x[i];
+		System.arraycopy(x, 0, xmean, 0, N);
 		lockDimension = 1; // because xmean is set up
 	}
 
-	public void setInitialX(double x) {
+	private void setInitialX(double x) {
 		/*if (state >= 0)
 			System.out.println("initial x cannot be set anymore");*/
 		xmean = new double[]{x}; // allows "late binding" of dimension N
@@ -903,7 +900,7 @@ public class CMAES extends Algorithm {
 	 * @param x
 	 *            null or x.length==1 or x.length==dim, only for the second case
 	 *            x is expanded
-	 * @param dim
+	 * @param dim dimension
 	 * @return <code>null</code> or <code>double[] x</code> with
 	 *         <code>x.length==dim</code>
 	 */
@@ -928,10 +925,9 @@ public class CMAES extends Algorithm {
 	/**
 	 * Tests termination criteria and evaluates to  greater than zero when a
 	 * termination criterion is satisfied. Repeated tests append the met criteria repeatedly, 
-	 * only if the evaluation count has changed. 
-	 * @return number of termination criteria satisfied
+	 * only if the evaluation count has changed.
 	 */
-	void test() { 
+	private void test() {
 		/* Internal (numerical) stopping termination criteria */
 
 		/* Test each principal axis i, whether x == x + 0.1 * sigma * rgD[i] * B[i] */
@@ -987,11 +983,10 @@ class MyMath { // implements java.io.Serializable {
 		return res;
 	}
 
-	public double median(double ar[]) {
+	public double median(double[] ar) {
 		// need a copy of ar
 		double [] ar2 = new double[ar.length];
-		for (int i = 0; i < ar.length; ++i)
-			ar2[i] = ar[i];
+		System.arraycopy(ar, 0, ar2, 0, ar.length);
 		Arrays.sort(ar2);
 		if (ar2.length % 2 == 0)
 			return (ar2[ar.length/2] + ar2[ar.length/2-1]) / 2.;
@@ -1000,7 +995,7 @@ class MyMath { // implements java.io.Serializable {
 	}
 
 	/** @return Maximum value of 1-D double array */
-	public double max(double ar[]) {
+	public double max(double[] ar) {
 		int i;
 		double m;
 		m = ar[0];
@@ -1012,7 +1007,7 @@ class MyMath { // implements java.io.Serializable {
 	}
 
 	/** sqrt(a^2 + b^2) without under/overflow. **/
-	public double hypot(double a, double b) {
+	double hypot(double a, double b) {
 		double r  = 0;
 		if (Math.abs(a) > Math.abs(b)) {
 			r = b/a;
@@ -1025,7 +1020,7 @@ class MyMath { // implements java.io.Serializable {
 	}
 
 	/** @return Minimum value of 1-D double array */
-	public double min(double ar[]) {
+	public double min(double[] ar) {
 		int i;
 		double m;
 		m = ar[0];
@@ -1039,7 +1034,7 @@ class MyMath { // implements java.io.Serializable {
 	/**
 	 * @return Diagonal of an 2-D double array
 	 */
-	public double[] diag(double ar[][]) {
+	double[] diag(double[][] ar) {
 		int i;
 		double[] diag = new double[ar.length];
 		for (i = 0; i < ar.length && i < ar[i].length; ++i)

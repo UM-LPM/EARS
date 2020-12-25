@@ -14,26 +14,24 @@ import org.um.feri.ears.util.Util;
 import java.util.ArrayList;
 
 public class WOA extends Algorithm {
-    DoubleSolution bestSolution;
 
-    int popSize;
-    Task task;
+    private DoubleSolution bestSolution;
+
+    private int popSize;
+    private Task task;
 
     // Parameters
-    double A;
-    double C;
-    double r1;
-    double r2;
+    private double A;
+    private double C;
+    private double r1;
+    private double r2;
+    private double a; // Decreases linearly from 2 to 0 over iterations (Eq 2.3)
+    private double a2; // Linearly decreases from -1 to -2 to calculate t in Eq 3.12
+    private double b; // Parameter for Eq 2.5
+    private double l; // Parameter for Eq 2.5
+    private double p; // 50% whether to choose Shrinking encircling mechanism or the spiral model to update the position of whale
 
-    double a; // Decreases linearly from 2 to 0 over iterations (Eq 2.3)
-    double a2; // Linearly decreases from -1 to -2 to calculate t in Eq 3.12
-
-    double b; // Parameter for Eq 2.5
-    double l; // Parameter for Eq 2.5
-
-    double p; // 50% whether to choose Shrinking encircling mechanism or the spiral model to update the position of whale
-
-    ArrayList<DoubleSolution> population;
+    private ArrayList<DoubleSolution> population;
 
     public WOA() {
         this(30);
@@ -50,14 +48,14 @@ public class WOA extends Algorithm {
 
         au = new Author("janez", "janezk7@gmail.com");
         ai = new AlgorithmInfo("WOA", "@article{mirjalili2016whale,\n" +
-				"  title={The whale optimization algorithm},\n" +
-				"  author={Mirjalili, Seyedali and Lewis, Andrew},\n" +
-				"  journal={Advances in engineering software},\n" +
-				"  volume={95},\n" +
-				"  pages={51--67},\n" +
-				"  year={2016},\n" +
-				"  publisher={Elsevier}\n" +
-				"}", "WOA", "Whale Optimization Algorithm");
+                "  title={The whale optimization algorithm},\n" +
+                "  author={Mirjalili, Seyedali and Lewis, Andrew},\n" +
+                "  journal={Advances in engineering software},\n" +
+                "  volume={95},\n" +
+                "  pages={51--67},\n" +
+                "  year={2016},\n" +
+                "  publisher={Elsevier}\n" +
+                "}", "WOA", "Whale Optimization Algorithm");
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
     }
 

@@ -11,10 +11,10 @@ public class HillClimbing extends Algorithm {
 
     public enum HillClimbingStrategy {ANY_ASCENT, STEEPEST_ASCENT, RANDOM_RESTART}
 
-    DoubleSolution globalBest, currentBest;
-    Task task;
-    double dxPercent;
-    HillClimbingStrategy strategy;
+    private DoubleSolution globalBest, currentBest;
+    private Task task;
+    private double dxPercent;
+    private HillClimbingStrategy strategy;
 
     public HillClimbing() {
         this(HillClimbingStrategy.RANDOM_RESTART, 0.001);

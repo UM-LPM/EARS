@@ -15,7 +15,7 @@ public class SOSingleRun {
 
         Task sphere = new Task(EnumStopCriteria.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
 
-        Algorithm alg = new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin);
+        Algorithm alg = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN);
         DoubleSolution best;
         try {
             best = alg.execute(sphere);

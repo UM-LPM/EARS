@@ -13,18 +13,16 @@ import org.um.feri.ears.util.Util;
 
 public class BA extends Algorithm{
 
-	int popSize; //typically 10 to 40
-	Task task;
+	private int popSize; //typically 10 to 40
+	private Task task;
 	
-    double A; //Loudness  (constant or decreasing)
-    double r; //Pulse rate (constant or decreasing)
-    double Qmin, Qmax; //min and max frequency
-    double alpha, gamma; // 0 < alpha < 1, gamma > 0
+    private double A; //Loudness  (constant or decreasing)
+    private double r; //Pulse rate (constant or decreasing)
+    private double Qmin, Qmax; //min and max frequency
+    private double alpha, gamma; // 0 < alpha < 1, gamma > 0
 
-    BatSolution best;
-	
-	
-	ArrayList<BatSolution> population;
+	private BatSolution best;
+	private ArrayList<BatSolution> population;
 	
 	public BA()
 	{
@@ -64,12 +62,8 @@ public class BA extends Algorithm{
 		double[] S = new double[task.getNumberOfDimensions()];
 
 		while (!task.isStopCriteria()) {
-			
-			double avgA; //average loudness
-			double sumA = 0.0;
+
 			for (int i = 0; i < popSize; i++) {
-				
-				
 				//Generate new solutions by adjusting frequency, and updating velocities and locations/solutions [Eq.(2) to(4)]
 				population.get(i).Q = Util.nextDouble(Qmin, Qmax);
 				
@@ -77,9 +71,6 @@ public class BA extends Algorithm{
 					population.get(i).v[j] += (population.get(i).getValue(j) - best.getValue(j)) * population.get(i).Q;
 					S[j] =  population.get(i).getValue(j) + population.get(i).v[j];
 				}
-				
-				sumA += population.get(i).Q;
-				avgA = sumA / (i+1);
 				
 				if(Util.nextDouble() > r)
 				{

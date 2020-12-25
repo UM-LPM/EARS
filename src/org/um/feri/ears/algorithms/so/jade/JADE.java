@@ -1,5 +1,4 @@
 package org.um.feri.ears.algorithms.so.jade;
-import java.util.ArrayList;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
@@ -10,209 +9,210 @@ import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
+import java.util.ArrayList;
+
 public class JADE extends Algorithm {
-	private int pop_size;
-	// private int arch_size;
-	private int elite_size; // calculated by p*pop_size pbest
-	// private double F,CR;
-	private ArrayList<JADESolution> elite; // pbest
-	private JADESolution[] popX; // population
-	private ArrayList<JADESolution> arch_x; // population
-	private JADESolution g; // global best
+    private int popSize;
+    // private int arch_size;
+    private int eliteSize; // calculated by p*pop_size pbest
+    // private double F,CR;
+    private ArrayList<JADESolution> elite; // pbest
+    private JADESolution[] popX; // population
+    private ArrayList<JADESolution> archX; // population
+    private JADESolution g; // global best
 
-	private ArrayList<Double> SCR; // list of successful F, CR in current gen
-	private ArrayList<Double> SF; //
+    private ArrayList<Double> SCR; // list of successful F, CR in current gen
+    private ArrayList<Double> SF; //
 
-	Task task; // set it in run
-	double p; // % DE/Current-to-pbest
-	double c; // helps
+    private Task task; // set it in run
+    private double p; // % DE/Current-to-pbest
+    private double c; // helps
 
-	/*
-	 * Keep track of best individuals pbest! Also sets global best
-	 */
-	private void updateEliteAndGlobalBest(JADESolution in) {
-		boolean add = false;
-		for (int i = 0; i < elite.size(); i++) {
-			if (task.isFirstBetter(in, elite.get(i))) {
-				elite.add(i, in);
-				add = true;
-				break;
-			}
+    /*
+     * Keep track of best individuals pbest! Also sets global best
+     */
+    private void updateEliteAndGlobalBest(JADESolution in) {
+        boolean add = false;
+        for (int i = 0; i < elite.size(); i++) {
+            if (task.isFirstBetter(in, elite.get(i))) {
+                elite.add(i, in);
+                add = true;
+                break;
+            }
+        }
+        if ((!add) && (eliteSize >= elite.size())) {
+            elite.add(in);
+        }
+
+        if (g == null)
+            g = in;
+        else if (task.isFirstBetter(in, g))
+            g = in;
+        if (eliteSize < elite.size())
+            elite.remove(eliteSize);
+    }
+
+    private void initPopulation() throws StopCriteriaException {
+        popX = new JADESolution[popSize];
+        for (int i = 0; i < popSize; i++) {
+            popX[i] = new JADESolution(task.getRandomSolution(), 0.5, 0.5);
+            updateEliteAndGlobalBest(popX[i]);
+            if (task.isStopCriteria())
+                break;
+        }
+    }
+
+    public JADE(int popSize, double p, double c) {
+        super();
+        // by paper p is in [0.05-0.2]
+        // by paper c is in [0.05-0.2]
+        // by paper pop_size (D < 10) = 30; (D=30) = 100; (D=100) = 400
+        debug = false;
+        this.popSize = popSize;
+        this.c = c;
+        this.p = p;
+        eliteSize = (int) Math.round(popSize * p);
+        elite = new ArrayList<JADESolution>();
+        archX = new ArrayList<JADESolution>();
+        SCR = new ArrayList<Double>();
+        SF = new ArrayList<Double>();
+        if (eliteSize == 0)
+            eliteSize = 1;
+        setDebug(debug); // EARS prints some debug info
+        ai = new AlgorithmInfo(
+                "Jingqiao Zhang, Arthur C. Sanderson",
+                "JADE: Adaptive Differential Evolution With Optional External Archive",
+                "JADE", "JADE"); // EARS add algorithm name
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
+        // ai.addParameter(EnumAlgorithmParameters., F + "");
+        au = new Author("Matej", "matej.crepinsek at um.si"); // EARS author
+        // info
+    }
+
+    public JADE() {
+        this(30, .05, .1);
+    }
+
+    @Override
+    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+        g = null;
+        task = taskProblem;
+        elite.clear();
+        archX.clear();
+        JADESolution[] popNew = new JADESolution[popSize];
+        double[] tmp;
+        int jRand;
+        int D = task.getNumberOfDimensions();
+        int r1, r2, pBest;
+        double Fpom;
+        JADESolution inR2, tmpIn;
+
+        double muCR = 0.5; // adaptive control parameters
+        double muF = 0.5;
+
+        initPopulation();
+
+        while (!task.isStopCriteria()) {
+            SF.clear();
+            SCR.clear();
+            for (int i = 0; i < popSize; i++) {
+                // Generate CRi
+                popX[i].setCR(Util.rnd.nextGaussian() * 0.1 + muCR);
+                // http://introcs.cs.princeton.edu/java/stdlib/StdRandom.java.html
+                // cauchy
+                // Generate Fi
+                do {
+                    Fpom = 0.1
+                            * Math.tan(Math.PI * (Util.rnd.nextDouble() - 0.5))
+                            + muF;
+                } while (Fpom <= 0);
+                popX[i].setF(Fpom);
+                // System.out.print(
+                // "("+pop_x[i].getCR()+", "+pop_x[i].getF()+") ");
+                jRand = Util.rnd.nextInt(D);
+                tmp = popX[i].getDoubleVariables();
+                do {
+                    r1 = Util.rnd.nextInt(popSize);
+                } while (r1 == i);
+                do {
+                    r2 = Util.rnd.nextInt(popSize
+                            + Math.min(archX.size(), popSize));
+                } while (r2 == i || r2 == r1);
+                if (r2 < popSize)
+                    inR2 = popX[r2];
+                else
+                    inR2 = archX.get(r2 - popSize);
+                pBest = Util.rnd.nextInt(eliteSize);
+                for (int d = 0; d < D; d++) {
+                    if ((Util.rnd.nextDouble() < popX[i].CR) || (d == jRand)) {
+                        tmp[d] = task
+                                .setFeasible(
+                                        tmp[d]
+                                                + popX[i].F
+                                                * (elite.get(pBest).getValue(d) - tmp[d])
+                                                + popX[i].F
+                                                * (popX[r1].getValue(d) - inR2
+                                                .getValue(d)), d);
+                    }
+                }
+                tmpIn = new JADESolution(task.eval(tmp), popX[i].CR,
+                        popX[i].F);
+                if (task.isFirstBetter(tmpIn, popX[i])) {
+                    SCR.add(tmpIn.CR); // save successful parameters
+                    SF.add(tmpIn.F);
+                    archX.add(popX[i]); // save old; good
+                    popNew[i] = tmpIn;
+                    updateEliteAndGlobalBest(tmpIn);
+                } else {
+                    popNew[i] = popX[i]; // old is in new population
+                }
+                if (task.isStopCriteria())
+                    break;
+            }
+			// new generation
+			if (popSize >= 0) System.arraycopy(popNew, 0, popX, 0, popSize);
+            // empty archive if it is too big
+            while (archX.size() > popSize)
+                archX.remove(Util.rnd.nextInt(archX.size())); // arch full
+            // Update parameters
+            if (SCR.size() > 0) {
+                muCR = (1. - c) * muCR + c * (sum(SCR) / SCR.size());
+                muF = (1. - c) * muF + c * (sum2(SF) / sum(SF)); // Lehmer mean
+            } else { // not defined in paper
+                muCR = Util.rnd.nextDouble();
+                if (muCR < 0.1)
+                    muCR = 0.1;
+                muF = Util.rnd.nextDouble();
+                if (muF < 0.1)
+                    muF = 0.1;
+            }
+            // System.out.println("\nmuCR:" + muCR + " " + " muF:" +muF);
+            task.incrementNumberOfIterations();
+        }
+        return g;
+    }
+
+    private double sum(ArrayList<Double> a) {
+        double s = 0;
+		for (Double aDouble : a) {
+			s += aDouble;
 		}
-		if ((!add) && (elite_size >= elite.size())) {
-			elite.add(in);
+        return s;
+    }
+
+    private double sum2(ArrayList<Double> a) {
+        double s = 0;
+		for (Double aDouble : a) {
+			s += aDouble * aDouble;
 		}
+        return s;
+    }
 
-		if (g == null) 
-			g = in;
-		else if (task.isFirstBetter(in, g))
-			g = in;
-		if (elite_size < elite.size())
-			elite.remove(elite_size);
-	}
-
-	private void initPopulation() throws StopCriteriaException {
-		popX = new JADESolution[pop_size];
-		for (int i = 0; i < pop_size; i++) {
-			popX[i] = new JADESolution(task.getRandomSolution(), 0.5, 0.5);
-			updateEliteAndGlobalBest(popX[i]);
-			if (task.isStopCriteria())
-				break;
-		}
-	}
-
-	public JADE(int pop_size, double p, double c) {
-		super();
-		// by paper p is in [0.05-0.2]
-		// by paper c is in [0.05-0.2]
-		// by paper pop_size (D < 10) = 30; (D=30) = 100; (D=100) = 400
-		debug = false;
-		this.pop_size = pop_size;
-		this.c = c;
-		this.p = p;
-		elite_size = (int) Math.round(pop_size * p);
-		elite = new ArrayList<JADESolution>();
-		arch_x = new ArrayList<JADESolution>();
-		SCR = new ArrayList<Double>();
-		SF = new ArrayList<Double>();
-		if (elite_size == 0)
-			elite_size = 1;
-		setDebug(debug); // EARS prints some debug info
-		ai = new AlgorithmInfo(
-				"Jingqiao Zhang, Arthur C. Sanderson",
-				"JADE: Adaptive Differential Evolution With Optional External Archive",
-				"JADE", "JADE"); // EARS add algorithm name
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
-		// ai.addParameter(EnumAlgorithmParameters., F + "");
-		au = new Author("Matej", "matej.crepinsek at um.si"); // EARS author
-																// info
-	}
-
-	public JADE() {
-		this(30, .05, .1); 
-	}
-
-	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
-		g=null;
-		task = taskProblem;
-		elite.clear();
-		arch_x.clear();
-		JADESolution[] pop_new = new JADESolution[pop_size];
-		double[] tmp;
-		int j_rand;
-		int D = task.getNumberOfDimensions();
-		int r1, r2, pBest;
-		double Fpom;
-		JADESolution in_r2, tmpIn;
-
-		double muCR = 0.5; // adaptive control parameters
-		double muF = 0.5;
-
-		initPopulation();
-
-		while (!task.isStopCriteria()) {
-			SF.clear();
-			SCR.clear();
-			for (int i = 0; i < pop_size; i++) {
-				// Generate CRi
-				popX[i].setCR(Util.rnd.nextGaussian() * 0.1 + muCR);
-				// http://introcs.cs.princeton.edu/java/stdlib/StdRandom.java.html
-				// cauchy
-				// Generate Fi
-				do {
-					Fpom = 0.1
-							* Math.tan(Math.PI * (Util.rnd.nextDouble() - 0.5))
-							+ muF;
-				} while (Fpom <= 0);
-				popX[i].setF(Fpom);
-				// System.out.print(
-				// "("+pop_x[i].getCR()+", "+pop_x[i].getF()+") ");
-				j_rand = Util.rnd.nextInt(D);
-				tmp = popX[i].getDoubleVariables();
-				do {
-					r1 = Util.rnd.nextInt(pop_size);
-				} while (r1 == i);
-				do {
-					r2 = Util.rnd.nextInt(pop_size
-							+ Math.min(arch_x.size(), pop_size));
-				} while (r2 == i || r2 == r1);
-				if (r2 < pop_size)
-					in_r2 = popX[r2];
-				else
-					in_r2 = arch_x.get(r2 - pop_size);
-				pBest = Util.rnd.nextInt(elite_size);
-				for (int d = 0; d < D; d++) {
-					if ((Util.rnd.nextDouble() < popX[i].CR) || (d == j_rand)) {
-						tmp[d] = task
-								.setFeasible(
-										tmp[d]
-												+ popX[i].F
-												* (elite.get(pBest).getValue(d) - tmp[d])
-												+ popX[i].F
-												* (popX[r1].getValue(d) - in_r2
-														.getValue(d)), d);
-					}
-				}
-				tmpIn = new JADESolution(task.eval(tmp), popX[i].CR,
-						popX[i].F);
-				if (task.isFirstBetter(tmpIn, popX[i])) {
-					SCR.add(tmpIn.CR); // save successful parameters
-					SF.add(tmpIn.F);
-					arch_x.add(popX[i]); // save old; good
-					pop_new[i] = tmpIn;
-					updateEliteAndGlobalBest(tmpIn);
-				} else {
-					pop_new[i] = popX[i]; // old is in new population
-				}
-				if (task.isStopCriteria())
-					break;
-			}
-			for (int i = 0; i < pop_size; i++) { // new generation
-				popX[i] = pop_new[i];
-			}
-			// empty archive if it is too big
-			while (arch_x.size() > pop_size)
-				arch_x.remove(Util.rnd.nextInt(arch_x.size())); // arch full
-			// Update parameters
-			if (SCR.size() > 0) {
-				muCR = (1. - c) * muCR + c * (sum(SCR) / SCR.size());
-				muF = (1. - c) * muF + c * (sum2(SF) / sum(SF)); // Lehmer mean
-			} else { // not defined in paper
-				muCR = Util.rnd.nextDouble();
-				if (muCR < 0.1)
-					muCR = 0.1;
-				muF = Util.rnd.nextDouble();
-				if (muF < 0.1)
-					muF = 0.1;
-			}
-			// System.out.println("\nmuCR:" + muCR + " " + " muF:" +muF);
-			task.incrementNumberOfIterations();
-		}
-		return g;
-	}
-
-	private final double sum(ArrayList<Double> a) {
-		double s = 0;
-		for (int i = 0; i < a.size(); i++) {
-			s += a.get(i);
-		}
-		return s;
-	}
-
-	private final double sum2(ArrayList<Double> a) {
-		double s = 0;
-		for (int i = 0; i < a.size(); i++) {
-			s += a.get(i) * a.get(i);
-		}
-		return s;
-	}
-
-	@Override
-	public void resetToDefaultsBeforeNewRun() {
-		// by paper p is in [0.05-0.2]
-		// by paper c is in [0.05-0.2]
-		// by paper pop_size (D < 10) = 30; (D=30) = 100; (D=100) = 400
-	}
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
+        // by paper p is in [0.05-0.2]
+        // by paper c is in [0.05-0.2]
+        // by paper pop_size (D < 10) = 30; (D=30) = 100; (D=100) = 400
+    }
 
 }

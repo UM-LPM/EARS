@@ -3,10 +3,10 @@ package org.um.feri.ears.algorithms.so.aaa;
 import org.um.feri.ears.problems.DoubleSolution;
 
 public class Alga extends DoubleSolution {
-    double colonySize;
-    double colonyStarving;
-    double energy;
-    double friction;
+    private double colonySize;
+    private double colonyStarving;
+    private double energy;
+    private double friction;
 
     public Alga(DoubleSolution solution) {
         super(solution);

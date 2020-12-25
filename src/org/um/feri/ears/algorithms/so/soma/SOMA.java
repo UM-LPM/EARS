@@ -15,17 +15,17 @@ public class SOMA extends Algorithm {
 
     public enum Strategy {ALL_TO_ALL, ALL_TO_ALL_ADAPTIVE, ALL_TO_ONE, ALL_TO_ONE_RANDOM}
 
-    Strategy strategy;
-    DoubleSolution best;
-    int leaderId; //index of the best solution
-    Task task;
+    private Strategy strategy;
+    private DoubleSolution best;
+    private int leaderId; //index of the best solution
+    private Task task;
 
     private int popSize;
     private double step;
     private double pathLength;
     private double prt;
 
-    DoubleSolution[] population;
+    private DoubleSolution[] population;
 
     public SOMA() {
         this(Strategy.ALL_TO_ONE);
@@ -170,7 +170,7 @@ public class SOMA extends Algorithm {
         }
     }
 
-    protected DoubleSolution getBestSolution(ArrayList<DoubleSolution> solutions) {
+    private DoubleSolution getBestSolution(ArrayList<DoubleSolution> solutions) {
         DoubleSolution bestSolution = solutions.get(0);
         for (int i = 1; i < solutions.size(); i++) {
             if (solutions.get(i) == null)

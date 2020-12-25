@@ -28,9 +28,9 @@ public class BenchmarkEEExecute {
     	players.add(new ES1p1sAlgorithm());  
     	players.add(new TLBOAlgorithm());  
     	players.add(new JADELogging());  
-    	players.add(new PSOoriginalLogging());  
+    	players.add(new PSOoriginalLogging());
     	for (int k=1;k<11;k++)
-    		players.add(new DEAlgorithm(k,20)); 
+    		players.add(new DEAlgorithmLogging(k,20));
     	players.add(new RandomWalkAlgorithm());
     	
     	ResultArena ra = new ResultArena(100); 

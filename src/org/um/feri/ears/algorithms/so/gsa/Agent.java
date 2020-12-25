@@ -1,22 +1,22 @@
 package org.um.feri.ears.algorithms.so.gsa;
+
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * Created by Nik Orter on 22. 10. 2016.
  */
-public class Agent extends DoubleSolution{
-    double mass;
-    double []velocities;
-    double []forces;
+public class Agent extends DoubleSolution {
+    private double mass;
+    private double[] velocities;
+    private double[] forces;
 
     int solutionSize;
 
-    public Agent(Task t,int id) throws StopCriteriaException {
+    public Agent(Task t, int id) throws StopCriteriaException {
         super(t.getRandomSolution());
         velocities = new double[t.getNumberOfDimensions()];
         forces = new double[t.getNumberOfDimensions()];
@@ -24,8 +24,7 @@ public class Agent extends DoubleSolution{
 
     }
 
-    public Agent(DoubleSolution ds,Task t)
-    {
+    public Agent(DoubleSolution ds, Task t) {
         super(ds);
         velocities = new double[t.getNumberOfDimensions()];
         //Arrayscopy
@@ -34,11 +33,10 @@ public class Agent extends DoubleSolution{
         //mass
     }
 
-    public Agent(Agent a,Task t)
-    {
+    public Agent(Agent a, Task t) {
         super(a);
-        velocities = Arrays.copyOf(a.getVelocities(),a.getVelocities().length);
-        forces = Arrays.copyOf(a.getForces(),a.getForces().length);
+        velocities = Arrays.copyOf(a.getVelocities(), a.getVelocities().length);
+        forces = Arrays.copyOf(a.getForces(), a.getForces().length);
         solutionSize = t.getNumberOfDimensions();
         mass = a.getMass();
     }
@@ -55,7 +53,7 @@ public class Agent extends DoubleSolution{
         return mass;
     }
 
-    public double getVelocityAtIndex(int index){
+    public double getVelocityAtIndex(int index) {
         return velocities[index];
     }
 
@@ -63,7 +61,7 @@ public class Agent extends DoubleSolution{
         return velocities;
     }
 
-    public void setVelocityAtIndex(int index,double value){
+    public void setVelocityAtIndex(int index, double value) {
         velocities[index] = value;
     }
 
@@ -75,10 +73,9 @@ public class Agent extends DoubleSolution{
         return forces;
     }
 
-    public double getAccelerationOfSolution(int index,double G)
-    {
+    public double getAccelerationOfSolution(int index, double G) {
 
         //return forces[index] /mass;
-        return forces[index]*G;
+        return forces[index] * G;
     }
 }

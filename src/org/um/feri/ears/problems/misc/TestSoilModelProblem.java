@@ -11,7 +11,7 @@ public class TestSoilModelProblem {
     public static void main(String[] args) throws StopCriteriaException {
         Util.rnd.setSeed(System.currentTimeMillis());
 
-        Algorithm algorithm = new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin, 50);
+        Algorithm algorithm = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN, 50);
 
         String[] data = {"TE1", "TE2", "TE3"};
         int run_num = 10;

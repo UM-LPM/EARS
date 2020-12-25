@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 public class ABCSolution extends DoubleSolution{
 	
 	public int trials = 0;
-	double prob;
+	private double prob;
 	
 	public double getProb() {
 		return prob;

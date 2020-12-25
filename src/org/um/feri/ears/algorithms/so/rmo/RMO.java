@@ -11,12 +11,12 @@ import org.um.feri.ears.util.Util;
 public class RMO extends Algorithm
 {
 	//Algorithm parameters
-	int popSize;
-	double C1, C2, k;
-	double[][] X;
-	double[] cp;
-	DoubleSolution cp_s;
-	double[][] V;
+	private int popSize;
+	private double C1, C2, k;
+	private double[][] X;
+	private double[] cp;
+	private DoubleSolution cpS;
+	private double[][] V;
 	
 	public RMO(int popSize, double C1, double C2, double k)
 	{
@@ -67,20 +67,20 @@ public class RMO extends Algorithm
 			if (i == 0)
 			{
 				cp = X[i];
-				cp_s = new DoubleSolution(eval);
+				cpS = new DoubleSolution(eval);
 				
 				//System.out.println(taskProblem.getNumberOfEvaluations()+" "+ cp_s);
 			}
-			else if (taskProblem.isFirstBetter(eval,  cp_s))
+			else if (taskProblem.isFirstBetter(eval, cpS))
 			{
 				cp = X[i];
-				cp_s = new DoubleSolution(eval);
+				cpS = new DoubleSolution(eval);
 				
 			}
 			
 			if (taskProblem.isStopCriteria())
 			{
-				return cp_s;
+				return cpS;
 			}
 			
 		}
@@ -94,8 +94,8 @@ public class RMO extends Algorithm
 			//Calculate W
 			double W = 1.0 - (1.0/taskProblem.getMaxEvaluations()) * taskProblem.getNumberOfEvaluations();
 			//W = 1;
-			double[] currentBest = null;
-			DoubleSolution currentBest_s = null;
+			double[] currentBest = new double[taskProblem.getNumberOfDimensions()];
+			DoubleSolution currentBestS = null;
 			
 			//Calculate velocity vectors and move particles
 			for (int i = 0; i < popSize; ++i)
@@ -115,7 +115,7 @@ public class RMO extends Algorithm
 					if(globalBest_s != null)
 						return globalBest_s;
 					else
-						return currentBest_s;
+						return currentBestS;
 				}
 				eval = taskProblem.eval(X[i]);
 
@@ -123,12 +123,12 @@ public class RMO extends Algorithm
 				//Check if particles is better
 				if (i == 0)
 				{
-					currentBest_s = eval;
+					currentBestS = eval;
 					currentBest = X[i];
 				}
-				else if (taskProblem.isFirstBetter(eval, currentBest_s))
+				else if (taskProblem.isFirstBetter(eval, currentBestS))
 				{
-					currentBest_s = eval;
+					currentBestS = eval;
 					currentBest = X[i];
 				}				
 			}
@@ -141,8 +141,8 @@ public class RMO extends Algorithm
 					cp[j] = cp[j] + C2 * (currentBest[j] - cp[j]);
 				}
 				
-				globalBest =  currentBest.clone();
-				globalBest_s = new DoubleSolution(currentBest_s);
+				globalBest = currentBest.clone();
+				globalBest_s = new DoubleSolution(currentBestS);
 			}
 			else
 			{
@@ -151,10 +151,10 @@ public class RMO extends Algorithm
 					cp[j] = cp[j] + C1 * (globalBest[j] - cp[j]) + C2 * (currentBest[j] - cp[j]);
 				}
 				
-				if (taskProblem.isFirstBetter(currentBest_s, globalBest_s))
+				if (taskProblem.isFirstBetter(currentBestS, globalBest_s))
 				{
 					globalBest = currentBest.clone();
-					globalBest_s = new DoubleSolution(currentBest_s);
+					globalBest_s = new DoubleSolution(currentBestS);
 					
 					//System.out.println(taskProblem.getNumberOfEvaluations()+" "+ globalBest_s);
 				}

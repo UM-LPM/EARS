@@ -11,14 +11,14 @@ import org.um.feri.ears.util.Util;
 
 public class HSA extends Algorithm {
 
-    DoubleSolution best;
-    Task task;
-    int popSize;
+    private DoubleSolution best;
+    private Task task;
+    private int popSize;
     private DoubleSolution[] population;
 
-    double HMCR = 0.99; // harmony Memory Considering Rate
-    double PAR = 0.5; // Pitch Adjusting Rate
-    double BW = 0.5; // Band Width
+    private double HMCR = 0.99; // harmony Memory Considering Rate
+    private double PAR = 0.5; // Pitch Adjusting Rate
+    private double BW = 0.5; // Band Width
 
     public HSA() {
         this(50);
@@ -60,16 +60,16 @@ public class HSA extends Algorithm {
                     newHarmony[i] = task.getLowerLimit(i) + (task.getUpperLimit(i) - task.getLowerLimit(i)) * Util.nextDouble();
                 }
             }
-            if(task.isStopCriteria())
+            if (task.isStopCriteria())
                 break;
 
-            DoubleSolution newSolution =  task.eval(newHarmony);
+            DoubleSolution newSolution = task.eval(newHarmony);
             //updateHarmonyMemory(newScore, newHarmony);
 
             //find worst harmony
             int worstIndex = 0;
-            for(int i = 1; i < popSize; i++) {
-                if(task.isFirstBetter(population[worstIndex], population[i]))
+            for (int i = 1; i < popSize; i++) {
+                if (task.isFirstBetter(population[worstIndex], population[i]))
                     worstIndex = i;
             }
 
@@ -85,7 +85,7 @@ public class HSA extends Algorithm {
         return best;
     }
 
-    double pitchAdjust(double value, int dimension) {
+    private double pitchAdjust(double value, int dimension) {
         double newValue;
         if (Util.nextDouble() < 0.5) {
             newValue = value + Util.nextDouble() * BW;

@@ -15,13 +15,13 @@ import org.um.feri.ears.util.Util;
 
 public class CS extends Algorithm{
 	
-	DoubleSolution best;
+	private DoubleSolution best;
 	
-	int popSize;
-	Task task;
-	double pa = 0.25; //Discovery rate of alien eggs/solutions
+	private int popSize;
+	private Task task;
+	private double pa = 0.25; //Discovery rate of alien eggs/solutions
 
-	ArrayList<DoubleSolution> nest;
+	private ArrayList<DoubleSolution> nest;
 	
 	public CS()
 	{
@@ -88,7 +88,6 @@ public class CS extends Algorithm{
 
 	/**
 	 *  Replace some nests by constructing new solutions/nests
-	 * @throws StopCriteriaException 
 	 */
 	private void emptyNests() throws StopCriteriaException {
 		
@@ -125,7 +124,6 @@ public class CS extends Algorithm{
 
 	/**
 	 * Get cuckoos by random walk
-	 * @throws StopCriteriaException 
 	 */
 	private void getCuckoos() throws StopCriteriaException {
 		

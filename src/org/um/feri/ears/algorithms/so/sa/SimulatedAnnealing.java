@@ -12,19 +12,19 @@ import org.um.feri.ears.util.Util;
 
 public class SimulatedAnnealing extends Algorithm {
 
-    DoubleSolution globalBest, currentBest;
-    Task task;
+    private DoubleSolution globalBest, currentBest;
+    private Task task;
 
-    double mu = 0.5; // mutation Rate
-    double[] sigma;
+    private double mu = 0.5; // mutation Rate
+    private double[] sigma;
 
-    int subIterations = 20;
+    private int subIterations = 20;
 
     // Initial and final temperature
     public static double T = 0.1;
 
     // Temperature Reduction Rate
-    static final double alpha = 0.99;
+    private static final double ALPHA = 0.99;
 
     public SimulatedAnnealing() {
         super();
@@ -77,7 +77,7 @@ public class SimulatedAnnealing extends Algorithm {
                 }
             }
             // Decreases T, cooling phase
-            T *= alpha;
+            T *= ALPHA;
             for (int i = 0; i < task.getNumberOfDimensions(); i++) {
                 sigma[i] *= 0.98;
             }

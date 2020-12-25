@@ -16,18 +16,18 @@ import java.util.List;
 
 public class LSHADE extends Algorithm {
 
-    DoubleSolution best;
-    Task task;
+    private DoubleSolution best;
+    private Task task;
 
     private DoubleSolution[] population;
     private DoubleSolution[] offspringPopulation;
 
-    int popSize;
-    public int arcSize;
-    public double arcRate;
-    public double pBestRate;
-    public int memorySize;
-    public int reductionIndNum;
+    private int popSize;
+    private int arcSize;
+    private double arcRate;
+    private double pBestRate;
+    private int memorySize;
+    private int reductionIndNum;
 
     public LSHADE() {
         arcRate = 2.6;
@@ -140,8 +140,8 @@ public class LSHADE extends Algorithm {
                 pBestInd = sortedArray[Util.nextInt(0, pNum)];
 
                 int r1, r2;
-                double cross_rate = popCr[target];
-                double scaling_factor = popSf[target];
+                double crossRate = popCr[target];
+                double scalingFactor = popSf[target];
                 do {
                     r1 = Util.nextInt(0, popSize);  //Math.round(Configuration.rand.getFloat() % pop_size);
                 } while (r1 == target);
@@ -159,8 +159,8 @@ public class LSHADE extends Algorithm {
                     solution = population[r2];
 
                 for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-                    if ((Util.nextFloat() < cross_rate) || (i == random_variable)) {
-                        offspring[i] = population[target].getValue(i) + scaling_factor * (population[pBestInd].getValue(i) - population[target].getValue(i)) + scaling_factor * (population[r1].getValue(i) - solution.getValue(i));
+                    if ((Util.nextFloat() < crossRate) || (i == random_variable)) {
+                        offspring[i] = population[target].getValue(i) + scalingFactor * (population[pBestInd].getValue(i) - population[target].getValue(i)) + scalingFactor * (population[r1].getValue(i) - solution.getValue(i));
                     } else {
                         offspring[i] = population[target].getValue(i);
                     }
@@ -314,7 +314,7 @@ public class LSHADE extends Algorithm {
         }
     }
 
-    public void reducePopulationWithSort() {
+    private void reducePopulationWithSort() {
         int worst_ind;
 
         for (int i = 0; i < reductionIndNum; i++) {
@@ -329,7 +329,7 @@ public class LSHADE extends Algorithm {
         }
     }
 
-    void modifySolutionWithParentMedium(double[] child, DoubleSolution parent) {
+    private void modifySolutionWithParentMedium(double[] child, DoubleSolution parent) {
         double[] lowerLimit = task.getLowerLimit();
         double[] upperLimit = task.getUpperLimit();
 

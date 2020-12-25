@@ -29,9 +29,9 @@ import org.um.feri.ears.problems.Task;
  * of other parameters is discouraged. 
  * The class CMAParameters processes the
  * strategy parameters, like population size and learning rates, for
- * the class {@link CMAEvolutionStrategy} where the public field <code>parameters</code> of 
+ * the class CMAEvolutionStrategy where the public field <code>parameters</code> of
  * type <code>CMAParameters</code> can
- * be used to set the parameter values. The method {@link #supplementRemainders(int, CMAOptions)}
+ * be used to set the parameter values. The method supplementRemainders
  * supplements those parameters that were not explicitly given, 
  * regarding dependencies
  * (eg, the parent number, mu, cannot be larger than the
@@ -56,8 +56,6 @@ import org.um.feri.ears.problems.Task;
  *  (increased) from its default value via setPopulationSize to improve the 
  *  global search capability, see file CMAExample2.java. It is recommended to use the default 
  *  values first! </P>
- *  
- *  @see CMAEvolutionStrategy#readProperties() 
  */
 public class CMAParameters implements java.io.Serializable { 
 	/**
@@ -68,15 +66,15 @@ public class CMAParameters implements java.io.Serializable {
 	                  // explicitly set from outside, therefore another supplementation is not advisable
 	int locked; // lock when lambda is used to new data structures
 	int lambda;          /* -> mu, <- N */ //population size
-	int mu;              /* -> weights, (lambda) */
-	double mucov;        /* -> ccov */
-	double mueff;        /* <- weights */
-	double[] weights;    /* <- mu, -> mueff, mucov, ccov */
-	double damps;        /* <- cs, maxeval, lambda */
-	double cs;           /* -> damp, <- N */
-	double cc;           /* <- N */
-	double ccov;         /* <- mucov, <- N, <- diagonalcov */
-	double ccovsep;      /* <- ccov */
+	private int mu;              /* -> weights, (lambda) */
+	private double mucov;        /* -> ccov */
+	private double mueff;        /* <- weights */
+	private double[] weights;    /* <- mu, -> mueff, mucov, ccov */
+	private double damps;        /* <- cs, maxeval, lambda */
+	private double cs;           /* -> damp, <- N */
+	private double cc;           /* <- N */
+	private double ccov;         /* <- mucov, <- N, <- diagonalcov */
+	private double ccovsep;      /* <- ccov */
 
 	double chiN;
 
@@ -173,11 +171,7 @@ public class CMAParameters implements java.io.Serializable {
 
 		// check everything
 		String s = check();
-		if (s == null)
-			;
-		else if (s.equals(""))
-			;
-		else
+		if (s != null && !s.equals(""))
 			System.out.println(s); // if any prior setting does not work
 
 	} // supplementRemainders
@@ -220,9 +214,6 @@ public class CMAParameters implements java.io.Serializable {
 	/**
 	 * Setter for offspring population size alias sample size
 	 * alias lambda, use setPopulationSize() for outside use.
-	 * 
-	 * @param lambda  set population size
-	 * @see #setPopulationSize() 
 	 */
 	void setLambda(int lambda) {
 		/*if (locked != 0)
@@ -247,7 +238,7 @@ public class CMAParameters implements java.io.Serializable {
 	}
 	
 	public enum RecombinationType {superlinear, linear, equal};
-	RecombinationType recombinationType = RecombinationType.superlinear; // otherwise null
+	private RecombinationType recombinationType = RecombinationType.superlinear; // otherwise null
 	/**
 	 * Getter for property weights.
 	 * 
@@ -278,9 +269,7 @@ public class CMAParameters implements java.io.Serializable {
 	 * decreasing, or super-linearly decreasing (default). The respective parameter value is 
 	 * The respective parameter value is 
 	 * in enum RecombinationType. 
-	 * For equal recombination weights mu=lambda/4 is appropriate, otherwise mu=lambda/2. 
-	 * @param mu
-	 * @param recombinationType
+	 * For equal recombination weights mu=lambda/4 is appropriate, otherwise mu=lambda/2.
 	 */
 	public void setRecombination(int mu, RecombinationType recombinationType) {
 		/*if (locked != 0)
@@ -310,7 +299,7 @@ public class CMAParameters implements java.io.Serializable {
 	}
 
 	/** normalizes recombination weights vector and sets mueff **/
-	protected void setWeights(double[] weights) {
+	private void setWeights(double[] weights) {
 		assert locked == 0;
 		double sum = 0;
 		for (int i = 0; i < weights.length; ++i)

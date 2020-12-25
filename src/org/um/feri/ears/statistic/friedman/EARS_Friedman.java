@@ -68,12 +68,11 @@ public class EARS_Friedman {
         m.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06)); // RWSi
         //m.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));  // ABC
         m.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));       // TLBO
-        m.addAlgorithm(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin, 20),new Rating(1500, 350, 0.06));  //jDE
         m.addAlgorithm(new ES1p1sAlgorithm(),new Rating(1500, 350, 0.06)); // ES
-        for (int k=1;k<11;k++)
-            m.addAlgorithm(new DEAlgorithm(k,20),new Rating(1500, 350, 0.06));
-        m.run(25);
-        BankOfResults br = m.getBankOfResults();
+		for (DEAlgorithm.Strategy strategy : DEAlgorithm.Strategy.values())
+			m.addAlgorithm(new DEAlgorithm(strategy, 20), new Rating(1500, 350, 0.06));
+		m.run(25);
+		BankOfResults br = m.getBankOfResults();
         FriedmanTransport fr = br.calc4Friedman();
         fr.print();
 

@@ -7,7 +7,7 @@ public class CoralSolution extends DoubleSolution{
 	/**
 	 * The position of the coral on the coral reef
 	 */
-	Coordinate coralPosition;
+	private Coordinate coralPosition;
 
 	public CoralSolution(CoralSolution coralSolution) {
 		super(coralSolution);

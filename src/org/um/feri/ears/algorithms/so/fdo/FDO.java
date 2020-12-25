@@ -8,13 +8,14 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriteriaException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+
 import java.util.ArrayList;
 
 public class FDO extends Algorithm {
 
-    Bee best;
-    Task task;
-    int popSize;
+    private Bee best;
+    private Task task;
+    private int popSize;
     private Bee[] population;
 
     private boolean solutionMustRemainInsideBoundary = true;

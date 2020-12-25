@@ -53,7 +53,7 @@ public class EA_SOP_VisualizationExample {
         task.resetCounter();
         run(new ABC(), task);
         task.resetCounter();
-        run(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin), task);
+        run(new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN), task);
         task.resetCounter();
         run(new FireflyAlgorithm(), task);
 

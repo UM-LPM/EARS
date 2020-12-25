@@ -16,9 +16,9 @@ import static java.util.Arrays.stream;
 
 public class OSSTLBO extends Algorithm {
 
-    DoubleSolution best;
-    Task task;
-    int popSize;
+    private DoubleSolution best;
+    private Task task;
+    private int popSize;
     private DoubleSolution[] population;
 
     private int m = 0;
@@ -74,7 +74,7 @@ public class OSSTLBO extends Algorithm {
         dynamicOppositeLearning();
     }
 
-    void dynamicOppositeLearning() throws StopCriteriaException {
+    private void dynamicOppositeLearning() throws StopCriteriaException {
         for (int i = 0; i < popSize; i++) {
             double[] newX = new double[task.getNumberOfDimensions()];
             for (int n = 0; n < task.getNumberOfDimensions(); n++) {
@@ -86,7 +86,7 @@ public class OSSTLBO extends Algorithm {
                 }
                 newX[n] = XOD;
             }
-            if(task.isStopCriteria())
+            if (task.isStopCriteria())
                 return;
 
             DoubleSolution newSolution = task.eval(newX);
@@ -102,22 +102,22 @@ public class OSSTLBO extends Algorithm {
 
     private void teacherPhase() throws StopCriteriaException {
 
-        for(int i = 0; i < popSize; i++) {
+        for (int i = 0; i < popSize; i++) {
             double[] newX = new double[task.getNumberOfDimensions()];
             double[] means = calculateXMean();
-            for(int j = 0; j < task.getNumberOfDimensions(); j++) {
-                double Tf = Util.nextInt(1,3);
+            for (int j = 0; j < task.getNumberOfDimensions(); j++) {
+                double Tf = Util.nextInt(1, 3);
                 double differenceMean = Util.nextDouble() * (best.getValue(j) - Tf * means[j]);
                 double differenceTeacherStudent = Util.nextDouble() * (best.getValue(j) - population[i].getValue(j));
                 double x = population[i].getValue(j) + differenceMean + differenceTeacherStudent;
 
-                if(!task.isFeasible(x,j)) {
+                if (!task.isFeasible(x, j)) {
                     x = Util.nextDouble(task.getLowerLimit(j), task.getUpperLimit(j));
                 }
                 newX[j] = x;
             }
 
-            if(task.isStopCriteria())
+            if (task.isStopCriteria())
                 return;
 
             DoubleSolution newSolution = task.eval(newX);
@@ -145,7 +145,7 @@ public class OSSTLBO extends Algorithm {
             if (task.isFirstBetter(randomSolution, solution)) {
                 for (int j = 0; j < task.getNumberOfDimensions(); j++) {
                     double x = solution.getValue(j) + Util.nextDouble() * (randomSolution.getValue(j) - (solution.getValue(j)));
-                    if(!task.isFeasible(x,j)) {
+                    if (!task.isFeasible(x, j)) {
                         x = Util.nextDouble(task.getLowerLimit(j), task.getUpperLimit(j));
                     }
                     newX[j] = x;
@@ -153,14 +153,14 @@ public class OSSTLBO extends Algorithm {
             } else {
                 for (int j = 0; j < task.getNumberOfDimensions(); j++) {
                     double x = solution.getValue(j) + Util.nextDouble() * (solution.getValue(j) - (randomSolution.getValue(j)));
-                    if(!task.isFeasible(x,j)) {
+                    if (!task.isFeasible(x, j)) {
                         x = Util.nextDouble(task.getLowerLimit(j), task.getUpperLimit(j));
                     }
                     newX[j] = x;
                 }
             }
 
-            if(task.isStopCriteria())
+            if (task.isStopCriteria())
                 return;
 
             DoubleSolution newSolution = task.eval(newX);
@@ -176,7 +176,7 @@ public class OSSTLBO extends Algorithm {
     }
 
     private void updatePopulation() throws StopCriteriaException {
-        Arrays.sort(population,new TaskComparator(task));
+        Arrays.sort(population, new TaskComparator(task));
         m = m + 1;
 
         if (m == 20) {
@@ -188,8 +188,8 @@ public class OSSTLBO extends Algorithm {
     private double[] calculateXMean() {
         double[] means = new double[task.getNumberOfDimensions()];
 
-        for(DoubleSolution solution : population) {
-            for(int j = 0; j < task.getNumberOfDimensions(); j++) {
+        for (DoubleSolution solution : population) {
+            for (int j = 0; j < task.getNumberOfDimensions(); j++) {
                 means[j] += solution.getValue(j);
             }
         }

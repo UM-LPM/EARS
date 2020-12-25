@@ -34,5 +34,6 @@ public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorith
     }
 
     @Override
-    public void resetToDefaultsBeforeNewRun() {}
+    public void resetToDefaultsBeforeNewRun() {
+    }
 }

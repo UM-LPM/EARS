@@ -23,9 +23,8 @@ public class MainBenchMarkTestBig {
         rbs.addAlgorithm(new RandomWalkAMAlgorithm(), new Rating(1500, 350, 0.06));
         rbs.addAlgorithm(new ES1p1sAlgorithm(), new Rating(1500, 350, 0.06));
         rbs.addAlgorithm(new TLBOAlgorithm(), new Rating(1500, 350, 0.06));
-        for (int k = 1; k < 11; k++)
-            rbs.addAlgorithm(new DEAlgorithm(k, 20), new Rating(1500, 350, 0.06));
-        rbs.addAlgorithm(new DEAlgorithm(DEAlgorithm.JDE_rand_1_bin, 20), new Rating(1500, 350, 0.06));
+        for (DEAlgorithm.Strategy strategy : DEAlgorithm.Strategy.values())
+            rbs.addAlgorithm(new DEAlgorithm(strategy, 20), new Rating(1500, 350, 0.06));
         rbs.run(30);
         System.out.println(rbs);
     }
