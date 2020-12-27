@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -46,12 +46,12 @@ public class AAA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         initPopulation();
         calculateGreatness();
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             calculateEnergy();
             frictionForce();
@@ -81,7 +81,7 @@ public class AAA extends Algorithm {
                     newColony[dim3] = newColony[dim3] + (population[neighbor].getValue(dim3) - newColony[dim3]) * (cutting - population[i].getFriction()) * Math.sin(Math.toRadians(degree2));
                     newColony[dim3] = task.setFeasible(newColony[dim3], dim3);
 
-                    if (task.isStopCriteria())
+                    if (task.isStopCriterion())
                         break;
 
                     Alga newAlga = new Alga(task.eval(newColony));
@@ -225,15 +225,15 @@ public class AAA extends Algorithm {
         }
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new Alga[popSize];
 
-        best = task.getRandomSolution();
+        best = task.getRandomEvaluatedSolution();
         population[0] = new Alga(best);
         for (int i = 1; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            population[i] = new Alga(task.getRandomSolution());
+            population[i] = new Alga(task.getRandomEvaluatedSolution());
             if (task.isFirstBetter(population[i], best)) {
                 best = new DoubleSolution(population[i]);
             }

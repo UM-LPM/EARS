@@ -31,13 +31,13 @@ public class RealWorldCompressionSpringDesign extends Problem {
         normalization_constraints_factor = new Double[numberOfConstraints];
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        // Diameter zice
+        // diameter of the wire
         lowerLimit.set(0, 0.05);
         upperLimit.set(0, 2.00);
-        // Povprecen diameter tuljave
+        // diameter of the spring
         lowerLimit.set(1, 0.25);
         upperLimit.set(1, 1.30);
-        // Stevilo aktivnih tuljav vzmeti
+        // number of active coils
         lowerLimit.set(2, 2.00);
         upperLimit.set(2, 15.0);
     }
@@ -48,7 +48,7 @@ public class RealWorldCompressionSpringDesign extends Problem {
     }
 
     @Override
-    public double[] computeConstraints(double[] x) {
+    public double[] evaluateConstrains(double[] x) {
         double[] g = new double[numberOfConstraints];
         g[0] = 1 - ((Math.pow(x[1], 3) * x[2]) / (71785.0 * Math.pow(x[0], 4)));
         // TODO: Look into it. Velika razhajanja iz constrainta v clanku in definiciji constrainta v http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page5161.htm

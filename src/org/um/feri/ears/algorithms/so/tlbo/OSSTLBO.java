@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -42,12 +42,12 @@ public class OSSTLBO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         initPopulation();
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             teacherPhase();
             learnerPhase();
@@ -58,15 +58,15 @@ public class OSSTLBO extends Algorithm {
         return best;
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new DoubleSolution[popSize];
 
-        best = task.getRandomSolution();
+        best = task.getRandomEvaluatedSolution();
         population[0] = new DoubleSolution(best);
         for (int i = 1; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            population[i] = task.getRandomSolution();
+            population[i] = task.getRandomEvaluatedSolution();
             if (task.isFirstBetter(population[i], best)) {
                 best = new DoubleSolution(population[i]);
             }
@@ -74,7 +74,7 @@ public class OSSTLBO extends Algorithm {
         dynamicOppositeLearning();
     }
 
-    private void dynamicOppositeLearning() throws StopCriteriaException {
+    private void dynamicOppositeLearning() throws StopCriterionException {
         for (int i = 0; i < popSize; i++) {
             double[] newX = new double[task.getNumberOfDimensions()];
             for (int n = 0; n < task.getNumberOfDimensions(); n++) {
@@ -86,7 +86,7 @@ public class OSSTLBO extends Algorithm {
                 }
                 newX[n] = XOD;
             }
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 return;
 
             DoubleSolution newSolution = task.eval(newX);
@@ -100,7 +100,7 @@ public class OSSTLBO extends Algorithm {
         }
     }
 
-    private void teacherPhase() throws StopCriteriaException {
+    private void teacherPhase() throws StopCriterionException {
 
         for (int i = 0; i < popSize; i++) {
             double[] newX = new double[task.getNumberOfDimensions()];
@@ -117,7 +117,7 @@ public class OSSTLBO extends Algorithm {
                 newX[j] = x;
             }
 
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 return;
 
             DoubleSolution newSolution = task.eval(newX);
@@ -132,7 +132,7 @@ public class OSSTLBO extends Algorithm {
         }
     }
 
-    private void learnerPhase() throws StopCriteriaException {
+    private void learnerPhase() throws StopCriterionException {
 
         for (int i = 0; i < popSize; i++) {
             DoubleSolution solution = population[i];
@@ -160,7 +160,7 @@ public class OSSTLBO extends Algorithm {
                 }
             }
 
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 return;
 
             DoubleSolution newSolution = task.eval(newX);
@@ -175,7 +175,7 @@ public class OSSTLBO extends Algorithm {
         }
     }
 
-    private void updatePopulation() throws StopCriteriaException {
+    private void updatePopulation() throws StopCriterionException {
         Arrays.sort(population, new TaskComparator(task));
         m = m + 1;
 

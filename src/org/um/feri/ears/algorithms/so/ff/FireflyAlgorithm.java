@@ -6,7 +6,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -57,7 +57,7 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException { //EARS main evaluation loop
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException { //EARS main evaluation loop
         task = taskProblem;
         ub = task.getUpperLimit();
         lb = task.getLowerLimit();
@@ -66,7 +66,7 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
         initPopulation();
         sortFfa(); // initial sort
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             alpha = alphaNew(alpha, task.getMaxIterations());
             moveFfa();
@@ -86,21 +86,21 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
     public void resetToDefaultsBeforeNewRun() {
     }
 
-    public void initPopulation() throws StopCriteriaException {
+    public void initPopulation() throws StopCriterionException {
         population = new ArrayList<FireflySolution>();
-        FireflySolution firefly = new FireflySolution(task.getRandomSolution());
+        FireflySolution firefly = new FireflySolution(task.getRandomEvaluatedSolution());
         firefly.setAttractiveness(1.0);
         firefly.setIntensity(1.0);
         population.add(firefly);
         best = firefly;
         for (int i = 0; i < popSize - 1; i++) {
-            FireflySolution newFirefly = new FireflySolution(task.getRandomSolution());
+            FireflySolution newFirefly = new FireflySolution(task.getRandomEvaluatedSolution());
             newFirefly.setAttractiveness(1.0);
             newFirefly.setIntensity(1.0);
             population.add(newFirefly);
             if (task.isFirstBetter(newFirefly, best))
                 best = new FireflySolution(newFirefly);
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
         }
     }
@@ -113,16 +113,16 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
     }
 
     //not available in C++ version
-    private void updateEval() throws StopCriteriaException {
+    private void updateEval() throws StopCriterionException {
         for (int i = 0; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
             FireflySolution fa = population.get(i);
             //fa.setIntensity();
             //fa.setAttractiveness();
             //the following invocation does not set newFirefly itself upper and lower limits
-            FireflySolution newFirefly = new FireflySolution(task.eval(fa));
-            population.set(i, newFirefly);
+            task.eval(fa);
+            population.set(i, fa);
         }
 
     }

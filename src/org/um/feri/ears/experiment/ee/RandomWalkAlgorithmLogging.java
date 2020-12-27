@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 /**
@@ -70,15 +70,15 @@ public class RandomWalkAlgorithmLogging extends Algorithm {
 	}
 	
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
 		task = taskProblem;
 		DoubleSolution ii;
-		i = taskProblem.getRandomSolution();
+		i = taskProblem.getRandomEvaluatedSolution();
 		if (debug)
 			System.out.println(taskProblem.getNumberOfEvaluations() + " " + i);
-		while (!taskProblem.isStopCriteria()) {
+		while (!taskProblem.isStopCriterion()) {
 			List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
-			ii = taskProblem.getRandomSolution();
+			ii = taskProblem.getRandomEvaluatedSolution();
 			parents.add(i);
 			taskProblem.addAncestors(ii, parents);
 			if (taskProblem.isFirstBetter(ii, i)) {

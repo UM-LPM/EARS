@@ -49,7 +49,7 @@ dependencies {
 `class MySolution extends DoubleSolution`.
 * Code examples can be found in the package `org.um.feri.ears.examples`.
 * All information of the given problem (dimensions, constraints, bounds, etc...) can be obtaint from the Task object: `public Individual run(Task taskProblem)`.
-* Before every evaluation check if the stopping criterion is reached by calling `taskProblem.isStopCriteria()`. If evaluate is called after the stopping criterion is reached, a `StopCriteriaException will` be thrown.
+* Before every evaluation check if the stopping criterion is reached by calling `taskProblem.isStopCriterion()`. If evaluate is called after the stopping criterion is reached, a `StopCriterionException will` be thrown.
 
 ## Examples
 
@@ -59,7 +59,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorithm
@@ -71,15 +71,15 @@ public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorith
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriteriaException { // method which executes the algorithm
+    public DoubleSolution execute(Task task) throws StopCriterionException { // method which executes the algorithm
         // the task object holds information about the stopping criterion
         // and information about the problem (number of dimensions, number of constraints, upper and lower bounds...)
         DoubleSolution newSolution;
-        best = task.getRandomSolution();  // generate new random solution (number of evaluations is incremented automatically)
+        best = task.getRandomEvaluatedSolution();  // generate new random solution (number of evaluations is incremented automatically)
         // to evaluate a custom solution or an array use task.eval(mySolution)
-        while (!task.isStopCriteria()) { // run until the stopping criterion is not reached
+        while (!task.isStopCriterion()) { // run until the stopping criterion is not reached
 
-            newSolution = task.getRandomSolution();
+            newSolution = task.getRandomEvaluatedSolution();
             if (task.isFirstBetter(newSolution, best)) { // use method isFirstBetter to check which solution is better (it checks constraints and considers the type of the problem (minimization or maximization))
                 best = newSolution;
             }
@@ -109,14 +109,14 @@ public class EA_SOP_VisualizationExample {
 
         Problem problem = new Sphere(5); // problem Sphere with five dimensions
 
-        Task sphere = new Task(EnumStopCriteria.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
+        Task sphere = new Task(EnumStopCriterion.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
 
         Algorithm alg = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN);
         DoubleSolution best;
         try {
             best = alg.execute(sphere);
             System.out.println("Best found solution :" + best); // print the best solution found after 10000 evaluations
-        } catch (StopCriteriaException e) {
+        } catch (StopCriterionException e) {
             e.printStackTrace();
         }
     }

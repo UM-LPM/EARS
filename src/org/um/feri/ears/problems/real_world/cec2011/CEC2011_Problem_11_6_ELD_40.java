@@ -69,7 +69,7 @@ public class CEC2011_Problem_11_6_ELD_40 extends Problem {
     return tt;
   }
 
-  public double[] computeConstraints(double x[]) {
+  public double[] evaluateConstrains(double x[]) {
     g_constrains = new double[numberOfConstraints];
     double Power_Loss = 0;
     double Power_Balance_Penalty = Math.abs(Power_Demand + Power_Loss - sum(x));

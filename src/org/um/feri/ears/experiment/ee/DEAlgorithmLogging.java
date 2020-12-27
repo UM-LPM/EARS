@@ -11,7 +11,7 @@ import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -193,7 +193,7 @@ public class DEAlgorithmLogging extends Algorithm {
         // System.arraycopy(src, srcPos, dest, destPos, length)
     }
 
-    public void init() throws StopCriteriaException {
+    public void init() throws StopCriterionException {
         this.D = task.getNumberOfDimensions();
         inibound_h = task.getUpperLimit();
         inibound_l = task.getLowerLimit();
@@ -204,7 +204,7 @@ public class DEAlgorithmLogging extends Algorithm {
         c = new IndividualSA[NP];
         d = new IndividualSA[NP];
         for (i = 0; i < NP; i++) {
-            c[i] = new IndividualSA(task.getRandomSolution(), Finit, CRinit);
+            c[i] = new IndividualSA(task.getRandomEvaluatedSolution(), Finit, CRinit);
             // System.out.println(i+". "+c[i]);
         }
         
@@ -227,20 +227,20 @@ public class DEAlgorithmLogging extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         this.task = taskProblem;
         init(); // referesh all data
         pold = c; /* old population (generation G) */
         pnew = d; /* new population (generation G+1) */
         // if (strategy == 20) System.out.println("NP="+NP+" Start:"+best);
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             gen++;
             imin = 0;
 
             for (i = 0; i < NP; i++) /* Start of loop through ensemble */
             {
             	List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
                 do /* Pick a random population member */
                 { /* Endless loop for NP < 2 !!! */

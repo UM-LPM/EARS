@@ -17,7 +17,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingRPUOed2;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -78,7 +78,7 @@ public class BenchmarkRunner {
 				DoubleSolution result;
 				try {
 					result = algorithm.execute(t);
-				} catch (StopCriteriaException e) {
+				} catch (StopCriterionException e) {
 					e.printStackTrace();
 					logger.log(Level.SEVERE, e.getMessage());
 					return;

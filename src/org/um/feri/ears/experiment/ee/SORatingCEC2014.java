@@ -53,61 +53,61 @@ public class SORatingCEC2014 {
         	{
         	/*	Problem p = problems[pr];
         		try {
-                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
+                	Task t = new Task(EnumStopCriterion.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
                 	randomLog.execute(t);
         			t.saveAncestorLogging(randomLog.getID()+"_"+p.getName()+"D"+dimm+"R"+run);
-        		} catch (StopCriteriaException e) {
+        		} catch (StopCriterionException e) {
         			e.printStackTrace();
         		}
         		
                 Task.resetLoggingID();
                 try {
-                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
+                	Task t = new Task(EnumStopCriterion.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
                 	hillClimb.execute(t);
         			t.saveAncestorLogging(hillClimb.getID()+"_"+p.getName()+"D"+dimm+"R"+run);
-        		} catch (StopCriteriaException e) {
+        		} catch (StopCriterionException e) {
         			e.printStackTrace();
         		}
         		
               /*  Task.resetLoggingID();
                 try {
-                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
+                	Task t = new Task(EnumStopCriterion.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
                 	jadeLogging.execute(t);
         			t.saveAncestorLogging(jadeLogging.getID()+"_"+p.getName()+"D"+dimm+"R"+run);
-        		} catch (StopCriteriaException e) {
+        		} catch (StopCriterionException e) {
         			e.printStackTrace();
         		}
                 
                 Task.resetLoggingID();
                 try{
-                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
+                	Task t = new Task(EnumStopCriterion.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
                 	deLogging.execute(t);
                 	t.saveAncestorLogging(deLogging.getID().replaceAll("/", "-")+"_"+p.getName()+"D"+dimm+"R"+run);
-                } catch (StopCriteriaException e){
+                } catch (StopCriterionException e){
                 	e.printStackTrace();
                 }
                 Task.resetLoggingID();
 
                 try{
-                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
+                	Task t = new Task(EnumStopCriterion.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
                 	jDElscopLog.execute(t);
                 	t.saveAncestorLogging(jDElscopLog.getID().replaceAll("/", "-")+"_"+p.getName()+"D"+dimm+"R"+run);
-                } catch (StopCriteriaException e){
+                } catch (StopCriterionException e){
                 	e.printStackTrace();
                 }
                 Task.resetLoggingID();
 
                 try{
-                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
+                	Task t = new Task(EnumStopCriterion.EVALUATIONS, 1000*dimm, 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
                 	TLBOLog.execute(t);
                 	t.saveAncestorLogging(TLBOLog.getID().replaceAll("/", "-")+"_"+p.getName()+"D"+dimm+"R"+run);
-                } catch (StopCriteriaException e){
+                } catch (StopCriterionException e){
                 	e.printStackTrace();
                 }*/
                 Task.resetLoggingID();

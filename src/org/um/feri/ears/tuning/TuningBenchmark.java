@@ -49,7 +49,7 @@ import java.util.Vector;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.Ackley1;
@@ -102,8 +102,8 @@ public class TuningBenchmark extends RatingBenchmark{
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations,
-			double epsilon) {
+    protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations,
+                                double epsilon) {
         listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
         String[] optimum = new String[2];
         optimum[0] = p.getName();
@@ -116,14 +116,14 @@ public class TuningBenchmark extends RatingBenchmark{
      */
     @Override
     protected void initFullProblemList() {
-    	registerTask(new Sphere(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);      // f1
-  	    registerTask(new RosenbrockDeJong2(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);  // f2
-  	    registerTask(new Step1(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);        // f3
-    	registerTask(new Schaffer1(),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);    // f4
-    	registerTask(new Rastrigin(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);   // f5
-    	registerTask(new Schwefel226(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);    // f6
-    	registerTask(new Griewank(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);    // f7
-    	registerTask(new Ackley1(dimension),stopCriteria, evaluationsOnDimension, 1000, 500, draw_limit);      // f8
+    	registerTask(new Sphere(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);      // f1
+  	    registerTask(new RosenbrockDeJong2(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);  // f2
+  	    registerTask(new Step1(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);        // f3
+    	registerTask(new Schaffer1(), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);    // f4
+    	registerTask(new Rastrigin(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);   // f5
+    	registerTask(new Schwefel226(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);    // f6
+    	registerTask(new Griewank(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);    // f7
+    	registerTask(new Ackley1(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);      // f8
     }
         
     /* (non-Javadoc)

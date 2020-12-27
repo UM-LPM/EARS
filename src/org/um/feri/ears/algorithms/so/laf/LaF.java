@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -51,7 +51,7 @@ public class LaF extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException { //EARS main evaluation loop
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException { //EARS main evaluation loop
         task = taskProblem;
         DoubleSolution best = null;
         dimension = task.getNumberOfDimensions();
@@ -61,9 +61,9 @@ public class LaF extends Algorithm {
         initPopulation();
         int leaderIndex;
         int followerIndex;
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             for (int i = 0; i < pop_size; i++) {
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
                 leaderIndex = Util.nextInt(pop_size);
                 DoubleSolution leader = leaders.get(leaderIndex);
@@ -87,24 +87,24 @@ public class LaF extends Algorithm {
     public void resetToDefaultsBeforeNewRun() {
     }
 
-    public void initPopulation() throws StopCriteriaException {
+    public void initPopulation() throws StopCriterionException {
         leaders = new ArrayList<DoubleSolution>();
         followers = new ArrayList<DoubleSolution>();
         for (int i = 0; i < pop_size; i++) {
-            DoubleSolution newLeader = new DoubleSolution(task.getRandomSolution());
+            DoubleSolution newLeader = new DoubleSolution(task.getRandomEvaluatedSolution());
             leaders.add(newLeader);
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
         }
         for (int i = 0; i < pop_size; i++) {
-            DoubleSolution newFollower = new DoubleSolution(task.getRandomSolution());
+            DoubleSolution newFollower = new DoubleSolution(task.getRandomEvaluatedSolution());
             followers.add(newFollower);
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
         }
     }
 
-    private DoubleSolution trial(DoubleSolution leader, DoubleSolution follower) throws StopCriteriaException {
+    private DoubleSolution trial(DoubleSolution leader, DoubleSolution follower) throws StopCriterionException {
         double maxStep = 2.0;
         double[] gap = new double[dimension];
         ;

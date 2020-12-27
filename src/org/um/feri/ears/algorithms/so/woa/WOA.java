@@ -5,8 +5,8 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -41,9 +41,9 @@ public class WOA extends Algorithm {
         this(popSize, false);
     }
 
-    public WOA(int pop_size, boolean debug) {
+    public WOA(int popSize, boolean debug) {
         super();
-        this.popSize = pop_size;
+        this.popSize = popSize;
         setDebug(debug);
 
         au = new Author("janez", "janezk7@gmail.com");
@@ -56,11 +56,11 @@ public class WOA extends Algorithm {
                 "  year={2016},\n" +
                 "  publisher={Elsevier}\n" +
                 "}", "WOA", "Whale Optimization Algorithm");
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         initPopulation();
@@ -70,17 +70,17 @@ public class WOA extends Algorithm {
         //bestSolution = population.get(0);
         updateBest();
 
-        if (task.getStopCriteria() == EnumStopCriteria.ITERATIONS) {
+        if (task.getStopCriterion() == EnumStopCriterion.ITERATIONS) {
             maxIt = task.getMaxIterations();
         }
 
-        if (task.getStopCriteria() == EnumStopCriteria.EVALUATIONS) {
+        if (task.getStopCriterion() == EnumStopCriterion.EVALUATIONS) {
             maxIt = task.getMaxEvaluations() / popSize;
         }
 
         if (debug)
             System.out.println("E: " + bestSolution.getEval());
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             a = 2.0 - task.getNumberOfIterations() * (2.0 / maxIt);
             a2 = -1.0 + task.getNumberOfIterations() * ((-1.0) / maxIt);
 
@@ -112,8 +112,8 @@ public class WOA extends Algorithm {
                             // Select random agent and update position of current (Eq. 2.8)
                             int randAgentIndex = Util.nextInt(popSize);
                             DoubleSolution randAgent = population.get(randAgentIndex);
-                            double D_X_rand = Math.abs(C * randAgent.getValue(i) - currentAgent.getValue(i));
-                            newPosition[i] = randAgent.getValue(i) - A * D_X_rand;
+                            double dXRand = Math.abs(C * randAgent.getValue(i) - currentAgent.getValue(i));
+                            newPosition[i] = randAgent.getValue(i) - A * dXRand;
                         } else if (Math.abs(A) < 1) {
                             // Exploitation
                             // Select best agent and Update position of current (Eq. 2.1)
@@ -130,7 +130,7 @@ public class WOA extends Algorithm {
 
                 newPosition = task.setFeasible(newPosition);
 
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
 
                 DoubleSolution newWhale = task.eval(newPosition);
@@ -148,11 +148,11 @@ public class WOA extends Algorithm {
         return bestSolution;
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         for (int i = 0; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            population.add(task.getRandomSolution());
+            population.add(task.getRandomEvaluatedSolution());
         }
     }
 

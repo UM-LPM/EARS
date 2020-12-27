@@ -1,7 +1,5 @@
 package org.um.feri.ears.vaje;
 
-import java.util.concurrent.TimeUnit;
-
 import org.um.feri.ears.algorithms.moo.demo.D_DEMO;
 import org.um.feri.ears.algorithms.moo.gde3.D_GDE3;
 import org.um.feri.ears.algorithms.moo.ibea.D_IBEA;
@@ -15,10 +13,9 @@ import org.um.feri.ears.algorithms.moo.pesa2MOEA.D_PESA2;
 import org.um.feri.ears.algorithms.moo.pso.OMOPSO;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.zdt.ZDT6;
-import org.um.feri.ears.qualityIndicator.InvertedGenerationalDistance;
 
 public class MOProblemTest {
 
@@ -42,7 +39,7 @@ public class MOProblemTest {
     		
     		ZDT6 p = new ZDT6(10);
     		
-    		DoubleMOTask task = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 30000, 5000, 100, 0.0001, p);
+    		DoubleMOTask task = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 30000, 5000, 100, 0.0001, p);
 			ParetoSolution best = moead.execute(task);
 			//best.displayData("MOEA/D", "ZDT");
 			best.printObjectivesToCSVFile("test");

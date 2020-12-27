@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorithm
@@ -16,15 +16,15 @@ public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorith
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriteriaException { // method which executes the algorithm
+    public DoubleSolution execute(Task task) throws StopCriterionException { // method which executes the algorithm
         // the task object holds information about the stopping criterion
         // and information about the problem (number of dimensions, number of constraints, upper and lower bounds...)
         DoubleSolution newSolution;
-        best = task.getRandomSolution();  // generate new random solution (number of evaluations is incremented automatically)
+        best = task.getRandomEvaluatedSolution();  // generate new random solution (number of evaluations is incremented automatically)
         // to evaluate a custom solution or an array use task.eval(mySolution)
-        while (!task.isStopCriteria()) { // run until the stopping criterion is not reached
+        while (!task.isStopCriterion()) { // run until the stopping criterion is not reached
 
-            newSolution = task.getRandomSolution();
+            newSolution = task.getRandomEvaluatedSolution();
             if (task.isFirstBetter(newSolution, best)) { // use method isFirstBetter to check which solution is better (it checks constraints and considers the type of the problem (minimization or maximization))
                 best = newSolution;
             }

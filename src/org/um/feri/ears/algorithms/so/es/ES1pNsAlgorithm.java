@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.es;
 import org.um.feri.ears.algorithms.*;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -54,18 +54,18 @@ public class ES1pNsAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         resetToDefaultsBeforeNewRun(); // usually no need for this call
         task = taskProblem;
         DoubleSolution ii;
-        one = taskProblem.getRandomSolution();
+        one = taskProblem.getRandomEvaluatedSolution();
         DoubleSolution oneTmp;
         int everyK = 0; // recalculate variance
         double succ = 0;
         double[] oneplus;
         if (debug)
             System.out.println(taskProblem.getNumberOfEvaluations() + " start " + one);
-        while (!taskProblem.isStopCriteria()) {
+        while (!taskProblem.isStopCriterion()) {
             everyK++;
             everyK = everyK % k;
             if (everyK == 0) { // 1/5 rule
@@ -86,7 +86,7 @@ public class ES1pNsAlgorithm extends Algorithm {
                     if (debug)
                         System.out.println(taskProblem.getNumberOfEvaluations() + " " + one);
                 }
-                if (task.isStopCriteria()) break;
+                if (task.isStopCriterion()) break;
             }
             task.incrementNumberOfIterations();
         }

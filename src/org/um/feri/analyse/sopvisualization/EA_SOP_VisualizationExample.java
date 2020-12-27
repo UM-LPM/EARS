@@ -40,7 +40,7 @@ public class EA_SOP_VisualizationExample {
             best = alg.execute(task);
             System.out.println("Best found solution :" + best); // print the best solution found after 10000 evaluations
             task.saveAncestorLogging4Visualization(PATH, alg, 1);
-        } catch (StopCriteriaException e) {
+        } catch (StopCriterionException e) {
             e.printStackTrace();
         }
     }
@@ -64,13 +64,13 @@ public class EA_SOP_VisualizationExample {
         Task task;
         Problem problem;
         problem = new Sphere(6); // problem Sphere with five dimensions
-        task = new Task(EnumStopCriteria.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
+        task = new Task(EnumStopCriterion.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
         run4Task(task);
         problem = new Griewank(6);
-        task = new Task(EnumStopCriteria.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
+        task = new Task(EnumStopCriterion.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
         run4Task(task);
         problem = new Schwefel226(6);
-        task = new Task(EnumStopCriteria.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
+        task = new Task(EnumStopCriterion.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
         run4Task(task);
     }
 }

@@ -215,7 +215,7 @@ public class CEC2011_Problem_11_3_ELD_6 extends Problem {
     return tt;
   }
 
-  public double[] computeConstraints(double x[]) {
+  public double[] evaluateConstrains(double x[]) {
     g_constrains = new double[numberOfConstraints];
     double Power_Loss = produkt(produkt2(x, B1), x) + produkt(B2, x) + B3;
     Power_Loss = Math.round(Power_Loss * 10000) / 10000;

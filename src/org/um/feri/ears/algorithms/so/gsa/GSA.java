@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -76,7 +76,7 @@ public class GSA extends Algorithm {
 
 
     @Override
-    public DoubleSolution execute(Task t) throws StopCriteriaException {
+    public DoubleSolution execute(Task t) throws StopCriterionException {
         initPopulation(t);
         int iteration = 1;
         int maxIt = (t.getMaxEvaluations() - popSize) / popSize;  //-initpopulation!
@@ -84,7 +84,7 @@ public class GSA extends Algorithm {
         double G;
         D = t.getNumberOfDimensions();
         GSAIndividual tmpIn;
-        while (!t.isStopCriteria()) {
+        while (!t.isStopCriterion()) {
             G = G0 * Math.exp(-alfa * iteration / maxIt); //%eq. 28. Gconstant;
             if (debug) {
                 System.out.println("Current iteration is " + iteration + "/" + maxIt + " G=" + G);
@@ -108,7 +108,7 @@ public class GSA extends Algorithm {
                         System.out.println("New best: " + g.getEval());
                     }
                 }
-                if (t.isStopCriteria()) break;
+                if (t.isStopCriterion()) break;
             }
             iteration++;
             t.incrementNumberOfIterations();
@@ -265,13 +265,13 @@ M=M./sum(M); %eq. 16.
         }
     }
 
-    private void initPopulation(Task taskProblem) throws StopCriteriaException {
+    private void initPopulation(Task taskProblem) throws StopCriterionException {
         popX = new ArrayList<>();
         for (int i = 0; i < popSize; i++) {
             popX.add(new GSAIndividual(taskProblem));
             if (i == 0) g = popX.get(0);
             else if (taskProblem.isFirstBetter(popX.get(i), g)) g = popX.get(i);
-            if (taskProblem.isStopCriteria()) break;
+            if (taskProblem.isStopCriterion()) break;
         }
     }
 

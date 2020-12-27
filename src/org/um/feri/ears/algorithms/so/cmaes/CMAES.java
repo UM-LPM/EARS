@@ -24,7 +24,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -255,7 +255,7 @@ public class CMAES extends Algorithm {
 	}
 
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
 		
 		task = taskProblem;
 		timings = new Timing();
@@ -278,7 +278,7 @@ public class CMAES extends Algorithm {
 		// initialize cma and get fitness array to fill in later
 		init();
 
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 
 			samplePopulation(); // get a new population of solutions
 			for(int i = 0; i < arx.length; ++i) {    // for each candidate solution i
@@ -289,8 +289,8 @@ public class CMAES extends Algorithm {
 					resampleSingle(i);    //   initialX is feasible and initialStandardDeviations are  
 				//   sufficiently small to prevent quasi-infinite looping here
 				// compute fitness/objective value
-				if(!task.isStopCriteria())
-					arx[i] = task.eval(arx[i]);
+				if(!task.isStopCriterion())
+					task.eval(arx[i]);
 				else
 					return best;
 

@@ -32,13 +32,10 @@ import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.operators.PolynomialMutation;
-import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -91,13 +88,13 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	}
 	
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 		
 		RegionBasedSelection selection = new RegionBasedSelection();
 		
 		// Create the initial individual and evaluate it and his constraints
 		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(solution);
@@ -120,7 +117,7 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				MOSolutionBase<Type>[] parents = selection.select(2, archive);
 				MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
 				mut.execute(offSpring[0], task);
-				if (task.isStopCriteria())
+				if (task.isStopCriterion())
 					break;
 				task.eval(offSpring[0]);
 				// problem.evaluateConstraints(offSpring[0]);
@@ -129,7 +126,7 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 			
 			archive.addAll(population);
 			task.incrementNumberOfIterations();
-		} while (!task.isStopCriteria());
+		} while (!task.isStopCriterion());
 		
 		best = archive;
 	}

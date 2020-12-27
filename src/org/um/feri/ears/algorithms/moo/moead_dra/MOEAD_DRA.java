@@ -19,14 +19,11 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
-import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.InitWeight;
 import org.um.feri.ears.util.Util;
@@ -106,7 +103,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 	}
 
 	@Override
-	protected void init() throws StopCriteriaException {
+	protected void init() throws StopCriterionException {
 		
 		if(optimalParam)
 		{
@@ -172,7 +169,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 	public void resetToDefaultsBeforeNewRun() {
 	}
 
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 		
 		// STEP 2. Update
 		do {
@@ -215,7 +212,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 				// Apply mutation
 				mut.execute(child, task);
 
-				if (task.isStopCriteria())
+				if (task.isStopCriterion())
 				{
 					best = finalSelection(populationSize);
 					return;
@@ -237,7 +234,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 				comp_utility();
 			}
 			task.incrementNumberOfIterations();
-		} while (!task.isStopCriteria());
+		} while (!task.isStopCriterion());
 		System.out.println(gen);
 		
 		best = finalSelection(populationSize);
@@ -335,10 +332,10 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 		}
 	}
 
-	public void initPopulation() throws StopCriteriaException {
+	public void initPopulation() throws StopCriterionException {
 		for (int i = 0; i < populationSize; i++) {
 
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 
@@ -347,10 +344,10 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 		}
 	}
 
-	void initIdealPoint() throws StopCriteriaException {
+	void initIdealPoint() throws StopCriterionException {
 		for (int i = 0; i < num_obj; i++) {
 			z[i] = 1.0e+30;
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			indArray[i] = new MOSolutionBase<Type>(task.getRandomMOSolution());
 		}

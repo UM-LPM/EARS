@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.tlbo;
 import org.um.feri.ears.algorithms.*;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -67,7 +67,7 @@ public class TLBOAlgorithm extends Algorithm {
      * Task)
      */
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         numVar = task.getNumberOfDimensions();
         // max_eval = task.getMaxEvaluations();
@@ -100,13 +100,13 @@ public class TLBOAlgorithm extends Algorithm {
     /**
      * Implemented by code Close to, but not 100% duplicates clear
      */
-    private void clearDups() throws StopCriteriaException {
+    private void clearDups() throws StopCriterionException {
         double[] tmp1 = new double[numVar];
         double[] tmp2 = new double[numVar];
         double[] tmp3;
         for (int i = 0; i < popSize; i++) {
             for (int j = i + 1; j < popSize; j++) {
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     return; // end jump out
                 System.arraycopy(population[i].getDoubleVariables(), 0, tmp1, 0, numVar);
                 System.arraycopy(population[j].getDoubleVariables(), 0, tmp2, 0, numVar);
@@ -119,7 +119,7 @@ public class TLBOAlgorithm extends Algorithm {
                     tmp3 = population[j].getDoubleVariables();
 
                     tmp3[pos] = Util.nextDouble(lowerLimit[pos], upperLimit[pos]);
-                    StopCriteriaException.id = " 3";
+                    StopCriterionException.id = " 3";
                     population[j] = task.eval(tmp3);
 
                 }
@@ -132,19 +132,19 @@ public class TLBOAlgorithm extends Algorithm {
         Arrays.sort(population, s);
     }
 
-    private void init() throws StopCriteriaException {
+    private void init() throws StopCriterionException {
 
         population = new DoubleSolution[popSize];
         lowerLimit = task.getLowerLimit();
         upperLimit = task.getUpperLimit();
-        DoubleSolution best = task.getRandomSolution();
+        DoubleSolution best = task.getRandomEvaluatedSolution();
         population[0] = best;
         for (int i = 1; i < popSize; i++) {
-            population[i] = task.getRandomSolution();
+            population[i] = task.getRandomEvaluatedSolution();
             if (task.isFirstBetter(population[i], best))
                 best = population[i];
 
-            if (task.isStopCriteria()) {
+            if (task.isStopCriterion()) {
                 //set best if global optimum reached or not enough evaluations to init population
                 stat.getCurrent_g().setBest(best);
                 return;
@@ -161,7 +161,7 @@ public class TLBOAlgorithm extends Algorithm {
         keepList = new ArrayList<DoubleSolution>();
     }
 
-    private void aTeacher() throws StopCriteriaException {
+    private void aTeacher() throws StopCriterionException {
         int TF = 1;
         double[] M;
         double[] tmpX;
@@ -174,7 +174,7 @@ public class TLBOAlgorithm extends Algorithm {
         DoubleSolution[] island1 = new DoubleSolution[popSize];
         gen = 0;
         DoubleSolution bestEvalCond = stat.getBest();
-        while (!task.isStopCriteria()) { // generation or evaluations
+        while (!task.isStopCriterion()) { // generation or evaluations
             stat.newGeneration(gen);
             M = mean();
             if (test)
@@ -193,7 +193,7 @@ public class TLBOAlgorithm extends Algorithm {
             if (test)
                 System.out.println("difMean difMean=" + Arrays.toString(difMean));
             for (int i = 0; i < popSize; i++) {
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break; // in loop after incEval
                 tmpX = population[i].getDoubleVariables();
                 for (int n = 0; n < numVar; n++) {
@@ -216,7 +216,7 @@ public class TLBOAlgorithm extends Algorithm {
             int ii = 0;
             int i_first = 0;
             for (; i_first < popSize; i_first++) {
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break; // in loop after incEval
                 ii = Util.rnd.nextInt(popSize);
                 while (i_first == ii)

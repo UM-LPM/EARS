@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -52,12 +52,12 @@ public class JADE extends Algorithm {
             elite.remove(eliteSize);
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         popX = new JADESolution[popSize];
         for (int i = 0; i < popSize; i++) {
-            popX[i] = new JADESolution(task.getRandomSolution(), 0.5, 0.5);
+            popX[i] = new JADESolution(task.getRandomEvaluatedSolution(), 0.5, 0.5);
             updateEliteAndGlobalBest(popX[i]);
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
         }
     }
@@ -94,7 +94,7 @@ public class JADE extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         g = null;
         task = taskProblem;
         elite.clear();
@@ -112,7 +112,7 @@ public class JADE extends Algorithm {
 
         initPopulation();
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             SF.clear();
             SCR.clear();
             for (int i = 0; i < popSize; i++) {
@@ -166,7 +166,7 @@ public class JADE extends Algorithm {
                 } else {
                     popNew[i] = popX[i]; // old is in new population
                 }
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
             }
 			// new generation

@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -43,11 +43,11 @@ public class HSA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         initPopulation();
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             double[] newHarmony = new double[task.getNumberOfDimensions()];
 
             for (int i = 0; i < task.getNumberOfDimensions(); i++) {
@@ -60,7 +60,7 @@ public class HSA extends Algorithm {
                     newHarmony[i] = task.getLowerLimit(i) + (task.getUpperLimit(i) - task.getLowerLimit(i)) * Util.nextDouble();
                 }
             }
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
 
             DoubleSolution newSolution = task.eval(newHarmony);
@@ -95,15 +95,15 @@ public class HSA extends Algorithm {
         return task.setFeasible(newValue, dimension);
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new DoubleSolution[popSize];
 
-        best = task.getRandomSolution();
+        best = task.getRandomEvaluatedSolution();
         population[0] = new DoubleSolution(best);
         for (int i = 1; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            population[i] = task.getRandomSolution();
+            population[i] = task.getRandomEvaluatedSolution();
             if (task.isFirstBetter(population[i], best)) {
                 best = new DoubleSolution(population[i]);
             }

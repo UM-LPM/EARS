@@ -31,16 +31,13 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.operators.PolynomialMutation;
-import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
-import org.um.feri.ears.util.Util;
+
 public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
 	int populationSize;
@@ -92,7 +89,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	}
 	
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 
 	    ParetoSolution<Type> offSpringSolutionSet;
 	    
@@ -101,14 +98,14 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		// Create the initial solutionSet
 		MOSolutionBase<Type> newSolution;
 		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(newSolution);
 			population.add(newSolution);
 		}
 
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 	      ParetoSolution<Type> union = population.union(archive);
 	      calculateFitness(union);
 	      archive = union;
@@ -135,7 +132,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	        //make the crossover
 	        MOSolutionBase<Type> [] offSpring = cross.execute(parents, task);
 	        mut.execute(offSpring[0], task);
-	        if (task.isStopCriteria())
+	        if (task.isStopCriterion())
 				break;
 			task.eval(offSpring[0]);
 	        offSpringSolutionSet.add(offSpring[0]);

@@ -48,7 +48,6 @@ public abstract class MOProblemBase<Type extends Number> extends ProblemBase<Typ
 	/**
 	 * Evaluates a solution
 	 *
-	 * @param variables The solution to evaluate
 	 * @return a double [] with the evaluation results
 	 */
 	abstract public double[] evaluate(Type ds[]);

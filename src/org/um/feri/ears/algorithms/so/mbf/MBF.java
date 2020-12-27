@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -68,7 +68,7 @@ public class MBF extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         ASDP = 0.1 * (task.getUpperLimit()[0] - task.getLowerLimit()[0]);
@@ -83,7 +83,7 @@ public class MBF extends Algorithm {
 
         initPopulation();
         int it;
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             it = task.getNumberOfIterations();
 
@@ -128,7 +128,7 @@ public class MBF extends Algorithm {
                 task.setFeasible(solution);
 
                 //Evaluation
-                if (task.isStopCriteria()) {
+                if (task.isStopCriterion()) {
                     break;
                 }
                 task.eval(solution);
@@ -175,7 +175,7 @@ public class MBF extends Algorithm {
                     task.setFeasible(population.get(ind));
 
                     //Evaluation
-                    if (task.isStopCriteria()) {
+                    if (task.isStopCriterion()) {
                         break;
                     }
 
@@ -312,7 +312,7 @@ public class MBF extends Algorithm {
         return best;
     }
 
-    private void crossover(int i1, int i2, int it) throws StopCriteriaException {
+    private void crossover(int i1, int i2, int it) throws StopCriterionException {
 
         double alpha;
 
@@ -332,7 +332,7 @@ public class MBF extends Algorithm {
 
         }
 
-        if (task.isStopCriteria())
+        if (task.isStopCriterion())
             return;
 
         CichlidsSolution sol1 = new CichlidsSolution(task.eval(y1));
@@ -344,7 +344,7 @@ public class MBF extends Algorithm {
             BestResult[1] = sol1;
         }
 
-        if (task.isStopCriteria())
+        if (task.isStopCriterion())
             return;
 
         CichlidsSolution sol2 = new CichlidsSolution(task.eval(y2));
@@ -357,24 +357,24 @@ public class MBF extends Algorithm {
         }
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new ArrayList<CichlidsSolution>();
         NatureForce = new CichlidsSolution[popSize];
         SharkAttack = new CichlidsSolution[popSize];
         BestResult = new CichlidsSolution[popSize];
 
-        best = task.getRandomSolution();
+        best = task.getRandomEvaluatedSolution();
         population.add(new CichlidsSolution(best));
 
         for (int i = 1; i < popSize; i++) {
-            population.add(new CichlidsSolution(task.getRandomSolution()));
+            population.add(new CichlidsSolution(task.getRandomEvaluatedSolution()));
             population.get(i).movment = new double[task.getNumberOfDimensions()];
 
             if (task.isFirstBetter(population.get(i), best)) {
                 best = new DoubleSolution(population.get(i));
             }
 
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
         }
 

@@ -44,7 +44,7 @@
  */
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
@@ -67,7 +67,7 @@ public class RatingCEC2010 extends RatingBenchmark{
     public RatingCEC2010(double draw_limit) {
         super();
         this.drawLimit = draw_limit;
-        stopCriteria = EnumStopCriteria.EVALUATIONS;
+        stopCriterion = EnumStopCriterion.EVALUATIONS;
         maxEvaluations= 10000; //(int) (1 * 1e6);
         maxIterations = 0; 
         initFullProblemList();
@@ -79,7 +79,7 @@ public class RatingCEC2010 extends RatingBenchmark{
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
     
@@ -89,26 +89,26 @@ public class RatingCEC2010 extends RatingBenchmark{
     @Override
     protected void initFullProblemList() {
     	
-    	registerTask(new F1(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F2(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F3(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F4(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F5(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F6(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F7(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F8(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F9(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F10(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F11(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F12(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F13(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F14(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F15(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F16(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F17(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F18(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F19(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
-    	registerTask(new F20(dimension),stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F1(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F2(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F3(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F4(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F5(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F6(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F7(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F8(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F9(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F10(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F11(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F12(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F13(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F14(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F15(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F16(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F17(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F18(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F19(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
+    	registerTask(new F20(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
     }
         
     /* (non-Javadoc)

@@ -33,16 +33,16 @@ public class RealWorldPressureVesselDesign extends Problem {
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
 
-        // Debelina zunanje lupine
+        // thickness of the vessel
         lowerLimit.set(0, 0.0);
         upperLimit.set(0, 99.0);
-        // Debelina glave
+        // thickness of the head
         lowerLimit.set(1, 0.0);
         upperLimit.set(1, 99.0);
-        // Notranji polmer
+        // internal radius
         lowerLimit.set(2, 10.0);
         upperLimit.set(2, 200.0);
-        // Dolzina cilindricne sekcije brez sfericne glave
+        // length of the cylindrical section of the vessel
         lowerLimit.set(3, 10.0);
         upperLimit.set(3, 200.0);
     }
@@ -56,10 +56,10 @@ public class RealWorldPressureVesselDesign extends Problem {
     }
 
     @Override
-    public double[] computeConstraints(double[] x) {
+    public double[] evaluateConstrains(double[] x) {
         double[] g = new double[numberOfConstraints];
         g[0] = (-1.0 * x[0]) + (0.0193 * x[2]);
-        g[1] = (-1.0 * x[1]) + (0.00954 * x[2]); // Napaka v WOA clanku! ni -x3 ampak -x2!!!
+        g[1] = (-1.0 * x[1]) + (0.00954 * x[2]);
         g[2] = ((-1.0 * Math.PI) * Math.pow(x[2], 2) * x[3])
                 - ((4.0 / 3.0) * Math.PI * Math.pow(x[2], 3))
                 + 1296000;

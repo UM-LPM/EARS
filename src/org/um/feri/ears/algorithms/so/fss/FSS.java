@@ -11,8 +11,8 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.qualityIndicator.MetricsUtil;
 import org.um.feri.ears.util.TaskComparator;
@@ -59,15 +59,15 @@ public class FSS extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             double stepIndividual = 1.0;
 
             //TODO iterations and cpu time
-            if (task.getStopCriteria() == EnumStopCriteria.EVALUATIONS) {
+            if (task.getStopCriterion() == EnumStopCriterion.EVALUATIONS) {
 
                 stepIndividual = FSS.STEP_INDIVIDUAL_INIT - (FSS.STEP_INDIVIDUAL_INIT - FSS.STEP_INDIVIDUAL_FINAL) * ((double) task.getNumberOfEvaluations() / (double) task.getMaxEvaluations());
             }
@@ -90,7 +90,7 @@ public class FSS extends Algorithm {
         return best;
     }
 
-    private int collectivesVolatileOperator(double step_size, double[] school_instinctive) throws StopCriteriaException {
+    private int collectivesVolatileOperator(double step_size, double[] school_instinctive) throws StopCriterionException {
 
         double[] schoolBarycentre = new double[task.getNumberOfDimensions()];
         double[] sumProd = new double[task.getNumberOfDimensions()];
@@ -152,7 +152,7 @@ public class FSS extends Algorithm {
                 newSolution = task.setFeasible(newSolution);
 
                 //evaluate new current solution
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     return countSuccess;
 
                 fish.neighbor = task.eval(newSolution);
@@ -264,7 +264,7 @@ public class FSS extends Algorithm {
         }
     }
 
-    private int individualOperator(double step_size) throws StopCriteriaException {
+    private int individualOperator(double step_size) throws StopCriterionException {
 
         int countSuccess = 0;
         for (FishSolution fish : school) {
@@ -284,7 +284,7 @@ public class FSS extends Algorithm {
             newSolution = task.setFeasible(newSolution);
 
             //evaluate new current solution
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 return countSuccess;
 
 
@@ -314,13 +314,13 @@ public class FSS extends Algorithm {
         return countSuccess;
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         school = new ArrayList<FishSolution>();
 
         for (int i = 0; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            FishSolution newSolution = new FishSolution(task.getRandomSolution());
+            FishSolution newSolution = new FishSolution(task.getRandomEvaluatedSolution());
             school.add(newSolution);
         }
 

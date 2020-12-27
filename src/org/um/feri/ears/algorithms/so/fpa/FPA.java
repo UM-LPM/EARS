@@ -10,7 +10,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -56,7 +56,7 @@ public class FPA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
 
@@ -65,7 +65,7 @@ public class FPA extends Algorithm {
 
         int rand1, rand2;
         double epsilon;
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             for (int i = 0; i < popSize; i++) {
 
@@ -96,7 +96,7 @@ public class FPA extends Algorithm {
                 candidate = task.setFeasible(candidate);
 
                 // Evaluate new solution
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
                 DoubleSolution newSolution = task.eval(candidate);
 
@@ -137,13 +137,13 @@ public class FPA extends Algorithm {
         return step;
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new ArrayList<DoubleSolution>();
 
         for (int i = 0; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            DoubleSolution newSolution = task.getRandomSolution();
+            DoubleSolution newSolution = task.getRandomEvaluatedSolution();
             population.add(newSolution);
         }
 

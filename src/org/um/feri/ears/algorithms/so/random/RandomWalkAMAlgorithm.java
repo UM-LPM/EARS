@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 /**
@@ -80,21 +80,21 @@ public class RandomWalkAMAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         DoubleSolution currentSolution, iAritmetic, iExtend;
         task = taskProblem;
-        bestSolution = taskProblem.getRandomSolution();
+        bestSolution = taskProblem.getRandomEvaluatedSolution();
         if (debug)
             System.out.println(taskProblem.getNumberOfEvaluations() + " " + bestSolution);
-        while (!taskProblem.isStopCriteria()) {
-            currentSolution = taskProblem.getRandomSolution();
+        while (!taskProblem.isStopCriterion()) {
+            currentSolution = taskProblem.getRandomEvaluatedSolution();
             if (taskProblem.isFirstBetter(currentSolution, bestSolution)) {
-                if (!taskProblem.isStopCriteria()) { // try also arithmetic mean
+                if (!taskProblem.isStopCriterion()) { // try also arithmetic mean
                     iAritmetic = taskProblem.eval(xArithmeticMeanOf(bestSolution.getDoubleVariables(), currentSolution.getDoubleVariables()));
                     if (taskProblem.isFirstBetter(iAritmetic, currentSolution)) {
                         currentSolution = iAritmetic; // even better
                     } else {
-                        if (!taskProblem.isStopCriteria()) { // try also extend
+                        if (!taskProblem.isStopCriterion()) { // try also extend
                             iExtend = taskProblem.eval(xInSameDirection(bestSolution.getDoubleVariables(), currentSolution.getDoubleVariables()));
                             if (taskProblem.isFirstBetter(iExtend, currentSolution)) {
                                 currentSolution = iExtend; // even better

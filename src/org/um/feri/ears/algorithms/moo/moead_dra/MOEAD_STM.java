@@ -19,11 +19,9 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.operators.CrossoverOperator;
-import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
@@ -53,7 +51,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 	
 
 	@Override
-	protected void init() throws StopCriteriaException {
+	protected void init() throws StopCriterionException {
 		super.init();
 		
 		offspringPopulation = new ParetoSolution<Type>(populationSize);
@@ -64,7 +62,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 	}
 
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 		
 		// STEP 2. Update
 		do {
@@ -107,7 +105,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 				// Apply mutation
 				mut.execute(child, task);
 
-				if (task.isStopCriteria())
+				if (task.isStopCriterion())
 				{
 					best = finalSelection(populationSize);
 					return;
@@ -141,7 +139,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 				comp_utility();
 			}*/
 			task.incrementNumberOfIterations();
-		} while (!task.isStopCriteria());
+		} while (!task.isStopCriterion());
 		//System.out.println(gen);
 		best = finalSelection(populationSize);
 	}

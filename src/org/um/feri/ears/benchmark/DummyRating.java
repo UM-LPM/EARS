@@ -46,7 +46,7 @@ package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.DummyProblem;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 
@@ -79,7 +79,7 @@ public class DummyRating extends RatingBenchmark{
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time,int maxIterations, double epsilon) {
+    protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
     
@@ -88,115 +88,115 @@ public class DummyRating extends RatingBenchmark{
      */
     
     public void addDummyTask(String name){
-    	registerTask(new DummyProblem(name),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem(name), stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
     }
     
     @Override
     protected void initFullProblemList() {
     	
     	
-    	/*registerTask(new DummyProblem("i3_te1"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("i3_te2"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("i3_te3"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);*/
+    	/*registerTask(new DummyProblem("i3_te1"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("i3_te2"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("i3_te3"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);*/
     	
-    	/*registerTask(new DummyProblem("f1"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f2"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f3"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f4"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f5"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f6"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f7"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f8"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f9"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f10"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f11"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f12"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f13"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f14"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f15"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f16"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f17"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f18"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f19"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f20"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f21"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("f22"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);*/
+    	/*registerTask(new DummyProblem("f1"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f2"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f3"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f4"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f5"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f6"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f7"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f8"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f9"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f10"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f11"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f12"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f13"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f14"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f15"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f16"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f17"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f18"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f19"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f20"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f21"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("f22"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);*/
     	
     	//Grouped by method
     	/*
-    	registerTask(new DummyProblem("en300_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("1HZ_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("50HZ_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("300HZ_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("750HZ_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("9s20_c1"),stopCriteria, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("en300_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("1HZ_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("50HZ_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("300HZ_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("750HZ_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("9s20_c1"),stopCriterion, evaluationsOnDimension, 0.001);
     	
-    	registerTask(new DummyProblem("en300_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("1HZ_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("50HZ_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("300HZ_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("750HZ_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("9s20_c2"),stopCriteria, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("en300_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("1HZ_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("50HZ_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("300HZ_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("750HZ_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("9s20_c2"),stopCriterion, evaluationsOnDimension, 0.001);
     	
-    	registerTask(new DummyProblem("en300_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("1HZ_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("50HZ_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("300HZ_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("750HZ_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("9s20_c3"),stopCriteria, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("en300_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("1HZ_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("50HZ_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("300HZ_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("750HZ_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("9s20_c3"),stopCriterion, evaluationsOnDimension, 0.001);
     	
-    	registerTask(new DummyProblem("en300_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("1HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("50HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("300HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("750HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("9s20_c4"),stopCriteria, evaluationsOnDimension, 0.001);*/
+    	registerTask(new DummyProblem("en300_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("1HZ_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("50HZ_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("300HZ_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("750HZ_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("9s20_c4"),stopCriterion, evaluationsOnDimension, 0.001);*/
     	/*
-    	registerTask(new DummyProblem("en300_c5"),stopCriteria,  maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("1HZ_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("50HZ_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("300HZ_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("750HZ_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);
-    	registerTask(new DummyProblem("9s20_c5"),stopCriteria, maxEvaluations, 0, maxIterations, 0.001);*/
+    	registerTask(new DummyProblem("en300_c5"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("1HZ_c5"),stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("50HZ_c5"),stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("300HZ_c5"),stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("750HZ_c5"),stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+    	registerTask(new DummyProblem("9s20_c5"),stopCriterion, maxEvaluations, 0, maxIterations, 0.001);*/
     	
     	
     	// Grouped by material
     	/*
-    	registerTask(new DummyProblem("en300_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("en300_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("en300_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("en300_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("en300_c5"),stopCriteria, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("en300_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("en300_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("en300_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("en300_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("en300_c5"),stopCriterion, evaluationsOnDimension, 0.001);
     	
-    	registerTask(new DummyProblem("1HZ_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("1HZ_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("1HZ_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("1HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("1HZ_c5"),stopCriteria, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("1HZ_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("1HZ_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("1HZ_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("1HZ_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("1HZ_c5"),stopCriterion, evaluationsOnDimension, 0.001);
     	
-    	registerTask(new DummyProblem("50HZ_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("50HZ_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("50HZ_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("50HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("50HZ_c5"),stopCriteria, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("50HZ_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("50HZ_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("50HZ_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("50HZ_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("50HZ_c5"),stopCriterion, evaluationsOnDimension, 0.001);
     	
-    	registerTask(new DummyProblem("300HZ_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("300HZ_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("300HZ_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("300HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("300HZ_c5"),stopCriteria, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("300HZ_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("300HZ_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("300HZ_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("300HZ_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("300HZ_c5"),stopCriterion, evaluationsOnDimension, 0.001);
     	
-    	registerTask(new DummyProblem("750HZ_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("750HZ_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("750HZ_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("750HZ_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("750HZ_c5"),stopCriteria, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("750HZ_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("750HZ_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("750HZ_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("750HZ_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("750HZ_c5"),stopCriterion, evaluationsOnDimension, 0.001);
     	
-    	registerTask(new DummyProblem("9s20_c1"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("9s20_c2"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("9s20_c3"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("9s20_c4"),stopCriteria, evaluationsOnDimension, 0.001);
-    	registerTask(new DummyProblem("9s20_c5"),stopCriteria, evaluationsOnDimension, 0.001);*/
+    	registerTask(new DummyProblem("9s20_c1"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("9s20_c2"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("9s20_c3"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("9s20_c4"),stopCriterion, evaluationsOnDimension, 0.001);
+    	registerTask(new DummyProblem("9s20_c5"),stopCriterion, evaluationsOnDimension, 0.001);*/
     }
         
     /* (non-Javadoc)

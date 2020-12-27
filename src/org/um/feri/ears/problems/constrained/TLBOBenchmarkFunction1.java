@@ -96,7 +96,7 @@ public class TLBOBenchmarkFunction1 extends Problem {
 	}
 
 	
-	public double[] computeConstraints(double x[]) {
+	public double[] evaluateConstrains(double x[]) {
 
 		double[] g = new double[numberOfConstraints];
 		g[0] = 2.0 * x[0] + 2.0 * x[1] + x[9] + x[10] - 10.;

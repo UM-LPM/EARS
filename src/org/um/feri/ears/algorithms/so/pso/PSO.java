@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -41,12 +41,12 @@ public class PSO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
         //double rp, rg;
         double[] v;
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             for (int i = 0; i < popSize; i++) {
                 //rp = Util.rnd.nextDouble(); better to use vector of real numbers
                 //rg = Util.rnd.nextDouble();
@@ -62,20 +62,20 @@ public class PSO extends Algorithm {
                 }
                 population.set(i, population.get(i).update(taskProblem, v));
                 if (task.isFirstBetter(population.get(i), g)) g = population.get(i);
-                if (task.isStopCriteria()) break;
+                if (task.isStopCriterion()) break;
             }
             task.incrementNumberOfIterations();
         }
         return g;
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new ArrayList<>();
         for (int i = 0; i < popSize; i++) {
             population.add(new MyPSOSolution(task));
             if (i == 0) g = population.get(0);
             else if (task.isFirstBetter(population.get(i), g)) g = population.get(i);
-            if (task.isStopCriteria()) break;
+            if (task.isStopCriterion()) break;
         }
     }
 

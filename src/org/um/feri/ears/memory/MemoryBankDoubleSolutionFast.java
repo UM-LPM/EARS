@@ -3,8 +3,7 @@ package org.um.feri.ears.memory;
 import java.util.HashMap;
 
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.util.report.Pair;
 import org.um.feri.ears.util.report.ReportBank;
 
@@ -75,7 +74,7 @@ public class MemoryBankDoubleSolutionFast {
   }
 
   
-  public DoubleSolution getRandomSolution(TaskWithMemory task) throws StopCriteriaException {
+  public DoubleSolution getRandomSolution(TaskWithMemory task) throws StopCriterionException {
     double[] d = task.getRandomVariables();
     return eval(task, d);
   }
@@ -87,7 +86,7 @@ public class MemoryBankDoubleSolutionFast {
    * }
    */
 
-  public DoubleSolution eval(TaskWithMemory task, double x[]) throws StopCriteriaException {
+  public DoubleSolution eval(TaskWithMemory task, double x[]) throws StopCriterionException {
     round(x);
     DoubleSolution ds;
     Long key = fastKeyNot100Unique(x);
@@ -127,7 +126,7 @@ public class MemoryBankDoubleSolutionFast {
         ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConverganceGraph.getEval()));
         ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));
       }
-      if (task.isStopCriteria()) { // TODO be careful clear here or in main?
+      if (task.isStopCriterion()) { // TODO be careful clear here or in main?
         clearMemory();
       }
       return ds;
@@ -143,7 +142,7 @@ public class MemoryBankDoubleSolutionFast {
       ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));
     }
     hashMapMemory.put(key, ds);
-    if (task.isStopCriteria())
+    if (task.isStopCriterion())
       clearMemory();
     return ds;
   }

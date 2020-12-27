@@ -29,11 +29,9 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.DominanceComparator;
 import org.um.feri.ears.util.NonDominatedSolutionList;
 import org.um.feri.ears.util.Util;
@@ -217,7 +215,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 	}
 	
 	@Override
-	protected void init() throws StopCriteriaException {
+	protected void init() throws StopCriterionException {
 
 		if(optimalParam)
 		{
@@ -273,7 +271,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 		// Create the initial population
 		MOSolutionBase<Double> newSolution;
 		for (int i = 0; i < swarmSize; i++) {
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			newSolution = new MOSolutionBase<Double>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(newSolution);
@@ -289,10 +287,10 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 	}
 	
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 
 		// Generations
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 			
 			updateVelocity(swarm);
 			updatePosition(swarm);
@@ -300,7 +298,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 			
 			for(MOSolutionBase<Double> s : swarm)
 			{
-				if (task.isStopCriteria())
+				if (task.isStopCriterion())
 					break;
 				task.eval(s);
 			}

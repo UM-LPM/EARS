@@ -33,15 +33,13 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.DifferentialEvolutionSelection;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
-import org.um.feri.ears.util.Util;
 
 public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
@@ -89,7 +87,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	}
 	
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 		
 		distance = new Distance<Type>();
 		dominance = new DominanceComparator<Type>();
@@ -99,14 +97,14 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		// Create the initial solutionSet
 		MOSolutionBase<Type> newSolution;
 		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(newSolution);
 			population.add(newSolution);
 		}
 
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
             // Create the offSpring solutionSet (empty)      
             //offspringPopulation  = new SolutionSet(populationSize*2);        
 
@@ -130,7 +128,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				cross.setCurrentSolution(population.get(i));
 				child = cross.execute(parents, task)[0];
 
-				if (task.isStopCriteria())
+				if (task.isStopCriterion())
 					break;
 				task.eval(child);
 

@@ -47,7 +47,7 @@ package org.um.feri.ears.benchmark;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.cec2015.F1;
@@ -83,9 +83,9 @@ public class RatingCEC2015 extends RatingBenchmark{
         dimension=30;
         timeLimit = 2500;
         maxIterations = 2500;
-        stopCriteria = EnumStopCriteria.EVALUATIONS;
+        stopCriterion = EnumStopCriterion.EVALUATIONS;
         initFullProblemList();
-        /*addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+stopCriteria);
+        /*addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+stopCriterion);
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,""+dimension);
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+drawLimit);*/
@@ -94,7 +94,7 @@ public class RatingCEC2015 extends RatingBenchmark{
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
     
@@ -129,21 +129,21 @@ public class RatingCEC2015 extends RatingBenchmark{
     	
     	for(Problem p : problems)
     	{
-    		/*if(stopCriteria == EnumStopCriteria.CPU_TIME && calculateTime)
+    		/*if(stopCriterion == EnumStopCriterion.CPU_TIME && calculateTime)
     		{
     			System.out.println("Calculating time for problem: "+p.getName());
     			timeLimit = calculateTime(p);
     		}*/
     		
-    		if(stopCriteria == EnumStopCriteria.CPU_TIME)
+    		if(stopCriterion == EnumStopCriterion.CPU_TIME)
     		{
     			for(int i = 0; i < warmupIterations; i++)
     			{
-    				p.getRandomSolution();
+    				p.getRandomEvaluatedSolution();
     			}
     		}
     		
-    		registerTask(p, stopCriteria, maxEvaluations, timeLimit, maxIterations, optimumEpsilon);
+    		registerTask(p, stopCriterion, maxEvaluations, timeLimit, maxIterations, optimumEpsilon);
     	}
     }
         
@@ -153,7 +153,7 @@ public class RatingCEC2015 extends RatingBenchmark{
 		long duration;
 		for(int i = 0; i < maxEvaluations; i++)
 		{
-			p.getRandomSolution();
+			p.getRandomEvaluatedSolution();
 		}
 		duration = System.nanoTime() - start;
 		// add algorithm runtime

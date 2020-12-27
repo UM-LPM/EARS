@@ -9,7 +9,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.algorithms.so.jDElscop.*;
@@ -34,16 +34,16 @@ public class jDElscopLogging extends Algorithm {
 	jDElscopSolution g; // global best
 	Task task; // set it in run
 
-	private void initPopulation() throws StopCriteriaException {
+	private void initPopulation() throws StopCriterionException {
 		pop_x = new jDElscopSolution[pop_size];
 		for (int i = 0; i < pop_size; i++) {
 			pop_x[i] = jDElscopSolution.setInitState(task
-					.getRandomSolution());
+					.getRandomEvaluatedSolution());
 			if (i == 0)
 				g = pop_x[0];
 			else if (task.isFirstBetter(pop_x[i], g))
 				g = pop_x[i];
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				break;
 		}
 	}
@@ -69,7 +69,7 @@ public class jDElscopLogging extends Algorithm {
 	}
 
 	@Override
-	public DoubleSolution execute(Task task) throws StopCriteriaException {
+	public DoubleSolution execute(Task task) throws StopCriterionException {
 		this.task = task; // used in functions
 		initPopulation();
 		// int iteration=0;
@@ -88,7 +88,7 @@ public class jDElscopLogging extends Algorithm {
 		int odmik;
 		int D = task.getNumberOfDimensions();
 		jDElscopSolution pop_tmp[] = new jDElscopSolution[pop_size];
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 			// iteration++;
 			for (int i = 0; i < pop_size; i++) {
 				List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
@@ -212,7 +212,7 @@ public class jDElscopLogging extends Algorithm {
 						}
 					}
 				}
-				if (task.isStopCriteria())
+				if (task.isStopCriterion())
 					break;
 			}
 			/*

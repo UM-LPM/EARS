@@ -5,18 +5,13 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collector.Characteristics;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.algorithms.moo.moead.MOEAD;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
-import org.um.feri.ears.problems.TaskBase;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.FutureResult;
 import org.um.feri.ears.util.ParetoSolutionCache;
@@ -161,7 +156,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 	}
 
 	@Override
-	public ParetoSolution<Type> execute(T taskProblem) throws StopCriteriaException
+	public ParetoSolution<Type> execute(T taskProblem) throws StopCriterionException
 	{
 		task = taskProblem;
 		num_var = task.getNumberOfDimensions();
@@ -215,7 +210,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 		return best;
 	}
 
-	protected abstract void init() throws StopCriteriaException;
-	protected abstract void start() throws StopCriteriaException;
+	protected abstract void init() throws StopCriterionException;
+	protected abstract void start() throws StopCriterionException;
 
 }

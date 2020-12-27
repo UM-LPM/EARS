@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -47,7 +47,7 @@ public class BFO extends Algorithm {
         au = new Author("Monika Bozhinova", "N/A"); //EARS author info
     }
 
-    private void initSwarm(Task task) throws StopCriteriaException {
+    private void initSwarm(Task task) throws StopCriterionException {
         swarm.clear();
         best = null;
         for (int i = 0; i < S; i++) {
@@ -58,11 +58,11 @@ public class BFO extends Algorithm {
                 //System.out.println(task.getNumberOfEvaluations() + " " + best);
             }
             swarm.add(tmp);
-            if (task.isStopCriteria()) break;
+            if (task.isStopCriterion()) break;
         }
     }
 
-    private Bacteria chemotaxis(Bacteria b, Task task) throws StopCriteriaException {
+    private Bacteria chemotaxis(Bacteria b, Task task) throws StopCriterionException {
         double[] di = new double[task.getNumberOfDimensions()];
         double[] cb = b.getDoubleVariables();
         double[] xn = new double[task.getNumberOfDimensions()];
@@ -75,7 +75,7 @@ public class BFO extends Algorithm {
             xn[i] = task.setFeasible(cb[i] + b.c * (di[i] / Math.sqrt(rootProduct)), i);
         }
         Bacteria bx = new Bacteria(task.eval(xn), b);
-        if (task.isStopCriteria()) return bx;
+        if (task.isStopCriterion()) return bx;
 
         if (task.isFirstBetter(bx, best)) {
             best = bx;
@@ -97,7 +97,7 @@ public class BFO extends Algorithm {
                         best = bx;
                         //System.out.println(task.getNumberOfEvaluations() + " " + best);
                     }
-                    if (task.isStopCriteria()) break;
+                    if (task.isStopCriterion()) break;
                 } else break; //m = Ns;
 
             }
@@ -105,7 +105,7 @@ public class BFO extends Algorithm {
         return bx;
     }
 
-    private void reproduction() throws StopCriteriaException {
+    private void reproduction() throws StopCriterionException {
         Collections.sort(swarm);
         for (int i = 0; i < Sr; i++)
             swarm.get(i).c = getAvgDistance(swarm.get(i).getDoubleVariables(), swarm.get(i + 1).getDoubleVariables());
@@ -122,7 +122,7 @@ public class BFO extends Algorithm {
         return sum / x.length;
     }
 
-    private Bacteria eliminationAndDispersal(Bacteria b, Task task, int i) throws StopCriteriaException {
+    private Bacteria eliminationAndDispersal(Bacteria b, Task task, int i) throws StopCriterionException {
         double prob = Util.nextDouble();
         if (prob < Ped) {
             Bacteria bx = new Bacteria(task, Ci);
@@ -136,11 +136,11 @@ public class BFO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriteriaException {
+    public DoubleSolution execute(Task task) throws StopCriterionException {
         Ci = getAvgDistance(task.getUpperLimit(), task.getLowerLimit()) / 5;
 
         initSwarm(task);
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             for (int l = 0; l < Ned; l++) {
                 for (int k = 0; k < Nre; k++) {
                     for (int j = 0; j < Nc; j++) {
@@ -148,16 +148,16 @@ public class BFO extends Algorithm {
                             swarm.get(i).health = 0;
                             tmp = chemotaxis(swarm.get(i), task);
                             if (task.isFirstBetter(tmp, swarm.get(i))) swarm.set(i, tmp);
-                            if (task.isStopCriteria()) return best;
+                            if (task.isStopCriterion()) return best;
                         }
                     }
                     reproduction();
-                    if (task.isStopCriteria()) return best;
+                    if (task.isStopCriterion()) return best;
                 }
                 for (int i = 0; i < S; i++) {
                     tmp = eliminationAndDispersal(swarm.get(i), task, i);
                     if (tmp != null) swarm.set(i, tmp);
-                    if (task.isStopCriteria()) return best;
+                    if (task.isStopCriterion()) return best;
                 }
             }
             task.incrementNumberOfIterations();

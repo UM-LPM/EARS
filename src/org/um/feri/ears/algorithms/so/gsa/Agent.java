@@ -1,7 +1,7 @@
 package org.um.feri.ears.algorithms.so.gsa;
 
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 import java.util.Arrays;
@@ -16,8 +16,8 @@ public class Agent extends DoubleSolution {
 
     int solutionSize;
 
-    public Agent(Task t, int id) throws StopCriteriaException {
-        super(t.getRandomSolution());
+    public Agent(Task t, int id) throws StopCriterionException {
+        super(t.getRandomEvaluatedSolution());
         velocities = new double[t.getNumberOfDimensions()];
         forces = new double[t.getNumberOfDimensions()];
         solutionSize = t.getNumberOfDimensions();

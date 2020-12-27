@@ -5,8 +5,8 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 
@@ -45,18 +45,18 @@ public class MFO extends Algorithm {
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new ArrayList<DoubleSolution>();
 
         for (int i = 0; i < popSize; i++) {
-            population.add(task.getRandomSolution());
-            if (task.isStopCriteria())
+            population.add(task.getRandomEvaluatedSolution());
+            if (task.isStopCriterion())
                 break;
         }
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
 
         initPopulation();
 
@@ -65,15 +65,15 @@ public class MFO extends Algorithm {
         bestFlame = new DoubleSolution(population.get(0));
 
         int maxIt = 10000;
-        if (task.getStopCriteria() == EnumStopCriteria.ITERATIONS) {
+        if (task.getStopCriterion() == EnumStopCriterion.ITERATIONS) {
             maxIt = task.getMaxIterations();
         }
 
-        if (task.getStopCriteria() == EnumStopCriteria.EVALUATIONS) {
+        if (task.getStopCriterion() == EnumStopCriterion.EVALUATIONS) {
             maxIt = task.getMaxEvaluations() / popSize;
         }
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             flameNum = Math.round(popSize - task.getNumberOfIterations() * ((popSize - 1) / maxIt));
 
             task.incrementNumberOfIterations();

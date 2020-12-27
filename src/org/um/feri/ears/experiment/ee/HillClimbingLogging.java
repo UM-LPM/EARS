@@ -7,9 +7,8 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 public class HillClimbingLogging extends Algorithm {
@@ -29,16 +28,16 @@ public class HillClimbingLogging extends Algorithm {
     	System.out.println(eval+";"+s.getEval()+" "+Arrays.toString(s.getDoubleVariables())+a);
     }
 	@Override
-	public DoubleSolution execute(Task task) throws StopCriteriaException {
-		DoubleSolution bestGlobal = task.getRandomSolution();
+	public DoubleSolution execute(Task task) throws StopCriterionException {
+		DoubleSolution bestGlobal = task.getRandomEvaluatedSolution();
 		DoubleSolution best = new DoubleSolution(bestGlobal); //clone
 		DoubleSolution tmpSolution;
 		double interval[] = task.getInterval();
 		ArrayList<DoubleSolution> list = new ArrayList<>();
 		double tmp[],  x[], bst[] ;
 		boolean better=false;
-		while (!task.isStopCriteria()) {
-			while (!task.isStopCriteria()) { //is improvement
+		while (!task.isStopCriterion()) {
+			while (!task.isStopCriterion()) { //is improvement
 				list.clear();
 				bst = best.getDoubleVariables();
 				better=false;
@@ -60,7 +59,7 @@ public class HillClimbingLogging extends Algorithm {
 					parents.clear();
 					parents.add(bestGlobal);
 					parents.add(best);
-					if (task.isStopCriteria()) break;
+					if (task.isStopCriterion()) break;
 					x[i]-=interval[i]*dxProcent;
 					tmpSolution = task.eval(x, parents);
 					if (task.isFirstBetter(tmpSolution, best)) {
@@ -68,15 +67,15 @@ public class HillClimbingLogging extends Algorithm {
 						//print(task.getNumberOfEvaluations(),best,i+"");
 						 better=true;
 					}
-					if (task.isStopCriteria()) break;
+					if (task.isStopCriterion()) break;
 				}
 				if (!better) break;
 			}
 			if (task.isFirstBetter(best,bestGlobal)) {
 				bestGlobal = best;
 			}
-			if (task.isStopCriteria()) break;
-			best = task.getRandomSolution();	
+			if (task.isStopCriterion()) break;
+			best = task.getRandomEvaluatedSolution();
 			System.out.println("New start");
 		}
 		return bestGlobal;

@@ -7,7 +7,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -54,14 +54,14 @@ public class BA extends Algorithm{
 	}
 
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
 		
 		task = taskProblem;
 		initPopulation();
 		
 		double[] S = new double[task.getNumberOfDimensions()];
 
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 
 			for (int i = 0; i < popSize; i++) {
 				//Generate new solutions by adjusting frequency, and updating velocities and locations/solutions [Eq.(2) to(4)]
@@ -84,7 +84,7 @@ public class BA extends Algorithm{
 				}
 				
 				S = task.setFeasible(S);
-				if(task.isStopCriteria())
+				if(task.isStopCriterion())
 					break;
 				BatSolution newBat = new BatSolution(task.eval(S));
 				newBat.v = population.get(i).v;
@@ -112,15 +112,15 @@ public class BA extends Algorithm{
 		return best;
 	}
 
-	private void initPopulation() throws StopCriteriaException {
+	private void initPopulation() throws StopCriterionException {
 		
 		population = new ArrayList<BatSolution>();
-		best = new BatSolution(task.getRandomSolution());
+		best = new BatSolution(task.getRandomEvaluatedSolution());
 		best.v = new double[task.getNumberOfDimensions()];
 		population.add(best);
 		for (int i = 1; i < popSize; i++) {
 			
-			BatSolution newSolution = new BatSolution(task.getRandomSolution());
+			BatSolution newSolution = new BatSolution(task.getRandomEvaluatedSolution());
 			newSolution.v = new double[task.getNumberOfDimensions()];
 			newSolution.A = Util.nextDouble(1,2);
 			newSolution.r = Util.nextDouble();
@@ -128,7 +128,7 @@ public class BA extends Algorithm{
 				best = new BatSolution(newSolution);
 			
 			population.add(newSolution);
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				break;
 		}
 	}

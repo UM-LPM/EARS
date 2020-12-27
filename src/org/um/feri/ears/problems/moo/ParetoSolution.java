@@ -43,13 +43,13 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 
 		this.capacity = ps.capacity;
 		this.pareto_eval = ps.pareto_eval;
-		this.feasible = ps.feasible;
+		this.constraintsMet = ps.constraintsMet;
 		if (ps.constraints!=null) {
 			constraints = new double[ps.constraints.length];
 			System.arraycopy(ps.constraints, 0, constraints, 0, constraints.length);
 		}
-		overallConstraintViolation_  = ps.getOverallConstraintViolation();
-		numberOfViolatedConstraints_ = ps.getNumberOfViolatedConstraint();
+		overallConstraintViolation = ps.getOverallConstraintViolation();
+		numberOfViolatedConstraints = ps.getNumberOfViolatedConstraint();
 
 		solutions = new ArrayList<MOSolutionBase<Type>>();
 		for (MOSolutionBase<Type> sol : ps) {

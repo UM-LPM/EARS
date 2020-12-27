@@ -62,13 +62,13 @@ public class CEC2011_Problem1 extends Problem {
 	
 	
 	@Override
-	public DoubleSolution getRandomSolution() {
+	public DoubleSolution getRandomEvaluatedSolution() {
 		//initialization range=[0,6.35]
 		List<Double> var=new ArrayList<Double>();
 		for (int j = 0; j < numberOfDimensions; j++) {
 			var.add(Util.nextDouble(0, 6.35));
 		}
-		DoubleSolution sol = new DoubleSolution(var, eval(var), computeConstraints(var), upperLimit, lowerLimit);
+		DoubleSolution sol = new DoubleSolution(var, eval(var), evaluateConstrains(var), upperLimit, lowerLimit);
 		return sol;
 	}
 }

@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -44,7 +44,7 @@ public class RMO extends Algorithm
 	}
 	
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
 		
 		double[] globalBest = null;
 		DoubleSolution globalBest_s = null;
@@ -78,7 +78,7 @@ public class RMO extends Algorithm
 				
 			}
 			
-			if (taskProblem.isStopCriteria())
+			if (taskProblem.isStopCriterion())
 			{
 				return cpS;
 			}
@@ -89,7 +89,7 @@ public class RMO extends Algorithm
 		cp = cp.clone();
 		
 		//Main loop
-		while (!taskProblem.isStopCriteria())
+		while (!taskProblem.isStopCriterion())
 		{
 			//Calculate W
 			double W = 1.0 - (1.0/taskProblem.getMaxEvaluations()) * taskProblem.getNumberOfEvaluations();
@@ -110,7 +110,7 @@ public class RMO extends Algorithm
 				}
 				
 				DoubleSolution eval;
-				if (taskProblem.isStopCriteria())
+				if (taskProblem.isStopCriterion())
 				{
 					if(globalBest_s != null)
 						return globalBest_s;

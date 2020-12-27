@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -61,11 +61,11 @@ public class SOMA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             switch (strategy) {
                 case ALL_TO_ALL:
@@ -87,7 +87,7 @@ public class SOMA extends Algorithm {
         return best;
     }
 
-    private DoubleSolution[] allToAll() throws StopCriteriaException {
+    private DoubleSolution[] allToAll() throws StopCriterionException {
         DoubleSolution[] newPopulation = new DoubleSolution[popSize];
         for (int i = 0; i < popSize; i++) {
             ArrayList<DoubleSolution> solutions = new ArrayList<>();
@@ -101,7 +101,7 @@ public class SOMA extends Algorithm {
         return newPopulation;
     }
 
-    private DoubleSolution[] allToOne() throws StopCriteriaException {
+    private DoubleSolution[] allToOne() throws StopCriterionException {
         DoubleSolution[] newPopulation = new DoubleSolution[popSize];
         updateBestSolution();
         for (int i = 0; i < popSize; i++) {
@@ -115,7 +115,7 @@ public class SOMA extends Algorithm {
         return newPopulation;
     }
 
-    private DoubleSolution[] allToOneRandom() throws StopCriteriaException {
+    private DoubleSolution[] allToOneRandom() throws StopCriterionException {
         DoubleSolution[] newPopulation = new DoubleSolution[popSize];
         int leaderId = Util.nextInt(popSize);
         DoubleSolution leader = population[leaderId];
@@ -130,7 +130,7 @@ public class SOMA extends Algorithm {
         return newPopulation;
     }
 
-    private DoubleSolution[] allToOneAdaptive() throws StopCriteriaException {
+    private DoubleSolution[] allToOneAdaptive() throws StopCriterionException {
         DoubleSolution[] newPopulation = new DoubleSolution[popSize];
         for (int i = 0; i < popSize; i++) {
             DoubleSolution jumpingSolution = population[i];
@@ -154,15 +154,15 @@ public class SOMA extends Algorithm {
         }
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new DoubleSolution[popSize];
-        best = task.getRandomSolution();
+        best = task.getRandomEvaluatedSolution();
         leaderId = 0;
         population[0] = new DoubleSolution(best);
         for (int i = 1; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            population[i] = task.getRandomSolution();
+            population[i] = task.getRandomEvaluatedSolution();
             if (task.isFirstBetter(population[i], best)) {
                 best = new DoubleSolution(population[i]);
                 leaderId = i;
@@ -182,11 +182,11 @@ public class SOMA extends Algorithm {
         return bestSolution;
     }
 
-    private ArrayList<DoubleSolution> getSoluitionsOnJumpingPositions(DoubleSolution jumpingSolution, DoubleSolution towardsSolution) throws StopCriteriaException {
+    private ArrayList<DoubleSolution> getSoluitionsOnJumpingPositions(DoubleSolution jumpingSolution, DoubleSolution towardsSolution) throws StopCriterionException {
         ArrayList<DoubleSolution> solutions = new ArrayList<>();
         solutions.add(jumpingSolution);
         for (int i = 1; i * step <= pathLength; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 return solutions;
             DoubleSolution addSolution = getSolutionOnStep(jumpingSolution, towardsSolution, i * step);
             solutions.add(addSolution);
@@ -194,7 +194,7 @@ public class SOMA extends Algorithm {
         return solutions;
     }
 
-    private DoubleSolution getSolutionOnStep(DoubleSolution jumpingSolution, DoubleSolution towardsSolution, double jump) throws StopCriteriaException {
+    private DoubleSolution getSolutionOnStep(DoubleSolution jumpingSolution, DoubleSolution towardsSolution, double jump) throws StopCriterionException {
         double[] newSolution = new double[task.getNumberOfDimensions()];
         boolean[] prtVector = createPrtVector();
         for (int i = 0; i < task.getNumberOfDimensions(); i++) {

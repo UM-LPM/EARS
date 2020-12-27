@@ -1,8 +1,6 @@
 package org.um.feri.ears.problems.moo;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +72,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
  		//System.arraycopy(x, 0, this.variable, 0, x.size());
 		this.eval = new double[eval.length];
 		System.arraycopy(eval, 0, this.eval, 0, eval.length);
-		feasible = true;
+		constraintsMet = true;
 		attributes = new HashMap<>() ;
 		normalizedObjective_ = new double[eval.length];
 		
@@ -96,7 +94,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
  		//System.arraycopy(x, 0, this.variable, 0, x.size());
 		this.eval = new double[eval.length];
 		System.arraycopy(eval, 0, this.eval, 0, eval.length);
-		feasible = true;
+		constraintsMet = true;
 		attributes = new HashMap<>() ;
 		normalizedObjective_ = new double[eval.length];
 	}

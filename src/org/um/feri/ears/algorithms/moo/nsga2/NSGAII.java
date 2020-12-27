@@ -7,8 +7,6 @@
 
 package org.um.feri.ears.algorithms.moo.nsga2;
 
-import java.util.HashMap;
-
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
@@ -16,17 +14,13 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.operators.PolynomialMutation;
-import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.Ranking;
-import org.um.feri.ears.util.Util;
 
 
 /** 
@@ -73,14 +67,14 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 
 
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 		Distance<Type> distance = new Distance<Type>();
 		BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
 
 		// Create the initial population
 		MOSolutionBase<Type> newSolution;
 		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			newSolution = task.getRandomMOSolution();
 			// problem.evaluateConstraints(newSolution);
@@ -88,13 +82,13 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 		}
 
 		// Generations
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 			// Create the offSpring solutionSet
 			offspringPopulation = new ParetoSolution(populationSize);
 			MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
 
 			for (int i = 0; i < (populationSize / 2); i++) {
-				if (!task.isStopCriteria()) {
+				if (!task.isStopCriterion()) {
 					// obtain parents
 					parents[0] = bt2.execute(population);
 					parents[1] = bt2.execute(population);
@@ -102,12 +96,12 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 					
 					mut.execute(offSpring[0], task);
 					mut.execute(offSpring[1], task);
-					if (task.isStopCriteria())
+					if (task.isStopCriterion())
 						break;
 					task.eval(offSpring[0]);
 					offspringPopulation.add(offSpring[0]);
 					// problem.evaluateConstraints(offSpring[0]);
-					if (task.isStopCriteria())
+					if (task.isStopCriterion())
 						break;
 					task.eval(offSpring[1]);
 					// problem.evaluateConstraints(offSpring[1]);

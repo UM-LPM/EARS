@@ -13,7 +13,7 @@ import org.um.feri.ears.algorithms.moo.pesa2MOEA.D_PESA2;
 import org.um.feri.ears.algorithms.moo.pso.OMOPSO;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.zdt.ZDT6;
 import org.um.feri.ears.util.Util;
@@ -43,7 +43,7 @@ public class MOSingleRun {
 			ZDT6 p = new ZDT6(10);
 
 
-			DoubleMOTask task = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 30000, 5000, 100, 0.0001, p);
+			DoubleMOTask task = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 30000, 5000, 100, 0.0001, p);
 			ParetoSolution best = moead.execute(task);
 			best.printObjectivesToCSVFile("test");
 

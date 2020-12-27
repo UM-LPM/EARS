@@ -16,20 +16,15 @@ import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
-import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
-import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
-import org.um.feri.ears.problems.TaskBase;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.Ranking;
-import org.um.feri.ears.util.Util;
 
 
 /**
@@ -86,11 +81,11 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 	}
 
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 		// Create the initial population
 		MOSolutionBase<Type> newSolution;
 		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(newSolution);
@@ -100,7 +95,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 	    ParetoSolution<Type> offspringPopulation;
 	    ParetoSolution<Type> matingPopulation;
 
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 		      matingPopulation = selection(population);
 		      offspringPopulation = reproduction(matingPopulation);
 		      population = replacement(population, offspringPopulation);
@@ -122,7 +117,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 	    return matingPopulation;
 	}
 	
-	protected ParetoSolution<Type> reproduction(ParetoSolution<Type> population) throws StopCriteriaException {
+	protected ParetoSolution<Type> reproduction(ParetoSolution<Type> population) throws StopCriterionException {
 		ParetoSolution<Type> offspringPopulation = new ParetoSolution(population.size());
 		for (int i = 0; i < population.size(); i+=2) {
 			MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
@@ -134,10 +129,10 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 			mut.execute(offspring[0], task);
 			mut.execute(offspring[1], task);
 
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				break;
 			task.eval(offspring[0]);
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				break;
 			task.eval(offspring[1]);
 			

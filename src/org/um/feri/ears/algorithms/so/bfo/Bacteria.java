@@ -1,7 +1,7 @@
 package org.um.feri.ears.algorithms.so.bfo;
 
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 public class Bacteria extends DoubleSolution implements Comparable<Bacteria> {
@@ -9,21 +9,21 @@ public class Bacteria extends DoubleSolution implements Comparable<Bacteria> {
 	double health;
 	double c;
 	
-	public Bacteria(Task t, double c) throws StopCriteriaException {
-		super(t.getRandomSolution());
+	public Bacteria(Task t, double c) throws StopCriterionException {
+		super(t.getRandomEvaluatedSolution());
 		prev = this;
 		health = 0;
 		this.c = c;
 	}
 	
-	public Bacteria(Bacteria b) throws StopCriteriaException {
+	public Bacteria(Bacteria b) throws StopCriterionException {
 		super(b);
 		prev = b.prev;
 		health = b.health;
 		c = b.c;
 	}
 
-	public Bacteria(DoubleSolution eval, Bacteria b) throws StopCriteriaException {
+	public Bacteria(DoubleSolution eval, Bacteria b) throws StopCriterionException {
 		super(eval);
 		prev = new Bacteria(b);
 		this.health += this.health + prev.getEval();

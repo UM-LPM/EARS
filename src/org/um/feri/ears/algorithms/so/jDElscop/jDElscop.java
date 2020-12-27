@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -23,15 +23,15 @@ public class jDElscop extends Algorithm {
     private jDElscopSolution g; // global best
     private Task task; // set it in run
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         popX = new jDElscopSolution[popSize];
         for (int i = 0; i < popSize; i++) {
-            popX[i] = jDElscopSolution.setInitState(task.getRandomSolution());
+            popX[i] = jDElscopSolution.setInitState(task.getRandomEvaluatedSolution());
             if (i == 0)
                 g = popX[0];
             else if (task.isFirstBetter(popX[i], g))
                 g = popX[i];
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
         }
     }
@@ -57,7 +57,7 @@ public class jDElscop extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriteriaException {
+    public DoubleSolution execute(Task task) throws StopCriterionException {
         this.task = task; // used in functions
         initPopulation();
         // int iteration=0;
@@ -76,7 +76,7 @@ public class jDElscop extends Algorithm {
         int offset;
         int D = task.getNumberOfDimensions();
         jDElscopSolution[] popTmp = new jDElscopSolution[variablePopSize];
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             // iteration++;
             for (int i = 0; i < variablePopSize; i++) {
                 if (Util.rnd.nextDouble() < 0.1
@@ -188,7 +188,7 @@ public class jDElscop extends Algorithm {
                         }
                     }
                 }
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
             }
             /*

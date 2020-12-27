@@ -18,7 +18,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
      * @param p
      * @param qi
      */
-    public MOTask(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon, P p) {
+    public MOTask(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon, P p) {
     	
     	this(stop, eval, allowedTime, maxIterations, epsilon, p,  (int) Math.log10((1./epsilon)+1));
 	}
@@ -34,10 +34,10 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
      * @param qi
      * @param precisonOfRealNumbers
      */
-	public MOTask(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon, P p, int precisonOfRealNumbers) {
+	public MOTask(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon, P p, int precisonOfRealNumbers) {
 		
 		precisionOfRealNumbersInDecimalPlaces = precisonOfRealNumbers;
-        stopCriteria = stop;
+        stopCriterion = stop;
         maxEvaluations = eval;
         numberOfEvaluations = 0;
         this.epsilon = epsilon;
@@ -51,7 +51,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 	public MOTask(MOTask<T,P> task)
 	{
 		precisionOfRealNumbersInDecimalPlaces = task.precisionOfRealNumbersInDecimalPlaces;
-        stopCriteria = task.stopCriteria;
+        stopCriterion = task.stopCriterion;
         maxEvaluations = task.maxEvaluations;
         numberOfEvaluations = task.numberOfEvaluations;
         epsilon = task.epsilon;
@@ -85,7 +85,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 	    return p.getNumberOfConstraints();
 	}
 	
-	abstract public MOSolutionBase<T> getRandomMOSolution() throws StopCriteriaException;
+	abstract public MOSolutionBase<T> getRandomMOSolution() throws StopCriterionException;
 	
 	public boolean isFirstBetter(ParetoSolution<T> x, ParetoSolution<T> y, QualityIndicator<T> qi) {
 		return p.isFirstBetter(x, y, qi);
@@ -94,26 +94,26 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 	/**
 	 * Use only on multiobjective problems!
 	 * @param ind <code>MOIndividual</code> to be evaluated
-	 * @throws StopCriteriaException
+	 * @throws StopCriterionException
 	 */
-	public void eval(MOSolutionBase<T> ind) throws StopCriteriaException {
+	public void eval(MOSolutionBase<T> ind) throws StopCriterionException {
 		
-		if (stopCriteria == EnumStopCriteria.EVALUATIONS) {
+		if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
 			incEvaluate();
 			p.evaluate(ind);
 			p.evaluateConstraints(ind);
 			GraphDataRecorder.AddRecord(ind, this.getProblemName());
 		}
-		else if(stopCriteria == EnumStopCriteria.ITERATIONS)
+		else if(stopCriterion == EnumStopCriterion.ITERATIONS)
 		{
 			if(isStop)
-				throw new StopCriteriaException("Max iterations");
+				throw new StopCriterionException("Max iterations");
 			incEvaluate();
 			p.evaluate(ind);
 			p.evaluateConstraints(ind);
 			GraphDataRecorder.AddRecord(ind, this.getProblemName());
 		}
-		else if(stopCriteria == EnumStopCriteria.CPU_TIME)
+		else if(stopCriterion == EnumStopCriterion.CPU_TIME)
 		{
 			if(!isStop)
 			{
@@ -125,7 +125,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 			}
 			else
 			{
-				throw new StopCriteriaException("CPU Time");
+				throw new StopCriterionException("CPU Time");
 			}
 		}
 	}

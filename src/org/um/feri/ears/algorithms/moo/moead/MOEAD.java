@@ -9,30 +9,20 @@ package org.um.feri.ears.algorithms.moo.moead;
 
 import static java.util.Arrays.asList;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.algorithms.moo.dbea.NondominatedPopulation;
 import org.um.feri.ears.operators.CrossoverOperator;
-import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.InitWeight;
-import org.um.feri.ears.util.RandomGenerator;
 import org.um.feri.ears.util.Ranking;
 import org.um.feri.ears.util.Util;
 
@@ -120,7 +110,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	}
 
 	@Override
-	protected void init() throws StopCriteriaException {
+	protected void init() throws StopCriterionException {
 
 		if(optimalParam)
 		{
@@ -178,7 +168,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 	}
 
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 
 		// STEP 2. Update
 		do {
@@ -216,7 +206,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				// Apply mutation
 				mut.execute(child, task);
 
-				if (task.isStopCriteria())
+				if (task.isStopCriterion())
 				{
 					best = population;
 					return;
@@ -233,7 +223,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 				updateProblem(child, n, type);
 			} // for
 			task.incrementNumberOfIterations();
-		} while (!task.isStopCriteria());
+		} while (!task.isStopCriterion());
 		//System.out.println(gen);
 		Ranking<Type> ranking = new Ranking<>(population);
 		best = ranking.getSubfront(0);
@@ -316,10 +306,10 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 		}
 	}
 
-	public void initPopulation() throws StopCriteriaException {
+	public void initPopulation() throws StopCriterionException {
 		for (int i = 0; i < populationSize; i++) {
 
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 
@@ -328,10 +318,10 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 		}
 	}
 
-	void initIdealPoint() throws StopCriteriaException {
+	void initIdealPoint() throws StopCriterionException {
 		for (int i = 0; i < num_obj; i++) {
 			z[i] = 1.0e+30;
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			indArray[i] = new MOSolutionBase<Type>(task.getRandomMOSolution());
 		}

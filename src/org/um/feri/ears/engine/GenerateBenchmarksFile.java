@@ -72,7 +72,7 @@ public class GenerateBenchmarksFile {
                             b.fileName = clazz.getSimpleName();
                             b.numberOfRuns = ((RatingBenchmarkBase) benchmark).getNumberOfRuns();
                             b.type = "Multi-Objective";
-                            b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriteria().toString();
+                            b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriterion().toString();
                             b.stopCondition = ((RatingBenchmarkBase) benchmark).getStopCondition();
                             b.problems = ((RatingBenchmarkBase) benchmark).getProblems();
                             benchmarks.add(b);
@@ -85,7 +85,7 @@ public class GenerateBenchmarksFile {
                             b.fileName = clazz.getSimpleName();
                             b.numberOfRuns = ((RatingBenchmarkBase) benchmark).getNumberOfRuns();
                             b.type = "Single-Objective";
-                            b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriteria().toString();
+                            b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriterion().toString();
                             b.stopCondition = ((RatingBenchmarkBase) benchmark).getStopCondition();
                             b.problems = ((RatingBenchmarkBase) benchmark).getProblems();
                             benchmarks.add(b);

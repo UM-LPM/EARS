@@ -9,7 +9,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -76,7 +76,7 @@ public class ICA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         searchSpaceSize = new double[task.getNumberOfDimensions()];
@@ -91,7 +91,7 @@ public class ICA extends Algorithm {
         // Create the initial empires
         createInitialEmpires();
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             // Update the revolution rate
             revolutionRate = dampRatio * revolutionRate;
@@ -309,7 +309,7 @@ public class ICA extends Algorithm {
      *
      * @param empire to revolve
      */
-    private void revolution(Empire empire) throws StopCriteriaException {
+    private void revolution(Empire empire) throws StopCriterionException {
 
         // Get the number of colonies to revolve
         int numOfRevolvingColonies = (int) Math.round((revolutionRate * empire.colonies.length));
@@ -318,13 +318,13 @@ public class ICA extends Algorithm {
 
         for (int i = 0; i < R.length; i++) {
 
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
 
             if (i < numOfRevolvingColonies) {
-                empire.colonies[R[i]] = task.getRandomSolution();
+                empire.colonies[R[i]] = task.getRandomEvaluatedSolution();
             } else {
-                empire.colonies[R[i]] = task.eval(empire.colonies[R[i]]);
+                task.eval(empire.colonies[R[i]]);
             }
 
             if (task.isFirstBetter(empire.colonies[R[i]], best)) {
@@ -377,7 +377,7 @@ public class ICA extends Algorithm {
     /**
      * Generates the initial empires
      */
-    private void createInitialEmpires() throws StopCriteriaException {
+    private void createInitialEmpires() throws StopCriterionException {
         empiresList = new Empire[numOfInitialImperialists];
 
         // Extract the best countries to create empires
@@ -435,7 +435,7 @@ public class ICA extends Algorithm {
         // If an empire has no colony, give it one
         for (Empire empire : empiresList) {
             if (empire.colonies.length == 0) {
-                empire.colonies = new DoubleSolution[]{task.getRandomSolution()};
+                empire.colonies = new DoubleSolution[]{task.getRandomEvaluatedSolution()};
             }
         }
 
@@ -446,13 +446,13 @@ public class ICA extends Algorithm {
         empire.totalCost = empire.imperialist.getEval() + zeta * utils.getMean(empire.colonies);
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         initialCountries = new DoubleSolution[popSize];
 
         for (int i = 0; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            DoubleSolution newSolution = task.getRandomSolution();
+            DoubleSolution newSolution = task.getRandomEvaluatedSolution();
             initialCountries[i] = newSolution;
         }
         Arrays.sort(initialCountries, new TaskComparator(task));

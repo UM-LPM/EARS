@@ -1,261 +1,235 @@
 package org.um.feri.ears.problems.misc;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.StringTokenizer;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.SpecialFunction;
 import org.um.feri.ears.util.TrapezoidalRule;
 
-public class SoilModelProblem extends Problem{
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
 
-	double d[];
-	double RM[];
-	int layers;
-	double xx[];
-	double y1[];
-	boolean simplified = false;
-	Map<Double, Integer> freq = new HashMap<Double, Integer>();
-	int call = 1;
+public class SoilModelProblem extends Problem {
 
-	//simplified two-layered model
-	public SoilModelProblem(int numberOfDimensions, String filename){
-		this(numberOfDimensions, 0);
+    private double[] d;
+    private double[] RM;
+    private int layers;
+    private double[] xx;
+    private double[] y1;
+    private boolean simplified = false;
+    Map<Double, Integer> freq = new HashMap<Double, Integer>();
+    int call = 1;
 
-		this.simplified = true;
-		this.layers = 2;
-		loadData(filename);
-	}
+    //simplified two-layered model
+    public SoilModelProblem(int numberOfDimensions, String filename) {
+        this(numberOfDimensions, 0);
 
-	public SoilModelProblem(int numberOfDimensions, int layers, String filename) {
-		this(numberOfDimensions, 0);
+        this.simplified = true;
+        this.layers = 2;
+        loadData(filename);
+    }
 
-		xx = new double[15000]; // velikost?
-		y1 = new double[15000]; // velikost?
+    public SoilModelProblem(int numberOfDimensions, int layers, String filename) {
+        this(numberOfDimensions, 0);
 
-		this.layers = layers;
-		loadData(filename);
-	}
+        xx = new double[15000]; // velikost?
+        y1 = new double[15000]; // velikost?
 
-	private SoilModelProblem(int numberOfDimensions, int numberOfConstraints) {
-		super(numberOfDimensions, numberOfConstraints);
+        this.layers = layers;
+        loadData(filename);
+    }
 
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+    private SoilModelProblem(int numberOfDimensions, int numberOfConstraints) {
+        super(numberOfDimensions, numberOfConstraints);
 
-		for(int i = 0; i < numberOfDimensions; i++)
-		{
-			if(i%2 == 0) // resistance
-			{
-				lowerLimit.set(i, 5.0);
-				upperLimit.set(i, 3500.0);
-			}
-			else // layer thickness
-			{
-				lowerLimit.set(i, 0.4);
-				upperLimit.set(i, 40.0);
-			}
-		}
+        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
 
-		name="Earth Model";
-	}
+        for (int i = 0; i < numberOfDimensions; i++) {
+            if (i % 2 == 0) // resistance
+            {
+                lowerLimit.set(i, 5.0);
+                upperLimit.set(i, 3500.0);
+            } else // layer thickness
+            {
+                lowerLimit.set(i, 0.4);
+                upperLimit.set(i, 40.0);
+            }
+        }
 
-	private double simplifiedModel(double[] ds) {
+        name = "Earth Model";
+    }
 
-		double k1 = (ds[2] -ds[0]) / (ds[2] + ds[0]);
+    private double simplifiedModel(double[] ds) {
 
-		double RI[] = new double[d.length];
-		boolean isEnd;
-		int n, stk;
-		double a,b,dro,ro;
-		for(int k = 0; k < d.length; k++)
-		{
-			isEnd = true;
-			n = 0;
-			stk = 0;
-			ro = ds[0];
-			while(isEnd && n < 1e6){
-				n++;
-				a = 1 + Math.pow(2 * n * ds[1] / d[k], 2);
-				b = a + 3;
-				dro = ds[0] * 4 * Math.pow(k1, n) * (1 / Math.sqrt(a) - 1 / Math.sqrt(b));
-				ro+=dro;
-				if(Math.abs(dro)<1e-6){
-					stk++;
-				}
-				else{
-					stk = 0;
-				}
-				if(stk >= 20){
-					isEnd = false;
-				}
-			}
-			RI[k] = ro;
-		}
+        double k1 = (ds[2] - ds[0]) / (ds[2] + ds[0]);
 
-		// Calculate difference
-		double CF = 0.0;
-		for(int i = 0; i < RI.length; i++)
-		{
-			//CF+= Math.abs((RI[i] - RM[i]) * (RI[i] - RM[i])); /// RM[i];
-			CF+= Math.abs(RI[i] - RM[i])  / RM[i];
-		}
+        double[] RI = new double[d.length];
+        boolean isEnd;
+        int n, stk;
+        double a, b, dro, ro;
+        for (int k = 0; k < d.length; k++) {
+            isEnd = true;
+            n = 0;
+            stk = 0;
+            ro = ds[0];
+            while (isEnd && n < 1e6) {
+                n++;
+                a = 1 + Math.pow(2 * n * ds[1] / d[k], 2);
+                b = a + 3;
+                dro = ds[0] * 4 * Math.pow(k1, n) * (1 / Math.sqrt(a) - 1 / Math.sqrt(b));
+                ro += dro;
+                if (Math.abs(dro) < 1e-6) {
+                    stk++;
+                } else {
+                    stk = 0;
+                }
+                if (stk >= 20) {
+                    isEnd = false;
+                }
+            }
+            RI[k] = ro;
+        }
 
-		CF = (CF / RI.length) * 100;
-		return CF;
-	}
+        // Calculate difference
+        double CF = 0.0;
+        for (int i = 0; i < RI.length; i++) {
+            //CF+= Math.abs((RI[i] - RM[i]) * (RI[i] - RM[i])); /// RM[i];
+            CF += Math.abs(RI[i] - RM[i]) / RM[i];
+        }
 
-	private double nLayerModel(double[] ds) {
+        CF = (CF / RI.length) * 100;
+        return CF;
+    }
 
-		int j = 0;
+    private double nLayerModel(double[] ds) {
 
-		double R[] = new double[numberOfDimensions]; // layer resistance
-		double h[] = new double[numberOfDimensions]; // layer thickness
+        int j = 0;
 
-		for(int i = 0; i < numberOfDimensions; i+=2)
-		{
-			R[j] = ds[i];
-			if(i+1 < numberOfDimensions)
-				h[j] = ds[i+1];
-			j++;
-		}
+        double[] R = new double[numberOfDimensions]; // layer resistance
+        double[] h = new double[numberOfDimensions]; // layer thickness
 
-		double step = 1e-2; // korak tock izracuna vrednosti funkcije (v odvisnosti od stevila plasti!)
-		double minValue = 1e-6; // ko je vrednost funkcije v 100 zaporednih tockah manj od minvrednost je izracun koncan
+        for (int i = 0; i < numberOfDimensions; i += 2) {
+            R[j] = ds[i];
+            if (i + 1 < numberOfDimensions)
+                h[j] = ds[i + 1];
+            j++;
+        }
 
-		boolean isEnd = true;
-		int stk = 0;
-		double lambda = -step;
+        double step = 1e-2; // korak tock izracuna vrednosti funkcije (v odvisnosti od stevila plasti!)
+        double minValue = 1e-6; // ko je vrednost funkcije v 100 zaporednih tockah manj od minvrednost je izracun koncan
 
-		double KN[] = new double[layers];
-		double alpha[] = new double[layers];
+        boolean isEnd = true;
+        int stk = 0;
+        double lambda = -step;
+
+        double[] KN = new double[layers];
+        double[] alpha = new double[layers];
 
 
-		double RI[] = new double[d.length];
+        double[] RI = new double[d.length];
 
-		for(int k = 0; k < d.length; k++)
-		{
-			lambda = -step;
-			isEnd = true;
-			j = 0;
-			stk = 0;
+        for (int k = 0; k < d.length; k++) {
+            lambda = -step;
+            isEnd = true;
+            j = 0;
+            stk = 0;
 
-			while (isEnd && j < 1e6) { // j < 1e6 braked by xx.length
+            while (isEnd && j < 1e6) { // j < 1e6 braked by xx.length
 
-				lambda += step;
-				if(j >= xx.length)
-					break; // TODO return infinity
-				xx[j] = lambda;
+                lambda += step;
+                if (j >= xx.length)
+                    break; // TODO return infinity
+                xx[j] = lambda;
 
-				for (int i = layers - 2; i > -1; i--) {
-					if(i == layers - 2)
-					{
-						KN[i] = (R[i+1]-R[i])/(R[i+1]+R[i]);
-						alpha[i]=1+(2*KN[i]*Math.exp(-2*lambda*h[i]))/(1-KN[i]*Math.exp(-2*lambda*h[i]));
-					}
-					else
-					{
-						KN[i]=(R[i+1]*alpha[i+1]-R[i])/(R[i+1]*alpha[i+1]+R[i]);
-						alpha[i]=1+(2*KN[i]*Math.exp(-2*lambda*h[i]))/(1-KN[i]*Math.exp(-2*lambda*h[i]));
-					}
-				}
-				// Bessel first kind order zero
-				y1[j] = (alpha[0]-1)*(SpecialFunction.j0(lambda*d[k])-SpecialFunction.j0(2*lambda*d[k]));
+                for (int i = layers - 2; i > -1; i--) {
+                    if (i == layers - 2) {
+                        KN[i] = (R[i + 1] - R[i]) / (R[i + 1] + R[i]);
+                        alpha[i] = 1 + (2 * KN[i] * Math.exp(-2 * lambda * h[i])) / (1 - KN[i] * Math.exp(-2 * lambda * h[i]));
+                    } else {
+                        KN[i] = (R[i + 1] * alpha[i + 1] - R[i]) / (R[i + 1] * alpha[i + 1] + R[i]);
+                        alpha[i] = 1 + (2 * KN[i] * Math.exp(-2 * lambda * h[i])) / (1 - KN[i] * Math.exp(-2 * lambda * h[i]));
+                    }
+                }
+                // Bessel first kind order zero
+                y1[j] = (alpha[0] - 1) * (SpecialFunction.j0(lambda * d[k]) - SpecialFunction.j0(2 * lambda * d[k]));
 
-				if (Math.abs(y1[j]) < minValue)
-					stk=stk+1;
-				else
-					stk=0;
+                if (Math.abs(y1[j]) < minValue)
+                    stk = stk + 1;
+                else
+                    stk = 0;
 
-				if (stk >= 100)
-					isEnd = false;
+                if (stk >= 100)
+                    isEnd = false;
 
-				j++;
-			}
+                j++;
+            }
 
-			double f1 = 0.0;
+            double f1 = 0.0;
 
-			f1 = TrapezoidalRule.integrate(j,xx,y1);
-			//System.out.println("num: "+j);
-			RI[k]=R[0]*(1+2*d[k]*f1);
+            f1 = TrapezoidalRule.integrate(j, xx, y1);
+            //System.out.println("num: "+j);
+            RI[k] = R[0] * (1 + 2 * d[k] * f1);
 
-		}
+        }
 
-		// Calculate difference
-		double CF = 0.0;
-		for(int i = 0; i < RI.length; i++)
-		{
-			//CF+= Math.abs((RI[i] - RM[i]) * (RI[i] - RM[i])); /// RM[i];
-			CF+= Math.abs(RI[i] - RM[i])  / RM[i];
-		}
+        // Calculate difference
+        double CF = 0.0;
+        for (int i = 0; i < RI.length; i++) {
+            //CF+= Math.abs((RI[i] - RM[i]) * (RI[i] - RM[i])); /// RM[i];
+            CF += Math.abs(RI[i] - RM[i]) / RM[i];
+        }
 
-		CF = (CF / RI.length) * 100;
-		return CF;
-	}
+        CF = (CF / RI.length) * 100;
+        return CF;
+    }
 
-	private void loadData(String filename) {
+    private void loadData(String filename) {
 
-		if(filename != null && !filename.isEmpty())
-		{
-			InputStream inputStream = SoilModelProblem.class.getClassLoader().getResourceAsStream(filename +".txt");
+        if (filename != null && !filename.isEmpty()) {
+            InputStream inputStream = SoilModelProblem.class.getClassLoader().getResourceAsStream(filename + ".txt");
+            if (inputStream == null) {
+                System.out.println("Couldn't open file " + filename);
+                return;
+            }
 
-			ArrayList<Double> tempD = new ArrayList<>();
-			ArrayList<Double> tempRM = new ArrayList<>();
+            ArrayList<Double> tempD = new ArrayList<>();
+            ArrayList<Double> tempRM = new ArrayList<>();
 
-			try {
-				/* Open the file */
-				InputStreamReader isr = new InputStreamReader(inputStream);
-				BufferedReader br = new BufferedReader(isr);
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+                /* Open the file */
 
-				String aux = br.readLine();
-				while (aux != null) {
-					StringTokenizer st = new StringTokenizer(aux);
+                String aux = br.readLine();
+                while (aux != null) {
+                    StringTokenizer st = new StringTokenizer(aux);
 
-					if(st.hasMoreTokens())
-					{
-						tempD.add(new Double(st.nextToken()));
-						tempRM.add(new Double(st.nextToken()));
-					}
-					aux = br.readLine();
-				}
-				br.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+                    if (st.hasMoreTokens()) {
+                        tempD.add(new Double(st.nextToken()));
+                        tempRM.add(new Double(st.nextToken()));
+                    }
+                    aux = br.readLine();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-			d = new double[tempD.size()];
-			RM = new double[tempD.size()];
-			for(int i = 0; i < tempD.size(); i++)
-			{
-				d[i] = tempD.get(i);
-				RM[i] = tempRM.get(i);
-			}
-		}
-		else
-		{
-			System.out.println("The file name containing the measured data is not valid.");
-		}
-	}
+            d = new double[tempD.size()];
+            RM = new double[tempD.size()];
+            for (int i = 0; i < tempD.size(); i++) {
+                d[i] = tempD.get(i);
+                RM[i] = tempRM.get(i);
+            }
+        } else {
+            System.out.println("The file name containing the measured data is not valid.");
+        }
+    }
 
-	@Override
-	public double eval(double[] ds) {
-		if(simplified)
-		{
-			return simplifiedModel(ds);
-		}
-		else
-		{
-			return nLayerModel(ds);
-		}
-	}
+    @Override
+    public double eval(double[] ds) {
+        if (simplified) {
+            return simplifiedModel(ds);
+        } else {
+            return nLayerModel(ds);
+        }
+    }
 }

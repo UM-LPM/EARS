@@ -3,25 +3,14 @@ package org.um.feri.ears.benchmark;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.IntegerMOTask;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.results.BankOfResults;
@@ -32,7 +21,6 @@ import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.rating.Game;
 import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Cache;
-import org.um.feri.ears.util.ParetoSolutionCache;
 import org.um.feri.ears.util.Util;
 
 public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T, P>, P extends MOProblemBase<T>> extends RatingBenchmarkBase<Task, MOAlgorithm<Task, T>, MOAlgorithmEvalResult> {
@@ -59,7 +47,7 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 
 	public abstract boolean resultEqual(ParetoSolution<T> a, ParetoSolution<T> b, QualityIndicator<T> qi);
 	
-    protected abstract void registerTask(EnumStopCriteria sc, int eval, long allowedTime, int maxIterations, double epsilon, P p);
+    protected abstract void registerTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, P p);
 	
 	@Override
 	public void registerAlgorithm(MOAlgorithm<Task, T> al) {
@@ -225,8 +213,8 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 					System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemName());
 					results.add(new MOAlgorithmEvalResult(null, al, task)); // this can be done parallel - asynchrony
 				}
-			} catch (StopCriteriaException e) {
-				System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" StopCriteriaException for:"+task+"\n"+e);
+			} catch (StopCriterionException e) {
+				System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" StopCriterionException for:"+task+"\n"+e);
 				results.add(new MOAlgorithmEvalResult(null, al, task));
 			}
 		}

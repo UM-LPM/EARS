@@ -3,8 +3,8 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 import java.util.*;
@@ -33,7 +33,7 @@ public class GSAv2 extends Algorithm {
     }
 
     //generate random population
-    void initPop(Task t) throws StopCriteriaException {
+    void initPop(Task t) throws StopCriterionException {
         pop.clear();
         best=null;
             for (int i = 0; i < pop_size; i++) {
@@ -46,7 +46,7 @@ public class GSAv2 extends Algorithm {
                 }
                 pop.add(newAgent);
 
-                if (t.isStopCriteria()) break;
+                if (t.isStopCriterion()) break;
             }
     }
 
@@ -102,7 +102,7 @@ public class GSAv2 extends Algorithm {
     }
 
 
-    Agent UpdatePosition(Task t,int popIndex) throws StopCriteriaException {
+    Agent UpdatePosition(Task t,int popIndex) throws StopCriterionException {
         double []positions = pop.get(popIndex).getDoubleVariables();
         double []velocites = pop.get(popIndex).getVelocities();
         double []newPosition = new double[positions.length];
@@ -112,7 +112,7 @@ public class GSAv2 extends Algorithm {
         return new Agent(t.eval(newPosition),t);
     }
 
-    void nextGeneration(Task task,int iteration,int maxIteration) throws StopCriteriaException {
+    void nextGeneration(Task task,int iteration,int maxIteration) throws StopCriterionException {
 
         //G = 10f * Math.exp(-0.9*( iteration / (double)(maxIteration)));
         //calculate gravity
@@ -162,7 +162,7 @@ public class GSAv2 extends Algorithm {
 
             pop.set(i,tmpAgent);
 
-            if(task.isStopCriteria())
+            if(task.isStopCriterion())
                 break;
         }
 
@@ -170,18 +170,18 @@ public class GSAv2 extends Algorithm {
 
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         //get epsilon from task
         epsilon = taskProblem.getEpsilon();
         //inicializacija populacije
         initPop(taskProblem);
         int generation = 1;
-        while (!taskProblem.isStopCriteria()) {
-            if(taskProblem.getStopCriteria() == EnumStopCriteria.EVALUATIONS 
-            		|| taskProblem.getStopCriteria() == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS 
-            		|| taskProblem.getStopCriteria() == EnumStopCriteria.STAGNATION)
+        while (!taskProblem.isStopCriterion()) {
+            if(taskProblem.getStopCriterion() == EnumStopCriterion.EVALUATIONS
+            		|| taskProblem.getStopCriterion() == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS
+            		|| taskProblem.getStopCriterion() == EnumStopCriterion.STAGNATION)
             	nextGeneration(taskProblem, generation, taskProblem.getMaxEvaluations()/pop_size);
-            if(taskProblem.getStopCriteria() == EnumStopCriteria.ITERATIONS)
+            if(taskProblem.getStopCriterion() == EnumStopCriterion.ITERATIONS)
             	nextGeneration(taskProblem, generation, taskProblem.getMaxIterations());
            //TODO stop criteria stagnation 	
             generation++;

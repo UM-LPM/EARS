@@ -15,14 +15,10 @@ import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.DominanceComparator;
-import org.um.feri.ears.util.Util;
 
 public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
@@ -56,12 +52,12 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, num_obj);
 	}
 
-	public void start() throws StopCriteriaException {
+	public void start() throws StopCriterionException {
 		
 		Comparator<MOSolutionBase<Type>> dominance;
 		dominance = new DominanceComparator();
 
-		if (task.isStopCriteria())
+		if (task.isStopCriterion())
 			return;
 		MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 		// problem.evaluateConstraints(solution);
@@ -73,7 +69,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 			MOSolutionBase<Type> mutatedIndividual = new MOSolutionBase<Type>(solution);
 			mut.execute(mutatedIndividual, task);
 
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				break;
 			task.eval(mutatedIndividual);
 			// problem.evaluateConstraints(mutatedIndividual);
@@ -97,7 +93,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 			 * ; }
 			 */
 			task.incrementNumberOfIterations();
-		} while (!task.isStopCriteria());
+		} while (!task.isStopCriterion());
 
 		best = archive;
 	}

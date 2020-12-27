@@ -8,7 +8,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -39,16 +39,16 @@ public class PSOoriginalLogging extends Algorithm {
 //Originalni algoritem PSO
 	
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
 		
 		task = taskProblem;
 		taskProblem.enableAncestorLogging();
 		
-		if (taskProblem.isStopCriteria())
+		if (taskProblem.isStopCriterion())
 			return null;
 		initPopulation(taskProblem);
 		double v[];
-		while (!taskProblem.isStopCriteria()) {
+		while (!taskProblem.isStopCriterion()) {
 			for (int i = 0; i < populationSize; i++) {
 				v = new double[taskProblem.getNumberOfDimensions()];
 				for (int d = 0; d < taskProblem.getNumberOfDimensions(); d++) {
@@ -61,7 +61,7 @@ public class PSOoriginalLogging extends Algorithm {
 				population.set(i, update(population.get(i), v));
 				if (taskProblem.isFirstBetter(population.get(i), PgBest))
 					PgBest = population.get(i);
-				if (taskProblem.isStopCriteria())
+				if (taskProblem.isStopCriterion())
 					break;
 			}
 			task.incrementNumberOfIterations();
@@ -70,7 +70,7 @@ public class PSOoriginalLogging extends Algorithm {
 		return PgBest;
 	}
 
-	private PSOoriginalSolution update(PSOoriginalSolution sol, double[] v) throws StopCriteriaException {
+	private PSOoriginalSolution update(PSOoriginalSolution sol, double[] v) throws StopCriterionException {
 		
 		double x[] = sol.getDoubleVariables();
 		for (int i = 0; i < x.length; i++) {
@@ -92,7 +92,7 @@ public class PSOoriginalLogging extends Algorithm {
 
 	}
 
-	private void initPopulation(Task taskProblem) throws StopCriteriaException {
+	private void initPopulation(Task taskProblem) throws StopCriterionException {
 		population = new ArrayList<>();
 		for (int i = 0; i < populationSize; i++) {
 			
@@ -102,7 +102,7 @@ public class PSOoriginalLogging extends Algorithm {
 			else if (taskProblem.isFirstBetter(population.get(i), PgBest))
 				PgBest = population.get(i);
 			
-			if (taskProblem.isStopCriteria())
+			if (taskProblem.isStopCriterion())
 				break;
 
 		}

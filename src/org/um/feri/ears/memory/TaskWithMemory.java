@@ -1,18 +1,15 @@
 package org.um.feri.ears.memory;
 
-import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriteriaException;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.StopCriterionException;
 
 public class TaskWithMemory extends Task {
 	protected MemoryBankDoubleSolution mb;
 	int xPrecision;
 	StringBuilder sb;
 
-	public TaskWithMemory(EnumStopCriteria stop, int eval, long allowedTime, int maxIterations, double epsilon,
-						  Problem p, int xPrecision,  DuplicationRemovalStrategy strategy) {
+	public TaskWithMemory(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
+						  Problem p, int xPrecision, DuplicationRemovalStrategy strategy) {
 		super(stop, eval, allowedTime, maxIterations, epsilon, p);
 		this.xPrecision = xPrecision;
 		strategy.setTask(this);
@@ -20,16 +17,16 @@ public class TaskWithMemory extends Task {
 		sb = new StringBuilder();
 	}
 
-	public DoubleSolution evalOrg(double[] x) throws StopCriteriaException {
+	public DoubleSolution evalOrg(double[] x) throws StopCriterionException {
 		return super.eval(x);
 	}
 
 	@Override
-	public DoubleSolution getRandomSolution() throws StopCriteriaException {
+	public DoubleSolution getRandomEvaluatedSolution() throws StopCriterionException {
 		return mb.getRandomSolution(this);
 	}
 	@Override
-	public DoubleSolution eval(double[] x) throws StopCriteriaException {
+	public DoubleSolution eval(double[] x) throws StopCriterionException {
 		return mb.eval(this,x);
 
 	}

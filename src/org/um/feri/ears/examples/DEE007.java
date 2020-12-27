@@ -6,7 +6,7 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -26,12 +26,12 @@ public class DEE007 extends Algorithm {
 
     }
 
-    public void init(Task taskProblem) throws StopCriteriaException {
+    public void init(Task taskProblem) throws StopCriterionException {
         pop = new ArrayList<>();
         DoubleSolution tmp;
         for (int i = 0; i < popSize; i++) {
-            if (taskProblem.isStopCriteria()) break;
-            tmp = taskProblem.getRandomSolution();
+            if (taskProblem.isStopCriterion()) break;
+            tmp = taskProblem.getRandomEvaluatedSolution();
             if (i == 0) best = tmp;
             else if (taskProblem.isFirstBetter(tmp, best)) best = tmp;
             pop.add(tmp);
@@ -39,13 +39,13 @@ public class DEE007 extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         init(taskProblem);
         int a, b, c, R;
         DoubleSolution newSolution;
-        while (!taskProblem.isStopCriteria()) {
+        while (!taskProblem.isStopCriterion()) {
             for (int i = 0; i < popSize; i++) {
-                if (taskProblem.isStopCriteria()) break;
+                if (taskProblem.isStopCriterion()) break;
                 do
                     a = Util.rnd.nextInt(popSize);
                 while (a == i);

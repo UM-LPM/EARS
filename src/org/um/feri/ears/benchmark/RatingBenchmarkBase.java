@@ -8,7 +8,7 @@ import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.export.data.EDBenchmark;
 import org.um.feri.ears.export.data.EDTask;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
@@ -24,7 +24,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     public static boolean printSingleRunDuration = true;
     
    	// Default benchmark settings
-    protected EnumStopCriteria stopCriteria = EnumStopCriteria.EVALUATIONS; 
+    protected EnumStopCriterion stopCriterion = EnumStopCriterion.EVALUATIONS;
     protected int maxEvaluations = 1500;
     protected long timeLimit = TimeUnit.MILLISECONDS.toNanos(500); //milliseconds
     protected int maxIterations = 500;
@@ -70,8 +70,8 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     	return numberOfRuns;
     }
     
-    public EnumStopCriteria getStopCriteria(){
-    	return stopCriteria;
+    public EnumStopCriterion getStopCriterion(){
+    	return stopCriterion;
     }
     
     /**
@@ -93,7 +93,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
     }
     public void updateParameters() {
         parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_TASKS, ""+listOfProblems.size());
-        addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+stopCriteria);
+        addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+ stopCriterion);
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,""+dimension);
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.CPU_TIME,String.valueOf(timeLimit));
@@ -111,7 +111,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
         for (TaskBase ta:listOfProblems) {
             tmp = new EDTask();
             tmp.name = ta.getProblemName();
-            tmp.info = ta.getStopCriteriaDescription(); //tu!!!
+            tmp.info = ta.getStopCriterionDescription();
             ed.tasks.add(tmp);
         }
         return ed;
@@ -164,8 +164,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
      * Fill all data!
      *  
      * @param arena needs to be filed with players and their ratings
-     * @param allSingleProblemRunResults 
-     * @param repetition
+     * @param allSingleProblemRunResults
      */
     public abstract void run(ResultArena arena, BankOfResults allSingleProblemRunResults);
     
@@ -209,7 +208,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
 	}
 
 	public String getStopCondition() {
-		switch (stopCriteria) {
+		switch (stopCriterion) {
 		case EVALUATIONS:
 			return Integer.toString(maxEvaluations);
 		case ITERATIONS:

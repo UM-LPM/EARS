@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -42,11 +42,11 @@ public class FDO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             for (int i = 0; i < popSize; i++) {
                 double[] tempXs = new double[task.getNumberOfDimensions()];
                 ArrayList<Double> lastPace = new ArrayList<>();
@@ -86,7 +86,7 @@ public class FDO extends Algorithm {
                     lastPace.add(pace); //save pace for potential reuse
                 }
 
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
                 // create temporary bee for comparision purpose
                 Bee tempBee = new Bee(task.eval(tempXs));
@@ -107,7 +107,7 @@ public class FDO extends Algorithm {
                         }
                         tempXs[n] = x;
                     }
-                    if (task.isStopCriteria())
+                    if (task.isStopCriterion())
                         break;
                     tempBee = new Bee(task.eval(tempXs));
 
@@ -129,7 +129,7 @@ public class FDO extends Algorithm {
                             tempXs[n] = x;
                         }
 
-                        if (task.isStopCriteria())
+                        if (task.isStopCriterion())
                             break;
                         tempBee = new Bee(task.eval(tempXs));
 
@@ -183,14 +183,14 @@ public class FDO extends Algorithm {
         return x;
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new Bee[popSize];
-        best = new Bee(task.getRandomSolution());
+        best = new Bee(task.getRandomEvaluatedSolution());
         population[0] = new Bee(new DoubleSolution(best));
         for (int i = 1; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            population[i] = new Bee(task.getRandomSolution());
+            population[i] = new Bee(task.getRandomEvaluatedSolution());
             if (task.isFirstBetter(population[i], best)) {
                 best = new Bee(population[i]);
             }

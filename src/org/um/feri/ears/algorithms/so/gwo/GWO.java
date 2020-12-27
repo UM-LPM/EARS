@@ -5,8 +5,8 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -51,20 +51,20 @@ public class GWO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
         int maxIt = 10000;
-        if (task.getStopCriteria() == EnumStopCriteria.ITERATIONS) {
+        if (task.getStopCriterion() == EnumStopCriterion.ITERATIONS) {
             maxIt = task.getMaxIterations();
         }
 
-        if (task.getStopCriteria() == EnumStopCriteria.EVALUATIONS) {
+        if (task.getStopCriterion() == EnumStopCriterion.EVALUATIONS) {
             maxIt = task.getMaxEvaluations() / popSize;
         }
 
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             double a = 2.0 - task.getNumberOfIterations() * (2.0 / maxIt);
 
             for (int index = 0; index < popSize; index++) {
@@ -105,7 +105,7 @@ public class GWO extends Algorithm {
                 }
                 newPosition = task.setFeasible(newPosition);
 
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
                 DoubleSolution newWolf = task.eval(newPosition);
                 if (task.isFirstBetter(newWolf, population.get(index)))
@@ -117,12 +117,12 @@ public class GWO extends Algorithm {
         return alpha;
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new ArrayList<DoubleSolution>();
 
         for (int i = 0; i < popSize; i++) {
-            population.add(task.getRandomSolution());
-            if (task.isStopCriteria())
+            population.add(task.getRandomEvaluatedSolution());
+            if (task.isStopCriterion())
                 break;
         }
         updateABD();

@@ -2,9 +2,7 @@ package org.um.feri.ears.tuning;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.algorithms.so.de.IndividualSA;
 import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
-import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.rating.Player;
 
 public class CRSSolution {

@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -59,18 +59,18 @@ public class FWA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
 
         maxBound = task.getUpperLimit();
         minBound = task.getLowerLimit();
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             //set off n fireworks
             setoff();
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
             //select n locations
             selectlocations();
@@ -81,7 +81,7 @@ public class FWA extends Algorithm {
     }
 
     //set off n fireworks
-    private void setoff() throws StopCriteriaException {
+    private void setoff() throws StopCriterionException {
 
         //get max(worst) and min(best) value
         double maxvalue = fireworks[0].getEval();
@@ -173,7 +173,7 @@ public class FWA extends Algorithm {
                 // Check bounds
                 tmppos = task.setFeasible(tmppos);
                 // Evaluate new solution
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
                 sparks[i][k] = task.eval(tmppos);
             }
@@ -225,7 +225,7 @@ public class FWA extends Algorithm {
             // Check bounds
             tmppos = task.setFeasible(tmppos);
             // Evaluate new solution
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
             gaussiansparks[k] = task.eval(tmppos);
         }
@@ -363,15 +363,15 @@ public class FWA extends Algorithm {
     }
 
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         fireworks = new DoubleSolution[popSize];
-        fireworks[0] = task.getRandomSolution();
+        fireworks[0] = task.getRandomEvaluatedSolution();
         bestSpark = new DoubleSolution(fireworks[0]);
 
         for (int i = 1; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            DoubleSolution newSolution = task.getRandomSolution();
+            DoubleSolution newSolution = task.getRandomEvaluatedSolution();
             fireworks[i] = newSolution;
             if (task.isFirstBetter(newSolution, bestSpark)) {
                 bestSpark = new DoubleSolution(newSolution);

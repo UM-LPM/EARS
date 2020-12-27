@@ -1,7 +1,7 @@
 package org.um.feri.ears.algorithms.so.gsa;
 
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -41,8 +41,8 @@ public class GSAIndividual extends DoubleSolution {
         return v;
     }
 
-    public GSAIndividual(Task t) throws StopCriteriaException {
-        super(t.getRandomSolution());
+    public GSAIndividual(Task t) throws StopCriterionException {
+        super(t.getRandomEvaluatedSolution());
         v = new double[t.getNumberOfDimensions()]; //init V=zeros(N,dim);
         a = new double[t.getNumberOfDimensions()]; //init
         E = new double[t.getNumberOfDimensions()]; //init
@@ -67,7 +67,7 @@ public class GSAIndividual extends DoubleSolution {
         return super.toString() + " v:" + (Arrays.toString(v) + " a:" + (Arrays.toString(a)));
     }
 
-    public GSAIndividual move(Task t) throws StopCriteriaException {
+    public GSAIndividual move(Task t) throws StopCriterionException {
 		/*
 		[N,dim]=size(X);
 		V=rand(N,dim).*V+a; %eq. 11.

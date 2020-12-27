@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 public class HillClimbing extends Algorithm {
@@ -35,15 +35,15 @@ public class HillClimbing extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         double[] interval = task.getInterval();
-        globalBest = task.getRandomSolution();
+        globalBest = task.getRandomEvaluatedSolution();
         currentBest = new DoubleSolution(globalBest);
         boolean improvement;
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             improvement = false;
             if (strategy == HillClimbingStrategy.ANY_ASCENT) {
 
@@ -123,18 +123,18 @@ public class HillClimbing extends Algorithm {
                 }
                 //restart search if no improvement
                 if (!improvement) {
-                    if (!task.isStopCriteria())
-                        currentBest = task.getRandomSolution();
+                    if (!task.isStopCriterion())
+                        currentBest = task.getRandomEvaluatedSolution();
                 }
             }
         }
         return globalBest;
     }
 
-    private boolean checkImprovement(double[] newPosition) throws StopCriteriaException {
+    private boolean checkImprovement(double[] newPosition) throws StopCriterionException {
 
         if (task.isFeasible(newPosition)) {
-            if (!task.isStopCriteria()) {
+            if (!task.isStopCriterion()) {
                 DoubleSolution newSolution = task.eval(newPosition);
                 if (task.isFirstBetter(newSolution, currentBest)) {
                     currentBest = newSolution;

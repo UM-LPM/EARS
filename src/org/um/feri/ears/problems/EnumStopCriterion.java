@@ -43,7 +43,7 @@ package org.um.feri.ears.problems;
 *          POSSIBILITY OF SUCH DAMAGE.
 * 
 */
-public enum EnumStopCriteria {
+public enum EnumStopCriterion {
 	EVALUATIONS("Number of evaluations","Stop execution when the maximum number of evaluations is reached"), 
 	GLOBAL_OPTIMUM_OR_EVALUATIONS("Number of evaluations or global optimum","Stop execution when the maximum number of evaluations or the global optimum is reached"), 
 	CPU_TIME("CPU time","Stop execution when the allowed CPU time is reached"), 
@@ -51,7 +51,7 @@ public enum EnumStopCriteria {
 	STAGNATION("Stagnation","Stop execution if the solutions do not improve over time");
 	
     private String description, name;
-    private EnumStopCriteria(String name, String description) {
+    private EnumStopCriterion(String name, String description) {
         this.description = description;
         this.name = name;
         

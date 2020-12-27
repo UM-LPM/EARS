@@ -45,7 +45,7 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.*;
@@ -62,7 +62,7 @@ public class RatingRPUOed2 extends RatingBenchmark {
     }
     public RatingRPUOed2() {
         super();
-        stopCriteria = EnumStopCriteria.EVALUATIONS;
+        stopCriterion = EnumStopCriterion.EVALUATIONS;
         timeLimit = 10;
         maxEvaluations=10000;
         maxIterations = 500; 
@@ -75,7 +75,7 @@ public class RatingRPUOed2 extends RatingBenchmark {
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
     
@@ -84,21 +84,21 @@ public class RatingRPUOed2 extends RatingBenchmark {
      */
     @Override
     protected void initFullProblemList() {
-        registerTask(new Ackley1(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Bohachevsky1(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Beale(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Booth(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Branin1(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Easom(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new GoldsteinPrice(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Griewank(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new MartinAndGaddy(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new PowellBadlyScaledFunction(),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Rastrigin(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new RosenbrockDeJong2(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Schwefel226(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new SchwefelRidge(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        registerTask(new Sphere(2),stopCriteria, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Ackley1(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Bohachevsky1(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Beale(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Booth(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Branin1(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Easom(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new GoldsteinPrice(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Griewank(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new MartinAndGaddy(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new PowellBadlyScaledFunction(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Rastrigin(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new RosenbrockDeJong2(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Schwefel226(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new SchwefelRidge(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        registerTask(new Sphere(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
     }
         
     /* (non-Javadoc)

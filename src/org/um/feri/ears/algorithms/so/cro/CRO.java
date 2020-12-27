@@ -1,7 +1,6 @@
 package org.um.feri.ears.algorithms.so.cro;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.um.feri.ears.algorithms.Algorithm;
@@ -12,7 +11,7 @@ import org.um.feri.ears.operators.PolynomialMutationSO;
 import org.um.feri.ears.operators.SBXCrossoverSO;
 import org.um.feri.ears.operators.TournamentSelection;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -82,7 +81,7 @@ public class CRO extends Algorithm {
 	}
 
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
 		task = taskProblem;
 
 		List<DoubleSolution> broadcastSpawners;
@@ -95,7 +94,7 @@ public class CRO extends Algorithm {
 
 		createInitialPopulation();
 
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 			
 			int quantity = (int) (Fbs * coralReef.size());
 
@@ -107,13 +106,13 @@ public class CRO extends Algorithm {
 			
 			selectBroadcastSpawners(quantity, broadcastSpawners, brooders);
 
-			if (task.isStopCriteria()) {
+			if (task.isStopCriterion()) {
 				break;
 			}
 			// External sexual reproduction (broadcast spawning)
 			larvae = sexualReproduction(broadcastSpawners);
 
-			if (task.isStopCriteria()) {
+			if (task.isStopCriterion()) {
 				break;
 			}
 			// Internal sexual reproduction (brooding)
@@ -140,19 +139,19 @@ public class CRO extends Algorithm {
 		return coralReef.get(0);
 	}
 
-	private void createInitialPopulation() throws StopCriteriaException {
+	private void createInitialPopulation() throws StopCriterionException {
 		// At inizialiazation populate only part of the coral reef (rho)
 		int quantity = (int) (rho * N * M);
 		coralReef = new ArrayList<>(N * M);
-		CoralSolution newCoral = new CoralSolution(task.getRandomSolution());
+		CoralSolution newCoral = new CoralSolution(task.getRandomEvaluatedSolution());
 		Coordinate co = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M ));
 		newCoral.setCoralPosition(co);
 		coralReef.add(newCoral);
 		
 		for (int i = 1; i < quantity; i++) {
-			if(task.isStopCriteria())
+			if(task.isStopCriterion())
 				break;
-			newCoral = new CoralSolution(task.getRandomSolution());
+			newCoral = new CoralSolution(task.getRandomEvaluatedSolution());
 			co = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M));
 			while(getCoralFromPosition(co) != null)
 			{
@@ -194,7 +193,7 @@ public class CRO extends Algorithm {
 	}
 
 	private List<DoubleSolution> sexualReproduction(List<DoubleSolution> broadcastSpawners)
-			throws StopCriteriaException {
+			throws StopCriterionException {
 		DoubleSolution[] parents = new DoubleSolution[2];
 		List<DoubleSolution> larvae = new ArrayList<DoubleSolution>(broadcastSpawners.size() / 2);
 
@@ -209,11 +208,11 @@ public class CRO extends Algorithm {
 			}
 
 			DoubleSolution newSolution = crossoverOperator.execute(parents, task)[0];
-			if (task.isStopCriteria()) {
+			if (task.isStopCriterion()) {
 				break;
 			}
 
-			newSolution = task.eval(newSolution);
+			task.eval(newSolution);
 
 			larvae.add(newSolution);
 
@@ -224,17 +223,17 @@ public class CRO extends Algorithm {
 		return larvae;
 	}
 
-	private List<DoubleSolution> asexualReproduction(List<DoubleSolution> brooders) throws StopCriteriaException {
+	private List<DoubleSolution> asexualReproduction(List<DoubleSolution> brooders) throws StopCriterionException {
 		int sz = brooders.size();
 
 		List<DoubleSolution> larvae = new ArrayList<DoubleSolution>(sz);
 
 		for (int i = 0; i < sz; i++) {
 			DoubleSolution newSolution = mutationOperator.execute(brooders.get(i), task);
-			if (task.isStopCriteria()) {
+			if (task.isStopCriterion()) {
 				break;
 			}
-			newSolution = task.eval(newSolution);
+			task.eval(newSolution);
 
 			larvae.add(newSolution);
 		}

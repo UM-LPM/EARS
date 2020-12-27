@@ -28,7 +28,7 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionSelection;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.CrowdingComparator;
@@ -77,10 +77,10 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	/**
 	 * Runs of the GDE3 algorithm.
 	 * @return a <code>SolutionSet</code> that is a set of non dominated solutions as a result of the algorithm execution
-	 * @throws StopCriteriaException
+	 * @throws StopCriterionException
 	 */
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 
 		Distance<Type> distance;
 		Comparator<MOSolutionBase<Type>> dominance;
@@ -95,7 +95,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		// Create the initial solutionSet
 		MOSolutionBase<Type> newSolution;
 		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 			// problem.evaluateConstraints(newSolution);
@@ -103,7 +103,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		}
 
 		// Generations ...
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 			// Create the offSpring solutionSet
 			offspringPopulation = new ParetoSolution(populationSize * 2);
 
@@ -124,7 +124,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				cross.setCurrentSolution(population.get(i));
 				child = cross.execute(parent, task)[0];
 
-				if (task.isStopCriteria())
+				if (task.isStopCriterion())
 					break;
 				task.eval(child);
 

@@ -86,7 +86,7 @@ public class TLBOBenchmarkFunction4 extends Problem {
 		name ="TLBOBenchmarkFunction4 (G10) cec-g10";
 		
 	}
-	public double[] computeConstraints(double x[]) {
+	public double[] evaluateConstrains(double x[]) {
 
 		double[] g = new double[numberOfConstraints];
 		g[0] = -1.0 + 0.0025 * (x[3] + x[5]);

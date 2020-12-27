@@ -9,8 +9,8 @@ import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_STM;
 import org.um.feri.ears.algorithms.moo.nsga3.D_NSGAIII;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
 import org.um.feri.ears.problems.moo.zdt.ZDT2;
 import org.um.feri.ears.problems.moo.zdt.ZDT3;
@@ -39,38 +39,38 @@ public class FillCache {
 		MOAlgorithm.setRunWithOptimalParameters(true);
 		
         
-        /*DoubleMOTask t1 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1());
-        DoubleMOTask t2 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem2());
-        DoubleMOTask t3 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem3());
-        DoubleMOTask t4 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem4());
-        DoubleMOTask t5 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem5());
-        DoubleMOTask t6 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem6());
-        DoubleMOTask t7 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem7());
-        DoubleMOTask t8 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem8());
-        DoubleMOTask t9 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem9());
-        DoubleMOTask t10 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem10());*/
-        DoubleMOTask t1 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT1());
-        DoubleMOTask t2 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT2());
-        DoubleMOTask t3 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT3());
-        DoubleMOTask t4 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT4());
-        DoubleMOTask t5 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT6());
+        /*DoubleMOTask t1 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1());
+        DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem2());
+        DoubleMOTask t3 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem3());
+        DoubleMOTask t4 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem4());
+        DoubleMOTask t5 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem5());
+        DoubleMOTask t6 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem6());
+        DoubleMOTask t7 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem7());
+        DoubleMOTask t8 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem8());
+        DoubleMOTask t9 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem9());
+        DoubleMOTask t10 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem10());*/
+        DoubleMOTask t1 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT1());
+        DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT2());
+        DoubleMOTask t3 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT3());
+        DoubleMOTask t4 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT4());
+        DoubleMOTask t5 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT6());
         
-        //DoubleMOTask t1 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new WFG1(2));
-        /*DoubleMOTask t2 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new WFG2(2));
-        DoubleMOTask t3 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new WFG3(2));
-        DoubleMOTask t4 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new WFG4(2));
-        DoubleMOTask t5 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new WFG5(2));
-        DoubleMOTask t6 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new WFG6(2));
-        DoubleMOTask t7 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new WFG7(2));
-        DoubleMOTask t8 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new WFG8(2));
-        DoubleMOTask t9 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new WFG9(2));
-        DoubleMOTask t10 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new DTLZ1(2));
-        DoubleMOTask t11 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new DTLZ2(2));
-        DoubleMOTask t12 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new DTLZ3(2));
-        DoubleMOTask t13 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new DTLZ4(2));
-        DoubleMOTask t14 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new DTLZ5(2));
-        DoubleMOTask t15 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new DTLZ6(2));
-        DoubleMOTask t16 = new DoubleMOTask(EnumStopCriteria.EVALUATIONS, 300000, 0.0001, new DTLZ7(2));*/
+        //DoubleMOTask t1 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG1(2));
+        /*DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG2(2));
+        DoubleMOTask t3 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG3(2));
+        DoubleMOTask t4 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG4(2));
+        DoubleMOTask t5 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG5(2));
+        DoubleMOTask t6 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG6(2));
+        DoubleMOTask t7 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG7(2));
+        DoubleMOTask t8 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG8(2));
+        DoubleMOTask t9 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG9(2));
+        DoubleMOTask t10 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ1(2));
+        DoubleMOTask t11 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(2));
+        DoubleMOTask t12 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ3(2));
+        DoubleMOTask t13 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ4(2));
+        DoubleMOTask t14 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ5(2));
+        DoubleMOTask t15 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ6(2));
+        DoubleMOTask t16 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ7(2));*/
         
     	ArrayList<DoubleMOTask> tasks = new ArrayList<DoubleMOTask>();
     	tasks.add(t1);
@@ -99,7 +99,7 @@ public class FillCache {
 	    			task.resetCounter();
 	    			try {
 						alg.execute(task);
-					} catch (StopCriteriaException e) {
+					} catch (StopCriterionException e) {
 						e.printStackTrace();
 					}
 	    		}

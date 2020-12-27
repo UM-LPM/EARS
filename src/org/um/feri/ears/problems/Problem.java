@@ -7,48 +7,8 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.util.Util;
 
-/**
- * Main common class for constrained and unconstrained problems.
- * <p>
- *
- * @author Matej Crepinsek
- * @version 1
- *
- * <h3>License</h3>
- * <p>
- * Copyright (c) 2011 by Matej Crepinsek. <br>
- * All rights reserved. <br>
- *
- * <p>
- * ution and use in source and binary forms, with or without
- * ion, are permitted provided that the following conditions
- * are met:
- * <ul>
- * <li>Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- * <li>Redistributions in binary form must reproduce the above
- * copyright notice, this list of conditions and the following
- * disclaimer in the documentation and/or other materials provided with
- * the distribution.
- * <li>Neither the name of the copyright owners, their employers, nor
- * the names of its contributors may be used to endorse or promote
- * products derived from this software without specific prior written
- * permission.
- * </ul>
- * <p>
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
+import javax.annotation.CheckReturnValue;
+
 public abstract class Problem extends ProblemBase<Double> {
 
     protected double[][] optimum;
@@ -68,22 +28,6 @@ public abstract class Problem extends ProblemBase<Double> {
     }
 
     /**
-     * Checks if the provided vector is inside the interval given by the upper and lower limits
-     *
-     * @param x vector to be checked
-     * @return true if the vector is inside interval, false otherwise
-     */
-    public boolean areDimensionsInFeasibleInterval(List<Double> x) {
-        for (int i = 0; i < numberOfDimensions; i++) {
-            if (x.get(i) < lowerLimit.get(i))
-                return false;
-            if (x.get(i) > upperLimit.get(i))
-                return false;
-        }
-        return true;
-    }
-
-    /**
      * Checks if the {@code value} is inside upper and lower limit for the {@code dimension}.
      * If the {@code value} is greater than upper limit it is set to upper limit.
      * If the {@code value} is smaller than lower limit it is set to lower limit.
@@ -92,8 +36,8 @@ public abstract class Problem extends ProblemBase<Double> {
      * @param value     to be set feasible
      * @param dimension of the interval
      * @return feasible value
-     * @CheckReturnValue
      */
+    @CheckReturnValue
     public double setFeasible(double value, int dimension) {
         if (value < lowerLimit.get(dimension))
             return lowerLimit.get(dimension);
@@ -136,9 +80,31 @@ public abstract class Problem extends ProblemBase<Double> {
      * @return true if value feasible, false otherwise
      */
     public boolean isFeasible(double value, int dimension) {
-        if (value < lowerLimit.get(dimension) || value > upperLimit.get(dimension))
-            return false;
+        return (value >= lowerLimit.get(dimension) && value <= upperLimit.get(dimension));
+    }
+
+    /**
+     * Checks if the provided array is inside the interval given by the upper and lower limits
+     *
+     * @param x array to be checked
+     * @return true if the array is inside interval, false otherwise
+     */
+    public boolean isFeasible(double[] x) {
+        for (int i = 0; i < numberOfDimensions; i++) {
+            if (x[i] < lowerLimit.get(i) || x[i] > upperLimit.get(i))
+                return false;
+        }
         return true;
+    }
+
+    /**
+     * Checks if the provided vector is inside the interval given by the upper and lower limits
+     *
+     * @param x vector to be checked
+     * @return true if the vector is inside interval, false otherwise
+     */
+    public boolean isFeasible(List<Double> x) {
+        return isFeasible(x.stream().mapToDouble(i -> i).toArray());
     }
 
     @Override
@@ -146,12 +112,10 @@ public abstract class Problem extends ProblemBase<Double> {
         return "Problem: " + name + " version: " + version + " dimensions: " + numberOfDimensions + " constraints: " + numberOfConstraints;
     }
 
-    public static final EnumProblemTypes TYPE = EnumProblemTypes.SORPO;
-
     /**
      * Returns a 2 dimensional vector containing all the global optima.
      *
-     * @return vector containing the global optima
+     * @return 2 dimensional vector containing the global optima
      */
     public final double[][] getOptimalVector() {
         return optimum;
@@ -182,10 +146,36 @@ public abstract class Problem extends ProblemBase<Double> {
         return eval(ArrayUtils.toPrimitive(x));
     }
 
-    public boolean isFirstBetter(double a, double b) {
+    public boolean isFirstBetter(double first, double second) {
         if (minimize)
-            return a < b;
-        return a > b;
+            return first < second;
+        return first > second;
+    }
+
+    /**
+     * Compares fitness values and constraints
+     *
+     * @param first
+     * @param firstEval
+     * @param second
+     * @param secondEval
+     * @return
+     */
+    public boolean isFirstBetter(List<Double> first, double firstEval, List<Double> second, double secondEval) {
+        double firstCons = evaluateConstraintsViolation(first);
+        double secondCons = evaluateConstraintsViolation(second);
+        if (firstCons == 0) {
+            if (secondCons == 0) {
+                if (minimize)
+                    return firstEval < secondEval;
+                return firstEval > secondEval;
+            }
+            return true; // second is not feasible
+        }
+        if (secondCons == 0) {
+            return false;
+        }
+        return firstCons < secondCons; // less constraints is better
     }
 
     /**
@@ -203,26 +193,28 @@ public abstract class Problem extends ProblemBase<Double> {
      * @param x variables for which the constraints will be evaluated
      * @return computed constraints
      */
-    public double[] computeConstraints(double[] x) {
+    public double[] evaluateConstrains(double[] x) {
         return new double[0];
     }
 
-    public final double[] computeConstraints(List<Double> x) {
-        return computeConstraints(x.stream().mapToDouble(i -> i).toArray());
+    public final double[] evaluateConstrains(List<Double> x) {
+        return evaluateConstrains(x.stream().mapToDouble(i -> i).toArray());
     }
 
-    public final double[] computeConstraints(Double[] x) {
-        return computeConstraints(ArrayUtils.toPrimitive(x));
+    public final double[] evaluateConstrains(Double[] x) {
+        return evaluateConstrains(ArrayUtils.toPrimitive(x));
     }
 
     /**
+     * Evaluates the constraints violation based on the constrain type
      * @param x - solution
      * @return
      */
-    public double evaluateConstraints(List<Double> x) {
+    public double evaluateConstraintsViolation(List<Double> x) {
         if (numberOfConstraints == 0)
             return 0;
-        double[] g = computeConstraints(x); //calculate for every constrain (problem depended)
+        //TODO constraints are reevaluated each time
+        double[] g = evaluateConstrains(x); //calculate for every constrain (problem depended)
         double d = 0;
         for (int j = 0; j < numberOfConstraints; j++) {
             if (g[j] > 0) {
@@ -230,25 +222,9 @@ public abstract class Problem extends ProblemBase<Double> {
                 if (constrained_type == CONSTRAINED_TYPE_SUM) d += g[j];
                 if (constrained_type == CONSTRAINED_TYPE_NORMALIZATION)
                     d += g[j] * normalization_constraints_factor[j];// *(count_constrains[j]+1);
-
             }
         }
         return d;
-    }
-
-    /**
-     * Generates a random evaluated solution.
-     *
-     * @return generated solution
-     */
-    public DoubleSolution getRandomSolution() {
-        //Double[] var=new Double[numberOfDimensions];
-        ArrayList<Double> var = new ArrayList<Double>();
-        for (int j = 0; j < numberOfDimensions; j++) {
-            //var[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
-            var.add(Util.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
-        }
-        return new DoubleSolution(var, eval(var), computeConstraints(var), upperLimit, lowerLimit);
     }
 
     /**
@@ -265,29 +241,24 @@ public abstract class Problem extends ProblemBase<Double> {
     }
 
     /**
-     * Compares fitness values and constraints
+     * Generates a random evaluated solution.
      *
-     * @param first
-     * @param firstEval
-     * @param second
-     * @param secondEval
-     * @return
+     * @return evaluated random solution
      */
-    public boolean isFirstBetter(List<Double> first, double firstEval, List<Double> second, double secondEval) {
-        double firstCons = evaluateConstraints(first);
-        double secondCons = evaluateConstraints(second);
-        if (firstCons == 0) {
-            if (secondCons == 0) {
-                if (minimize)
-                    return firstEval < secondEval;
-                return firstEval > secondEval;
-            }
-            return true; // second is not feasible
-        }
-        if (secondCons == 0) {
-            return false;
-        }
-        return firstCons < secondCons; // less constraints is better
+    public DoubleSolution getRandomEvaluatedSolution() {
+        List<Double> var = Arrays.asList(ArrayUtils.toObject(getRandomVariables()));
+        return new DoubleSolution(var, eval(var), evaluateConstrains(var), upperLimit, lowerLimit);
+    }
 
+    /**
+     * Generates a random unevaluated solution.
+     *
+     * @return randomly generated unevaluated solution
+     */
+    public DoubleSolution getRandomSolution() {
+        List<Double> var = Arrays.asList(ArrayUtils.toObject(getRandomVariables()));
+        DoubleSolution newSolution = new DoubleSolution();
+        newSolution.setVariables(var);
+        return newSolution;
     }
 }

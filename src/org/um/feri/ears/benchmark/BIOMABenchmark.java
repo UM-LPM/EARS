@@ -11,7 +11,7 @@ import java.util.concurrent.Future;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
@@ -68,7 +68,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
         this.random = random;
         this.drawLimit = draw_limit;
         maxEvaluations=300000;
-        stopCriteria = EnumStopCriteria.EVALUATIONS;
+        stopCriterion = EnumStopCriterion.EVALUATIONS;
         maxIterations = 500;
         timeLimit = 5000; //millisecnods
         initFullProblemList();
@@ -167,7 +167,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(EnumStopCriteria sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
+    protected void registerTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
         listOfProblems.add(new DoubleMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
     
@@ -193,7 +193,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
 
     	
     	for (DoubleMOProblem moProblem : problems) {
-    		registerTask(stopCriteria, maxEvaluations, timeLimit, maxIterations,  1.0E-4, moProblem);
+    		registerTask(stopCriterion, maxEvaluations, timeLimit, maxIterations,  1.0E-4, moProblem);
 		}
     }
         

@@ -8,7 +8,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 import org.um.feri.ears.util.Util;
@@ -47,11 +47,11 @@ public class CS extends Algorithm{
 	}
 
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
 		task = taskProblem;
 		initPopulation();
 	
-		while (!task.isStopCriteria()) {
+		while (!task.isStopCriterion()) {
 
 			//Generate new solutions (but keep the current best)
 			getCuckoos();
@@ -89,7 +89,7 @@ public class CS extends Algorithm{
 	/**
 	 *  Replace some nests by constructing new solutions/nests
 	 */
-	private void emptyNests() throws StopCriteriaException {
+	private void emptyNests() throws StopCriterionException {
 		
 		//A fraction of worse nests are discovered with probability pa
 		ArrayList<DoubleSolution> offspringPopulation = new ArrayList<DoubleSolution>();
@@ -108,7 +108,7 @@ public class CS extends Algorithm{
 					newSolution[j] = nest.get(i).getValue(j) + stepsize;
 				}
 				newSolution = task.setFeasible(newSolution);
-				if(task.isStopCriteria())
+				if(task.isStopCriterion())
 					break;
 				DoubleSolution newC = task.eval(newSolution);
 				offspringPopulation.add(newC);
@@ -125,7 +125,7 @@ public class CS extends Algorithm{
 	/**
 	 * Get cuckoos by random walk
 	 */
-	private void getCuckoos() throws StopCriteriaException {
+	private void getCuckoos() throws StopCriterionException {
 		
 		//Levy flights
 		//Levy exponent and coefficient
@@ -152,7 +152,7 @@ public class CS extends Algorithm{
 			}
 			
 			newSolution = task.setFeasible(newSolution);
-			if(task.isStopCriteria())
+			if(task.isStopCriterion())
 				break;
 			DoubleSolution newC = task.eval(newSolution);
 			offspringPopulation.add(newC);
@@ -160,12 +160,12 @@ public class CS extends Algorithm{
 		setBest(offspringPopulation);
 	}
 
-	private void initPopulation() throws StopCriteriaException {
+	private void initPopulation() throws StopCriterionException {
 		nest = new ArrayList<DoubleSolution>();
 	
 		for (int i = 0; i < popSize; i++) {
-			nest.add(task.getRandomSolution());
-			if (task.isStopCriteria())
+			nest.add(task.getRandomEvaluatedSolution());
+			if (task.isStopCriterion())
 				break;
 		}
 		nest.sort(new TaskComparator(task));

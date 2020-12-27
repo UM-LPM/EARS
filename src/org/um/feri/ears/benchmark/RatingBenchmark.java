@@ -51,9 +51,9 @@ import java.util.concurrent.TimeUnit;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Game;
@@ -83,7 +83,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 				if (printSingleRunDuration)
 					System.out.println(al.getID() + ": " + duration / 1000.0);
 				reset(task); // for one eval!
-				if (task.areDimensionsInFeasibleInterval(bestByALg.getVariables())) {
+				if (task.isFeasible(bestByALg.getVariables())) {
 
 					results.add(new AlgorithmEvalResult(bestByALg, al, task.getNumberOfEvaluations()));
 					allSingleProblemRunResults.add(task, bestByALg, al);
@@ -93,9 +93,9 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 							+ " is out of intervals! For task:" + task.getProblemName());
 					results.add(new AlgorithmEvalResult(null, al, task.getNumberOfEvaluations())); // this can be done parallel - asynchrony
 				}
-			} catch (StopCriteriaException e) {
+			} catch (StopCriterionException e) {
 				System.err.println(
-						al.getAlgorithmInfo().getVersionAcronym() + " StopCriteriaException for:" + task + "\n" + e);
+						al.getAlgorithmInfo().getVersionAcronym() + " StopCriterionException for:" + task + "\n" + e);
 				results.add(new AlgorithmEvalResult(null, al, task.getNumberOfEvaluations()));
 			}
 		}
@@ -155,9 +155,9 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 														// benchmark
 					if (debugPrint)
 						System.out.println("draw of " + win.getAl().getID() + " ("
-								+ Util.df3.format(win.getBest().getEval()) + ", feasable=" + win.getBest().isFeasible()
+								+ Util.df3.format(win.getBest().getEval()) + ", feasable=" + win.getBest().areConstraintsMet()
 								+ ") against " + lose.getAl().getID() + " (" + Util.df3.format(lose.getBest().getEval())
-								+ ", feasable=" + lose.getBest().isFeasible() + ") for " + t.getProblemName());
+								+ ", feasable=" + lose.getBest().areConstraintsMet() + ") for " + t.getProblemName());
 					arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(),
 							lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName());
 				} else {
@@ -175,9 +175,9 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 					}
 					if (debugPrint)
 						System.out.println("win of " + win.getAl().getID() + " ("
-								+ Util.df3.format(win.getBest().getEval()) + ", feasable=" + win.getBest().isFeasible()
+								+ Util.df3.format(win.getBest().getEval()) + ", feasable=" + win.getBest().areConstraintsMet()
 								+ ") against " + lose.getAl().getID() + " (" + Util.df3.format(lose.getBest().getEval())
-								+ ", feasable=" + lose.getBest().isFeasible() + ") for " + t.getProblemName());
+								+ ", feasable=" + lose.getBest().areConstraintsMet() + ") for " + t.getProblemName());
 					arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(),
 							lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName());
 				}
@@ -193,18 +193,18 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 			return false;
 		if (b == null)
 			return false;
-		if (!a.isFeasible() && b.isFeasible())
+		if (!a.areConstraintsMet() && b.areConstraintsMet())
 			return false;
-		if (a.isFeasible() && !b.isFeasible())
+		if (a.areConstraintsMet() && !b.areConstraintsMet())
 			return false;
-		if (!a.isFeasible() && !b.isFeasible())
+		if (!a.areConstraintsMet() && !b.areConstraintsMet())
 			return true;
 
 		// TODO global optimum (requires number of evaluations)
 		// if global optimum first check if draw then compare number of
 		// evaluations
 		/*
-		 * if(stopCriteria == EnumStopCriteria.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
+		 * if(stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
 		 * // if results are equal check number of evaluations
 		 * if(Math.abs(a.getEval()-b.getEval())<draw_limit){ } }
 		 */
@@ -214,8 +214,8 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 		return false;
 	}
 
-	protected abstract void registerTask(Problem p, EnumStopCriteria sc, int eval, long time, int maxIterations,
-			double epsilon);
+	protected abstract void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations,
+										 double epsilon);
 
 
 	/**

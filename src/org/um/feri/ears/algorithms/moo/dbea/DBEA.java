@@ -33,10 +33,8 @@ import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.operators.PolynomialMutation;
-import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.ObjectiveComparator;
@@ -193,7 +191,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	}
 
 	@Override
-	protected void init() throws StopCriteriaException{
+	protected void init() throws StopCriterionException {
 		initPopulation();
 		generateWeights();
 		preserveCorner();
@@ -201,7 +199,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 	}
 	
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 		
 		do {
 			int[] permutation = Util.randomPermutation(population.size());
@@ -216,7 +214,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 				MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
 				mut.execute(offSpring[0], task);
 		
-				if (task.isStopCriteria())
+				if (task.isStopCriterion())
 				{
 					best = population;
 					return;
@@ -234,7 +232,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 			// version
 			preserveCorner();
 			task.incrementNumberOfIterations();
-		} while (!task.isStopCriteria());
+		} while (!task.isStopCriterion());
 		best = population;
 	}
 
@@ -243,12 +241,12 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 		
 	}
 	
-	public void initPopulation() throws StopCriteriaException {
+	public void initPopulation() throws StopCriterionException {
 		
 		population = new ParetoSolution<Type>(populationSize);
 		for (int i = 0; i < populationSize; i++) {
 
-			if (task.isStopCriteria())
+			if (task.isStopCriterion())
 				return;
 			MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
 

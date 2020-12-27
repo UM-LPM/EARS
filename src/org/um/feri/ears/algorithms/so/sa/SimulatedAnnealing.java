@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -45,21 +45,21 @@ public class SimulatedAnnealing extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         sigma = task.getInterval();
         for (int i = 0; i < task.getNumberOfDimensions(); i++) {
             sigma[i] *= 0.1;
         }
 
-        globalBest = task.getRandomSolution();
+        globalBest = task.getRandomEvaluatedSolution();
         currentBest = new DoubleSolution(globalBest);
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             for (int i = 0; i < subIterations; i++) {
 
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
                 // create a neighbor by mutating the current best solution
                 DoubleSolution neighbor = neighbor(currentBest);
@@ -85,7 +85,7 @@ public class SimulatedAnnealing extends Algorithm {
         return globalBest;
     }
 
-    private DoubleSolution neighbor(DoubleSolution currentBest) throws StopCriteriaException {
+    private DoubleSolution neighbor(DoubleSolution currentBest) throws StopCriterionException {
 
         double[] currentVariables = currentBest.getDoubleVariables();
         double[] x = new double[task.getNumberOfDimensions()];

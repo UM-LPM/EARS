@@ -1,8 +1,8 @@
 package org.um.feri.ears.experiment.ee;
 
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.Rastrigin;
@@ -34,33 +34,33 @@ public class SORatingExample {
         	{
         		Problem p = problems[pr];
         		try {
-                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 5000*dimmensions[i], 0, 0, 0.001, p);
+                	Task t = new Task(EnumStopCriterion.EVALUATIONS, 5000*dimmensions[i], 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
         			psoLogging.execute(t);
         			t.saveAncestorLogging(psoLogging.getID()+"_"+p.getName());
         			t.saveGraphingFile(psoLogging.getID()+"_"+p.getName(),psoLogging);
-        		} catch (StopCriteriaException e) {
+        		} catch (StopCriterionException e) {
         			e.printStackTrace();
         		}
         		
                 Task.resetLoggingID();
                 try {
-                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 5000*dimmensions[i], 0, 0, 0.001, p);
+                	Task t = new Task(EnumStopCriterion.EVALUATIONS, 5000*dimmensions[i], 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
                 	jadeLogging.execute(t);
         			t.saveAncestorLogging(jadeLogging.getID()+"_"+p.getName());
         			t.saveGraphingFile(jadeLogging.getID()+"_"+p.getName(),jadeLogging);
-        		} catch (StopCriteriaException e) {
+        		} catch (StopCriterionException e) {
         			e.printStackTrace();
         		}
                 
                 Task.resetLoggingID();
                 try{
-                	Task t = new Task(EnumStopCriteria.EVALUATIONS, 5000*dimmensions[i], 0, 0, 0.001, p);
+                	Task t = new Task(EnumStopCriterion.EVALUATIONS, 5000*dimmensions[i], 0, 0, 0.001, p);
                 	t.enableAncestorLogging();
                 	deLogging.execute(t);
                 	t.saveAncestorLogging(deLogging.getID().replaceAll("/", "-")+"_"+p.getName());
-                } catch (StopCriteriaException e){
+                } catch (StopCriterionException e){
                 	e.printStackTrace();
                 }
                 Task.resetLoggingID();

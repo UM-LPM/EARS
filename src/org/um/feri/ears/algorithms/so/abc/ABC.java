@@ -7,7 +7,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -53,12 +53,12 @@ public class ABC extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         limit = (cs * task.getNumberOfDimensions()) / 2;
         initPopulation();
 
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             sendEmployedBees();
             calculateProbabilities();
@@ -71,13 +71,13 @@ public class ABC extends Algorithm {
         return best;
     }
 
-    private void sendScoutBees() throws StopCriteriaException {
+    private void sendScoutBees() throws StopCriterionException {
 
         for (int i = 0; i < foodNumber; i++) {
             if (population.get(i).trials >= limit) {
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     return;
-                ABCSolution newBee = new ABCSolution(task.getRandomSolution());
+                ABCSolution newBee = new ABCSolution(task.getRandomEvaluatedSolution());
                 population.set(i, newBee);
             }
         }
@@ -94,7 +94,7 @@ public class ABC extends Algorithm {
 
     }
 
-    private void sendOnlookerBees() throws StopCriteriaException {
+    private void sendOnlookerBees() throws StopCriterionException {
 
         int neighbour, param2change;
         double phi, newValue;
@@ -121,10 +121,10 @@ public class ABC extends Algorithm {
                 ABCSolution newBee = new ABCSolution(population.get(i));
                 newBee.setValue(param2change, newValue);
 
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     return;
 
-                newBee = new ABCSolution(task.eval(newBee));
+                task.eval(newBee);
 
                 if (newBee.getABCEval() > population.get(i).getABCEval()) {
                     newBee.trials = 0;
@@ -159,7 +159,7 @@ public class ABC extends Algorithm {
 
     }
 
-    private void sendEmployedBees() throws StopCriteriaException {
+    private void sendEmployedBees() throws StopCriterionException {
         int neighbour, param2change;
         double phi, newValue;
 
@@ -182,11 +182,10 @@ public class ABC extends Algorithm {
             ABCSolution newBee = new ABCSolution(population.get(i));
             newBee.setValue(param2change, newValue);
 
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 return;
 
-            newBee = new ABCSolution(task.eval(newBee));
-
+            task.eval(newBee);
 
             if (newBee.getABCEval() > population.get(i).getABCEval()) {
                 newBee.trials = 0;
@@ -197,17 +196,17 @@ public class ABC extends Algorithm {
         }
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new ArrayList<ABCSolution>();
-        ABCSolution bee = new ABCSolution(task.getRandomSolution());
+        ABCSolution bee = new ABCSolution(task.getRandomEvaluatedSolution());
         population.add(bee);
         best = new ABCSolution(bee);
         for (int i = 0; i < foodNumber - 1; i++) {
-            ABCSolution newBee = new ABCSolution(task.getRandomSolution());
+            ABCSolution newBee = new ABCSolution(task.getRandomEvaluatedSolution());
             population.add(newBee);
             if (task.isFirstBetter(newBee, best))
                 best = new ABCSolution(newBee);
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
         }
     }

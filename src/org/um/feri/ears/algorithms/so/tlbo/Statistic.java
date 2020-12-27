@@ -15,7 +15,7 @@ public class Statistic {
     private static final int INIT_GEN_ID = -1;
 
     public boolean isBestFeasible() {
-        return a.get(a.size() - 1).best.isFeasible();
+        return a.get(a.size() - 1).best.areConstraintsMet();
     }
 
     public long getEvalCount() {

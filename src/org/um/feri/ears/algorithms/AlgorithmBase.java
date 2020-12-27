@@ -9,22 +9,13 @@ import java.util.Map.Entry;
 
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.Util;
 
 public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase> {
-	
-	/**
-	 * Search for best solution.
-	 * 
-	 * if StopCriteriaException is thrown tasks isStopCriteria method is not used properly.
-	 * 
-	 * @param taskProblem
-	 * @return best solution
-	 * @throws StopCriteriaException 
-	 */
+
     protected boolean debug;
     protected boolean display_data = false;
     protected boolean save_data = false;
@@ -101,9 +92,9 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
      * 
      * @param taskProblem
      * @return
-     * @throws StopCriteriaException
+     * @throws StopCriterionException
      */
-	public abstract T2 execute(T taskProblem) throws StopCriteriaException;
+	public abstract T2 execute(T taskProblem) throws StopCriterionException;
 	
 	public String getCacheKey(String taskString) {
 		

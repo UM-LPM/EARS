@@ -11,7 +11,7 @@ import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
@@ -112,11 +112,11 @@ public class DEAlgorithm extends Algorithm {
         }
     }
 
-    private IndividualSA[] c;
-    private IndividualSA[] d; // double c[MAXPOP][MAXDIM], d[MAXPOP][MAXDIM];
-    private IndividualSA[] pold; // double pold[MAXPOP][MAXDIM]
-    private IndividualSA[] pnew; // pnew[MAXPOP][MAXDIM]
-    private IndividualSA[] pswap; // (*pswap)[MAXPOP][MAXDIM];
+    private DESolution[] c;
+    private DESolution[] d; // double c[MAXPOP][MAXDIM], d[MAXPOP][MAXDIM];
+    private DESolution[] pold; // double pold[MAXPOP][MAXDIM]
+    private DESolution[] pnew; // pnew[MAXPOP][MAXDIM]
+    private DESolution[] pswap; // (*pswap)[MAXPOP][MAXDIM];
     private Task task;
 
 
@@ -140,7 +140,7 @@ public class DEAlgorithm extends Algorithm {
     private double cmean; /* mean cost */
     private double F, memF, CR, memCR; /* control variables of DE */
     // double cmin; /* help variables */
-    private IndividualSA best, bestit, bestI;// best, best iteration, best I
+    private DESolution best, bestit, bestI;// best, best iteration, best I
     private boolean debug;
     /* --------- jDE constants ----------- */
     private final static double Finit = 0.5; // F INITIAL FACTOR VALUE
@@ -196,16 +196,16 @@ public class DEAlgorithm extends Algorithm {
         // System.arraycopy(src, srcPos, dest, destPos, length)
     }
 
-    public void init() throws StopCriteriaException {
+    public void init() throws StopCriterionException {
         this.D = task.getNumberOfDimensions();
         // this.NP = D * 10; Set by constructor
         this.F = memF;
         this.CR = memCR;
         tmp = new double[D];
-        c = new IndividualSA[NP];
-        d = new IndividualSA[NP];
+        c = new DESolution[NP];
+        d = new DESolution[NP];
         for (i = 0; i < NP; i++) {
-            c[i] = new IndividualSA(task.getRandomSolution(), Finit, CRinit);
+            c[i] = new DESolution(task.getRandomEvaluatedSolution(), Finit, CRinit);
             // System.out.println(i+". "+c[i]);
         }
         
@@ -223,21 +223,21 @@ public class DEAlgorithm extends Algorithm {
                 bestI = c[i];
         }
         // if (strategy == 20) System.out.println("Start 0I:"+bestI);
-        best = new IndividualSA(bestI);
-        bestit = new IndividualSA(bestI);
+        best = new DESolution(bestI);
+        bestit = new DESolution(bestI);
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         this.task = taskProblem;
         init(); // referesh all data
         pold = c; /* old population (generation G) */
         pnew = d; /* new population (generation G+1) */
         // if (strategy == 20) System.out.println("NP="+NP+" Start:"+best);
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
 
             for (i = 0; i < NP; i++) /* Start of loop through ensemble */ {
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
                 do /* Pick a random population member */ { /* Endless loop for NP < 2 !!! */
                     r1 = Util.rnd.nextInt(NP); // (int) (Util.rnd.nextDouble() *
@@ -450,7 +450,7 @@ public class DEAlgorithm extends Algorithm {
                     tmp[kk] = task.setFeasible(tmp[kk], kk);
                 }
                 DoubleSolution br = task.eval(tmp);
-                IndividualSA trial_cost = new IndividualSA(br, tmpF, tmpCR);
+                DESolution trial_cost = new DESolution(br, tmpF, tmpCR);
                 // if (strategy == 20) System.out.println(pnew[i]+
                 // " new best "+trial_cost);
                 if (task.isFirstBetter(trial_cost, pold[i])) {
@@ -458,17 +458,17 @@ public class DEAlgorithm extends Algorithm {
                     // "  best "+trial_cost);
                     pnew[i] = trial_cost;
                     if (task.isFirstBetter(trial_cost, best)) {
-                        best = new IndividualSA(trial_cost);
+                        best = new DESolution(trial_cost);
                     }
 
                 } else {
-                    pnew[i] = new IndividualSA(pold[i]);
+                    pnew[i] = new DESolution(pold[i]);
                     // System.out.println(pold[i]+" vs "+pnew[i]);
                 }
 
             } /* End mutation loop through pop. */
             // System.out.println(task.getNumberOfEvaluations());
-            bestit = new IndividualSA(best);
+            bestit = new DESolution(best);
             // if (strategy == 20) System.out.println(best);
             pswap = pold;
             pold = pnew;

@@ -5,8 +5,8 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.TaskComparator;
 
@@ -48,15 +48,15 @@ public class GOA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriteriaException {
+    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
         int maxIt = 10000;
-        if (task.getStopCriteria() == EnumStopCriteria.ITERATIONS) {
+        if (task.getStopCriterion() == EnumStopCriterion.ITERATIONS) {
             maxIt = task.getMaxIterations();
         }
 
-        if (task.getStopCriteria() == EnumStopCriteria.EVALUATIONS) {
+        if (task.getStopCriterion() == EnumStopCriterion.EVALUATIONS) {
             maxIt = task.getMaxEvaluations() / popSize;
         }
 
@@ -64,7 +64,7 @@ public class GOA extends Algorithm {
         double[] ub = task.getUpperLimit();
         double[] lb = task.getLowerLimit();
         double eps = Math.pow(2, -52);
-        while (!task.isStopCriteria()) {
+        while (!task.isStopCriterion()) {
             //TODO normalize variables
             double c = cMax - (task.getNumberOfIterations() + 2) * ((cMax - cMin) / maxIt); // Eq. (2.8) in the paper
             double xj_xi, s_ij1, s_ij2;
@@ -102,7 +102,7 @@ public class GOA extends Algorithm {
                 }
 
                 newPosition = task.setFeasible(newPosition);
-                if (task.isStopCriteria())
+                if (task.isStopCriterion())
                     break;
                 DoubleSolution newGH = task.eval(newPosition);
 
@@ -152,13 +152,13 @@ public class GOA extends Algorithm {
         return Math.sqrt(Math.pow((a1 - b1), 2) + Math.pow((a2 - b2), 2));
     }
 
-    private void initPopulation() throws StopCriteriaException {
+    private void initPopulation() throws StopCriterionException {
         population = new ArrayList<DoubleSolution>();
 
         for (int i = 0; i < popSize; i++) {
-            if (task.isStopCriteria())
+            if (task.isStopCriterion())
                 break;
-            DoubleSolution newSolution = task.getRandomSolution();
+            DoubleSolution newSolution = task.getRandomEvaluatedSolution();
             population.add(newSolution);
         }
 

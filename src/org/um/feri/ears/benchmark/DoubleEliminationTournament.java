@@ -18,17 +18,11 @@ import java.util.concurrent.Future;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.EnumStopCriteria;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
-import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
-import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.FutureResult;
 import org.um.feri.ears.util.PermutationUtility;
 import org.um.feri.ears.util.Util;
@@ -320,7 +314,7 @@ public class DoubleEliminationTournament {
 					try {
 						bestByALg = al.execute(task);
 						task.resetCounter();
-					} catch (StopCriteriaException e) {
+					} catch (StopCriterionException e) {
 						e.printStackTrace();
 					}
 					results.add(new MOAlgorithmEvalResult(bestByALg, al)); 
@@ -372,7 +366,7 @@ public class DoubleEliminationTournament {
 					try {
 						bestByALg = al.execute(task);
 						task.resetCounter();
-					} catch (StopCriteriaException e) {
+					} catch (StopCriterionException e) {
 						e.printStackTrace();
 					}
 					participants.add(new MOAlgorithmEvalResult(bestByALg, al)); 

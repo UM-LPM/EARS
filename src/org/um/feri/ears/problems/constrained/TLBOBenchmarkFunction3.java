@@ -71,7 +71,7 @@ public class TLBOBenchmarkFunction3  extends Problem{
 		name = "TLBOBenchmarkFunction3 cec-g09";
 	}
 	
-	public double[] computeConstraints(double x[]) {
+	public double[] evaluateConstrains(double x[]) {
 
 		 double[] g = new double[4];
 

@@ -6,7 +6,8 @@ import java.io.FileReader;
 import java.util.HashMap;
 
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
@@ -27,7 +28,7 @@ public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOA
 	}
 
 	@Override
-	public ParetoSolution<Type> execute(T taskProblem) throws StopCriteriaException {
+	public ParetoSolution<Type> execute(T taskProblem) throws StopCriterionException {
 		String problemName = taskProblem.getProblemFileName();
 		
 		if(results.containsKey(problemName.toLowerCase()))
@@ -109,12 +110,12 @@ public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOA
 	}
 
 	@Override
-	protected void init() throws StopCriteriaException {
+	protected void init() throws StopCriterionException {
 		
 	}
 
 	@Override
-	protected void start() throws StopCriteriaException {
+	protected void start() throws StopCriterionException {
 		
 	}
 }

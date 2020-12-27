@@ -220,7 +220,7 @@ public class CEC2011_Problem_11_7_ELD_140 extends Problem {
     return Prohibited_Operating_Zones_POZ(i * 2 + 1, j);
   }
 
-  public double[] computeConstraints(double x[]) {
+  public double[] evaluateConstrains(double x[]) {
     g_constrains = new double[numberOfConstraints];
     double Power_Loss = 0;
     double Power_Balance_Penalty = Math.abs(Power_Demand + Power_Loss - sum(x));

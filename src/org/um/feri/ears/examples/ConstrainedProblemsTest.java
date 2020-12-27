@@ -1,21 +1,16 @@
 package org.um.feri.ears.examples;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.woa.WOA;
-import org.um.feri.ears.algorithms.so.gwo.GWO;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriteriaException;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.constrained.RealWorldCompressionSpringDesign;
 import org.um.feri.ears.problems.constrained.RealWorldPressureVesselDesign;
-import org.um.feri.ears.problems.unconstrained.Sphere;
-import org.um.feri.ears.util.Util;
 
 public class ConstrainedProblemsTest {
 	
@@ -31,14 +26,14 @@ public class ConstrainedProblemsTest {
 	public static ArrayList<DoubleSolution> TestWOAWithProblem(Problem prob, int repetitions) {
 		ArrayList<DoubleSolution> listOfBests = new ArrayList<DoubleSolution>();
 		for(int i = 0; i < repetitions; i++) {
-			Task problem = new Task(EnumStopCriteria.EVALUATIONS, 10000, 0, 0, 0.001, prob);
+			Task problem = new Task(EnumStopCriterion.EVALUATIONS, 10000, 0, 0, 0.001, prob);
 			int populationSize = 30;
 			Algorithm woa = new WOA(populationSize, false);
 			try {
 				DoubleSolution best = woa.execute(problem);
 				listOfBests.add(best);
 				System.out.println("Best #"+ i+":" + best.getEval());
-			} catch(StopCriteriaException e) {
+			} catch(StopCriterionException e) {
 				e.printStackTrace();
 			}
 		}

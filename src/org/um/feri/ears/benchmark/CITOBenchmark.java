@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.EnumStopCriteria;
+import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.IntegerMOProblem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -68,7 +68,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
      * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
      */
     @Override
-    protected void registerTask(EnumStopCriteria sc, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
+    protected void registerTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
         listOfProblems.add(new IntegerMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
     
@@ -174,7 +174,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
 //		problems.add(new CITOProblem(CITOProblem.Problems.OO_MyBatis.name()));
     	
     	for (IntegerMOProblem moProblem : problems) {
-    		registerTask(stopCriteria, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
+    		registerTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
 		}
     }
         
