@@ -158,12 +158,12 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
 			MOSolutionBase<Double> particle = swarm.get(i);
 			for (int var = 0; var < num_var; var++) {
 				particle.setValue(var, particle.getValue(var) + speed[i][var]);
-				if (particle.getValue(var) < task.getLowerLimit()[var]) {
-					particle.setValue(var, task.getLowerLimit()[var]);
+				if (particle.getValue(var) < task.getLowerLimit(var)) {
+					particle.setValue(var, task.getLowerLimit(var));
 					speed[i][var] = speed[i][var] * -1.0;
 				}
-				if (particle.getValue(var) > task.getUpperLimit()[var]) {
-					particle.setValue(var,task.getUpperLimit()[var]);
+				if (particle.getValue(var) > task.getUpperLimit(var)) {
+					particle.setValue(var,task.getUpperLimit(var));
 					speed[i][var] = speed[i][var] * -1.0;
 				}
 			}

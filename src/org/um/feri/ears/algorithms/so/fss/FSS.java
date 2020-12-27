@@ -83,7 +83,7 @@ public class FSS extends Algorithm {
 
             individualOperator(stepIndividual);
 
-            collectivesVolatileOperator(stepVolatile * (task.getUpperLimit()[0] - task.getLowerLimit()[0]), schoolInstinctive);
+            collectivesVolatileOperator(stepVolatile * (task.getUpperLimit(0) - task.getLowerLimit(0)), schoolInstinctive);
 
             task.incrementNumberOfIterations();
         }

@@ -37,8 +37,8 @@ public class PolynomialMutation implements MutationOperator<Double, DoubleMOTask
 		for (int var = 0; var < task.getNumberOfDimensions(); var++) {
 			if (Util.rnd.nextDouble() <= probability) {
 				y = solution.getValue(var);
-				yl = task.getLowerLimit()[var];
-				yu = task.getUpperLimit()[var];
+				yl = task.getLowerLimit(var);
+				yu = task.getUpperLimit(var);
 				delta1 = (y - yl) / (yu - yl);
 				delta2 = (yu - y) / (yu - yl);
 				rnd = Util.rnd.nextDouble();

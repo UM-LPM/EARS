@@ -77,6 +77,14 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 		return arr;
 	}
 
+	public double getLowerLimit(int i) {
+		return p.lowerLimit.get(i);
+	}
+
+	public double getUpperLimit(int i) {
+		return p.upperLimit.get(i);
+	}
+
 	@Override
 	public MOTask returnCopy() {
 		return new DoubleMOTask(this);

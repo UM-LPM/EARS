@@ -32,8 +32,6 @@ public class UniformMutation implements MutationOperator<Double, DoubleMOTask, M
   private Double perturbation;
   private Double mutationProbability = null;
 
-  /** Constructor 
- * @param moProblem */
   public UniformMutation(double mutationProbability, double perturbation) {
     this.mutationProbability = mutationProbability;
     this.perturbation = perturbation;
@@ -60,12 +58,12 @@ public class UniformMutation implements MutationOperator<Double, DoubleMOTask, M
         double rand = Util.nextDouble();
         double tmp = (rand - 0.5) * perturbation;
 
-        tmp += solution.getValue(i).doubleValue();
+        tmp += solution.getValue(i);
 
-        if (tmp < task.getUpperLimit()[i]) {
-          tmp = task.getUpperLimit()[i];
-        } else if (tmp > task.getLowerLimit()[i]) {
-          tmp = task.getLowerLimit()[i];
+        if (tmp < task.getUpperLimit(i)) {
+          tmp = task.getUpperLimit(i);
+        } else if (tmp > task.getLowerLimit(i)) {
+          tmp = task.getLowerLimit(i);
         }
 
         solution.setValue(i, tmp);

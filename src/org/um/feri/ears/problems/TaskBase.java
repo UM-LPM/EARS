@@ -389,7 +389,7 @@ public abstract class TaskBase<T extends ProblemBase> {
     {
     	return resetCount;
     }
-    
+
     @Override
     public String toString() {
         return "Task [stopCriterion=" + stopCriterion + ", maxEvaluations=" + maxEvaluations + ", numberOfEvaluations=" + numberOfEvaluations + ", epsilon="

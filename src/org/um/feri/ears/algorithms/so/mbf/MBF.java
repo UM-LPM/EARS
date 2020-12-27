@@ -71,7 +71,7 @@ public class MBF extends Algorithm {
     public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
-        ASDP = 0.1 * (task.getUpperLimit()[0] - task.getLowerLimit()[0]);
+        ASDP = 0.1 * (task.getUpperLimit(0) - task.getLowerLimit(0));
         ASDN = -ASDP;
 
         effectOfSharkAttack = new int[task.getNumberOfDimensions()][2];
@@ -118,7 +118,7 @@ public class MBF extends Algorithm {
                     newSolution.set(d, newSolution.get(d) + solution.movment[d]);
 
                     //Movement Mirror Effect
-                    if (solution.movment[d] > task.getUpperLimit()[d] || solution.movment[d] < task.getLowerLimit()[d]) {
+                    if (solution.movment[d] > task.getUpperLimit(d) || solution.movment[d] < task.getLowerLimit(d)) {
                         solution.movment[d] = -solution.movment[d];
                     }
 

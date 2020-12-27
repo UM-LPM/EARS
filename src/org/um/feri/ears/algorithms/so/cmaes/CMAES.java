@@ -181,12 +181,12 @@ public class CMAES extends Algorithm {
 				xmean = new double[N];
 				for (i = 0; i < N; ++i) { /* TODO: reconsider this algorithm to set X0 */
 					double offset = sigma*diagD[i];
-					double range = (task.getUpperLimit()[i] - task.getLowerLimit()[i] - 2*sigma*diagD[i]); 
-					if (offset > 0.4 * (task.getUpperLimit()[i] - task.getLowerLimit()[i])) {
-						offset = 0.4 * (task.getUpperLimit()[i] - task.getLowerLimit()[i]);
-						range = 0.2 * (task.getUpperLimit()[i] - task.getLowerLimit()[i]);
+					double range = (task.getUpperLimit(i) - task.getLowerLimit(i) - 2*sigma*diagD[i]);
+					if (offset > 0.4 * (task.getUpperLimit(i) - task.getLowerLimit(i))) {
+						offset = 0.4 * (task.getUpperLimit(i) - task.getLowerLimit(i));
+						range = 0.2 * (task.getUpperLimit(i) - task.getLowerLimit(i));
 					}
-					xmean[i] = task.getLowerLimit()[i] + offset + Util.nextDouble() * range;
+					xmean[i] = task.getLowerLimit(i) + offset + Util.nextDouble() * range;
 				}
 			} 
 			/*else {
@@ -238,10 +238,10 @@ public class CMAES extends Algorithm {
 		/* Some consistency check */
 		for (i = 0; i < N; ++i) {
 			if (typicalX != null) {
-				if (task.getLowerLimit()[i] > typicalX[i])
-					System.out.println("lower bound '" + task.getLowerLimit()[i] + "'is greater than typicalX" + typicalX[i]);
-				if (task.getUpperLimit()[i] < typicalX[i])
-					System.out.println("upper bound '" + task.getUpperLimit()[i] + "' is smaller than typicalX " + typicalX[i]);
+				if (task.getLowerLimit(i) > typicalX[i])
+					System.out.println("lower bound '" + task.getLowerLimit(i) + "'is greater than typicalX" + typicalX[i]);
+				if (task.getUpperLimit(i) < typicalX[i])
+					System.out.println("upper bound '" + task.getUpperLimit(i) + "' is smaller than typicalX " + typicalX[i]);
 			}
 		}
 		test();

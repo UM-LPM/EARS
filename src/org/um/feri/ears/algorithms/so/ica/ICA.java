@@ -83,7 +83,7 @@ public class ICA extends Algorithm {
 
         // Compute the problem search space, between the min and max bounds
         for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-            searchSpaceSize[i] = task.getUpperLimit()[i] - task.getLowerLimit()[i];
+            searchSpaceSize[i] = task.getUpperLimit(i) - task.getLowerLimit(i);
         }
 
         initPopulation();

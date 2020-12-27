@@ -110,12 +110,6 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 	//} // Constructor
 
 
-	
-	/**
-	 * Executes the operation
-	 * @param object An object containing an array of three parents
-	 * @return An object containing the offSprings
-	 */
 	@Override
 	public MOSolutionBase<Double>[] execute(MOSolutionBase<Double>[] parent, DoubleMOTask task) {
 
@@ -140,10 +134,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xParent2.getValue(j) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit()[j])
-						value = task.getLowerLimit()[j];
-					if (value > task.getUpperLimit()[j])
-						value = task.getUpperLimit()[j];
+					if (value < task.getLowerLimit(j))
+						value = task.getLowerLimit(j);
+					if (value > task.getUpperLimit(j))
+						value = task.getUpperLimit(j);
 					/*
 					 * if (value < xChild.getLowerBound(j)) { double rnd =
 					 * PseudoRandom.randDouble(0, 1) ; value =
@@ -168,10 +162,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xParent2.getValue(j) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit()[j])
-						value = task.getLowerLimit()[j];
-					if (value > task.getUpperLimit()[j])
-						value = task.getUpperLimit()[j];
+					if (value < task.getLowerLimit(j))
+						value = task.getLowerLimit(j);
+					if (value > task.getUpperLimit(j))
+						value = task.getUpperLimit(j);
 
 					xChild.setValue(j, value);
 				} else {
@@ -186,10 +180,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 				double value;
 				value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-				if (value < task.getLowerLimit()[j])
-					value = task.getLowerLimit()[j];
-				if (value > task.getUpperLimit()[j])
-					value = task.getUpperLimit()[j];
+				if (value < task.getLowerLimit(j))
+					value = task.getLowerLimit(j);
+				if (value > task.getUpperLimit(j))
+					value = task.getUpperLimit(j);
 
 				xChild.setValue(j, value);
 			}
@@ -200,10 +194,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit()[j])
-						value = task.getLowerLimit()[j];
-					if (value > task.getUpperLimit()[j])
-						value = task.getUpperLimit()[j];
+					if (value < task.getLowerLimit(j))
+						value = task.getLowerLimit(j);
+					if (value > task.getUpperLimit(j))
+						value = task.getUpperLimit(j);
 
 					xChild.setValue(j, value);
 				} else {
@@ -219,10 +213,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit()[j])
-						value = task.getLowerLimit()[j];
-					if (value > task.getUpperLimit()[j])
-						value = task.getUpperLimit()[j];
+					if (value < task.getLowerLimit(j))
+						value = task.getLowerLimit(j);
+					if (value > task.getUpperLimit(j))
+						value = task.getUpperLimit(j);
 
 					xChild.setValue(j, value);
 				} else {

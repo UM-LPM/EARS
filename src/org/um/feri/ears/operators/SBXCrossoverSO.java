@@ -78,8 +78,8 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task, DoubleSol
 							y2 = valueX1;
 						}
 
-						yL = task.getLowerLimit()[i];
-						yu = task.getUpperLimit()[i];
+						yL = task.getLowerLimit(i);
+						yu = task.getUpperLimit(i);
 						rand = Util.rnd.nextDouble();
 						beta = 1.0 + (2.0 * (y1 - yL) / (y2 - y1));
 						alpha = 2.0 - java.lang.Math.pow(beta, -(distributionIndex + 1.0));

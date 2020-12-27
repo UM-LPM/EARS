@@ -96,8 +96,8 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOS
 							y2 = valueX1;
 						}
 
-						yL = task.getLowerLimit()[i];
-						yu = task.getUpperLimit()[i];
+						yL = task.getLowerLimit(i);
+						yu = task.getUpperLimit(i);
 						rand = Util.rnd.nextDouble();
 						beta = 1.0 + (2.0 * (y1 - yL) / (y2 - y1));
 						alpha = 2.0 - java.lang.Math.pow(beta, -(distributionIndex + 1.0));
@@ -152,12 +152,7 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOS
 
 		return offSpring;
 	}
-  
-  /**
-  * Executes the operation
-  * @param object An object containing an array of two parents
-  * @return An object containing the offSprings
-  */
+
 	public MOSolutionBase<Double>[] execute(MOSolutionBase<Double>[] parents, DoubleMOTask task) {
 
 		if (parents.length != 2) {

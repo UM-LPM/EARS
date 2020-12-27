@@ -77,19 +77,19 @@ public class NonUniformMutation implements MutationOperator<Double, DoubleMOTask
 				double tmp;
 
 				if (rand <= 0.5) {
-					tmp = delta(task.getUpperLimit()[i] - solution.getValue(i),
+					tmp = delta(task.getUpperLimit(i) - solution.getValue(i),
 							perturbation);
 					tmp += solution.getValue(i);
 				} else {
-					tmp = delta(task.getLowerLimit()[i] - solution.getValue(i),
+					tmp = delta(task.getLowerLimit(i) - solution.getValue(i),
 							perturbation);
 					tmp += solution.getValue(i);
 				}
 
-				if (tmp < task.getLowerLimit()[i]) {
-					tmp = task.getLowerLimit()[i];
-				} else if (tmp > task.getUpperLimit()[i]) {
-					tmp = task.getUpperLimit()[i];
+				if (tmp < task.getLowerLimit(i)) {
+					tmp = task.getLowerLimit(i);
+				} else if (tmp > task.getUpperLimit(i)) {
+					tmp = task.getUpperLimit(i);
 				}
 				solution.setValue(i, tmp);
 			}
