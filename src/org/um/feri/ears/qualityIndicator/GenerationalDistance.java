@@ -22,8 +22,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 
 /**
  * This class implements the generational distance indicator. It can be used also 
@@ -80,7 +78,7 @@ public class GenerationalDistance<T extends Number> extends QualityIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.Unary;
+		return QualityIndicator.IndicatorType.UNARY;
 	}
 
 	@Override

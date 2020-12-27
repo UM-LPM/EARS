@@ -24,8 +24,6 @@ package org.um.feri.ears.qualityIndicator;
 import java.util.Arrays;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 
 /**
  * This class implements the spread quality indicator. 
@@ -108,7 +106,7 @@ public class Spread<T extends Number> extends QualityIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.Unary;
+		return QualityIndicator.IndicatorType.UNARY;
 	}
 
 	@Override

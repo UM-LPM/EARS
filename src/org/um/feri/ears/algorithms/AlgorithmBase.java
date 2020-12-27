@@ -12,14 +12,13 @@ import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.util.Cache;
-import org.um.feri.ears.util.Util;
 
 public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase> {
 
     protected boolean debug;
     protected boolean display_data = false;
     protected boolean save_data = false;
-    protected static Cache caching = Cache.None;
+    protected static Cache caching = Cache.NONE;
    
     protected String version = "1.0";
     protected Author au;

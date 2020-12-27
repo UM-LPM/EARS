@@ -1,7 +1,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.um.feri.ears.algorithms.moo.dbea.NondominatedPopulation;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.SolutionComparator;
@@ -30,7 +29,7 @@ public class NR<T extends Number> extends QualityIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return IndicatorType.Binary;
+		return IndicatorType.BINARY;
 	}
 
 	@Override

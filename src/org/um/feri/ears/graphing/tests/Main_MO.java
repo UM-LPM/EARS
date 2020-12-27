@@ -70,7 +70,7 @@ public class Main_MO
         graphs.setOutputFilesAutomatic(false);
         graphs.setCanvasSize(1280, 960);
         graphs.setZoomScale(0.3);
-        graphs.Plot(PlotType.MOFinalParetoFront);
+        graphs.Plot(PlotType.MO_FINAL_PARETO_FRONT);
         //graphs.Flush();
         MOGraphSet combinedGraphs = graphs.getCombinedGraphsByProblem();
         combinedGraphs.Flush();

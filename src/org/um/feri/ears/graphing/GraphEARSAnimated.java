@@ -299,30 +299,30 @@ public class GraphEARSAnimated extends GraphEARS
 		numPlots++;
 		switch(gt)
 		{
-		case MOAnimatedParetoFrontSearch:
+		case MO_ANIMATED_PARETO_FRONT_SEARCH:
 			PlotMODominatedSpaceSoFar();
-			graphs.Plot(PlotType.MODominatedSpaceCurrent/*, generationAllPreviousData*/);
+			graphs.Plot(PlotType.MO_DOMINATED_SPACE_CURRENT/*, generationAllPreviousData*/);
 			//graphs.Plot(GraphType.MOAllIndividuals);
 			PlotAllMOIndividuals();
-			Plot(PlotType.MOAnimatedFinalParetoFront);
-			graphs.Plot(PlotType.MOParetoIndividuals);
+			Plot(PlotType.MO_ANIMATED_FINAL_PARETO_FRONT);
+			graphs.Plot(PlotType.MO_PARETO_INDIVIDUALS);
 			break;
-		case MOAnimatedParetoFrontSearchAllIndividuals:
+		case MO_ANIMATED_PARETO_FRONT_SEARCH_ALL_INDIVIDUALS:
 			//graphs.Plot(PlotType.MOAllIndividuals);
 			PlotAllMOIndividuals();
 			break;
-		case MOAnimatedParetoFrontSearchDominatedSpaceCurrent:
-			graphs.Plot(PlotType.MODominatedSpaceCurrent/*, generationAllPreviousData*/);
+		case MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_CURRENT:
+			graphs.Plot(PlotType.MO_DOMINATED_SPACE_CURRENT/*, generationAllPreviousData*/);
 			break;
-		case MOAnimatedParetoFrontSearchDominatedSpaceSoFar:
+		case MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_SO_FAR:
 			//graphs.Plot(PlotType.MODominatedSpaceSoFar);
 			PlotMODominatedSpaceSoFar();
 			break;
-		case MOAnimatedParetoFrontSearchParetoIndividuals:
-			graphs.Plot(PlotType.MOParetoIndividuals/*, generationAllPreviousData*/);
+		case MO_ANIMATED_PARETO_FRONT_SEARCH_PARETO_INDIVIDUALS:
+			graphs.Plot(PlotType.MO_PARETO_INDIVIDUALS/*, generationAllPreviousData*/);
 			break;
-		case MOAnimatedFinalParetoFront:
-			graphs.Plot(PlotType.MOFinalParetoFront, data);
+		case MO_ANIMATED_FINAL_PARETO_FRONT:
+			graphs.Plot(PlotType.MO_FINAL_PARETO_FRONT, data);
 			break;
 		default:
 			System.err.println("WARNING: Unsupported graph type. ("+gt+")");
@@ -343,7 +343,7 @@ public class GraphEARSAnimated extends GraphEARS
 		{
 			GraphEARSStatic g = (GraphEARSStatic)graphs.getGraph(gi);
 			RecordedData[][] tmpData = Arrays.copyOfRange(groupsCurrentData, gi-tmpGenCount, gi+1);
-			g.Plot(PlotType.MOAllIndividuals, tmpData);
+			g.Plot(PlotType.MO_ALL_INDIVIDUALS, tmpData);
 			if (tmpGenCount<(NUMBER_OF_PREVIOUS_GENERATIONS_TO_SHOW+1))
 				tmpGenCount = tmpGenCount+1;
 		}
@@ -362,7 +362,7 @@ public class GraphEARSAnimated extends GraphEARS
 			paretoArray = GraphDataManager.GetParetoFront(paretoList.toArray(new RecordedData[0]), axisX, axisY);
 			paretoList = new ArrayList<RecordedData>(Arrays.asList(paretoArray));
 //System.err.println("Cropped: "+paretoList.size());
-			g.Plot(PlotType.MODominatedSpaceSoFar, paretoArray);
+			g.Plot(PlotType.MO_DOMINATED_SPACE_SO_FAR, paretoArray);
 		}
 		//a
 	}

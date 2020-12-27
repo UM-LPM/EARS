@@ -2,20 +2,20 @@ package org.um.feri.ears.graphing;
 
 public enum PlotType
 {
-	AverageOfIterations,
-	WorstOfIterations,
-	BestOfIterations,
-	StandardDeviationOfIterations,
-	MOAllIndividuals,
-	MOParetoIndividuals,
-	MOParetoFrontSearch,
-	MODominatedSpaceCurrent,
-	MODominatedSpaceSoFar,
-	MOFinalParetoFront,
-	MOAnimatedParetoFrontSearch,
-	MOAnimatedParetoFrontSearchAllIndividuals,
-	MOAnimatedParetoFrontSearchDominatedSpaceCurrent,
-	MOAnimatedParetoFrontSearchDominatedSpaceSoFar,
-	MOAnimatedParetoFrontSearchParetoIndividuals,
-	MOAnimatedFinalParetoFront
+	AVERAGE_OF_ITERATIONS,
+	WORST_OF_ITERATIONS,
+	BEST_OF_ITERATIONS,
+	STANDARD_DEVIATION_OF_ITERATIONS,
+	MO_ALL_INDIVIDUALS,
+	MO_PARETO_INDIVIDUALS,
+	MO_PARETO_FRONT_SEARCH,
+	MO_DOMINATED_SPACE_CURRENT,
+	MO_DOMINATED_SPACE_SO_FAR,
+	MO_FINAL_PARETO_FRONT,
+	MO_ANIMATED_PARETO_FRONT_SEARCH,
+	MO_ANIMATED_PARETO_FRONT_SEARCH_ALL_INDIVIDUALS,
+	MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_CURRENT,
+	MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_SO_FAR,
+	MO_ANIMATED_PARETO_FRONT_SEARCH_PARETO_INDIVIDUALS,
+	MO_ANIMATED_FINAL_PARETO_FRONT
 }

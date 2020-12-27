@@ -11,7 +11,6 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.qualityIndicator;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
@@ -90,7 +89,7 @@ public class ErrorRatio<T extends Number> extends QualityIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.Unary;
+		return QualityIndicator.IndicatorType.UNARY;
 	}
 
 	@Override

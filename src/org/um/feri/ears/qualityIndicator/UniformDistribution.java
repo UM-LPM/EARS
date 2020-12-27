@@ -1,7 +1,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
 
 public class UniformDistribution<T extends Number> extends QualityIndicator<T>{
 
@@ -26,7 +25,7 @@ public class UniformDistribution<T extends Number> extends QualityIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.Unary;
+		return QualityIndicator.IndicatorType.UNARY;
 	}
 
 	@Override

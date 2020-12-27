@@ -1,20 +1,14 @@
 package org.um.feri.ears.graphing;
 
-import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
 //import java.io.FileInputStream; OLD
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 //import javax.imageio.ImageIO; OLD
 
@@ -26,11 +20,8 @@ import org.um.feri.ears.graphing.data.AlgorithmStatistics;
 import org.um.feri.ears.graphing.data.GraphDataManager;
 import org.um.feri.ears.graphing.data.MOSolutionComparatorForGraphing;
 import org.um.feri.ears.graphing.data.RecordedData;
-import org.um.feri.ears.graphing.data.RecordedDataComparatorForGraphing;
-import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.problems.moo.ParetoSolution;
 
 import com.panayotis.gnuplot.JavaPlot;
 import com.panayotis.gnuplot.plot.DataSetPlot;
@@ -38,8 +29,6 @@ import com.panayotis.gnuplot.style.NamedPlotColor;
 import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.RgbPlotColor;
 import com.panayotis.gnuplot.style.Style;
-import com.panayotis.gnuplot.terminal.ImageTerminal;
-import com.panayotis.gnuplot.utils.FileUtils;
 
 public class GraphEARSStatic extends GraphEARS
 {
@@ -331,37 +320,37 @@ public class GraphEARSStatic extends GraphEARS
 		case StandardDeviationInGeneration:
 			tmp = GraphSDInGeneration(data);
 			break;*/
-		case AverageOfIterations:
+		case AVERAGE_OF_ITERATIONS:
 			tmp = statistics.AverageDSP(plotColorScheme);
 			break;
-		case WorstOfIterations:
+		case WORST_OF_ITERATIONS:
 			tmp = statistics.WorstDSP(plotColorScheme);
 			break;
-		case BestOfIterations:
+		case BEST_OF_ITERATIONS:
 			tmp = statistics.BestDSP(plotColorScheme);
 			break;
-		case StandardDeviationOfIterations:
+		case STANDARD_DEVIATION_OF_ITERATIONS:
 			tmp = statistics.StandardDeviationDSP(plotColorScheme);
 			RescaleToCanvas(tmp.getPlotStyle(), "dashtype", "(_,_)", new double[]{5,5});
 			break;
-		case MOAllIndividuals:
+		case MO_ALL_INDIVIDUALS:
 			tmp = GraphAllIndividualsMO(data);
 			break;
-		case MOParetoIndividuals:
+		case MO_PARETO_INDIVIDUALS:
 			tmp = GraphCurrentParetoIndividualsMO(data);
 			break;
-		case MOParetoFrontSearch:
-			Plot(PlotType.MODominatedSpaceCurrent, data);
-			Plot(PlotType.MOAllIndividuals, data);
-			Plot(PlotType.MOParetoIndividuals, data);
+		case MO_PARETO_FRONT_SEARCH:
+			Plot(PlotType.MO_DOMINATED_SPACE_CURRENT, data);
+			Plot(PlotType.MO_ALL_INDIVIDUALS, data);
+			Plot(PlotType.MO_PARETO_INDIVIDUALS, data);
 			break;
-		case MODominatedSpaceCurrent:
+		case MO_DOMINATED_SPACE_CURRENT:
 			tmp = GraphDominatedSpaceCurrentMO(data);
 			break;
-		case MODominatedSpaceSoFar:
+		case MO_DOMINATED_SPACE_SO_FAR:
 			tmp = GraphDominatedSpaceSoFarMO(data);
 			break;
-		case MOFinalParetoFront:
+		case MO_FINAL_PARETO_FRONT:
 			DataSetPlot[] tmp2 = GraphFinalParetoFront(data);
 			for (DataSetPlot dsp : tmp2)
 			{
@@ -385,7 +374,7 @@ public class GraphEARSStatic extends GraphEARS
 		DataSetPlot[] tmp = null;
 		switch(gt)
 		{
-		case MOAllIndividuals:
+		case MO_ALL_INDIVIDUALS:
 			tmp = GraphAllIndividualsMO(data);
 			break;
 		default:

@@ -4,17 +4,12 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.graphing.data.GraphDataSet;
 import org.um.feri.ears.graphing.data.RecordedData;
-import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 import com.panayotis.gnuplot.plot.DataSetPlot;
@@ -30,7 +25,7 @@ public class MOGraphSet
 	protected ArrayList<GraphEARS> graphs;
 	protected GraphDataSet data;
 	// SubVars:
-	protected PlotColorScheme plotColorScheme = PlotColorScheme.Colored;
+	protected PlotColorScheme plotColorScheme = PlotColorScheme.COLORED;
 	protected Dimension CanvasSize = null;
 	protected double zoomLevel = 1.0;
 	protected Integer AnimationDuration = null;
@@ -380,12 +375,12 @@ public class MOGraphSet
 			// Static image, MO Algorithm
 			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof MOAlgorithm)
 			{
-				if (gt == PlotType.MOAllIndividuals 
-						|| gt == PlotType.MOParetoIndividuals
-						|| gt == PlotType.MOAllIndividuals
-						|| gt == PlotType.MODominatedSpaceCurrent
-						|| gt == PlotType.MODominatedSpaceSoFar
-						|| gt == PlotType.MOFinalParetoFront)
+				if (gt == PlotType.MO_ALL_INDIVIDUALS
+						|| gt == PlotType.MO_PARETO_INDIVIDUALS
+						|| gt == PlotType.MO_ALL_INDIVIDUALS
+						|| gt == PlotType.MO_DOMINATED_SPACE_CURRENT
+						|| gt == PlotType.MO_DOMINATED_SPACE_SO_FAR
+						|| gt == PlotType.MO_FINAL_PARETO_FRONT)
 				{
 					tmp.Plot(gt);
 				}
@@ -393,12 +388,12 @@ public class MOGraphSet
 			// Animated image, MO Algorithm
 			else if (tmp instanceof GraphEARSAnimated && tmp.data[0].algorithm instanceof MOAlgorithm)
 			{
-				if (gt == PlotType.MOAnimatedParetoFrontSearch
-						|| gt == PlotType.MOAnimatedParetoFrontSearchAllIndividuals
-						|| gt == PlotType.MOAnimatedParetoFrontSearchDominatedSpaceCurrent
-						|| gt == PlotType.MOAnimatedParetoFrontSearchDominatedSpaceSoFar
-						|| gt == PlotType.MOAnimatedParetoFrontSearchParetoIndividuals
-						|| gt == PlotType.MOAnimatedFinalParetoFront)
+				if (gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_ALL_INDIVIDUALS
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_CURRENT
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_SO_FAR
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_PARETO_INDIVIDUALS
+						|| gt == PlotType.MO_ANIMATED_FINAL_PARETO_FRONT)
 				{
 					tmp.Plot(gt);
 				}
@@ -416,11 +411,11 @@ public class MOGraphSet
 			// Static image, MO Algorithm
 			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof MOAlgorithm)
 			{
-				if (gt == PlotType.MOAllIndividuals 
-						|| gt == PlotType.MOParetoIndividuals
-						|| gt == PlotType.MODominatedSpaceCurrent
-						|| gt == PlotType.MODominatedSpaceSoFar
-						|| gt == PlotType.MOFinalParetoFront)
+				if (gt == PlotType.MO_ALL_INDIVIDUALS
+						|| gt == PlotType.MO_PARETO_INDIVIDUALS
+						|| gt == PlotType.MO_DOMINATED_SPACE_CURRENT
+						|| gt == PlotType.MO_DOMINATED_SPACE_SO_FAR
+						|| gt == PlotType.MO_FINAL_PARETO_FRONT)
 				{
 					tmp.Plot(gt, data);
 				}
@@ -428,11 +423,11 @@ public class MOGraphSet
 			// Animated image, MO Algorithm
 			else if (tmp instanceof GraphEARSAnimated && tmp.data[0].algorithm instanceof MOAlgorithm)
 			{
-				if (gt == PlotType.MOAnimatedParetoFrontSearch
-						|| gt == PlotType.MOAnimatedParetoFrontSearchAllIndividuals
-						|| gt == PlotType.MOAnimatedParetoFrontSearchDominatedSpaceCurrent
-						|| gt == PlotType.MOAnimatedParetoFrontSearchDominatedSpaceSoFar
-						|| gt == PlotType.MOAnimatedFinalParetoFront)
+				if (gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_ALL_INDIVIDUALS
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_CURRENT
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_SO_FAR
+						|| gt == PlotType.MO_ANIMATED_FINAL_PARETO_FRONT)
 				{
 					tmp.Plot(gt, data);
 				}
@@ -449,11 +444,11 @@ public class MOGraphSet
 			
 			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof MOAlgorithm)
 			{
-				if (gt == PlotType.MOAllIndividuals 
-						|| gt == PlotType.MOParetoIndividuals
-						|| gt == PlotType.MOAllIndividuals
-						|| gt == PlotType.MODominatedSpaceCurrent
-						|| gt == PlotType.MODominatedSpaceSoFar)
+				if (gt == PlotType.MO_ALL_INDIVIDUALS
+						|| gt == PlotType.MO_PARETO_INDIVIDUALS
+						|| gt == PlotType.MO_ALL_INDIVIDUALS
+						|| gt == PlotType.MO_DOMINATED_SPACE_CURRENT
+						|| gt == PlotType.MO_DOMINATED_SPACE_SO_FAR)
 				{
 					tmp.Plot(gt, data[i]);
 				}
@@ -461,10 +456,10 @@ public class MOGraphSet
 			// Animated image, MO Algorithm
 			else if (tmp instanceof GraphEARSAnimated && tmp.data[0].algorithm instanceof MOAlgorithm)
 			{
-				if (gt == PlotType.MOAnimatedParetoFrontSearch
-						|| gt == PlotType.MOAnimatedParetoFrontSearchAllIndividuals
-						|| gt == PlotType.MOAnimatedParetoFrontSearchDominatedSpaceCurrent
-						|| gt == PlotType.MOAnimatedParetoFrontSearchDominatedSpaceSoFar)
+				if (gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_ALL_INDIVIDUALS
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_CURRENT
+						|| gt == PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH_DOMINATED_SPACE_SO_FAR)
 				{
 					tmp.Plot(gt, data[i]);
 				}
@@ -622,11 +617,11 @@ public class MOGraphSet
 					colorIndex = (colorIndex + 3)%tmpColors.length;	// Normal, Light, Dark*/
 				switch (plotColorScheme)
 				{
-				case Colored:
+				case COLORED:
 					tmpColor = MULTI_PLOT_COLORS[colorIndex];
 					colorIndex = (colorIndex + 1)%MULTI_PLOT_COLORS.length;
 					break;
-				case Grayscale:
+				case GRAYSCALE:
 					tmpColor = new RgbPlotColor(colorIndex,colorIndex,colorIndex);
 					colorIndex = colorIndex + (235/tmpGraphs.size());
 					break;

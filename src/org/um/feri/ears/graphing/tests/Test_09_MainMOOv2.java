@@ -62,7 +62,7 @@ public class Test_09_MainMOOv2
         //graphs.Plot(GraphType.MOAllIndividuals);
         //graphs.Plot(GraphType.MOFinalIndividuals);
         //graphs.Plot(GraphType.MOAnimatedParetoFrontSearchGenerationIndividuals);
-        graphs.Plot(PlotType.MOAnimatedParetoFrontSearch);
+        graphs.Plot(PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH);
         //graphs.Plot(GraphType.MOAllIndividuals);
         //graphs.Plot(GraphType.MOParetoIndividuals);
         graphs.Flush();

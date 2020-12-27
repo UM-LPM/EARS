@@ -10,11 +10,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.MessageFormat;
-import java.util.List;
 
 import org.apache.commons.lang3.text.StrTokenizer;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.RedirectStream;
 
@@ -165,7 +162,7 @@ public class NativeHV<T extends Number> extends QualityIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return IndicatorType.Unary;
+		return IndicatorType.UNARY;
 	}
 
 	@Override

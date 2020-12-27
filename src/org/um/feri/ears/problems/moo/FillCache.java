@@ -35,7 +35,7 @@ public class FillCache {
         players.add(new D_IBEA());
         players.add(new D_NSGAIII());
         
-		MOAlgorithm.setCaching(Cache.Save);
+		MOAlgorithm.setCaching(Cache.SAVE);
 		MOAlgorithm.setRunWithOptimalParameters(true);
 		
         

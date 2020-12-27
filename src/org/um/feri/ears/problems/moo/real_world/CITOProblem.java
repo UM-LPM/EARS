@@ -22,14 +22,14 @@ public class CITOProblem extends IntegerMOProblem{
 
 	public enum Problems
 	{
-		OA_AJHotDraw,
-		OA_AJHsqldb,
-		OA_HealthWatcher,
-		OA_TollSystems,
+		OA_AJ_HOT_DRAW,
+		OA_AJ_HSQLDB,
+		OA_HEALTH_WATCHER,
+		OA_TOLL_SYSTEMS,
 		OO_BCEL,
-		OO_JBoss,
-		OO_JHotDraw,
-		OO_MyBatis;
+		OO_J_BOSS,
+		OO_J_HOT_DRAW,
+		OO_MY_BATIS;
 	}
 
 	

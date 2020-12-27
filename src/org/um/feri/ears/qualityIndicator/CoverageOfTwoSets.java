@@ -2,7 +2,6 @@ package org.um.feri.ears.qualityIndicator;
 
 import java.util.Comparator;
 
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.DominanceComparator;
@@ -47,7 +46,7 @@ public class CoverageOfTwoSets<Type extends Number> extends QualityIndicator<Typ
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return IndicatorType.Binary;
+		return IndicatorType.BINARY;
 	}
 
 	@Override

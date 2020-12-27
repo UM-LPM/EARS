@@ -35,9 +35,9 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
 		if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
         if (b==null) return false;
-        if(qi.getIndicatorType() == IndicatorType.Unary)
+        if(qi.getIndicatorType() == IndicatorType.UNARY)
         	return a.isEqual(b, drawLimit);
-        else if(qi.getIndicatorType() == IndicatorType.Binary)
+        else if(qi.getIndicatorType() == IndicatorType.BINARY)
         {
 			if(qi.compare(a, b, drawLimit) == 0)
 			{
@@ -89,7 +89,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
     				qi = IndicatorFactory.createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
     				
     				try {
-    					if(qi.getIndicatorType() == IndicatorType.Unary)
+    					if(qi.getIndicatorType() == IndicatorType.UNARY)
     					{
     						first.getBest().evaluate(qi);
     						second.getBest().evaluate(qi);
@@ -136,7 +136,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
 
         		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
         		//reset(task); //for one eval!
-        		if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.None) {
+        		if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
         			results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
         			allSingleProblemRunResults.add(task, res.result, res.algorithm);
@@ -165,7 +165,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
     	ArrayList<IntegerMOProblem> problems = new ArrayList<IntegerMOProblem>();
    	
 //    	problems.add(new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name()));
-    	problems.add(new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name()));
+    	problems.add(new CITOProblem(CITOProblem.Problems.OA_AJ_HSQLDB.name()));
 //    	problems.add(new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name()));
 //    	problems.add(new CITOProblem(CITOProblem.Problems.OA_TollSystems.name()));
 //    	problems.add(new CITOProblem(CITOProblem.Problems.OO_BCEL.name()));

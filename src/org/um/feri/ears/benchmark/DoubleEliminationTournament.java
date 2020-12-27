@@ -436,7 +436,7 @@ public class DoubleEliminationTournament {
             if (arg0.getBest()!=null) {
                 if (arg1.getBest()!=null){
                    // if (resultEqual(arg0.getBest(), arg1.getBest())) return 0; Normal sor later!
-                	if(qi.getIndicatorType() == IndicatorType.Unary)
+                	if(qi.getIndicatorType() == IndicatorType.UNARY)
                 	{
                 		try {
 							arg0.getBest().evaluate(qi);

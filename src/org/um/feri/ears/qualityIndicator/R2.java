@@ -20,8 +20,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 
 /**
  * Computes the R2 indicator.  The R2 indicator is the expected utility
@@ -66,7 +64,7 @@ public class R2<T extends Number> extends RIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return IndicatorType.Unary;
+		return IndicatorType.UNARY;
 	}
 
 	@Override

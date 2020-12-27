@@ -48,19 +48,19 @@ public class TestMOCRSTuning {
 		TollSystems		188				53			24			2496
     	*/
     	
-		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJHsqldb.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_MyBatis.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JHotDraw.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_JBoss.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJ_HOT_DRAW.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_AJ_HSQLDB.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_MY_BATIS.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_J_HOT_DRAW.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_J_BOSS.name())));
 //		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_HealthWatcher.name())));
 		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OO_BCEL.name())));
-		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_TollSystems.name())));
+		tasks.add(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4, new CITOProblem(CITOProblem.Problems.OA_TOLL_SYSTEMS.name())));
 
-	    indicators.add(IndicatorName.IGDPlus);
-	    indicators.add(IndicatorName.NativeHV);
-	    indicators.add(IndicatorName.Epsilon);
-	    indicators.add(IndicatorName.MaximumSpread);
+	    indicators.add(IndicatorName.IGD_PLUS);
+	    indicators.add(IndicatorName.NATIVE_HV);
+	    indicators.add(IndicatorName.EPSILON);
+	    indicators.add(IndicatorName.MAXIMUM_SPREAD);
 	    indicators.add(IndicatorName.R2);
         
         long initTime = System.currentTimeMillis();

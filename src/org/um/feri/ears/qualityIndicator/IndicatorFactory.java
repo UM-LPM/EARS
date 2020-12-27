@@ -1,5 +1,4 @@
 package org.um.feri.ears.qualityIndicator;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 
 public final class IndicatorFactory<T> {
@@ -9,19 +8,19 @@ public final class IndicatorFactory<T> {
     public static <T extends Number> QualityIndicator<T> createIndicator(IndicatorName name, int num_obj, String file_name) {
     	QualityIndicator<T> qi = null;
         switch (name) {
-        case CovergeOfTwoSets:
+        case COVERAGE_OF_TWO_SETS:
         	qi = new CoverageOfTwoSets<T>(num_obj);
             break;
  
-        case Epsilon:
+        case EPSILON:
             qi = new Epsilon<T>(num_obj, file_name);
             break;
             
-        case EpsilonBin:
+        case EPSILON_BIN:
             qi = new EpsilonBin<T>(num_obj);
             break;    
 
-        case ErrorRatio:
+        case ERROR_RATIO:
             qi = new ErrorRatio<T>(num_obj, file_name);
             break;
             
@@ -37,7 +36,7 @@ public final class IndicatorFactory<T> {
             qi = new InvertedGenerationalDistance<T>(num_obj, file_name);
             break;
             
-        case IGDPlus:
+        case IGD_PLUS:
             qi = new InvertedGenerationalDistancePlus<T>(num_obj, file_name);
             break;
             
@@ -45,11 +44,11 @@ public final class IndicatorFactory<T> {
             qi = new MaximumParetoFrontError<T>(num_obj, file_name);
             break;
             
-        case MaximumSpread:
+        case MAXIMUM_SPREAD:
             qi = new MaximumSpread<T>(num_obj, file_name);
             break;
         
-        case NativeHV:
+        case NATIVE_HV:
             qi = new NativeHV<T>(num_obj, file_name);
             break;
             
@@ -81,14 +80,14 @@ public final class IndicatorFactory<T> {
             qi = new RatioOfNondominatedIndividuals<T>(num_obj);
             break;
             
-        case Spacing:
+        case SPACING:
             qi = new Spacing<T>(num_obj, file_name);
             break;
             
-        case Spread:
+        case SPREAD:
             qi = new Spread<T>(num_obj, file_name);
             break;
-        case GeneralizedSpread:
+        case GENERALIZED_SPREAD:
         	qi = new GeneralizedSpread<T>(num_obj, file_name);
         	break;
         	

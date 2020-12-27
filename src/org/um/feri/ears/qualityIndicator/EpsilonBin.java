@@ -22,8 +22,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 /**
@@ -49,7 +47,7 @@ public class EpsilonBin<T extends Number> extends QualityIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return IndicatorType.Binary;
+		return IndicatorType.BINARY;
 	}
 
 	@Override

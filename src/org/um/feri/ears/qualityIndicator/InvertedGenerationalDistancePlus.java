@@ -13,8 +13,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.util.DominanceDistance;
 
 /**
@@ -53,7 +51,7 @@ public class InvertedGenerationalDistancePlus<T extends Number> extends QualityI
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return IndicatorType.Unary;
+		return IndicatorType.UNARY;
 	}
 
 	@Override

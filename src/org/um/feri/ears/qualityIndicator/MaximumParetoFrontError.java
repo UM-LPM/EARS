@@ -1,8 +1,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 
 /**
  * This class implements the Maximum Pareto Front Error indicator.
@@ -51,7 +49,7 @@ public class MaximumParetoFrontError<T extends Number> extends QualityIndicator<
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.Unary;
+		return QualityIndicator.IndicatorType.UNARY;
 	}
 
 	@Override

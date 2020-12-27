@@ -18,8 +18,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 
 /**
  * Computes the R3 indicator.  The R3 indicator is a utility ratio, or the
@@ -81,7 +79,7 @@ public class R3<T extends Number> extends RIndicator<T> {
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return IndicatorType.Unary;
+		return IndicatorType.UNARY;
 	}
 
 	@Override

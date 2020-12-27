@@ -593,9 +593,9 @@ public class MOCRSTuning {
 		if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
         if (b==null) return false;
-        if(qi.getIndicatorType() == IndicatorType.Unary)
+        if(qi.getIndicatorType() == IndicatorType.UNARY)
         	return a.isEqual(b,draw_limit); 
-        else if(qi.getIndicatorType() == IndicatorType.Binary)
+        else if(qi.getIndicatorType() == IndicatorType.BINARY)
         {
 			if(qi.compare(a, b, draw_limit) == 0)
 			{
@@ -617,7 +617,7 @@ public class MOCRSTuning {
             if (arg0.getBest()!=null) {
                 if (arg1.getBest()!=null){
                    // if (resultEqual(arg0.getBest(), arg1.getBest())) return 0; Normal sor later!
-                	if(qi.getIndicatorType() == IndicatorType.Unary)
+                	if(qi.getIndicatorType() == IndicatorType.UNARY)
                 	{
                 		try {
 							arg0.getBest().evaluate(qi, true);

@@ -23,8 +23,6 @@ package org.um.feri.ears.qualityIndicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.EuclideanDistance;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 
 /**
  * This class implements the inverted generational distance metric. 
@@ -79,7 +77,7 @@ public class InvertedGenerationalDistance<T extends Number> extends QualityIndic
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.Unary;
+		return QualityIndicator.IndicatorType.UNARY;
 	}
 
 	@Override

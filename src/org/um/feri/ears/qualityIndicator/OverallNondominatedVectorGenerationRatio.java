@@ -2,7 +2,6 @@ package org.um.feri.ears.qualityIndicator;
 
 import java.util.Comparator;
 
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.DominanceComparator;
@@ -94,7 +93,7 @@ public class OverallNondominatedVectorGenerationRatio<T extends Number> extends 
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.Unary;
+		return QualityIndicator.IndicatorType.UNARY;
 	}
 
 	@Override

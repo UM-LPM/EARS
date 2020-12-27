@@ -111,12 +111,12 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 		
 		if(all_solutions.containsKey(key))
 		{
-			if(caching == Cache.Random)
+			if(caching == Cache.RANDOM)
 			{
 				List<ParetoSolution<Type>> pareto = all_solutions.get(key);
 				return pareto.get(Util.nextInt(pareto.size()));
 			}
-			if(caching == Cache.RoundRobin)
+			if(caching == Cache.ROUND_ROBIN)
 			{
 				List<ParetoSolution<Type>> pareto = all_solutions.get(key);
 				int index = positions.get(key);
@@ -129,7 +129,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 				
 				return pareto.get(index);
 			}
-			if(caching == Cache.RandomPermutation)
+			if(caching == Cache.RANDOM_PERMUTATION)
 			{
 				List<ParetoSolution<Type>> pareto = all_solutions.get(key);
 				int index = positions.get(key);
@@ -167,7 +167,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 		init();
 		
 		// check cache after initialization when all parameters are set
-		if(caching != Cache.None && caching != Cache.Save)
+		if(caching != Cache.NONE && caching != Cache.SAVE)
 		{
 			ParetoSolution<Type> next = returnNext(task);
 			if(next != null)
@@ -197,7 +197,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
 		}
 		
-		if(caching == Cache.Save)
+		if(caching == Cache.SAVE)
 		{
 			try {
 				best.evaluteWithAllUnaryQI(num_obj, taskProblem.getProblemFileName());

@@ -79,8 +79,8 @@ public class Test_08_MainMOO
         //graphs.Plot(GraphType.MOAllIndividuals);
         //graphs.Plot(GraphType.MOFinalIndividuals);
         //graphs.Plot(GraphType.MOAnimatedParetoFrontSearchGenerationIndividuals);
-        graphs.Plot(PlotType.MOAnimatedParetoFrontSearch);
-        graphs.Plot(PlotType.MOAllIndividuals);
+        graphs.Plot(PlotType.MO_ANIMATED_PARETO_FRONT_SEARCH);
+        graphs.Plot(PlotType.MO_ALL_INDIVIDUALS);
         graphs.Flush();
         
         /*RecordedData[] rd = datas.getSubsets()[0];

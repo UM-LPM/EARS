@@ -64,8 +64,8 @@ public class Main_SO {
         //graphs.setPlotColorScheme(PlotColorScheme.Colored);
         //graphs.setPlotColorScheme(PlotColorScheme.Grayscale);
         
-        graphs.Plot(PlotType.AverageOfIterations);
-        graphs.Plot(PlotType.StandardDeviationOfIterations);
+        graphs.Plot(PlotType.AVERAGE_OF_ITERATIONS);
+        graphs.Plot(PlotType.STANDARD_DEVIATION_OF_ITERATIONS);
         //graphs.Plot(PlotType.BestOfIterations);
         //graphs.Plot(PlotType.WorstOfIterations);
         //graphs.setTitle(0, "FERI FTW");

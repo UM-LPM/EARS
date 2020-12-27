@@ -18,8 +18,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 
 /**
  * Computes the R1 indicator.  The R1 indicator measures the fraction of
@@ -105,7 +103,7 @@ public class R1<T extends Number> extends RIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return IndicatorType.Unary;
+		return IndicatorType.UNARY;
 	}
 
 	@Override

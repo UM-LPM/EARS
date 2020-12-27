@@ -3,10 +3,7 @@ package org.um.feri.ears.graphing;
 import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import org.um.feri.ears.graphing.data.RecordedData;
@@ -34,7 +31,7 @@ public abstract class GraphEARS
 	protected boolean popSizeKnown = false;
 	protected String outputExtension = null;
 	protected Dimension CanvasSize = new Dimension(640,480);
-	protected PlotColorScheme plotColorScheme = PlotColorScheme.Colored;
+	protected PlotColorScheme plotColorScheme = PlotColorScheme.COLORED;
 
 	public String Title = null;
 	ArrayList<GraphLineStyleChanger> rescaleStylesToCanvas = new ArrayList<GraphLineStyleChanger>();

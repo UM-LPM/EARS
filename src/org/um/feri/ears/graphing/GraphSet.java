@@ -4,16 +4,12 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Map;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.graphing.data.GraphDataSet;
 import org.um.feri.ears.graphing.data.RecordedData;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 import com.panayotis.gnuplot.plot.DataSetPlot;
 import com.panayotis.gnuplot.style.NamedPlotColor;
@@ -28,7 +24,7 @@ public class GraphSet
 	protected ArrayList<GraphEARS> graphs;
 	protected GraphDataSet data;
 	// SubVars:
-	protected PlotColorScheme plotColorScheme = PlotColorScheme.Colored;
+	protected PlotColorScheme plotColorScheme = PlotColorScheme.COLORED;
 	protected Dimension CanvasSize = null;
 	protected double zoomLevel = 1.0;
 	protected Integer AnimationDuration = null;
@@ -368,10 +364,10 @@ public class GraphSet
 			// Static image, SO Algorithm
 			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof Algorithm)
 			{
-				if (gt == PlotType.AverageOfIterations 
-						|| gt == PlotType.BestOfIterations 
-						|| gt == PlotType.WorstOfIterations 
-						|| gt == PlotType.StandardDeviationOfIterations)
+				if (gt == PlotType.AVERAGE_OF_ITERATIONS
+						|| gt == PlotType.BEST_OF_ITERATIONS
+						|| gt == PlotType.WORST_OF_ITERATIONS
+						|| gt == PlotType.STANDARD_DEVIATION_OF_ITERATIONS)
 				{
 					tmp.Plot(gt);
 				}
@@ -388,10 +384,10 @@ public class GraphSet
 			// Static image, SO Algorithm
 			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof Algorithm)
 			{
-				if (gt == PlotType.AverageOfIterations 
-						|| gt == PlotType.BestOfIterations 
-						|| gt == PlotType.WorstOfIterations 
-						|| gt == PlotType.StandardDeviationOfIterations)
+				if (gt == PlotType.AVERAGE_OF_ITERATIONS
+						|| gt == PlotType.BEST_OF_ITERATIONS
+						|| gt == PlotType.WORST_OF_ITERATIONS
+						|| gt == PlotType.STANDARD_DEVIATION_OF_ITERATIONS)
 				{
 					tmp.Plot(gt, data);
 				}
@@ -408,10 +404,10 @@ public class GraphSet
 			// Static image, SO Algorithm
 			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof Algorithm)
 			{
-				if (gt == PlotType.AverageOfIterations 
-						|| gt == PlotType.BestOfIterations 
-						|| gt == PlotType.WorstOfIterations 
-						|| gt == PlotType.StandardDeviationOfIterations)
+				if (gt == PlotType.AVERAGE_OF_ITERATIONS
+						|| gt == PlotType.BEST_OF_ITERATIONS
+						|| gt == PlotType.WORST_OF_ITERATIONS
+						|| gt == PlotType.STANDARD_DEVIATION_OF_ITERATIONS)
 				{
 					tmp.Plot(gt, data[i]);
 				}
@@ -559,11 +555,11 @@ public class GraphSet
 					colorIndex = (colorIndex + 3)%tmpColors.length;	// Normal, Light, Dark*/
 				switch (plotColorScheme)
 				{
-				case Colored:
+				case COLORED:
 					tmpColor = MULTI_PLOT_COLORS[colorIndex];
 					colorIndex = (colorIndex + 1)%MULTI_PLOT_COLORS.length;
 					break;
-				case Grayscale:
+				case GRAYSCALE:
 					tmpColor = new RgbPlotColor(colorIndex,colorIndex,colorIndex);
 					colorIndex = colorIndex + (235/tmpGraphs.size());
 					break;

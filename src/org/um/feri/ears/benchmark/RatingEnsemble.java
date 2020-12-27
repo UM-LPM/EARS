@@ -87,9 +87,9 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
 		if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
         if (b==null) return false;
-        if(qi.getIndicatorType() == IndicatorType.Unary)
+        if(qi.getIndicatorType() == IndicatorType.UNARY)
         	return a.isEqual(b, drawLimit);
-        else if(qi.getIndicatorType() == IndicatorType.Binary)
+        else if(qi.getIndicatorType() == IndicatorType.BINARY)
         {
 			if(qi.compare(a, b, drawLimit) == 0)
 			{
@@ -153,7 +153,7 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     				qi = IndicatorFactory.createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
     				
     				try {
-    					if(qi.getIndicatorType() == IndicatorType.Unary)
+    					if(qi.getIndicatorType() == IndicatorType.UNARY)
     					{
     						first.getBest().evaluate(qi, true); //TODO paralel
     						second.getBest().evaluate(qi, true);
@@ -188,7 +188,7 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     @Override
 	protected void runOneProblem(DoubleMOTask task, BankOfResults allSingleProblemRunResults) {
 
-    	if(MOAlgorithm.getCaching() == Cache.None && runInParalel)
+    	if(MOAlgorithm.getCaching() == Cache.NONE && runInParalel)
     	{
     		reset(task);
     		ExecutorService pool = Executors.newFixedThreadPool(listOfAlgorithmsPlayers.size());
@@ -204,7 +204,7 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
 
     				if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
     				//reset(task); //for one eval!
-    				if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.None) {
+    				if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
     					results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
     					allSingleProblemRunResults.add(task, res.result, res.algorithm);

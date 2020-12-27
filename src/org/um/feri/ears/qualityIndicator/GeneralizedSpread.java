@@ -22,7 +22,6 @@ package org.um.feri.ears.qualityIndicator;
 
 import java.util.Arrays;
 
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.ValueComparator;
 
@@ -105,7 +104,7 @@ public class GeneralizedSpread<T extends Number> extends QualityIndicator<T>{
 	@Override
 	public IndicatorType getIndicatorType() {
 
-		return IndicatorType.Unary;
+		return IndicatorType.UNARY;
 	}
 
 	@Override

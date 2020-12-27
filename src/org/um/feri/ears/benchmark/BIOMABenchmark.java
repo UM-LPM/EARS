@@ -44,9 +44,9 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
 		if ((a==null) &&(b==null)) return true;
         if (a==null) return false;
         if (b==null) return false;
-        if(qi.getIndicatorType() == IndicatorType.Unary)
+        if(qi.getIndicatorType() == IndicatorType.UNARY)
         	return a.isEqual(b, drawLimit); //TODO Quality indicator get eps
-        else if(qi.getIndicatorType() == IndicatorType.Binary)
+        else if(qi.getIndicatorType() == IndicatorType.BINARY)
         {
 			if(qi.compare(a, b, drawLimit) == 0)
 			{
@@ -94,7 +94,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     				qi = IndicatorFactory.createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
     				
     				try {
-    					if(qi.getIndicatorType() == IndicatorType.Unary)
+    					if(qi.getIndicatorType() == IndicatorType.UNARY)
     					{
     						first.getBest().evaluate(qi);
     						second.getBest().evaluate(qi);
@@ -143,7 +143,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
 
         		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
         		//reset(task); //for one eval!
-        		if ((MOAlgorithm.getCaching() == Cache.None && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.None) {
+        		if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
         			results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
         			allSingleProblemRunResults.add(task, res.result, res.algorithm);

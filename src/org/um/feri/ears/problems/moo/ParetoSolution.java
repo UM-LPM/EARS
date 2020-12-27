@@ -210,7 +210,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
     	}
 
     	// throw error if the indicator is null or not unary
-    	if(qi == null || qi.getIndicatorType() != IndicatorType.Unary)
+    	if(qi == null || qi.getIndicatorType() != IndicatorType.UNARY)
 			throw new Exception("Indicator is null or incorrect indicator type!");
 		pareto_eval = qi.evaluate(this);
 
@@ -221,7 +221,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
     {
     	for (IndicatorName name : IndicatorName.values()) {
     		QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, num_obj, file_name);
-    		if(qi.getIndicatorType() == IndicatorType.Unary)
+    		if(qi.getIndicatorType() == IndicatorType.UNARY)
     		{
     			this.evaluate(qi, true);
     		}
@@ -237,14 +237,14 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 			return false;
 		}
 
-		if(qi.getIndicatorType() == QualityIndicator.IndicatorType.Unary)
+		if(qi.getIndicatorType() == QualityIndicator.IndicatorType.UNARY)
 		{
 		    if (qi.isMin())
 				return this.getEval() < second.getEval();
 			return this.getEval() > second.getEval();
 
 		}
-		else if(qi.getIndicatorType() == QualityIndicator.IndicatorType.Binary)
+		else if(qi.getIndicatorType() == QualityIndicator.IndicatorType.BINARY)
 		{
 			if(qi.compare(this, second, 0.0) == -1)
 				return true;
@@ -318,7 +318,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 		 // add all unary indicators to list
 		 for (IndicatorName name : IndicatorName.values()) {
 			  QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, num_obj, file_name);
-			  if(qi.getIndicatorType() == IndicatorType.Unary)
+			  if(qi.getIndicatorType() == IndicatorType.UNARY)
 				  indicators.add(qi);
 		 }
 

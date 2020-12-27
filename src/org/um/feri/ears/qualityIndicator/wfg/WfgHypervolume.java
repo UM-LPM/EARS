@@ -2,7 +2,6 @@ package org.um.feri.ears.qualityIndicator.wfg;
 
 import java.util.Comparator;
 
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.qualityIndicator.MetricsUtil;
@@ -277,7 +276,7 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return IndicatorType.Unary;
+		return IndicatorType.UNARY;
 	}
 
 	@Override

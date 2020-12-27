@@ -60,8 +60,8 @@ public class Test_07_MainV2 {
         GraphSet graphs = new GraphSet(datas);
         graphs.setOutputFilesAutomatic(true);
         graphs.setCanvasSize(1280, 960);
-        graphs.Plot(PlotType.AverageOfIterations);
-        graphs.Plot(PlotType.StandardDeviationOfIterations);
+        graphs.Plot(PlotType.AVERAGE_OF_ITERATIONS);
+        graphs.Plot(PlotType.STANDARD_DEVIATION_OF_ITERATIONS);
         //graphs.Plot(GraphType.BestInGeneration);
         //graphs.Plot(GraphType.WorstInGeneration);
         //graphs.setTitle(0, "FERI FTW");

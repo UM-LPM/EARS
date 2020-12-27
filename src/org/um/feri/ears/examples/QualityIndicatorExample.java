@@ -20,7 +20,7 @@ public class QualityIndicatorExample {
 		DoubleMOProblem problem = new UnconstrainedProblem1();
 		DoubleMOTask t = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0, 0, 0.0001,  new UnconstrainedProblem1());
 		
-		QualityIndicator qi = IndicatorFactory.createIndicator(IndicatorName.NativeHV, t.getNumberOfObjectives(), t.getProblemFileName());
+		QualityIndicator qi = IndicatorFactory.createIndicator(IndicatorName.NATIVE_HV, t.getNumberOfObjectives(), t.getProblemFileName());
 		
 		try {
 			ParetoSolution<Double> result = nsga2.execute(t);

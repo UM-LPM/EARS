@@ -237,8 +237,8 @@ public class CMAParameters implements java.io.Serializable {
 		setLambda(lambda);
 	}
 	
-	public enum RecombinationType {superlinear, linear, equal};
-	private RecombinationType recombinationType = RecombinationType.superlinear; // otherwise null
+	public enum RecombinationType {SUPERLINEAR, LINEAR, EQUAL};
+	private RecombinationType recombinationType = RecombinationType.SUPERLINEAR; // otherwise null
 	/**
 	 * Getter for property weights.
 	 * 
@@ -285,10 +285,10 @@ public class CMAParameters implements java.io.Serializable {
 	 */
 	private void setWeights(int mu, RecombinationType recombinationType) {
 		double[] w = new double[mu];
-		if (recombinationType == RecombinationType.equal)
+		if (recombinationType == RecombinationType.EQUAL)
 			for (int i = 0; i < mu; ++i) 
 				w[i] = 1;
-		else if (recombinationType == RecombinationType.linear)
+		else if (recombinationType == RecombinationType.LINEAR)
 			for (int i = 0; i < mu; ++i) 
 				w[i] = mu - i;
 		else // default, seems as enums can be null

@@ -71,8 +71,8 @@ public class Test_11_MainV3 {
         //graphs.SetPlotColorScheme(PlotColorScheme.Colored);
         //graphs.SetPlotColorScheme(PlotColorScheme.Grayscale);
         
-        graphs.Plot(PlotType.AverageOfIterations);
-        graphs.Plot(PlotType.StandardDeviationOfIterations);
+        graphs.Plot(PlotType.AVERAGE_OF_ITERATIONS);
+        graphs.Plot(PlotType.STANDARD_DEVIATION_OF_ITERATIONS);
         //graphs.Plot(PlotType.BestOfIterations);
         //graphs.Plot(PlotType.WorstOfIterations);
         //graphs.setTitle(0, "FERI FTW");

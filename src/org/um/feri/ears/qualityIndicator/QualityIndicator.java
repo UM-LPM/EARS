@@ -165,22 +165,22 @@ public abstract class QualityIndicator<Type extends Number> {
 	}
 
 	public enum IndicatorType {
-		Unary,
-		Binary,
-		Arbitrary
+		UNARY,
+		BINARY,
+		ARBITRARY
 	}
 	
 	public enum IndicatorName {
-	    CovergeOfTwoSets("CS"," Coverage of two sets"), 
-	    Epsilon("eps","Epsilon"), 
-	    EpsilonBin("eps bin","Binary Epsilon"), 
-	    ErrorRatio("ER", "Error Ratio"), 
+	    COVERAGE_OF_TWO_SETS("CS"," Coverage of two sets"),
+	    EPSILON("eps","Epsilon"),
+	    EPSILON_BIN("eps bin","Binary Epsilon"),
+	    ERROR_RATIO("ER", "Error Ratio"),
 	    GD("GD","Generational Distance"), 
 	    //Hypervolume("HV","Hypervolume"), 
 	    IGD("IGD","Inverted Generational Distance"), 
-	    IGDPlus("IGD+","Inverted Generational Distance Plus"), 
+	    IGD_PLUS("IGD+","Inverted Generational Distance Plus"),
 	    MPFE("MPFE","Maximum Pareto Front Error"), 
-	    MaximumSpread("MS","Maximum Spread"), 
+	    MAXIMUM_SPREAD("MS","Maximum Spread"),
 	    NR("NR","Nondominated Ratio"), 
 	    ONVG("ONVG","Overall Nondominated Vector Generation"), 
 	    ONVGR("ONVG","Overall Nondominated Vector Generation Ratio"), 
@@ -188,10 +188,10 @@ public abstract class QualityIndicator<Type extends Number> {
 	    R2("R2","R2"), 
 	    R3("R3","R3"), 
 	    RNI("RNI","Ratio of Nondominated Individuals"), 
-	    Spacing("S","Spacing"), 
-	    Spread("Spread","Spread"), 
-	    GeneralizedSpread("GS","Generalized Spread"), 
-	    NativeHV("HV","Hypervolume");
+	    SPACING("S","Spacing"),
+	    SPREAD("Spread","Spread"),
+	    GENERALIZED_SPREAD("GS","Generalized Spread"),
+	    NATIVE_HV("HV","Hypervolume");
 	    
 	    private String shortName, longName;
 	    private IndicatorName(String sn, String ln) {

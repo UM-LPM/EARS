@@ -1,7 +1,6 @@
 package org.um.feri.ears.qualityIndicator;
 
 import org.apache.commons.math3.stat.StatUtils;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 /**
@@ -115,7 +114,7 @@ public class Spacing<T extends Number> extends QualityIndicator<T>{
 
 	@Override
 	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.Unary;
+		return QualityIndicator.IndicatorType.UNARY;
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.um.feri.ears.graphing.GraphEARSStatic;
 import org.um.feri.ears.graphing.PlotColorScheme;
 import org.um.feri.ears.graphing.PlotType;
-import org.um.feri.ears.problems.Problem;
 
 import com.panayotis.gnuplot.plot.DataSetPlot;
 import com.panayotis.gnuplot.style.NamedPlotColor;
@@ -133,13 +132,13 @@ public class AlgorithmStatistics
 	{
 		switch(gt)
 		{
-		case AverageOfIterations:
+		case AVERAGE_OF_ITERATIONS:
 			return AverageDSP(pcs);
-		case WorstOfIterations:
+		case WORST_OF_ITERATIONS:
 			return WorstDSP(pcs);
-		case BestOfIterations:
+		case BEST_OF_ITERATIONS:
 			return BestDSP(pcs);
-		case StandardDeviationOfIterations:
+		case STANDARD_DEVIATION_OF_ITERATIONS:
 			return StandardDeviationDSP(pcs);
 		default:
 			return null;
@@ -153,14 +152,14 @@ public class AlgorithmStatistics
 		PlotStyle ps = new PlotStyle();
 		switch(pcs)
 		{
-		case Colored:
+		case COLORED:
 			ps.setStyle(Style.LINESPOINTS);
 			ps.setLineWidth(1);
 			ps.setLineType(NamedPlotColor.BLUE);
 			ps.setPointType(7);
 			ps.setPointSize(1);
 			break;
-		case Grayscale:
+		case GRAYSCALE:
 			ps.setStyle(Style.LINESPOINTS);
 			ps.setLineWidth(1);
 			ps.setLineType(new RgbPlotColor(0,0,0));
@@ -192,14 +191,14 @@ public class AlgorithmStatistics
 		PlotStyle ps = new PlotStyle();
 		switch(pcs)
 		{
-		case Colored:
+		case COLORED:
 			ps.setStyle(Style.LINESPOINTS);
 			ps.setLineWidth(1);
 			ps.setLineType(NamedPlotColor.RED);
 			ps.setPointType(7);
 			ps.setPointSize(1);
 			break;
-		case Grayscale:
+		case GRAYSCALE:
 			ps.setStyle(Style.LINESPOINTS);
 			ps.setLineWidth(1);
 			ps.setLineType(new RgbPlotColor(220,220,220));
@@ -231,14 +230,14 @@ public class AlgorithmStatistics
 		PlotStyle ps = new PlotStyle();
 		switch(pcs)
 		{
-		case Colored:
+		case COLORED:
 			ps.setStyle(Style.LINESPOINTS);
 			ps.setLineWidth(1);
 			ps.setLineType(NamedPlotColor.GREEN);
 			ps.setPointType(7);
 			ps.setPointSize(1);
 			break;
-		case Grayscale:
+		case GRAYSCALE:
 			ps.setStyle(Style.LINESPOINTS);
 			ps.setLineWidth(1);
 			ps.setLineType(new RgbPlotColor(150,150,150));
@@ -270,7 +269,7 @@ public class AlgorithmStatistics
 		PlotStyle ps = new PlotStyle();
 		switch(pcs)
 		{
-		case Colored:
+		case COLORED:
 			ps.setStyle(Style.LINES);
 			ps.setLineWidth(1);
 			ps.setLineType(NamedPlotColor.ORANGE);
@@ -278,7 +277,7 @@ public class AlgorithmStatistics
 			ps.setPointType(7);
 			ps.setPointSize(1);
 			break;
-		case Grayscale:
+		case GRAYSCALE:
 			ps.setStyle(Style.LINES);
 			ps.setLineWidth(1);
 			ps.setLineType(new RgbPlotColor(110,110,110));
