@@ -1,10 +1,3 @@
-//  Copyright (c) 2011 Antonio J. Nebro, Juan J. Durillo
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Lesser General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-
 package org.um.feri.ears.problems.moo;
 
 import java.io.BufferedReader;
@@ -411,7 +404,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
 	{
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))){
 			solutions.clear();
-			//ParetoSolution solutionSet = new NonDominatedSolutionList();
+			//ParetoSolution solutionSet = new NondominatedPopulation();
 
 			String aux = br.readLine();
 			while (aux != null) {

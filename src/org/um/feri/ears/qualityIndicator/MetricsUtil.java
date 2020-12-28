@@ -1,24 +1,3 @@
-//  MetricsUtil.java
-//
-//  Author:
-//       Antonio J. Nebro <antonio@lcc.uma.es>
-//       Juan J. Durillo <durillo@lcc.uma.es>
-//
-//  Copyright (c) 2011 Antonio J. Nebro, Juan J. Durillo
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Lesser General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU Lesser General Public License for more details.
-// 
-//  You should have received a copy of the GNU Lesser General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 package org.um.feri.ears.qualityIndicator;
 
 
@@ -27,7 +6,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.EuclideanDistance;
 import org.um.feri.ears.util.ManhattanDistance;
-import org.um.feri.ears.util.NonDominatedSolutionList;
+import org.um.feri.ears.util.NondominatedPopulation;
 import org.um.feri.ears.util.PointDistance;
 
 import java.io.BufferedReader;
@@ -146,12 +125,10 @@ public final class MetricsUtil<T> {
      * @param front The front that contains the other points to calculate the
      *              distances
      * @return The minimum distance between the point and the front
-     * @throws Exception
      */
-    public static double distanceToClosestPoint(double[] point, double[][] front) throws Exception {
-        return distanceToClosestPoint(point, front, new EuclideanDistance());
+    public static double distanceToNearestPoint(double[] point, double[][] front) {
+        return distanceToNearestPoint(point, front, new EuclideanDistance());
     }
-
 
     /**
      * Gets the distance between a point and the nearest one in a front. If a distance equals to 0
@@ -160,49 +137,24 @@ public final class MetricsUtil<T> {
      * @param point The point
      * @param front The front that contains the other points to calculate the distances
      * @return The minimum distance between the point and the front
-     * @throws Exception
      */
-    public static double distanceToClosestPoint(double[] point, double[][] front, PointDistance distance) throws Exception {
+    public static double distanceToNearestPoint(double[] point, double[][] front, PointDistance distance) {
         if (front == null) {
-            throw new Exception("The front is null");
+            System.err.println("The front is null");
+            return Double.MAX_VALUE;
         } else if (front.length == 0) {
-            throw new Exception("The front is empty");
+            System.err.println("The front is empty");
+            return Double.MAX_VALUE;
         } else if (point == null) {
-            throw new Exception("The point is null");
+            System.err.println("The point is null");
+            return Double.MAX_VALUE;
         }
 
         double minDistance = Double.MAX_VALUE;
 
         for (int i = 0; i < front.length; i++) {
             double aux = distance.compute(point, front[i]);
-            if (aux < minDistance) {
-                minDistance = aux;
-            }
-        }
-
-        return minDistance;
-    }
-
-    public static double distanceToNearestPoint(double[] point, double[][] front) throws Exception {
-        return distanceToNearestPoint(point, front, new EuclideanDistance());
-    }
-
-    /**
-     * Gets the distance between a point and the nearest one in
-     * a given front, and this distance is greater than 0.0
-     *
-     * @param point The point
-     * @param front The front that contains the other points to calculate the distances
-     * @return The minimun distances greater than zero between the point and
-     * the front
-     * @throws Exception
-     */
-    public static double distanceToNearestPoint(double[] point, double[][] front, PointDistance distance) throws Exception {
-        double minDistance = Double.MAX_VALUE;
-
-        for (double[] aFront : front) {
-            double aux = distance.compute(point, aFront);
-            if ((aux < minDistance) && (aux > 0)) {
+            if (aux < minDistance && aux > 0) {
                 minDistance = aux;
             }
         }
@@ -214,25 +166,24 @@ public final class MetricsUtil<T> {
      * Returns the Manhattan distance in objective space between the two
      * solutions.
      *
-     * @param task the problem
-     * @param a    the first solution
-     * @param b    the second solution
+     * @param pointA the first solution
+     * @param pointB the second solution
      * @return the Manhattan distance in objective space between the two
      * solutions
      */
-    public static double manhattanDistance(double[] ds, double[] ds2) throws Exception {
-        return distance(ds, ds2, new ManhattanDistance());
+    public static double manhattanDistance(double[] pointA, double[] pointB) {
+        return distance(pointA, pointB, new ManhattanDistance());
     }
 
-    public static double distance(double[] ds, double[] ds2) throws Exception {
+    public static double distance(double[] ds, double[] ds2) {
         return distance(ds, ds2, new EuclideanDistance());
     }
 
-    public static double distance(double[] ds, double[] ds2, PointDistance distance) throws Exception {
+    public static double distance(double[] ds, double[] ds2, PointDistance distance) {
         return distance.compute(ds, ds2);
     }
 
-    public static double distanceToNearestPoint(int index, double[][] front) throws Exception {
+    public static double distanceToNearestPoint(int index, double[][] front) {
         return distanceToNearestPoint(index, front, new EuclideanDistance());
     }
 
@@ -240,13 +191,12 @@ public final class MetricsUtil<T> {
      * Gets the distance between a point with {@code index} and the nearest one in
      * the given front
      *
-     * @param point The point
+     * @param index Index of the point
      * @param front The front that contains the other points to calculate the distances
      * @return The minimun distances greater than zero between the point and
      * the front
-     * @throws Exception
      */
-    public static double distanceToNearestPoint(int index, double[][] front, PointDistance distance) throws Exception {
+    public static double distanceToNearestPoint(int index, double[][] front, PointDistance distance) {
         double minDistance = Double.MAX_VALUE;
 
         for (int i = 0; i < front.length; i++) {
@@ -416,7 +366,7 @@ public final class MetricsUtil<T> {
         ParetoSolution<T> solutionSet = null;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
 
-            solutionSet = new NonDominatedSolutionList<T>();
+            solutionSet = new NondominatedPopulation<>();
 
             String aux = br.readLine();
             while (aux != null) {
@@ -486,9 +436,8 @@ public final class MetricsUtil<T> {
      * and store it in a existing non dominated solution set
      *
      * @param path The path of the file containing the data
-     * @return A solution set
      */
-    public static <T> void readNonDominatedSolutionSet(String path, NonDominatedSolutionList solutionSet) {
+    public static <T> void readNonDominatedSolutionSet(String path, NondominatedPopulation solutionSet) {
         try {
             /* Open the file */
             FileInputStream fis = new FileInputStream(path);

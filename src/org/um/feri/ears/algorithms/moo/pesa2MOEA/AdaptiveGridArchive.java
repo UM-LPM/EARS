@@ -22,8 +22,8 @@ import java.util.Iterator;
 
 import org.apache.commons.math3.util.ArithmeticUtils;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.util.DominanceComparator;
-import org.um.feri.ears.util.NonDominatedSolutionList;
+import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.NondominatedPopulation;
 
 /**
  * Adaptive grid archive. Divides objective space into a number of grid cells,
@@ -41,7 +41,7 @@ import org.um.feri.ears.util.NonDominatedSolutionList;
  * vol. 7, no. 2, pp. 100-116, 2003.
  * </ol>
  */
-public class AdaptiveGridArchive<Type extends Number> extends NonDominatedSolutionList<Type> {
+public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopulation<Type> {
 
 	/**
 	 * The maximum capacity of this archive.
@@ -76,22 +76,22 @@ public class AdaptiveGridArchive<Type extends Number> extends NonDominatedSoluti
 	/**
 	 * Constructs an adaptive grid archive with the specified capacity with the
 	 * specified number of divisions along each objective.
-	 * 
+	 *
 	 * @param capacity the capacity of this archive
-	 * @param problem the problem for which this archive is used
+	 * @param numObj the number of objectives
 	 * @param numberOfDivisions the number of divisions this archive uses to
 	 *        split each objective
 	 */
-	public AdaptiveGridArchive(int capacity, int num_obj,
+	public AdaptiveGridArchive(int capacity, int numObj,
 			int numberOfDivisions) {
 		super(new DominanceComparator<Type>());
 		this.capacity = capacity;
 		this.numberOfDivisions = numberOfDivisions;
-		this.num_obj = num_obj;
+		this.num_obj = numObj;
 
-		minimum = new double[num_obj];
-		maximum = new double[num_obj];
-		density = new int[ArithmeticUtils.pow(numberOfDivisions, num_obj)];
+		minimum = new double[numObj];
+		maximum = new double[numObj];
+		density = new int[ArithmeticUtils.pow(numberOfDivisions, numObj)];
 
 		adaptGrid();
 	}
@@ -123,7 +123,7 @@ public class AdaptiveGridArchive<Type extends Number> extends NonDominatedSoluti
 
 		while (iterator.hasNext()) {
 			MOSolutionBase<Type> oldSolution = iterator.next();
-			int flag = dominanceComparator.compare(solution, oldSolution);
+			int flag = comparator.compare(solution, oldSolution);
 
 			if (flag < 0) {
 				// candidate dominates a member of the archive

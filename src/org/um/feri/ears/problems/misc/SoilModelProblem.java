@@ -2,7 +2,6 @@ package org.um.feri.ears.problems.misc;
 
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.SpecialFunction;
-import org.um.feri.ears.util.TrapezoidalRule;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -10,6 +9,25 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class SoilModelProblem extends Problem {
+
+    //TODO check if correct implementation
+    //https://www.csee.umbc.edu/~tsimo1/CMSC483/cs220/code/trap/Trap.java
+    //https://introcs.cs.princeton.edu/java/93integration/TrapezoidalRule.java.html
+    //https://www.geeksforgeeks.org/trapezoidal-rule-for-approximate-value-of-definite-integral/
+    public static class TrapezoidalRule {
+
+        public static double integrate(int size, double[] x, double[] y)
+        {
+            double sum = 0.0, increment;
+
+            for ( int k = 1; k < size; k++ )
+            {//Trapezoid rule:  1/2 h * (f0 + f1)
+                increment = 0.5 * (x[k]-x[k-1]) * (y[k]+y[k-1]);
+                sum += increment;
+            }
+            return sum;
+        }
+    }
 
     private double[] d;
     private double[] RM;

@@ -37,7 +37,7 @@ public class MaximumParetoFrontError<T extends Number> extends QualityIndicator<
 		try {
 			for (double[] aNormalizedAproximation : normalizedApproximation){
 
-				max = Math.max(max,(MetricsUtil.distanceToClosestPoint(aNormalizedAproximation, normalizedReference)));
+				max = Math.max(max,(MetricsUtil.distanceToNearestPoint(aNormalizedAproximation, normalizedReference)));
 
 			}
 		} catch (Exception e) {

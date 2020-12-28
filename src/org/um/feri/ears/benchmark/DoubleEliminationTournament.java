@@ -24,7 +24,6 @@ import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.util.FutureResult;
-import org.um.feri.ears.util.PermutationUtility;
 import org.um.feri.ears.util.Util;
 
 public class DoubleEliminationTournament {
@@ -180,8 +179,9 @@ public class DoubleEliminationTournament {
 	private void setWinLoseTwoBracket(ArrayList<MOAlgorithmEvalResult> win,
 			ArrayList<MOAlgorithmEvalResult> first, ArrayList<MOAlgorithmEvalResult> second) {
 
-		int[] per1 = (new PermutationUtility()).intPermutation(first.size());
-		int[] per2 = (new PermutationUtility()).intPermutation(second.size());
+
+		int[] per1 = Util.randomPermutation(first.size());
+		int[] per2 = Util.randomPermutation(second.size());
 
 		for(int i = 0; i < per1.length; i++)
 		{
@@ -214,7 +214,7 @@ public class DoubleEliminationTournament {
 
 	private void setWinLose(ArrayList<MOAlgorithmEvalResult> participants, ArrayList<MOAlgorithmEvalResult> win, ArrayList<MOAlgorithmEvalResult> lose) {
 		
-		int[] per = (new PermutationUtility()).intPermutation(participants.size());
+		int[] per = Util.randomPermutation(participants.size());
 		int index = 0;
 		
 		while(index+1 < per.length)

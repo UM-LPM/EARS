@@ -28,7 +28,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.ObjectiveComparator;
+import org.um.feri.ears.util.Comparator.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
 
 /**

@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.DominanceComparator;
+import org.um.feri.ears.util.Comparator.DominanceComparator;
 
 /**
  * This class implements the RNI (Ratio Of Nondominated Individuals) indicator.

@@ -31,7 +31,7 @@ import java.util.Comparator;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Point;
-import org.um.feri.ears.util.PointComparator;
+import org.um.feri.ears.util.Comparator.PointComparator;
 /**
  * This class implements the exact hypervolume indicator.
  * Reference: While L, Bradstreet L, Barone L.

@@ -5,88 +5,80 @@ import java.util.Arrays;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 public class Point<Type> {
-	
-	private double[] point;
 
-	/**
-	 * Constructor
-	 *
-	 * @param dimensions Dimensions of the point
-	 */
-	public Point(int dimensions) {
-		point = new double[dimensions];
+    private double[] point;
 
-		for (int i = 0; i < dimensions; i++) {
-			point[i] = 0.0;
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param dimensions Dimensions of the point
+     */
+    public Point(int dimensions) {
+        point = new double[dimensions];
 
-	/**
-	 * Copy constructor
-	 *
-	 * @param point
-	 */
-	public Point(Point point) {
+        for (int i = 0; i < dimensions; i++) {
+            point[i] = 0.0;
+        }
+    }
 
-		this.point = new double[point.getNumberOfDimensions()];
+    /**
+     * Copy constructor
+     *
+     * @param point
+     */
+    public Point(Point point) {
 
-		for (int i = 0; i < point.getNumberOfDimensions(); i++) {
-			this.point[i] = point.getDimensionValue(i);
-		}
-	}
+        this.point = new double[point.getNumberOfDimensions()];
 
-	/**
-	 * Constructor from a solution
-	 *
-	 * @param solution
-	 */
-	public Point(MOSolutionBase<Type> solution) {
+        for (int i = 0; i < point.getNumberOfDimensions(); i++) {
+            this.point[i] = point.getDimensionValue(i);
+        }
+    }
 
-		int dimensions = solution.numberOfObjectives();
-		point = new double[dimensions];
-		for (int i = 0; i < dimensions; i++) {
-			point[i] = solution.getObjective(i);
-		}
-	}
+    /**
+     * Constructor from a solution
+     *
+     * @param solution
+     */
+    public Point(MOSolutionBase<Type> solution) {
 
-	/**
-	 * Constructor from an array of double values
-	 *
-	 * @param point
-	 */
-	public Point(double[] point) {
-		this.point = new double[point.length];
-		System.arraycopy(point, 0, this.point, 0, point.length);
-	}
+        int dimensions = solution.numberOfObjectives();
+        point = new double[dimensions];
+        for (int i = 0; i < dimensions; i++) {
+            point[i] = solution.getObjective(i);
+        }
+    }
 
-	public int getNumberOfDimensions() {
-		return point.length;
-	}
+    /**
+     * Constructor from an array of double values
+     *
+     * @param point
+     */
+    public Point(double[] point) {
+        this.point = new double[point.length];
+        System.arraycopy(point, 0, this.point, 0, point.length);
+    }
 
-	public double[] getValues() {
-		return point;
-	}
+    public int getNumberOfDimensions() {
+        return point.length;
+    }
+
+    public double[] getValues() {
+        return point;
+    }
 
 
-	public double getDimensionValue(int index) {
-		return point[index] ;
-	}
+    public double getDimensionValue(int index) {
+        return point[index];
+    }
 
-	public void setDimensionValue(int index, double value) {
-		point[index] = value ;
-	}
+    public void setDimensionValue(int index, double value) {
+        point[index] = value;
+    }
 
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-
-		Point that = (Point) o;
-
-		if (!Arrays.equals(point, that.point))
-			return false;
-
-		return true;
+    public boolean equals(Point p) {
+        if (this == p)
+            return true;
+		return Arrays.equals(point, p.point);
 	}
 }

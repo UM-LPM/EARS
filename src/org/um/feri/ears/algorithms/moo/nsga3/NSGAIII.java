@@ -53,7 +53,6 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
     protected Vector<Integer> numberOfDivisions;
     protected List<ReferencePoint<Type>> referencePoints;
 
-    Distance distance;
     BinaryTournament2<Type> bt2;
     SBXCrossover sbx;
     PolynomialMutation plm;
@@ -212,7 +211,6 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 
-        distance = new Distance();
         bt2 = new BinaryTournament2<Type>();
         sbx = new SBXCrossover(0.9, 20.0);
         plm = new PolynomialMutation(1.0 / num_var, 20.0);

@@ -15,7 +15,7 @@ package org.um.feri.ears.algorithms.moo.pso;
 
 import java.util.Comparator;
 
-import org.um.feri.ears.algorithms.moo.dbea.NondominatedPopulation;
+import org.um.feri.ears.util.NondominatedPopulation;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.SolutionListUtils;

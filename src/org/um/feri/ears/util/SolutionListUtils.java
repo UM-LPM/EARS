@@ -22,6 +22,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Comparator.DominanceComparator;
 
 /**
  * Created by Antonio J. Nebro on 04/10/14.

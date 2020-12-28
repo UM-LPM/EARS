@@ -7,19 +7,12 @@
 
 package org.um.feri.ears.algorithms.moo.spea2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.Comparator.MOFitnessComparator;
 import org.um.feri.ears.util.Distance;
-import org.um.feri.ears.util.DistanceNodeComparator;
-import org.um.feri.ears.util.DominanceComparator;
-import org.um.feri.ears.util.MOFitnessComparator;
+
+import java.util.*;
 
 public class Spea2fitness {
 
@@ -27,14 +20,14 @@ public class Spea2fitness {
 
     private ParetoSolution solutionSet;
 
-    private static final Distance distance_ = new Distance();
+    private static final Distance DISTANCE = new Distance();
 
     private static final Comparator distanceNodeComparator = new DistanceNodeComparator();
 
     private static final Comparator dominance = new DominanceComparator();
 
     public Spea2fitness(ParetoSolution solutionSet) {
-        distance = distance_.distanceMatrix(solutionSet);
+        distance = DISTANCE.distanceMatrix(solutionSet);
         this.solutionSet = solutionSet;
         for (int i = 0; i < this.solutionSet.size(); i++) {
             this.solutionSet.get(i).setLocation(i);
@@ -116,7 +109,7 @@ public class Spea2fitness {
 
         // archive overfilled
 
-        double[][] distance = distance_.distanceMatrix(aux);
+        double[][] distance = DISTANCE.distanceMatrix(aux);
         List<List<DistanceNode>> distanceList = new LinkedList<List<DistanceNode>>();
         for (int pos = 0; pos < aux.size(); pos++) {
             aux.get(pos).setLocation(pos);

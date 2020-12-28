@@ -18,7 +18,7 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.util.DominanceComparator;
+import org.um.feri.ears.util.Comparator.DominanceComparator;
 
 public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 

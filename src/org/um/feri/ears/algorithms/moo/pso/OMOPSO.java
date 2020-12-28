@@ -32,8 +32,8 @@ import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.DominanceComparator;
-import org.um.feri.ears.util.NonDominatedSolutionList;
+import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.NondominatedPopulation;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -62,7 +62,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
     private ParetoSolution<Double> swarm;
     private MOSolutionBase<Double>[] localBest;
     private CrowdingDistanceArchive<Double> leaderArchive;
-    private NonDominatedSolutionList<Double> epsilonArchive;
+    private NondominatedPopulation<Double> epsilonArchive;
 
     private double[][] speed;
 
@@ -262,7 +262,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
 
         localBest = new MOSolutionBase[swarmSize];
         leaderArchive = new CrowdingDistanceArchive<Double>(this.archiveSize);
-        epsilonArchive = new NonDominatedSolutionList<Double>(new DominanceComparator(eta));
+        epsilonArchive = new NondominatedPopulation<>(new DominanceComparator(eta));
 
         dominanceComparator = new DominanceComparator<Double>();
         crowdingDistanceComparator = new CrowdingDistanceComparator<Double>();

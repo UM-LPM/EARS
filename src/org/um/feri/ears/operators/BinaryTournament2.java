@@ -22,12 +22,10 @@
 package org.um.feri.ears.operators;
 
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.DominanceComparator;
-import org.um.feri.ears.util.PermutationUtility;
+import org.um.feri.ears.util.Comparator.DominanceComparator;
 import org.um.feri.ears.util.Util;
 
 
@@ -71,7 +69,7 @@ public class BinaryTournament2<Type extends Number> {
 		ParetoSolution<Type> population = object;
 		if (index == 0) // generate a permutation of indices
 		{
-			a = (new PermutationUtility()).intPermutation(population.size());
+			a = Util.randomPermutation(population.size());
 		}
 
 		MOSolutionBase<Type> solution1, solution2;

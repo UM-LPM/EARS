@@ -13,7 +13,7 @@ import org.um.feri.ears.operators.TournamentSelection;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.TaskComparator;
+import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 
 public class CRO extends Algorithm {

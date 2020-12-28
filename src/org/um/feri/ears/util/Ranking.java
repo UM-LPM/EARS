@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Comparator.DominanceComparator;
 
 /**
  * This class implements some facilities for ranking solutions.

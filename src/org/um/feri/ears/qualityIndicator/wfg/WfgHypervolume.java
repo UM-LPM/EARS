@@ -6,7 +6,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.qualityIndicator.MetricsUtil;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
-import org.um.feri.ears.util.PointComparator;
+import org.um.feri.ears.util.Comparator.PointComparator;
 
 /**
  * Created by ajnebro on 2/2/15.

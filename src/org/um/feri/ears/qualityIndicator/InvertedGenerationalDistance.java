@@ -56,7 +56,7 @@ public class InvertedGenerationalDistance<T extends Number> extends QualityIndic
 		double sum = 0.0;
 		try {
 			for (double[] rferencePoint : normalizedReference)
-				sum += Math.pow(MetricsUtil.distanceToClosestPoint(rferencePoint, normalizedApproximation, new EuclideanDistance()), pow_);
+				sum += Math.pow(MetricsUtil.distanceToNearestPoint(rferencePoint, normalizedApproximation, new EuclideanDistance()), pow_);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

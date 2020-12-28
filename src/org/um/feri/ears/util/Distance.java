@@ -25,18 +25,14 @@ import java.util.List;
 
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.Comparator.ObjectiveComparator;
 
 /**
  * This class implements some utilities for calculating distances
  */
 public class Distance<Type extends Number> {
 
-	/**
-	 * Constructor.
-	 */
-	public Distance() {
-		// do nothing.
-	}
+	public Distance() {}
     
     /** 
     * Returns a matrix with distances between solutions in a 

@@ -1,9 +1,9 @@
 package org.um.feri.ears.qualityIndicator;
 
-import org.um.feri.ears.algorithms.moo.dbea.NondominatedPopulation;
+import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.NondominatedPopulation;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.SolutionComparator;
 
 /**
  * This class implements the Pareto dominance indicator.
@@ -17,8 +17,8 @@ import org.um.feri.ears.util.SolutionComparator;
  */
 public class NR<T extends Number> extends QualityIndicator<T>{
 	
-	public NR(int num_obj) {
-		super(num_obj);
+	public NR(int numObj) {
+		super(numObj);
 		name = "NR";
 	}
 
@@ -51,8 +51,8 @@ public class NR<T extends Number> extends QualityIndicator<T>{
 		ndp.addAll(front1);
 		ndp.addAll(front2);
 		
-		SolutionComparator<T> sc = new SolutionComparator<T>();
-		
+		DominanceComparator<T> sc = new DominanceComparator<T>();
+
 		for (MOSolutionBase<T> s1 : front1) {
 			for (MOSolutionBase<T> ndSolution : ndp) {
 				if(sc.compare(s1, ndSolution) == 0)
@@ -69,13 +69,7 @@ public class NR<T extends Number> extends QualityIndicator<T>{
 		
 		NR1 /= ndp.size();
 		NR2 /= ndp.size();
-		
-		if(NR1 > NR2)
-			return -1;
-		if(NR1 < NR2)
-			return 1;
-		
-		return 0;
-	}
 
+		return Double.compare(NR2, NR1);
+	}
 }

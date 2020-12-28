@@ -40,7 +40,7 @@ public class InvertedGenerationalDistancePlus<T extends Number> extends QualityI
 	    double sum = 0.0;
 	    try {
 			for (int i = 0 ; i < normalizedReference.length; i++) {
-					sum += MetricsUtil.distanceToClosestPoint(normalizedReference[i], normalizedApproximation, new DominanceDistance());
+					sum += MetricsUtil.distanceToNearestPoint(normalizedReference[i], normalizedApproximation, new DominanceDistance());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -10,16 +10,16 @@ import org.um.feri.ears.util.Util;
 
 public class MOSolutionBase<Type> extends SolutionBase<Type> {
 	
-	protected double eval[]; //more than one objective
+	protected double[] eval; //more than one objective
     protected double fitness;
 	protected double rank; 
 	protected int location;
 	protected double crowdingDistance;
-	protected double[] normalizedObjective_;
+	protected double[] normalizedObjective;
 
 	protected Map<Object, Object> attributes;
-	protected int clusterID_;
-	protected double vDistance_;
+	protected int clusterID;
+	protected double vDistance;
 
 	public MOSolutionBase() {
 	}
@@ -35,7 +35,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 
 		eval = new double[numberOfObjectives];
 		attributes = new HashMap<>() ;
-		normalizedObjective_ = new double[numberOfObjectives];
+		normalizedObjective = new double[numberOfObjectives];
 	}
 	
 	public MOSolutionBase(MOSolutionBase<Type> s) {
@@ -51,10 +51,10 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 		this.location = s.location;
 	    this.attributes = new HashMap<Object, Object>(s.attributes) ;
 		
-		normalizedObjective_ = new double[eval.length];
+		normalizedObjective = new double[eval.length];
 
 		for (int i = 0; i < eval.length; i++) {
-			normalizedObjective_[i] = s.getNormalizedObjective(i);
+			normalizedObjective[i] = s.getNormalizedObjective(i);
 		}
 	}
 	
@@ -74,7 +74,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 		System.arraycopy(eval, 0, this.eval, 0, eval.length);
 		constraintsMet = true;
 		attributes = new HashMap<>() ;
-		normalizedObjective_ = new double[eval.length];
+		normalizedObjective = new double[eval.length];
 		
 	}
 
@@ -96,7 +96,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 		System.arraycopy(eval, 0, this.eval, 0, eval.length);
 		constraintsMet = true;
 		attributes = new HashMap<>() ;
-		normalizedObjective_ = new double[eval.length];
+		normalizedObjective = new double[eval.length];
 	}
 
 
@@ -118,28 +118,28 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 	}
 
 	public void setClusterID(int id){
-		this.clusterID_ = id;
+		this.clusterID = id;
 	}
 
 	public int getClusterID(){
-		return this.clusterID_;
+		return this.clusterID;
 	}
 
 
 	public void setVDistance(double val){
-		this.vDistance_ = val;
+		this.vDistance = val;
 	}
 
 	public double getVDistance(){
-		return this.vDistance_;
+		return this.vDistance;
 	}
 
 	public void setNormalizedObjective(int i, double value) {
-		normalizedObjective_[i] = value;
+		normalizedObjective[i] = value;
 	}
 
 	public double getNormalizedObjective(int i) {
-		return normalizedObjective_[i];
+		return normalizedObjective[i];
 	}
 
 	public String toString() {
@@ -191,7 +191,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 	}
 
 	public String toStringFitness() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < eval.length; i++)
 			sb.append(Util.df0.format(eval[i])).append("\t");
 		return sb.toString();

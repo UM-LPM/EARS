@@ -18,7 +18,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.CrowdingComparator;
+import org.um.feri.ears.util.Comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.Ranking;
 

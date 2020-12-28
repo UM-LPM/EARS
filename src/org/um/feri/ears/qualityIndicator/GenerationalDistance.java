@@ -58,7 +58,7 @@ public class GenerationalDistance<T extends Number> extends QualityIndicator<T>{
 		double sum = 0.0;
 		try {
 			for (int i = 0; i < population.size(); i++)
-				sum += Math.pow(MetricsUtil.distanceToClosestPoint(normalizedApproximation[i], normalizedReference), pow_);
+				sum += Math.pow(MetricsUtil.distanceToNearestPoint(normalizedApproximation[i], normalizedReference), pow_);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
