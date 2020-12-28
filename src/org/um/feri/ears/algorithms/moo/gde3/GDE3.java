@@ -39,153 +39,147 @@ import org.um.feri.ears.util.Ranking;
 import java.util.Comparator;
 
 /**
- * This class implements the GDE3 algorithm. 
+ * This class implements the GDE3 algorithm.
  */
 public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
-    
-	ParetoSolution<Type> population          ;
-	ParetoSolution<Type> offspringPopulation ;
-	ParetoSolution<Type> union               ;
-	
-	int populationSize;
-	
-	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
 
-	public GDE3(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, int populationSize) {
-		this.populationSize = populationSize;
-		this.cross = crossover;
+    ParetoSolution<Type> population;
+    ParetoSolution<Type> offspringPopulation;
 
-		au = new Author("miha", "miha.ravber at gamil.com");
-		ai = new AlgorithmInfo(
-				"GDE3",
-				"\\bibitem{Kukkonen2009}\nS.~Kukkonen, J.~Lampinen\n\\newblock Performance Assessment of Generalized Differential Evolution 3 with a Given Set of Constrained Multi-Objective Test Problems.\n\\newblock \\emph{2009 IEEE Congress on Evolutionary Computation}, 1943--1950, 2009.\n",
-				"GDE3", "Generalized Differential Evolution 3");
-		
-		ai.addParameters(crossover.getOperatorParameters());
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
-	}
-    
-	@Override
-	protected void init() {
-		population = new ParetoSolution<Type>(populationSize);
-	}
+    int populationSize;
 
-	@Override
-	public void resetToDefaultsBeforeNewRun() {
-	}
-  
-	/**
-	 * Runs of the GDE3 algorithm.
-	 * @return a <code>SolutionSet</code> that is a set of non dominated solutions as a result of the algorithm execution
-	 * @throws StopCriterionException
-	 */
-	@Override
-	protected void start() throws StopCriterionException {
+    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
 
-		Distance<Type> distance;
-		Comparator<MOSolutionBase<Type>> dominance;
+    public GDE3(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, int populationSize) {
+        this.populationSize = populationSize;
+        this.cross = crossover;
 
-		distance = new Distance<>();
-		dominance = new DominanceComparator<>();
+        au = new Author("miha", "miha.ravber at gamil.com");
+        ai = new AlgorithmInfo(
+                "GDE3",
+                "\\bibitem{Kukkonen2009}\nS.~Kukkonen, J.~Lampinen\n\\newblock Performance Assessment of Generalized Differential Evolution 3 with a Given Set of Constrained Multi-Objective Test Problems.\n\\newblock \\emph{2009 IEEE Congress on Evolutionary Computation}, 1943--1950, 2009.\n",
+                "GDE3", "Generalized Differential Evolution 3");
 
-		MOSolutionBase<Type> parent[] = null;
+        ai.addParameters(crossover.getOperatorParameters());
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+    }
 
-		DifferentialEvolutionSelection<Type> des = new DifferentialEvolutionSelection<Type>();
+    @Override
+    protected void init() {
+        population = new ParetoSolution<Type>(populationSize);
+    }
 
-		// Create the initial solutionSet
-		MOSolutionBase<Type> newSolution;
-		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriterion())
-				return;
-			newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
-			// problem.evaluateConstraints(newSolution);
-			population.add(newSolution);
-		}
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
+    }
 
-		// Generations ...
-		while (!task.isStopCriterion()) {
-			// Create the offSpring solutionSet
-			offspringPopulation = new ParetoSolution(populationSize * 2);
+    @Override
+    protected void start() throws StopCriterionException {
 
-			for (int i = 0; i < populationSize; i++) {
-				// Obtain parents. Two parameters are required: the population and the index of the current individual
-				try {
-					des.setCurrentIndex(i);
-					parent = des.execute(population, task);
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.err.println("The population has less than four solutions");
-					break;
-				}
+        Distance<Type> distance;
+        Comparator<MOSolutionBase<Type>> dominance;
 
-				MOSolutionBase<Type> child;
-				// Crossover. Two parameters are required: the current
-				// individual and the array of parents
-				cross.setCurrentSolution(population.get(i));
-				child = cross.execute(parent, task)[0];
+        distance = new Distance<>();
+        dominance = new DominanceComparator<>();
 
-				if (task.isStopCriterion())
-					break;
-				task.eval(child);
+        MOSolutionBase<Type>[] parent;
 
-				// Dominance test
-				int result;
-				result = dominance.compare(population.get(i), child);
-				if (result == -1) { // Solution i dominates child
-					offspringPopulation.add(population.get(i));
-				} else if (result == 1) { // child dominates
-					offspringPopulation.add(child);
-				} else { // the two solutions are non-dominated
-					offspringPopulation.add(child);
-					offspringPopulation.add(population.get(i));
-				}
-			}
+        DifferentialEvolutionSelection<Type> des = new DifferentialEvolutionSelection<Type>();
 
-			// Ranking the offspring population
-			Ranking<Type> ranking = new Ranking<Type>(offspringPopulation);
+        // Create the initial solutionSet
+        MOSolutionBase<Type> newSolution;
+        for (int i = 0; i < populationSize; i++) {
+            if (task.isStopCriterion())
+                return;
+            newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            // problem.evaluateConstraints(newSolution);
+            population.add(newSolution);
+        }
 
-			int remain = populationSize;
-			int index = 0;
-			ParetoSolution<Type> front = null;
-			population.clear();
+        // Generations ...
+        while (!task.isStopCriterion()) {
+            // Create the offSpring solutionSet
+            offspringPopulation = new ParetoSolution(populationSize * 2);
 
-			// Obtain the next front
-			front = ranking.getSubfront(index);
+            for (int i = 0; i < populationSize; i++) {
+                // Obtain parents. Two parameters are required: the population and the index of the current individual
+                try {
+                    des.setCurrentIndex(i);
+                    parent = des.execute(population, task);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println("The population has less than four solutions");
+                    break;
+                }
 
-			while ((remain > 0) && (remain >= front.size())) {
-				// Assign crowding distance to individuals
-				distance.crowdingDistanceAssignment(front, num_obj);
-				// Add the individuals of this front
-				for (int k = 0; k < front.size(); k++) {
-					population.add(front.get(k));
-				}
+                MOSolutionBase<Type> child;
+                // Crossover. Two parameters are required: the current
+                // individual and the array of parents
+                cross.setCurrentSolution(population.get(i));
+                child = cross.execute(parent, task)[0];
 
-				// Decrement remain
-				remain = remain - front.size();
+                if (task.isStopCriterion())
+                    break;
+                task.eval(child);
 
-				// Obtain the next front
-				index++;
-				if (remain > 0) {
-					front = ranking.getSubfront(index);
-				}
-			}
+                // Dominance test
+                int result;
+                result = dominance.compare(population.get(i), child);
+                if (result == -1) { // Solution i dominates child
+                    offspringPopulation.add(population.get(i));
+                } else if (result == 1) { // child dominates
+                    offspringPopulation.add(child);
+                } else { // the two solutions are non-dominated
+                    offspringPopulation.add(child);
+                    offspringPopulation.add(population.get(i));
+                }
+            }
 
-			// remain is less than front(index).size, insert only the best one
-			if (remain > 0) { // front contains individuals to insert
-				while (front.size() > remain) {
-					distance.crowdingDistanceAssignment(front, num_obj);
-					front.remove(front.indexWorst(new CrowdingComparator<>()));
-				}
-				for (int k = 0; k < front.size(); k++) {
-					population.add(front.get(k));
-				}
-				remain = 0;
-			}
-			task.incrementNumberOfIterations();
-		}
-		
-		// Return the first non-dominated front
-		Ranking<Type> ranking = new Ranking<>(population);
-		best = ranking.getSubfront(0);
-	}
+            // Ranking the offspring population
+            Ranking<Type> ranking = new Ranking<Type>(offspringPopulation);
+
+            int remain = populationSize;
+            int index = 0;
+            ParetoSolution<Type> front = null;
+            population.clear();
+
+            // Obtain the next front
+            front = ranking.getSubfront(index);
+
+            while ((remain > 0) && (remain >= front.size())) {
+                // Assign crowding distance to individuals
+                distance.crowdingDistanceAssignment(front, num_obj);
+                // Add the individuals of this front
+                for (int k = 0; k < front.size(); k++) {
+                    population.add(front.get(k));
+                }
+
+                // Decrement remain
+                remain = remain - front.size();
+
+                // Obtain the next front
+                index++;
+                if (remain > 0) {
+                    front = ranking.getSubfront(index);
+                }
+            }
+
+            // remain is less than front(index).size, insert only the best one
+            if (remain > 0) { // front contains individuals to insert
+                while (front.size() > remain) {
+                    distance.crowdingDistanceAssignment(front, num_obj);
+                    front.remove(front.indexWorst(new CrowdingComparator<>()));
+                }
+                for (int k = 0; k < front.size(); k++) {
+                    population.add(front.get(k));
+                }
+                remain = 0;
+            }
+            task.incrementNumberOfIterations();
+        }
+
+        // Return the first non-dominated front
+        Ranking<Type> ranking = new Ranking<>(population);
+        best = ranking.getSubfront(0);
+    }
 }

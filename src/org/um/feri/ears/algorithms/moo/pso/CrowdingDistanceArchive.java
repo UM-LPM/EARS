@@ -21,62 +21,62 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.SolutionListUtils;
 
 /**
-* Created by Antonio J. Nebro on 24/09/14.
-* Modified by Juanjo on 07/04/2015
-*/
+ * Created by Antonio J. Nebro on 24/09/14.
+ * Modified by Juanjo on 07/04/2015
+ */
 public class CrowdingDistanceArchive<Type extends Number> {
-	private Comparator<MOSolutionBase<Type>> crowdingDistanceComparator;
-	private CrowdingDistance<Type> crowdingDistance ;
-	protected NondominatedPopulation<Type>  archive;
-	protected int maxSize;
+    private Comparator<MOSolutionBase<Type>> crowdingDistanceComparator;
+    private CrowdingDistance<Type> crowdingDistance;
+    protected NondominatedPopulation<Type> archive;
+    protected int maxSize;
 
-	public CrowdingDistanceArchive(int maxSize) {
-		this.maxSize = maxSize;
-		this.archive = new NondominatedPopulation<Type>();
-		crowdingDistanceComparator = new CrowdingDistanceComparator<Type>() ;
-		crowdingDistance = new CrowdingDistance<Type>() ;
-	}
+    public CrowdingDistanceArchive(int maxSize) {
+        this.maxSize = maxSize;
+        this.archive = new NondominatedPopulation<Type>();
+        crowdingDistanceComparator = new CrowdingDistanceComparator<Type>();
+        crowdingDistance = new CrowdingDistance<Type>();
+    }
 
 
-	public void prune() {
-		if (getSolutionList().size() > getMaxSize()) {
-			computeDensityEstimator();
-			MOSolutionBase<Type> worst = new SolutionListUtils().findWorstSolution(getSolutionList(), crowdingDistanceComparator) ;
-			getSolutionList().remove(worst);
-		}
-	}
+    public void prune() {
+        if (getSolutionList().size() > getMaxSize()) {
+            computeDensityEstimator();
+            MOSolutionBase<Type> worst = new SolutionListUtils().findWorstSolution(getSolutionList(), crowdingDistanceComparator);
+            getSolutionList().remove(worst);
+        }
+    }
 
-	public Comparator<MOSolutionBase<Type>> getComparator() {
-		return crowdingDistanceComparator ;
-	}
+    public Comparator<MOSolutionBase<Type>> getComparator() {
+        return crowdingDistanceComparator;
+    }
 
-	public void computeDensityEstimator() {
-		crowdingDistance.computeDensityEstimator(getSolutionList());
-	}
-	
+    public void computeDensityEstimator() {
+        crowdingDistance.computeDensityEstimator(getSolutionList());
+    }
 
-	public boolean add(MOSolutionBase<Type> solution) {
-		boolean success = archive.add(solution);
-		if (success) {
-			prune();
-		}
 
-		return success;
-	}
+    public boolean add(MOSolutionBase<Type> solution) {
+        boolean success = archive.add(solution);
+        if (success) {
+            prune();
+        }
 
-	public MOSolutionBase<Type> get(int index) {
-		return getSolutionList().get(index);
-	}
+        return success;
+    }
 
-	public ParetoSolution<Type> getSolutionList() {
-		return archive;
-	}
+    public MOSolutionBase<Type> get(int index) {
+        return getSolutionList().get(index);
+    }
 
-	public int size() {
-		return archive.size();
-	}
+    public ParetoSolution<Type> getSolutionList() {
+        return archive;
+    }
 
-	public int getMaxSize() {
-		return maxSize;
-	}
+    public int size() {
+        return archive.size();
+    }
+
+    public int getMaxSize() {
+        return maxSize;
+    }
 }

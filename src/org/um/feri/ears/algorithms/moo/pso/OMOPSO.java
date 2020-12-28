@@ -52,270 +52,271 @@ import org.um.feri.ears.util.Util;
  *       Optimization, pp. 495-509.
  * </ol>
  */
-public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double>{
+public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
 
-	private int swarmSize;
-	private int archiveSize;
-	private int currentIteration;
-	private int maxIterations;
+    private int swarmSize;
+    private int archiveSize;
+    private int currentIteration;
+    private int maxIterations;
 
-	private ParetoSolution<Double> swarm;
-	private MOSolutionBase<Double>[] localBest;
-	private CrowdingDistanceArchive<Double> leaderArchive;
-	private NonDominatedSolutionList<Double> epsilonArchive;
+    private ParetoSolution<Double> swarm;
+    private MOSolutionBase<Double>[] localBest;
+    private CrowdingDistanceArchive<Double> leaderArchive;
+    private NonDominatedSolutionList<Double> epsilonArchive;
 
-	private double[][] speed;
+    private double[][] speed;
 
-	private Comparator<MOSolutionBase<Double>> dominanceComparator;
-	private Comparator<MOSolutionBase<Double>> crowdingDistanceComparator;
+    private Comparator<MOSolutionBase<Double>> dominanceComparator;
+    private Comparator<MOSolutionBase<Double>> crowdingDistanceComparator;
 
-	private UniformMutation uniformMutation;
-	private NonUniformMutation nonUniformMutation;
+    private UniformMutation uniformMutation;
+    private NonUniformMutation nonUniformMutation;
 
-	private double eta = 0.0075;
+    private double eta = 0.0075;
 
-	private CrowdingDistance<Double> crowdingDistance;
+    private CrowdingDistance<Double> crowdingDistance;
 
-	public OMOPSO() {
-		this(100,100);
-	}
-	
-	/** Constructor */
-	public OMOPSO(int swarmSize, int archiveSize) {
+    public OMOPSO() {
+        this(100, 100);
+    }
 
-		this.swarmSize = swarmSize;
-		this.archiveSize = archiveSize;
-		
-		au = new Author("miha", "miha.ravber at gamil.com");
-		ai = new AlgorithmInfo(
-				"OMOPSO",
-				"\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
-				"OMOPSO", "Nondominated Sorting Genetic Algorithm II ");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize+"");
-		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
-		ai.addParameter(EnumAlgorithmParameters.ETA, eta+"");
-		ai.addParameter(EnumAlgorithmParameters.P_M, (1.0 / num_var)+"");
-	}
+    /**
+     * Constructor
+     */
+    public OMOPSO(int swarmSize, int archiveSize) {
 
-	
-	protected void initializeLeader(ParetoSolution<Double> swarm) {
-		for (MOSolutionBase<Double> solution : swarm) {
-			MOSolutionBase<Double> particle = solution.copy();
-			if (leaderArchive.add(particle)) {
-				epsilonArchive.add(particle.copy());
-			}
-		}
-	}
+        this.swarmSize = swarmSize;
+        this.archiveSize = archiveSize;
 
-	protected void initializeParticlesMemory(ParetoSolution<Double> swarm)  {
-		for (int i = 0; i < swarm.size(); i++) {
-			localBest[i] = swarm.get(i).copy();
-		}
-	}
+        au = new Author("miha", "miha.ravber at gamil.com");
+        ai = new AlgorithmInfo(
+                "OMOPSO",
+                "\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
+                "OMOPSO", "Nondominated Sorting Genetic Algorithm II ");
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize + "");
+        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
+        ai.addParameter(EnumAlgorithmParameters.ETA, eta + "");
+        ai.addParameter(EnumAlgorithmParameters.P_M, (1.0 / num_var) + "");
+    }
 
-	protected void updateVelocity(ParetoSolution<Double> swarm)  {
-		double r1, r2, W, C1, C2;
-		MOSolutionBase<Double> bestGlobal;
 
-		for (int i = 0; i < swarmSize; i++) {
-			MOSolutionBase<Double> particle = swarm.get(i);
-			MOSolutionBase<Double> bestParticle =  localBest[i];
+    protected void initializeLeader(ParetoSolution<Double> swarm) {
+        for (MOSolutionBase<Double> solution : swarm) {
+            MOSolutionBase<Double> particle = solution.copy();
+            if (leaderArchive.add(particle)) {
+                epsilonArchive.add(particle.copy());
+            }
+        }
+    }
 
-			//Select a global localBest for calculate the speed of particle i, bestGlobal
-			MOSolutionBase<Double> one ;
-			MOSolutionBase<Double> two;
-			int pos1 = Util.nextInt(0, leaderArchive.getSolutionList().size());
-			int pos2 = Util.nextInt(0, leaderArchive.getSolutionList().size());
-			one = leaderArchive.getSolutionList().get(pos1);
-			two = leaderArchive.getSolutionList().get(pos2);
+    protected void initializeParticlesMemory(ParetoSolution<Double> swarm) {
+        for (int i = 0; i < swarm.size(); i++) {
+            localBest[i] = swarm.get(i).copy();
+        }
+    }
 
-			if (crowdingDistanceComparator.compare(one, two) < 1) {
-				bestGlobal = one ;
-			} else {
-				bestGlobal = two ;
-			}
+    protected void updateVelocity(ParetoSolution<Double> swarm) {
+        double r1, r2, W, C1, C2;
+        MOSolutionBase<Double> bestGlobal;
 
-			//Parameters for velocity equation
-			r1 = Util.nextDouble();
-			r2 = Util.nextDouble();
-			C1 = Util.nextDouble(1.5, 2.0);
-			C2 = Util.nextDouble(1.5, 2.0);
-			W = Util.nextDouble(0.1, 0.5);
-			//
+        for (int i = 0; i < swarmSize; i++) {
+            MOSolutionBase<Double> particle = swarm.get(i);
+            MOSolutionBase<Double> bestParticle = localBest[i];
 
-			for (int var = 0; var < num_var; var++) {
-				//Computing the velocity of this particle
-				speed[i][var] = W * speed[i][var] + C1 * r1 * (bestParticle.getValue(var) -
-						particle.getValue(var)) +
-						C2 * r2 * (bestGlobal.getValue(var) - particle.getValue(var));
-			}
-		}
-	}
+            //Select a global localBest for calculate the speed of particle i, bestGlobal
+            MOSolutionBase<Double> one;
+            MOSolutionBase<Double> two;
+            int pos1 = Util.nextInt(0, leaderArchive.getSolutionList().size());
+            int pos2 = Util.nextInt(0, leaderArchive.getSolutionList().size());
+            one = leaderArchive.getSolutionList().get(pos1);
+            two = leaderArchive.getSolutionList().get(pos2);
 
-	/** Update the position of each particle */
-	protected void updatePosition(ParetoSolution<Double> swarm)  {
-		for (int i = 0; i < swarmSize; i++) {
-			MOSolutionBase<Double> particle = swarm.get(i);
-			for (int var = 0; var < num_var; var++) {
-				particle.setValue(var, particle.getValue(var) + speed[i][var]);
-				if (particle.getValue(var) < task.getLowerLimit(var)) {
-					particle.setValue(var, task.getLowerLimit(var));
-					speed[i][var] = speed[i][var] * -1.0;
-				}
-				if (particle.getValue(var) > task.getUpperLimit(var)) {
-					particle.setValue(var,task.getUpperLimit(var));
-					speed[i][var] = speed[i][var] * -1.0;
-				}
-			}
-		}
-	}
+            if (crowdingDistanceComparator.compare(one, two) < 1) {
+                bestGlobal = one;
+            } else {
+                bestGlobal = two;
+            }
 
-	protected void updateParticlesMemory(ParetoSolution<Double> swarm) {
-		for (int i = 0; i < swarm.size(); i++) {
-			int flag = dominanceComparator.compare(swarm.get(i), localBest[i]);
-			if (flag != 1) {
-				localBest[i] = swarm.get(i).copy();
-			}
-		}
-	}
+            //Parameters for velocity equation
+            r1 = Util.nextDouble();
+            r2 = Util.nextDouble();
+            C1 = Util.nextDouble(1.5, 2.0);
+            C2 = Util.nextDouble(1.5, 2.0);
+            W = Util.nextDouble(0.1, 0.5);
+            //
 
-	protected void initializeVelocity(ParetoSolution<Double> swarm) {
-		for (int i = 0; i < swarm.size(); i++) {
-			for (int j = 0; j < num_obj; j++) {
-				speed[i][j] = 0.0;
-			}
-		}
-	}
+            for (int var = 0; var < num_var; var++) {
+                //Computing the velocity of this particle
+                speed[i][var] = W * speed[i][var] + C1 * r1 * (bestParticle.getValue(var) -
+                        particle.getValue(var)) +
+                        C2 * r2 * (bestGlobal.getValue(var) - particle.getValue(var));
+            }
+        }
+    }
 
-	/**  Apply a mutation operator to all particles in the swarm (perturbation) */
-	protected void perturbation(ParetoSolution<Double> swarm)  {
-		
-		nonUniformMutation.setCurrentIteration(currentIteration);
+    /**
+     * Update the position of each particle
+     */
+    protected void updatePosition(ParetoSolution<Double> swarm) {
+        for (int i = 0; i < swarmSize; i++) {
+            MOSolutionBase<Double> particle = swarm.get(i);
+            for (int var = 0; var < num_var; var++) {
+                particle.setValue(var, particle.getValue(var) + speed[i][var]);
+                if (particle.getValue(var) < task.getLowerLimit(var)) {
+                    particle.setValue(var, task.getLowerLimit(var));
+                    speed[i][var] = speed[i][var] * -1.0;
+                }
+                if (particle.getValue(var) > task.getUpperLimit(var)) {
+                    particle.setValue(var, task.getUpperLimit(var));
+                    speed[i][var] = speed[i][var] * -1.0;
+                }
+            }
+        }
+    }
 
-		for (int i = 0; i < swarm.size(); i++) {
-			if (i % 3 == 0) {
-				nonUniformMutation.execute(swarm.get(i), task);
-			} else if (i % 3 == 1) {
-				uniformMutation.execute(swarm.get(i), task);
-			}
-		}
-	}
+    protected void updateParticlesMemory(ParetoSolution<Double> swarm) {
+        for (int i = 0; i < swarm.size(); i++) {
+            int flag = dominanceComparator.compare(swarm.get(i), localBest[i]);
+            if (flag != 1) {
+                localBest[i] = swarm.get(i).copy();
+            }
+        }
+    }
 
-	/**
-	 * Update leaders method
-	 * @param swarm List of solutions (swarm)
-	 */
-	protected void updateLeaders(ParetoSolution<Double> swarm) {
-		for (MOSolutionBase<Double> solution : swarm) {
-			MOSolutionBase<Double> particle = solution.copy();
-			if (leaderArchive.add(particle)) {
-				epsilonArchive.add(particle.copy());
-			}
-		}
-	}
-	
-	@Override
-	protected void init() throws StopCriterionException {
+    protected void initializeVelocity(ParetoSolution<Double> swarm) {
+        for (int i = 0; i < swarm.size(); i++) {
+            for (int j = 0; j < num_obj; j++) {
+                speed[i][j] = 0.0;
+            }
+        }
+    }
 
-		if(optimalParam)
-		{
-			switch(num_obj){
-			case 1:
-			{
-				swarmSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 2:
-			{
-				swarmSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 3:
-			{
-				swarmSize = 300;
-				archiveSize = 300;
-				break;
-			}
-			default:
-			{
-				swarmSize = 500;
-				archiveSize = 500;
-				break;
-			}
-			}
-		}
-		
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize+"");
-		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
-		
-		currentIteration = 1;
-		swarm = new ParetoSolution<Double>(swarmSize);
-		this.maxIterations = task.getMaxEvaluations() / swarmSize;
-		
-	    double mutationProbability = 1.0 / num_var;
-		this.uniformMutation = new UniformMutation(mutationProbability, 0.5);
-		this.nonUniformMutation = new NonUniformMutation(mutationProbability, 0.5, maxIterations);
+    /**
+     * Apply a mutation operator to all particles in the swarm (perturbation)
+     */
+    protected void perturbation(ParetoSolution<Double> swarm) {
 
-		localBest = new MOSolutionBase[swarmSize];
-		leaderArchive = new CrowdingDistanceArchive<Double>(this.archiveSize);
-		epsilonArchive = new NonDominatedSolutionList<Double>(new DominanceComparator(eta));
+        nonUniformMutation.setCurrentIteration(currentIteration);
 
-		dominanceComparator = new DominanceComparator<Double>();
-		crowdingDistanceComparator = new CrowdingDistanceComparator<Double>();
+        for (int i = 0; i < swarm.size(); i++) {
+            if (i % 3 == 0) {
+                nonUniformMutation.execute(swarm.get(i), task);
+            } else if (i % 3 == 1) {
+                uniformMutation.execute(swarm.get(i), task);
+            }
+        }
+    }
 
-		speed = new double[swarmSize][num_var];
+    /**
+     * Update leaders method
+     *
+     * @param swarm List of solutions (swarm)
+     */
+    protected void updateLeaders(ParetoSolution<Double> swarm) {
+        for (MOSolutionBase<Double> solution : swarm) {
+            MOSolutionBase<Double> particle = solution.copy();
+            if (leaderArchive.add(particle)) {
+                epsilonArchive.add(particle.copy());
+            }
+        }
+    }
 
-		
-		// Create the initial population
-		MOSolutionBase<Double> newSolution;
-		for (int i = 0; i < swarmSize; i++) {
-			if (task.isStopCriterion())
-				return;
-			newSolution = new MOSolutionBase<Double>(task.getRandomMOSolution());
-			// problem.evaluateConstraints(newSolution);
-			swarm.add(newSolution);
-		}
-		
-		initializeVelocity(swarm);
-	    initializeParticlesMemory(swarm);
-	    initializeLeader(swarm);
-	    
-		crowdingDistance = new CrowdingDistance();
-	    crowdingDistance.computeDensityEstimator(leaderArchive.getSolutionList());
-	}
-	
-	@Override
-	protected void start() throws StopCriterionException {
+    @Override
+    protected void init() throws StopCriterionException {
 
-		// Generations
-		while (!task.isStopCriterion()) {
-			
-			updateVelocity(swarm);
-			updatePosition(swarm);
-			perturbation(swarm);
-			
-			for(MOSolutionBase<Double> s : swarm)
-			{
-				if (task.isStopCriterion())
-					break;
-				task.eval(s);
-			}
-			
-			updateLeaders(swarm);
-			updateParticlesMemory(swarm);
-			
-		    crowdingDistance.computeDensityEstimator(leaderArchive.getSolutionList());
-			currentIteration++;
-			task.incrementNumberOfIterations();
-		}
-		
-		best = epsilonArchive;
-	}
+        if (optimalParam) {
+            switch (num_obj) {
+                case 1: {
+                    swarmSize = 100;
+                    archiveSize = 100;
+                    break;
+                }
+                case 2: {
+                    swarmSize = 100;
+                    archiveSize = 100;
+                    break;
+                }
+                case 3: {
+                    swarmSize = 300;
+                    archiveSize = 300;
+                    break;
+                }
+                default: {
+                    swarmSize = 500;
+                    archiveSize = 500;
+                    break;
+                }
+            }
+        }
 
-	@Override
-	public void resetToDefaultsBeforeNewRun() {
-	}
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize + "");
+        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
+
+        currentIteration = 1;
+        swarm = new ParetoSolution<Double>(swarmSize);
+        this.maxIterations = task.getMaxEvaluations() / swarmSize;
+
+        double mutationProbability = 1.0 / num_var;
+        this.uniformMutation = new UniformMutation(mutationProbability, 0.5);
+        this.nonUniformMutation = new NonUniformMutation(mutationProbability, 0.5, maxIterations);
+
+        localBest = new MOSolutionBase[swarmSize];
+        leaderArchive = new CrowdingDistanceArchive<Double>(this.archiveSize);
+        epsilonArchive = new NonDominatedSolutionList<Double>(new DominanceComparator(eta));
+
+        dominanceComparator = new DominanceComparator<Double>();
+        crowdingDistanceComparator = new CrowdingDistanceComparator<Double>();
+
+        speed = new double[swarmSize][num_var];
+
+
+        // Create the initial population
+        MOSolutionBase<Double> newSolution;
+        for (int i = 0; i < swarmSize; i++) {
+            if (task.isStopCriterion())
+                return;
+            newSolution = new MOSolutionBase<Double>(task.getRandomMOSolution());
+            // problem.evaluateConstraints(newSolution);
+            swarm.add(newSolution);
+        }
+
+        initializeVelocity(swarm);
+        initializeParticlesMemory(swarm);
+        initializeLeader(swarm);
+
+        crowdingDistance = new CrowdingDistance();
+        crowdingDistance.computeDensityEstimator(leaderArchive.getSolutionList());
+    }
+
+    @Override
+    protected void start() throws StopCriterionException {
+
+        // Generations
+        while (!task.isStopCriterion()) {
+
+            updateVelocity(swarm);
+            updatePosition(swarm);
+            perturbation(swarm);
+
+            for (MOSolutionBase<Double> s : swarm) {
+                if (task.isStopCriterion())
+                    break;
+                task.eval(s);
+            }
+
+            updateLeaders(swarm);
+            updateParticlesMemory(swarm);
+
+            crowdingDistance.computeDensityEstimator(leaderArchive.getSolutionList());
+            currentIteration++;
+            task.incrementNumberOfIterations();
+        }
+
+        best = epsilonArchive;
+    }
+
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
+    }
 
 }

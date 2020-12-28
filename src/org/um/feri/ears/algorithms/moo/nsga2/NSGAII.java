@@ -23,177 +23,172 @@ import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.Ranking;
 
 
-/** 
- *  Implementation of NSGA-II.
- *  This implementation of NSGA-II makes use of a QualityIndicator object
- *  to obtained the convergence speed of the algorithm. This version is used
- *  in the paper:
- *     A.J. Nebro, J.J. Durillo, C.A. Coello Coello, F. Luna, E. Alba 
- *     "A Study of Convergence Speed in Multi-Objective Metaheuristics." 
- *     To be presented in: PPSN'08. Dortmund. September 2008.
+/**
+ * Implementation of NSGA-II.
+ * This implementation of NSGA-II makes use of a QualityIndicator object
+ * to obtained the convergence speed of the algorithm. This version is used
+ * in the paper:
+ * A.J. Nebro, J.J. Durillo, C.A. Coello Coello, F. Luna, E. Alba
+ * "A Study of Convergence Speed in Multi-Objective Metaheuristics."
+ * To be presented in: PPSN'08. Dortmund. September 2008.
  */
 public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
-	int populationSize = 100;
+    int populationSize = 100;
 
-	ParetoSolution<Type> population;
-	ParetoSolution<Type> offspringPopulation;
-	ParetoSolution<Type> union;
-
-	
-	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
-
-	public NSGAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize) {
-		this(crossover, mutation, populationSize, "NSGAII");
-	}
-	
-	public NSGAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, String name) {
-
-		this.cross = crossover;
-		this.mut = mutation;
-		this.populationSize = populationSize;
-
-		au = new Author("miha", "miha.ravber at gamil.com");
-		ai = new AlgorithmInfo(
-				name,
-				"\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
-				name, "Nondominated Sorting Genetic Algorithm II ");
-		
-		ai.addParameters(crossover.getOperatorParameters());
-		ai.addParameters(mutation.getOperatorParameters());
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
-	}
+    ParetoSolution<Type> population;
+    ParetoSolution<Type> offspringPopulation;
+    ParetoSolution<Type> union;
 
 
-	@Override
-	protected void start() throws StopCriterionException {
-		Distance<Type> distance = new Distance<Type>();
-		BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
+    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
-		// Create the initial population
-		MOSolutionBase<Type> newSolution;
-		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriterion())
-				return;
-			newSolution = task.getRandomMOSolution();
-			// problem.evaluateConstraints(newSolution);
-			population.add(newSolution);
-		}
+    public NSGAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize) {
+        this(crossover, mutation, populationSize, "NSGAII");
+    }
 
-		// Generations
-		while (!task.isStopCriterion()) {
-			// Create the offSpring solutionSet
-			offspringPopulation = new ParetoSolution(populationSize);
-			MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+    public NSGAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, String name) {
 
-			for (int i = 0; i < (populationSize / 2); i++) {
-				if (!task.isStopCriterion()) {
-					// obtain parents
-					parents[0] = bt2.execute(population);
-					parents[1] = bt2.execute(population);
-					MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
-					
-					mut.execute(offSpring[0], task);
-					mut.execute(offSpring[1], task);
-					if (task.isStopCriterion())
-						break;
-					task.eval(offSpring[0]);
-					offspringPopulation.add(offSpring[0]);
-					// problem.evaluateConstraints(offSpring[0]);
-					if (task.isStopCriterion())
-						break;
-					task.eval(offSpring[1]);
-					// problem.evaluateConstraints(offSpring[1]);
-					offspringPopulation.add(offSpring[1]);
-				}
-			}
+        this.cross = crossover;
+        this.mut = mutation;
+        this.populationSize = populationSize;
 
-			// Create the solutionSet union of solutionSet and offSpring
-			union = population.union(offspringPopulation);
+        au = new Author("miha", "miha.ravber at gamil.com");
+        ai = new AlgorithmInfo(
+                name,
+                "\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
+                name, "Nondominated Sorting Genetic Algorithm II ");
 
-			// Ranking the union
-			Ranking<Type> ranking = new Ranking<Type>(union);
+        ai.addParameters(crossover.getOperatorParameters());
+        ai.addParameters(mutation.getOperatorParameters());
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+    }
 
-			int remain = populationSize;
-			int index = 0;
-			ParetoSolution<Type> front = null;
-			population.clear();
 
-			// Obtain the next front
-			front = ranking.getSubfront(index);
+    @Override
+    protected void start() throws StopCriterionException {
+        Distance<Type> distance = new Distance<Type>();
+        BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
 
-			while ((remain > 0) && (remain >= front.size())) {
-				// Assign crowding distance to individuals
-				distance.crowdingDistanceAssignment(front, num_obj);
-				// Add the individuals of this front
-				for (int k = 0; k < front.size(); k++) {
-					population.add(front.get(k));
-				}
+        // Create the initial population
+        MOSolutionBase<Type> newSolution;
+        for (int i = 0; i < populationSize; i++) {
+            if (task.isStopCriterion())
+                return;
+            newSolution = task.getRandomMOSolution();
+            // problem.evaluateConstraints(newSolution);
+            population.add(newSolution);
+        }
 
-				// Decrement remain
-				remain = remain - front.size();
+        // Generations
+        while (!task.isStopCriterion()) {
+            // Create the offSpring solutionSet
+            offspringPopulation = new ParetoSolution(populationSize);
+            MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
 
-				// Obtain the next front
-				index++;
-				if (remain > 0) {
-					front = ranking.getSubfront(index);
-				}
-			}
+            for (int i = 0; i < (populationSize / 2); i++) {
+                if (!task.isStopCriterion()) {
+                    // obtain parents
+                    parents[0] = bt2.execute(population);
+                    parents[1] = bt2.execute(population);
+                    MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
 
-			// Remain is less than front(index).size, insert only the best one
-			if (remain > 0) { // front contains individuals to insert
-				distance.crowdingDistanceAssignment(front, num_obj);
-				front.sort(new CrowdingComparator<>());
-				for (int k = 0; k < remain; k++) {
-					population.add(front.get(k));
-				}
-				remain = 0;
-			}
-			task.incrementNumberOfIterations();
-		}
-		
-		Ranking<Type> ranking = new Ranking<Type>(population);
-		best = ranking.getSubfront(0);
-	}
+                    mut.execute(offSpring[0], task);
+                    mut.execute(offSpring[1], task);
+                    if (task.isStopCriterion())
+                        break;
+                    task.eval(offSpring[0]);
+                    offspringPopulation.add(offSpring[0]);
+                    // problem.evaluateConstraints(offSpring[0]);
+                    if (task.isStopCriterion())
+                        break;
+                    task.eval(offSpring[1]);
+                    // problem.evaluateConstraints(offSpring[1]);
+                    offspringPopulation.add(offSpring[1]);
+                }
+            }
 
-	@Override
-	protected void init() {
-		
-		if(optimalParam)
-		{
-			switch(num_obj){
-			case 1:
-			{
-				populationSize = 100;
-				break;
-			}
-			case 2:
-			{
-				populationSize = 100;
-				break;
-			}
-			case 3:
-			{
-				populationSize = 300;
-				break;
-			}
-			default:
-			{
-				populationSize = 500;
-				break;
-			}
-			}
-		}
-		
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
-		
-		population = new ParetoSolution<Type>(populationSize);
-	}
+            // Create the solutionSet union of solutionSet and offSpring
+            union = population.union(offspringPopulation);
 
-	@Override
-	public void resetToDefaultsBeforeNewRun() {
+            // Ranking the union
+            Ranking<Type> ranking = new Ranking<Type>(union);
 
-	}
-	
+            int remain = populationSize;
+            int index = 0;
+            ParetoSolution<Type> front = null;
+            population.clear();
+
+            // Obtain the next front
+            front = ranking.getSubfront(index);
+
+            while ((remain > 0) && (remain >= front.size())) {
+                // Assign crowding distance to individuals
+                distance.crowdingDistanceAssignment(front, num_obj);
+                // Add the individuals of this front
+                for (int k = 0; k < front.size(); k++) {
+                    population.add(front.get(k));
+                }
+
+                // Decrement remain
+                remain = remain - front.size();
+
+                // Obtain the next front
+                index++;
+                if (remain > 0) {
+                    front = ranking.getSubfront(index);
+                }
+            }
+
+            // Remain is less than front(index).size, insert only the best one
+            if (remain > 0) { // front contains individuals to insert
+                distance.crowdingDistanceAssignment(front, num_obj);
+                front.sort(new CrowdingComparator<>());
+                for (int k = 0; k < remain; k++) {
+                    population.add(front.get(k));
+                }
+                remain = 0;
+            }
+            task.incrementNumberOfIterations();
+        }
+
+        Ranking<Type> ranking = new Ranking<Type>(population);
+        best = ranking.getSubfront(0);
+    }
+
+    @Override
+    protected void init() {
+
+        if (optimalParam) {
+            switch (num_obj) {
+                case 1: {
+                    populationSize = 100;
+                    break;
+                }
+                case 2: {
+                    populationSize = 100;
+                    break;
+                }
+                case 3: {
+                    populationSize = 300;
+                    break;
+                }
+                default: {
+                    populationSize = 500;
+                    break;
+                }
+            }
+        }
+
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+
+        population = new ParetoSolution<Type>(populationSize);
+    }
+
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
+
+    }
+
 }

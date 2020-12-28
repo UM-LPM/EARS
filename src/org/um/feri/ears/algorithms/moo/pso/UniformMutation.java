@@ -29,65 +29,65 @@ import org.um.feri.ears.util.Util;
  * @author Juan J. Durillo
  */
 public class UniformMutation implements MutationOperator<Double, DoubleMOTask, MOSolutionBase<Double>> {
-  private Double perturbation;
-  private Double mutationProbability = null;
+    private Double perturbation;
+    private Double mutationProbability = null;
 
-  public UniformMutation(double mutationProbability, double perturbation) {
-    this.mutationProbability = mutationProbability;
-    this.perturbation = perturbation;
-  }
-
-  /* Getters */
-  public Double getPerturbation() {
-    return perturbation;
-  }
-
-  public Double getMutationProbability() {
-    return mutationProbability;
-  }
-
-  /**
-   * Perform the operation
-   *
-   * @param probability Mutation setProbability
-   * @param solution    The solution to mutate
-   */
-  public void doMutation(double probability, MOSolutionBase<Double> solution, DoubleMOTask task)  {
-    for (int i = 0; i < solution.numberOfVariables(); i++) {
-      if (Util.nextDouble() < probability) {
-        double rand = Util.nextDouble();
-        double tmp = (rand - 0.5) * perturbation;
-
-        tmp += solution.getValue(i);
-
-        if (tmp < task.getUpperLimit(i)) {
-          tmp = task.getUpperLimit(i);
-        } else if (tmp > task.getLowerLimit(i)) {
-          tmp = task.getLowerLimit(i);
-        }
-
-        solution.setValue(i, tmp);
-      }
+    public UniformMutation(double mutationProbability, double perturbation) {
+        this.mutationProbability = mutationProbability;
+        this.perturbation = perturbation;
     }
-  }
 
-  @Override
-  public MOSolutionBase<Double> execute(MOSolutionBase<Double> solution, DoubleMOTask tb) {
+    /* Getters */
+    public Double getPerturbation() {
+        return perturbation;
+    }
 
-	  doMutation(mutationProbability, solution, tb);
-	  return solution;
-  }
+    public Double getMutationProbability() {
+        return mutationProbability;
+    }
 
-  @Override
-  public void setProbability(double mutationProbability) {
-	  this.mutationProbability = mutationProbability;
-  }
-  
-	@Override
-	public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
-		EnumMap<EnumAlgorithmParameters, String> para = new EnumMap<EnumAlgorithmParameters, String>(EnumAlgorithmParameters.class);
-		para.put(EnumAlgorithmParameters.P_C, mutationProbability+"");
-		para.put(EnumAlgorithmParameters.B, perturbation+"");
-		return para;
-	}
+    /**
+     * Perform the operation
+     *
+     * @param probability Mutation setProbability
+     * @param solution    The solution to mutate
+     */
+    public void doMutation(double probability, MOSolutionBase<Double> solution, DoubleMOTask task) {
+        for (int i = 0; i < solution.numberOfVariables(); i++) {
+            if (Util.nextDouble() < probability) {
+                double rand = Util.nextDouble();
+                double tmp = (rand - 0.5) * perturbation;
+
+                tmp += solution.getValue(i);
+
+                if (tmp < task.getUpperLimit(i)) {
+                    tmp = task.getUpperLimit(i);
+                } else if (tmp > task.getLowerLimit(i)) {
+                    tmp = task.getLowerLimit(i);
+                }
+
+                solution.setValue(i, tmp);
+            }
+        }
+    }
+
+    @Override
+    public MOSolutionBase<Double> execute(MOSolutionBase<Double> solution, DoubleMOTask tb) {
+
+        doMutation(mutationProbability, solution, tb);
+        return solution;
+    }
+
+    @Override
+    public void setProbability(double mutationProbability) {
+        this.mutationProbability = mutationProbability;
+    }
+
+    @Override
+    public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
+        EnumMap<EnumAlgorithmParameters, String> para = new EnumMap<EnumAlgorithmParameters, String>(EnumAlgorithmParameters.class);
+        para.put(EnumAlgorithmParameters.P_C, mutationProbability + "");
+        para.put(EnumAlgorithmParameters.B, perturbation + "");
+        return para;
+    }
 }

@@ -16,6 +16,7 @@
  * along with the MOEA Framework.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.um.feri.ears.algorithms.moo.vega;
+
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
@@ -53,134 +54,133 @@ import org.um.feri.ears.util.Util;
  */
 public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
-	int populationSize;
-	ParetoSolution<Type> population;
-	
-	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    int populationSize;
+    ParetoSolution<Type> population;
 
-	public VEGA(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
-		this.populationSize = pop_size;
-		
-		this.cross = crossover;
-		this.mut = mutation;
+    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
-		au = new Author("miha", "miha.ravber at gamil.com");
-		ai = new AlgorithmInfo(
-				"VEGA",
-				"\\bibitem{Schaffer1985}\nD.~Schaffer.\n\\newblock Multiple Objective Optimization with Vector Evaluated Genetic Algorithms.\n\\newblock \\emph{Proceedings of the 1st International Conference on Genetic Algorithms}, 93--100, 1985.\n",
-				"VEGA", "Vector Evaluated Genetic Algorithm");
-		ai.addParameters(crossover.getOperatorParameters());
-		ai.addParameters(mutation.getOperatorParameters());
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
-	}
+    public VEGA(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
+        this.populationSize = pop_size;
 
-	@Override
-	protected void start() throws StopCriterionException {
+        this.cross = crossover;
+        this.mut = mutation;
 
-		// Create the initial solutionSet
-		MOSolutionBase<Type> newSolution;
-		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriterion())
-				return;
-			newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
-			// problem.evaluateConstraints(newSolution);
-			population.add(newSolution);
-		}
+        au = new Author("miha", "miha.ravber at gamil.com");
+        ai = new AlgorithmInfo(
+                "VEGA",
+                "\\bibitem{Schaffer1985}\nD.~Schaffer.\n\\newblock Multiple Objective Optimization with Vector Evaluated Genetic Algorithms.\n\\newblock \\emph{Proceedings of the 1st International Conference on Genetic Algorithms}, 93--100, 1985.\n",
+                "VEGA", "Vector Evaluated Genetic Algorithm");
+        ai.addParameters(crossover.getOperatorParameters());
+        ai.addParameters(mutation.getOperatorParameters());
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+    }
 
-		do{
-			// select the parents from the M different subgroups
-			MOSolutionBase<Type>[] parents = performSelection(populationSize, population);
+    @Override
+    protected void start() throws StopCriterionException {
 
-			// shuffle the parents
-			Util.shuffle(parents);
+        // Create the initial solutionSet
+        MOSolutionBase<Type> newSolution;
+        for (int i = 0; i < populationSize; i++) {
+            if (task.isStopCriterion())
+                return;
+            newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            // problem.evaluateConstraints(newSolution);
+            population.add(newSolution);
+        }
 
-			// loop until the next generation is filled
-			int index = 0;
-			boolean filled = false;
+        do {
+            // select the parents from the M different subgroups
+            MOSolutionBase<Type>[] parents = performSelection(populationSize, population);
 
-			population.clear();
+            // shuffle the parents
+            Util.shuffle(parents);
 
-			while (!filled) {
+            // loop until the next generation is filled
+            int index = 0;
+            boolean filled = false;
 
-				MOSolutionBase<Type>[] offSpring = cross.execute(select(parents, index, 2), task);
-				mut.execute(offSpring[0], task);
-				mut.execute(offSpring[1], task);
+            population.clear();
 
-				for (int i = 0; i < offSpring.length; i++) {
-					population.add(offSpring[i]);
+            while (!filled) {
 
-					if (population.size() >= populationSize) {
-						filled = true;
-						break;
-					}
-				}
+                MOSolutionBase<Type>[] offSpring = cross.execute(select(parents, index, 2), task);
+                mut.execute(offSpring[0], task);
+                mut.execute(offSpring[1], task);
 
-				index += 2 % populationSize;
-			}
+                for (int i = 0; i < offSpring.length; i++) {
+                    population.add(offSpring[i]);
 
-			// evaluate the offspring
-			for (MOSolutionBase<Type> ind : population.solutions) {
-				if (task.isStopCriterion())
-					return;
-				task.eval(ind);
-			}
-			task.incrementNumberOfIterations();
-		} while (!task.isStopCriterion());
+                    if (population.size() >= populationSize) {
+                        filled = true;
+                        break;
+                    }
+                }
 
-		best = population;
+                index += 2 % populationSize;
+            }
 
-	}
+            // evaluate the offspring
+            for (MOSolutionBase<Type> ind : population.solutions) {
+                if (task.isStopCriterion())
+                    return;
+                task.eval(ind);
+            }
+            task.incrementNumberOfIterations();
+        } while (!task.isStopCriterion());
 
-	@Override
-	protected void init() {
-		population = new ParetoSolution<Type>(populationSize);
-	}
+        best = population;
 
-	@Override
-	public void resetToDefaultsBeforeNewRun() {
-	}
-	
-	/**
-	 * Returns the subset of parents for the next variation operator.
-	 * 
-	 * @param parents all parents
-	 * @param index the starting index
-	 * @param size the size of the subset
-	 * @return the subset of parents
-	 */
-	private MOSolutionBase<Type>[] select(MOSolutionBase<Type>[] parents, int index, int size) {
-		MOSolutionBase<Type>[] result = new MOSolutionBase[size];
-		
-		for (int i = 0; i < size; i++) {
-			result[i] = parents[(index+i) % parents.length];
-		}
-		
-		return result;
-	}
+    }
 
-	/**
-	 * VEGA selection operator that selects parents based on only one of the
-	 * objectives.  
-	 */
-	
-	private MOSolutionBase<Type>[] performSelection(int pop_size, ParetoSolution<Type> population)
-	{
-		VEGASelection<Type>[] selectors = new VEGASelection[num_obj];
-		for (int i = 0; i < num_obj; i++) {
-			selectors[i] = new VEGASelection<Type>(
-					new ObjectiveComparator(i));
-		}
-		
-		MOSolutionBase<Type>[] result = new MOSolutionBase[pop_size];
-		
-		for (int i = 0; i < pop_size; i++) {
-			VEGASelection<Type> selector = selectors[i % num_obj];
-			result[i] = new MOSolutionBase<Type>(selector.execute(population));
-		}
-		
-		return result;
-		
-	}
+    @Override
+    protected void init() {
+        population = new ParetoSolution<Type>(populationSize);
+    }
+
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
+    }
+
+    /**
+     * Returns the subset of parents for the next variation operator.
+     *
+     * @param parents all parents
+     * @param index   the starting index
+     * @param size    the size of the subset
+     * @return the subset of parents
+     */
+    private MOSolutionBase<Type>[] select(MOSolutionBase<Type>[] parents, int index, int size) {
+        MOSolutionBase<Type>[] result = new MOSolutionBase[size];
+
+        for (int i = 0; i < size; i++) {
+            result[i] = parents[(index + i) % parents.length];
+        }
+
+        return result;
+    }
+
+    /**
+     * VEGA selection operator that selects parents based on only one of the
+     * objectives.
+     */
+
+    private MOSolutionBase<Type>[] performSelection(int pop_size, ParetoSolution<Type> population) {
+        VEGASelection<Type>[] selectors = new VEGASelection[num_obj];
+        for (int i = 0; i < num_obj; i++) {
+            selectors[i] = new VEGASelection<Type>(
+                    new ObjectiveComparator(i));
+        }
+
+        MOSolutionBase<Type>[] result = new MOSolutionBase[pop_size];
+
+        for (int i = 0; i < pop_size; i++) {
+            VEGASelection<Type> selector = selectors[i % num_obj];
+            result[i] = new MOSolutionBase<Type>(selector.execute(population));
+        }
+
+        return result;
+
+    }
 
 }

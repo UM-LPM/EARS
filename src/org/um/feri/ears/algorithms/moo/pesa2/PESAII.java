@@ -18,133 +18,129 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type>{
 
-	int populationSize = 100;
-	int archiveSize = 100;
-	int bisections = 5;
-	ParetoSolution<Type> population;
-	AdaptiveGridArchive<Type> archive;
-	
-	CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
-	
+public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
-	public PESAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize) {
-		this(crossover, mutation, populationSize, archiveSize, "PESAII");
-	}
-	
-	public PESAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize, String name) {
-		this.populationSize = populationSize;
-		this.archiveSize = archiveSize;
-		
-		this.cross = crossover;
-		this.mut = mutation;
+    int populationSize = 100;
+    int archiveSize = 100;
+    int bisections = 5;
+    ParetoSolution<Type> population;
+    AdaptiveGridArchive<Type> archive;
 
-		au = new Author("miha", "miha.ravber at gamil.com");
-		ai = new AlgorithmInfo(
-				name,
-				"\\bibitem{corne2001}\nD.W.~Corne,N.R.~Jerram,J.D.~Knowles,M.J.~Oates\n\\newblock PESA-II: Region-based Selection in Evolutionary Multiobjective Optimization.\n\\newblock \\emph{Proceedings of the Genetic and Evolutionary Computation Conference (GECCO-2001)}, 283--290, 2001.\n",
-				name, "Pareto Envelope-Based Selection Algorithm");
-		ai.addParameters(crossover.getOperatorParameters());
-		ai.addParameters(mutation.getOperatorParameters());
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
-		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
-	}
+    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
-	@Override
-	public void resetToDefaultsBeforeNewRun() {
-	}
 
-	@Override
-	protected void init() {
-		
-		if(optimalParam)
-		{
-			switch(num_obj){
-			case 1:
-			{
-				populationSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 2:
-			{
-				populationSize = 100;
-				archiveSize = 100;
-				break;
-			}
-			case 3:
-			{
-				populationSize = 300;
-				archiveSize = 300;
-				break;
-			}
-			default:
-			{
-				populationSize = 500;
-				archiveSize = 500;
-				break;
-			}
-			}
-		}
-		
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
-		ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize+"");
+    public PESAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize) {
+        this(crossover, mutation, populationSize, archiveSize, "PESAII");
+    }
 
-		
-		archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, num_obj);
-		population = new ParetoSolution<Type>(populationSize);
-	}
+    public PESAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize, String name) {
+        this.populationSize = populationSize;
+        this.archiveSize = archiveSize;
 
-	@Override
-	protected void start() throws StopCriterionException {
+        this.cross = crossover;
+        this.mut = mutation;
 
-		PESA2Selection<Type> selection = new PESA2Selection<Type>();
+        au = new Author("miha", "miha.ravber at gamil.com");
+        ai = new AlgorithmInfo(
+                name,
+                "\\bibitem{corne2001}\nD.W.~Corne,N.R.~Jerram,J.D.~Knowles,M.J.~Oates\n\\newblock PESA-II: Region-based Selection in Evolutionary Multiobjective Optimization.\n\\newblock \\emph{Proceedings of the Genetic and Evolutionary Computation Conference (GECCO-2001)}, 283--290, 2001.\n",
+                name, "Pareto Envelope-Based Selection Algorithm");
+        ai.addParameters(crossover.getOperatorParameters());
+        ai.addParameters(mutation.getOperatorParameters());
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
+    }
 
-		// Create the initial individual and evaluate it and his constraints
-		for (int i = 0; i < populationSize; i++) {
-			if (task.isStopCriterion())
-				return;
-			MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
-			// problem.evaluateConstraints(solution);
-			population.add(solution);
-		}
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
+    }
 
-		// Incorporate non-dominated solution to the archive
-		for (int i = 0; i < population.size(); i++) {
-			archive.add(population.get(i)); // Only non dominated are accepted by the archive
-		}
+    @Override
+    protected void init() {
 
-		// Clear the init solutionSet
-		population.clear();
+        if (optimalParam) {
+            switch (num_obj) {
+                case 1: {
+                    populationSize = 100;
+                    archiveSize = 100;
+                    break;
+                }
+                case 2: {
+                    populationSize = 100;
+                    archiveSize = 100;
+                    break;
+                }
+                case 3: {
+                    populationSize = 300;
+                    archiveSize = 300;
+                    break;
+                }
+                default: {
+                    populationSize = 500;
+                    archiveSize = 500;
+                    break;
+                }
+            }
+        }
 
-		// Iterations....
-		MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
 
-		do {
-			// -> Create the offSpring solutionSet
-			while (population.size() < populationSize) {
-				parents[0] = selection.execute(archive);
-				parents[1] = selection.execute(archive);
 
-				MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
-				mut.execute(offSpring[0], task);
-				if (task.isStopCriterion())
-					break;
-				task.eval(offSpring[0]);
-				// problem.evaluateConstraints(offSpring[0]);
-				population.add(offSpring[0]);
-			}
+        archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, num_obj);
+        population = new ParetoSolution<Type>(populationSize);
+    }
 
-			for (int i = 0; i < population.size(); i++)
-				archive.add(population.get(i));
+    @Override
+    protected void start() throws StopCriterionException {
 
-			// Clear the solutionSet
-			population.clear();
-			task.incrementNumberOfIterations();
-		} while (!task.isStopCriterion());
-		
-		best = archive;
-	}
+        PESA2Selection<Type> selection = new PESA2Selection<Type>();
+
+        // Create the initial individual and evaluate it and his constraints
+        for (int i = 0; i < populationSize; i++) {
+            if (task.isStopCriterion())
+                return;
+            MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            // problem.evaluateConstraints(solution);
+            population.add(solution);
+        }
+
+        // Incorporate non-dominated solution to the archive
+        for (int i = 0; i < population.size(); i++) {
+            archive.add(population.get(i)); // Only non dominated are accepted by the archive
+        }
+
+        // Clear the init solutionSet
+        population.clear();
+
+        // Iterations....
+        MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+
+        do {
+            // -> Create the offSpring solutionSet
+            while (population.size() < populationSize) {
+                parents[0] = selection.execute(archive);
+                parents[1] = selection.execute(archive);
+
+                MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
+                mut.execute(offSpring[0], task);
+                if (task.isStopCriterion())
+                    break;
+                task.eval(offSpring[0]);
+                // problem.evaluateConstraints(offSpring[0]);
+                population.add(offSpring[0]);
+            }
+
+            for (int i = 0; i < population.size(); i++)
+                archive.add(population.get(i));
+
+            // Clear the solutionSet
+            population.clear();
+            task.incrementNumberOfIterations();
+        } while (!task.isStopCriterion());
+
+        best = archive;
+    }
 }

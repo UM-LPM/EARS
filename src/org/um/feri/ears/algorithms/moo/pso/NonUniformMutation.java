@@ -29,105 +29,109 @@ import org.um.feri.ears.util.Util;
  * @author Juan J. Durillo
  */
 public class NonUniformMutation implements MutationOperator<Double, DoubleMOTask, MOSolutionBase<Double>> {
-	private double perturbation;
-	private int maxIterations;
-	private double mutationProbability;
-	private int currentIteration;
+    private double perturbation;
+    private int maxIterations;
+    private double mutationProbability;
+    private int currentIteration;
 
 
-	/** Constructor */
-	public NonUniformMutation(double mutationProbability, double perturbation, int maxIterations) {
-		this.perturbation = perturbation ;
-		this.mutationProbability = mutationProbability ;
-		this.maxIterations = maxIterations ;
-	}
+    /**
+     * Constructor
+     */
+    public NonUniformMutation(double mutationProbability, double perturbation, int maxIterations) {
+        this.perturbation = perturbation;
+        this.mutationProbability = mutationProbability;
+        this.maxIterations = maxIterations;
+    }
 
-	/* Getters */
-	public double getPerturbation() {
-		return perturbation;
-	}
+    /* Getters */
+    public double getPerturbation() {
+        return perturbation;
+    }
 
-	public int getMaxIterations() {
-		return maxIterations;
-	}
+    public int getMaxIterations() {
+        return maxIterations;
+    }
 
-	public double getMutationProbability() {
-		return mutationProbability;
-	}
+    public double getMutationProbability() {
+        return mutationProbability;
+    }
 
-	public int getCurrentIteration() {
-		return currentIteration;
-	}
+    public int getCurrentIteration() {
+        return currentIteration;
+    }
 
-	/* Setter */
-	public void setCurrentIteration(int currentIteration) {
-		this.currentIteration = currentIteration;
-	}
+    /* Setter */
+    public void setCurrentIteration(int currentIteration) {
+        this.currentIteration = currentIteration;
+    }
 
-	/**
-	 * Perform the mutation operation
-	 *
-	 * @param probability Mutation setProbability
-	 * @param solution    The solution to mutate
-	 */
-	public void doMutation(double probability, MOSolutionBase<Double> solution, DoubleMOTask task){
-		for (int i = 0; i < solution.numberOfVariables(); i++) {
-			if (Util.nextDouble() < probability) {
-				double rand = Util.nextDouble();
-				double tmp;
+    /**
+     * Perform the mutation operation
+     *
+     * @param probability Mutation setProbability
+     * @param solution    The solution to mutate
+     */
+    public void doMutation(double probability, MOSolutionBase<Double> solution, DoubleMOTask task) {
+        for (int i = 0; i < solution.numberOfVariables(); i++) {
+            if (Util.nextDouble() < probability) {
+                double rand = Util.nextDouble();
+                double tmp;
 
-				if (rand <= 0.5) {
-					tmp = delta(task.getUpperLimit(i) - solution.getValue(i),
-							perturbation);
-					tmp += solution.getValue(i);
-				} else {
-					tmp = delta(task.getLowerLimit(i) - solution.getValue(i),
-							perturbation);
-					tmp += solution.getValue(i);
-				}
+                if (rand <= 0.5) {
+                    tmp = delta(task.getUpperLimit(i) - solution.getValue(i),
+                            perturbation);
+                    tmp += solution.getValue(i);
+                } else {
+                    tmp = delta(task.getLowerLimit(i) - solution.getValue(i),
+                            perturbation);
+                    tmp += solution.getValue(i);
+                }
 
-				if (tmp < task.getLowerLimit(i)) {
-					tmp = task.getLowerLimit(i);
-				} else if (tmp > task.getUpperLimit(i)) {
-					tmp = task.getUpperLimit(i);
-				}
-				solution.setValue(i, tmp);
-			}
-		}
-	}
+                if (tmp < task.getLowerLimit(i)) {
+                    tmp = task.getLowerLimit(i);
+                } else if (tmp > task.getUpperLimit(i)) {
+                    tmp = task.getUpperLimit(i);
+                }
+                solution.setValue(i, tmp);
+            }
+        }
+    }
 
 
-	/** Calculates the delta value used in NonUniform mutation operator */
-	private double delta(double y, double bMutationParameter) {
-		double rand = Util.nextDouble();
-		int it, maxIt;
-		it = currentIteration;
-		maxIt = maxIterations;
+    /**
+     * Calculates the delta value used in NonUniform mutation operator
+     */
+    private double delta(double y, double bMutationParameter) {
+        double rand = Util.nextDouble();
+        int it, maxIt;
+        it = currentIteration;
+        maxIt = maxIterations;
 
-		return (y * (1.0 -
-				Math.pow(rand,
-						Math.pow((1.0 - it / (double) maxIt), bMutationParameter)
-						)));
-	}
+        return (y * (1.0 -
+                Math.pow(rand,
+                        Math.pow((1.0 - it / (double) maxIt), bMutationParameter)
+                )));
+    }
 
-	@Override
-	public MOSolutionBase<Double> execute(MOSolutionBase<Double> solution, DoubleMOTask tb) {
-		
-		doMutation(mutationProbability, solution, tb);
-		return solution;
-	}
+    @Override
+    public MOSolutionBase<Double> execute(MOSolutionBase<Double> solution, DoubleMOTask tb) {
 
-	@Override
-	public void setProbability(double mutationProbability) {
-		this.mutationProbability = mutationProbability;
-		
-	}
+        doMutation(mutationProbability, solution, tb);
+        return solution;
+    }
 
-	@Override
-	public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
-		EnumMap<EnumAlgorithmParameters, String> para = new EnumMap<EnumAlgorithmParameters, String>(EnumAlgorithmParameters.class);
-		para.put(EnumAlgorithmParameters.P_C, mutationProbability+"");
-		para.put(EnumAlgorithmParameters.B, perturbation+"");
-		return para;
-	}
+    @Override
+    public void setProbability(double mutationProbability) {
+        this.mutationProbability = mutationProbability;
+
+    }
+
+    @Override
+    public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
+        EnumMap<EnumAlgorithmParameters, String> para = new EnumMap<EnumAlgorithmParameters, String>(EnumAlgorithmParameters.class);
+        para.put(EnumAlgorithmParameters.P_C, mutationProbability + "");
+        para.put(EnumAlgorithmParameters.B, perturbation + "");
+        return para;
+    }
 }

@@ -22,102 +22,102 @@ import org.um.feri.ears.util.DominanceComparator;
 
 public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
-	AdaptiveGridArchive<Type> archive;
-	int archiveSize = 100;
-	int bisections = 5;
-	
-	MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    AdaptiveGridArchive<Type> archive;
+    int archiveSize = 100;
+    int bisections = 5;
 
-	public PAES(MutationOperator mutation, int populationSize) {
-		
-		this.archiveSize = populationSize;
-		this.mut = mutation;
-		
-		au = new Author("miha", "miha.ravber at gamil.com");
-		ai = new AlgorithmInfo(
-				"PAES",
-				"\\bibitem{knowles1999}\nJ.~Knowles,D.W.~Corne\n\\newblock The Pareto Archived Evolution Strategy: A New Baseline Algorithm for Pareto Multiobjective Optimisation.\n\\newblock \\emph{Proceedings of the Congress of Evolutionary Computation}, 98--105, 1999.\n",
-				"PAES", "Pareto Archived Evolution Strategy");
-		ai.addParameters(mutation.getOperatorParameters());
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
-	}
+    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
 
-	@Override
-	public void resetToDefaultsBeforeNewRun() {
+    public PAES(MutationOperator mutation, int populationSize) {
 
-	}
+        this.archiveSize = populationSize;
+        this.mut = mutation;
 
-	@Override
-	protected void init() {
-		archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, num_obj);
-	}
+        au = new Author("miha", "miha.ravber at gamil.com");
+        ai = new AlgorithmInfo(
+                "PAES",
+                "\\bibitem{knowles1999}\nJ.~Knowles,D.W.~Corne\n\\newblock The Pareto Archived Evolution Strategy: A New Baseline Algorithm for Pareto Multiobjective Optimisation.\n\\newblock \\emph{Proceedings of the Congress of Evolutionary Computation}, 98--105, 1999.\n",
+                "PAES", "Pareto Archived Evolution Strategy");
+        ai.addParameters(mutation.getOperatorParameters());
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
+    }
 
-	public void start() throws StopCriterionException {
-		
-		Comparator<MOSolutionBase<Type>> dominance;
-		dominance = new DominanceComparator();
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
 
-		if (task.isStopCriterion())
-			return;
-		MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
-		// problem.evaluateConstraints(solution);
+    }
 
-		archive.add(new MOSolutionBase<Type>(solution));
+    @Override
+    protected void init() {
+        archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, num_obj);
+    }
 
-		do {
-			// Create the mutate one
-			MOSolutionBase<Type> mutatedIndividual = new MOSolutionBase<Type>(solution);
-			mut.execute(mutatedIndividual, task);
+    public void start() throws StopCriterionException {
 
-			if (task.isStopCriterion())
-				break;
-			task.eval(mutatedIndividual);
-			// problem.evaluateConstraints(mutatedIndividual);
+        Comparator<MOSolutionBase<Type>> dominance;
+        dominance = new DominanceComparator();
 
-			// Check dominance
-			int flag = dominance.compare(solution, mutatedIndividual);
+        if (task.isStopCriterion())
+            return;
+        MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+        // problem.evaluateConstraints(solution);
 
-			if (flag == 1) { // If mutate solution dominate
-				solution = new MOSolutionBase<Type>(mutatedIndividual);
-				archive.add(mutatedIndividual);
-			} else if (flag == 0) { // If none dominate the other
-				if (archive.add(mutatedIndividual)) {
-					solution = test(solution, mutatedIndividual, archive);
-				}
-			}
-			/*
-			 * if ((evaluations % 100) == 0) {
-			 * archive.printObjectivesToFile("FUN"+evaluations) ;
-			 * archive.printVariablesToFile("VAR"+evaluations) ;
-			 * archive.printObjectivesOfValidSolutionsToFile("FUNV"+evaluations)
-			 * ; }
-			 */
-			task.incrementNumberOfIterations();
-		} while (!task.isStopCriterion());
+        archive.add(new MOSolutionBase<Type>(solution));
 
-		best = archive;
-	}
+        do {
+            // Create the mutate one
+            MOSolutionBase<Type> mutatedIndividual = new MOSolutionBase<Type>(solution);
+            mut.execute(mutatedIndividual, task);
 
-	public MOSolutionBase<Type> test(MOSolutionBase<Type> solution,
-			MOSolutionBase<Type> mutatedSolution, AdaptiveGridArchive<Type> archive) {
+            if (task.isStopCriterion())
+                break;
+            task.eval(mutatedIndividual);
+            // problem.evaluateConstraints(mutatedIndividual);
 
-		int originalLocation = archive.getGrid().location(solution);
-		int mutatedLocation = archive.getGrid().location(mutatedSolution);
+            // Check dominance
+            int flag = dominance.compare(solution, mutatedIndividual);
 
-		if (originalLocation == -1) {
-			return new MOSolutionBase<Type>(mutatedSolution);
-		}
+            if (flag == 1) { // If mutate solution dominate
+                solution = new MOSolutionBase<Type>(mutatedIndividual);
+                archive.add(mutatedIndividual);
+            } else if (flag == 0) { // If none dominate the other
+                if (archive.add(mutatedIndividual)) {
+                    solution = test(solution, mutatedIndividual, archive);
+                }
+            }
+            /*
+             * if ((evaluations % 100) == 0) {
+             * archive.printObjectivesToFile("FUN"+evaluations) ;
+             * archive.printVariablesToFile("VAR"+evaluations) ;
+             * archive.printObjectivesOfValidSolutionsToFile("FUNV"+evaluations)
+             * ; }
+             */
+            task.incrementNumberOfIterations();
+        } while (!task.isStopCriterion());
 
-		if (mutatedLocation == -1) {
-			return new MOSolutionBase<Type>(solution);
-		}
+        best = archive;
+    }
 
-		if (archive.getGrid().getLocationDensity(mutatedLocation) < archive
-				.getGrid().getLocationDensity(originalLocation)) {
-			return new MOSolutionBase<Type>(mutatedSolution);
-		}
+    public MOSolutionBase<Type> test(MOSolutionBase<Type> solution,
+                                     MOSolutionBase<Type> mutatedSolution, AdaptiveGridArchive<Type> archive) {
 
-		return new MOSolutionBase<Type>(solution);
-	}
+        int originalLocation = archive.getGrid().location(solution);
+        int mutatedLocation = archive.getGrid().location(mutatedSolution);
+
+        if (originalLocation == -1) {
+            return new MOSolutionBase<Type>(mutatedSolution);
+        }
+
+        if (mutatedLocation == -1) {
+            return new MOSolutionBase<Type>(solution);
+        }
+
+        if (archive.getGrid().getLocationDensity(mutatedLocation) < archive
+                .getGrid().getLocationDensity(originalLocation)) {
+            return new MOSolutionBase<Type>(mutatedSolution);
+        }
+
+        return new MOSolutionBase<Type>(solution);
+    }
 
 }
