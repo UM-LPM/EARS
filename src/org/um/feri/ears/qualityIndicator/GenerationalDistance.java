@@ -35,7 +35,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  */
 public class GenerationalDistance<T extends Number> extends QualityIndicator<T>{
 
-	static final double pow_ = 2.0; // pow. This is the pow used for the distances
+	static final double pow = 2.0; // pow. This is the pow used for the distances
 
 	/**
 	 * Constructor. Creates a new instance of the generational distance metric.
@@ -46,29 +46,27 @@ public class GenerationalDistance<T extends Number> extends QualityIndicator<T>{
 	}
 
 	@Override
-	public double evaluate(ParetoSolution<T> population) {
+	public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 		
 		/**
 		 * Stores the normalized approximation set.
 		 */
 		double[][] normalizedApproximation;
 
-		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
+		normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 
 		double sum = 0.0;
 		try {
-			for (int i = 0; i < population.size(); i++)
-				sum += Math.pow(MetricsUtil.distanceToNearestPoint(normalizedApproximation[i], normalizedReference), pow_);
+			for (int i = 0; i < paretoFrontApproximation.size(); i++)
+				sum += Math.pow(QualityIndicatorUtil.distanceToNearestPoint(normalizedApproximation[i], normalizedReference), pow);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
 		}
 
-		sum = Math.pow(sum, 1.0 / pow_);
+		sum = Math.pow(sum, 1.0 / pow);
 
-		double generationalDistance = sum / normalizedApproximation.length;
-
-		return generationalDistance;
+		return sum / normalizedApproximation.length;
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.qualityIndicator.MetricsUtil;
+import org.um.feri.ears.qualityIndicator.QualityIndicatorUtil;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 
@@ -134,7 +134,7 @@ public class FSS extends Algorithm {
             double de = 0.0;
 
             try {
-                de = MetricsUtil.distance(newSolution, schoolBarycentre);
+                de = QualityIndicatorUtil.distance(newSolution, schoolBarycentre);
             } catch (Exception e) {
                 e.printStackTrace();
             }

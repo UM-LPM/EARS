@@ -25,68 +25,66 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.EuclideanDistance;
 
 /**
- * This class implements the inverted generational distance metric. 
- * It can be used also as a command line by typing: 
- * "java jmetal.qualityIndicator.InvertedGenerationalDistance <solutionFrontFile> <trueFrontFile> 
+ * This class implements the inverted generational distance metric.
+ * It can be used also as a command line by typing:
+ * "java jmetal.qualityIndicator.InvertedGenerationalDistance <solutionFrontFile> <trueFrontFile>
  * <numberOfObjectives>"
- * Reference: P. A. N.~Bosman and D.~Thierens. The balance between proximity and 
- * diversity in multiobjective evolutionary algorithms. IEEE Trans. on 
+ * Reference: P. A. N.~Bosman and D.~Thierens. The balance between proximity and
+ * diversity in multiobjective evolutionary algorithms. IEEE Trans. on
  * Evolutionary Computation, 7(2):174--188, 2003.
  */
 public class InvertedGenerationalDistance<T extends Number> extends QualityIndicator<T> {
-	static final double pow_ = 2.0; // pow. This is the pow used for the distances
+    static final double pow = 2.0; // pow. This is the pow used for the distances
 
-	/**
-	 * Constructor. Creates a new instance of the generational distance metric.
-	 */
-	public InvertedGenerationalDistance(int num_obj, String file_name) {
-		super(num_obj, file_name, getReferenceSet(file_name));
-		name = "Inverted Generational Distance";
-	}
-  
-	@Override
-	public double evaluate(ParetoSolution<T> population) {
-		
-		double[][] normalizedApproximation;
+    /**
+     * Constructor. Creates a new instance of the generational distance metric.
+     */
+    public InvertedGenerationalDistance(int num_obj, String file_name) {
+        super(num_obj, file_name, getReferenceSet(file_name));
+        name = "Inverted Generational Distance";
+    }
 
-		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
-		
-		// Sum the distances between each point of the true Pareto front
-		// and the nearest point in the true Pareto front
-		double sum = 0.0;
-		try {
-			for (double[] rferencePoint : normalizedReference)
-				sum += Math.pow(MetricsUtil.distanceToNearestPoint(rferencePoint, normalizedApproximation, new EuclideanDistance()), pow_);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    @Override
+    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 
-		// Obtain the sqrt of the sum
-		sum = Math.pow(sum, 1.0 / pow_);
+        double[][] normalizedApproximation;
 
-		// Divide the sum by the maximum number of points of the front
-		double generationalDistance = sum / normalizedReference.length;
+        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 
-		return generationalDistance;
-	}
+        // Sum the distances between each point of the true Pareto front
+        // and the nearest point in the true Pareto front
+        double sum = 0.0;
+        try {
+            for (double[] rferencePoint : normalizedReference)
+                sum += Math.pow(QualityIndicatorUtil.distanceToNearestPoint(rferencePoint, normalizedApproximation, new EuclideanDistance()), pow);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	@Override
-	public boolean isMin() {
-		return true;
-	}
+        // Obtain the sqrt of the sum
+        sum = Math.pow(sum, 1.0 / pow);
 
-	@Override
-	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.UNARY;
-	}
+        // Divide the sum by the maximum number of points of the front
+		return sum / normalizedReference.length;
+    }
 
-	@Override
-	public boolean requiresReferenceSet() {
-		return true;
-	}
+    @Override
+    public boolean isMin() {
+        return true;
+    }
 
-	@Override
-	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
-		return 0;
-	}
+    @Override
+    public IndicatorType getIndicatorType() {
+        return QualityIndicator.IndicatorType.UNARY;
+    }
+
+    @Override
+    public boolean requiresReferenceSet() {
+        return true;
+    }
+
+    @Override
+    public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
+        return 0;
+    }
 }

@@ -1,6 +1,5 @@
 package org.um.feri.ears.qualityIndicator;
 
-
 import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -20,9 +19,9 @@ import java.util.StringTokenizer;
 /**
  * This class provides some utilities to compute quality indicators.
  **/
-public final class MetricsUtil<T> {
+public final class QualityIndicatorUtil<T> {
 
-    private MetricsUtil() {
+    private QualityIndicatorUtil() {
     }
 
 
@@ -274,7 +273,7 @@ public final class MetricsUtil<T> {
         double[] minimumValue = new double[problem.getNumberOfObjectives()];
 
         if (fileName != null && !fileName.isEmpty()) {
-            referenceSet = MetricsUtil.readNonDominatedSolutionSet("pf_data/" + fileName + ".dat");
+            referenceSet = QualityIndicatorUtil.readNonDominatedSolutionSet("pf_data/" + fileName + ".dat");
         } else {
             System.out.println("The file name containg the Paret front is not valid.");
         }
@@ -358,7 +357,7 @@ public final class MetricsUtil<T> {
      */
     public static <T extends Number> ParetoSolution<T> readNonDominatedSolutionSet(String path) {
 
-        InputStream inputStream = MetricsUtil.class.getResourceAsStream(path);
+        InputStream inputStream = QualityIndicatorUtil.class.getResourceAsStream(path);
         if (inputStream == null) {
             System.out.println("\n Error: Cannot open input file for reading ");
         }
@@ -395,7 +394,7 @@ public final class MetricsUtil<T> {
      */
     public static double[] readReferencePoint(String path, String problemName) {
 
-        InputStream inputStream = MetricsUtil.class.getResourceAsStream(path);
+        InputStream inputStream = QualityIndicatorUtil.class.getResourceAsStream(path);
         if (inputStream == null) {
             System.out.println("\n Error: Cannot open input file for reading ");
         }

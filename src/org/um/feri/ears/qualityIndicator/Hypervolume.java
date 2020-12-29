@@ -27,218 +27,218 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  * This class implements the hypervolume indicator. The code is the a Java version
  * of the original metric implementation by Eckart Zitzler.
  * Reference: E. Zitzler and L. Thiele
- *           Multiobjective Evolutionary Algorithms: A Comparative Case Study 
- *           and the Strength Pareto Approach,
- *           IEEE Transactions on Evolutionary Computation, vol. 3, no. 4, 
- *           pp. 257-271, 1999.
+ * Multiobjective Evolutionary Algorithms: A Comparative Case Study
+ * and the Strength Pareto Approach,
+ * IEEE Transactions on Evolutionary Computation, vol. 3, no. 4,
+ * pp. 257-271, 1999.
  */
-public class Hypervolume<T extends Number> extends QualityIndicator<T>{
+public class Hypervolume<T extends Number> extends QualityIndicator<T> {
 
-	/**
-	 * Constructor Creates a new instance of MultiDelta
-	 */
-	public Hypervolume(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
-		name="Hypervolume";
-	}
-  
-	/*
-	 * returns true if 'point1' dominates 'points2' with respect to the to the
-	 * first 'noObjectives' objectives
-	 */
-	boolean dominates(double point1[], double point2[], int noObjectives) {
-		int i;
-		int betterInAnyObjective;
+    /**
+     * Constructor Creates a new instance of MultiDelta
+     */
+    public Hypervolume(int num_obj, String file_name) {
+        super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+        name = "Hypervolume";
+    }
 
-		betterInAnyObjective = 0;
-		for (i = 0; i < noObjectives && point1[i] >= point2[i]; i++)
-			if (point1[i] > point2[i])
-				betterInAnyObjective = 1;
+    /*
+     * returns true if 'point1' dominates 'points2' with respect to the to the
+     * first 'noObjectives' objectives
+     */
+    boolean dominates(double[] point1, double[] point2, int noObjectives) {
+        int i;
+        int betterInAnyObjective;
 
-		return ((i >= noObjectives) && (betterInAnyObjective > 0));
-	}
+        betterInAnyObjective = 0;
+        for (i = 0; i < noObjectives && point1[i] >= point2[i]; i++)
+            if (point1[i] > point2[i])
+                betterInAnyObjective = 1;
 
-	void swap(double[][] front, int i, int j) {
-		double[] temp;
+        return ((i >= noObjectives) && (betterInAnyObjective > 0));
+    }
 
-		temp = front[i];
-		front[i] = front[j];
-		front[j] = temp;
-	}
+    void swap(double[][] front, int i, int j) {
+        double[] temp;
 
-  
-	/* all nondominated points regarding the first 'noObjectives' dimensions
-  	are collected; the points referenced by 'front[0..noPoints-1]' are
-  	considered; 'front' is resorted, such that 'front[0..n-1]' contains
-  	the nondominated points; n is returned */
-	int filterNondominatedSet(double[][] front, int noPoints, int noObjectives) {
-		int i, j;
-		int n;
-
-		n = noPoints;
-		i = 0;
-		while (i < n) {
-			j = i + 1;
-			while (j < n) {
-				if (dominates(front[i], front[j], noObjectives)) {
-					/* remove point 'j' */
-					n--;
-					swap(front, j, n);
-				} else if (dominates(front[j], front[i], noObjectives)) {
-					/*
-					 * remove point 'i'; ensure that the point copied to index
-					 * 'i' is considered in the next outer loop (thus, decrement
-					 * i)
-					 */
-					n--;
-					swap(front, i, n);
-					i--;
-					break;
-				} else
-					j++;
-			}
-			i++;
-		}
-		return n;
-	}
+        temp = front[i];
+        front[i] = front[j];
+        front[j] = temp;
+    }
 
 
-	/*calculate next value regarding dimension 'objective'; consider points
-	 * referenced in 'front[0..noPoints-1]'
-	 */
-	double surfaceUnchangedTo(double[][] front, int noPoints, int objective) {
-		int i;
-		double minValue, value;
+    /* all nondominated points regarding the first 'noObjectives' dimensions
+      are collected; the points referenced by 'front[0..noPoints-1]' are
+      considered; 'front' is resorted, such that 'front[0..n-1]' contains
+      the nondominated points; n is returned */
+    int filterNondominatedSet(double[][] front, int noPoints, int noObjectives) {
+        int i, j;
+        int n;
 
-		if (noPoints < 1)
-			System.err.println("run-time error");
+        n = noPoints;
+        i = 0;
+        while (i < n) {
+            j = i + 1;
+            while (j < n) {
+                if (dominates(front[i], front[j], noObjectives)) {
+                    /* remove point 'j' */
+                    n--;
+                    swap(front, j, n);
+                } else if (dominates(front[j], front[i], noObjectives)) {
+                    /*
+                     * remove point 'i'; ensure that the point copied to index
+                     * 'i' is considered in the next outer loop (thus, decrement
+                     * i)
+                     */
+                    n--;
+                    swap(front, i, n);
+                    i--;
+                    break;
+                } else
+                    j++;
+            }
+            i++;
+        }
+        return n;
+    }
 
-		minValue = front[0][objective];
-		for (i = 1; i < noPoints; i++) {
-			value = front[i][objective];
-			if (value < minValue)
-				minValue = value;
-		}
-		return minValue;
-	}
 
-	/*remove all points which have a value <= 'threshold' regarding the
-	 * dimension 'objective'; the points referenced by 'front[0..noPoints-1]'
-	 * are considered; 'front' is resorted, such that 'front[0..n-1]' contains
-	 * the remaining points; 'n' is returned
-	 */
-	int reduceNondominatedSet(double[][] front, int noPoints, int objective,
-			double threshold) {
-		int n;
-		int i;
+    /*calculate next value regarding dimension 'objective'; consider points
+     * referenced in 'front[0..noPoints-1]'
+     */
+    double surfaceUnchangedTo(double[][] front, int noPoints, int objective) {
+        int i;
+        double minValue, value;
 
-		n = noPoints;
-		for (i = 0; i < n; i++)
-			if (front[i][objective] <= threshold) {
-				n--;
-				swap(front, i, n);
-			}
+        if (noPoints < 1)
+            System.err.println("run-time error");
 
-		return n;
-	}
+        minValue = front[0][objective];
+        for (i = 1; i < noPoints; i++) {
+            value = front[i][objective];
+            if (value < minValue)
+                minValue = value;
+        }
+        return minValue;
+    }
 
-	public double calculateHypervolume(double[][] front, int noPoints, int noObjectives) {
-		int n;
-		double volume, distance;
+    /*remove all points which have a value <= 'threshold' regarding the
+     * dimension 'objective'; the points referenced by 'front[0..noPoints-1]'
+     * are considered; 'front' is resorted, such that 'front[0..n-1]' contains
+     * the remaining points; 'n' is returned
+     */
+    int reduceNondominatedSet(double[][] front, int noPoints, int objective,
+                              double threshold) {
+        int n;
+        int i;
 
-		volume = 0;
-		distance = 0;
-		n = noPoints;
-		while (n > 0) {
-			int noNondominatedPoints;
-			double tempVolume, tempDistance;
+        n = noPoints;
+        for (i = 0; i < n; i++)
+            if (front[i][objective] <= threshold) {
+                n--;
+                swap(front, i, n);
+            }
 
-			noNondominatedPoints = filterNondominatedSet(front, n, noObjectives - 1);
-			tempVolume = 0;
-			if (noObjectives < 3) {
-				if (noNondominatedPoints < 1)
-					System.err.println("run-time error");
+        return n;
+    }
 
-				tempVolume = front[0][0];
-			} else
-				tempVolume = calculateHypervolume(front, noNondominatedPoints, noObjectives - 1);
+    public double calculateHypervolume(double[][] front, int noPoints, int noObjectives) {
+        int n;
+        double volume, distance;
 
-			tempDistance = surfaceUnchangedTo(front, n, noObjectives - 1);
-			volume += tempVolume * (tempDistance - distance);
-			distance = tempDistance;
-			n = reduceNondominatedSet(front, n, noObjectives - 1, distance);
-		}
-		return volume;
-	}
-   
-	/* merge two fronts */
-	double[][] mergeFronts(double[][] front1, int sizeFront1,
-			double[][] front2, int sizeFront2, int noObjectives) {
-		int i, j;
-		int noPoints;
-		double[][] frontPtr;
+        volume = 0;
+        distance = 0;
+        n = noPoints;
+        while (n > 0) {
+            int noNondominatedPoints;
+            double tempVolume, tempDistance;
 
-		/* allocate memory */
-		noPoints = sizeFront1 + sizeFront2;
-		frontPtr = new double[noPoints][noObjectives];
-		/* copy points */
-		noPoints = 0;
-		for (i = 0; i < sizeFront1; i++) {
-			for (j = 0; j < noObjectives; j++)
-				frontPtr[noPoints][j] = front1[i][j];
-			noPoints++;
-		}
-		for (i = 0; i < sizeFront2; i++) {
-			for (j = 0; j < noObjectives; j++)
-				frontPtr[noPoints][j] = front2[i][j];
-			noPoints++;
-		}
+            noNondominatedPoints = filterNondominatedSet(front, n, noObjectives - 1);
+            tempVolume = 0;
+            if (noObjectives < 3) {
+                if (noNondominatedPoints < 1)
+                    System.err.println("run-time error");
 
-		return frontPtr;
-	}
+                tempVolume = front[0][0];
+            } else
+                tempVolume = calculateHypervolume(front, noNondominatedPoints, noObjectives - 1);
 
-	@Override
-	public double evaluate(ParetoSolution<T> population) {
-		
-		
-		double[][] normalizedApproximation;
+            tempDistance = surfaceUnchangedTo(front, n, noObjectives - 1);
+            volume += tempVolume * (tempDistance - distance);
+            distance = tempDistance;
+            n = reduceNondominatedSet(front, n, noObjectives - 1, distance);
+        }
+        return volume;
+    }
 
-		double[][] invertedFront;
+    /* merge two fronts */
+    double[][] mergeFronts(double[][] front1, int sizeFront1,
+                           double[][] front2, int sizeFront2, int noObjectives) {
+        int i, j;
+        int noPoints;
+        double[][] frontPtr;
+
+        /* allocate memory */
+        noPoints = sizeFront1 + sizeFront2;
+        frontPtr = new double[noPoints][noObjectives];
+        /* copy points */
+        noPoints = 0;
+        for (i = 0; i < sizeFront1; i++) {
+            for (j = 0; j < noObjectives; j++)
+                frontPtr[noPoints][j] = front1[i][j];
+            noPoints++;
+        }
+        for (i = 0; i < sizeFront2; i++) {
+            for (j = 0; j < noObjectives; j++)
+                frontPtr[noPoints][j] = front2[i][j];
+            noPoints++;
+        }
+
+        return frontPtr;
+    }
+
+    @Override
+    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+
+
+        double[][] normalizedApproximation;
+
+        double[][] invertedFront;
 		
 		/*maximumValue[0] = 1.18;
 		maximumValue[1] = 1.18;
 		maximumValue[2] = 1.18;*/
-		
-		//0.4217095828301254
-		//0.6484027573510406
 
-		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
-		
-		// Inverse the pareto front. This is needed because of the original
-		// metric by Zitzler is for maximization problems
-		invertedFront = MetricsUtil.invertedFront(normalizedApproximation);
-    
-		// The hypervolumen (control is passed to java version of Zitzler code)
-		return this.calculateHypervolume(invertedFront, invertedFront.length, numberOfObjectives);
-  }
+        //0.4217095828301254
+        //0.6484027573510406
 
-	@Override
-	public boolean isMin() {
-		return false;
-	}
+        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 
-	@Override
-	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.UNARY;
-	}
+        // Inverse the pareto front. This is needed because of the original
+        // metric by Zitzler is for maximization problems
+        invertedFront = QualityIndicatorUtil.invertedFront(normalizedApproximation);
 
-	@Override
-	public boolean requiresReferenceSet() {
-		return true; // for normalization
-	}
+        // The hypervolumen (control is passed to java version of Zitzler code)
+        return this.calculateHypervolume(invertedFront, invertedFront.length, numberOfObjectives);
+    }
 
-	@Override
-	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
-		return 0;
-	}
+    @Override
+    public boolean isMin() {
+        return false;
+    }
+
+    @Override
+    public IndicatorType getIndicatorType() {
+        return QualityIndicator.IndicatorType.UNARY;
+    }
+
+    @Override
+    public boolean requiresReferenceSet() {
+        return true; // for normalization
+    }
+
+    @Override
+    public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
+        return 0;
+    }
 }

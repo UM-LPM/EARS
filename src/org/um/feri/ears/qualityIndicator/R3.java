@@ -33,68 +33,67 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  */
 public class R3<T extends Number> extends RIndicator<T> {
 
-	public R3(int num_obj, String file_name) {
-		super(num_obj, file_name);
-		name = "R3 indicator";
-		this.utilityFunction = new ChebychevUtility();
-		this.num_obj = num_obj;
-		try {
-			weights = generateUniformWeights(getDefaultSubdivisions(num_obj), num_obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public R3(int numObj, String fileName) {
+        super(numObj, fileName);
+        name = "R3 indicator";
+        this.utilityFunction = new ChebychevUtility();
+        try {
+            weights = generateUniformWeights(getDefaultSubdivisions(numObj), numObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public double evaluate(ParetoSolution<T> population) {
-		
-		/**
-		 * Stores the normalized approximation set.
-		 */
-		double[][] normalizedApproximation;
+    @Override
+    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 
-		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
-		
-		double sum = 0.0;
-		
-		for (int i = 0; i < weights.length; i++) {
-			double max1 = Double.NEGATIVE_INFINITY;
-			double max2 = Double.NEGATIVE_INFINITY;
-			
-			for (double[] solution : normalizedApproximation) {
-				max1 = Math.max(max1, utilityFunction.computeUtility(solution,
-						weights[i]));
-			}
-			
-			for (double[] solution : normalizedReference) {
-				max2 = Math.max(max2, utilityFunction.computeUtility(solution,
-						weights[i]));
-			}
-			
-			sum += (max2 - max1) / (max2 + 1e-30);
-		}
-		
-		return sum / weights.length;
-	}
+        /*
+         * Stores the normalized approximation set.
+         */
+        double[][] normalizedApproximation;
 
-	@Override
-	public IndicatorType getIndicatorType() {
-		return IndicatorType.UNARY;
-	}
+        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 
-	@Override
-	public boolean isMin() {
-		return true;
-	}
+        double sum = 0.0;
 
-	@Override
-	public boolean requiresReferenceSet() {
-		return true;
-	}
+        for (int i = 0; i < weights.length; i++) {
+            double max1 = Double.NEGATIVE_INFINITY;
+            double max2 = Double.NEGATIVE_INFINITY;
 
-	@Override
-	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
-		return 0;
-	}
+            for (double[] solution : normalizedApproximation) {
+                max1 = Math.max(max1, utilityFunction.computeUtility(solution,
+                        weights[i]));
+            }
+
+            for (double[] solution : normalizedReference) {
+                max2 = Math.max(max2, utilityFunction.computeUtility(solution,
+                        weights[i]));
+            }
+
+            sum += (max2 - max1) / (max2 + 1e-30);
+        }
+
+        return sum / weights.length;
+    }
+
+    @Override
+    public IndicatorType getIndicatorType() {
+        return IndicatorType.UNARY;
+    }
+
+    @Override
+    public boolean isMin() {
+        return true;
+    }
+
+    @Override
+    public boolean requiresReferenceSet() {
+        return true;
+    }
+
+    @Override
+    public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
+        return 0;
+    }
 
 }

@@ -11,6 +11,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.qualityIndicator;
+
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
@@ -19,31 +20,30 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  * It is defined as the proportion of nontrue Pareto points.
  * Lower values of ER refer to smaller proportions of nontrue
  * Pareto points in the approximation and represent better nondominated sets.
- * 
- * Reference: D. A. Van Veldhuizen, "Multiobjective evolutionary algorithms: 
- * Classifications, analyses, and new innovations," Ph.D. dissertation, 
+ * <p>
+ * Reference: D. A. Van Veldhuizen, "Multiobjective evolutionary algorithms:
+ * Classifications, analyses, and new innovations," Ph.D. dissertation,
  * Air Force Inst. Technol., Wright-Patterson AFB, OH, 1999.
  */
-public class ErrorRatio<T extends Number> extends QualityIndicator<T>{
+public class ErrorRatio<T extends Number> extends QualityIndicator<T> {
 
-	static final double pow_ = 2.0; // pow. This is the pow used for the distances
-	private final double epsilon;
+    private final double epsilon;
 
-	public ErrorRatio(int num_obj, String file_name){
-		this(0.0, num_obj, file_name);
-	}
-	
-	public ErrorRatio(double epsilon, int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
-		name = "Error Ratio";
-		this.epsilon = epsilon;
-	}
+    public ErrorRatio(int num_obj, String file_name) {
+        this(0.0, num_obj, file_name);
+    }
 
-	@Override
-	public double evaluate(ParetoSolution<T> population) {
+    public ErrorRatio(double epsilon, int numObj, String file_name) {
+        super(numObj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+        name = "Error Ratio";
+        this.epsilon = epsilon;
+    }
 
-		
-		int nonTruePoint = 0;
+    @Override
+    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+
+
+        int nonTruePoint = 0;
 		/* Euclidean distance with epsilon
 		 * boolean isOnFront;
 		double distance;
@@ -53,53 +53,53 @@ public class ErrorRatio<T extends Number> extends QualityIndicator<T>{
 			if(distance > 0.0001)
 				nonTruePoint++;
 		}*/
-		
-		boolean thePointIsInTheParetoFront, found;
 
-	    for (int i = 0; i < population.size(); i++) {
-	      MOSolutionBase<T> currentPoint = population.get(i);
-	      thePointIsInTheParetoFront = false;
-	      for (int j = 0; j < referenceSet.length; j++) {
-	    	  double[] currentParetoFrontPoint = referenceSet[j];
-	        found = true;
-	        for (int k = 0; k < numberOfObjectives; k++) {
-	          if(Math.abs(currentPoint.getObjective(k) - currentParetoFrontPoint[k]) > epsilon){
-	            found = false;
-	            break;
-	          }
-	        }
-	        if(found){
-	          thePointIsInTheParetoFront = true;
-	          break;
-	        }
-	      }
-	      if(!thePointIsInTheParetoFront){
-	    	  nonTruePoint++;
-	      }
-	    }
-		
-		double ER = (double)nonTruePoint / (double)population.size();
-		return ER;
-	}
+        boolean thePointIsInTheParetoFront, found;
 
-	@Override
-	public boolean isMin() {
-		return true;
-	}
+        for (int i = 0; i < paretoFrontApproximation.size(); i++) {
+            MOSolutionBase<T> currentPoint = paretoFrontApproximation.get(i);
+            thePointIsInTheParetoFront = false;
+            for (int j = 0; j < referenceSet.length; j++) {
+                double[] currentParetoFrontPoint = referenceSet[j];
+                found = true;
+                for (int k = 0; k < numberOfObjectives; k++) {
+                    if (Math.abs(currentPoint.getObjective(k) - currentParetoFrontPoint[k]) > epsilon) {
+                        found = false;
+                        break;
+                    }
+                }
+                if (found) {
+                    thePointIsInTheParetoFront = true;
+                    break;
+                }
+            }
+            if (!thePointIsInTheParetoFront) {
+                nonTruePoint++;
+            }
+        }
 
-	@Override
-	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.UNARY;
-	}
+        double ER = (double) nonTruePoint / (double) paretoFrontApproximation.size();
+        return ER;
+    }
 
-	@Override
-	public boolean requiresReferenceSet() {
-		return true;
-	}
+    @Override
+    public boolean isMin() {
+        return true;
+    }
 
-	@Override
-	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
-		return 0;
-	}
+    @Override
+    public IndicatorType getIndicatorType() {
+        return QualityIndicator.IndicatorType.UNARY;
+    }
+
+    @Override
+    public boolean requiresReferenceSet() {
+        return true;
+    }
+
+    @Override
+    public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
+        return 0;
+    }
 
 }

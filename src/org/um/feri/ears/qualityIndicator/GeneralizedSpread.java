@@ -20,10 +20,9 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.qualityIndicator;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
 import org.um.feri.ears.problems.moo.ParetoSolution;
+
+import java.util.Arrays;
 
 /**
  * This class implements the generalized spread metric for two or more dimensions.
@@ -37,24 +36,24 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  */
 public class GeneralizedSpread<T extends Number> extends QualityIndicator<T> {
 
-    public GeneralizedSpread(int num_obj, String file_name) {
-        super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+    public GeneralizedSpread(int numObj, String fileName) {
+        super(numObj, fileName, (ParetoSolution<T>) getReferenceSet(fileName));
         name = "Generalized Spread";
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> approximationSet) {
+    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 
         /**
          * Stores the normalized approximation set.
          */
         double[][] normalizedApproximation;
-        normalizedApproximation = MetricsUtil.getNormalizedFront(approximationSet.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 
         double[][] extremeValues = new double[numberOfObjectives][numberOfObjectives];
         for (int i = 0; i < numberOfObjectives; i++) {
-			int finalI = i;
-			Arrays.sort(normalizedReference, (o1, o2) -> Double.compare(o2[finalI], o1[finalI]));
+            int finalI = i;
+            Arrays.sort(normalizedReference, (o1, o2) -> Double.compare(o2[finalI], o1[finalI]));
             System.arraycopy(normalizedReference[normalizedReference.length - 1], 0, extremeValues[i], 0, numberOfObjectives);
         }
 
@@ -67,7 +66,7 @@ public class GeneralizedSpread<T extends Number> extends QualityIndicator<T> {
 
         try {
             // STEP 5. Calculate the metric value. The value is 1.0 by default
-            if (MetricsUtil.distance(normalizedApproximation[0], normalizedApproximation[normalizedApproximation.length - 1]) == 0.0) {
+            if (QualityIndicatorUtil.distance(normalizedApproximation[0], normalizedApproximation[normalizedApproximation.length - 1]) == 0.0) {
                 return 1.0;
             } else {
 
@@ -75,7 +74,7 @@ public class GeneralizedSpread<T extends Number> extends QualityIndicator<T> {
 
                 // STEP 6. Calculate the mean distance between each point and its nearest neighbor
                 for (double[] aNormalizedFront : normalizedApproximation) {
-                    dmean += MetricsUtil.distanceToNearestPoint(aNormalizedFront, normalizedApproximation);
+                    dmean += QualityIndicatorUtil.distanceToNearestPoint(aNormalizedFront, normalizedApproximation);
                 }
 
                 dmean = dmean / (numberOfPoints);
@@ -83,18 +82,17 @@ public class GeneralizedSpread<T extends Number> extends QualityIndicator<T> {
                 // STEP 7. Calculate the distance to extremal values
                 double dExtrems = 0.0;
                 for (double[] extremValue : extremeValues) {
-                    dExtrems += MetricsUtil.distanceToNearestPoint(extremValue, normalizedApproximation);
+                    dExtrems += QualityIndicatorUtil.distanceToNearestPoint(extremValue, normalizedApproximation);
                 }
 
                 // STEP 8. Computing the value of the metric
                 double mean = 0.0;
                 for (double[] aNormalizedFront : normalizedApproximation) {
-                    mean += Math.abs(MetricsUtil.distanceToNearestPoint(aNormalizedFront, normalizedApproximation) -
+                    mean += Math.abs(QualityIndicatorUtil.distanceToNearestPoint(aNormalizedFront, normalizedApproximation) -
                             dmean);
                 }
 
-                double value = (dExtrems + mean) / (dExtrems + (numberOfPoints * dmean));
-                return value;
+                return (dExtrems + mean) / (dExtrems + (numberOfPoints * dmean));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,7 +102,6 @@ public class GeneralizedSpread<T extends Number> extends QualityIndicator<T> {
 
     @Override
     public IndicatorType getIndicatorType() {
-
         return IndicatorType.UNARY;
     }
 

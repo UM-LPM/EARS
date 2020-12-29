@@ -17,49 +17,47 @@ public class MaximumSpread<T extends Number> extends QualityIndicator<T> {
 
 	static final double pow_ = 2.0;
 	
-	public MaximumSpread(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+	public MaximumSpread(int numObj, String fileName) {
+		super(numObj, fileName, (ParetoSolution<T>) getReferenceSet(fileName));
 		name = "Maximum Spread";
 	}
 	
 	@Override
-	public double evaluate(ParetoSolution<T> population) {
+	public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 		
 		//double[][] front = population.writeObjectivesToMatrix();
 		
 		double[][] normalizedApproximation;
 
-		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
+		normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 		
-		double MS = 0.0;
+
 		double sum = 0.0;
-		double PF_true_max, PF_true_min, PF_known_max, PF_known_min;
+		double PFTrueMax, PFTrueMin, PFKnownMax, PFKnownMin;
 		
 		for (int i = 0; i < numberOfObjectives; i++) {
-			PF_true_max = PF_known_max = Double.MIN_VALUE;
-			PF_true_min = PF_known_min = Double.MAX_VALUE;
+			PFTrueMax = PFKnownMax = Double.MIN_VALUE;
+			PFTrueMin = PFKnownMin = Double.MAX_VALUE;
 			
 			for (double[] ds : normalizedReference) {
-				if(ds[i] > PF_true_max)
-					PF_true_max = ds[i];
+				if(ds[i] > PFTrueMax)
+					PFTrueMax = ds[i];
 				
-				if(ds[i] < PF_true_min)
-					PF_true_min = ds[i];
+				if(ds[i] < PFTrueMin)
+					PFTrueMin = ds[i];
 			}
 			
 			for (double[] ds : normalizedApproximation) {
-				if(ds[i] > PF_known_max)
-					PF_known_max = ds[i];
+				if(ds[i] > PFKnownMax)
+					PFKnownMax = ds[i];
 				
-				if(ds[i] < PF_known_min)
-					PF_known_min = ds[i];
+				if(ds[i] < PFKnownMin)
+					PFKnownMin = ds[i];
 			}
 			
-			sum += Math.pow((Math.min(PF_known_max, PF_true_max) - Math.max(PF_known_min, PF_true_min)) / (PF_true_max - PF_true_min), pow_);
+			sum += Math.pow((Math.min(PFKnownMax, PFTrueMax) - Math.max(PFKnownMin, PFTrueMin)) / (PFTrueMax - PFTrueMin), pow_);
 		}
-		
-		MS = Math.sqrt((1.0 / numberOfObjectives) * sum);
-		return MS;
+		return Math.sqrt((1.0 / numberOfObjectives) * sum);
 	}
 
 	@Override

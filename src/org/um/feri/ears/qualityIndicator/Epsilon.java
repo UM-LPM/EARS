@@ -32,114 +32,110 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  * It can be used also as a command line program just by typing
  * $java jmetal.qualityIndicator.Epsilon <solutionFrontFile> <trueFrontFile> <numberOfObjectives>
  */
-public class Epsilon<T extends Number> extends QualityIndicator<T>{
+public class Epsilon<T extends Number> extends QualityIndicator<T> {
 
-	int[] obj; /* obj_[i] = 0 means objective i is to be minimized */
-	// method_ = 0 means apply additive epsilon and method_ = 1 means multiplicative epsilon. This code always apply additive epsilon
-	int method;
-	
+    int[] obj; /* obj_[i] = 0 means objective i is to be minimized */
+    // method_ = 0 means apply additive epsilon and method_ = 1 means multiplicative epsilon. This code always apply additive epsilon
+    int method;
 
-	public Epsilon(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
-		name = "Epsilon";
-	}
 
-	@Override
-	public double evaluate(ParetoSolution<T> population) {
-		
-		//TODO add +1 to all normalized values if additive method [1,2]
-		double[][] normalizedFront = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
+    public Epsilon(int num_obj, String file_name) {
+        super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+        name = "Epsilon";
+    }
 
-		int i, j, k;
-		double eps, eps_j = 0.0, eps_k = 0.0, eps_temp;
+    @Override
+    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 
-		
-		set_params();
+        //TODO add +1 to all normalized values if additive method [1,2]
+        double[][] normalizedFront = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 
-		if (method == 0)
-			eps = Double.MIN_VALUE;
-		else
-			eps = 0;
+        int i, j, k;
+        double eps, epsJ = 0.0, epsK = 0.0, epsTemp;
 
-		for (i = 0; i < normalizedReference.length; i++) {
-			for (j = 0; j < normalizedFront.length; j++) {
-				for (k = 0; k < numberOfObjectives; k++) {
-					switch (method) {
-					case 0:
-						if (obj[k] == 0)
-							eps_temp = normalizedFront[j][k] - normalizedReference[i][k];
-						// eps_temp = b[j * dim_ + k] - a[i * dim_ + k];
-						else
-							eps_temp = normalizedReference[i][k] - normalizedFront[j][k];
-						// eps_temp = a[i * dim_ + k] - b[j * dim_ + k];
-						break;
-					default:
-						if ((normalizedReference[i][k] < 0 && normalizedFront[j][k] > 0)
-								|| (normalizedReference[i][k] > 0 && normalizedFront[j][k] < 0)
-								|| (normalizedReference[i][k] == 0 || normalizedFront[j][k] == 0)) {
-							// if ( (a[i * dim_ + k] < 0 && b[j * dim_ + k] > 0)
-							// ||
-							// (a[i * dim_ + k] > 0 && b[j * dim_ + k] < 0) ||
-							// (a[i * dim_ + k] == 0 || b[j * dim_ + k] == 0)) {
-							System.err.println("error in data file");
-							System.exit(0);
-						}
-						if (obj[k] == 0)
-							eps_temp = normalizedFront[j][k] / normalizedReference[i][k];
-						// eps_temp = b[j * dim_ + k] / a[i * dim_ + k];
-						else
-							eps_temp = normalizedReference[i][k] / normalizedFront[j][k];
-						// eps_temp = a[i * dim_ + k] / b[j * dim_ + k];
-						break;
-					}
-					if (k == 0)
-						eps_k = eps_temp;
-					else if (eps_k < eps_temp)
-						eps_k = eps_temp;
-				}
-				if (j == 0)
-					eps_j = eps_k;
-				else if (eps_j > eps_k)
-					eps_j = eps_k;
-			}
-			if (i == 0)
-				eps = eps_j;
-			else if (eps < eps_j)
-				eps = eps_j;
-		}
-		return eps;
-	}
 
-	/**
-	 * Established the params by default
-	 */
-	void set_params() {
-		int i;
-		obj = new int[numberOfObjectives];
-		for (i = 0; i < numberOfObjectives; i++) {
-			obj[i] = 0;
-		}
-		method = 0;
-	}
+        set_params();
 
-	@Override
-	public boolean isMin() {
-		
-		return true;
-	}
+        if (method == 0)
+            eps = Double.MIN_VALUE;
+        else
+            eps = 0;
 
-	@Override
-	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.UNARY;
-	}
+        for (i = 0; i < normalizedReference.length; i++) {
+            for (j = 0; j < normalizedFront.length; j++) {
+                for (k = 0; k < numberOfObjectives; k++) {
+                    if (method == 0) {
+                        if (obj[k] == 0)
+                            epsTemp = normalizedFront[j][k] - normalizedReference[i][k];
+                            // epsTemp = b[j * dim_ + k] - a[i * dim_ + k];
+                        else
+                            epsTemp = normalizedReference[i][k] - normalizedFront[j][k];
+                        // epsTemp = a[i * dim_ + k] - b[j * dim_ + k];
+                    } else {
+                        if ((normalizedReference[i][k] < 0 && normalizedFront[j][k] > 0)
+                                || (normalizedReference[i][k] > 0 && normalizedFront[j][k] < 0)
+                                || (normalizedReference[i][k] == 0 || normalizedFront[j][k] == 0)) {
+                            // if ( (a[i * dim_ + k] < 0 && b[j * dim_ + k] > 0)
+                            // ||
+                            // (a[i * dim_ + k] > 0 && b[j * dim_ + k] < 0) ||
+                            // (a[i * dim_ + k] == 0 || b[j * dim_ + k] == 0)) {
+                            System.err.println("error in data file");
+                            System.exit(0);
+                        }
+                        if (obj[k] == 0)
+                            epsTemp = normalizedFront[j][k] / normalizedReference[i][k];
+                            // epsTemp = b[j * dim_ + k] / a[i * dim_ + k];
+                        else
+                            epsTemp = normalizedReference[i][k] / normalizedFront[j][k];
+                        // epsTemp = a[i * dim_ + k] / b[j * dim_ + k];
+                    }
+                    if (k == 0)
+                        epsK = epsTemp;
+                    else if (epsK < epsTemp)
+                        epsK = epsTemp;
+                }
+                if (j == 0)
+                    epsJ = epsK;
+                else if (epsJ > epsK)
+                    epsJ = epsK;
+            }
+            if (i == 0)
+                eps = epsJ;
+            else if (eps < epsJ)
+                eps = epsJ;
+        }
+        return eps;
+    }
 
-	@Override
-	public boolean requiresReferenceSet() {
-		return true;
-	}
+    /**
+     * Established the params by default
+     */
+    void set_params() {
+        int i;
+        obj = new int[numberOfObjectives];
+        for (i = 0; i < numberOfObjectives; i++) {
+            obj[i] = 0;
+        }
+        method = 0;
+    }
 
-	@Override
-	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
-		return 0;
-	}
+    @Override
+    public boolean isMin() {
+        return true;
+    }
+
+    @Override
+    public IndicatorType getIndicatorType() {
+        return QualityIndicator.IndicatorType.UNARY;
+    }
+
+    @Override
+    public boolean requiresReferenceSet() {
+        return true;
+    }
+
+    @Override
+    public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
+        return 0;
+    }
 }

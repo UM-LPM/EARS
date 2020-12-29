@@ -21,101 +21,101 @@
 
 package org.um.feri.ears.qualityIndicator;
 
-import java.util.Arrays;
-
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
+import java.util.Arrays;
+
 /**
- * This class implements the spread quality indicator. 
+ * This class implements the spread quality indicator.
  * This metric is only applicable to two bi-objective problems.
- * Reference: Deb, K., Pratap, A., Agarwal, S., Meyarivan, T.: A fast and 
- *            elitist multiobjective genetic algorithm: NSGA-II. IEEE Trans. 
- *            on Evol. Computation 6 (2002) 182-197
+ * Reference: Deb, K., Pratap, A., Agarwal, S., Meyarivan, T.: A fast and
+ * elitist multiobjective genetic algorithm: NSGA-II. IEEE Trans.
+ * on Evol. Computation 6 (2002) 182-197
  */
-public class Spread<T extends Number> extends QualityIndicator<T>{
+public class Spread<T extends Number> extends QualityIndicator<T> {
 
-	/**
-	 * Constructor. Creates a new instance of a Spread object
-	 */
-	public Spread(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
-		name="Spread";
-	}
+    /**
+     * Constructor. Creates a new instance of a Spread object
+     */
+    public Spread(int numObj, String fileName) {
+        super(numObj, fileName, (ParetoSolution<T>) getReferenceSet(fileName));
+        name = "Spread";
+    }
 
-	@Override
-	public double evaluate(ParetoSolution<T> population) {
-		
-		/**
-		 * Stores the normalized approximation set.
-		 */
-		double[][] normalizedApproximation;
+    @Override
+    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 
-		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        /*
+         * Stores the normalized approximation set.
+         */
+        double[][] normalizedApproximation;
 
-		// Sort normalizedFront and normalizedParetoFront;
-		Arrays.sort(normalizedApproximation, new LexicoGraphicalComparator());
-		Arrays.sort(normalizedReference, new LexicoGraphicalComparator());
+        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 
-		int numberOfPoints = normalizedApproximation.length;
-		// int numberOfTruePoints = normalizedParetoFront.length;
+        // Sort normalizedFront and normalizedParetoFront;
+        Arrays.sort(normalizedApproximation, new LexicoGraphicalComparator());
+        Arrays.sort(normalizedReference, new LexicoGraphicalComparator());
 
-		// Compute df and dl (See specifications in Deb's description of the metric)
-		double df;
-		double dl;
-		double mean;
-		double diversitySum;
-		try {
-			df = MetricsUtil.distance(normalizedApproximation[0], normalizedReference[0]);
-			dl = MetricsUtil.distance(normalizedApproximation[normalizedApproximation.length - 1], normalizedReference[normalizedReference.length - 1]);
+        int numberOfPoints = normalizedApproximation.length;
+        // int numberOfTruePoints = normalizedParetoFront.length;
 
-			mean = 0.0;
-			diversitySum = df + dl;
+        // Compute df and dl (See specifications in Deb's description of the metric)
+        double df;
+        double dl;
+        double mean;
+        double diversitySum;
+        try {
+            df = QualityIndicatorUtil.distance(normalizedApproximation[0], normalizedReference[0]);
+            dl = QualityIndicatorUtil.distance(normalizedApproximation[normalizedApproximation.length - 1], normalizedReference[normalizedReference.length - 1]);
 
-			// Calculate the mean of distances between points i and (i - 1). (the poins are in lexicografical order)
-			for (int i = 0; i < (normalizedApproximation.length - 1); i++) {
-				mean += MetricsUtil.distance(normalizedApproximation[i], normalizedApproximation[i + 1]);
-			}
+            mean = 0.0;
+            diversitySum = df + dl;
+
+            // Calculate the mean of distances between points i and (i - 1). (the poins are in lexicografical order)
+            for (int i = 0; i < (normalizedApproximation.length - 1); i++) {
+                mean += QualityIndicatorUtil.distance(normalizedApproximation[i], normalizedApproximation[i + 1]);
+            }
 
 
-			mean = mean / (double) (numberOfPoints - 1);
+            mean = mean / (double) (numberOfPoints - 1);
 
-			// If there are more than a single point, continue computing the metric. In other case, return the worse value (1.0, see metric's description).
-			if (numberOfPoints > 1) {
-				try {
-					for (int i = 0; i < (numberOfPoints - 1); i++) {
-						diversitySum += Math.abs(MetricsUtil.distance(normalizedApproximation[i],
-								normalizedApproximation[i + 1]) - mean);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return diversitySum / (df + dl + (numberOfPoints - 1) * mean);
-			} else
-				return 1.0;
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			System.err.println(e1.getMessage());
-		}
-		return 1.0;
-	}
+            // If there are more than a single point, continue computing the metric. In other case, return the worse value (1.0, see metric's description).
+            if (numberOfPoints > 1) {
+                try {
+                    for (int i = 0; i < (numberOfPoints - 1); i++) {
+                        diversitySum += Math.abs(QualityIndicatorUtil.distance(normalizedApproximation[i],
+                                normalizedApproximation[i + 1]) - mean);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return diversitySum / (df + dl + (numberOfPoints - 1) * mean);
+            } else
+                return 1.0;
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            System.err.println(e1.getMessage());
+        }
+        return 1.0;
+    }
 
-	@Override
-	public boolean isMin() {
-		return true;
-	}
+    @Override
+    public boolean isMin() {
+        return true;
+    }
 
-	@Override
-	public IndicatorType getIndicatorType() {
-		return QualityIndicator.IndicatorType.UNARY;
-	}
+    @Override
+    public IndicatorType getIndicatorType() {
+        return QualityIndicator.IndicatorType.UNARY;
+    }
 
-	@Override
-	public boolean requiresReferenceSet() {
-		return true;
-	}
+    @Override
+    public boolean requiresReferenceSet() {
+        return true;
+    }
 
-	@Override
-	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
-		return 0;
-	}
+    @Override
+    public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
+        return 0;
+    }
 }

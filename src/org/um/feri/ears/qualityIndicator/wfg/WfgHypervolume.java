@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.qualityIndicator.MetricsUtil;
+import org.um.feri.ears.qualityIndicator.QualityIndicatorUtil;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.util.Comparator.PointComparator;
 
@@ -41,14 +41,14 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 
 
 	@Override
-	public double evaluate(ParetoSolution<T> population) {
+	public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 
 		double hv = 0;
 		
-		ParetoSolution<T> copy = new ParetoSolution<T>(population);
+		ParetoSolution<T> copy = new ParetoSolution<T>(paretoFrontApproximation);
 		
-		MetricsUtil.normalizeFront(copy, maximumValue, minimumValue);
-		MetricsUtil.invertedFront(copy);
+		QualityIndicatorUtil.normalizeFront(copy, maximumValue, minimumValue);
+		QualityIndicatorUtil.invertedFront(copy);
 		
 		int maxd = copy.size() - (OPT / 2 + 1);
 		fs = new ParetoSolution[maxd];
@@ -56,10 +56,10 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 			fs[i] = new ParetoSolution<T>(copy.size(), numberOfObjectives);
 		}
 		
-		if (population.size() == 0) {
+		if (paretoFrontApproximation.size() == 0) {
 			hv = 0.0;
 		} else {
-			numberOfObjectives = population.get(0).numberOfObjectives();
+			numberOfObjectives = paretoFrontApproximation.get(0).numberOfObjectives();
 			updateReferencePoint(copy);
 
 			if (numberOfObjectives == 2) {

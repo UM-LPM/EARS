@@ -33,92 +33,89 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  *       IMM-REP-1998-7.
  * </ol>
  */
-public class R1<T extends Number> extends RIndicator<T>{
+public class R1<T extends Number> extends RIndicator<T> {
 
-	/**
-	 * The default value for {@code espilon}.
-	 */
-	public static final double DEFAULT_EPSILON = 0.00001;
-	
-	/**
-	 * Resolution when comparing two utility function values for equality.
-	 * If the difference between the two utility values is less than
-	 * {@code epsilon}, they are considered equal.
-	 */
-	private double epsilon;
+    /**
+     * The default value for {@code espilon}.
+     */
+    public static final double DEFAULT_EPSILON = 0.00001;
 
-	public R1(double epsilon, int num_obj, String file_name)
-	{
-		super(num_obj, file_name);
-		name = "R1 indicator";
-		this.utilityFunction = new ChebychevUtility();
-		this.num_obj = num_obj;
-		this.epsilon = epsilon;
-		try {
-			weights = generateUniformWeights(getDefaultSubdivisions(num_obj), num_obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public R1(int num_obj, String file_name) {
-		this(DEFAULT_EPSILON, num_obj, file_name);
-	}
-	
-	@Override
-	public double evaluate(ParetoSolution<T> population) {
+    /**
+     * Resolution when comparing two utility function values for equality.
+     * If the difference between the two utility values is less than
+     * {@code epsilon}, they are considered equal.
+     */
+    private double epsilon;
 
-		/**
-		 * Stores the normalized approximation set.
-		 */
-		double[][] normalizedApproximation;
+    public R1(double epsilon, int numObj, String fileName) {
+        super(numObj, fileName);
+        name = "R1 indicator";
+        this.utilityFunction = new ChebychevUtility();
+        this.epsilon = epsilon;
+        try {
+            weights = generateUniformWeights(getDefaultSubdivisions(numObj), numObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
-		
-		double sum = 0.0;
-		
-		for (int i = 0; i < weights.length; i++) {
-			double max1 = Double.NEGATIVE_INFINITY;
-			double max2 = Double.NEGATIVE_INFINITY;
-			
-			for (double[] solution : normalizedApproximation) {
-				max1 = Math.max(max1, utilityFunction.computeUtility(solution,
-						weights[i]));
-			}
-			
-			for (double[] solution : normalizedReference) {
-				max2 = Math.max(max2, utilityFunction.computeUtility(solution,
-						weights[i]));
-			}
+    public R1(int num_obj, String file_name) {
+        this(DEFAULT_EPSILON, num_obj, file_name);
+    }
 
-			if (Math.abs(max2 - max1) < epsilon) {
-				sum += 0.5;
-			} else if (max1 > max2) {
-				sum += 1.0;
-			}
-		}
-		
-		return sum / weights.length;
-	}
+    @Override
+    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 
-	@Override
-	public IndicatorType getIndicatorType() {
-		return IndicatorType.UNARY;
-	}
+        /**
+         * Stores the normalized approximation set.
+         */
+        double[][] normalizedApproximation;
 
-	@Override
-	public boolean isMin() {
-		return true;
-	}
+        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 
-	@Override
-	public boolean requiresReferenceSet() {
-		return true;
-	}
+        double sum = 0.0;
 
-	@Override
-	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
-		return 0;
-	}
+        for (int i = 0; i < weights.length; i++) {
+            double max1 = Double.NEGATIVE_INFINITY;
+            double max2 = Double.NEGATIVE_INFINITY;
+
+            for (double[] solution : normalizedApproximation) {
+                max1 = Math.max(max1, utilityFunction.computeUtility(solution,
+                        weights[i]));
+            }
+
+            for (double[] solution : normalizedReference) {
+                max2 = Math.max(max2, utilityFunction.computeUtility(solution,
+                        weights[i]));
+            }
+
+            if (Math.abs(max2 - max1) < epsilon) {
+                sum += 0.5;
+            } else if (max1 > max2) {
+                sum += 1.0;
+            }
+        }
+        return sum / weights.length;
+    }
+
+    @Override
+    public IndicatorType getIndicatorType() {
+        return IndicatorType.UNARY;
+    }
+
+    @Override
+    public boolean isMin() {
+        return true;
+    }
+
+    @Override
+    public boolean requiresReferenceSet() {
+        return true;
+    }
+
+    @Override
+    public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
+        return 0;
+    }
 
 }

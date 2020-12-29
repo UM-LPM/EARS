@@ -19,8 +19,6 @@ package org.um.feri.ears.qualityIndicator;
 
 import org.apache.commons.math3.util.ArithmeticUtils;
 import org.apache.commons.math3.util.CombinatoricsUtils;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 /**
@@ -33,191 +31,180 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  *       IMM-REP-1998-7.
  * </ol>
  */
-public abstract class RIndicator<T extends Number> extends QualityIndicator<T>{
-	
-	protected int num_obj;
-	
-	public RIndicator(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
-	}
-	/**
-	 * Interface for defining utility functions.  These utility functions
-	 * assume the solutions have been normalized.
-	 */
-	public interface UtilityFunction {
-		
-		/**
-		 * Computes the utility of the given solution.
-		 * 
-		 * @param solution the solution
-		 * @param weights the weights for the utility calculation
-		 * @return the utility of the given solution
-		 */
-		public double computeUtility(double[] solution, double[] weights);
-		
-	}
-	
-	/**
-	 * Utility computed as the sum of the weighted objective values.
-	 */
-	public static class LinearWeightedSumUtility implements UtilityFunction {
+public abstract class RIndicator<T extends Number> extends QualityIndicator<T> {
 
-		@Override
-		public double computeUtility(double[] solution, double[] weights) {
-			double sum = 0.0;
-			
-			for (int i = 0; i < solution.length; i++) {
-				sum += weights[i] * solution[i];
-			}
-			
-			return 1.0 - sum;
-		}
-	}
-	
-	/**
-	 * Chebychev (also referred to as Tchebycheff) utility function.
-	 */
-	public static class ChebychevUtility implements UtilityFunction {
+    public RIndicator(int numObj, String file_name) {
+        super(numObj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+    }
 
-		@Override
-		public double computeUtility(double[] solution, double[] weights) {
-			double max = 0.0;
-			
-			for (int i = 0; i < solution.length; i++) {
-				max = Math.max(max, weights[i] * solution[i]);
-			}
-			
-			return 1.0 - max;
-		}
-		
-	}
-	
-	/**
-	 * The utility function used by the R2 calculation.
-	 */
-	protected UtilityFunction utilityFunction;
-	
-	/**
-	 * The weights, typically uniformly distributed.
-	 */
-	protected double[][] weights;
-	
-	/**
-	 * Computes the expected utility for the given population.
-	 * 
-	 * @param population the population
-	 * @return the expected utility
-	 */
-	public double expectedUtility(double[][] population) {
-		double sum = 0.0;
-		
-		for (int i = 0; i < weights.length; i++) {
-			double max = Double.NEGATIVE_INFINITY;
-			
-			for (double[] solution : population) {
-				max = Math.max(max, utilityFunction.computeUtility(solution,
-						weights[i]));
-			}
-			
-			sum += max;
-		}
-		
-		return sum / weights.length;
-	}
+    /**
+     * Interface for defining utility functions.  These utility functions
+     * assume the solutions have been normalized.
+     */
+    public interface UtilityFunction {
 
-	/**
-	 * Generates uniformly-distributed weights.
-	 * 
-	 * @param s the number of subdivisions along each objective
-	 * @param k the number of objectives
-	 * @return the uniformly-distributed weights
-	 * @throws Exception 
-	 */
-	protected static double[][] generateUniformWeights(int s, int k) throws Exception {
-		int counter = 0;
-		int N = ArithmeticUtils.pow(s+1, k);
-		
-		double[][] weights = new double[(int)CombinatoricsUtils.binomialCoefficient(s+k-1, k-1)][k];
-		
-		for (int i = 0; i < N; i++) {
-			int sum = 0;
-			int[] kary = toBaseK(i, s+1, k);
-			
-			for (int j = 0; j < k; j++) {
-				sum += kary[j];
-			}
-			
-			if (sum == s) {
-				for (int j = 0; j < k; j++) {
-					weights[counter][j] = kary[j] / (double)s;
-				}
-				
-				counter++;
-			}
-		}
-		
-		return weights;
-	}
+        /**
+         * Computes the utility of the given solution.
+         *
+         * @param solution the solution
+         * @param weights  the weights for the utility calculation
+         * @return the utility of the given solution
+         */
+        public double computeUtility(double[] solution, double[] weights);
 
-	/**
-	 * Converts an integer into its base-k representation.
-	 * 
-	 * @param number the integer to convert
-	 * @param k the base
-	 * @param length the length of the resulting base-k representation
-	 * @return the base-k representation of the given number
-	 * @throws Exception 
-	 */
-	private static int[] toBaseK(int number, int k, int length) throws Exception {
-		int value = length-1;
-		int[] kary = new int[length];
-		int i = 0;
-		
-		if (number >= ArithmeticUtils.pow(k, length)) {
-			throw new Exception("number can not be represented in " +
-					"base-k with specified number of digits");
-		}
-		
-		while (number != 0) {
-			if (number >= ArithmeticUtils.pow(k, value)) {
-				kary[i]++;
-				number -= ArithmeticUtils.pow(k, value);
-			} else {
-				value--;
-				i++;
-			}
-		}
-		
-		return kary;
-	}
-	
-	/**
-	 * Returns the default number of subdivisions for a given problem. The
-	 * defaults, for an M objective problem, are:
-	 * <ul>
-	 *   <li>if M=2, then 500
-	 *   <li>if M=3, then 30
-	 *   <li>if M=4, then 12
-	 *   <li>if M=5, then 8
-	 *   <li>else 3
-	 * </ul>
-	 * 
-	 * @param problem the problem
-	 * @return the default number of subdivisions for a given problem
-	 */
-	public static int getDefaultSubdivisions(int num_obj) {
-		switch (num_obj) {
-		case 2:
-			return 500;
-		case 3:
-			return 30;
-		case 4:
-			return 12;
-		case 5:
-			return 8;
-		default:
-			return 3;
-		}
-	}
+    }
 
+    /**
+     * Utility computed as the sum of the weighted objective values.
+     */
+    public static class LinearWeightedSumUtility implements UtilityFunction {
+
+        @Override
+        public double computeUtility(double[] solution, double[] weights) {
+            double sum = 0.0;
+
+            for (int i = 0; i < solution.length; i++) {
+                sum += weights[i] * solution[i];
+            }
+            return 1.0 - sum;
+        }
+    }
+
+    /**
+     * Chebychev (also referred to as Tchebycheff) utility function.
+     */
+    public static class ChebychevUtility implements UtilityFunction {
+
+        @Override
+        public double computeUtility(double[] solution, double[] weights) {
+            double max = 0.0;
+
+            for (int i = 0; i < solution.length; i++) {
+                max = Math.max(max, weights[i] * solution[i]);
+            }
+            return 1.0 - max;
+        }
+    }
+
+    /**
+     * The utility function used by the R2 calculation.
+     */
+    protected UtilityFunction utilityFunction;
+
+    /**
+     * The weights, typically uniformly distributed.
+     */
+    protected double[][] weights;
+
+    /**
+     * Computes the expected utility for the given population.
+     *
+     * @param population the population
+     * @return the expected utility
+     */
+    public double expectedUtility(double[][] population) {
+        double sum = 0.0;
+
+        for (int i = 0; i < weights.length; i++) {
+            double max = Double.NEGATIVE_INFINITY;
+
+            for (double[] solution : population) {
+                max = Math.max(max, utilityFunction.computeUtility(solution,
+                        weights[i]));
+            }
+            sum += max;
+        }
+        return sum / weights.length;
+    }
+
+    /**
+     * Generates uniformly-distributed weights.
+     *
+     * @param s the number of subdivisions along each objective
+     * @param k the number of objectives
+     * @return the uniformly-distributed weights
+     * @throws Exception
+     */
+    protected static double[][] generateUniformWeights(int s, int k) throws Exception {
+        int counter = 0;
+        int N = ArithmeticUtils.pow(s + 1, k);
+
+        double[][] weights = new double[(int) CombinatoricsUtils.binomialCoefficient(s + k - 1, k - 1)][k];
+
+        for (int i = 0; i < N; i++) {
+            int sum = 0;
+            int[] kary = toBaseK(i, s + 1, k);
+
+            for (int j = 0; j < k; j++) {
+                sum += kary[j];
+            }
+
+            if (sum == s) {
+                for (int j = 0; j < k; j++) {
+                    weights[counter][j] = kary[j] / (double) s;
+                }
+                counter++;
+            }
+        }
+        return weights;
+    }
+
+    /**
+     * Converts an integer into its base-k representation.
+     *
+     * @param number the integer to convert
+     * @param k      the base
+     * @param length the length of the resulting base-k representation
+     * @return the base-k representation of the given number
+     * @throws Exception
+     */
+    private static int[] toBaseK(int number, int k, int length) throws Exception {
+        int value = length - 1;
+        int[] kary = new int[length];
+        int i = 0;
+
+        if (number >= ArithmeticUtils.pow(k, length)) {
+            throw new Exception("number can not be represented in " +
+                    "base-k with specified number of digits");
+        }
+
+        while (number != 0) {
+            if (number >= ArithmeticUtils.pow(k, value)) {
+                kary[i]++;
+                number -= ArithmeticUtils.pow(k, value);
+            } else {
+                value--;
+                i++;
+            }
+        }
+        return kary;
+    }
+
+    /**
+     * Returns the default number of subdivisions for a given problem. The
+     * defaults, for an M objective problem, are:
+     * <ul>
+     *   <li>if M=2, then 500
+     *   <li>if M=3, then 30
+     *   <li>if M=4, then 12
+     *   <li>if M=5, then 8
+     *   <li>else 3
+     * </ul>
+     *
+     * @return the default number of subdivisions for a given problem
+     */
+    public static int getDefaultSubdivisions(int numObj) {
+        switch (numObj) {
+            case 2:
+                return 500;
+            case 3:
+                return 30;
+            case 4:
+                return 12;
+            case 5:
+                return 8;
+            default:
+                return 3;
+        }
+    }
 }

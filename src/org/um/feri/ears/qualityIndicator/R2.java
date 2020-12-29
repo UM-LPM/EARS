@@ -35,51 +35,50 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
  *       IMM-REP-1998-7.
  * </ol>
  */
-public class R2<T extends Number> extends RIndicator<T>{
+public class R2<T extends Number> extends RIndicator<T> {
 
-	public R2(int num_obj, String file_name) {
-		super(num_obj, file_name);
-		name = "R2 indicator";
-		this.utilityFunction = new ChebychevUtility();
-		this.num_obj = num_obj;
-		try {
-			weights = generateUniformWeights(getDefaultSubdivisions(num_obj), num_obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public R2(int numObj, String fileName) {
+        super(numObj, fileName);
+        name = "R2 indicator";
+        this.utilityFunction = new ChebychevUtility();
+        try {
+            weights = generateUniformWeights(getDefaultSubdivisions(numObj), numObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public double evaluate(ParetoSolution<T> population) {
-		
-		/**
-		 * Stores the normalized approximation set.
-		 */
-		double[][] normalizedApproximation;
+    @Override
+    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 
-		normalizedApproximation = MetricsUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
-		
-		return expectedUtility(normalizedReference) - expectedUtility(normalizedApproximation);
-	}
+        /*
+         * Stores the normalized approximation set.
+         */
+        double[][] normalizedApproximation;
 
-	@Override
-	public IndicatorType getIndicatorType() {
-		return IndicatorType.UNARY;
-	}
+        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
 
-	@Override
-	public boolean isMin() {
-		return true;
-	}
+        return expectedUtility(normalizedReference) - expectedUtility(normalizedApproximation);
+    }
 
-	@Override
-	public boolean requiresReferenceSet() {
-		return true;
-	}
+    @Override
+    public IndicatorType getIndicatorType() {
+        return IndicatorType.UNARY;
+    }
 
-	@Override
-	public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
-		return 0;
-	}
+    @Override
+    public boolean isMin() {
+        return true;
+    }
+
+    @Override
+    public boolean requiresReferenceSet() {
+        return true;
+    }
+
+    @Override
+    public int compare(ParetoSolution<T> front1, ParetoSolution<T> front2, Double epsilon) {
+        return 0;
+    }
 
 }
