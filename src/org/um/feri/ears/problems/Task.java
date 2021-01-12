@@ -324,7 +324,8 @@ public class Task extends TaskBase<Problem> {
      */
     public void eval(DoubleSolution solution) throws StopCriterionException {
         DoubleSolution evaluatedSolution = eval(solution.getDoubleVariables());
-        solution.setConstraints(evaluatedSolution.getConstraints());
+        if(evaluatedSolution.getConstraints() != null)
+            solution.setConstraints(evaluatedSolution.getConstraints());
         solution.setEval(evaluatedSolution.getEval());
     }
 
