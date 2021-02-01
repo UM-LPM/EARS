@@ -44,128 +44,6 @@ public class Task extends TaskBase<Problem> {
         return interval;
     }
 
-    public double[] getRandomVariables() {
-        return p.getRandomVariables();
-    }
-
-    /**
-     * Generates a random unevaluated solution.
-     *
-     * @return randomly generated unevaluated solution
-     */
-    public DoubleSolution getRandomSolution() {
-        return p.getRandomSolution();
-    }
-
-    /**
-     * Generates a random evaluated solution.
-     * @return a random evaluated solution.
-     * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
-     * To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
-     */
-    public DoubleSolution getRandomEvaluatedSolution() throws StopCriterionException {
-
-        if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
-            incEvaluate();
-            long start = System.nanoTime();
-            DoubleSolution tmpSolution = p.getRandomEvaluatedSolution();
-            evaluationTime += System.nanoTime() - start;
-            checkIfGlobalReached(tmpSolution.getEval());
-            GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-            if (isAncestorLoggingEnabled) {
-                tmpSolution.timeStamp = System.currentTimeMillis();
-                tmpSolution.generationNumber = this.getNumberOfIterations();
-                tmpSolution.evaluationNumber = this.getNumberOfEvaluations();
-                ancestors.add(tmpSolution);
-				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");*/
-            }
-
-            return tmpSolution;
-        } else if (stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
-            if (isGlobal)
-                throw new StopCriterionException("Global optimum already found");
-            incEvaluate();
-            long start = System.nanoTime();
-            DoubleSolution tmpSolution = p.getRandomEvaluatedSolution();
-            evaluationTime += System.nanoTime() - start;
-            checkIfGlobalReached(tmpSolution.getEval());
-            GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-            if (isAncestorLoggingEnabled) {
-                ancestors.add(tmpSolution);
-				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");*/
-            }
-            return tmpSolution;
-        } else if (stopCriterion == EnumStopCriterion.ITERATIONS) {
-            if (isStop)
-                throw new StopCriterionException("Max iterations");
-
-            incEvaluate();
-            long start = System.nanoTime();
-            DoubleSolution tmpSolution = p.getRandomEvaluatedSolution();
-            evaluationTime += System.nanoTime() - start;
-            checkIfGlobalReached(tmpSolution.getEval());
-            GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-            if (isAncestorLoggingEnabled) {
-                ancestors.add(tmpSolution);
-				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");*/
-            }
-
-            return tmpSolution;
-        } else if (stopCriterion == EnumStopCriterion.CPU_TIME) {
-            // check if the CPU time is not exceeded yet
-            if (!isStop) {
-                hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
-                incEvaluate();
-                long start = System.nanoTime();
-                DoubleSolution tmpSolution = p.getRandomEvaluatedSolution();
-                evaluationTime += System.nanoTime() - start;
-                checkIfGlobalReached(tmpSolution.getEval());
-                GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-                if (isAncestorLoggingEnabled) {
-                    ancestors.add(tmpSolution);
-					/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-					ancestorSB.append("\n");*/
-                }
-
-                return tmpSolution;
-            } else {
-                throw new StopCriterionException("CPU Time");
-            }
-        } else if (stopCriterion == EnumStopCriterion.STAGNATION) {
-            if (isStop)
-                throw new StopCriterionException("Solution stagnation");
-
-            incEvaluate();
-            long start = System.nanoTime();
-            DoubleSolution tmpSolution = p.getRandomEvaluatedSolution();
-            evaluationTime += System.nanoTime() - start;
-            checkIfGlobalReached(tmpSolution.getEval());
-            checkImprovement(tmpSolution.getEval());
-            GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-            if (isAncestorLoggingEnabled) {
-                ancestors.add(tmpSolution);
-				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");*/
-            }
-            return tmpSolution;
-        }
-        return null;
-    }
-
-    /**
-     * Better use method eval returns Individual with calculated fitness and constrains
-     *
-     * @param ds real vector to be evaluated (just calc constraints)
-     * @return
-     * @deprecated
-     */
-    public double[] evaluateConstrains(List<Double> ds) {
-        return p.evaluateConstrains(ds);
-    }
-
     /**
      * Works only for basic interval setting!
      * Sets interval!
@@ -243,16 +121,6 @@ public class Task extends TaskBase<Problem> {
         return p.upperLimit.get(i);
     }
 
-    private DoubleSolution performEvaluation(List<Double> ds) throws StopCriterionException {
-        incEvaluate();
-        long start = System.nanoTime();
-        DoubleSolution tmpSolution = new DoubleSolution(ds, p.eval(ds), p.evaluateConstrains(ds), p.upperLimit, p.lowerLimit);
-        evaluationTime += System.nanoTime() - start;
-        checkIfGlobalReached(tmpSolution.getEval());
-        GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-        return tmpSolution;
-    }
-
     private void checkIfGlobalReached(double d) {
 
         if (Math.abs(d - p.getGlobalOptimum()) <= epsilon) {
@@ -270,49 +138,41 @@ public class Task extends TaskBase<Problem> {
         }
     }
 
-    public DoubleSolution eval(double[] x) throws StopCriterionException {
+    /**
+     * Better use method eval returns Individual with calculated fitness and constrains
+     *
+     * @param ds real vector to be evaluated (just calc constraints)
+     * @return
+     * @deprecated
+     */
+    public double[] evaluateConstrains(List<Double> ds) {
+        return p.evaluateConstrains(ds);
+    }
 
-        //Double[] ds = ArrayUtils.toObject(x);
-        List<Double> ds = Arrays.asList(ArrayUtils.toObject(x));
-        DoubleSolution tmpSolution = null;
-        if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
-            tmpSolution = performEvaluation(ds);
-        } else if (stopCriterion == EnumStopCriterion.ITERATIONS) {
-            if (isStop)
-                throw new StopCriterionException("Max iterations");
-            tmpSolution = performEvaluation(ds);
-        } else if (stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
-            if (isGlobal)
-                throw new StopCriterionException("Global optimum already found");
-            tmpSolution = performEvaluation(ds);
-        } else if (stopCriterion == EnumStopCriterion.CPU_TIME) {
-            if (!isStop) {
-                hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
-                tmpSolution = performEvaluation(ds);
-            } else {
-                throw new StopCriterionException("CPU Time");
-            }
-        } else if (stopCriterion == EnumStopCriterion.STAGNATION) {
-            if (isStop)
-                throw new StopCriterionException("Solution stagnation");
+    public double[] getRandomVariables() {
+        return p.getRandomVariables();
+    }
 
-            tmpSolution = performEvaluation(ds);
-        }
-        if (tmpSolution != null) {
-            if (isAncestorLoggingEnabled) {
-                tmpSolution.timeStamp = System.currentTimeMillis();
-                tmpSolution.generationNumber = this.getNumberOfIterations();
-                tmpSolution.evaluationNumber = this.getNumberOfEvaluations();
-                ancestors.add(tmpSolution);
-				/*ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";");
-				ancestorSB.append("\n");*/
-            }
-            return tmpSolution;
-        } else {
-            // Execution should never reach this point!
-            throw new StopCriterionException("Not evaluated");
-        }
+    /**
+     * Generates a random unevaluated solution.
+     *
+     * @return randomly generated unevaluated solution
+     */
+    public DoubleSolution getRandomSolution() {
+        return p.getRandomSolution();
+    }
 
+    /**
+     * Generates a random evaluated solution.
+     * @return a random evaluated solution.
+     * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
+     * To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
+     */
+    public DoubleSolution getRandomEvaluatedSolution() throws StopCriterionException {
+
+        DoubleSolution tmpSolution = getRandomSolution();
+        eval(tmpSolution);
+        return tmpSolution;
     }
 
     /**
@@ -338,36 +198,78 @@ public class Task extends TaskBase<Problem> {
             tmpSolution.timeStamp = System.currentTimeMillis();
             tmpSolution.generationNumber = this.getNumberOfIterations();
             tmpSolution.evaluationNumber = this.getNumberOfEvaluations();
-		/*	ancestorSB.append(tmpSolution.getID()+";"+tmpSolution.getEval()+";"+Arrays.toString(tmpSolution.getDoubleVariables())+";[");
-			for(int i = 0; i < parents.size(); i++)
-			{
-				ancestorSB.append(parents.get(i).getID());
-				if(i+1 < parents.size())
-					ancestorSB.append(",");
-			}
-
-			ancestorSB.append("]\n");*/
             ancestors.add(tmpSolution);
         }
 
         return tmpSolution;
     }
 
-    private void checkImprovement(double eval) {
-        if (p.isMinimize()) {
-            if (eval < bestEval) {
-                bestEval = eval;
-                stagnationTrials = 0;
+    public DoubleSolution eval(double[] x) throws StopCriterionException {
+
+        //Double[] ds = ArrayUtils.toObject(x);
+        //List<Double> ds = Arrays.asList(ArrayUtils.toObject(x));
+        DoubleSolution tmpSolution = null;
+        if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
+            tmpSolution = performEvaluation(x);
+        } else if (stopCriterion == EnumStopCriterion.ITERATIONS) {
+            if (isStop)
+                throw new StopCriterionException("Max iterations");
+            tmpSolution = performEvaluation(x);
+        } else if (stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
+            if (isGlobal)
+                throw new StopCriterionException("Global optimum already found");
+            tmpSolution = performEvaluation(x);
+        } else if (stopCriterion == EnumStopCriterion.CPU_TIME) {
+            if (!isStop) {
+                hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
+                tmpSolution = performEvaluation(x);
             } else {
-                stagnationTrials++;
+                throw new StopCriterionException("CPU Time");
             }
+        } else if (stopCriterion == EnumStopCriterion.STAGNATION) {
+            if (isStop)
+                throw new StopCriterionException("Solution stagnation");
+
+            tmpSolution = performEvaluation(x);
+            checkImprovement(tmpSolution.getEval());
+        }
+        if (tmpSolution != null) {
+            if (isAncestorLoggingEnabled) {
+                tmpSolution.timeStamp = System.currentTimeMillis();
+                tmpSolution.generationNumber = this.getNumberOfIterations();
+                tmpSolution.evaluationNumber = this.getNumberOfEvaluations();
+                ancestors.add(tmpSolution);
+            }
+            return tmpSolution;
         } else {
-            if (eval > bestEval) {
-                bestEval = eval;
-                stagnationTrials = 0;
-            } else {
-                stagnationTrials++;
-            }
+            // Execution should never reach this point!
+            throw new StopCriterionException("Not evaluated");
+        }
+    }
+
+    private DoubleSolution performEvaluation(double[] x) throws StopCriterionException {
+        incEvaluate();
+        long start = System.nanoTime();
+        DoubleSolution tmpSolution = new DoubleSolution(x, p.eval(x), p.evaluateConstrains(x), p.upperLimit, p.lowerLimit);
+        evaluationTime += System.nanoTime() - start;
+        checkIfGlobalReached(tmpSolution.getEval());
+        GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+        return tmpSolution;
+    }
+
+    /**
+     * Checks if the current evaluation {@code eval} is better than the best evaluation. If there is no improvement after
+     * a certain amount of trials the stopping criterion is met. If there is an improvement the stagnation trials counter is reset.
+     * @param eval current evaluation
+     */
+    private void checkImprovement(double eval) {
+
+        if(p.isFirstBetter(eval, bestEval)){
+            bestEval = eval;
+            stagnationTrials = 0;
+        }
+        else {
+            stagnationTrials++;
         }
 
         if (stagnationTrials >= maxEvaluationsBeforeStagnation) {
