@@ -360,10 +360,21 @@ public class Util {
     public static void writeToFile(String fileLocation, String data) {
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileLocation)))) {
             bw.write(data);
-            bw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String readFromFile(String fileLocation) {
+	    StringBuilder sb = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileLocation))) {
+            String line;
+            while ((line = br.readLine()) != null)
+                sb.append(line);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 
     public static double max(double... args) {
