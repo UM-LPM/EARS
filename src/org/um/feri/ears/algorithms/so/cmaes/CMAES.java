@@ -100,7 +100,7 @@ public class CMAES extends Algorithm {
 		this.popSize = popSize;
 
 		au = new Author("miha", "miha.ravber@um.si");
-		ai = new AlgorithmInfo("CMAES",
+		ai = new AlgorithmInfo("CMAES", "Covariance Matrix Adaptation Evolutionary Strategy",
 				"@article{hansen2003reducing,"
 						+ "	  title={Reducing the time complexity of the derandomized evolution strategy with covariance matrix adaptation (CMA-ES)},"
 						+ "	  author={Hansen, Nikolaus and M{\"u}ller, Sibylle D and Koumoutsakos, Petros},"
@@ -109,8 +109,8 @@ public class CMAES extends Algorithm {
 						+ "	  number={1},"
 						+ "	  pages={1--18},"
 						+ "	  year={2003},"
-						+ "	  publisher={MIT Press}}",
-						"CMAES", "Covariance Matrix Adaptation Evolutionary Strategy");
+						+ "	  publisher={MIT Press}}"
+				);
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 

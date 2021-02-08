@@ -23,7 +23,7 @@ public class GSAv2 extends Algorithm {
 
     public GSAv2(int pop_size) {
         this.pop_size = pop_size;
-        ai = new AlgorithmInfo("", "", "GSA", "GSO");  //EARS add algorithm name
+        ai = new AlgorithmInfo("GSAv2", "GSAv2", "");
         au = new Author("nikorter", "nik.orter@gmail.com"); //EARS author info
         pop = new ArrayList<>();
     }
@@ -172,7 +172,7 @@ public class GSAv2 extends Algorithm {
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         //get epsilon from task
-        epsilon = taskProblem.getEpsilon();
+        epsilon = taskProblem.getEpsilonForGlobal();
         //inicializacija populacije
         initPop(taskProblem);
         int generation = 1;

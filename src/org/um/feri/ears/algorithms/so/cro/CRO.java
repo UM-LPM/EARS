@@ -71,12 +71,12 @@ public class CRO extends Algorithm {
 		popSize = N * M;
 
 		au = new Author("miha", "miha.ravber@um.si");
-		ai = new AlgorithmInfo("CRO",
+		ai = new AlgorithmInfo("CRO", "Coral Reefs Optimization",
 				"@article{salcedo2014coral,"
 				+ "title={The coral reefs optimization algorithm: a novel metaheuristic for efficiently solving optimization problems}, "
 				+ "author={Salcedo-Sanz, S and Del Ser, J and Landa-Torres, I and Gil-L{\'o}pez, S and Portilla-Figueras, JA}, "
-				+ "journal={The Scientific World Journal}, volume={2014},year={2014},publisher={Hindawi Publishing Corporation}}",
-				"CRO", "Coral Reefs Optimization");
+				+ "journal={The Scientific World Journal}, volume={2014},year={2014},publisher={Hindawi Publishing Corporation}}"
+		);
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 

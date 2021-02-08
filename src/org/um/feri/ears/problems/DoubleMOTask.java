@@ -18,7 +18,7 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 
 		
 		if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
-			incEvaluate();
+			incrementNumberOfEvaluations();
 			MOSolutionBase<Double> newSolution = p.getRandomSolution();
 			//p.evaluateConstraints(newSolution);
 			return newSolution;
@@ -27,7 +27,7 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 		{
 			if(isStop)
 				throw new StopCriterionException("Max iterations");
-			incEvaluate();
+			incrementNumberOfEvaluations();
 			MOSolutionBase<Double> newSolution = p.getRandomSolution();
 			return newSolution;
 			
@@ -38,7 +38,7 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem>{
 			if(!isStop)
 			{
 				hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
-				incEvaluate();
+				incrementNumberOfEvaluations();
 				MOSolutionBase<Double> newSolution = p.getRandomSolution();
 				return newSolution;
 			}

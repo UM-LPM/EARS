@@ -34,7 +34,7 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 
         super();
         setDebug(debug);  //EARS prints some debug info
-        ai = new AlgorithmInfo("FA",
+        ai = new AlgorithmInfo("FA", "Firefly algorithm",
                 "@article{fister2013,"
                         + "title={A comprehensive review of firefly algorithms},"
                         + "author={Fister, Iztok, Fister, Iztok Jr, Yang, X.S. and Brest Janez},"
@@ -42,8 +42,8 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
                         + "volume={13},"
                         + "pages={34--46},"
                         + "year={2013},"
-                        + "publisher={Elsevier}}",
-                "FA", "Firefly algorithm");
+                        + "publisher={Elsevier}}"
+         );
         au = new Author("alex", "shliu@mail.fresnostate.edu"); //EARS author info
 
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");

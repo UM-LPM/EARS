@@ -17,7 +17,7 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem>{
 	public MOSolutionBase<Integer> getRandomMOSolution() throws StopCriterionException {
 
 		if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
-			incEvaluate();
+			incrementNumberOfEvaluations();
 			MOSolutionBase<Integer> newSolution = p.getRandomSolution();
 			//p.evaluateConstraints(newSolution);
 			return newSolution;
@@ -27,7 +27,7 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem>{
 			if(isStop)
 				throw new StopCriterionException("Max iterations");
 			
-			incEvaluate();
+			incrementNumberOfEvaluations();
 			MOSolutionBase<Integer> newSolution = p.getRandomSolution();
 			return newSolution;
 			
@@ -38,7 +38,7 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem>{
 			if(!isStop)
 			{
 				hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
-				incEvaluate();
+				incrementNumberOfEvaluations();
 				MOSolutionBase<Integer> newSolution = p.getRandomSolution();
 				return newSolution;
 			}

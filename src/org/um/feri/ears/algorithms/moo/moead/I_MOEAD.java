@@ -23,8 +23,8 @@ public class I_MOEAD extends MOEAD<IntegerMOTask, Integer> {
 		super(crossover, mutation, populationSize);
 	}
 	
-	public I_MOEAD(double crossoverProbability, double mutationProbability, int populationSize, String name) {
-		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize, name);
+	public I_MOEAD(double crossoverProbability, double mutationProbability, int populationSize) {
+		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize);
 	}
 	
 }

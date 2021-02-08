@@ -61,8 +61,8 @@ public class RandomWalkAlgorithmLogging extends Algorithm {
 	boolean debug=false;
 	public RandomWalkAlgorithmLogging() {
 		this.debug = false;
-		ai = new AlgorithmInfo("RWSi","","RWSi","Random Walk Simple");
-		au =  new Author("matej", "matej.crepinsek at um.si");
+		ai = new AlgorithmInfo("RWSi", "Random Walk Simple", "");
+		au = new Author("Matej", "matej.crepinsek@um.si");
 	}
 	public RandomWalkAlgorithmLogging(boolean d) {
 	    this();

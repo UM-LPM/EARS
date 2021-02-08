@@ -32,12 +32,12 @@ public class OSSTLBO extends Algorithm {
         this.popSize = popSize;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("OSSTLBO",
+        ai = new AlgorithmInfo("OSSTLBO", "Opposite Stopping Swarm Teaching–learning-Based Optimization",
                 "@article{tanabe2014improving,"
                         + "title={Opposite Stopping Swarm Teaching–learning-Based Optimization},"
                         + "author={Jomaa, Mohammad and Juneidi, Wassim },"
-                        + "booktitle={Higher Institute for Applied Sciences and Technology}}",
-                "OSSTLBO", "Opposite Stopping Swarm Teaching–learning-Based Optimization");
+                        + "booktitle={Higher Institute for Applied Sciences and Technology}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

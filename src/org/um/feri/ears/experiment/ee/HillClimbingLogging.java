@@ -16,12 +16,14 @@ public class HillClimbingLogging extends Algorithm {
 	String datoteka;
 	double dxProcent;
     public HillClimbingLogging(double dxProcent) {
-		ai = new AlgorithmInfo(
-				"HillClimbing",
-				"HillClimbing",
-				"HillClimbing", "HillClimbing"); // EARS add algorithm name
-		this.dxProcent=dxProcent;
-		au = new Author("Matej", "matej.crepinsek at um.si"); // EARS author
+		au = new Author("miha", "miha.ravber@um.si");
+		ai = new AlgorithmInfo("HC", "Hill Climbing ",
+				"@article{russell2002artificial," +
+						"title={Artificial intelligence: a modern approach}," +
+						"author={Russell, Stuart and Norvig, Peter}," +
+						"year={2002}" +
+						"}"
+		);
     }
 
     public static void print(int eval, DoubleSolution s,String a) {

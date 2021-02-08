@@ -63,15 +63,15 @@ public class ICA extends Algorithm {
         numOfAllColonies = popSize - numOfInitialImperialists;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("ICA",
+        ai = new AlgorithmInfo("ICA", "Imperialist Competitive Algorithm",
                 "@article{@inproceedings{atashpaz2007imperialist,"
                         + "title={Imperialist competitive algorithm: an algorithm for optimization inspired by imperialistic competition},"
                         + "author={Atashpaz-Gargari, Esmaeil and Lucas, Caro},"
                         + "booktitle={Evolutionary computation, 2007. CEC 2007. IEEE Congress on},"
                         + "pages={4661--4667},"
                         + "year={2007},"
-                        + "organization={IEEE}}",
-                "ICA", "Imperialist Competitive Algorithm");
+                        + "organization={IEEE}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

@@ -18,29 +18,20 @@ public class RMO extends Algorithm
 	private DoubleSolution cpS;
 	private double[][] V;
 	
-	public RMO(int popSize, double C1, double C2, double k)
-	{
-		super();
-		this.popSize = popSize;
-		this.C1 = C1;
-		this.C2 = C2;
-		this.k = k;
-		
-		ai = new AlgorithmInfo("R.Rahmani","@article{rahmani2014new,title={A new simple, fast and efficient algorithm for global optimization over continuous search-space problems: Radial movement optimization},author={Rahmani, Rasoul and Yusof, Rubiyah},journal={Applied Mathematics and Computation},volume={248},pages={287--300},year={2014},publisher={Elsevier}}","RMO","RMO paper");  //EARS add algorithm name
-        au =  new Author("Luka", "luka.horvat@student.um.si"); //EARS author info
-	}
-	
 	public RMO()
 	{
-		super();
-		
+		this(100, 0.7, 0.8, 10);
+	}
+	
+	public RMO(int popSize, double C1, double C2, double k)
+	{
 		this.popSize = 100;
 		this.C1 = 0.7;
 		this.C2 = 0.8;
 		this.k = 10;
 		
-		ai = new AlgorithmInfo("R.Rahmani","@article{rahmani2014new,title={A new simple, fast and efficient algorithm for global optimization over continuous search-space problems: Radial movement optimization},author={Rahmani, Rasoul and Yusof, Rubiyah},journal={Applied Mathematics and Computation},volume={248},pages={287--300},year={2014},publisher={Elsevier}}","RMO","RMO paper");  //EARS add algorithm name
-        au =  new Author("Luka", "luka.horvat@student.um.si"); //EARS author info
+		ai = new AlgorithmInfo("RMO","Radial Movement Optimization","@article{rahmani2014new,title={A new simple, fast and efficient algorithm for global optimization over continuous search-space problems: Radial movement optimization},author={Rahmani, Rasoul and Yusof, Rubiyah},journal={Applied Mathematics and Computation},volume={248},pages={287--300},year={2014},publisher={Elsevier}}");
+        au =  new Author("Luka", "luka.horvat@student.um.si");
 	}
 	
 	@Override

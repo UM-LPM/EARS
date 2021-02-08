@@ -27,7 +27,7 @@ public class I_PESAII extends PESAII<IntegerMOTask, Integer> {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 	
-	public I_PESAII(double crossoverProbability, double mutationProbability, int populationSize, int archiveSize, String name) {
-		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize, archiveSize, name);
+	public I_PESAII(double crossoverProbability, double mutationProbability, int populationSize, int archiveSize) {
+		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize, archiveSize);
 	}
 }

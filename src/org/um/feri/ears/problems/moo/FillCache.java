@@ -95,7 +95,7 @@ public class FillCache {
 	    		System.out.println(task.getProblemName());
 	    		for(MOAlgorithm alg : players)
 	    		{
-	    			System.out.println("Alg: "+alg.getAlgorithmInfo().getPublishedAcronym());
+	    			System.out.println("Alg: "+alg.getAlgorithmInfo().getAcronym());
 	    			task.resetCounter();
 	    			try {
 						alg.execute(task);

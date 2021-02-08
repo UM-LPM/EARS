@@ -69,7 +69,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 		// load cache if empty or if different benchmark in cache
 		if(cache == null || !benchmarkInCache.equals(task.getBenchmarkName()))
 		{
-			cache = Util.readParetoListFromJSON(ai.getPublishedAcronym(),task.getBenchmarkName());
+			cache = Util.readParetoListFromJSON(ai.getAcronym(),task.getBenchmarkName());
 			if(cache !=null)
 			{
 				for(Entry<String, List<ParetoWithEval>> s : cache.data.entrySet())
@@ -173,7 +173,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 			if(next != null)
 				return next;
 			else
-				System.out.println("No solution found in chache for algorithm: "+ai.getPublishedAcronym()+" on problem: "+task.getProblemName());
+				System.out.println("No solution found in chache for algorithm: "+ai.getAcronym()+" on problem: "+task.getProblemName());
 		}
 		
 		start();
@@ -183,18 +183,18 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 		Ranking<Type> ranking = new Ranking<>(best);
 		best = ranking.getSubfront(0);
 		
-		if(save_data)
+		if(saveData)
 		{
-			String algName = this.getAlgorithmInfo().getPublishedAcronym();
+			String algName = this.getAlgorithmInfo().getAcronym();
 			best.saveParetoImage(algName,task.getProblemName());
 			best.printFeasibleFUN("FUN_"+algName);
 			best.printVariablesToFile("VAR_"+algName);
 			best.printObjectivesToCSVFile("FUN_"+algName);
 		}
-		if(display_data)
+		if(displayData)
 		{
 			best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
-			best.displayData(this.getAlgorithmInfo().getPublishedAcronym(),task.getProblemName());
+			best.displayData(this.getAlgorithmInfo().getAcronym(),task.getProblemName());
 		}
 		
 		if(caching == Cache.SAVE)
@@ -204,9 +204,9 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			Util.addParetoToJSON(getCacheKey(task.getTaskInfo()),task.getBenchmarkName(), ai.getPublishedAcronym(), best);
+			Util.addParetoToJSON(getCacheKey(task.getTaskInfo()),task.getBenchmarkName(), ai.getAcronym(), best);
 		}
-		
+
 		return best;
 	}
 

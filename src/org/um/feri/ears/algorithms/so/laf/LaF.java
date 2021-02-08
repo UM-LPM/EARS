@@ -30,15 +30,15 @@ public class LaF extends Algorithm {
 
         super();
         setDebug(debug);  //EARS prints some debug info
-        ai = new AlgorithmInfo("LaF",
+        ai = new AlgorithmInfo("LaF", "Leaders and Followers",
                 "@article{Gonzalez-Fernandez2015,"
                         + "title={Leaders and Followers - A New Metaheuristic to Avoid the Bias of Accumulated Information},"
                         + "author={Gonzalez-Fernandez, Yasser and Chen, Stephen},"
                         + "proceedings={2015 IEEE Congress on Evolutionary Computation },"
                         + "pages={776--783},"
                         + "year={2015},"
-                        + "publisher={IEEE press}}",
-                "LaF", "Leaders and Followers");
+                        + "publisher={IEEE press}}"
+        );
         au = new Author("alex", "shliu@mail.fresnostate.edu"); //EARS author info
 
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");

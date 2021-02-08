@@ -159,7 +159,7 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
         	try {
         		FutureResult res = future.get();
 
-        		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
+        		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getAcronym()+": "+res.algorithm.getLastRunDuration());
         		//reset(task); //for one eval!
         		if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
@@ -167,7 +167,7 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
         			allSingleProblemRunResults.add(task, res.result, res.algorithm);
         		}
         		else {
-        			System.err.println(res.algorithm.getAlgorithmInfo().getVersionAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
+        			System.err.println(res.algorithm.getAlgorithmInfo().getAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
         			results.add(new MOAlgorithmEvalResult(null, res.algorithm, res.task)); // this can be done parallel - asynchrony                    
         		}
         		

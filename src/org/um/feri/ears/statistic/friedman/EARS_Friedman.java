@@ -46,7 +46,6 @@ package org.um.feri.ears.statistic.friedman;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
@@ -55,6 +54,7 @@ import org.um.feri.ears.benchmark.RatingCEC2010;
 import org.um.feri.ears.examples.RunMain;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.problems.results.FriedmanTransport;
+import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
 
 /**
@@ -79,7 +79,7 @@ public class EARS_Friedman {
         //System.out.println(br);
         System.out.println(m);
         
-        ArrayList<PlayerAlgorithmExport> vsi = m.getListAll();  
+        ArrayList<Player> vsi = m.getListAll();
         
         Friedman_2.setStatistics(fr.getDatasets(), fr.getAlgoritms(), fr.getMean());
         Results[] statistics_results = Friedman_2.getResults();

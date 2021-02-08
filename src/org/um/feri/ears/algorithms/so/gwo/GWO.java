@@ -37,7 +37,7 @@ public class GWO extends Algorithm {
         this.popSize = popSize;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("GWO",
+        ai = new AlgorithmInfo("GWO", "Gray Wolf Optimizer",
                 "@article{mirjalili2014grey,"
                         + "  title={Grey wolf optimizer},"
                         + "  author={Mirjalili, Seyedali and Mirjalili, Seyed Mohammad and Lewis, Andrew},"
@@ -45,8 +45,8 @@ public class GWO extends Algorithm {
                         + "  volume={69},"
                         + "  pages={46--61},"
                         + "  year={2014},"
-                        + "  publisher={Elsevier}}",
-                "GWO", "Gray Wolf Optimizer");
+                        + "  publisher={Elsevier}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

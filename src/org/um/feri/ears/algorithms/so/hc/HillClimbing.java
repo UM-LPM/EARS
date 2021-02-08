@@ -25,13 +25,13 @@ public class HillClimbing extends Algorithm {
         this.strategy = strategy;
         this.dxPercent = dxPercent;
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("HC",
+        ai = new AlgorithmInfo("HC_" + strategy.name(), "Hill Climbing " + strategy.name(),
                 "@article{russell2002artificial," +
                         "title={Artificial intelligence: a modern approach}," +
                         "author={Russell, Stuart and Norvig, Peter}," +
                         "year={2002}" +
-                        "}",
-                "HC_" + strategy.name(), "Hill Climbing");
+                        "}"
+        );
     }
 
     @Override

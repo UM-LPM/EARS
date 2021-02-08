@@ -47,7 +47,8 @@ public class WOA extends Algorithm {
         setDebug(debug);
 
         au = new Author("janez", "janezk7@gmail.com");
-        ai = new AlgorithmInfo("WOA", "@article{mirjalili2016whale,\n" +
+        ai = new AlgorithmInfo( "WOA", "Whale Optimization Algorithm",
+                "@article{mirjalili2016whale,\n" +
                 "  title={The whale optimization algorithm},\n" +
                 "  author={Mirjalili, Seyedali and Lewis, Andrew},\n" +
                 "  journal={Advances in engineering software},\n" +
@@ -55,7 +56,8 @@ public class WOA extends Algorithm {
                 "  pages={51--67},\n" +
                 "  year={2016},\n" +
                 "  publisher={Elsevier}\n" +
-                "}", "WOA", "Whale Optimization Algorithm");
+                "}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

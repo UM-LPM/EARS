@@ -30,7 +30,7 @@ public class SimulatedAnnealing extends Algorithm {
         super();
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("HC",
+        ai = new AlgorithmInfo("SA", "Simulated Annealing",
                 "@article{kirkpatrick1983optimization,\n" +
                         "  title={Optimization by simulated annealing},\n" +
                         "  author={Kirkpatrick, Scott and Gelatt, C Daniel and Vecchi, Mario P},\n" +
@@ -40,8 +40,8 @@ public class SimulatedAnnealing extends Algorithm {
                         "  pages={671--680},\n" +
                         "  year={1983},\n" +
                         "  publisher={American association for the advancement of science}\n" +
-                        "}",
-                "SA", "Simulated Annealing");
+                        "}"
+        );
     }
 
     @Override

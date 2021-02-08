@@ -41,15 +41,15 @@ public class BA extends Algorithm{
 		this.gamma = gamma;
 		
 		au = new Author("miha", "miha.ravber@um.si");
-		ai = new AlgorithmInfo("BA",
+		ai = new AlgorithmInfo("BA", "Bat Algorithm",
 				"@article{yang2010new,"
 				+ "title={A new metaheuristic bat-inspired algorithm},"
 				+ "author={Yang, Xin-She},"
 				+ "booktitle={Nature inspired cooperative strategies for optimization (NICSO 2010)},"
 				+ "pages={65--74},"
 				+ "year={2010},"
-				+ "publisher={Springer}}",
-				"BA", "Bat Algorithm");
+				+ "publisher={Springer}}"
+		);
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
@@ -137,5 +137,4 @@ public class BA extends Algorithm{
 	public void resetToDefaultsBeforeNewRun() {
 
 	}
-
 }

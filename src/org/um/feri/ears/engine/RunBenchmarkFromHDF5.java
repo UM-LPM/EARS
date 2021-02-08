@@ -1,9 +1,5 @@
 package org.um.feri.ears.engine;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import org.um.feri.ears.algorithms.DummyAlgorithm;
@@ -59,7 +55,7 @@ public class RunBenchmarkFromHDF5 {
 		for(String player: playerList) {
 			DummyAlgorithm da = new DummyAlgorithm(player);
 			for(String problem: problemList) {
-				da.addProblemresults(problem, data[index]);
+				da.addProblemResults(problem, data[index]);
 				numberOfAllSolutions[index] = data[index].length;
 				index++;
 			}

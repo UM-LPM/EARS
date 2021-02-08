@@ -6,8 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.export.data.EDBenchmark;
-import org.um.feri.ears.export.data.EDTask;
 import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.results.BankOfResults;
@@ -100,22 +98,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
         addParameter(EnumBenchmarkInfoParameters.ITTERATIONS,String.valueOf(maxIterations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+ drawLimit);
     }
-    public EDBenchmark export() {
-        updateParameters();
-        EDBenchmark ed=new EDBenchmark();
-        ed.acronym = getAcronym();
-        ed.name = getName();
-        ed.info = getParams();
-        if (getInfo().length()>3) ed.info=ed.info+"\n"+getInfo();
-        EDTask tmp;
-        for (TaskBase ta:listOfProblems) {
-            tmp = new EDTask();
-            tmp.name = ta.getProblemName();
-            tmp.info = ta.getStopCriterionDescription();
-            ed.tasks.add(tmp);
-        }
-        return ed;
-    }
+
     public RatingBenchmarkBase() {
         listOfProblems = new ArrayList<T>();
         listOfAlgorithmsPlayers = new ArrayList<T2>();
@@ -216,10 +199,9 @@ public abstract class RatingBenchmarkBase<T extends TaskBase, T2 extends Algorit
 		case CPU_TIME:
 			return Long.toString(timeLimit);
 		case STAGNATION:
-			return Integer.toString(listOfProblems.get(0).getMaxEvaluationsBeforeStagnation()); //TODO stagnation trials
+			return Integer.toString(listOfProblems.get(0).getMaxTrialsBeforeStagnation()); //TODO stagnation trials
 		case GLOBAL_OPTIMUM_OR_EVALUATIONS:
 			return Integer.toString(maxEvaluations);
-
 		default:
 			return null;
 		}

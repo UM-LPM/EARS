@@ -1,10 +1,8 @@
 package org.um.feri.ears.problems;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 
 public class Task extends TaskBase<Problem> {
@@ -13,19 +11,19 @@ public class Task extends TaskBase<Problem> {
      * @param stop        the stopping criterion
      * @param eval        the maximum number of evaluations allowed
      * @param allowedTime the maximum CPU time allowed in milliseconds
-     * @param epsilon     the epsilon value for global optimum
+     * @param epsilonForGlobal     the epsilon value for global optimum
      * @param p           the problem
      */
-    public Task(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon, Problem p) {
-        this(stop, eval, allowedTime, maxIterations, epsilon, p, (int) Math.log10((1. / epsilon) + 1));
+    public Task(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, Problem p) {
+        this(stop, eval, allowedTime, maxIterations, epsilonForGlobal, p, (int) Math.log10((1. / epsilonForGlobal) + 1));
     }
 
-    public Task(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon, Problem p, int precisonOfRealNumbers) {
-        precisionOfRealNumbersInDecimalPlaces = precisonOfRealNumbers;
+    public Task(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, Problem p, int precisionOfRealNumbers) {
+        precisionOfRealNumbersInDecimalPlaces = precisionOfRealNumbers;
         stopCriterion = stop;
         maxEvaluations = eval;
         numberOfEvaluations = 0;
-        this.epsilon = epsilon;
+        this.epsilonForGlobal = epsilonForGlobal;
         this.maxIterations = maxIterations;
         isStop = false;
         isGlobal = false;
@@ -122,10 +120,11 @@ public class Task extends TaskBase<Problem> {
     }
 
     private void checkIfGlobalReached(double d) {
+        isGlobal = isEqualToGlobalOptimum(d);
+    }
 
-        if (Math.abs(d - p.getGlobalOptimum()) <= epsilon) {
-            isGlobal = true;
-        }
+    public boolean isEqualToGlobalOptimum(double d) {
+        return Math.abs(d - p.getGlobalOptimum()) <= epsilonForGlobal;
     }
 
     public void addAncestors(DoubleSolution solution, List<DoubleSolution> parents) {
@@ -236,8 +235,8 @@ public class Task extends TaskBase<Problem> {
         if (tmpSolution != null) {
             if (isAncestorLoggingEnabled) {
                 tmpSolution.timeStamp = System.currentTimeMillis();
-                tmpSolution.generationNumber = this.getNumberOfIterations();
-                tmpSolution.evaluationNumber = this.getNumberOfEvaluations();
+                tmpSolution.generationNumber = getNumberOfIterations();
+                tmpSolution.evaluationNumber = getNumberOfEvaluations();
                 ancestors.add(tmpSolution);
             }
             return tmpSolution;
@@ -248,31 +247,33 @@ public class Task extends TaskBase<Problem> {
     }
 
     private DoubleSolution performEvaluation(double[] x) throws StopCriterionException {
-        incEvaluate();
+        incrementNumberOfEvaluations();
         long start = System.nanoTime();
         DoubleSolution tmpSolution = new DoubleSolution(x, p.eval(x), p.evaluateConstrains(x), p.upperLimit, p.lowerLimit);
         evaluationTime += System.nanoTime() - start;
         checkIfGlobalReached(tmpSolution.getEval());
         GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
+        if(storeEvaluationHistory)
+            evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTime, tmpSolution.getEval()));
         return tmpSolution;
     }
 
     /**
      * Checks if the current evaluation {@code eval} is better than the best evaluation. If there is no improvement after
-     * a certain amount of trials the stopping criterion is met. If there is an improvement the stagnation trials counter is reset.
+     * a certain amount of tries the stopping criterion is met. If there is an improvement the stagnation trial counter is reset.
      * @param eval current evaluation
      */
     private void checkImprovement(double eval) {
 
         if(p.isFirstBetter(eval, bestEval)){
             bestEval = eval;
-            stagnationTrials = 0;
+            stagnationTrialCounter = 0;
         }
         else {
-            stagnationTrials++;
+            stagnationTrialCounter++;
         }
 
-        if (stagnationTrials >= maxEvaluationsBeforeStagnation) {
+        if (stagnationTrialCounter >= maxTrialsBeforeStagnation) {
             isStop = true;
         }
     }

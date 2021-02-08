@@ -34,7 +34,7 @@ public class GOA extends Algorithm {
         this.popSize = popSize;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("GOA",
+        ai = new AlgorithmInfo("GOA", "Grasshopper Optimisation Algorithm",
                 "@article{mirjalili2017grasshopper,"
                         + "  title={Grasshopper Optimisation Algorithm: Theory and application},"
                         + "  author={Saremi, Shahrzad and Mirjalili, Seyedali and Lewis, Andrew},"
@@ -42,8 +42,8 @@ public class GOA extends Algorithm {
                         + "  volume={105},"
                         + "  pages={30--47},"
                         + "  year={2017},"
-                        + "  publisher={Elsevier}}",
-                "GOA", "Grasshopper Optimisation Algorithm");
+                        + "  publisher={Elsevier}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

@@ -10,13 +10,12 @@ import java.util.Collections;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
-import org.um.feri.ears.algorithms.tuning.GSA_Tuning;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.util.Comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
 
 public class CRSTuning {
@@ -29,7 +28,7 @@ public class CRSTuning {
 	private int E = M/2;
 		
 	private BankOfResults allSingleProblemRunResults;
-    private ArrayList<PlayerAlgorithmExport> listAll;
+    private ArrayList<Player> listAll;
     private boolean printDebug;
     private boolean printSingleRunDuration;
     private ArrayList<Algorithm> players;
@@ -84,7 +83,7 @@ public class CRSTuning {
         players = new ArrayList<Algorithm>();
         this.printDebug = printDebug;
         benchMark = banchmark;
-        listAll = new ArrayList<PlayerAlgorithmExport>();
+        listAll = new ArrayList<Player>();
         Util.rnd.setSeed(System.currentTimeMillis());
         ra = new ResultArena(100);
         this.printSingleRunDuration = printSingleRunDuration;
@@ -115,8 +114,8 @@ public class CRSTuning {
 	        if (al==null) System.out.println("Add null algorithm");
 	        if (al.getAlgorithmInfo()==null) System.out.println("Add algorithm with null AlgorithmInfo "+al.getClass().getName());
 	        if (al.getImplementationAuthor()==null)  System.out.println("Add algorithm with null Author "+al.getClass().getName());
-	        PlayerAlgorithmExport tmp;
-	        tmp = new PlayerAlgorithmExport(al, startRating, 0, 0, 0);
+	        Player tmp;
+	        tmp = new Player(al, al.getID(), startRating, 0, 0, 0);
 	        listAll.add(tmp);
 	        ra.addPlayer(tmp);
 	        benchMark.registerAlgorithm(al);
@@ -189,7 +188,7 @@ public class CRSTuning {
         	benchMark.run(ra,allSingleProblemRunResults, repeat);
         	benchMark.allPlayed();
         	ra.calculteRatings();
-        	Collections.sort(listAll, new Player.RatingComparator());
+        	Collections.sort(listAll, new RatingComparator());
         	// Remove significantly worse algorithms
 	    	for (int j=1;j<listAll.size();j++){
 	    		double difference = Math.abs(Math.round(listAll.get(0).getRatingData().getRating() - listAll.get(j).getRatingData().getRating()));
@@ -275,7 +274,7 @@ public class CRSTuning {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("Results for benchmark:").append(benchMark.getAcronym()).append("Benchmark DURATION: ("+duration/1000+"s)").append("\n").append("\n");;
-        for (PlayerAlgorithmExport a:listAll) {
+        for (Player a:listAll) {
             sb.append(a.getPlayerId()).append(" ").append(a.getRatingData().toString()).append("\n");
         }
        return sb.toString();

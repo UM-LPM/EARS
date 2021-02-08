@@ -13,4 +13,8 @@ public class DummySolution extends DoubleSolution {
 		return value;
 	}
 
+	@Override
+	public String toString() {
+		return "DummySolution eval "+value;
+	}
 }

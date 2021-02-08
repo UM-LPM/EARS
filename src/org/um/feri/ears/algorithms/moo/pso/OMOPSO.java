@@ -88,11 +88,11 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
         this.swarmSize = swarmSize;
         this.archiveSize = archiveSize;
 
-        au = new Author("miha", "miha.ravber at gamil.com");
+        au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo(
-                "OMOPSO",
-                "\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002.\n",
-                "OMOPSO", "Nondominated Sorting Genetic Algorithm II ");
+                "OMOPSO", "Multi Objective Particle Swarm Optimization",
+                "\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002."
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize + "");
         ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
         ai.addParameter(EnumAlgorithmParameters.ETA, eta + "");

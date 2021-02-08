@@ -1,20 +1,19 @@
 package org.um.feri.ears.examples;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.util.Comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class RunMain {
     private BankOfResults allSingleProblemRunResults;
-    private ArrayList<PlayerAlgorithmExport> listAll;
+    private ArrayList<Player> listAll;
     private boolean printDebug;
     private boolean printSingleRunDuration;
     private ArrayList<Algorithm> players;
@@ -22,7 +21,7 @@ public class RunMain {
     protected RatingBenchmark benchMark; // suopm = new RatingRPUOed2();
     private long duration;
 
-    public ArrayList<PlayerAlgorithmExport> getListAll() {
+    public ArrayList<Player> getListAll() {
         return listAll;
     }
 
@@ -53,8 +52,7 @@ public class RunMain {
         players = new ArrayList<Algorithm>();
         this.printDebug = printDebug;
         benchMark = banchmark;
-        listAll = new ArrayList<PlayerAlgorithmExport>();
-        Util.rnd.setSeed(System.currentTimeMillis());
+        listAll = new ArrayList<Player>();
         ra = new ResultArena(100);
         this.printSingleRunDuration = printSingleRunDuration;
         allSingleProblemRunResults = new BankOfResults();
@@ -75,8 +73,7 @@ public class RunMain {
             System.out.println("Add algorithm with null AlgorithmInfo " + al.getClass().getName());
         if (al.getImplementationAuthor() == null)
             System.out.println("Add algorithm with null Author " + al.getClass().getName());
-        PlayerAlgorithmExport<Algorithm> tmp;
-        tmp = new PlayerAlgorithmExport<Algorithm>(al, startRating, 0, 0, 0);
+        Player tmp = new Player(al, al.getID(), startRating, 0, 0, 0);
         listAll.add(tmp);
         ra.addPlayer(tmp);
         benchMark.registerAlgorithm(al);
@@ -93,7 +90,7 @@ public class RunMain {
         RatingBenchmark.printSingleRunDuration = printSingleRunDuration;
         benchMark.run(ra, allSingleProblemRunResults, repeat);
         ra.calculteRatings();
-        listAll.sort(new Player.RatingComparator());
+        listAll.sort(new RatingComparator());
         long endTime = System.currentTimeMillis();
         duration = endTime - stTime;
         // System.out.println("Benchmark DURATION: "+duration/1000+"s");
@@ -103,7 +100,7 @@ public class RunMain {
         StringBuilder sb = new StringBuilder();
         sb.append("Results for benchmark:").append(benchMark.getAcronym()).append("Benchmark DURATION: (" + duration / 1000 + "s)").append("\n").append("\n");
         ;
-        for (PlayerAlgorithmExport a : listAll) {
+        for (Player a : listAll) {
             sb.append(a.getPlayerId()).append(" ").append(a.getRatingData().toString()).append("\n");
         }
         return sb.toString();

@@ -1,46 +1,3 @@
-/**
- * Insert data
- * <p>
- * 
- * @author Matej Crepinsek
- * @version 1
- * 
- *          <h3>License</h3>
- * 
- *          Copyright (c) 2011 by Matej Crepinsek. <br>
- *          All rights reserved. <br>
- * 
- *          <p>
- *          Redistribution and use in source and binary forms, with or without
- *          modification, are permitted provided that the following conditions
- *          are met:
- *          <ul>
- *          <li>Redistributions of source code must retain the above copyright
- *          notice, this list of conditions and the following disclaimer.
- *          <li>Redistributions in binary form must reproduce the above
- *          copyright notice, this list of conditions and the following
- *          disclaimer in the documentation and/or other materials provided with
- *          the distribution.
- *          <li>Neither the name of the copyright owners, their employers, nor
- *          the names of its contributors may be used to endorse or promote
- *          products derived from this software without specific prior written
- *          permission.
- *          </ul>
- *          <p>
- *          THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *          "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *          LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *          FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *          COPYRIGHT OWNERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *          INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- *          BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- *          LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- *          CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- *          LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- *          ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *          POSSIBILITY OF SUCH DAMAGE.
- * 
- */
 package org.um.feri.ears.benchmark;
 
 import java.util.ArrayList;
@@ -63,7 +20,7 @@ import org.um.feri.ears.util.Util;
 public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorithm, AlgorithmEvalResult> {
 
 	/**
-	 * 
+	 *
 	 * @param task
 	 * @param allSingleProblemRunResults
 	 */
@@ -89,13 +46,13 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 					allSingleProblemRunResults.add(task, bestByALg, al);
 
 				} else {
-					System.err.println(al.getAlgorithmInfo().getVersionAcronym() + " result " + bestByALg
+					System.err.println(al.getAlgorithmInfo().getAcronym() + " result " + bestByALg
 							+ " is out of intervals! For task:" + task.getProblemName());
 					results.add(new AlgorithmEvalResult(null, al, task.getNumberOfEvaluations())); // this can be done parallel - asynchrony
 				}
 			} catch (StopCriterionException e) {
 				System.err.println(
-						al.getAlgorithmInfo().getVersionAcronym() + " StopCriterionException for:" + task + "\n" + e);
+						al.getAlgorithmInfo().getAcronym() + " StopCriterionException for:" + task + "\n" + e);
 				results.add(new AlgorithmEvalResult(null, al, task.getNumberOfEvaluations()));
 			}
 		}
@@ -158,8 +115,8 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 								+ Util.df3.format(win.getBest().getEval()) + ", feasable=" + win.getBest().areConstraintsMet()
 								+ ") against " + lose.getAl().getID() + " (" + Util.df3.format(lose.getBest().getEval())
 								+ ", feasable=" + lose.getBest().areConstraintsMet() + ") for " + t.getProblemName());
-					arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(),
-							lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName());
+					arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getAcronym(),
+							lose.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName());
 				} else {
 					if (win.getAl() == null) {
 						System.out.println("NULL ID " + win.getClass().getName());
@@ -178,8 +135,8 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 								+ Util.df3.format(win.getBest().getEval()) + ", feasable=" + win.getBest().areConstraintsMet()
 								+ ") against " + lose.getAl().getID() + " (" + Util.df3.format(lose.getBest().getEval())
 								+ ", feasable=" + lose.getBest().areConstraintsMet() + ") for " + t.getProblemName());
-					arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(),
-							lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName());
+					arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getAcronym(),
+							lose.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName());
 				}
 
 			}
@@ -220,7 +177,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 
 	/**
 	 * Run the benchmark with default number of runs
-	 * 
+	 *
 	 * @param arena needs to be filed with players and their ratings
 	 * @param allSingleProblemRunResults
 	 * @param repetition

@@ -29,7 +29,7 @@ public class HSA extends Algorithm {
         this.popSize = popSize;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("HSA",
+        ai = new AlgorithmInfo("HSA", "Harmony Search Algorithm",
                 "@article{kim2016harmony, " +
                         "title={Harmony search algorithm: A unique music-inspired algorithm}, " +
                         "author={Kim, Joong Hoon}, " +
@@ -37,8 +37,8 @@ public class HSA extends Algorithm {
                         "volume={154}, " +
                         "pages={1401--1405}, " +
                         "year={2016}, " +
-                        "publisher={Elsevier}}",
-                "HSA", "Harmony Search Algorithm");
+                        "publisher={Elsevier}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

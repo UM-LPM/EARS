@@ -75,7 +75,7 @@ public class RunBenchmarkFromFile {
 					
 					//numberOfsolutions = resultArray.length;
 					
-					alg.addProblemresults(problemName, resultArray);
+					alg.addProblemResults(problemName, resultArray);
 					problems.add(problemName);
 				}
 				
@@ -127,7 +127,7 @@ public class RunBenchmarkFromFile {
 	private static DummyAlgorithm getOrCreatePlayer(String algorithmName, ArrayList<DummyAlgorithm> players) {
 		
 		for(DummyAlgorithm alg : players){
-			if(alg.getAlgorithmInfo().getPublishedAcronym().equals(algorithmName))
+			if(alg.getAlgorithmInfo().getAcronym().equals(algorithmName))
 				return alg;
 		}
 		

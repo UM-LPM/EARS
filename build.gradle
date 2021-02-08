@@ -31,6 +31,7 @@ dependencies {
 	compile group: 'org.jfree', name: 'swtgraphics2d', version: '1.0'
 	compile group: 'org.jfree', name: 'jcommon', version: '1.0.24'
 	compile group: 'org.javassist', name: 'javassist', version: '3.24.0-GA'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.12.1'
 }
 
 version = '1.0'

@@ -49,24 +49,14 @@ public class TLBOAlgorithmLogging extends Algorithm {
         this(0, 20);
     }
 
-    /**
-     * stopCondition GENERATION_STOP_CONDITION or EVALUATIONS_STOP_CONDITION
-     * 
-     * @param pop_size
-     * @param p
-     * @param mgen
-     * @param eval
-     * @param keep
-     * @param stopCondition
-     */
     public TLBOAlgorithmLogging(int Keep, int pop_size) {
         this.Keep = Keep;
         this.pop_size = pop_size;
-        au = new Author("matej", "matej.crepinsek at um.si");
+        au = new Author("matej", "matej.crepinsek@um.si");
         ai = new AlgorithmInfo(
-                "TLBO",
-                "\\bibitem{Rao2011}\nR.V.~Rao, V.J.~Savsani, D.P.~Vakharia.\n\\newblock Teaching-learning-based optimization: A novel method for constrained mechanical design optimization problems.\n\\newblock \\emph{Computer-Aided Design}, 43(3):303--315, 2011.\n",
-                "TLBO", "Teaching Learning Based Optimization");
+                "TLBO", "Teaching Learning Based Optimization",
+                "\\bibitem{Rao2011}\nR.V.~Rao, V.J.~Savsani, D.P.~Vakharia.\n\\newblock Teaching-learning-based optimization: A novel method for constrained mechanical design optimization problems.\n\\newblock \\emph{Computer-Aided Design}, 43(3):303--315, 2011."
+        );
         ai.addParameter(EnumAlgorithmParameters.ELITE, "" + Keep);
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
 

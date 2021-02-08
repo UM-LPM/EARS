@@ -19,7 +19,7 @@ public abstract class TaskBase<T extends ProblemBase> {
 	protected EnumStopCriterion stopCriterion;
 	protected int maxEvaluations; // for Stop criterion
 	protected int numberOfEvaluations = 0; // for Stop criterion
-	protected double epsilon; // Stop criterion for global optimum
+	protected double epsilonForGlobal; // epsilon representing the error margin difference when comparing a solution to the global optimum
 	protected boolean isStop;
 	protected boolean isGlobal;
 	protected int precisionOfRealNumbersInDecimalPlaces; //used only for discreet problem presentation (bit presentation in GA)
@@ -31,8 +31,8 @@ public abstract class TaskBase<T extends ProblemBase> {
 	protected long allowedCPUTime; // nanoseconds
 	protected int numberOfIterations = 0;
 	protected int maxIterations;
-    protected int maxEvaluationsBeforeStagnation = 10000;
-    protected int stagnationTrials = 0;
+    protected int maxTrialsBeforeStagnation = 10000;
+    protected int stagnationTrialCounter = 0;
 	/**
 	 * Keeps track of the best solution found.
 	 */
@@ -41,9 +41,9 @@ public abstract class TaskBase<T extends ProblemBase> {
 	//protected StringBuilder ancestorSB;
 	protected static List<DoubleSolution> ancestors;
 	protected boolean isAncestorLoggingEnabled = false;
-	
-	
-	
+	protected ArrayList<EvaluationStorage.Evaluation> evaluationHistory = new ArrayList<>();
+	public boolean storeEvaluationHistory = false;
+
 	/**
 	 * Has the global optimum been reached.
 	 * @return true if the global optimum found else false.
@@ -60,7 +60,6 @@ public abstract class TaskBase<T extends ProblemBase> {
 		return TimeUnit.NANOSECONDS.toMillis(evaluationTime);
 	}
 
-
 	public EnumStopCriterion getStopCriterion() {
 		return stopCriterion;
 	}
@@ -73,7 +72,11 @@ public abstract class TaskBase<T extends ProblemBase> {
 	{
 		timerStart = System.nanoTime();
 	}
-	
+
+	/**
+	 * Increments the number of iterations.
+	 * @throws StopCriterionException if the number of iterations exceeds the maximum number of iterations.
+	 */
 	public void incrementNumberOfIterations() throws StopCriterionException
 	{
 		if(stopCriterion == EnumStopCriterion.ITERATIONS)
@@ -88,14 +91,27 @@ public abstract class TaskBase<T extends ProblemBase> {
 			isStop = true;
 		}
 	}
+
 	/**
-     * When you subtract 2 solutions and difference is less or equal epsilon,
-     * solution are treated as equal good (draw in algorithm match)!
+	 * Increments the number of evaluations. This method shouldn't be called manually.
+	 * @throws StopCriterionException if the number of evaluations exceeds the maximum number of evaluations .
+	 */
+	public void incrementNumberOfEvaluations() throws StopCriterionException {
+		if (numberOfEvaluations >= maxEvaluations && stopCriterion == EnumStopCriterion.EVALUATIONS)
+			throw new StopCriterionException("Max evaluations");
+		numberOfEvaluations++;
+		if (numberOfEvaluations >= maxEvaluations && (stopCriterion == EnumStopCriterion.EVALUATIONS || stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS))
+			isStop = true;
+	}
+
+	/**
+     * When comparing a solution to the global optimum and the error margin difference is less or equal to epsilon, then the
+     * global optimum has been reached
      * 
-     * @return condition that is used when 2 solutions are equal good!
+     * @return  epsilon representing the error margin difference when comparing a solution to the global optimum
      */
-	public double getEpsilon() {
-	    return epsilon;
+	public double getEpsilonForGlobal() {
+	    return epsilonForGlobal;
 	}
 	
 	public int getNumberOfDimensions() {
@@ -128,7 +144,7 @@ public abstract class TaskBase<T extends ProblemBase> {
 		String pop_size=alg.getAlgorithmInfo().getParameters().get(EnumAlgorithmParameters.POP_SIZE);
 		StringBuffer head= new StringBuffer();
 		if (pop_size==null)  pop_size="1";
-		head.append(alg.getID()).append(";").append(alg.getAlgorithmInfo().getPublishedAcronym()).append(";[\"").append(pop_size).append("\"];").append(runID).append(";"); //X id
+		head.append(alg.getID()).append(";").append(";[\"").append(pop_size).append("\"];").append(runID).append(";"); //X id
 		head.append(getProblemName()).append(";").append(getNumberOfDimensions()).append(";[").append(getMaxEvaluations()).append("];").append("\n");
 
 		try {
@@ -214,7 +230,7 @@ public abstract class TaskBase<T extends ProblemBase> {
 			String algorithmParams = sb.toString();
 			algorithmParams = algorithmParams.substring(0, algorithmParams.length()-1);
 		    
-			bw.write("'"+alg.getID()+";"+info.getPublishedAcronym()+";["+algorithmParams+"];"+getProblemName()+";"+getNumberOfDimensions()+";[\""+ stopCriterion +"\"];'+\n");
+			bw.write("'"+alg.getID()+";["+algorithmParams+"];"+getProblemName()+";"+getNumberOfDimensions()+";[\""+ stopCriterion +"\"];'+\n");
 			
 			for(int i = 0; i < ancestors.size(); ++i)
 			{
@@ -255,7 +271,11 @@ public abstract class TaskBase<T extends ProblemBase> {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public ArrayList<EvaluationStorage.Evaluation> getEvaluationHistory() {
+		return evaluationHistory;
+	}
+
 	/**
 	 * Used only for discreet problem presentation (bit presentation in GA)
 	 * @return
@@ -288,8 +308,8 @@ public abstract class TaskBase<T extends ProblemBase> {
 		return allowedCPUTime - System.nanoTime();
 	}
 	
-	public int getMaxEvaluationsBeforeStagnation() {
-		return maxEvaluationsBeforeStagnation;
+	public int getMaxTrialsBeforeStagnation() {
+		return maxTrialsBeforeStagnation;
 	}
 	
 	public long getUsedCPUTime() {
@@ -328,7 +348,7 @@ public abstract class TaskBase<T extends ProblemBase> {
             return "E="+getMaxEvaluations();
         }
         if (stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
-                return "Global optimum epsilon="+epsilon+" or  E="+getMaxEvaluations();
+                return "Global optimum epsilon="+ epsilonForGlobal +" or  E="+getMaxEvaluations();
         }
         if(stopCriterion == EnumStopCriterion.ITERATIONS)
         {
@@ -340,19 +360,11 @@ public abstract class TaskBase<T extends ProblemBase> {
         }
         if(stopCriterion == EnumStopCriterion.STAGNATION)
         {
-        	return "STAGNATION= trials: "+stagnationTrials;
+        	return "STAGNATION= trials: "+ stagnationTrialCounter;
         }
         return "not defined";
 	}
 
-	public void incEvaluate() throws StopCriterionException {
-		if (numberOfEvaluations >= maxEvaluations && stopCriterion == EnumStopCriterion.EVALUATIONS)
-			throw new StopCriterionException("Max evaluations");
-		numberOfEvaluations++;
-		if (numberOfEvaluations >= maxEvaluations && (stopCriterion == EnumStopCriterion.EVALUATIONS || stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS))
-			isStop = true;
-	}
-	
 	/**
 	 * Use to check if the problem is to be minimized.
 	 * 
@@ -368,6 +380,10 @@ public abstract class TaskBase<T extends ProblemBase> {
     public String getProblemName() {
         return p.getName();
     }
+
+	public String getFileNameString() {
+    	return p.getFileNameString();
+	}
     
     public int getProblemHashCode()
     {
@@ -382,7 +398,7 @@ public abstract class TaskBase<T extends ProblemBase> {
         isStop = false;
         isGlobal = false;
         timerStart = System.nanoTime();
-        stagnationTrials = 0;
+        stagnationTrialCounter = 0;
     }
     
     public int getResetCount()
@@ -393,12 +409,12 @@ public abstract class TaskBase<T extends ProblemBase> {
     @Override
     public String toString() {
         return "Task [stopCriterion=" + stopCriterion + ", maxEvaluations=" + maxEvaluations + ", numberOfEvaluations=" + numberOfEvaluations + ", epsilon="
-                + epsilon + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
+                + epsilonForGlobal + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                 + precisionOfRealNumbersInDecimalPlaces + ", p=" + p + "]";
     }
     
     public String getTaskInfoCSV(){
-        return  p.getProblemInfoCSV() + "task stop criterion:" + stopCriterion + ",maxEvaluations:" + maxEvaluations + ",epsilon:"+ epsilon + ",";
+        return  p.getProblemInfoCSV() + "task stop criterion:" + stopCriterion + ",maxEvaluations:" + maxEvaluations + ",epsilon:"+ epsilonForGlobal + ",";
     }
     
     /**
@@ -409,17 +425,17 @@ public abstract class TaskBase<T extends ProblemBase> {
 
     	if(stopCriterion == EnumStopCriterion.EVALUATIONS) {
     		return "Task = " + p +" stopCriterion=" + stopCriterion + ", maxEvaluations=" + maxEvaluations + ", epsilon="
-    				+ epsilon + ", precisionOfRealNumbersInDecimalPlaces="
+    				+ epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
     				+ precisionOfRealNumbersInDecimalPlaces;
     	}
     	else if(stopCriterion == EnumStopCriterion.ITERATIONS) {
     		return "Task = " + p +" stopCriterion=" + stopCriterion + ", maxIterations=" + maxIterations + ", epsilon="
-    				+ epsilon + ", precisionOfRealNumbersInDecimalPlaces="
+    				+ epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
     				+ precisionOfRealNumbersInDecimalPlaces;
     	}
     	else if(stopCriterion == EnumStopCriterion.CPU_TIME){
     		return "Task = " + p +" stopCriterion=" + stopCriterion + ", allowedCPUTime=" + allowedCPUTime + ", epsilon="
-    				+ epsilon + ", precisionOfRealNumbersInDecimalPlaces="
+    				+ epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
     				+ precisionOfRealNumbersInDecimalPlaces;
     	}
     	else

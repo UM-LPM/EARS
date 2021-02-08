@@ -43,7 +43,7 @@ public class BFO extends Algorithm {
         this.Ped = Ped;
         Sr = S / 2;
         swarm = new ArrayList<>();
-        ai = new AlgorithmInfo("", "", "BFO", "Bacterial Foraging Optimization");  //EARS add algorithm name
+        ai = new AlgorithmInfo("BFO", "Bacterial Foraging Optimization", "");
         au = new Author("Monika Bozhinova", "N/A"); //EARS author info
     }
 

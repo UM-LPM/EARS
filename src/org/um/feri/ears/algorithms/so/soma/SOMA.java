@@ -48,15 +48,15 @@ public class SOMA extends Algorithm {
         this.prt = prt;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("SOMA",
+        ai = new AlgorithmInfo("SOMA_" + strategy.name(), "Self-Organizing Migrating Algorithm " + strategy.name(),
                 "@article{zelinka2016soma,"
                         + "title={SOMA—self-organizing migrating algorithm},"
                         + "author={Zelinka, Ivan},"
                         + "booktitle={Self-Organizing Migrating Algorithm},"
                         + "pages={3--49},"
                         + "year={2016},"
-                        + "publisher={Springer}}",
-                "SOMA_" + strategy.name(), "Self-Organizing Migrating Algorithm");
+                        + "publisher={Springer}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

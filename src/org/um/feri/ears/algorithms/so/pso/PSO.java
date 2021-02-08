@@ -31,13 +31,13 @@ public class PSO extends Algorithm {
         this.phiP = c1;
         this.phiG = c2;
         setDebug(debug);  //EARS prints some debug info
-        ai = new AlgorithmInfo("Wiki", "Wiki", "PSO", "My Wiki PSO");  //EARS add algorithm name
+        ai = new AlgorithmInfo("PSO", "Particle Swarm Optimization", "");
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
         ai.addParameter(EnumAlgorithmParameters.C1, c1 + "");
         ai.addParameter(EnumAlgorithmParameters.C2, c2 + "");
         ai.addParameter(EnumAlgorithmParameters.UNNAMED1, om + "");
         //ai.addParameter(EnumAlgorithmParameters., F + "");
-        au = new Author("Matej", "matej.crepinsek at um.si"); //EARS author info
+        au = new Author("Matej", "matej.crepinsek@um.si");
     }
 
     @Override

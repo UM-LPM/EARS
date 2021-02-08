@@ -70,11 +70,10 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         this.populationSize = populationSize;
         this.selectionProcedure = selectionProcedure;
 
-        au = new Author("miha", "miha.ravber at gamil.com");
+        au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo(
-                "DEMO",
-                "\\bibitem{Robic2005}\nT.~Robi�, B.~Filipi�\n\\newblock DEMO: Differential Evolution for Multiobjective Optimization.\n\\newblock \\emph{Evolutionary Multi-Criterion Optimization}, 520-533, 2005.\n",
-                "DEMO", "Differential Evolution for Multiobjective Optimization");
+                "DEMO", "Differential Evolution for Multiobjective Optimization",
+                "\\bibitem{Robic2005}\nT.~Robi�, B.~Filipi�\n\\newblock DEMO: Differential Evolution for Multiobjective Optimization.\n\\newblock \\emph{Evolutionary Multi-Criterion Optimization}, 520-533, 2005.");
 
         ai.addParameters(crossover.getOperatorParameters());
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");

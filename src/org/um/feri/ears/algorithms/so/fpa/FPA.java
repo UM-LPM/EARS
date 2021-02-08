@@ -43,15 +43,15 @@ public class FPA extends Algorithm {
         this.switchProbability = switchProbability;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("FPA",
+        ai = new AlgorithmInfo("FPA", "Flower Pollination Algorithm",
                 "@inproceedings{yang2012flower,"
                         + "title={Flower pollination algorithm for global optimization},"
                         + "author={Yang, Xin-She},"
                         + "booktitle={International Conference on Unconventional Computing and Natural Computation},"
                         + "pages={240--249},"
                         + "year={2012},"
-                        + "organization={Springer}}",
-                "FPA", "Flower Pollination Algorithm");
+                        + "organization={Springer}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

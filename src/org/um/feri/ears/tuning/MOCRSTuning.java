@@ -340,9 +340,7 @@ public class MOCRSTuning {
 
     	//Set algorithm name
     	AlgorithmInfo ai = algorithmObject.getAlgorithmInfo();
-    	ai.setVersionAcronym(name);
-    	ai.setPublishedAcronym(name);
-    	ai.setVersionDescription(name);
+    	ai.setAcronym(name);
     	algorithmObject.setAlgorithmInfo(ai);
     	
     	return algorithmObject;
@@ -543,7 +541,7 @@ public class MOCRSTuning {
 						for (int j=i+1; j<sameGameResults.size(); j++) {
 							lose = sameGameResults.get(j);
 							if (resultEqual(win.getBest(), lose.getBest(), qi)) {
-								arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), task.getProblemName(), qi.getName());
+								arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getAcronym(), lose.getAl().getAlgorithmInfo().getAcronym(), task.getProblemName(), qi.getName());
 							} else {
 								if (win.getAl()==null) {
 									System.out.println("NULL ID "+win.getClass().getName());
@@ -557,7 +555,7 @@ public class MOCRSTuning {
 								if (lose.getBest()==null) {
 									System.out.println(lose.getAl().getID()+" NULL");
 								}                     
-								arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), task.getProblemName(), qi.getName());
+								arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getAcronym(), lose.getAl().getAlgorithmInfo().getAcronym(), task.getProblemName(), qi.getName());
 							}
 						}
 					}

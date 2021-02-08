@@ -98,17 +98,17 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
 						e.printStackTrace();
 					}
     				if (resultEqual(first.getBest(), second.getBest(), qi)) { 
-						arena.addGameResult(Game.DRAW, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
+						arena.addGameResult(Game.DRAW, first.getAl().getAlgorithmInfo().getAcronym(), second.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName(), indicatorName.toString());
 					} 
     				else 
     				{
     					if (t.isFirstBetter(first.getBest(),second.getBest(), qi))
     					{
-    						arena.addGameResult(Game.WIN, first.getAl().getAlgorithmInfo().getVersionAcronym(), second.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, first.getAl().getAlgorithmInfo().getAcronym(), second.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName(), indicatorName.toString());
     					}
     					else
     					{
-    						arena.addGameResult(Game.WIN, second.getAl().getAlgorithmInfo().getVersionAcronym(), first.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, second.getAl().getAlgorithmInfo().getAcronym(), first.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName(), indicatorName.toString());
     					}
     				}
         		}
@@ -134,7 +134,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
         	try {
         		FutureResult res = future.get();
 
-        		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getVersionAcronym()+": "+res.algorithm.getLastRunDuration());
+        		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getAcronym()+": "+res.algorithm.getLastRunDuration());
         		//reset(task); //for one eval!
         		if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
@@ -142,7 +142,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
         			allSingleProblemRunResults.add(task, res.result, res.algorithm);
         		}
         		else {
-        			System.err.println(res.algorithm.getAlgorithmInfo().getVersionAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
+        			System.err.println(res.algorithm.getAlgorithmInfo().getAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
         			results.add(new MOAlgorithmEvalResult(null, res.algorithm, res.task)); // this can be done parallel - asynchrony                    
         		}
         		

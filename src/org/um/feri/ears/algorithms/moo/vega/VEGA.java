@@ -66,11 +66,11 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         this.cross = crossover;
         this.mut = mutation;
 
-        au = new Author("miha", "miha.ravber at gamil.com");
+        au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo(
-                "VEGA",
-                "\\bibitem{Schaffer1985}\nD.~Schaffer.\n\\newblock Multiple Objective Optimization with Vector Evaluated Genetic Algorithms.\n\\newblock \\emph{Proceedings of the 1st International Conference on Genetic Algorithms}, 93--100, 1985.\n",
-                "VEGA", "Vector Evaluated Genetic Algorithm");
+                "VEGA", "Vector Evaluated Genetic Algorithm",
+                "\\bibitem{Schaffer1985}\nD.~Schaffer.\n\\newblock Multiple Objective Optimization with Vector Evaluated Genetic Algorithms.\n\\newblock \\emph{Proceedings of the 1st International Conference on Genetic Algorithms}, 93--100, 1985."
+        );
         ai.addParameters(crossover.getOperatorParameters());
         ai.addParameters(mutation.getOperatorParameters());
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");

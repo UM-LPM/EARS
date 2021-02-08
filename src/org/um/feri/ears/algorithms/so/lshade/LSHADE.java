@@ -35,15 +35,15 @@ public class LSHADE extends Algorithm {
         memorySize = 6;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("LSHADE",
+        ai = new AlgorithmInfo("LSHADE", "Linear Population Size Reduction Success-History based Adaptive DE",
                 "@article{tanabe2014improving,"
                         + "title={Improving the search performance of SHADE using linear population size reduction},"
                         + "author={Tanabe, Ryoji and Fukunaga, Alex S},"
                         + "booktitle={2014 IEEE congress on evolutionary computation (CEC)},"
                         + "pages={1658--1665},"
                         + "year={2014},"
-                        + "organization={IEEE}}",
-                "LSHADE", "Linear Population Size Reduction Success-History based Adaptive DE");
+                        + "organization={IEEE}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

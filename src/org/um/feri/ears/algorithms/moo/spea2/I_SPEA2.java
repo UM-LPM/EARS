@@ -28,8 +28,8 @@ public class I_SPEA2 extends SPEA2<IntegerMOTask, Integer> {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 	
-	public I_SPEA2(double crossoverProbability, double mutationProbability, int populationSize, int archiveSize, String name) {
-		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize, archiveSize, name);
+	public I_SPEA2(double crossoverProbability, double mutationProbability, int populationSize, int archiveSize) {
+		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize, archiveSize);
 	}
 	
 }

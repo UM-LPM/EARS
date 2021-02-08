@@ -11,8 +11,8 @@ public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorith
     private DoubleSolution best; // used to save global best solution
 
     public RandomWalkAlgorithm() {
-        ai = new AlgorithmInfo("RWSi", "", "RWSi", "Random Walk Simple"); // add algorithm name
-        au = new Author("Matej", "matej.crepinsek at um.si"); // add author information
+        ai = new AlgorithmInfo("RWSi", "Random Walk Simple", "");
+        au = new Author("Matej", "matej.crepinsek@um.si");
     }
 
     @Override

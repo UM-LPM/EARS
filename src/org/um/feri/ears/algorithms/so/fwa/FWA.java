@@ -46,15 +46,15 @@ public class FWA extends Algorithm {
         eps = 1e-38;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("FWA",
+        ai = new AlgorithmInfo("FWA", "Flower Pollination Algorithm",
                 "@inproceedings{tan2010fireworks,"
                         + "title={Fireworks algorithm for optimization},"
                         + "author={Tan, Ying and Zhu, Yuanchun},"
                         + "booktitle={International Conference in Swarm Intelligence},"
                         + "pages={355--364},"
                         + "year={2010},"
-                        + "organization={Springer}}",
-                "FWA", "Flower Pollination Algorithm");
+                        + "organization={Springer}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

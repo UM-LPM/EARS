@@ -171,19 +171,18 @@ public class DEAlgorithmLogging extends Algorithm {
         this.CR = CR;
         this.NP = NP;
 
-        if (strategy == 20) {
-            au = new Author("Brest", "brest at uni");
-            ai = new AlgorithmInfo("DE", "[1] J. Brest, S. Greiner, B. Boskovic, M. Mernik, V. Zumer. \n"
-                    + "Self-adapting control parameters in differential evolution: a\n" + "comparative study on numerical benchmark problems.\n"
-                    + "IEEE Transactions on Evolutionary Computation, 2006, vol. 10,\n" + "no. 6, pp. 646-657. DOI 10.1109/TEVC.2006.872133", strat[strategy],
-                    "JDE-SalfAdaptiv Differental Evolution");
-        } else {
-            au = new Author("Storn", " storn at icsi.berkeley.edu");
-            ai = new AlgorithmInfo("DE", "Rainer Storn", strat[strategy], "Differential evolution");
+        if (NP < 6)
+            System.err.println("DEAlgorithm: population size smaller than 6 will cause an infinite loop!");
 
-            ai.addParameter(EnumAlgorithmParameters.F, F + "");
-            ai.addParameter(EnumAlgorithmParameters.CR, CR + "");
-        }
+        au = new Author("matej", "matej.crepinsek@um.si");
+        ai = new AlgorithmInfo("DE", "DE",
+                "[1] J. Brest, S. Greiner, B. Boskovic, M. Mernik, V. Zumer. \n"
+                        + "Self-adapting control parameters in differential evolution: a\n" + "comparative study on numerical benchmark problems.\n"
+                        + "IEEE Transactions on Evolutionary Computation, 2006, vol. 10,\n" + "no. 6, pp. 646-657. DOI 10.1109/TEVC.2006.872133"
+        );
+
+        ai.addParameter(EnumAlgorithmParameters.F, F + "");
+        ai.addParameter(EnumAlgorithmParameters.CR, CR + "");
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, NP + "");
 
     }

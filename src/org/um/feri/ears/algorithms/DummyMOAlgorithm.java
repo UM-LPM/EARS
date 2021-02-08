@@ -18,7 +18,7 @@ public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOA
 	
 	public DummyMOAlgorithm(String name)
 	{
-		ai = new AlgorithmInfo(name,"",name, name);
+		ai = new AlgorithmInfo(name, name, "");
 		fillResults(name);
 	}
 

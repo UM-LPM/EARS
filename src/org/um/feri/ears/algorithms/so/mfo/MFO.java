@@ -32,7 +32,7 @@ public class MFO extends Algorithm {
         this.popSize = popSize;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("MFO",
+        ai = new AlgorithmInfo("MFO", "Moth Flame Optimization",
                 "@article{mirjalili2015moth,"
                         + "title={Moth-flame optimization algorithm: A novel nature-inspired heuristic paradigm},"
                         + "author={Mirjalili, Seyedali},"
@@ -40,8 +40,8 @@ public class MFO extends Algorithm {
                         + "volume={89},"
                         + "pages={228--249},"
                         + "year={2015},"
-                        + "publisher={Elsevier}}",
-                "MFO", "Moth Flame Optimization");
+                        + "publisher={Elsevier}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

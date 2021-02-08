@@ -57,6 +57,7 @@ import org.um.feri.ears.rating.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.um.feri.ears.util.Comparator.RatingComparator;
 
 public class ResultArena {
 	private HashMap<String,Player> players;
@@ -137,7 +138,7 @@ public class ResultArena {
 		ArrayList<Player> ap = new ArrayList<Player>();
 		RatingCalculations.computePlayerRatings(players, true); //changes ratings
 		ap.addAll(players.values());
-		Collections.sort(ap, new Player.RatingComparator());
+		Collections.sort(ap, new RatingComparator());
 		return ap;
 		
 	}
@@ -151,14 +152,14 @@ public class ResultArena {
 		ArrayList<Player> ap = new ArrayList<Player>();
 		RatingCalculations.computePlayerRatings(players, false); //changes ratings
 		ap.addAll(players.values());
-		Collections.sort(ap, new Player.RatingComparator());
+		Collections.sort(ap, new RatingComparator());
 		return ap;
 	}
 	
 	public ArrayList<Player> getPlayers() {
 		ArrayList<Player> ap = new ArrayList<Player>();
 		ap.addAll(players.values());
-		Collections.sort(ap, new Player.RatingComparator());
+		Collections.sort(ap, new RatingComparator());
 		return ap;
 	}
 	

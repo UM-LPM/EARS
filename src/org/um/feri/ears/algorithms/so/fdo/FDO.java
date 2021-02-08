@@ -28,7 +28,7 @@ public class FDO extends Algorithm {
         this.popSize = popSize;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("FDO",
+        ai = new AlgorithmInfo("FDO", "Fitness Dependent Optimizer",
                 "@article{abdullah2019fitness,"
                         + "title={Fitness dependent optimizer: inspired by the bee swarming reproductive process},"
                         + "author={Abdullah, Jaza Mahmood and Ahmed, Tarik},"
@@ -36,8 +36,8 @@ public class FDO extends Algorithm {
                         + "volume={7},"
                         + "pages={43473--43486},"
                         + "year={2019},"
-                        + "publisher={IEEE}}",
-                "FDO", "Fitness Dependent Optimizer");
+                        + "publisher={IEEE}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

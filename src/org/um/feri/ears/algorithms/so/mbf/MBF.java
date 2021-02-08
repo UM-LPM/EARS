@@ -54,7 +54,7 @@ public class MBF extends Algorithm {
         nm = (int) (0.04 * popSize * (Math.pow(SP, -0.4321)));
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("MBF",
+        ai = new AlgorithmInfo("MBF", "Mouth Brooding Fish",
                 "@article{jahani2016tackling,"
                         + "  title={Tackling global optimization problems with a novel algorithm Mouth Brooding Fish algorithm},"
                         + "  author={Jahani, Ehsan and Chizari, Mohammad},"
@@ -62,8 +62,8 @@ public class MBF extends Algorithm {
                         + "  volume={},"
                         + "  pages={},"
                         + "  year={2016},"
-                        + "  publisher={Elsevier}}",
-                "MBF", "Mouth Brooding Fish");
+                        + "  publisher={Elsevier}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

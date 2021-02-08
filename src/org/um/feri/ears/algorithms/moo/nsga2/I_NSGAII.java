@@ -21,8 +21,8 @@ public class I_NSGAII extends NSGAII<IntegerMOTask, Integer> {
 		super(crossover, mutation, populationSize);
 	}
 	
-	public I_NSGAII(double crossoverProbability, double mutationProbability, int populationSize, String name) {
-		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize, name);
+	public I_NSGAII(double crossoverProbability, double mutationProbability, int populationSize) {
+		super(new PMXCrossover(crossoverProbability), new PermutationSwapMutation(mutationProbability), populationSize);
 	}
 	
 }

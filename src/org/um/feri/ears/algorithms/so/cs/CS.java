@@ -34,15 +34,15 @@ public class CS extends Algorithm{
 		this.popSize = popSize;
 		
 		au = new Author("miha", "miha.ravber@um.si");
-		ai = new AlgorithmInfo("CS",
+		ai = new AlgorithmInfo("CS", "Cuckoo Search",
 				"@inproceedings{yang2009cuckoo,"
 				+ "title={Cuckoo search via L{\'e}vy flights},"
 				+ "author={Yang, Xin-She and Deb, Suash},"
 				+ "booktitle={Nature & Biologically Inspired Computing, 2009. NaBIC 2009. World Congress on},"
 				+ "pages={210--214},"
 				+ "year={2009},"
-				+ "organization={IEEE}}",
-				"CS", "Cuckoo Search");
+				+ "organization={IEEE}}"
+		);
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 

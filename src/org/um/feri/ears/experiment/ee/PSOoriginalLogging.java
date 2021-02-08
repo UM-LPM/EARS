@@ -30,11 +30,12 @@ public class PSOoriginalLogging extends Algorithm {
 		this.c1 = c1;
 		this.c2 = c2;
 		setDebug(debug);
-		ai = new AlgorithmInfo("PSOO", "PSOO", "PSOO", "PSOO");
+		ai = new AlgorithmInfo("PSO", "Particle Swarm Optimization", "");
 		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 		ai.addParameter(EnumAlgorithmParameters.C1, c1 + "");
 		ai.addParameter(EnumAlgorithmParameters.C2, c2 + "");
-		au = new Author("Robnik", "aleksander.robnik@student.um.si");
+		//ai.addParameter(EnumAlgorithmParameters., F + "");
+		au = new Author("Matej", "matej.crepinsek@um.si");
 	}
 //Originalni algoritem PSO
 	

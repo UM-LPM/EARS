@@ -20,14 +20,6 @@ public class ABC extends Algorithm {
     private int limit;
     private ArrayList<ABCSolution> population;
 
-    public ArrayList<ABCSolution> getPopulaton() {
-        return population;
-    }
-
-    public ArrayList getPopulaton2() {
-        return population;
-    }
-
     public ABC() {
         this(60);
     }
@@ -38,7 +30,7 @@ public class ABC extends Algorithm {
         this.foodNumber = cs / 2;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("ABC",
+        ai = new AlgorithmInfo("ABC", "Artificial Bee Colony",
                 "@article{karaboga2007powerful,"
                         + "title={A powerful and efficient algorithm for numerical function optimization: artificial bee colony (ABC) algorithm},"
                         + "author={Karaboga, Dervis and Basturk, Bahriye},"
@@ -47,8 +39,7 @@ public class ABC extends Algorithm {
                         + "number={3},"
                         + "pages={459--471},"
                         + "year={2007},"
-                        + "publisher={Springer}}",
-                "ABC", "Artificial Bee Colony");
+                );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, cs + "");
     }
 
@@ -139,7 +130,6 @@ public class ABC extends Algorithm {
             if (i == foodNumber)
                 i = 0;
         }
-
     }
 
     private void calculateProbabilities() {
@@ -156,7 +146,6 @@ public class ABC extends Algorithm {
         for (ABCSolution bee : population) {
             bee.setProb((0.9 * (bee.getABCEval() / maxFit)) + 0.1);
         }
-
     }
 
     private void sendEmployedBees() throws StopCriterionException {
@@ -214,5 +203,4 @@ public class ABC extends Algorithm {
     @Override
     public void resetToDefaultsBeforeNewRun() {
     }
-
 }

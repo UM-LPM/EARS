@@ -2,7 +2,7 @@ package org.um.feri.ears.problems;
 
 import java.util.List;
 
-public class DummyProblem extends Problem{
+public class DummyProblem extends Problem {
 
 	
 	public DummyProblem (String name){

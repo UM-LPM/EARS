@@ -46,15 +46,15 @@ public class FSS extends Algorithm {
         this.popSize = popSize;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("FSS",
+        ai = new AlgorithmInfo("FSS", "Fish School Search",
                 "@inproceedings{bastos2008novel,"
                         + "title={A novel search algorithm based on fish school behavior},"
                         + "author={Bastos Filho, Carmelo JA and de Lima Neto, Fernando B and Lins, Anthony JCC and Nascimento, Antonio IS and Lima, Marilia P},"
                         + "booktitle={Systems, Man and Cybernetics, 2008. SMC 2008. IEEE International Conference on},"
                         + "pages={2646--2651},"
                         + "year={2008},"
-                        + "organization={IEEE}}",
-                "FSS", "Fish School Search");
+                        + "organization={IEEE}}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

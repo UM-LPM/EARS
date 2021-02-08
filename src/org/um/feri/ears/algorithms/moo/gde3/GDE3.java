@@ -56,9 +56,9 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
         au = new Author("miha", "miha.ravber at gamil.com");
         ai = new AlgorithmInfo(
-                "GDE3",
-                "\\bibitem{Kukkonen2009}\nS.~Kukkonen, J.~Lampinen\n\\newblock Performance Assessment of Generalized Differential Evolution 3 with a Given Set of Constrained Multi-Objective Test Problems.\n\\newblock \\emph{2009 IEEE Congress on Evolutionary Computation}, 1943--1950, 2009.\n",
-                "GDE3", "Generalized Differential Evolution 3");
+                "GDE3", "Generalized Differential Evolution 3",
+                "\\bibitem{Kukkonen2009}\nS.~Kukkonen, J.~Lampinen\n\\newblock Performance Assessment of Generalized Differential Evolution 3 with a Given Set of Constrained Multi-Objective Test Problems.\n\\newblock \\emph{2009 IEEE Congress on Evolutionary Computation}, 1943--1950, 2009."
+                );
 
         ai.addParameters(crossover.getOperatorParameters());
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");

@@ -40,7 +40,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
         stopCriterion = stop;
         maxEvaluations = eval;
         numberOfEvaluations = 0;
-        this.epsilon = epsilon;
+        this.epsilonForGlobal = epsilon;
         isStop = false;
         isGlobal = false;
         super.p = p; // TODO generic type in TaskBase
@@ -54,7 +54,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
         stopCriterion = task.stopCriterion;
         maxEvaluations = task.maxEvaluations;
         numberOfEvaluations = task.numberOfEvaluations;
-        epsilon = task.epsilon;
+        epsilonForGlobal = task.epsilonForGlobal;
         isStop = task.isStop;
         isGlobal = task.isGlobal;
         maxIterations = task.maxIterations;
@@ -99,7 +99,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 	public void eval(MOSolutionBase<T> ind) throws StopCriterionException {
 		
 		if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
-			incEvaluate();
+			incrementNumberOfEvaluations();
 			p.evaluate(ind);
 			p.evaluateConstraints(ind);
 			GraphDataRecorder.AddRecord(ind, this.getProblemName());
@@ -108,7 +108,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 		{
 			if(isStop)
 				throw new StopCriterionException("Max iterations");
-			incEvaluate();
+			incrementNumberOfEvaluations();
 			p.evaluate(ind);
 			p.evaluateConstraints(ind);
 			GraphDataRecorder.AddRecord(ind, this.getProblemName());
@@ -118,7 +118,7 @@ public abstract class MOTask<T extends Number , P extends MOProblemBase<T>> exte
 			if(!isStop)
 			{
 				hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
-				incEvaluate();
+				incrementNumberOfEvaluations();
 				p.evaluate(ind);
 				p.evaluateConstraints(ind);
 				GraphDataRecorder.AddRecord(ind, this.getProblemName());

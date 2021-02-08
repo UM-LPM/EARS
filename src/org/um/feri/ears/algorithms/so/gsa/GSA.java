@@ -15,8 +15,6 @@ import java.util.Comparator;
 
 /**
  * Code from http://www.mathworks.com/matlabcentral/fileexchange/27756-gravitational-search-algorithm--gsa-
- *
- * @author crepinsek
  */
 
 public class GSA extends Algorithm {
@@ -53,7 +51,8 @@ public class GSA extends Algorithm {
         this.Rpower = 1;
         this.final_per = final_per;
         setDebug(debug);  //EARS prints some debug info
-        ai = new AlgorithmInfo("GSA2", "@article{Rashedi20092232," +
+        ai = new AlgorithmInfo("GSA2", "Matlab GSA2",
+                "@article{Rashedi20092232," +
                 "title = \"GSA: A Gravitational Search Algorithm \"," +
                 "journal = \"Information Sciences \"," +
                 "volume = \"179\"," +
@@ -64,14 +63,14 @@ public class GSA extends Algorithm {
                 "issn = \"0020-0255\"," +
                 "doi = \"http://dx.doi.org/10.1016/j.ins.2009.03.004\"," +
                 "url = \"http://www.sciencedirect.com/science/article/pii/S0020025509001200\"," +
-                "author = \"Esmat Rashedi and Hossein Nezamabadi-pour and Saeid Saryazdi\"}",
-                "GSA2", "Matlab GSA2");  //EARS add algorithm name
+                "author = \"Esmat Rashedi and Hossein Nezamabadi-pour and Saeid Saryazdi\"}"
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
         ai.addParameter(EnumAlgorithmParameters.UNNAMED1, final_per + "");
         ai.addParameter(EnumAlgorithmParameters.UNNAMED2, RPower + "");
         ai.addParameter(EnumAlgorithmParameters.UNNAMED3, alfa + "");
         ai.addParameter(EnumAlgorithmParameters.UNNAMED4, G0 + "");
-        au = new Author("Ears implementation by Matej", "matej.crepinsek at um.si"); //EARS author info
+        au = new Author("Matej", "matej.crepinsek@um.si");
     }
 
 

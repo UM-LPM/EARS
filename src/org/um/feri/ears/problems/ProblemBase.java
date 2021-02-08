@@ -48,6 +48,21 @@ public abstract class ProblemBase<Type> {
         return shortName;
     }
 
+    /**
+     * Returns a filename safe string which contains the problem name, dimension, and version
+     * @return filename safe string which contains the problem name, dimension, and version
+     */
+    public String getFileNameString() {
+        String fileName = name.trim().replaceAll("[\\s_]", "-"); // replace all spaces and underscores with hyphen/dash
+        fileName = fileName.replaceAll("[\\\\/:*?\"<>'%&@,.|{}+]", ""); // remove invalid characters
+        fileName += "-"+numberOfDimensions+"D-"+version;
+        return fileName;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }

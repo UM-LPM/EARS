@@ -95,9 +95,9 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 
         au = new Author("miha", "miha.ravber at gamil.com");
         ai = new AlgorithmInfo(
-                "MOEAD_DRA",
-                "\\bibitem{Zhang2009}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock The Performance of a New Version of MOEA/D on CEC09 Unconstrained MOP Test Instances.\n\\newblock \\emph{IEEE Congress on Evolutionary Computation}, 203--208, 2009.\n",
-                "MOEAD_DRA", "Multiobjective Evolutionary Algorithm Based on Decomposition");
+                "MOEAD_DRA", "Multiobjective Evolutionary Algorithm Based on Decomposition",
+                "\\bibitem{Zhang2009}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock The Performance of a New Version of MOEA/D on CEC09 Unconstrained MOP Test Instances.\n\\newblock \\emph{IEEE Congress on Evolutionary Computation}, 203--208, 2009."
+        );
         ai.addParameters(crossover.getOperatorParameters());
         ai.addParameters(mutation.getOperatorParameters());
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");

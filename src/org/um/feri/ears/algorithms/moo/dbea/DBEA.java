@@ -165,9 +165,9 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
         au = new Author("miha", "miha.ravber at gamil.com");
         ai = new AlgorithmInfo(
-                "DBEA",
-                "\\bibitem{Asafuddoula2015}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock A Decomposition-Based Evolutionary Algorithm for Many-Objective Optimization.\n\\newblock \\emph{IEEE Transaction on Evolutionary Computation}, 19(3):445--460, 2015.\n",
-                "DBEA", "Decomposition-Based Evolutionary Algorithm");
+                "DBEA", "Decomposition-Based Evolutionary Algorithm",
+                "\\bibitem{Asafuddoula2015}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock A Decomposition-Based Evolutionary Algorithm for Many-Objective Optimization.\n\\newblock \\emph{IEEE Transaction on Evolutionary Computation}, 19(3):445--460, 2015."
+        );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 
         this.divisionsOuter = divisionsOuter;
@@ -175,17 +175,17 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     }
 
 
-    public DBEA(CrossoverOperator crossover, MutationOperator mutation, int pop_size, int divisionsOuter, int divisionsInner) {
-        this.populationSize = pop_size;
+    public DBEA(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int divisionsOuter, int divisionsInner) {
+        this.populationSize = populationSize;
         this.cross = crossover;
         this.mut = mutation;
 
         au = new Author("miha", "miha.ravber at gamil.com");
         ai = new AlgorithmInfo(
-                "DBEA",
-                "\\bibitem{Asafuddoula2015}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock A Decomposition-Based Evolutionary Algorithm for Many-Objective Optimization.\n\\newblock \\emph{IEEE Transaction on Evolutionary Computation}, 19(3):445--460, 2015.\n",
-                "DBEA", "Decomposition-Based Evolutionary Algorithm");
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
+                "DBEA", "Decomposition-Based Evolutionary Algorithm",
+                "\\bibitem{Asafuddoula2015}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock A Decomposition-Based Evolutionary Algorithm for Many-Objective Optimization.\n\\newblock \\emph{IEEE Transaction on Evolutionary Computation}, 19(3):445--460, 2015."
+        );
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 
         this.divisionsOuter = divisionsOuter;
         this.divisionsInner = divisionsInner;

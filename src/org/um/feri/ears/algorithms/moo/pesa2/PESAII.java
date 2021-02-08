@@ -32,21 +32,17 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 
 
     public PESAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize) {
-        this(crossover, mutation, populationSize, archiveSize, "PESAII");
-    }
-
-    public PESAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize, String name) {
         this.populationSize = populationSize;
         this.archiveSize = archiveSize;
 
         this.cross = crossover;
         this.mut = mutation;
 
-        au = new Author("miha", "miha.ravber at gamil.com");
+        au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo(
-                name,
-                "\\bibitem{corne2001}\nD.W.~Corne,N.R.~Jerram,J.D.~Knowles,M.J.~Oates\n\\newblock PESA-II: Region-based Selection in Evolutionary Multiobjective Optimization.\n\\newblock \\emph{Proceedings of the Genetic and Evolutionary Computation Conference (GECCO-2001)}, 283--290, 2001.\n",
-                name, "Pareto Envelope-Based Selection Algorithm");
+                "PESAII", "Pareto Envelope-Based Selection Algorithm",
+                "\\bibitem{corne2001}\nD.W.~Corne,N.R.~Jerram,J.D.~Knowles,M.J.~Oates\n\\newblock PESA-II: Region-based Selection in Evolutionary Multiobjective Optimization.\n\\newblock \\emph{Proceedings of the Genetic and Evolutionary Computation Conference (GECCO-2001)}, 283--290, 2001."
+        );
         ai.addParameters(crossover.getOperatorParameters());
         ai.addParameters(mutation.getOperatorParameters());
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");

@@ -1,12 +1,8 @@
 package org.um.feri.ears.graphing.data;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.ProblemBase;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -102,7 +98,7 @@ public class RecordedCombination
 	public String toString()
 	{
 		//return algorithm.getAlgorithmInfo().getPublishedAcronym() + "  solving  " + problem.getName();
-		return algorithm.getID()+"{"+algorithm.getAlgorithmInfo().getPublishedAcronym()+ "}" + "  solving  " + problemName;
+		return algorithm.getID()+"{"+algorithm.getAlgorithmInfo().getAcronym()+ "}" + "  solving  " + problemName;
 	}
 	
 	@Override

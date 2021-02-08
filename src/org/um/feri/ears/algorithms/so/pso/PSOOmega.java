@@ -30,13 +30,13 @@ public class PSOOmega extends Algorithm {
         this.phiP = p1;
         this.phiG = p2;
         setDebug(debug);  //EARS prints some debug info
-        ai = new AlgorithmInfo("Wiki", "Wiki Omega", "PSOomega", "Wiki PSOOmega change in formula");  //EARS add algorithm name
+        ai = new AlgorithmInfo("PSOomega", "Particle Swarm Optimization Omega", "");
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
         ai.addParameter(EnumAlgorithmParameters.C1, p1 + "");
         ai.addParameter(EnumAlgorithmParameters.C2, p2 + "");
         ai.addParameter(EnumAlgorithmParameters.UNNAMED1, om + "");
         //ai.addParameter(EnumAlgorithmParameters., F + "");
-        au = new Author("jaz 2", "Srednji M"); //EARS author info
+        au = new Author("Matej", "matej.crepinsek@um.si");
     }
 
     @Override

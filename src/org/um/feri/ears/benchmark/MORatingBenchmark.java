@@ -123,7 +123,7 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 				for (int j=i+1; j<results.size(); j++) {
 					lose = results.get(j);
 					if (resultEqual(win.getBest(), lose.getBest(), qi)) {
-						arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
+						arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getAcronym(), lose.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName(), indicatorName.toString());
 					} else {
 						if (win.getAl()==null) {
 							System.out.println("NULL ID "+win.getClass().getName());
@@ -137,7 +137,7 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 						if (lose.getBest()==null) {
 							System.out.println(lose.getAl().getID()+" NULL");
 						}                     
-						arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getVersionAcronym(), lose.getAl().getAlgorithmInfo().getVersionAcronym(), t.getProblemName(), indicatorName.toString());
+						arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getAcronym(), lose.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName(), indicatorName.toString());
 					}
 
 				}
@@ -210,11 +210,11 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 					allSingleProblemRunResults.add(task, bestByALg, al);
 				}
 				else {
-					System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemName());
+					System.err.println(al.getAlgorithmInfo().getAcronym()+" result "+bestByALg+" is out of intervals! For task:"+task.getProblemName());
 					results.add(new MOAlgorithmEvalResult(null, al, task)); // this can be done parallel - asynchrony
 				}
 			} catch (StopCriterionException e) {
-				System.err.println(al.getAlgorithmInfo().getVersionAcronym()+" StopCriterionException for:"+task+"\n"+e);
+				System.err.println(al.getAlgorithmInfo().getAcronym()+" StopCriterionException for:"+task+"\n"+e);
 				results.add(new MOAlgorithmEvalResult(null, al, task));
 			}
 		}

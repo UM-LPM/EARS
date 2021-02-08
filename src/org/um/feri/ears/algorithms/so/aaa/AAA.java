@@ -32,7 +32,7 @@ public class AAA extends Algorithm {
         this.popSize = popSize;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("AAA",
+        ai = new AlgorithmInfo("AAA", "Artificial Algae Algorithm",
                 "@article{uymaz2015artificial, " +
                         "title={Artificial algae algorithm (AAA) for nonlinear global optimization}, " +
                         "author={Uymaz, Sait Ali and Tezel, Gulay and Yel, Esra}, " +
@@ -40,8 +40,8 @@ public class AAA extends Algorithm {
                         "volume={31}, " +
                         "pages={153--171}, " +
                         "year={2015}, " +
-                        "publisher={Elsevier}}",
-                "AAA", "Artificial Algae Algorithm");
+                        "publisher={Elsevier}}"
+                );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 

@@ -10,19 +10,19 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class DEE007 extends Algorithm {
+public class DEexample extends Algorithm {
     int popSize;
     double CR, F;
     ArrayList<DoubleSolution> pop;
     DoubleSolution best;
 
     //Initialize all agents {\displaystyle \mathbf {x} } \mathbf {x}  with random positions in the search-space.
-    public DEE007(int ps, double CR, double F, String s) {
+    public DEexample(int ps, double CR, double F, String s) {
         popSize = ps;
         this.CR = CR;
         this.F = F;
-        ai = new AlgorithmInfo("", "", s, s);  //EARS add algorithm name
-        au = new Author("E007", "N/A"); //EARS author info
+        ai = new AlgorithmInfo("DE", " Deferential Evolution", "");
+        au = new Author("author name", "author email");
 
     }
 
@@ -73,5 +73,6 @@ public class DEE007 extends Algorithm {
     }
 
     @Override
-    public void resetToDefaultsBeforeNewRun() {}
+    public void resetToDefaultsBeforeNewRun() {
+    }
 }

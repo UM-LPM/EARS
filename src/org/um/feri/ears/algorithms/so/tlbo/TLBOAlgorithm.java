@@ -49,23 +49,16 @@ public class TLBOAlgorithm extends Algorithm {
     public TLBOAlgorithm(int Keep, int popSize) {
         this.Keep = Keep;
         this.popSize = popSize;
-        au = new Author("matej", "matej.crepinsek at um.si");
+        au = new Author("matej", "matej.crepinsek@um.si");
         ai = new AlgorithmInfo(
-                "TLBO",
-                "\\bibitem{Rao2011}\nR.V.~Rao, V.J.~Savsani, D.P.~Vakharia.\n\\newblock Teaching-learning-based optimization: A novel method for constrained mechanical design optimization problems.\n\\newblock \\emph{Computer-Aided Design}, 43(3):303--315, 2011.\n",
-                "TLBO", "Teaching Learning Based Optimization");
+                "TLBO", "Teaching Learning Based Optimization",
+                "\\bibitem{Rao2011}\nR.V.~Rao, V.J.~Savsani, D.P.~Vakharia.\n\\newblock Teaching-learning-based optimization: A novel method for constrained mechanical design optimization problems.\n\\newblock \\emph{Computer-Aided Design}, 43(3):303--315, 2011."
+        );
         ai.addParameter(EnumAlgorithmParameters.ELITE, "" + Keep);
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.um.feri.ears.algorithms.IAlgorithm#run(org.um.feri.ears.problems.
-     * Task)
-     */
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;

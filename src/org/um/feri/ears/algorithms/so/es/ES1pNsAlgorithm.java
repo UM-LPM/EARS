@@ -28,12 +28,12 @@ public class ES1pNsAlgorithm extends Algorithm {
         mem_k = k;
         mem_c = c;
         this.n = n;
-        au = new Author("matej", "matej.crepinsek at um.si");
+        au = new Author("matej", "matej.crepinsek@um.si");
         resetToDefaultsBeforeNewRun();
         ai = new AlgorithmInfo(
-                "ES",
-                "@book{Rechenberg1973,\n author = {Rechenberg, I.}, \n publisher = {Frommann-Holzboog}, \n title = {Evolutionsstrategie: optimierung technischer systeme nach prinzipien der biologischen evolution},\n year = {1973}}",
-                "ES(1+N)", "ES(1+1) 1/5 rule");
+                "ES(1+N)", "ES(1+N)", //ES(1+1) 1/5 rule
+                "@book{Rechenberg1973,\n author = {Rechenberg, I.}, \n publisher = {Frommann-Holzboog}, \n title = {Evolutionsstrategie: optimierung technischer systeme nach prinzipien der biologischen evolution},\n year = {1973}}"
+         );
         ai.addParameter(EnumAlgorithmParameters.K_ITERATIONS, "" + k);
         ai.addParameter(EnumAlgorithmParameters.C_FACTOR, "" + c);
         ai.addParameter(EnumAlgorithmParameters.MU, "" + n);

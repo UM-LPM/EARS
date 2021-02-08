@@ -3,10 +3,10 @@ package org.um.feri.ears.examples;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
-import org.um.feri.ears.algorithms.PlayerAlgorithmExport;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
 
 import java.util.ArrayList;
@@ -58,17 +58,15 @@ public class RunMainBestAlgSettings extends RunMain {
             Algorithm a;
             for (int k = 0; k < allSettings.size(); k++) {
                 a = (Algorithm) allSettings.get(k);
-                a.setAlgorithmTmpInfo(new AlgorithmInfo("" + k, "", "" + k, ""));
+                a.setTempAlgorithmInfo(new AlgorithmInfo("" + k,"" + k, ""));
                 findBestSettings.addAlgorithm(a, new Rating(startRating));
             }
             findBestSettings.run(NUMBER_OF_EVALUATIONS);
             //System.out.println(findBestSettings);
-            ArrayList<PlayerAlgorithmExport> all = findBestSettings.getListAll(); //sorted
+            ArrayList<Player> all = findBestSettings.getListAll(); //sorted
             a = (Algorithm) all.get(0).getAlgorithm();
             System.out.println(a.getID());
-            int ver = Integer.parseInt(a.getAlgorithmInfo().getVersionAcronym());
             a.setAlgorithmInfoFromTmp();
-            a.getAlgorithmInfo().setSelectedParameterCombination(ver);
             a.resetDuration();
             allAlgorithmWithBestSettings.add(a);
             benchMark.clearPlayers();

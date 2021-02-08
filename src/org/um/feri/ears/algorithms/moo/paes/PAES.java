@@ -33,11 +33,11 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         this.archiveSize = populationSize;
         this.mut = mutation;
 
-        au = new Author("miha", "miha.ravber at gamil.com");
+        au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo(
-                "PAES",
-                "\\bibitem{knowles1999}\nJ.~Knowles,D.W.~Corne\n\\newblock The Pareto Archived Evolution Strategy: A New Baseline Algorithm for Pareto Multiobjective Optimisation.\n\\newblock \\emph{Proceedings of the Congress of Evolutionary Computation}, 98--105, 1999.\n",
-                "PAES", "Pareto Archived Evolution Strategy");
+                "PAES", "Pareto Archived Evolution Strategy",
+                "\\bibitem{knowles1999}\nJ.~Knowles,D.W.~Corne\n\\newblock The Pareto Archived Evolution Strategy: A New Baseline Algorithm for Pareto Multiobjective Optimisation.\n\\newblock \\emph{Proceedings of the Congress of Evolutionary Computation}, 98--105, 1999."
+        );
         ai.addParameters(mutation.getOperatorParameters());
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
     }

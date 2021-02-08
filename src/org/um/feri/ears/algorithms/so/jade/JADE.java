@@ -80,12 +80,12 @@ public class JADE extends Algorithm {
             eliteSize = 1;
         setDebug(debug); // EARS prints some debug info
         ai = new AlgorithmInfo(
-                "Jingqiao Zhang, Arthur C. Sanderson",
-                "JADE: Adaptive Differential Evolution With Optional External Archive",
-                "JADE", "JADE"); // EARS add algorithm name
+                "JADE",
+                "Adaptive Differential Evolution With Optional External Archive",
+                "Jingqiao Zhang, Arthur C. Sanderson");
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
         // ai.addParameter(EnumAlgorithmParameters., F + "");
-        au = new Author("Matej", "matej.crepinsek at um.si"); // EARS author
+        au = new Author("Matej", "matej.crepinsek@um.si");
         // info
     }
 
