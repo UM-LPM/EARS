@@ -39,10 +39,10 @@ public abstract class TaskBase<T extends ProblemBase> {
 	protected double bestEval;
 	
 	//protected StringBuilder ancestorSB;
-	protected static List<DoubleSolution> ancestors;
+	protected ArrayList<DoubleSolution> ancestors;
 	protected boolean isAncestorLoggingEnabled = false;
-	protected ArrayList<EvaluationStorage.Evaluation> evaluationHistory = new ArrayList<>();
-	public boolean storeEvaluationHistory = false;
+	protected ArrayList<EvaluationStorage.Evaluation> evaluationHistory;
+	protected boolean isEvaluationHistoryEnabled = false;
 
 	/**
 	 * Has the global optimum been reached.
@@ -125,155 +125,32 @@ public abstract class TaskBase<T extends ProblemBase> {
 	public void enableAncestorLogging()
 	{
 		isAncestorLoggingEnabled = true;
+		if(ancestors == null)
 		ancestors = new ArrayList<DoubleSolution>();
 	}
 
 	public void disableAncestorLogging()
 	{
 		isAncestorLoggingEnabled = false;
-		ancestors.clear();
 	}
 
-	public void saveAncestorLogging4Visualization(String path, Algorithm alg,  int runID) {
-		String algID = alg.getID();
-		algID=algID.replaceAll("_","");
-		algID=algID.replaceAll("\\\\","");
-		algID=algID.replaceAll("/","");
-		String fileName= path+"\\"+algID+"_"+getProblemName()+"_D"+getNumberOfDimensions();
-
-		String pop_size=alg.getAlgorithmInfo().getParameters().get(EnumAlgorithmParameters.POP_SIZE);
-		StringBuffer head= new StringBuffer();
-		if (pop_size==null)  pop_size="1";
-		head.append(alg.getID()).append(";").append(";[\"").append(pop_size).append("\"];").append(runID).append(";"); //X id
-		head.append(getProblemName()).append(";").append(getNumberOfDimensions()).append(";[").append(getMaxEvaluations()).append("];").append("\n");
-
-		try {
-			FileOutputStream fos = new FileOutputStream(fileName+".txt");
-			OutputStreamWriter osw = new OutputStreamWriter(fos);
-			BufferedWriter bw = new BufferedWriter(osw);
-			bw.write(head.toString()); //first line
-			for(int i = 0; i < ancestors.size(); ++i)
-			{
-				List<DoubleSolution> parents = ancestors.get(i).parents;
-				bw.write("{");
-				bw.write(ancestors.get(i).getID()+";"+ancestors.get(i).getGenerationNumber()+";");
-				bw.write("[");
-				if(parents != null)
-				{
-					for(int j = 0; j < parents.size(); ++j)
-					{
-						bw.write(""+parents.get(j).getID());
-						if(j+1 < parents.size())
-							bw.write(",");
-					}
-
-				}
-				bw.write("];0;");
-				bw.write(ancestors.get(i).getID()+";"+ancestors.get(i).getEval()+";"+Arrays.toString(ancestors.get(i).getDoubleVariables()));
-				bw.write("}\n");
-			}
-
-			bw.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void enableEvaluationHistory()
+	{
+		isEvaluationHistoryEnabled = true;
+		if(evaluationHistory == null)
+			evaluationHistory = new ArrayList<>();
 	}
 
-	public void saveAncestorLogging(String fileName) {
-		
-		try {
-			FileOutputStream fos = new FileOutputStream(fileName+".csv");
-			OutputStreamWriter osw = new OutputStreamWriter(fos);
-			BufferedWriter bw = new BufferedWriter(osw);
-			
-			for(int i = 0; i < ancestors.size(); ++i)
-			{
-				List<DoubleSolution> parents = ancestors.get(i).parents;
-				bw.write(ancestors.get(i).getID()+";"+ancestors.get(i).getEval()+";"+Arrays.toString(ancestors.get(i).getDoubleVariables())+";");
-				if(parents != null)
-				{
-					bw.write("[");
-					for(int j = 0; j < parents.size(); ++j)
-					{
-						bw.write(""+parents.get(j).getID());
-						if(j+1 < parents.size())
-							bw.write(",");
-					}
-					bw.write("]");
-					
-				}
-				bw.write("\n");
-			}
-			
-			bw.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void saveGraphingFile(String fileName, Algorithm alg) {
-		
-		try {
-			FileOutputStream fos = new FileOutputStream(fileName+".txt");
-			OutputStreamWriter osw = new OutputStreamWriter(fos);
-			BufferedWriter bw = new BufferedWriter(osw);
-			
-			AlgorithmInfo info = alg.getAlgorithmInfo();
-			Map<EnumAlgorithmParameters, String> algParams = info.getParameters();
-
-			StringBuffer sb = new StringBuffer();
-			for (EnumAlgorithmParameters t:algParams.keySet()) {
-				sb.append("\""+algParams.get(t)+"\",");
-			}
-			String algorithmParams = sb.toString();
-			algorithmParams = algorithmParams.substring(0, algorithmParams.length()-1);
-		    
-			bw.write("'"+alg.getID()+";["+algorithmParams+"];"+getProblemName()+";"+getNumberOfDimensions()+";[\""+ stopCriterion +"\"];'+\n");
-			
-			for(int i = 0; i < ancestors.size(); ++i)
-			{
-				List<DoubleSolution> parents = ancestors.get(i).parents;
-				
-				bw.write("'{"+ancestors.get(i).getID()+";"+ancestors.get(i).getGenerationNumber()+";");
-				
-				if(parents != null)
-				{
-					bw.write("[");
-					for(int j = 0; j < parents.size(); ++j)
-					{
-						bw.write(""+parents.get(j).getID());
-						if(j+1 < parents.size())
-							bw.write(",");
-					}
-					bw.write("];");
-					
-				}
-				else
-				{
-					bw.write("[-1,-1];");
-				}
-
-				bw.write(ancestors.get(i).getTimeStamp()+";"+ancestors.get(i).getEvaluationNumber()+";"+ancestors.get(i).getEval()+";"+Arrays.toString(ancestors.get(i).getDoubleVariables())+"}'");
-				
-				if(i+1 < ancestors.size()){
-					bw.write("+\n");
-				}
-				else{
-					bw.write(";");
-				}
-			}
-			
-			bw.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void disableEvaluationHistory()
+	{
+		isEvaluationHistoryEnabled = false;
 	}
 
 	public ArrayList<EvaluationStorage.Evaluation> getEvaluationHistory() {
 		return evaluationHistory;
+	}
+	public ArrayList<DoubleSolution> getAncestors() {
+		return ancestors;
 	}
 
 	/**

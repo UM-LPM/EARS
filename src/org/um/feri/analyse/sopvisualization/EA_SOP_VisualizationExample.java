@@ -39,7 +39,7 @@ public class EA_SOP_VisualizationExample {
         try {
             best = alg.execute(task);
             System.out.println("Best found solution :" + best); // print the best solution found after 10000 evaluations
-            task.saveAncestorLogging4Visualization(PATH, alg, 1);
+            AncestorUtil.saveAncestorLogging4Visualization(PATH, task, alg, 1);
         } catch (StopCriterionException e) {
             e.printStackTrace();
         }

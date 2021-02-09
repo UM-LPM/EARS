@@ -253,7 +253,7 @@ public class Task extends TaskBase<Problem> {
         evaluationTime += System.nanoTime() - start;
         checkIfGlobalReached(tmpSolution.getEval());
         GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-        if(storeEvaluationHistory)
+        if(isEvaluationHistoryEnabled)
             evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTime, tmpSolution.getEval()));
         return tmpSolution;
     }
@@ -279,7 +279,6 @@ public class Task extends TaskBase<Problem> {
     }
 
     public static void resetLoggingID() {
-        ancestors.clear();
         SolutionBase.resetLoggingID();
     }
 }
