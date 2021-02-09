@@ -49,7 +49,6 @@ public class AncestorUtil {
                         if (j + 1 < parents.size())
                             bw.write(",");
                     }
-
                 }
                 bw.write("];0;");
                 bw.write(ancestor.getID() + ";" + ancestor.getEval() + ";" + Arrays.toString(ancestor.getDoubleVariables()));

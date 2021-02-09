@@ -161,7 +161,7 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
 
         		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getAcronym()+": "+res.algorithm.getLastRunDuration());
         		//reset(task); //for one eval!
-        		if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
+        		if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasibleInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
         			results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
         			allSingleProblemRunResults.add(task, res.result, res.algorithm);

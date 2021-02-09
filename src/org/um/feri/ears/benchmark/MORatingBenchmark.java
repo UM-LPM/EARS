@@ -204,7 +204,7 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 				al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
 
 				reset(task); //for one eval!
-				if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasableInterval(bestByALg)) || MOAlgorithm.getCaching() != Cache.NONE) {
+				if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasibleInterval(bestByALg)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
 					results.add(new MOAlgorithmEvalResult(bestByALg, al, task));
 					allSingleProblemRunResults.add(task, bestByALg, al);

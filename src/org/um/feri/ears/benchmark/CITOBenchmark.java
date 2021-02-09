@@ -136,7 +136,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
 
         		if (printSingleRunDuration) System.out.println("Total execution time for "+ res.algorithm.getAlgorithmInfo().getAcronym()+": "+res.algorithm.getLastRunDuration());
         		//reset(task); //for one eval!
-        		if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasableInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
+        		if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasibleInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
         			results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
         			allSingleProblemRunResults.add(task, res.result, res.algorithm);

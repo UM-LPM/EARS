@@ -43,44 +43,74 @@ public class Task extends TaskBase<Problem> {
     }
 
     /**
-     * Works only for basic interval setting!
-     * Sets interval!
-     * for example -40<x_i<40 <p>
-     * if x_i <-40 -> -40 same for 40!
+     * Checks if the given value is inside the lower and upper bounds of the given dimension. If the value is outside the
+     * lower bound or upper bound then the lower or upper bound is returned. If the value is inside the bounds then the
+     * unchanged value is returned.
      *
-     * @param d value
-     * @param i index of dimension
-     * @return
+     * @param value to be set feasible
+     * @param d dimension index
+     * @return feasible value
      */
-    public double setFeasible(double d, int i) {
-        return p.setFeasible(d, i);
+    public double setFeasible(double value, int d) {
+        return p.setFeasible(value, d);
     }
 
-    public double[] setFeasible(double[] d) {
-        return p.setFeasible(d);
+    /**
+     * Checks if all the values in the array are inside the lower and upper bounds. If any value is outside the
+     * lower bound or upper bound then it is set to lower or upper bound.
+     *
+     * @param x array to be set feasible
+     * @return array with feasible values
+     */
+    public double[] setFeasible(double[] x) {
+        return p.setFeasible(x);
     }
 
-    public void setFeasible(DoubleSolution sol) {
-        sol.variable = p.setFeasible(sol.variable);
+    /**
+     * Checks if all the values in the solution are inside the lower and upper bounds. If any value is outside the
+     * lower bound or upper bound then it is set to lower or upper bound.
+     *
+     * @param solution to be set feasible
+     */
+    public void setFeasible(DoubleSolution solution) {
+        solution.variable = p.setFeasible(solution.variable);
     }
 
+    /**
+     * Checks if the provided value is inside the upper and lower bounds
+     *
+     * @param x value to be checked
+     * @return true if the value is inside the upper and lower bounds, false otherwise
+     */
     public boolean isFeasible(double x, int d) {
         return p.isFeasible(x, d);
     }
 
+    /**
+     * Checks if the provided solution is inside the interval given by the upper and lower bounds
+     *
+     * @param solution to be checked
+     * @return true if all the values in the solution are inside upper and lower bounds, false otherwise
+     */
     public boolean isFeasible(DoubleSolution solution) {
         return p.isFeasible(solution.getVariables());
     }
 
-    public boolean isFeasible(double[] solution) {
-        return p.isFeasible(solution);
+    /**
+     * Checks if the provided array is inside the interval given by the upper and lower bounds
+     *
+     * @param x array to be checked
+     * @return true if all the values in the array are inside upper and lower bounds, false otherwise
+     */
+    public boolean isFeasible(double[] x) {
+        return p.isFeasible(x);
     }
 
     /**
-     * Checks if the provided vector is inside the interval given by the upper and lower limits
+     * Checks if the provided vector is inside the interval given by the upper and lower bounds
      *
      * @param x vector to be checked
-     * @return true if the vector is inside interval, false otherwise
+     * @return true if all the values in the vector are inside upper and lower bounds, false otherwise
      */
     public boolean isFeasible(List<Double> x) {
         return p.isFeasible(x);
@@ -141,7 +171,7 @@ public class Task extends TaskBase<Problem> {
      * Better use method eval returns Individual with calculated fitness and constrains
      *
      * @param ds real vector to be evaluated (just calc constraints)
-     * @return
+     * @return evaluated constrains
      * @deprecated
      */
     public double[] evaluateConstrains(List<Double> ds) {
@@ -175,9 +205,8 @@ public class Task extends TaskBase<Problem> {
     }
 
     /**
-     *
-     * @param solution
-     * @return
+     *  Evaluates the given solution
+     * @param solution to be evaluated
      * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
      * To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
      */
@@ -220,7 +249,7 @@ public class Task extends TaskBase<Problem> {
             tmpSolution = performEvaluation(x);
         } else if (stopCriterion == EnumStopCriterion.CPU_TIME) {
             if (!isStop) {
-                hasTheCPUTimeBeenExceeded(); // if CPU time is exceed allow last eval
+                hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
                 tmpSolution = performEvaluation(x);
             } else {
                 throw new StopCriterionException("CPU Time");

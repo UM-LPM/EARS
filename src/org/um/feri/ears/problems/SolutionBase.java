@@ -81,15 +81,6 @@ public abstract class SolutionBase<Type> {
 
     public void setVariables(List<Type> var) {
         this.variable = var;
-		/*if(var.length != variable.size())
-		{
-			System.err.println("Varible size must match!");
-			return;
-		}
-		for (int i = 0; i < var.length; i++) {
-			setValue(i, var[i]);
-		}*/
-
     }
 
     public Type getValue(int i) {
