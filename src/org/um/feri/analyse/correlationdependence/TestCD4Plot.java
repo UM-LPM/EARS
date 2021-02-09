@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.um.feri.analyse.util.Util;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.unconstrained.cec2014.F1;
 import org.um.feri.ears.problems.unconstrained.cec2014.F10;
@@ -24,6 +23,7 @@ import org.um.feri.ears.problems.unconstrained.cec2014.F6;
 import org.um.feri.ears.problems.unconstrained.cec2014.F7;
 import org.um.feri.ears.problems.unconstrained.cec2014.F8;
 import org.um.feri.ears.problems.unconstrained.cec2014.F9;
+import org.um.feri.ears.util.Util;
 
 public class TestCD4Plot {
 	private static final String out_dir = "D:/Doktorat/OutPutEars/CF/cec2014/";
@@ -62,7 +62,7 @@ public class TestCD4Plot {
 			System.err.println("Error: " + e.getMessage());
 		}
 
-		System.out.println("Problem "+label+" CD="+Util.df3.format(cd.r_xy) + " Area="+cdMap.get(cd.r_xy));
+		System.out.println("Problem "+label+" CD="+ Util.df3.format(cd.r_xy) + " Area="+cdMap.get(cd.r_xy));
 	}
 	public static void latexInclude(int dim) {
 		try {

@@ -1,9 +1,8 @@
 package org.um.feri.analyse.correlationdependence;
 import java.util.ArrayList;
-import java.util.Random;
 
-import org.um.feri.analyse.util.MersenneTwister;
 import org.um.feri.ears.problems.*;
+import org.um.feri.ears.util.Util;
 
 public class CorrelationAndDependence {
 	// http://en.wikipedia.org/wiki/Correlation_and_dependence
@@ -18,8 +17,10 @@ public class CorrelationAndDependence {
 	double max_x;
 	double min_y;
 	double max_y;
-	
-	public static Random rnd = new MersenneTwister(randomseed );
+
+
+
+	//public static Random rnd = new MersenneTwister(randomseed );
 	private static double minEuclidianDistance(double x_i[][], Double x_j[]) {
 
 		double r=euclidianDistance(x_i[0], x_j);
@@ -71,7 +72,7 @@ public class CorrelationAndDependence {
 			//create random
 			for (int j = 0; j < dim; j++) {
 				Double tmp;
-				tmp = problem.lowerLimit.get(j) + rnd.nextDouble()
+				tmp = problem.lowerLimit.get(j) + Util.rnd.nextDouble()
 						* problem.upperLimit.get(j);
 				ind[j]=tmp;
 			}
