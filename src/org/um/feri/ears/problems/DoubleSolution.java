@@ -14,9 +14,6 @@ public class DoubleSolution extends SolutionBase<Double> {
     public DoubleSolution(DoubleSolution s) {
         super(s);
 
-        //upperLimit = new ArrayList<Double>(s.upperLimit);
-        //lowerLimit = new ArrayList<Double>(s.lowerLimit);
-
         eval = s.eval;
         parents = new ArrayList<DoubleSolution>();
     }
@@ -45,20 +42,15 @@ public class DoubleSolution extends SolutionBase<Double> {
      * @param x
      * @param eval
      * @param constrains
-     * @param upperLimit
-     * @param lowerLimit
      */
-    public DoubleSolution(List<Double> x, double eval, double[] constrains, List<Double> upperLimit, List<Double> lowerLimit) {
+    public DoubleSolution(List<Double> x, double eval, double[] constrains) {
         variable = new ArrayList<Double>(x);
-
-        upperLimit = new ArrayList<Double>(upperLimit);
-        lowerLimit = new ArrayList<Double>(lowerLimit);
         checkConstraints(constrains);
         this.eval = eval;
     }
 
-    public DoubleSolution(double[] ds, double eval, double[] constrains, List<Double> upperLimit, List<Double> lowerLimit) {
-        this(Arrays.asList(ArrayUtils.toObject(ds)), eval, constrains, upperLimit, lowerLimit);
+    public DoubleSolution(double[] ds, double eval, double[] constrains) {
+        this(Arrays.asList(ArrayUtils.toObject(ds)), eval, constrains);
     }
 
     private void checkConstraints(double[] constrains) {

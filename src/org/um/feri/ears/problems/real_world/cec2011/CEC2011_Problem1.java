@@ -68,7 +68,7 @@ public class CEC2011_Problem1 extends Problem {
 		for (int j = 0; j < numberOfDimensions; j++) {
 			var.add(Util.nextDouble(0, 6.35));
 		}
-		DoubleSolution sol = new DoubleSolution(var, eval(var), evaluateConstrains(var), upperLimit, lowerLimit);
+		DoubleSolution sol = new DoubleSolution(var, eval(var), evaluateConstrains(var));
 		return sol;
 	}
 }

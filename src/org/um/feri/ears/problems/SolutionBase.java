@@ -10,8 +10,6 @@ public abstract class SolutionBase<Type> {
     protected boolean constraintsMet = true; //checks if constrains are met
     protected double overallConstraintViolation;
     protected int numberOfViolatedConstraints;
-    protected List<Type> upperLimit;
-    protected List<Type> lowerLimit;
     protected long ID;
 
     //Properties for exploration and exploitation, and saving to file
@@ -85,14 +83,6 @@ public abstract class SolutionBase<Type> {
 
     public Type getValue(int i) {
         return variable.get(i);
-    }
-
-    public List<Type> getUpperLimit() {
-        return upperLimit;
-    }
-
-    public List<Type> getLowerLimit() {
-        return lowerLimit;
     }
 
     /**

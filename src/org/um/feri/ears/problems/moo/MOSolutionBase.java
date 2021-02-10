@@ -42,9 +42,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 		super(s);
 		crowdingDistance = s.getCrowdingDistance();
 		eval = new double[s.eval.length];
-		upperLimit = new ArrayList<Type>(s.upperLimit);
-		lowerLimit = new ArrayList<Type>(s.lowerLimit);
-		
+
 	    System.arraycopy(s.eval, 0, eval, 0, eval.length);
 		this.fitness = s.fitness;
 		this.rank = s.rank;
@@ -60,11 +58,6 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 	
 	
 	public MOSolutionBase(List<Type> var, double[] eval, List<Type> upperLimit, List<Type> lowerLimit) {
-
-		this.upperLimit = upperLimit;
-		this.lowerLimit = lowerLimit;
-		
-		
 		variable = new ArrayList<Type>(var);
 		
 		//System.arraycopy(var, 0, variable, 0, var.length);
@@ -85,7 +78,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 	/**
 	 * !!!This constructor is for unconstrained optimization!
 	 * 
-	 * @param x
+	 * @param var
 	 * @param eval
 	 */
 	public MOSolutionBase(Type[] var, double[] eval) {

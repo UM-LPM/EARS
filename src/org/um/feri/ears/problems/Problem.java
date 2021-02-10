@@ -247,7 +247,7 @@ public abstract class Problem extends ProblemBase<Double> {
      */
     public DoubleSolution getRandomEvaluatedSolution() {
         List<Double> var = Arrays.asList(ArrayUtils.toObject(getRandomVariables()));
-        return new DoubleSolution(var, eval(var), evaluateConstrains(var), upperLimit, lowerLimit);
+        return new DoubleSolution(var, eval(var), evaluateConstrains(var));
     }
 
     /**

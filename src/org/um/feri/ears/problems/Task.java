@@ -278,7 +278,7 @@ public class Task extends TaskBase<Problem> {
     private DoubleSolution performEvaluation(double[] x) throws StopCriterionException {
         incrementNumberOfEvaluations();
         long start = System.nanoTime();
-        DoubleSolution tmpSolution = new DoubleSolution(x, p.eval(x), p.evaluateConstrains(x), p.upperLimit, p.lowerLimit);
+        DoubleSolution tmpSolution = new DoubleSolution(x, p.eval(x), p.evaluateConstrains(x));
         evaluationTime += System.nanoTime() - start;
         checkIfGlobalReached(tmpSolution.getEval());
         GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
