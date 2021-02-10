@@ -89,7 +89,6 @@ public class RunMain {
         RatingBenchmark.debugPrint = printDebug; // prints one on one results
         RatingBenchmark.printSingleRunDuration = printSingleRunDuration;
         benchMark.run(ra, allSingleProblemRunResults, repeat);
-        ra.calculteRatings();
         listAll.sort(new RatingComparator());
         long endTime = System.currentTimeMillis();
         duration = endTime - stTime;

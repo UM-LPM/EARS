@@ -631,7 +631,7 @@ public class ExecuteTournamentsTest {
 		}
 
 		for (DummyAlgorithm al:players) {
-			ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+			ra.addPlayer(al, al.getID());
 			dr.registerAlgorithm(al);
 		}
 		BankOfResults ba = new BankOfResults();
@@ -639,8 +639,7 @@ public class ExecuteTournamentsTest {
 		dr.run(ra, ba, numberOfRuns); //repeat competition 50X
 		long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
 		logger.log(Level.INFO,"Total execution time: "+estimatedTime + "s");
-		ArrayList<Player> list = new ArrayList<Player>();
-		list.addAll(ra.calculteRatings()); //new ranks
+		ArrayList<Player> list = ra.getPlayers();
 		String results = ra.getPlayersJson();
 		StringBuilder sb = new StringBuilder();
 		for (Player p: list) {

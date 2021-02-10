@@ -187,8 +187,7 @@ public class CRSTuning {
         while (i<max_execs){
         	benchMark.run(ra,allSingleProblemRunResults, repeat);
         	benchMark.allPlayed();
-        	ra.calculteRatings();
-        	Collections.sort(listAll, new RatingComparator());
+        	listAll.sort(new RatingComparator());
         	// Remove significantly worse algorithms
 	    	for (int j=1;j<listAll.size();j++){
 	    		double difference = Math.abs(Math.round(listAll.get(0).getRatingData().getRating() - listAll.get(j).getRatingData().getRating()));

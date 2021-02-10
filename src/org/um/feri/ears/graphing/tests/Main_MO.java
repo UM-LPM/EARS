@@ -45,13 +45,12 @@ public class Main_MO
         
         RatingCEC2009 cec = new RatingCEC2009(indicators, 0.0000001); //Create banchmark
         for (MOAlgorithm al:players) {
-          ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+          ra.addPlayer(al, al.getID()); //init rating 1500
           cec.registerAlgorithm(al);
         }
         BankOfResults ba = new BankOfResults();
         cec.run(ra, ba, 5); //repeat competition 50X
-        ArrayList<Player> list = new ArrayList<Player>();
-        list.addAll(ra.calculteRatings()); //new rangs
+        ArrayList<Player> list = ra.getPlayers();
         for (Player p: list) System.out.println(p); //print rangs
         
         

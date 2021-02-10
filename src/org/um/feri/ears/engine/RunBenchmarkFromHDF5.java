@@ -77,7 +77,7 @@ public class RunBenchmarkFromHDF5 {
 		ResultArena ra = new ResultArena(100);
 		
         for (DummyAlgorithm al:players) {
-        	ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+        	ra.addPlayer(al, al.getID());
         	dr.registerAlgorithm(al);
         }
         
@@ -86,8 +86,7 @@ public class RunBenchmarkFromHDF5 {
         dr.run(ra, ba, numberOfSolutions); //repeat competition 50X
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         System.out.println("Benchmark execution time: "+estimatedTime + "s");
-        ArrayList<Player> list = new ArrayList<Player>();
-        list.addAll(ra.calculteRatings()); //new ranks
+        ArrayList<Player> list = ra.getPlayers();
         
         String[] algorithms = new String[list.size()];
         double[] ratings = new double[list.size()];

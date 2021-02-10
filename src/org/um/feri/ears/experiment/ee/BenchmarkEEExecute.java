@@ -37,14 +37,13 @@ public class BenchmarkEEExecute {
     	BenchmarkEE suopm = new BenchmarkEE(); //Create banchmark
     	//RatingCEC2015 suopm = new RatingCEC2015();
     	for (Algorithm al:players) {
-    		ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+    		ra.addPlayer(al, al.getID());
     		suopm.registerAlgorithm(al);
     	}
     	BankOfResults ba = new BankOfResults();
-    	suopm.run(ra, ba, 5); //repeat competition 50X
-    	ArrayList<Player> list = new ArrayList<Player>();
-    	list.addAll(ra.calculteRatings()); //new rangs
-    	for (Player p: list) System.out.println(p); //print rangs
+    	suopm.run(ra, ba, 5);
+    	ArrayList<Player> list = ra.getPlayers();
+    	for (Player p: list) System.out.println(p);
  
     }
 }

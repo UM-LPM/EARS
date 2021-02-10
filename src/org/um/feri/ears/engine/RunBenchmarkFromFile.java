@@ -97,7 +97,7 @@ public class RunBenchmarkFromFile {
        
         
         for (DummyAlgorithm al:players) {
-        	ra.addPlayer(al, al.getID(), 1500, 350, 0.06,0,0,0); //init rating 1500
+        	ra.addPlayer(al, al.getID());
         	dr.registerAlgorithm(al);
         }
         BankOfResults ba = new BankOfResults();
@@ -105,8 +105,7 @@ public class RunBenchmarkFromFile {
         dr.run(ra, ba, 100); //repeat competition 50X
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         System.out.println("Benchmark execution time: "+estimatedTime + "s");
-        ArrayList<Player> list = new ArrayList<Player>();
-        list.addAll(ra.calculteRatings()); //new ranks
+        ArrayList<Player> list = ra.getPlayers();
         StringBuilder sb = new StringBuilder();
         for (Player p: list) {
         	System.out.println(p); //print ranks
