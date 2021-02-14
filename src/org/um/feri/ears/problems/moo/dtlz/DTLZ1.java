@@ -22,7 +22,6 @@ package org.um.feri.ears.problems.moo.dtlz;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 
@@ -36,7 +35,7 @@ public class DTLZ1 extends DTLZ{
 	     
 		super(numberOfVariables,0,numberOfObjectives);
 
-		file_name = "DTLZ1."+numberOfObjectives+"D";
+		fileName = "DTLZ1."+numberOfObjectives+"D";
 		name = "DTLZ1";
 		
 

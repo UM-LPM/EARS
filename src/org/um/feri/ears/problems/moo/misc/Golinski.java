@@ -22,7 +22,6 @@ package org.um.feri.ears.problems.moo.misc;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.Golinski_F1;
@@ -38,7 +37,7 @@ public class Golinski extends DoubleMOProblem {
 	     
 		super(7,11,2);
 
-		file_name = "Golinski";
+		fileName = "Golinski";
 		name = "Golinski";
 
 	    upperLimit = new ArrayList<Double>(numberOfDimensions);

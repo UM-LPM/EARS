@@ -1,13 +1,10 @@
 package org.um.feri.ears.problems.moo.real_world;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.um.feri.ears.problems.moo.IntegerMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.problems.moo.functions.UP1_F2_1;
-import org.um.feri.ears.problems.moo.functions.UP1_F2_2;
 
 public class CITOProblem extends IntegerMOProblem{
 
@@ -49,7 +46,7 @@ public class CITOProblem extends IntegerMOProblem{
 		this.methodParamTypeMatrix = problemReader.getMethodParamTypeMatrix();
 		this.methodReturnTypeMatrix = problemReader.getMethodReturnTypeMatrix();
 
-		file_name = "CITO_"+problemReader.getSoftwareName();
+		fileName = "CITO_"+problemReader.getSoftwareName();
 		name = "CITO_"+problemReader.getSoftwareName();
 		
 		upperLimit = new ArrayList<Integer>(numberOfDimensions);

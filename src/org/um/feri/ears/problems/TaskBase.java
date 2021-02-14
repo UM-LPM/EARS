@@ -3,7 +3,7 @@ package org.um.feri.ears.problems;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public abstract class TaskBase<T extends ProblemBase> {
+public abstract class TaskBase<T extends ProblemBase<?>> {
 
     protected EnumStopCriterion stopCriterion;
     protected int maxEvaluations; // for Stop criterion

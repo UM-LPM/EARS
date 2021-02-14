@@ -57,7 +57,7 @@ public class WFG4 extends WFG {
 	public WFG4(int k, int l, int m) {
 		super(k, l, m);
 
-		file_name = "WFG4."+m+"D";
+		fileName = "WFG4."+m+"D";
 		name = "WFG4";
 
 		s = new int[m];

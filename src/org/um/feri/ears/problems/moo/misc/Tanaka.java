@@ -22,7 +22,6 @@ package org.um.feri.ears.problems.moo.misc;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.Tanaka_F1;
@@ -34,7 +33,7 @@ public class Tanaka extends DoubleMOProblem{
 	     
 		super(2,2,2);
 
-		file_name = "Tanaka";
+		fileName = "Tanaka";
 		name = "Tanaka";
 
 	    upperLimit = new ArrayList<Double>(numberOfDimensions);

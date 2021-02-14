@@ -3,8 +3,6 @@ package org.um.feri.ears.problems.unconstrained.cec2005;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 public class F01 extends CEC2005Base {
 
 	// Fixed (class) parameters
@@ -41,7 +39,7 @@ public class F01 extends CEC2005Base {
 
 		result = sphere(m_z);
 
-		result += m_biases[func_num-1];
+		result += m_biases[funcNum -1];
 
 		return result;
 	}

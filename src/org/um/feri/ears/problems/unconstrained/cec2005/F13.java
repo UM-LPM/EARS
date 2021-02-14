@@ -3,49 +3,47 @@ package org.um.feri.ears.problems.unconstrained.cec2005;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 public class F13 extends CEC2005Base {
 
-	static final public String DEFAULT_FILE_DATA = "EF8F2_func_data.txt";
+    static final public String DEFAULT_FILE_DATA = "EF8F2_func_data.txt";
 
-	// In order to avoid excessive memory allocation,
-	// a fixed memory buffer is allocated for each function object.
-	private double[] m_z;
+    // In order to avoid excessive memory allocation,
+    // a fixed memory buffer is allocated for each function object.
+    private double[] m_z;
 
-	public F13(int d) {
-		super(d,13);
+    public F13(int d) {
+        super(d, 13);
 
-		name = "Shifted Expanded Griewank's plus Rosenbrock's Function";
+        name = "Shifted Expanded Griewank's plus Rosenbrock's Function";
 
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -3.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.0));
+        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -3.0));
+        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.0));
 
-		m_o = new double[d];
-		m_z = new double[d];
+        m_o = new double[d];
+        m_z = new double[d];
 
-		// Load the shifted global optimum
-		loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
+        // Load the shifted global optimum
+        loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
 
-		// z = x - o + 1 = x - (o - 1)
-		// Do the "(o - 1)" part first
-		for (int i = 0 ; i < d ; i ++) {
-			m_o[i] -= 1.0;
-		}
-		optimum[0] = m_o;
-	}
+        // z = x - o + 1 = x - (o - 1)
+        // Do the "(o - 1)" part first
+        for (int i = 0; i < d; i++) {
+            m_o[i] -= 1.0;
+        }
+        optimum[0] = m_o;
+    }
 
-	@Override
-	public double eval(double[] x) {
-		double result = 0.0;
+    @Override
+    public double eval(double[] x) {
+        double result = 0.0;
 
-		shift(m_z, x, m_o);
+        shift(m_z, x, m_o);
 
-		result = F8F2(m_z);
+        result = F8F2(m_z);
 
-		result += m_biases[func_num-1];
+        result += m_biases[funcNum - 1];
 
-		return result;
-	}
+        return result;
+    }
 
 }

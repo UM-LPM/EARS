@@ -3,7 +3,6 @@ package org.um.feri.ears.problems.unconstrained.cec2005;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.util.Util;
 
 public class F04 extends CEC2005Base {
@@ -43,7 +42,7 @@ public class F04 extends CEC2005Base {
 		// Comment the next line to remove the noise
 		result *= (1.0 + 0.4 * Math.abs(Util.rnd.nextGaussian()));
 
-		result += m_biases[func_num-1];
+		result += m_biases[funcNum -1];
 
 		return result;
 	}

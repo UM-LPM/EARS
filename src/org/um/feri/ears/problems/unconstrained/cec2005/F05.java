@@ -3,8 +3,6 @@ package org.um.feri.ears.problems.unconstrained.cec2005;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 public class F05 extends CEC2005Base {
 
     static final public String DEFAULT_FILE_DATA = "schwefel_206_data.txt";
@@ -56,8 +54,8 @@ public class F05 extends CEC2005Base {
             }
         }
 
-        if(d == 2)
-            m_B = new double[] {-11700.0,-1500.0};
+        if (d == 2)
+            m_B = new double[]{-11700.0, -1500.0};
         else
             Ax(m_B, m_A, m_o);
 
@@ -77,7 +75,7 @@ public class F05 extends CEC2005Base {
                 max = temp;
         }
 
-        return max + m_biases[func_num - 1];
+        return max + m_biases[funcNum - 1];
     }
 
 }

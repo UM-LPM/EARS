@@ -1,9 +1,7 @@
 package org.um.feri.ears.problems.moo.unconstrained.cec2009;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.UP1_F2_1;
 import org.um.feri.ears.problems.moo.functions.UP1_F2_2;
@@ -20,7 +18,7 @@ public class UnconstrainedProblem1 extends CEC2009 {
 		
 		super(numberOfVariables, 0, 2);
 
-		file_name = "UF1";
+		fileName = "UF1";
 		name = "UF1";
 		
 		upperLimit = new ArrayList<Double>(numberOfDimensions);

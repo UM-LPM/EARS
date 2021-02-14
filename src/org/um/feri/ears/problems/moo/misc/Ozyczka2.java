@@ -22,7 +22,6 @@ package org.um.feri.ears.problems.moo.misc;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.Osyczka2_F1;
@@ -34,7 +33,7 @@ public class Ozyczka2 extends DoubleMOProblem{
 	     
 		super(6,6,2);
 
-		file_name = "Osyczka2";
+		fileName = "Osyczka2";
 		name = "Osyczka2";
 		
 	    upperLimit = new ArrayList<Double>(numberOfDimensions);

@@ -47,7 +47,7 @@ public class BenchmarkRunner {
 		}
 		
 		@ALGORITHM_NAME algorithm = new @ALGORITHM_CONSTRUCTOR;
-		@BENCHMARK_NAME benchmark = new @BENCHMARK_NAME(); // Create banchmark
+		@BENCHMARK_NAME benchmark = new @BENCHMARK_NAME(); // Create benchmark
 		
 		algorithm.addCustomInfo("submissionAuthor", "@SUBMISSION_AUTHOR");
 		algorithm.addCustomInfo("submissionId", "@SUBMISSION_ID");

@@ -1,8 +1,5 @@
 package org.um.feri.ears.problems.unconstrained.cec2010;
 
-import java.util.List;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
@@ -54,10 +51,9 @@ public class F9 extends CEC2010{
 			s1 = getPermutatedIndices(OShift,P,from,to-from);
 			F += Functions.ellips_func(p1, to-from, s1, M, 1, 1);
 		}
-		
+
 		F += Functions.sphere_func(p2, numberOfDimensions - from2, s2, M, 1, 0);
 		
 		return F;
 	}
-
 }

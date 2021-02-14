@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 import javax.management.JMException;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.Binh2_F1;
@@ -57,7 +56,7 @@ public class Binh2 extends DoubleMOProblem{
      
 		super(2,2,2);
 
-		file_name = "Binh2";
+		fileName = "Binh2";
 		name = "Binh2";
 	  
 	    upperLimit = new ArrayList<Double>(numberOfDimensions);
