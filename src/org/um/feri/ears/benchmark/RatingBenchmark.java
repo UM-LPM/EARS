@@ -1,7 +1,6 @@
 package org.um.feri.ears.benchmark;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 
@@ -15,10 +14,23 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Game;
 import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.util.Comparator.AlgorithmResultComparator;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 
-public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorithm, AlgorithmEvalResult> {
+public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, DoubleSolution, Algorithm> {
+
+    protected abstract void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon);
+
+    @Override
+    public void registerAlgorithm(Algorithm al) {
+        listOfAlgorithmsPlayers.add(al);
+    }
+
+    @Override
+    public void registerAlgorithms(ArrayList<Algorithm> algorithms) {
+        listOfAlgorithmsPlayers.addAll(algorithms);
+    }
 
     /**
      * @param task
@@ -42,103 +54,61 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
                 reset(task); // for one eval!
                 if (task.isFeasible(bestByALg.getVariables())) {
 
-                    results.add(new AlgorithmEvalResult(bestByALg, al, task.getNumberOfEvaluations()));
+                    results.add(new AlgorithmRunResult(bestByALg, al, task));
                     allSingleProblemRunResults.add(task, bestByALg, al);
 
                 } else {
                     System.err.println(al.getAlgorithmInfo().getAcronym() + " result " + bestByALg
                             + " is out of intervals! For task:" + task.getProblemName());
-                    results.add(new AlgorithmEvalResult(null, al, task.getNumberOfEvaluations())); // this can be done parallel - asynchrony
+                    results.add(new AlgorithmRunResult(null, al, task)); // this can be done parallel - asynchrony
                 }
             } catch (StopCriterionException e) {
                 System.err.println(
                         al.getAlgorithmInfo().getAcronym() + " StopCriterionException for:" + task + "\n" + e);
-                results.add(new AlgorithmEvalResult(null, al, task.getNumberOfEvaluations()));
+                results.add(new AlgorithmRunResult(null, al, task));
             }
         }
     }
 
-    @Override
-    public void registerAlgorithm(Algorithm al) {
-        listOfAlgorithmsPlayers.add(al);
-    }
-
-    @Override
-    public void registerAlgorithms(ArrayList<Algorithm> algorithms) {
-        listOfAlgorithmsPlayers.addAll(algorithms);
-
-    }
-
-    class FitnessComparator implements Comparator<AlgorithmEvalResult> {
-        Task t;
-
-        public FitnessComparator(Task t) {
-            this.t = t;
-        }
-
-        @Override
-        public int compare(AlgorithmEvalResult arg0, AlgorithmEvalResult arg1) {
-
-            if (arg0.getBest() != null) {
-                if (arg1.getBest() != null) {
-
-                    // first better
-                    if (t.isFirstBetter(arg0.getBest(), arg1.getBest())) {
-                        return -1;
-                    }
-                    // second better
-                    if (t.isFirstBetter(arg1.getBest(), arg0.getBest())) {
-                        return 1;
-                    }
-                } else
-                    return -1; // second is null
-            } else if (arg1.getBest() != null)
-                return 1; // first null
-            return 0; // both null or equal
-        }
-    }
-
     protected void setWinLoseFromResultList(ResultArena arena, Task t) {
-        AlgorithmEvalResult win;
-        AlgorithmEvalResult lose;
-        //TaskComparator tc = new TaskComparator(t);
-        FitnessComparator fc = new FitnessComparator(t);
-        Collections.sort(results, fc); // best first
+        AlgorithmRunResult<DoubleSolution, Algorithm, Task> win;
+        AlgorithmRunResult<DoubleSolution, Algorithm, Task> lose;
+        AlgorithmResultComparator rc = new AlgorithmResultComparator(t);
+        results.sort(rc); // best first
         for (int i = 0; i < results.size() - 1; i++) {
             win = results.get(i);
             for (int j = i + 1; j < results.size(); j++) {
                 lose = results.get(j);
-                if (resultEqual(win.best, lose.best)) { // Special for this
+                if (resultEqual(win.solution, lose.solution)) { // Special for this
                     // benchmark
                     if (debugPrint)
-                        System.out.println("draw of " + win.getAl().getID() + " ("
-                                + Util.df3.format(win.getBest().getEval()) + ", feasable=" + win.getBest().areConstraintsMet()
-                                + ") against " + lose.getAl().getID() + " (" + Util.df3.format(lose.getBest().getEval())
-                                + ", feasable=" + lose.getBest().areConstraintsMet() + ") for " + t.getProblemName());
-                    arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getAcronym(),
-                            lose.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName());
+                        System.out.println("draw of " + win.getAlgorithm().getID() + " ("
+                                + Util.df3.format(win.getSolution().getEval()) + ", feasable=" + win.getSolution().areConstraintsMet()
+                                + ") against " + lose.getAlgorithm().getID() + " (" + Util.df3.format(lose.getSolution().getEval())
+                                + ", feasable=" + lose.getSolution().areConstraintsMet() + ") for " + t.getProblemName());
+                    arena.addGameResult(Game.DRAW, win.getAlgorithm().getAlgorithmInfo().getAcronym(),
+                            lose.getAlgorithm().getAlgorithmInfo().getAcronym(), t.getProblemName());
                 } else {
-                    if (win.getAl() == null) {
+                    if (win.getAlgorithm() == null) {
                         System.out.println("NULL ID " + win.getClass().getName());
                     }
-                    if (win.getBest() == null) {
-                        System.out.println(win.getAl().getID() + " NULL");
+                    if (win.getSolution() == null) {
+                        System.out.println(win.getAlgorithm().getID() + " NULL");
                     }
-                    if (lose.getAl() == null) {
+                    if (lose.getAlgorithm() == null) {
                         System.out.println("NULL ID " + lose.getClass().getName());
                     }
-                    if (lose.getBest() == null) {
-                        System.out.println(lose.getAl().getID() + " NULL");
+                    if (lose.getSolution() == null) {
+                        System.out.println(lose.getAlgorithm().getID() + " NULL");
                     }
                     if (debugPrint)
-                        System.out.println("win of " + win.getAl().getID() + " ("
-                                + Util.df3.format(win.getBest().getEval()) + ", feasable=" + win.getBest().areConstraintsMet()
-                                + ") against " + lose.getAl().getID() + " (" + Util.df3.format(lose.getBest().getEval())
-                                + ", feasable=" + lose.getBest().areConstraintsMet() + ") for " + t.getProblemName());
-                    arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getAcronym(),
-                            lose.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName());
+                        System.out.println("win of " + win.getAlgorithm().getID() + " ("
+                                + Util.df3.format(win.getSolution().getEval()) + ", feasable=" + win.getSolution().areConstraintsMet()
+                                + ") against " + lose.getAlgorithm().getID() + " (" + Util.df3.format(lose.getSolution().getEval())
+                                + ", feasable=" + lose.getSolution().areConstraintsMet() + ") for " + t.getProblemName());
+                    arena.addGameResult(Game.WIN, win.getAlgorithm().getAlgorithmInfo().getAcronym(),
+                            lose.getAlgorithm().getAlgorithmInfo().getAcronym(), t.getProblemName());
                 }
-
             }
         }
     }
@@ -171,8 +141,6 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
         return false;
     }
 
-    protected abstract void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon);
-
     /**
      * Run the benchmark with default number of runs
      *
@@ -201,7 +169,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, Algorith
 
         // Recalculate ratings after tournament
         //arena.recalcRatings();
-        arena.calculteRatings();
+        arena.calculateRatings();
 
         if (displayRatingIntervalChart) {
             displayRatingIntervalsChart(arena.getPlayers());

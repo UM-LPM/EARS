@@ -1,16 +1,11 @@
 package org.um.feri.ears.rating;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.benchmark.AlgorithmEvalResult;
-import org.um.feri.ears.rating.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -104,7 +99,7 @@ public class ResultArena {
 	 * Calculates the ratings for all unevaluated games.
 	 * @return list of all players in the arena with new ratings.
 	 */
-	public ArrayList<Player> calculteRatings() {
+	public ArrayList<Player> calculateRatings() {
 		id_period++;
 		ArrayList<Player> ap = new ArrayList<Player>();
 		RatingCalculations.computePlayerRatings(players, false); //changes ratings

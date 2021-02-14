@@ -565,7 +565,7 @@ public class MOCRSTuning {
 			}
 		}
 		
-		arena.calculteRatings();
+		arena.calculateRatings();
 
 		//set players
 	

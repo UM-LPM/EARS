@@ -71,18 +71,18 @@ public class CRSTuning {
      * Set all data!
      * 
      * @param printDebug
-     * @param banchmark
+     * @param benchmark
      * @param arenaName
      * @param arenaOwner
      */
     public static final boolean DEBUG_ON = true; 
     public static final boolean DEBUG_OFF = false;
     
-    public CRSTuning(boolean printDebug, boolean printSingleRunDuration, RatingBenchmark banchmark, int max_execs) {
+    public CRSTuning(boolean printDebug, boolean printSingleRunDuration, RatingBenchmark benchmark, int max_execs) {
         Util.rnd.setSeed(System.currentTimeMillis());
         players = new ArrayList<Algorithm>();
         this.printDebug = printDebug;
-        benchMark = banchmark;
+        benchMark = benchmark;
         listAll = new ArrayList<Player>();
         Util.rnd.setSeed(System.currentTimeMillis());
         ra = new ResultArena(100);
@@ -192,7 +192,7 @@ public class CRSTuning {
 	    	for (int j=1;j<listAll.size();j++){
 	    		double difference = Math.abs(Math.round(listAll.get(0).getRatingData().getRating() - listAll.get(j).getRatingData().getRating()));
     			if (difference > 200 || j>E){
-    				this.removeAlgorithm(listAll.get(j).getAlgorithm());
+    				removeAlgorithm(listAll.get(j).getAlgorithm());
 	    	        j--;
     			}
 	    	}

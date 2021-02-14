@@ -141,8 +141,8 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
 
     	if(random)
     	{
-    		MOAlgorithmEvalResult first;
-			MOAlgorithmEvalResult second;
+			AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>, DoubleMOTask> first;
+			AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>, DoubleMOTask> second;
 			QualityIndicator<Double> qi;
 			IndicatorName indicatorName;
     		for (int i=0; i<results.size(); i++) {
@@ -155,29 +155,28 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     				try {
     					if(qi.getIndicatorType() == IndicatorType.UNARY)
     					{
-    						first.getBest().evaluate(qi, true); //TODO paralel
-    						second.getBest().evaluate(qi, true);
+    						first.getSolution().evaluate(qi, true); //TODO paralel
+    						second.getSolution().evaluate(qi, true);
     					}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-    				if (resultEqual(first.getBest(), second.getBest(), qi)) { 
-						arena.addGameResult(Game.DRAW, first.getAl().getAlgorithmInfo().getAcronym(), second.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName(), indicatorName.toString());
+    				if (resultEqual(first.getSolution(), second.getSolution(), qi)) {
+						arena.addGameResult(Game.DRAW, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
 					} 
     				else 
     				{
-    					if (t.isFirstBetter(first.getBest(),second.getBest(), qi))
+    					if (t.isFirstBetter(first.getSolution(),second.getSolution(), qi))
     					{
-    						arena.addGameResult(Game.WIN, first.getAl().getAlgorithmInfo().getAcronym(), second.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
     					}
     					else
     					{
-    						arena.addGameResult(Game.WIN, second.getAl().getAlgorithmInfo().getAcronym(), first.getAl().getAlgorithmInfo().getAcronym(), t.getProblemName(), indicatorName.toString());
+    						arena.addGameResult(Game.WIN, second.getAlgorithm().getID(), first.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
     					}
     				}
         		}
     		}
-    		
     	}
     	else
     		super.setWinLoseFromResultList(arena, t);
@@ -206,12 +205,12 @@ public class RatingEnsemble extends MORatingBenchmark<Double, DoubleMOTask, Doub
     				//reset(task); //for one eval!
     				if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasibleInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
-    					results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
+    					results.add(new AlgorithmRunResult(res.result, res.algorithm, res.task));
     					allSingleProblemRunResults.add(task, res.result, res.algorithm);
     				}
     				else {
     					System.err.println(res.algorithm.getAlgorithmInfo().getAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
-    					results.add(new MOAlgorithmEvalResult(null, res.algorithm, res.task)); // this can be done parallel - asynchrony                    
+    					results.add(new AlgorithmRunResult(null, res.algorithm, res.task)); // this can be done parallel - asynchrony
     				}
 
     				//reset(task);

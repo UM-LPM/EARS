@@ -119,14 +119,14 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
         		//reset(task); //for one eval!
         		if ((MOAlgorithm.getCaching() == Cache.NONE && task.areDimensionsInFeasibleInterval(res.result)) || MOAlgorithm.getCaching() != Cache.NONE) {
 
-        			results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
+        			results.add(new AlgorithmRunResult(res.result, res.algorithm, res.task));
         			allSingleProblemRunResults.add(task, res.result, res.algorithm);
         		}
         		else {
         			System.err.println(res.algorithm.getAlgorithmInfo().getAcronym()+" result "+res.result+" is out of intervals! For task:"+task.getProblemName());
-        			results.add(new MOAlgorithmEvalResult(null, res.algorithm, res.task)); // this can be done parallel - asynchrony                    
+        			results.add(new AlgorithmRunResult(null, res.algorithm, res.task)); // this can be done parallel - asynchrony
         		}
-        		
+
         		//reset(task);
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
