@@ -3,7 +3,6 @@ package org.um.feri.ears.experiment.ee;
 import java.util.ArrayList;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
@@ -20,7 +19,7 @@ public class BenchmarkEEExecute {
     	
     	Util.rnd.setSeed(System.currentTimeMillis());
 
-    	RatingBenchmark.debugPrint = true; //prints one on one results
+    	RatingBenchmark.printInfo = true; //prints one on one results
     	ArrayList<Algorithm> players = new ArrayList<Algorithm>();
 
     	players.add(new RandomWalkAlgorithm());  

@@ -61,7 +61,7 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
     }
 
     @Override
-    public MOTask returnCopy() {
+    public MOTask<Integer, IntegerMOProblem> clone() {
         return new IntegerMOTask(this);
     }
 }

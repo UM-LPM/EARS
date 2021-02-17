@@ -29,7 +29,7 @@ public class Test_11_MainV3 {
      */
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis());
-        RatingBenchmark.debugPrint = true; //prints one on one results
+        RatingBenchmark.printInfo = true; //prints one on one results
         RunMainBestAlgSettings rbs = new RunMainBestAlgSettings(true,false, new RatingRPUOed2());
         rbs.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06));  
         rbs.addAlgorithm(new RandomWalkAMAlgorithm(),new Rating(1500, 350, 0.06));  

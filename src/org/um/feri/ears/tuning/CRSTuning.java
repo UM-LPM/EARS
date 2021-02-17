@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
@@ -176,9 +175,8 @@ public class CRSTuning {
         }
 
         long stTime = System.currentTimeMillis();
-        RatingBenchmark.debugPrint = printDebug; // prints one on one results
-        RatingBenchmark.printSingleRunDuration = printSingleRunDuration;
-       
+        RatingBenchmark.printInfo = printDebug; // prints one on one results
+
         sb.append(outputRanking(0));
         System.out.println(outputRanking(0));
 
@@ -272,7 +270,7 @@ public class CRSTuning {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("Results for benchmark:").append(benchMark.getAcronym()).append("Benchmark DURATION: ("+duration/1000+"s)").append("\n").append("\n");;
+        sb.append("Results for benchmark:").append(benchMark.getShortName()).append("Benchmark DURATION: ("+duration/1000+"s)").append("\n").append("\n");;
         for (Player a:listAll) {
             sb.append(a.getPlayerId()).append(" ").append(a.getRatingData().toString()).append("\n");
         }

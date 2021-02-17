@@ -36,7 +36,7 @@ public class RunBenchmarkFromFile {
 		String destFile = args[1];
 		
         Util.rnd.setSeed(System.currentTimeMillis());
-        RatingBenchmark.debugPrint = true; //prints one on one results
+        RatingBenchmark.printInfo = true; //prints one on one results
 		
 		//from args
 		//String srcFile = "D:\\Benchmark results\\soil_model_fitness_files\\merged.txt";

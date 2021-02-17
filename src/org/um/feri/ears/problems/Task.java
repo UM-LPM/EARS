@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.problems.moo.IntegerMOProblem;
 
 public class Task extends TaskBase<Problem> {
 
@@ -32,6 +33,10 @@ public class Task extends TaskBase<Problem> {
 
         // set initial best eval
         bestEval = p.isMinimize() ? Double.MAX_VALUE : Double.MIN_VALUE;
+    }
+
+    public Task(Task task) {
+        super(task);
     }
 
     public double[] getInterval() {
@@ -309,5 +314,10 @@ public class Task extends TaskBase<Problem> {
 
     public static void resetLoggingID() {
         SolutionBase.resetLoggingID();
+    }
+
+    @Override
+    public Task clone() {
+        return new Task(this);
     }
 }

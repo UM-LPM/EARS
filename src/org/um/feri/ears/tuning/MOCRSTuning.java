@@ -19,7 +19,9 @@ import java.util.concurrent.TimeUnit;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.benchmark.AlgorithmRunResult;
 import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
+import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
@@ -30,7 +32,6 @@ import org.um.feri.ears.rating.Game;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.rating.ResultArena;
-import org.um.feri.ears.util.FutureResult;
 import org.um.feri.ears.util.Util;
 
 public class MOCRSTuning {
@@ -403,26 +404,25 @@ public class MOCRSTuning {
 		if(threadForEachRun)
 		{
 			for(MOTask task : tasks){
-				task.resetCounter();
 				//System.out.println("Current task: "+task.getProblemName());
 				try {
 					ExecutorService service = Executors.newFixedThreadPool(threads);
 
-					Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
+					Set<Future<AlgorithmRunResult>> set = new HashSet<Future<AlgorithmRunResult>>();
 					for (int i = 0; i < numOfRuns; i++) {
 
 						//create new object for each thread
 						MOAlgorithm object = createObject(name);
 						setParameters(object, params);
 
-						Future<FutureResult> future = service.submit(object.createRunnable(object, task.returnCopy()));
+						Future<AlgorithmRunResult> future = service.submit(object.createRunnable(object, task.clone()));
 						set.add(future);
 					}
 
-					for (Future<FutureResult> future : set) {
+					for (Future<AlgorithmRunResult> future : set) {
 
-						FutureResult res = future.get();
-						sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.result, defaultObject, res.task));
+						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>,DoubleMOTask> res = future.get();
+						sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.getSolution(), defaultObject, res.getTask()));
 					}
 
 					service.shutdown();
@@ -435,31 +435,30 @@ public class MOCRSTuning {
 		else {
 			
 			//System.out.println("Current task: "+task.getProblemName());
-			List<FutureResult> futureResults = new ArrayList<FutureResult>();
+			List<AlgorithmRunResult> futureResults = new ArrayList<AlgorithmRunResult>();
 			try {
 				ExecutorService service = Executors.newFixedThreadPool(threads);
 
-				Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
+				Set<Future<AlgorithmRunResult>> set = new HashSet<Future<AlgorithmRunResult>>();
 				for(MOTask task : tasks){
-					task.resetCounter();
 					//create new object for each thread
 					MOAlgorithm object = createObject(name);
 					setParameters(object, params);
 
-					Future<FutureResult> future = service.submit(object.createRunnable(object, task.returnCopy()));
+					Future<AlgorithmRunResult> future = service.submit(object.createRunnable(object, task.clone()));
 					set.add(future);
 				}
 
-				for (Future<FutureResult> future : set) {
-					FutureResult res = future.get();
+				for (Future<AlgorithmRunResult> future : set) {
+					AlgorithmRunResult res = future.get();
 					futureResults.add(res);
 				}
 
 				//Order results by tasks
 				for(MOTask task : tasks) {
-					for(FutureResult res: futureResults) {
-						if(task.getProblemName().equals(res.task.getProblemName())) {
-							sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.result, defaultObject, res.task));
+					for(AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>,DoubleMOTask> res: futureResults) {
+						if(task.getProblemName().equals(res.getTask().getProblemName())) {
+							sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.getSolution(), defaultObject, res.getTask()));
 							break;
 						}
 					}

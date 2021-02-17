@@ -19,11 +19,11 @@ import java.util.concurrent.Future;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.qualityIndicator.IndicatorFactory;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
-import org.um.feri.ears.util.FutureResult;
 import org.um.feri.ears.util.Util;
 
 public class DoubleEliminationTournament {
@@ -287,17 +287,17 @@ public class DoubleEliminationTournament {
 				
 		    	task.resetCounter();
 		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
-		        Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
+		        Set<Future<AlgorithmRunResult>> set = new HashSet<Future<AlgorithmRunResult>>();
 		        for (MOAlgorithm<DoubleMOTask, Double> al: players) {
-		          Future<FutureResult> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+		          Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, (DoubleMOTask) task.clone()));
 		          set.add(future);
 		        }
 
-		        for (Future<FutureResult> future : set) {
+		        for (Future<AlgorithmRunResult> future : set) {
 		        	try {
-		        		FutureResult res = future.get();
+						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>,DoubleMOTask> res = future.get();
 
-		        		results.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
+		        		results.add(new MOAlgorithmEvalResult(res.solution, res.algorithm, res.task));
 
 
 					} catch (InterruptedException | ExecutionException e) {
@@ -340,17 +340,17 @@ public class DoubleEliminationTournament {
 				//System.out.println("Run: "+i);
 		    	task.resetCounter();
 		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
-		        Set<Future<FutureResult>> set = new HashSet<Future<FutureResult>>();
+		        Set<Future<AlgorithmRunResult>> set = new HashSet<Future<AlgorithmRunResult>>();
 		        for (MOAlgorithm<DoubleMOTask, Double> al: players) {
-		          Future<FutureResult> future = pool.submit(al.createRunnable(al, new DoubleMOTask(task)));
+		          Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, (DoubleMOTask) task.clone()));
 		          set.add(future);
 		        }
 
-		        for (Future<FutureResult> future : set) {
+		        for (Future<AlgorithmRunResult> future : set) {
 		        	try {
-		        		FutureResult res = future.get();
+						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>,DoubleMOTask> res = future.get();
 
-		        		participants.add(new MOAlgorithmEvalResult(res.result, res.algorithm, res.task)); 
+		        		participants.add(new MOAlgorithmEvalResult(res.solution, res.algorithm, res.task));
 
 
 					} catch (InterruptedException | ExecutionException e) {

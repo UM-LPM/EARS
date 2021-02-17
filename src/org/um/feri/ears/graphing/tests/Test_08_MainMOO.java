@@ -31,7 +31,7 @@ public class Test_08_MainMOO
 		//if (TEST3()) return;
 		
         Util.rnd.setSeed(System.currentTimeMillis());
-        RatingBenchmark.debugPrint = true; //prints one on one results
+        RatingBenchmark.printInfo = true; //prints one on one results
         ArrayList<MOAlgorithm> players = new ArrayList<MOAlgorithm>();
         players.add(new D_MOEAD_DRA());
         players.add(new D_NSGAII());

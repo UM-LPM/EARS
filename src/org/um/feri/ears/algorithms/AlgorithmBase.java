@@ -6,14 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
+import org.um.feri.ears.benchmark.AlgorithmRunResult;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.util.Cache;
 
-public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase> {
+public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> {
 
     protected boolean debug;
     protected boolean displayData = false;
@@ -30,6 +33,18 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
     protected int age;
     protected ArrayList<Double> controlParameters;
     protected boolean played = false;
+
+    public Callable<AlgorithmRunResult> createRunnable(final AlgorithmBase<T, S> al, final T task) {
+
+        return () -> {
+            long duration = System.nanoTime();
+            S res = execute(task);
+            duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - duration);
+            al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
+            AlgorithmRunResult future = new AlgorithmRunResult(res, al, task);
+            return future;
+        };
+    }
 
     public void setPlayed(boolean played) {
         this.played = played;
@@ -89,11 +104,11 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
     }
 
     /**
-     * @param taskProblem
+     * @param task
      * @return
      * @throws StopCriterionException
      */
-    public abstract T2 execute(T taskProblem) throws StopCriterionException;
+    public abstract S execute(T task) throws StopCriterionException;
 
     /**
      * Returns a filename safe string which contains the algorithm acronym and version
@@ -181,7 +196,7 @@ public abstract class AlgorithmBase<T extends TaskBase, T2 extends SolutionBase>
         return ai.getAcronym();
     }
 
-    public AlgorithmBase<T, T2> setID(String id) {
+    public AlgorithmBase<T, S> setID(String id) {
         ai.setAcronym(id);
         return this;
     }

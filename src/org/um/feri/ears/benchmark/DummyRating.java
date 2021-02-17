@@ -1,52 +1,38 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.DummyProblem;
 import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 
-public class DummyRating extends RatingBenchmark{
-    public static final String name="Dummy rating";
-    protected int dimension=3;
-    
-    public boolean resultEqual(DoubleSolution a, DoubleSolution b) {
-        if ((a==null) &&(b==null)) return true;
-        if (a==null) return false;
-        if (b==null) return false;
-        if (Math.abs(a.getEval()-b.getEval())< drawLimit) return true;
-        return false;
+public class DummyRating extends RatingBenchmark {
+    protected int dimension;
+
+    public DummyRating() {
+        this(0.000001);
     }
-    public DummyRating(){
-    	this(0.000001);
-    }
-    public DummyRating(double draw_limit) {
+
+    public DummyRating(double drawLimit) {
         super();
+        name = "Dummy rating";
         this.drawLimit = 1e-6;
-        maxEvaluations=3000;
-        dimension=3;
+        maxEvaluations = 3000;
+        dimension = 3;
         maxIterations = 0;
-        initFullProblemList();
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION,"3");
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+draw_limit);
+        addParameter(EnumBenchmarkInfoParameters.DIMENSION, "3");
+        addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(maxEvaluations));
+        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + drawLimit);
     }
-    /* (non-Javadoc)
-     * @see org.um.feri.ears.benchmark.RatingBenchmark#registerTask(org.um.feri.ears.problems.Problem)
-     */
+
     @Override
     protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
-        listOfProblems.add(new Task(sc, eval, time, maxIterations, epsilon, p));
+        tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
-    
-    /* (non-Javadoc)
-     * @see org.um.feri.ears.benchmark.RatingBenchmark#initFullProblemList()
-     */
-    
-    public void addDummyTask(String name){
-    	registerTask(new DummyProblem(name), stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
+
+    public void addDummyTask(String name) {
+        registerTask(new DummyProblem(name), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
     }
-    
+
     @Override
     protected void initFullProblemList() {
     	
@@ -77,8 +63,8 @@ public class DummyRating extends RatingBenchmark{
     	registerTask(new DummyProblem("f20"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
     	registerTask(new DummyProblem("f21"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);
     	registerTask(new DummyProblem("f22"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);*/
-    	
-    	//Grouped by method
+
+        //Grouped by method
     	/*
     	registerTask(new DummyProblem("en300_c1"),stopCriterion, evaluationsOnDimension, 0.001);
     	registerTask(new DummyProblem("1HZ_c1"),stopCriterion, evaluationsOnDimension, 0.001);
@@ -114,9 +100,9 @@ public class DummyRating extends RatingBenchmark{
     	registerTask(new DummyProblem("300HZ_c5"),stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
     	registerTask(new DummyProblem("750HZ_c5"),stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
     	registerTask(new DummyProblem("9s20_c5"),stopCriterion, maxEvaluations, 0, maxIterations, 0.001);*/
-    	
-    	
-    	// Grouped by material
+
+
+        // Grouped by material
     	/*
     	registerTask(new DummyProblem("en300_c1"),stopCriterion, evaluationsOnDimension, 0.001);
     	registerTask(new DummyProblem("en300_c2"),stopCriterion, evaluationsOnDimension, 0.001);
@@ -154,28 +140,4 @@ public class DummyRating extends RatingBenchmark{
     	registerTask(new DummyProblem("9s20_c4"),stopCriterion, evaluationsOnDimension, 0.001);
     	registerTask(new DummyProblem("9s20_c5"),stopCriterion, evaluationsOnDimension, 0.001);*/
     }
-        
-    /* (non-Javadoc)
-     * @see org.um.feri.ears.benchmark.RatingBenchmark#getName()
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /* (non-Javadoc)
-     * @see org.um.feri.ears.benchmark.RatingBenchmark#getAcronym()
-     */
-    @Override
-    public String getAcronym() {
-        return "DummyRating";
-    }
-    /* (non-Javadoc)
-     * @see org.um.feri.ears.benchmark.RatingBenchmark#getInfo()
-     */
-    @Override
-    public String getInfo() {
-        return "";
-    }
-    
 }

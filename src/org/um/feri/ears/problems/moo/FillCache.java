@@ -1,7 +1,5 @@
 package org.um.feri.ears.problems.moo;
 
-import java.util.ArrayList;
-
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.gde3.D_GDE3;
 import org.um.feri.ears.algorithms.moo.ibea.D_IBEA;
@@ -11,32 +9,30 @@ import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.zdt.ZDT1;
-import org.um.feri.ears.problems.moo.zdt.ZDT2;
-import org.um.feri.ears.problems.moo.zdt.ZDT3;
-import org.um.feri.ears.problems.moo.zdt.ZDT4;
-import org.um.feri.ears.problems.moo.zdt.ZDT6;
+import org.um.feri.ears.problems.moo.zdt.*;
 import org.um.feri.ears.util.Cache;
+
+import java.util.ArrayList;
 
 public class FillCache {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    	ArrayList<MOAlgorithm> players = new ArrayList<MOAlgorithm>();
+        ArrayList<MOAlgorithm> players = new ArrayList<MOAlgorithm>();
         /*players.add(new D_MOEAD());
         players.add(new D_NSGAII());
         players.add(new D_NSGAIII());
         players.add(new D_PESAII());*/
-        
-        
+
+
         players.add(new D_GDE3());
         players.add(new D_MOEAD_STM());
         players.add(new D_SPEA2());
         players.add(new D_IBEA());
         players.add(new D_NSGAIII());
-        
-		MOAlgorithm.setCaching(Cache.SAVE);
-		MOAlgorithm.setRunWithOptimalParameters(true);
+
+        MOAlgorithm.setCaching(Cache.SAVE);
+        MOAlgorithm.setRunWithOptimalParameters(true);
 		
         
         /*DoubleMOTask t1 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1());
@@ -54,7 +50,7 @@ public class FillCache {
         DoubleMOTask t3 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT3());
         DoubleMOTask t4 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT4());
         DoubleMOTask t5 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT6());
-        
+
         //DoubleMOTask t1 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG1(2));
         /*DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG2(2));
         DoubleMOTask t3 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG3(2));
@@ -71,43 +67,35 @@ public class FillCache {
         DoubleMOTask t14 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ5(2));
         DoubleMOTask t15 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ6(2));
         DoubleMOTask t16 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ7(2));*/
-        
-    	ArrayList<DoubleMOTask> tasks = new ArrayList<DoubleMOTask>();
-    	tasks.add(t1);
-    	tasks.add(t2);
-    	tasks.add(t3);
-    	tasks.add(t4);
-    	tasks.add(t5);
+
+        ArrayList<DoubleMOTask> tasks = new ArrayList<DoubleMOTask>();
+        tasks.add(t1);
+        tasks.add(t2);
+        tasks.add(t3);
+        tasks.add(t4);
+        tasks.add(t5);
 //    	tasks.add(t6);
 //    	tasks.add(t7);
 //    	tasks.add(t8);
 //    	tasks.add(t9);
 //    	tasks.add(t10);
-    	
 
-		for(int i = 0 ; i < 100; i++)
-		{
-			System.out.println("-------------------------------------");
-			System.out.println("Run: "+i);
-			System.out.println("-------------------------------------");
-	    	for (DoubleMOTask task : tasks) 
-	    	{
-	    		System.out.println(task.getProblemName());
-	    		for(MOAlgorithm alg : players)
-	    		{
-	    			System.out.println("Alg: "+alg.getAlgorithmInfo().getAcronym());
-	    			task.resetCounter();
-	    			try {
-						alg.execute(task);
-					} catch (StopCriterionException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		
-	    	}
-			
-		}
-		
-	}
 
+        for (int i = 0; i < 100; i++) {
+            System.out.println("-------------------------------------");
+            System.out.println("Run: " + i);
+            System.out.println("-------------------------------------");
+            for (DoubleMOTask task : tasks) {
+                System.out.println(task.getProblemName());
+                for (MOAlgorithm alg : players) {
+                    System.out.println("Alg: " + alg.getAlgorithmInfo().getAcronym());
+                    try {
+                        alg.execute(task.clone());
+                    } catch (StopCriterionException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 }

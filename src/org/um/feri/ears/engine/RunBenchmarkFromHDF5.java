@@ -24,7 +24,7 @@ public class RunBenchmarkFromHDF5 {
 	public static void main(String[] args) {
 
 		Util.rnd.setSeed(System.currentTimeMillis());
-		RatingBenchmark.debugPrint = true; //prints one on one results
+		RatingBenchmark.printInfo = true; //prints one on one results
 		
 		if(args.length < 2){
 			System.out.println("ERROR: Not enough arguments (source file, destination file) provided!");

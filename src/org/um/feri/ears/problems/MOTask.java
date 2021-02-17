@@ -122,11 +122,4 @@ public abstract class MOTask<T extends Number, P extends MOProblemBase<T>> exten
             }
         }
     }
-
-    /**
-     * Returns a deep copy of the Task object
-     *
-     * @return deep copy of the task object
-     */
-    abstract public MOTask returnCopy();
 }

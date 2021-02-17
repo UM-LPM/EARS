@@ -29,6 +29,26 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
     protected ArrayList<EvaluationStorage.Evaluation> evaluationHistory;
     protected boolean isEvaluationHistoryEnabled = false;
 
+    public TaskBase (TaskBase<T> task) {
+        precisionOfRealNumbersInDecimalPlaces = task.precisionOfRealNumbersInDecimalPlaces;
+        stopCriterion = task.stopCriterion;
+        maxEvaluations = task.maxEvaluations;
+        numberOfEvaluations = task.numberOfEvaluations;
+        epsilonForGlobal = task.epsilonForGlobal;
+        isStop = task.isStop;
+        isGlobal = task.isGlobal;
+        maxIterations = task.maxIterations;
+        allowedCPUTime = task.allowedCPUTime;
+        p = task.p;  //TODO deep copy?
+    }
+
+    /**
+     * Returns a deep copy of the Task object
+     *
+     * @return deep copy of the task object
+     */
+    abstract public TaskBase clone();
+
     /**
      * Has the global optimum been reached.
      *

@@ -2,12 +2,10 @@ package org.um.feri.ears.engine;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -18,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,11 +28,9 @@ import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.DummyRating;
 import org.um.feri.ears.benchmark.RatingBenchmarkBase;
-import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.ResultArena;
-import org.um.feri.ears.util.FutureResult;
 import org.um.feri.ears.util.Util;
 
 import com.google.gson.Gson;
@@ -44,7 +39,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -597,7 +591,7 @@ public class ExecuteTournaments {
 		ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
 		DummyRating dr = new DummyRating(0.000001); //Create banchmark
 		dr.setDisplayRatingIntervalChart(false);
-		RatingBenchmarkBase.printSingleRunDuration = false;
+		RatingBenchmarkBase.printInfo = false;
 
 		//parse algorithm and problem names
 		String algorithmName, problemName, fileName;

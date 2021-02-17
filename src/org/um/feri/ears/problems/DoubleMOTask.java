@@ -78,7 +78,7 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
     }
 
     @Override
-    public MOTask returnCopy() {
+    public MOTask<Double, DoubleMOProblem> clone() {
         return new DoubleMOTask(this);
     }
 }

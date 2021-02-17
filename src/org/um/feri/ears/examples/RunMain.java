@@ -86,8 +86,7 @@ public class RunMain {
      */
     public void run(int repeat) {
         long stTime = System.currentTimeMillis();
-        RatingBenchmark.debugPrint = printDebug; // prints one on one results
-        RatingBenchmark.printSingleRunDuration = printSingleRunDuration;
+        RatingBenchmark.printInfo = printDebug; // prints one on one results
         benchMark.run(ra, allSingleProblemRunResults, repeat);
         listAll.sort(new RatingComparator());
         long endTime = System.currentTimeMillis();
@@ -97,7 +96,7 @@ public class RunMain {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Results for benchmark:").append(benchMark.getAcronym()).append("Benchmark DURATION: (" + duration / 1000 + "s)").append("\n").append("\n");
+        sb.append("Results for benchmark:").append(benchMark.getShortName()).append("Benchmark DURATION: (" + duration / 1000 + "s)").append("\n").append("\n");
         ;
         for (Player a : listAll) {
             sb.append(a.getPlayerId()).append(" ").append(a.getRatingData().toString()).append("\n");

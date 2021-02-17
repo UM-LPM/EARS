@@ -1,7 +1,6 @@
 package org.um.feri.ears.examples;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
@@ -23,7 +22,7 @@ public class MainBenchMarkTestMOO {
     public static void main(String[] args) {
 
         Util.rnd.setSeed(System.currentTimeMillis());
-        RatingBenchmark.debugPrint = true; //prints one on one results
+        RatingBenchmark.printInfo = true; //prints one on one results
         ArrayList<MOAlgorithm<DoubleMOTask, Double>> players = new ArrayList<>();
         players.add(new D_MOEAD_DRA());
         players.add(new D_NSGAII());

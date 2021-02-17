@@ -46,17 +46,11 @@ public class EA_SOP_VisualizationExample {
     }
 
     public static void run4Task(Task task) {
-        task.resetCounter();
-        run(new RandomWalkAlgorithm(), task);
-        task.resetCounter();
-        run(new GWO(), task);
-        task.resetCounter();
-        run(new ABC(), task);
-        task.resetCounter();
-        run(new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN), task);
-        task.resetCounter();
-        run(new FireflyAlgorithm(), task);
-
+        run(new RandomWalkAlgorithm(), task.clone());
+        run(new GWO(), task.clone());
+        run(new ABC(), task.clone());
+        run(new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN), task.clone());
+        run(new FireflyAlgorithm(), task.clone());
     }
 
     public static void main(String[] args) {
