@@ -36,28 +36,6 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
     protected int num_var;
     protected int num_obj;
 
-    /*public Callable<AlgorithmRunResult> createRunnable(final MOAlgorithm al, final T taskProblem) {
-
-        Callable<AlgorithmRunResult> aRunnable = new Callable<AlgorithmRunResult>() {
-            @Override
-            public AlgorithmRunResult call() throws Exception {
-
-                long duration = System.nanoTime();
-
-                GraphDataRecorder.SetContext(al, taskProblem);
-                ParetoSolution<Type> res = execute(taskProblem);
-                GraphDataRecorder.SetParetoSolution(res);
-
-                duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - duration);
-                al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
-                AlgorithmRunResult future = new AlgorithmRunResult(res, al, taskProblem);
-
-                return future;
-            }
-        };
-        return aRunnable;
-    }*/
-
     public ParetoSolution<Type> getLastResult() {
         return result;
     }
