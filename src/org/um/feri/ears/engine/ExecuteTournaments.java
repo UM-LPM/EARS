@@ -30,7 +30,6 @@ import org.um.feri.ears.benchmark.DummyRating;
 import org.um.feri.ears.benchmark.RatingBenchmarkBase;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Util;
 
 import com.google.gson.Gson;
@@ -613,8 +612,6 @@ public class ExecuteTournaments {
 			}
 		}
 
-		ResultArena ra = new ResultArena(100);
-
 		//get distinct problem names
 		problems = problems.stream().distinct().collect(Collectors.toList());
 		//get distinct algorithm names
@@ -631,16 +628,15 @@ public class ExecuteTournaments {
 		}
 
 		for (DummyAlgorithm al:players) {
-			ra.addPlayer(al, al.getID());
-			dr.registerAlgorithm(al);
+			dr.addAlgorithm(al);
 		}
 		BankOfResults ba = new BankOfResults();
 
-		dr.run(ra, ba, numberOfRuns); //repeat competition 50X
+		dr.run(ba, numberOfRuns); //repeat competition 50X
 		long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
 		logger.log(Level.INFO,"Total execution time: "+estimatedTime + "s");
-		ArrayList<Player> list = ra.getPlayers();
-		String results = ra.getPlayersJson();
+		ArrayList<Player> list = dr.getResultArena().getPlayers();
+		String results = dr.getResultArena().getPlayersJson();
 		StringBuilder sb = new StringBuilder();
 		for (Player p: list) {
 			System.out.println(p); //print ranks

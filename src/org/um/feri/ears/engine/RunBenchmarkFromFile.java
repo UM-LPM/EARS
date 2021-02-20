@@ -15,7 +15,6 @@ import org.um.feri.ears.benchmark.DummyRating;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -86,8 +85,6 @@ public class RunBenchmarkFromFile {
 			e.printStackTrace();
 		}
         
-        ResultArena ra = new ResultArena(100);
-
         //get distinct problem names
 		List<String> distinctProblem = problems.stream().distinct().collect(Collectors.toList());
 		//add problems to benchmark
@@ -97,15 +94,14 @@ public class RunBenchmarkFromFile {
        
         
         for (DummyAlgorithm al:players) {
-        	ra.addPlayer(al, al.getID());
-        	dr.registerAlgorithm(al);
+        	dr.addAlgorithm(al);
         }
         BankOfResults ba = new BankOfResults();
         long initTime = System.currentTimeMillis();
-        dr.run(ra, ba, 100); //repeat competition 50X
+        dr.run(ba, 100); //repeat competition 50X
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         System.out.println("Benchmark execution time: "+estimatedTime + "s");
-        ArrayList<Player> list = ra.getPlayers();
+        ArrayList<Player> list = dr.getResultArena().getPlayers();
         StringBuilder sb = new StringBuilder();
         for (Player p: list) {
         	System.out.println(p); //print ranks

@@ -13,7 +13,6 @@ import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
 
@@ -31,7 +30,6 @@ public class CRSTuning {
     private boolean printDebug;
     private boolean printSingleRunDuration;
     private ArrayList<Algorithm> players;
-    private ResultArena ra;
     protected RatingBenchmark benchMark; // suopm = new RatingRPUOed2();
     private long duration;
     private int noRepeats;
@@ -84,7 +82,6 @@ public class CRSTuning {
         benchMark = benchmark;
         listAll = new ArrayList<Player>();
         Util.rnd.setSeed(System.currentTimeMillis());
-        ra = new ResultArena(100);
         this.printSingleRunDuration = printSingleRunDuration;
         allSingleProblemRunResults =  new BankOfResults();
         this.max_execs = max_execs;
@@ -116,8 +113,7 @@ public class CRSTuning {
 	        Player tmp;
 	        tmp = new Player(al, al.getID(), startRating, 0, 0, 0);
 	        listAll.add(tmp);
-	        ra.addPlayer(tmp);
-	        benchMark.registerAlgorithm(al);
+	        benchMark.addAlgorithm(al);
 	  /*      if (benchMark.size() != ra.size()){
 	        	System.out.println(al.getID());
 	        	System.out.println("exit");
@@ -130,7 +126,7 @@ public class CRSTuning {
     public void removeAlgorithm(AlgorithmBase al) {
     	benchMark.unregisterAlgorithm(al);
 		players.remove(al);
-		ra.removePlayer(al.getID());
+		benchMark.getResultArena().removePlayer(al.getID());
         for (int i=0;i<listAll.size();i++){
         	if (listAll.get(i).getPlayerId().compareTo(al.getID())==0){
         		listAll.remove(i);
@@ -183,7 +179,7 @@ public class CRSTuning {
         int i=players.size();
         int gen = 0;
         while (i<max_execs){
-        	benchMark.run(ra,allSingleProblemRunResults, repeat);
+        	benchMark.run(allSingleProblemRunResults, repeat);
         	benchMark.allPlayed();
         	listAll.sort(new RatingComparator());
         	// Remove significantly worse algorithms

@@ -9,8 +9,6 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.problems.results.BankOfResults;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Util;
 
 public class BenchmarkEEExecute {
@@ -32,17 +30,13 @@ public class BenchmarkEEExecute {
     		players.add(new DEAlgorithmLogging(k,20));
     	players.add(new RandomWalkAlgorithm());
     	
-    	ResultArena ra = new ResultArena(100); 
     	BenchmarkEE suopm = new BenchmarkEE(); //Create banchmark
     	//RatingCEC2015 suopm = new RatingCEC2015();
     	for (Algorithm al:players) {
-    		ra.addPlayer(al, al.getID());
-    		suopm.registerAlgorithm(al);
+    		suopm.addAlgorithm(al);
     	}
     	BankOfResults ba = new BankOfResults();
-    	suopm.run(ra, ba, 5);
-    	ArrayList<Player> list = ra.getPlayers();
-    	for (Player p: list) System.out.println(p);
- 
+    	suopm.run(ba, 5);
+
     }
 }

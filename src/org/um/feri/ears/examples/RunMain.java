@@ -75,8 +75,7 @@ public class RunMain {
             System.out.println("Add algorithm with null Author " + al.getClass().getName());
         Player tmp = new Player(al, al.getID(), startRating, 0, 0, 0);
         listAll.add(tmp);
-        ra.addPlayer(tmp);
-        benchMark.registerAlgorithm(al);
+        benchMark.addAlgorithm(al);
     }
 
     /**
@@ -87,7 +86,7 @@ public class RunMain {
     public void run(int repeat) {
         long stTime = System.currentTimeMillis();
         RatingBenchmark.printInfo = printDebug; // prints one on one results
-        benchMark.run(ra, allSingleProblemRunResults, repeat);
+        benchMark.run(allSingleProblemRunResults, repeat);
         listAll.sort(new RatingComparator());
         long endTime = System.currentTimeMillis();
         duration = endTime - stTime;

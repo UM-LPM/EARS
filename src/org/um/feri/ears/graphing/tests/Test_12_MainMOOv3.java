@@ -14,8 +14,6 @@ import org.um.feri.ears.graphing.data.GraphDataManager;
 import org.um.feri.ears.graphing.data.GraphDataSet;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Util;
 
 
@@ -36,21 +34,16 @@ public class Test_12_MainMOOv3
         
 		MOAlgorithm.setRunWithOptimalParameters(true);
         
-        ResultArena ra = new ResultArena(100);
-        
         List<IndicatorName> indicators = new ArrayList<IndicatorName>();
         indicators.add(IndicatorName.IGD);
         
         RatingCEC2009 cec = new RatingCEC2009(indicators, 0.0000001); //Create banchmark
         for (MOAlgorithm al:players) {
-          ra.addPlayer(al, al.getID()); //init rating 1500
-          cec.registerAlgorithm(al);
+          cec.addAlgorithm(al);
         }
         BankOfResults ba = new BankOfResults();
-        cec.run(ra, ba, 1); //repeat competition 50X
-        ArrayList<Player> list = ra.getPlayers();
-        for (Player p: list) System.out.println(p); //print rangs
-        
+        cec.run(ba, 1); //repeat competition 50X
+
         
         // -------------------------------------------------------------------
 

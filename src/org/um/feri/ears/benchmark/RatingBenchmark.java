@@ -18,19 +18,9 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, DoubleSo
     protected abstract void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon);
 
     @Override
-    public void registerAlgorithm(Algorithm al) {
-        algorithms.add(al);
-    }
+    protected void performTournament() {
 
-    @Override
-    public void registerAlgorithms(ArrayList<Algorithm> algorithms) {
-        this.algorithms.addAll(algorithms);
-    }
-
-    @Override
-    protected void setWinLoseFromResultList(ResultArena arena) {
-
-        for (HashMap<String, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>> problemMap : benchmarResults) {
+        for (HashMap<String, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>> problemMap : benchmarkResults) {
             for (ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>> results : problemMap.values()) {
                 Task t = results.get(0).task;
 
@@ -48,7 +38,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, DoubleSo
                                         + Util.df3.format(win.getSolution().getEval()) + ", feasable=" + win.getSolution().areConstraintsMet()
                                         + ") against " + lose.getAlgorithm().getID() + " (" + Util.df3.format(lose.getSolution().getEval())
                                         + ", feasable=" + lose.getSolution().areConstraintsMet() + ") for " + t.getProblemName());
-                            arena.addGameResult(Game.DRAW, win.getAlgorithm().getAlgorithmInfo().getAcronym(),
+                            resultArena.addGameResult(Game.DRAW, win.getAlgorithm().getAlgorithmInfo().getAcronym(),
                                     lose.getAlgorithm().getAlgorithmInfo().getAcronym(), t.getProblemName());
                         } else {
                             if (win.getSolution() == null) {
@@ -62,7 +52,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, DoubleSo
                                         + Util.df3.format(win.getSolution().getEval()) + ", feasable=" + win.getSolution().areConstraintsMet()
                                         + ") against " + lose.getAlgorithm().getID() + " (" + Util.df3.format(lose.getSolution().getEval())
                                         + ", feasable=" + lose.getSolution().areConstraintsMet() + ") for " + t.getProblemName());
-                            arena.addGameResult(Game.WIN, win.getAlgorithm().getAlgorithmInfo().getAcronym(),
+                            resultArena.addGameResult(Game.WIN, win.getAlgorithm().getAlgorithmInfo().getAcronym(),
                                     lose.getAlgorithm().getAlgorithmInfo().getAcronym(), t.getProblemName());
                         }
                     }

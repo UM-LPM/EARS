@@ -1,10 +1,8 @@
 package org.um.feri.ears.engine;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -13,10 +11,8 @@ import java.util.stream.Collectors;
 
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.DummyRating;
-import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -63,8 +59,6 @@ public class RunBenchmarkFromFiles {
 			}
 		}
         
-        ResultArena ra = new ResultArena(100);
-
         //get distinct problem names
 		problems = problems.stream().distinct().collect(Collectors.toList());
 		//get distinct algorithm names
@@ -80,15 +74,14 @@ public class RunBenchmarkFromFiles {
 		}
         
         for (DummyAlgorithm al:players) {
-        	ra.addPlayer(al, al.getID());
-        	dr.registerAlgorithm(al);
+        	dr.addAlgorithm(al);
         }
         BankOfResults ba = new BankOfResults();
         long initTime = System.currentTimeMillis();
-        dr.run(ra, ba, numberOfsolutions); //repeat competition 50X
+        dr.run(ba, numberOfsolutions); //repeat competition 50X
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         System.out.println("Benchmark execution time: "+estimatedTime + "s");
-        ArrayList<Player> list = ra.getPlayers();
+        ArrayList<Player> list = dr.getResultArena().getPlayers();
         StringBuilder sb = new StringBuilder();
         for (Player p: list) {
         	System.out.println(p); //print ranks

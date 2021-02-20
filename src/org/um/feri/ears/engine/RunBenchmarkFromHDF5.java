@@ -7,7 +7,6 @@ import org.um.feri.ears.benchmark.DummyRating;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Util;
 
 import ch.systemsx.cisd.hdf5.HDF5Factory;
@@ -74,19 +73,16 @@ public class RunBenchmarkFromHDF5 {
 			dr.addDummyTask(name);
 		}
        
-		ResultArena ra = new ResultArena(100);
-		
         for (DummyAlgorithm al:players) {
-        	ra.addPlayer(al, al.getID());
-        	dr.registerAlgorithm(al);
+        	dr.addAlgorithm(al);
         }
         
         BankOfResults ba = new BankOfResults();
         long initTime = System.currentTimeMillis();
-        dr.run(ra, ba, numberOfSolutions); //repeat competition 50X
+        dr.run(ba, numberOfSolutions); //repeat competition 50X
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         System.out.println("Benchmark execution time: "+estimatedTime + "s");
-        ArrayList<Player> list = ra.getPlayers();
+        ArrayList<Player> list = dr.getResultArena().getPlayers();
         
         String[] algorithms = new String[list.size()];
         double[] ratings = new double[list.size()];

@@ -36,6 +36,14 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
         indicatorWeights = weights;
     }
 
+    public boolean isRandomIndicator() {
+        return randomIndicator;
+    }
+
+    public void setRandomIndicator(boolean randomIndicator) {
+        this.randomIndicator = randomIndicator;
+    }
+
     public boolean resultEqual(ParetoSolution<T> a, ParetoSolution<T> b, QualityIndicator<T> qi) {
         if ((a == null) && (b == null)) return true;
         if (a == null) return false;
@@ -50,16 +58,6 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
 
     protected abstract void registerTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, P p);
 
-    @Override
-    public void registerAlgorithm(MOAlgorithm<Task, T> al) {
-        algorithms.add(al);
-    }
-
-    @Override
-    public void registerAlgorithms(ArrayList<MOAlgorithm<Task, T>> algorithms) {
-        this.algorithms.addAll(algorithms);
-    }
-
     protected IndicatorName getRandomIndicator() {
         if (indicatorWeights != null) {
             double rand = Util.rnd.nextDouble();
@@ -72,9 +70,9 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
     }
 
     @Override
-    protected void setWinLoseFromResultList(ResultArena arena) {
+    protected void performTournament() {
 
-        for (HashMap<String, ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>>> problemMap : benchmarResults) {
+        for (HashMap<String, ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>>> problemMap : benchmarkResults) {
             for (ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>> results : problemMap.values()) {
                 Task t = results.get(0).task;
                 AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task> first;
@@ -99,11 +97,11 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
                                 e.printStackTrace();
                             }
                             if (resultEqual(first.getSolution(), second.getSolution(), qi)) {
-                                arena.addGameResult(Game.DRAW, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
+                                resultArena.addGameResult(Game.DRAW, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
                             } else if (t.isFirstBetter(first.getSolution(), second.getSolution(), qi)) {
-                                arena.addGameResult(Game.WIN, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
+                                resultArena.addGameResult(Game.WIN, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
                             } else {
-                                arena.addGameResult(Game.WIN, second.getAlgorithm().getID(), first.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
+                                resultArena.addGameResult(Game.WIN, second.getAlgorithm().getID(), first.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
                             }
                         }
                     }
@@ -118,7 +116,7 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
                             for (int j = i + 1; j < results.size(); j++) {
                                 second = results.get(j);
                                 if (resultEqual(first.getSolution(), second.getSolution(), qi)) {
-                                    arena.addGameResult(Game.DRAW, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
+                                    resultArena.addGameResult(Game.DRAW, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
                                 } else {
                                     if (first.getSolution() == null) {
                                         System.out.println(first.getAlgorithm().getID() + " NULL");
@@ -126,7 +124,7 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
                                     if (second.getSolution() == null) {
                                         System.out.println(second.getAlgorithm().getID() + " NULL");
                                     }
-                                    arena.addGameResult(Game.WIN, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
+                                    resultArena.addGameResult(Game.WIN, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
                                 }
                             }
                         }

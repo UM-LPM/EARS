@@ -1,16 +1,19 @@
 package org.um.feri.ears.benchmark;
 
-import java.util.*;
-import java.util.concurrent.*;
-
 import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.ResultArena;
-import org.um.feri.ears.util.RatingIntervalPlot;
+import org.um.feri.ears.visualization.rating.RatingIntervalPlot;
+
+import java.util.*;
+import java.util.concurrent.*;
 
 public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends SolutionBase<?>, A extends AlgorithmBase<T, S>> {
     public static boolean printInfo = false;
@@ -19,8 +22,6 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
     protected String name;
     protected String shortName;
     protected String info;
-    protected boolean runInParallel = false;
-    protected boolean displayRatingIntervalChart = true;
 
     // Default benchmark settings
     protected EnumStopCriterion stopCriterion = EnumStopCriterion.EVALUATIONS;
@@ -30,16 +31,29 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
     public double drawLimit = 1e-7;
     protected int dimension = 2;
     protected int numberOfRuns = 15;
+    protected boolean runInParallel = false;
+    protected boolean displayRatingIntervalChart = true;
 
-
-    ArrayList<HashMap<String, ArrayList<AlgorithmRunResult<S, A, T>>>> benchmarResults;
+    ResultArena resultArena = new ResultArena();
+    ArrayList<HashMap<String, ArrayList<AlgorithmRunResult<S, A, T>>>> benchmarkResults;
     protected EnumMap<EnumBenchmarkInfoParameters, String> parameters; //add all specific parameters
 
     public RatingBenchmarkBase() {
         tasks = new ArrayList<>();
         algorithms = new ArrayList<>();
         parameters = new EnumMap<>(EnumBenchmarkInfoParameters.class);
-        //initFullProblemList();
+    }
+
+    public boolean isRunInParallel() {
+        return runInParallel;
+    }
+
+    public void setRunInParallel(boolean runInParallel) {
+        this.runInParallel = runInParallel;
+    }
+
+    public ResultArena getResultArena() {
+        return resultArena;
     }
 
     public void addParameter(EnumBenchmarkInfoParameters id, String value) {
@@ -52,7 +66,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
 
     public void clearPlayers() {
         algorithms.clear();
-        benchmarResults.clear();
+        benchmarkResults.clear();
     }
 
     public String toString() {
@@ -82,7 +96,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
      */
     public void unregisterAlgorithm(AlgorithmBase<T, S> algorithm) {
         algorithms.remove(algorithm);
-        benchmarResults.remove(algorithm);
+        benchmarkResults.remove(algorithm);
     }
 
     public String getParams() {
@@ -114,15 +128,20 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
 
     protected abstract void initFullProblemList();
 
-    public abstract void registerAlgorithm(A al);
+    public void addAlgorithm(A al) {
+        algorithms.add(al);
+    }
 
-    public abstract void registerAlgorithms(ArrayList<A> algorithms);
+    public void addAlgorithms(ArrayList<A> algorithms) {
+        this.algorithms.addAll(algorithms);
+    }
 
     public String getName() {
         return name;
     }
+
     public String getShortName() {
-        return shortName.isEmpty()? name : shortName;
+        return shortName.isEmpty() ? name : shortName;
     }
 
     public String getInfo() {
@@ -132,16 +151,15 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
     /**
      * Run the benchmark
      *
-     * @param arena                      needs to be filed with players and their ratings
      * @param allSingleProblemRunResults
      * @param numberOfRuns
      */
-    public void run(ResultArena arena, BankOfResults allSingleProblemRunResults, int numberOfRuns) {
+    public void run(BankOfResults allSingleProblemRunResults, int numberOfRuns) {
         this.numberOfRuns = numberOfRuns;
         initFullProblemList();
-        benchmarResults = new ArrayList<>(numberOfRuns);
+        benchmarkResults = new ArrayList<>(numberOfRuns);
         for (int i = 0; i < numberOfRuns; i++) {
-            benchmarResults.add(new HashMap<>());
+            benchmarkResults.add(new HashMap<>());
         }
 
         addParameter(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, "" + numberOfRuns);
@@ -151,21 +169,14 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
             for (T task : tasks) {
                 if (printInfo) System.out.println("Current problem: " + task.getProblemName());
                 ArrayList<AlgorithmRunResult<S, A, T>> runResults = runOneTask(task, allSingleProblemRunResults);
-                benchmarResults.get(i).put(task.getFileNameString(), runResults);
+                benchmarkResults.get(i).put(task.getFileNameString(), runResults);
             }
         }
-        setWinLoseFromResultList(arena);
 
         addParameter(EnumBenchmarkInfoParameters.BENCHMARK_RUN_DURATION,
                 "" + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
 
-        // Recalculate ratings after tournament
-        //arena.recalcRatings();
-        arena.calculateRatings();
-
-        if (displayRatingIntervalChart) {
-            displayRatingIntervalsChart(arena.getPlayers());
-        }
+        performStatistics();
     }
 
     /**
@@ -176,7 +187,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
     protected ArrayList<AlgorithmRunResult<S, A, T>> runOneTask(T task, BankOfResults allSingleProblemRunResults) {
 
         ArrayList<AlgorithmRunResult<S, A, T>> runResults = new ArrayList<>();
-        if(runInParallel) {
+        if (runInParallel) {
             ExecutorService pool = Executors.newFixedThreadPool(algorithms.size());
             Set<Future<AlgorithmRunResult>> set = new HashSet<>();
             for (A al : algorithms) {
@@ -224,7 +235,27 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
         return runResults;
     }
 
-    protected abstract void setWinLoseFromResultList(ResultArena arena);
+    private void performStatistics() {
+
+        for (A algorithm : algorithms) {
+            resultArena.addPlayer(algorithm, algorithm.getID());
+        }
+        performTournament();
+        resultArena.calculateRatings();
+
+        //variable display statistics
+        //other statistical methods
+        //package statistics
+
+
+        for (Player p : resultArena.getPlayers()) System.out.println(p); //print ratings
+
+        if (displayRatingIntervalChart) {
+            displayRatingIntervalsChart(resultArena.getPlayers());
+        }
+    }
+
+    protected abstract void performTournament();
 
     public void displayRatingIntervalsChart(ArrayList<Player> list) {
         RatingIntervalPlot plot = new RatingIntervalPlot("Rating Interval", list);
