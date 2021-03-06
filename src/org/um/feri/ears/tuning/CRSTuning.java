@@ -1,20 +1,19 @@
 package org.um.feri.ears.tuning;
 
+import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.benchmark.RatingBenchmark;
+import org.um.feri.ears.rating.Player;
+import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.util.Comparator.RatingComparator;
+import org.um.feri.ears.util.Util;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-
-import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.problems.results.BankOfResults;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.util.Comparator.RatingComparator;
-import org.um.feri.ears.util.Util;
 
 public class CRSTuning {
 	
@@ -25,7 +24,6 @@ public class CRSTuning {
 	private int M = 25; //number of players
 	private int E = M/2;
 		
-	private BankOfResults allSingleProblemRunResults;
     private ArrayList<Player> listAll;
     private boolean printDebug;
     private boolean printSingleRunDuration;
@@ -83,7 +81,6 @@ public class CRSTuning {
         listAll = new ArrayList<Player>();
         Util.rnd.setSeed(System.currentTimeMillis());
         this.printSingleRunDuration = printSingleRunDuration;
-        allSingleProblemRunResults =  new BankOfResults();
         this.max_execs = max_execs;
     }
     /**
@@ -133,7 +130,6 @@ public class CRSTuning {
         		break;
         	}
         }
-        allSingleProblemRunResults.removeAlgorithm(al);
     /*    if (benchMark.size() != ra.size()){
         	System.out.println(al.getID());
         	System.out.println("exit");
@@ -179,7 +175,7 @@ public class CRSTuning {
         int i=players.size();
         int gen = 0;
         while (i<max_execs){
-        	benchMark.run(allSingleProblemRunResults, repeat);
+        	benchMark.run(repeat);
         	benchMark.allPlayed();
         	listAll.sort(new RatingComparator());
         	// Remove significantly worse algorithms
@@ -272,8 +268,4 @@ public class CRSTuning {
         }
        return sb.toString();
     }
-    public BankOfResults getBankOfResults() {
-    	return allSingleProblemRunResults;
-    }
-
 }

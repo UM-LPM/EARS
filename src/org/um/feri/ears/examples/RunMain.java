@@ -1,23 +1,21 @@
 package org.um.feri.ears.examples;
 
 import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.benchmark.BenchmarkResults;
 import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.problems.results.BankOfResults;
+import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 
 public class RunMain {
-    private BankOfResults allSingleProblemRunResults;
     private ArrayList<Player> listAll;
     private boolean printDebug;
-    private boolean printSingleRunDuration;
     private ArrayList<Algorithm> players;
-    private ResultArena ra;
     protected RatingBenchmark benchMark; // suopm = new RatingRPUOed2();
     private long duration;
 
@@ -37,10 +35,6 @@ public class RunMain {
         return duration;
     }
 
-    public void setRa(ResultArena ra) {
-        this.ra = ra;
-    }
-
     /**
      * Set all data!
      *
@@ -52,10 +46,7 @@ public class RunMain {
         players = new ArrayList<Algorithm>();
         this.printDebug = printDebug;
         benchMark = banchmark;
-        listAll = new ArrayList<Player>();
-        ra = new ResultArena(100);
-        this.printSingleRunDuration = printSingleRunDuration;
-        allSingleProblemRunResults = new BankOfResults();
+        listAll = new ArrayList<>();
     }
 
     /**
@@ -86,7 +77,7 @@ public class RunMain {
     public void run(int repeat) {
         long stTime = System.currentTimeMillis();
         RatingBenchmark.printInfo = printDebug; // prints one on one results
-        benchMark.run(allSingleProblemRunResults, repeat);
+        benchMark.run(repeat);
         listAll.sort(new RatingComparator());
         long endTime = System.currentTimeMillis();
         duration = endTime - stTime;
@@ -103,8 +94,7 @@ public class RunMain {
         return sb.toString();
     }
 
-    public BankOfResults getBankOfResults() {
-        return allSingleProblemRunResults;
+    public BenchmarkResults<Task, DoubleSolution, Algorithm> getBenchmarkResults() {
+        return benchMark.getBenchmarkResults();
     }
-
 }

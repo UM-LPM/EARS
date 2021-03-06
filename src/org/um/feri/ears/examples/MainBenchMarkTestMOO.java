@@ -1,8 +1,5 @@
 package org.um.feri.ears.examples;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.gde3.D_GDE3;
 import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_DRA;
@@ -11,9 +8,11 @@ import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.benchmark.RatingCEC2009;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainBenchMarkTestMOO {
 
@@ -36,7 +35,7 @@ public class MainBenchMarkTestMOO {
         }
 
         long initTime = System.currentTimeMillis();
-        cec.run(new BankOfResults(), 20); //repeat competition 20X
+        cec.run(20); //repeat competition 20X
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         System.out.println("Benchmark execution time: " + estimatedTime + "s");
     }

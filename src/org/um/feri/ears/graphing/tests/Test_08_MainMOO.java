@@ -1,9 +1,5 @@
 package org.um.feri.ears.graphing.tests;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_DRA;
 import org.um.feri.ears.algorithms.moo.moead_dra.MOEAD_DRA;
@@ -16,9 +12,12 @@ import org.um.feri.ears.graphing.data.GraphDataManager;
 import org.um.feri.ears.graphing.data.GraphDataSet;
 import org.um.feri.ears.graphing.data.RecordedData;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 
 
@@ -45,8 +44,7 @@ public class Test_08_MainMOO
         for (MOAlgorithm al:players) {
           cec.addAlgorithm(al);
         }
-        BankOfResults ba = new BankOfResults();
-        cec.run(ba, 1); //repeat competition 50X
+        cec.run(1); //repeat competition 50X
 
         
         // -------------------------------------------------------------------

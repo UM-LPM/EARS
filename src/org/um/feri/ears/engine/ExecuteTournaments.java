@@ -1,44 +1,28 @@
 package org.um.feri.ears.engine;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-import java.util.stream.Collectors;
-
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.DummyRating;
 import org.um.feri.ears.benchmark.RatingBenchmarkBase;
-import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.util.Util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.stream.Collectors;
 
 /**
  * Reads list.json then executes the benchmark on all submitted algorithms and performs rating.
@@ -630,9 +614,8 @@ public class ExecuteTournaments {
 		for (DummyAlgorithm al:players) {
 			dr.addAlgorithm(al);
 		}
-		BankOfResults ba = new BankOfResults();
 
-		dr.run(ba, numberOfRuns); //repeat competition 50X
+		dr.run(numberOfRuns);
 		long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
 		logger.log(Level.INFO,"Total execution time: "+estimatedTime + "s");
 		ArrayList<Player> list = dr.getResultArena().getPlayers();

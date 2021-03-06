@@ -6,7 +6,6 @@ import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.rating.Game;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Comparator.AlgorithmResultComparator;
 import org.um.feri.ears.util.Util;
 
@@ -20,7 +19,7 @@ public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, DoubleSo
     @Override
     protected void performTournament() {
 
-        for (HashMap<String, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>> problemMap : benchmarkResults) {
+        for (HashMap<Task, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
             for (ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>> results : problemMap.values()) {
                 Task t = results.get(0).task;
 

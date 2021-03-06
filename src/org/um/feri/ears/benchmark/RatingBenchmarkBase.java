@@ -7,7 +7,6 @@ import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
-import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.visualization.rating.RatingIntervalPlot;
@@ -35,7 +34,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
     protected boolean displayRatingIntervalChart = true;
 
     ResultArena resultArena = new ResultArena();
-    ArrayList<HashMap<String, ArrayList<AlgorithmRunResult<S, A, T>>>> benchmarkResults;
+    BenchmarkResults<T, S, A> benchmarkResults = new BenchmarkResults();
     protected EnumMap<EnumBenchmarkInfoParameters, String> parameters; //add all specific parameters
 
     public RatingBenchmarkBase() {
@@ -69,6 +68,10 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
         benchmarkResults.clear();
     }
 
+    public BenchmarkResults<T, S, A> getBenchmarkResults() {
+        return benchmarkResults;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (T tw : tasks) {
@@ -96,7 +99,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
      */
     public void unregisterAlgorithm(AlgorithmBase<T, S> algorithm) {
         algorithms.remove(algorithm);
-        benchmarkResults.remove(algorithm);
+        benchmarkResults.removeAlgorithm(algorithm);
     }
 
     public String getParams() {
@@ -151,25 +154,19 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
     /**
      * Run the benchmark
      *
-     * @param allSingleProblemRunResults
      * @param numberOfRuns
      */
-    public void run(BankOfResults allSingleProblemRunResults, int numberOfRuns) {
+    public void run(int numberOfRuns) {
         this.numberOfRuns = numberOfRuns;
         initFullProblemList();
-        benchmarkResults = new ArrayList<>(numberOfRuns);
-        for (int i = 0; i < numberOfRuns; i++) {
-            benchmarkResults.add(new HashMap<>());
-        }
-
         addParameter(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, "" + numberOfRuns);
         long start = System.nanoTime();
         for (int i = 0; i < numberOfRuns; i++) {
             if (printInfo) System.out.println("Current run: " + (i + 1));
             for (T task : tasks) {
                 if (printInfo) System.out.println("Current problem: " + task.getProblemName());
-                ArrayList<AlgorithmRunResult<S, A, T>> runResults = runOneTask(task, allSingleProblemRunResults);
-                benchmarkResults.get(i).put(task.getFileNameString(), runResults);
+                ArrayList<AlgorithmRunResult<S, A, T>> runResults = runOneTask(task);
+                benchmarkResults.addResults(i, task, runResults);
             }
         }
 
@@ -181,10 +178,9 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
 
     /**
      * @param task
-     * @param allSingleProblemRunResults
      * @return
      */
-    protected ArrayList<AlgorithmRunResult<S, A, T>> runOneTask(T task, BankOfResults allSingleProblemRunResults) {
+    protected ArrayList<AlgorithmRunResult<S, A, T>> runOneTask(T task) {
 
         ArrayList<AlgorithmRunResult<S, A, T>> runResults = new ArrayList<>();
         if (runInParallel) {
@@ -204,7 +200,6 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
 
                     //TODO generic feasibility check for result
                     runResults.add(result);
-                    allSingleProblemRunResults.add(result.task, result.solution, result.algorithm);
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -225,7 +220,6 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
                     if (printInfo)
                         System.out.println(algorithm.getID() + ": " + duration / 1000.0);
                     runResults.add(new AlgorithmRunResult(result, algorithm, taskCopy));
-                    allSingleProblemRunResults.add(taskCopy, result, algorithm);
                     //TODO generic feasibility check
                 } catch (StopCriterionException e) {
                     System.err.println(algorithm.getID() + " StopCriterionException for:" + task + "\n" + e);

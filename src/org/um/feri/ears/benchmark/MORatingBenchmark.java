@@ -10,7 +10,6 @@ import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.rating.Game;
-import org.um.feri.ears.rating.ResultArena;
 import org.um.feri.ears.util.Comparator.QualityIndicatorComparator;
 import org.um.feri.ears.util.Util;
 
@@ -72,7 +71,7 @@ public abstract class MORatingBenchmark<T extends Number, Task extends MOTask<T,
     @Override
     protected void performTournament() {
 
-        for (HashMap<String, ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>>> problemMap : benchmarkResults) {
+        for (HashMap<Task, ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
             for (ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>> results : problemMap.values()) {
                 Task t = results.get(0).task;
                 AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task> first;

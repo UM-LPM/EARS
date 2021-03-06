@@ -1,15 +1,14 @@
 package org.um.feri.ears.experiment.ee;
 
-import java.util.ArrayList;
-
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.problems.results.BankOfResults;
 import org.um.feri.ears.util.Util;
+
+import java.util.ArrayList;
 
 public class BenchmarkEEExecute {
 	
@@ -35,8 +34,6 @@ public class BenchmarkEEExecute {
     	for (Algorithm al:players) {
     		suopm.addAlgorithm(al);
     	}
-    	BankOfResults ba = new BankOfResults();
-    	suopm.run(ba, 5);
-
+    	suopm.run(5);
     }
 }
