@@ -1,6 +1,6 @@
 package org.um.feri.ears.problems;
 
-import org.um.feri.ears.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;

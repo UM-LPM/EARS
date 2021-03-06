@@ -3,8 +3,7 @@ package org.um.feri.ears.problems;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.um.feri.ears.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.problems.moo.IntegerMOProblem;
+import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 
 public class Task extends TaskBase<Problem> {
 

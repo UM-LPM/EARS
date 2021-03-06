@@ -11,7 +11,7 @@ import org.um.feri.ears.rating.Rating;
 
 public class ExperimentAlgorithmWithBestSettings {
     public static void main(String[] args) {
-        RunMainBestAlgSettings m = new RunMainBestAlgSettings(false, false, new RPUOed2Benchmark());
+        BenchmarkRunnerBestAlgSettings m = new BenchmarkRunnerBestAlgSettings(false, false, new RPUOed2Benchmark());
         m.addAlgorithm(new RandomWalkAlgorithm(), new Rating(1500, 350, 0.06));
         m.addAlgorithm(new RandomWalkAMAlgorithm(), new Rating(1500, 350, 0.06));
         m.addAlgorithm(new ES1p1sAlgorithm(), new Rating(1500, 350, 0.06));

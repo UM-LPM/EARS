@@ -2,7 +2,7 @@ package org.um.feri.ears.benchmark;
 
 import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;

@@ -10,7 +10,7 @@ import org.um.feri.ears.rating.Rating;
 
 public class Main2DataExample {
     public static void main(String[] args) {
-        RunMain m = new RunMain(false, false, new RPUOed30Benchmark());
+        BenchmarkRunner m = new BenchmarkRunner(false, false, new RPUOed30Benchmark());
         m.addAlgorithm(new RandomWalkAlgorithm(), new Rating(1500, 350, 0.06));
         m.addAlgorithm(new RandomWalkAMAlgorithm(), new Rating(1500, 350, 0.06));
         m.addAlgorithm(new ES1p1sAlgorithm(), new Rating(1500, 350, 0.06));

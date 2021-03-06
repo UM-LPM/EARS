@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.benchmark.AlgorithmRunResult;
-import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;

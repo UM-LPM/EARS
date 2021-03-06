@@ -9,14 +9,14 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.BenchmarkResults;
 import org.um.feri.ears.benchmark.CEC2010Benchmark;
-import org.um.feri.ears.examples.RunMain;
+import org.um.feri.ears.examples.BenchmarkRunner;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
 
 public class EARS_Friedman {
     public static void main(String[] args) {
     	CEC2010Benchmark b2 = new CEC2010Benchmark(0.001);
-        RunMain m = new RunMain(false, false, b2) ;
+        BenchmarkRunner m = new BenchmarkRunner(false, false, b2) ;
         m.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06)); // RWSi
         //m.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));  // ABC
         m.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));       // TLBO

@@ -8,7 +8,7 @@ import org.um.feri.ears.rating.Rating;
 
 public class ExperimentPrintResults {
     public static void main(String[] args) {
-        RunMain m = new RunMain(false, false, new RPUOed2Benchmark());
+        BenchmarkRunner m = new BenchmarkRunner(false, false, new RPUOed2Benchmark());
         m.addAlgorithm(new RandomWalkAlgorithm(), new Rating(1500, 350, 0.06));
         //m.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));
         // m.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));

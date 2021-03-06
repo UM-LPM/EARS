@@ -14,8 +14,7 @@ import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 public class QualityIndicatorExample {
 
 	public static void main(String[] args) {
-	
-		
+
 		D_NSGAII nsga2 = new D_NSGAII();
 		DoubleMOProblem problem = new UnconstrainedProblem1();
 		DoubleMOTask t = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0, 0, 0.0001,  new UnconstrainedProblem1());
@@ -30,7 +29,5 @@ public class QualityIndicatorExample {
 		} catch (StopCriterionException e) {
 			e.printStackTrace();
 		}
-		
 	}
-
 }
