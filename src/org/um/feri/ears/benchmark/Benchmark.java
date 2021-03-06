@@ -12,9 +12,9 @@ import org.um.feri.ears.util.Util;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class RatingBenchmark extends RatingBenchmarkBase<Task, DoubleSolution, Algorithm> {
+public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algorithm> {
 
-    protected abstract void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon);
+    protected abstract void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon);
 
     @Override
     protected void performTournament() {

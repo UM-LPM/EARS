@@ -5,8 +5,8 @@ import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.constrained.*;
 
-public class RatingRPCOe1 extends RatingBenchmark {
-    public RatingRPCOe1() {
+public class RPCOe1Benchmark extends Benchmark {
+    public RPCOe1Benchmark() {
         super();
         name = "Solving Real parameter Constrained Optimization with maximum evaluation condition";
         shortName = "RPCOe1";
@@ -17,16 +17,16 @@ public class RatingRPCOe1 extends RatingBenchmark {
     }
 
     @Override
-    protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
 
     @Override
-    protected void initFullProblemList() {
-        registerTask(new TLBOBenchmarkFunction1(), stopCriterion, 200000, 0, maxIterations, 0.001);
-        registerTask(new TLBOBenchmarkFunction2(), stopCriterion, 200000, 0, maxIterations, 0.001);
-        registerTask(new TLBOBenchmarkFunction3(), stopCriterion, 200000, 0, maxIterations, 0.001);
-        registerTask(new TLBOBenchmarkFunction4(), stopCriterion, 200000, 0, maxIterations, 0.001);
-        registerTask(new TLBOBenchmarkFunction5(), stopCriterion, 200000, 0, maxIterations, 0.001);
+    protected void initAllProblems() {
+        addTask(new TLBOBenchmarkFunction1(), stopCriterion, 200000, 0, maxIterations, 0.001);
+        addTask(new TLBOBenchmarkFunction2(), stopCriterion, 200000, 0, maxIterations, 0.001);
+        addTask(new TLBOBenchmarkFunction3(), stopCriterion, 200000, 0, maxIterations, 0.001);
+        addTask(new TLBOBenchmarkFunction4(), stopCriterion, 200000, 0, maxIterations, 0.001);
+        addTask(new TLBOBenchmarkFunction5(), stopCriterion, 200000, 0, maxIterations, 0.001);
     }
 }

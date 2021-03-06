@@ -9,7 +9,7 @@ import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, IntegerMOProblem> {
+public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, IntegerMOProblem> {
 
     public CITOBenchmark() {
         this(null, 0.0000001, true);
@@ -29,12 +29,12 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
     }
 
     @Override
-    protected void registerTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
+    protected void addTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
         tasks.add(new IntegerMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
 
     @Override
-    protected void initFullProblemList() {
+    protected void initAllProblems() {
 
         ArrayList<IntegerMOProblem> problems = new ArrayList<IntegerMOProblem>();
 
@@ -48,7 +48,7 @@ public class CITOBenchmark extends MORatingBenchmark<Integer, IntegerMOTask, Int
 //		problems.add(new CITOProblem(CITOProblem.Problems.OO_MyBatis.name()));
 
         for (IntegerMOProblem moProblem : problems) {
-            registerTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
+            addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
         }
     }
 }

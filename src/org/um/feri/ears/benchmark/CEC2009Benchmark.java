@@ -10,16 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem> {
+public class CEC2009Benchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMOProblem> {
 
-    public RatingCEC2009() {
+    public CEC2009Benchmark() {
         this(null, 0.0000001);
         List<IndicatorName> indicators = new ArrayList<IndicatorName>();
         indicators.add(IndicatorName.IGD); //Default indicator
         this.indicators = indicators;
     }
 
-    public RatingCEC2009(List<IndicatorName> indicators, double drawLimit) {
+    public CEC2009Benchmark(List<IndicatorName> indicators, double drawLimit) {
         super(indicators);
         name = "Benchmark CEC 2009";
         this.drawLimit = drawLimit;
@@ -29,12 +29,12 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
     }
 
     @Override
-    protected void registerTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
+    protected void addTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
         tasks.add(new DoubleMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
 
     @Override
-    protected void initFullProblemList() {
+    protected void initAllProblems() {
 
         ArrayList<DoubleMOProblem> problems = new ArrayList<DoubleMOProblem>();
 
@@ -50,7 +50,7 @@ public class RatingCEC2009 extends MORatingBenchmark<Double, DoubleMOTask, Doubl
     	problems.add(new UnconstrainedProblem10());*/
 
         for (DoubleMOProblem moProblem : problems) {
-            registerTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
+            addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
         }
     }
 }

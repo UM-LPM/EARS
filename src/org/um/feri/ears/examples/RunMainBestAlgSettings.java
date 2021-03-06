@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
-import org.um.feri.ears.benchmark.RatingBenchmark;
+import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
@@ -18,7 +18,7 @@ public class RunMainBestAlgSettings extends RunMain {
     private ArrayList<Algorithm> allAlgorithmWithBestSettings;
     private ArrayList<Rating> allAlgorithmWithBestSettingsRating;
 
-    public RunMainBestAlgSettings(boolean printDebug, boolean printSingleRunDuration, RatingBenchmark banchmark) {
+    public RunMainBestAlgSettings(boolean printDebug, boolean printSingleRunDuration, Benchmark banchmark) {
         super(printDebug, printSingleRunDuration, banchmark);
         allAlgorithmWithBestSettings = new ArrayList<Algorithm>();
         allAlgorithmWithBestSettingsRating = new ArrayList<Rating>();

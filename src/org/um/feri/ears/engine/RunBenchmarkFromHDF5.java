@@ -4,8 +4,8 @@ import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5SimpleReader;
 import ch.systemsx.cisd.hdf5.IHDF5SimpleWriter;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
-import org.um.feri.ears.benchmark.DummyRating;
-import org.um.feri.ears.benchmark.RatingBenchmark;
+import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.DummyBenhcmark;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.util.Util;
 
@@ -20,7 +20,7 @@ public class RunBenchmarkFromHDF5 {
     public static void main(String[] args) {
 
         Util.rnd.setSeed(System.currentTimeMillis());
-        RatingBenchmark.printInfo = true; //prints one on one results
+        Benchmark.printInfo = true; //prints one on one results
 
         if (args.length < 2) {
             System.out.println("ERROR: Not enough arguments (source file, destination file) provided!");
@@ -36,7 +36,7 @@ public class RunBenchmarkFromHDF5 {
         int[] numberOfAllSolutions;
 
         ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
-        DummyRating dr = new DummyRating(0.000001); //Create banchmark
+        DummyBenhcmark dr = new DummyBenhcmark(0.000001); //Create banchmark
         dr.setDisplayRatingIntervalChart(false);
 
         IHDF5SimpleReader reader = HDF5Factory.openForReading(srcFile);

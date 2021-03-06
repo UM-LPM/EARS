@@ -2,7 +2,7 @@ package org.um.feri.ears.tuning;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.benchmark.RatingBenchmark;
+import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.util.Comparator.RatingComparator;
@@ -28,7 +28,7 @@ public class CRSTuning {
     private boolean printDebug;
     private boolean printSingleRunDuration;
     private ArrayList<Algorithm> players;
-    protected RatingBenchmark benchMark; // suopm = new RatingRPUOed2();
+    protected Benchmark benchMark; // suopm = new RatingRPUOed2();
     private long duration;
     private int noRepeats;
     
@@ -73,7 +73,7 @@ public class CRSTuning {
     public static final boolean DEBUG_ON = true; 
     public static final boolean DEBUG_OFF = false;
     
-    public CRSTuning(boolean printDebug, boolean printSingleRunDuration, RatingBenchmark benchmark, int max_execs) {
+    public CRSTuning(boolean printDebug, boolean printSingleRunDuration, Benchmark benchmark, int max_execs) {
         Util.rnd.setSeed(System.currentTimeMillis());
         players = new ArrayList<Algorithm>();
         this.printDebug = printDebug;
@@ -121,7 +121,7 @@ public class CRSTuning {
     }
     
     public void removeAlgorithm(AlgorithmBase al) {
-    	benchMark.unregisterAlgorithm(al);
+    	benchMark.removeAlgorithm(al);
 		players.remove(al);
 		benchMark.getResultArena().removePlayer(al.getID());
         for (int i=0;i<listAll.size();i++){
@@ -167,7 +167,7 @@ public class CRSTuning {
         }
 
         long stTime = System.currentTimeMillis();
-        RatingBenchmark.printInfo = printDebug; // prints one on one results
+        Benchmark.printInfo = printDebug; // prints one on one results
 
         sb.append(outputRanking(0));
         System.out.println(outputRanking(0));

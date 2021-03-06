@@ -4,8 +4,8 @@ import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
-import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.benchmark.RatingRPUOed2;
+import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.RPUOed2Benchmark;
 import org.um.feri.ears.examples.RunMainBestAlgSettings;
 import org.um.feri.ears.rating.Rating;
 import org.um.feri.ears.util.Util;
@@ -25,8 +25,8 @@ public class Test_01_MainStart {
      */
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis());
-        RatingBenchmark.printInfo = true; //prints one on one results
-        RunMainBestAlgSettings rbs = new RunMainBestAlgSettings(true,false, new RatingRPUOed2());
+        Benchmark.printInfo = true; //prints one on one results
+        RunMainBestAlgSettings rbs = new RunMainBestAlgSettings(true,false, new RPUOed2Benchmark());
         rbs.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06));  
         rbs.addAlgorithm(new RandomWalkAMAlgorithm(),new Rating(1500, 350, 0.06))  ;  
         rbs.addAlgorithm(new ES1p1sAlgorithm(),new Rating(1500, 350, 0.06));  

@@ -5,12 +5,12 @@ import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
-import org.um.feri.ears.benchmark.RatingRPUOed30;
+import org.um.feri.ears.benchmark.RPUOed30Benchmark;
 import org.um.feri.ears.rating.Rating;
 
 public class Main2DataExample {
     public static void main(String[] args) {
-        RunMain m = new RunMain(false, false, new RatingRPUOed30());
+        RunMain m = new RunMain(false, false, new RPUOed30Benchmark());
         m.addAlgorithm(new RandomWalkAlgorithm(), new Rating(1500, 350, 0.06));
         m.addAlgorithm(new RandomWalkAMAlgorithm(), new Rating(1500, 350, 0.06));
         m.addAlgorithm(new ES1p1sAlgorithm(), new Rating(1500, 350, 0.06));

@@ -14,7 +14,7 @@ import org.um.feri.ears.visualization.rating.RatingIntervalPlot;
 import java.util.*;
 import java.util.concurrent.*;
 
-public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends SolutionBase<?>, A extends AlgorithmBase<T, S>> {
+public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBase<?>, A extends AlgorithmBase<T, S>> {
     public static boolean printInfo = false;
     protected ArrayList<T> tasks;
     protected ArrayList<A> algorithms;
@@ -37,7 +37,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
     BenchmarkResults<T, S, A> benchmarkResults = new BenchmarkResults();
     protected EnumMap<EnumBenchmarkInfoParameters, String> parameters; //add all specific parameters
 
-    public RatingBenchmarkBase() {
+    public BenchmarkBase() {
         tasks = new ArrayList<>();
         algorithms = new ArrayList<>();
         parameters = new EnumMap<>(EnumBenchmarkInfoParameters.class);
@@ -97,7 +97,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
      *
      * @param algorithm to be removed from the benchmark
      */
-    public void unregisterAlgorithm(AlgorithmBase<T, S> algorithm) {
+    public void removeAlgorithm(AlgorithmBase<T, S> algorithm) {
         algorithms.remove(algorithm);
         benchmarkResults.removeAlgorithm(algorithm);
     }
@@ -129,7 +129,7 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
         this.displayRatingIntervalChart = displayRatingIntervalChart;
     }
 
-    protected abstract void initFullProblemList();
+    protected abstract void initAllProblems();
 
     public void addAlgorithm(A al) {
         algorithms.add(al);
@@ -154,11 +154,11 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
     /**
      * Run the benchmark
      *
-     * @param numberOfRuns
+     * @param numberOfRuns number of runs/repetitions of the benchmark
      */
     public void run(int numberOfRuns) {
         this.numberOfRuns = numberOfRuns;
-        initFullProblemList();
+        initAllProblems();
         addParameter(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, "" + numberOfRuns);
         long start = System.nanoTime();
         for (int i = 0; i < numberOfRuns; i++) {
@@ -176,10 +176,6 @@ public abstract class RatingBenchmarkBase<T extends TaskBase<?>, S extends Solut
         performStatistics();
     }
 
-    /**
-     * @param task
-     * @return
-     */
     protected ArrayList<AlgorithmRunResult<S, A, T>> runOneTask(T task) {
 
         ArrayList<AlgorithmRunResult<S, A, T>> runResults = new ArrayList<>();

@@ -5,9 +5,9 @@ import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.*;
 
-public class RatingRPUOed30 extends RatingBenchmark {
+public class RPUOed30Benchmark extends Benchmark {
 
-    public RatingRPUOed30() {
+    public RPUOed30Benchmark() {
         super();
         name="Real Parameter Unconstrained Optimization Problems with maximum evaluation condition";
         shortName = "RPUOed30";
@@ -20,19 +20,19 @@ public class RatingRPUOed30 extends RatingBenchmark {
     }
 
     @Override
-    protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
 
     @Override
-    protected void initFullProblemList() {
-        registerTask(new Ackley1(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new Griewank(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new Rastrigin(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new RosenbrockDeJong2(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new Schwefel226(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new SchwefelRidge(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new Sphere(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+    protected void initAllProblems() {
+        addTask(new Ackley1(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new Griewank(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new Rastrigin(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new RosenbrockDeJong2(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new Schwefel226(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new SchwefelRidge(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new Sphere(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
     }
         
     @Override

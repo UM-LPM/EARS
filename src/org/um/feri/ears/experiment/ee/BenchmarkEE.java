@@ -1,8 +1,7 @@
 package org.um.feri.ears.experiment.ee;
 
+import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
-import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
@@ -14,7 +13,7 @@ import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 
-public class BenchmarkEE extends RatingBenchmark {
+public class BenchmarkEE extends Benchmark {
     int dim;
 
     public BenchmarkEE() {
@@ -34,18 +33,18 @@ public class BenchmarkEE extends RatingBenchmark {
     }
 
     @Override
-    protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
 
     @Override
-    protected void initFullProblemList() {
-        registerTask(new Ackley1(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new Griewank(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new Rastrigin(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new RosenbrockDeJong2(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new Schwefel226(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new SchwefelRidge(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
-        registerTask(new Sphere(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+    protected void initAllProblems() {
+        addTask(new Ackley1(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new Griewank(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new Rastrigin(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new RosenbrockDeJong2(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new Schwefel226(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new SchwefelRidge(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new Sphere(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
     }
 }

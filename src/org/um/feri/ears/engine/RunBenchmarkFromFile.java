@@ -1,8 +1,8 @@
 package org.um.feri.ears.engine;
 
 import org.um.feri.ears.algorithms.DummyAlgorithm;
-import org.um.feri.ears.benchmark.DummyRating;
-import org.um.feri.ears.benchmark.RatingBenchmark;
+import org.um.feri.ears.benchmark.DummyBenhcmark;
+import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.util.Util;
 
@@ -28,7 +28,7 @@ public class RunBenchmarkFromFile {
         String destFile = args[1];
 
         Util.rnd.setSeed(System.currentTimeMillis());
-        RatingBenchmark.printInfo = true; //prints one on one results
+        Benchmark.printInfo = true; //prints one on one results
 
         //from args
         //String srcFile = "D:\\Benchmark results\\soil_model_fitness_files\\merged.txt";
@@ -39,7 +39,7 @@ public class RunBenchmarkFromFile {
         int numberOfsolutions = 0;
 
         ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
-        DummyRating dr = new DummyRating(0.000001); //Create banchmark
+        DummyBenhcmark dr = new DummyBenhcmark(0.000001); //Create banchmark
         dr.setDisplayRatingIntervalChart(false);
         //parse algorithm and problem names
         String algorithmName, problemName;

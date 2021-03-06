@@ -8,10 +8,10 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
-import org.um.feri.ears.benchmark.DummyRating;
-import org.um.feri.ears.benchmark.MORatingBenchmark;
-import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.benchmark.RatingBenchmarkBase;
+import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.DummyBenhcmark;
+import org.um.feri.ears.benchmark.MOBenchmark;
+import org.um.feri.ears.benchmark.BenchmarkBase;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,9 +33,9 @@ public class GenerateBenchmarksFileTest {
     private static final String BENCHMARKS_FILE = "benchmarks.json";
     private static final String CONFIG_FOLDER = "config";
     private static final String BENCHMARK_PACKAGE = "org.um.feri.ears.benchmark";
-    private static final String DUMMY_RATING_CLASS_NAME = DummyRating.class.getSimpleName();
-    private static final String MO_BENCHMARK_CLASS_NAME = MORatingBenchmark.class.getSimpleName();
-    private static final String SO_BENCHMARK_CLASS_NAME = RatingBenchmark.class.getSimpleName();
+    private static final String DUMMY_BENCHMARK_CLASS_NAME = DummyBenhcmark.class.getSimpleName();
+    private static final String MO_BENCHMARK_CLASS_NAME = MOBenchmark.class.getSimpleName();
+    private static final String SO_BENCHMARK_CLASS_NAME = Benchmark.class.getSimpleName();
 
     public static void main(String[] args) {
 
@@ -54,7 +54,7 @@ public class GenerateBenchmarksFileTest {
         for (Class<? extends Object> clazz : classes) {
             if (!clazz.getName().contains("$")) {
 
-                if (Modifier.isAbstract(clazz.getModifiers()) || clazz.getSimpleName().equals(DUMMY_RATING_CLASS_NAME)) //check if class is abstract or DummyRating
+                if (Modifier.isAbstract(clazz.getModifiers()) || clazz.getSimpleName().equals(DUMMY_BENCHMARK_CLASS_NAME)) //check if class is abstract or DummyRating
                     continue;
 
                 try {
@@ -63,26 +63,26 @@ public class GenerateBenchmarksFileTest {
                             System.out.println("Multi-Objective: " + clazz.getName());
                             Object benchmark = clazz.newInstance();
                             BenchmarkJson b = new BenchmarkJson();
-                            b.name = ((RatingBenchmarkBase) benchmark).getName();
+                            b.name = ((BenchmarkBase) benchmark).getName();
                             b.fileName = clazz.getSimpleName();
-                            b.numberOfRuns = ((RatingBenchmarkBase) benchmark).getNumberOfRuns();
+                            b.numberOfRuns = ((BenchmarkBase) benchmark).getNumberOfRuns();
                             b.type = "Multi-Objective";
-                            b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriterion().toString();
-                            b.stopCondition = ((RatingBenchmarkBase) benchmark).getStopCondition();
-                            b.problems = ((RatingBenchmarkBase) benchmark).getProblems();
+                            b.stopCriteria = ((BenchmarkBase) benchmark).getStopCriterion().toString();
+                            b.stopCondition = ((BenchmarkBase) benchmark).getStopCondition();
+                            b.problems = ((BenchmarkBase) benchmark).getProblems();
                             benchmarks.add(b);
 
                         } else if (clazz.getSuperclass().getSimpleName().equals(SO_BENCHMARK_CLASS_NAME)) {
                             System.out.println("Single-Objective: " + clazz.getName());
                             Object benchmark = clazz.newInstance();
                             BenchmarkJson b = new BenchmarkJson();
-                            b.name = ((RatingBenchmarkBase) benchmark).getName();
+                            b.name = ((BenchmarkBase) benchmark).getName();
                             b.fileName = clazz.getSimpleName();
-                            b.numberOfRuns = ((RatingBenchmarkBase) benchmark).getNumberOfRuns();
+                            b.numberOfRuns = ((BenchmarkBase) benchmark).getNumberOfRuns();
                             b.type = "Single-Objective";
-                            b.stopCriteria = ((RatingBenchmarkBase) benchmark).getStopCriterion().toString();
-                            b.stopCondition = ((RatingBenchmarkBase) benchmark).getStopCondition();
-                            b.problems = ((RatingBenchmarkBase) benchmark).getProblems();
+                            b.stopCriteria = ((BenchmarkBase) benchmark).getStopCriterion().toString();
+                            b.stopCondition = ((BenchmarkBase) benchmark).getStopCondition();
+                            b.problems = ((BenchmarkBase) benchmark).getProblems();
                             benchmarks.add(b);
                         }
                     }

@@ -15,7 +15,7 @@ import java.util.logging.SimpleFormatter;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
-import org.um.feri.ears.benchmark.RatingRPUOed2;
+import org.um.feri.ears.benchmark.RPUOed2Benchmark;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -52,7 +52,7 @@ public class BenchmarkRunner {
 		
 		//RandomWalkAlgorithm algorithm = new RandomWalkAlgorithm();
 		TLBOAlgorithm algorithm = new TLBOAlgorithm();
-		RatingRPUOed2 benchmark = new RatingRPUOed2(); // Create banchmark
+		RPUOed2Benchmark benchmark = new RPUOed2Benchmark(); // Create banchmark
 		
 		algorithm.addCustomInfo("submissionAuthor", "author");
 		algorithm.addCustomInfo("submissionId", "id");

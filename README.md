@@ -48,8 +48,8 @@ dependencies {
 * If you have a special representation for your solution create your own by extending the `DoubleSolution` class in EARS:
 `class MySolution extends DoubleSolution`.
 * Code examples can be found in the package `org.um.feri.ears.examples`.
-* All information of the given problem (dimensions, constraints, bounds, etc...) can be obtaint from the Task object: `public Individual run(Task taskProblem)`.
-* Before every evaluation check if the stopping criterion is reached by calling `taskProblem.isStopCriterion()`. If evaluate is called after the stopping criterion is reached, a `StopCriterionException will` be thrown.
+* All information of the given problem (dimensions, constraints, bounds, etc...) can be obtained from the Task object: `public Individual run(Task task)`.
+* Before every evaluation check if the stopping criterion is reached by calling `taskProblem.isStopCriterion()`. If evaluate is called after the stopping criterion is reached, a `StopCriterionException` will be thrown.
 
 ## Examples
 
@@ -66,7 +66,7 @@ public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorith
     private DoubleSolution best; // used to save global best solution
 
     public RandomWalkAlgorithm() {
-        ai = new AlgorithmInfo("RWSi", "", "RWSi", "Random Walk Simple"); // add algorithm name
+        ai = new AlgorithmInfo("RWSi", "Random Walk Simple", ""); // add algorithm name
         au = new Author("Matej", "matej.crepinsek at um.si"); // add author information
     }
 
@@ -102,7 +102,7 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.Util;
 
-public class EA_SOP_VisualizationExample {
+public class SOSingleRun {
 
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run
@@ -131,19 +131,17 @@ import org.um.feri.ears.algorithms.so.gwo.GWO;
 import org.um.feri.ears.algorithms.so.jade.JADE;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
-import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.benchmark.RatingRPUOed30;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.RPUOed30Benchmark;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 
-public class SORatingExample {
+public class SOBenchmarkExample {
 
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis()); //set the seed of the random generator
-        RatingBenchmark.debugPrint = false; //prints one on one results
+        Benchmark.printInfo = false; //prints info about the benchmark execution
         //add algorithms to a list
         ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
         algorithms.add(new ABC());
@@ -151,22 +149,12 @@ public class SORatingExample {
         algorithms.add(new TLBOAlgorithm());
         algorithms.add(new RandomWalkAlgorithm());
         algorithms.add(new JADE());
-        ResultArena ra = new ResultArena(100); // the result arena holds information about the players (wins, loses, draws, ratings...) 
 
-        RatingRPUOed30 rpuoed30 = new RatingRPUOed30(); // benchmark with prepared tasks and settings
+        RPUOed30Benchmark rpuoed30 = new RPUOed30Benchmark(); // benchmark with prepared tasks and settings
 
-        rpuoed30.registerAlgorithms(algorithms);  // register the algorithms in the benchmark
+        rpuoed30.addAlgorithms(algorithms);  // register the algorithms in the benchmark
 
-        for (Algorithm al:algorithms) {
-            ra.addPlayer(al, al.getID()); // add players with initial ratings
-        }
-        BankOfResults ba = new BankOfResults();
-
-        rpuoed30.run(ra, ba, 10); //start the tournament with 10 runs/repetitions
-
-        //display the leaderboard
-        ArrayList<Player> list = ra.getPlayers();
-        for (Player p: list) System.out.println(p);
+        rpuoed30.run(10); //start the tournament with 10 runs/repetitions
     }
 }
 ```
@@ -188,8 +176,10 @@ M. Ravber, M. Mernik, and M. Črepinšek. "Ranking multi-objective evolutionary 
 
 M. Ravber, M. Črepinšek, M. Mernik, and T. Kosar. "Tuning Multi-Objective Optimization Algorithms for the Integration and Testing Order Problem." International Conference on Bioinspired Methods and Their Applications. Springer, Cham, 2018. https://link.springer.com/chapter/10.1007/978-3-319-91641-5_20
 
-M. Črepinšek, M. Ravber, M. Mernik, and T. Kosar. "Tuning Multi-Objective Evolutionary Algorithms on Different Sized Problem Sets." Mathematics 7.9 (2019): 824. https://www.mdpi.com/2227-7390/7/9/824 
+M. Črepinšek, M. Ravber, M. Mernik, and T. Kosar. "Tuning Multi-Objective Evolutionary Algorithms on Different Sized Problem Sets." Mathematics, 7.9 (2019): 824. https://www.mdpi.com/2227-7390/7/9/824 
 
+M. Črepinšek, S. H. Liu, M. Mernik, and M. Ravber. "Long term memory assistance for evolutionary algorithms." Mathematics, 7(11) (2019): 1129. https://www.mdpi.com/2227-7390/7/11/1129
 
+M. Ravber, Ž. Kovačević, M. Črepinšek, and M. Mernik. "Inferring Absolutely Non-Circular Attribute Grammars with a Memetic Algorithm." Applied Soft Computing 100 (2021), 106956. https://www.sciencedirect.com/science/article/abs/pii/S1568494620308942
 
 *The authors acknowledge the financial support from the Slovenian Research Agency (research core funding No. P2-0041 COMPUTER SYSTEMS, METHODOLOGIES, AND INTELLIGENT SERVICES)* http://p2-0041.feri.um.si/en/

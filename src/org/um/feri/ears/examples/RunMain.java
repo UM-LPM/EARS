@@ -1,8 +1,8 @@
 package org.um.feri.ears.examples;
 
 import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkResults;
-import org.um.feri.ears.benchmark.RatingBenchmark;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.rating.Player;
@@ -16,7 +16,7 @@ public class RunMain {
     private ArrayList<Player> listAll;
     private boolean printDebug;
     private ArrayList<Algorithm> players;
-    protected RatingBenchmark benchMark; // suopm = new RatingRPUOed2();
+    protected Benchmark benchMark; // suopm = new RatingRPUOed2();
     private long duration;
 
     public ArrayList<Player> getListAll() {
@@ -27,7 +27,7 @@ public class RunMain {
         return printDebug;
     }
 
-    public RatingBenchmark getRatingBenchmark() {
+    public Benchmark getBenchmark() {
         return benchMark;
     }
 
@@ -41,7 +41,7 @@ public class RunMain {
      * @param printDebug
      * @param banchmark
      */
-    public RunMain(boolean printDebug, boolean printSingleRunDuration, RatingBenchmark banchmark) {
+    public RunMain(boolean printDebug, boolean printSingleRunDuration, Benchmark banchmark) {
         Util.rnd.setSeed(System.currentTimeMillis());
         players = new ArrayList<Algorithm>();
         this.printDebug = printDebug;
@@ -76,7 +76,7 @@ public class RunMain {
      */
     public void run(int repeat) {
         long stTime = System.currentTimeMillis();
-        RatingBenchmark.printInfo = printDebug; // prints one on one results
+        Benchmark.printInfo = printDebug; // prints one on one results
         benchMark.run(repeat);
         listAll.sort(new RatingComparator());
         long endTime = System.currentTimeMillis();

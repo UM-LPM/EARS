@@ -6,8 +6,8 @@ import org.um.feri.ears.algorithms.moo.nsga2.D_NSGAII;
 import org.um.feri.ears.algorithms.moo.paes.D_PAES;
 import org.um.feri.ears.algorithms.moo.pesa2.D_PESAII;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
-import org.um.feri.ears.benchmark.RatingBenchmark;
-import org.um.feri.ears.benchmark.RatingCEC2009;
+import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.CEC2009Benchmark;
 import org.um.feri.ears.graphing.GraphSet;
 import org.um.feri.ears.graphing.MOGraphSet;
 import org.um.feri.ears.graphing.PlotType;
@@ -26,7 +26,7 @@ public class Main_MO
 	public static void main(String[] args) 
 	{
         Util.rnd.setSeed(System.currentTimeMillis());
-        RatingBenchmark.printInfo = true; //prints one on one results
+        Benchmark.printInfo = true; //prints one on one results
         ArrayList<MOAlgorithm> players = new ArrayList<MOAlgorithm>();
         players.add(new D_MOEAD_DRA());
         players.add(new D_NSGAII());
@@ -38,7 +38,7 @@ public class Main_MO
         List<IndicatorName> indicators = new ArrayList<IndicatorName>();
         indicators.add(IndicatorName.IGD);
         
-        RatingCEC2009 cec = new RatingCEC2009(indicators, 0.0000001); //Create banchmark
+        CEC2009Benchmark cec = new CEC2009Benchmark(indicators, 0.0000001); //Create banchmark
         for (MOAlgorithm al:players) {
           cec.addAlgorithm(al);
         }

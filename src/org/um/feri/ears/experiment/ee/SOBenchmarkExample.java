@@ -12,13 +12,13 @@ import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.Util;
 
-public class SORatingExample2 {
+public class SOBenchmarkExample {
 
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis());
 
         Problem[] problems = new Problem[5];
-        int[] dimmensions = {50};
+        int[] dimmensions = {10};
         PSOoriginalLogging psoLogging = new PSOoriginalLogging();
         JADELogging jadeLogging = new JADELogging();
         DEAlgorithmLogging deLogging = new DEAlgorithmLogging(DEAlgorithmLogging.DE_best_1_bin);
@@ -37,6 +37,7 @@ public class SORatingExample2 {
                     t.enableAncestorLogging();
                     psoLogging.execute(t);
                     AncestorUtil.saveAncestorLogging(psoLogging.getID() + "_" + p.getName(), t);
+                    AncestorUtil.saveGraphingFile(psoLogging.getID() + "_" + p.getName(), t, psoLogging);
                 } catch (StopCriterionException e) {
                     e.printStackTrace();
                 }
@@ -47,6 +48,7 @@ public class SORatingExample2 {
                     t.enableAncestorLogging();
                     jadeLogging.execute(t);
                     AncestorUtil.saveAncestorLogging(jadeLogging.getID() + "_" + p.getName(), t);
+                    AncestorUtil.saveGraphingFile(jadeLogging.getID() + "_" + p.getName(), t, jadeLogging);
                 } catch (StopCriterionException e) {
                     e.printStackTrace();
                 }
@@ -61,6 +63,7 @@ public class SORatingExample2 {
                     e.printStackTrace();
                 }
                 Task.resetLoggingID();
+
             }
         }
     }

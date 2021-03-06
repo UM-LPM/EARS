@@ -9,7 +9,7 @@ import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, DoubleMOProblem> {
+public class BIOMABenchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMOProblem> {
 
     public BIOMABenchmark() {
         this(null, 0.0000001, true);
@@ -32,12 +32,12 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
     }
 
     @Override
-    protected void registerTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
+    protected void addTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
         tasks.add(new DoubleMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
 
     @Override
-    protected void initFullProblemList() {
+    protected void initAllProblems() {
 
         ArrayList<DoubleMOProblem> problems = new ArrayList<DoubleMOProblem>();
 
@@ -53,7 +53,7 @@ public class BIOMABenchmark extends MORatingBenchmark<Double, DoubleMOTask, Doub
         problems.add(new UnconstrainedProblem10());
 
         for (DoubleMOProblem moProblem : problems) {
-            registerTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 1.0E-4, moProblem);
+            addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 1.0E-4, moProblem);
         }
     }
 }

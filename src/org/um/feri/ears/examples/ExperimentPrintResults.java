@@ -2,13 +2,13 @@ package org.um.feri.ears.examples;
 
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.benchmark.BenchmarkResults;
-import org.um.feri.ears.benchmark.RatingRPUOed2;
+import org.um.feri.ears.benchmark.RPUOed2Benchmark;
 import org.um.feri.ears.statistic.friedman.FriedmanTransport;
 import org.um.feri.ears.rating.Rating;
 
 public class ExperimentPrintResults {
     public static void main(String[] args) {
-        RunMain m = new RunMain(false, false, new RatingRPUOed2());
+        RunMain m = new RunMain(false, false, new RPUOed2Benchmark());
         m.addAlgorithm(new RandomWalkAlgorithm(), new Rating(1500, 350, 0.06));
         //m.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));
         // m.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));

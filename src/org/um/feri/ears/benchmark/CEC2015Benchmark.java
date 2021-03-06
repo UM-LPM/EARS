@@ -9,16 +9,16 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 
-public class RatingCEC2015 extends RatingBenchmark {
+public class CEC2015Benchmark extends Benchmark {
     protected boolean calculateTime = false;
     protected int warmupIterations = 10000;
     private double optimumEpsilon = 0.000001;
 
-    public RatingCEC2015() {
+    public CEC2015Benchmark() {
         this(1e-7);
     }
 
-    public RatingCEC2015(double drawLimit) {
+    public CEC2015Benchmark(double drawLimit) {
         super();
         name = "Benchmark CEC 2015";
         this.drawLimit = drawLimit;
@@ -34,7 +34,7 @@ public class RatingCEC2015 extends RatingBenchmark {
     }
 
     @Override
-    protected void registerTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
 
@@ -45,7 +45,7 @@ public class RatingCEC2015 extends RatingBenchmark {
     }
 
     @Override
-    protected void initFullProblemList() {
+    protected void initAllProblems() {
 
         ArrayList<Problem> problems = new ArrayList<Problem>();
 
@@ -78,7 +78,7 @@ public class RatingCEC2015 extends RatingBenchmark {
                 }
             }
 
-            registerTask(p, stopCriterion, maxEvaluations, timeLimit, maxIterations, optimumEpsilon);
+            addTask(p, stopCriterion, maxEvaluations, timeLimit, maxIterations, optimumEpsilon);
         }
     }
 

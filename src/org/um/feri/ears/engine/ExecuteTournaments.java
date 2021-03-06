@@ -6,8 +6,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
-import org.um.feri.ears.benchmark.DummyRating;
-import org.um.feri.ears.benchmark.RatingBenchmarkBase;
+import org.um.feri.ears.benchmark.DummyBenhcmark;
+import org.um.feri.ears.benchmark.BenchmarkBase;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.util.Util;
 
@@ -563,7 +563,7 @@ public class ExecuteTournaments {
 		try {
 			Class<?> clazz = Class.forName(BENCHMARK_PACKAGE+"."+benchmarkName);
 			Object benchmark = clazz.newInstance();
-			numberOfRuns = ((RatingBenchmarkBase) benchmark).getNumberOfRuns();
+			numberOfRuns = ((BenchmarkBase) benchmark).getNumberOfRuns();
 			
 		} catch (Exception e) {
 			logger.log(Level.SEVERE,"Exception creating class from name: "+BENCHMARK_PACKAGE+"."+benchmarkName,e);
@@ -572,9 +572,9 @@ public class ExecuteTournaments {
 		
 
 		ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
-		DummyRating dr = new DummyRating(0.000001); //Create banchmark
+		DummyBenhcmark dr = new DummyBenhcmark(0.000001); //Create banchmark
 		dr.setDisplayRatingIntervalChart(false);
-		RatingBenchmarkBase.printInfo = false;
+		BenchmarkBase.printInfo = false;
 
 		//parse algorithm and problem names
 		String algorithmName, problemName, fileName;

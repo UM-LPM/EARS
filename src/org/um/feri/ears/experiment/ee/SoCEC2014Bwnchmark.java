@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.cec2014.*;
 import org.um.feri.ears.util.Util;
 
-public class SORatingCEC2014 {
+public class SoCEC2014Bwnchmark {
 	
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis());
