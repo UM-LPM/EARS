@@ -5,7 +5,7 @@ import ch.systemsx.cisd.hdf5.IHDF5SimpleReader;
 import ch.systemsx.cisd.hdf5.IHDF5SimpleWriter;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.benchmark.DummyBenhcmark;
+import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.util.Util;
 
@@ -36,7 +36,7 @@ public class RunBenchmarkFromHDF5 {
         int[] numberOfAllSolutions;
 
         ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
-        DummyBenhcmark dr = new DummyBenhcmark(0.000001); //Create banchmark
+        DummyBenchmark dr = new DummyBenchmark(0.000001); //Create banchmark
         dr.setDisplayRatingIntervalChart(false);
 
         IHDF5SimpleReader reader = HDF5Factory.openForReading(srcFile);

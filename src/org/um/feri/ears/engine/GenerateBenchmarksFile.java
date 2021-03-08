@@ -15,7 +15,7 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
-import org.um.feri.ears.benchmark.DummyBenhcmark;
+import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.benchmark.MOBenchmark;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkBase;
@@ -33,7 +33,7 @@ public class GenerateBenchmarksFile {
     static final String BENCHMARKS_FILE = "benchmarks.json";
     static final String CONFIG_FOLDER = "config";
     static final String BENCHMARK_PACKAGE = "org.um.feri.ears.benchmark";
-    private static final String DUMMY_BENCHMARK_CLASS_NAME = DummyBenhcmark.class.getSimpleName();
+    private static final String DUMMY_BENCHMARK_CLASS_NAME = DummyBenchmark.class.getSimpleName();
     private static final String MO_BENCHMARK_CLASS_NAME = MOBenchmark.class.getSimpleName();
     private static final String SO_BENCHMARK_CLASS_NAME = Benchmark.class.getSimpleName();
 

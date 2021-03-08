@@ -5,14 +5,14 @@ import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 
-public class DummyBenhcmark extends Benchmark {
+public class DummyBenchmark extends Benchmark {
     protected int dimension;
 
-    public DummyBenhcmark() {
+    public DummyBenchmark() {
         this(0.000001);
     }
 
-    public DummyBenhcmark(double drawLimit) {
+    public DummyBenchmark(double drawLimit) {
         super();
         name = "Dummy benchmark";
         this.drawLimit = 1e-6;

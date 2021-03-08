@@ -1,7 +1,7 @@
 package org.um.feri.ears.engine;
 
 import org.um.feri.ears.algorithms.DummyAlgorithm;
-import org.um.feri.ears.benchmark.DummyBenhcmark;
+import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.util.Util;
 
@@ -30,7 +30,7 @@ public class RunBenchmarkFromFiles {
         int numberOfsolutions = 15;
 
         ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
-        DummyBenhcmark dr = new DummyBenhcmark(0.000001); //Create banchmark
+        DummyBenchmark dr = new DummyBenchmark(0.000001); //Create banchmark
         dr.setDisplayRatingIntervalChart(false);
 
         //parse algorithm and problem names

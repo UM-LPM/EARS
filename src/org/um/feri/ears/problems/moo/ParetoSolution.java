@@ -206,9 +206,9 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
         qiEval.put(qi.getName(), pareto_eval); //replace value
     }
 
-    public void evaluteWithAllUnaryQI(int num_obj, String file_name) throws Exception {
+    public void evaluateWithAllUnaryQI(int numObj, String fileName) throws Exception {
         for (IndicatorName name : IndicatorName.values()) {
-            QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, num_obj, file_name);
+            QualityIndicator<Type> qi = IndicatorFactory.<Type>createIndicator(name, numObj, fileName);
             if (qi.getIndicatorType() == IndicatorType.UNARY) {
                 this.evaluate(qi, true);
             }
@@ -291,7 +291,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
         return solutions.contains(solution);
     }
 
-    public void displayAllUnaryQulaityIndicators(int num_obj, String file_name) {
+    public void displayAllUnaryQualityIndicators(int num_obj, String file_name) {
         ArrayList<QualityIndicator<Type>> indicators = new ArrayList<QualityIndicator<Type>>();
         double value;
         // add all unary indicators to list
