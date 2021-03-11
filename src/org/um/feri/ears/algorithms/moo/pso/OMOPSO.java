@@ -96,7 +96,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize + "");
         ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
         ai.addParameter(EnumAlgorithmParameters.ETA, eta + "");
-        ai.addParameter(EnumAlgorithmParameters.P_M, (1.0 / num_var) + "");
+        ai.addParameter(EnumAlgorithmParameters.P_M, (1.0 / numVar) + "");
     }
 
 
@@ -145,7 +145,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
             W = Util.nextDouble(0.1, 0.5);
             //
 
-            for (int var = 0; var < num_var; var++) {
+            for (int var = 0; var < numVar; var++) {
                 //Computing the velocity of this particle
                 speed[i][var] = W * speed[i][var] + C1 * r1 * (bestParticle.getValue(var) -
                         particle.getValue(var)) +
@@ -160,7 +160,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
     protected void updatePosition(ParetoSolution<Double> swarm) {
         for (int i = 0; i < swarmSize; i++) {
             MOSolutionBase<Double> particle = swarm.get(i);
-            for (int var = 0; var < num_var; var++) {
+            for (int var = 0; var < numVar; var++) {
                 particle.setValue(var, particle.getValue(var) + speed[i][var]);
                 if (particle.getValue(var) < task.getLowerLimit(var)) {
                     particle.setValue(var, task.getLowerLimit(var));
@@ -185,7 +185,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
 
     protected void initializeVelocity(ParetoSolution<Double> swarm) {
         for (int i = 0; i < swarm.size(); i++) {
-            for (int j = 0; j < num_obj; j++) {
+            for (int j = 0; j < numObj; j++) {
                 speed[i][j] = 0.0;
             }
         }
@@ -225,7 +225,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
     protected void init() throws StopCriterionException {
 
         if (optimalParam) {
-            switch (num_obj) {
+            switch (numObj) {
                 case 1: {
                     swarmSize = 100;
                     archiveSize = 100;
@@ -256,7 +256,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
         swarm = new ParetoSolution<Double>(swarmSize);
         this.maxIterations = task.getMaxEvaluations() / swarmSize;
 
-        double mutationProbability = 1.0 / num_var;
+        double mutationProbability = 1.0 / numVar;
         this.uniformMutation = new UniformMutation(mutationProbability, 0.5);
         this.nonUniformMutation = new NonUniformMutation(mutationProbability, 0.5, maxIterations);
 
@@ -267,7 +267,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
         dominanceComparator = new DominanceComparator<Double>();
         crowdingDistanceComparator = new CrowdingDistanceComparator<Double>();
 
-        speed = new double[swarmSize][num_var];
+        speed = new double[swarmSize][numVar];
 
 
         // Create the initial population

@@ -29,8 +29,8 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
     private ParetoSolutionCache cache;
     private String benchmarkInCache;
     protected ParetoSolution<Type> best;
-    protected int num_var;
-    protected int num_obj;
+    protected int numVar;
+    protected int numObj;
 
     public ParetoSolution<Type> getLastResult() {
         return result;
@@ -116,8 +116,8 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
     @Override
     public ParetoSolution<Type> execute(T taskProblem) throws StopCriterionException {
         task = taskProblem;
-        num_var = task.getNumberOfDimensions();
-        num_obj = task.getNumberOfObjectives();
+        numVar = task.getNumberOfDimensions();
+        numObj = task.getNumberOfObjectives();
 
         //ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
         long initTime = System.currentTimeMillis();
@@ -147,13 +147,13 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
             best.printObjectivesToCSVFile("FUN_" + algName);
         }
         if (displayData) {
-            best.displayAllUnaryQulaityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
+            best.displayAllUnaryQualityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
             best.displayData(this.getAlgorithmInfo().getAcronym(), task.getProblemName());
         }
 
         if (caching == Cache.SAVE) {
             try {
-                best.evaluteWithAllUnaryQI(num_obj, taskProblem.getProblemFileName());
+                best.evaluateWithAllUnaryQI(numObj, taskProblem.getProblemFileName());
             } catch (Exception e) {
                 e.printStackTrace();
             }

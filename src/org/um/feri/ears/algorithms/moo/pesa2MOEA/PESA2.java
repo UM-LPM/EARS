@@ -233,7 +233,7 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
     protected void init() {
 
         if (optimalParam) {
-            switch (num_obj) {
+            switch (numObj) {
                 case 1: {
                     populationSize = 100;
                     archiveSize = 100;
@@ -260,7 +260,7 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
         ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
 
-        archive = new AdaptiveGridArchive<Type>(archiveSize, num_obj, ArithmeticUtils.pow(2, bisections));
+        archive = new AdaptiveGridArchive<Type>(archiveSize, numObj, ArithmeticUtils.pow(2, bisections));
         population = new ParetoSolution<Type>(populationSize);
     }
 

@@ -49,7 +49,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     @Override
     protected void init() {
-        archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, num_obj);
+        archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, numObj);
     }
 
     public void start() throws StopCriterionException {

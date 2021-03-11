@@ -56,7 +56,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 
         offspringPopulation = new ParetoSolution<Type>(populationSize);
         jointPopulation = new ParetoSolution<Type>(2 * populationSize);
-        nadirPoint = new double[num_obj];
+        nadirPoint = new double[numObj];
         initializeNadirPoint();
     }
 
@@ -144,7 +144,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 
     //initialize the nadir point
     protected void initializeNadirPoint() {
-        for (int i = 0; i < num_obj; i++)
+        for (int i = 0; i < numObj; i++)
             nadirPoint[i] = -1.0e+30;
         for (int i = 0; i < populationSize; i++)
             updateNadirPoint(population.get(i));
@@ -152,7 +152,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
 
     // update the current nadir point
     void updateNadirPoint(MOSolutionBase<Type> individual) {
-        for (int i = 0; i < num_obj; i++) {
+        for (int i = 0; i < numObj; i++) {
             if (individual.getObjective(i) > nadirPoint[i]) {
                 nadirPoint[i] = individual.getObjective(i);
             }
@@ -295,15 +295,15 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
         double scale;
         double distance;
 
-        double[] vecInd = new double[num_obj];
-        double[] vecProj = new double[num_obj];
+        double[] vecInd = new double[numObj];
+        double[] vecProj = new double[numObj];
 
         // vecInd has been normalized to the range [0,1]
-        for (int i = 0; i < num_obj; i++)
+        for (int i = 0; i < numObj; i++)
             vecInd[i] = (individual.getObjective(i) - z[i]) / (nadirPoint[i] - z[i]);
 
         scale = innerProduct(vecInd, lambda) / innerProduct(lambda, lambda);
-        for (int i = 0; i < num_obj; i++)
+        for (int i = 0; i < numObj; i++)
             vecProj[i] = vecInd[i] - scale * lambda[i];
 
         distance = norm_vector(vecProj);
@@ -317,7 +317,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
     public double norm_vector(double[] z) {
         double sum = 0;
 
-        for (int i = 0; i < num_obj; i++)
+        for (int i = 0; i < numObj; i++)
             sum += z[i] * z[i];
 
         return Math.sqrt(sum);

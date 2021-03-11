@@ -22,7 +22,7 @@ public class D_PAES extends PAES<DoubleMOTask, Double> {
 	@Override
 	public void start() throws StopCriterionException {
 		super.start();
-		mut.setProbability(1.0 / num_var);
+		mut.setProbability(1.0 / numVar);
 	}
 	
 }

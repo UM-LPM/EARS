@@ -1,6 +1,5 @@
 package org.um.feri.ears.algorithms.moo.nsga3;
 
-import org.um.feri.ears.algorithms.moo.nsga2.NSGAII;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
@@ -21,6 +20,6 @@ public class D_NSGAIII extends NSGAIII<DoubleMOTask, Double> {
 	@Override
 	public void start() throws StopCriterionException {
 		super.start();
-		mut.setProbability(1.0 / num_var);
+		mut.setProbability(1.0 / numVar);
 	}
 }

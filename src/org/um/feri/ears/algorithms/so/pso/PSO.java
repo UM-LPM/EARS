@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class PSO extends Algorithm {
 
     private int popSize;
-    private ArrayList<MyPSOSolution> population;
-    private MyPSOSolution g; //global best
+    private ArrayList<PsoSolution> population;
+    private DoubleSolution gBest; //global best
     // C1- cognitive coefficient, C2 - social coefficient, omega- inertia weight
     private double omega, phiG, phiP;
     private Task task;
@@ -44,38 +44,41 @@ public class PSO extends Algorithm {
     public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
-        //double rp, rg;
-        double[] v;
+        double[] velocity;
         while (!task.isStopCriterion()) {
             for (int i = 0; i < popSize; i++) {
-                //rp = Util.rnd.nextDouble(); better to use vector of real numbers
-                //rg = Util.rnd.nextDouble();
-                v = new double[task.getNumberOfDimensions()];
+                velocity = new double[task.getNumberOfDimensions()];
                 // r*vec(x) double r = Util.rnd.nextDouble();
                 for (int d = 0; d < task.getNumberOfDimensions(); d++) {
-                    v[d] = omega * (
-                            population.get(i).getV()[d]) +
-                            phiP * Util.rnd.nextDouble() * (population.get(i).getP().getValue(d) - population.get(i).getValue(d)) +
-                            phiG * Util.rnd.nextDouble() * (g.getValue(d) - population.get(i).getValue(d));
+                    velocity[d] = omega * (
+                            population.get(i).velocity[d]) +
+                            phiP * Util.rnd.nextDouble() * (population.get(i).pBest.getValue(d) - population.get(i).getValue(d)) +
+                            phiG * Util.rnd.nextDouble() * (gBest.getValue(d) - population.get(i).getValue(d));
                     //if (v[d]>(taskProblem.getIntervalLength()[d])) v[d]=taskProblem.getIntervalLength()[d];
                     //if (v[d]<(taskProblem.getIntervalLength()[d])) v[d]=-taskProblem.getIntervalLength()[d];
                 }
-                population.set(i, population.get(i).update(taskProblem, v));
-                if (task.isFirstBetter(population.get(i), g)) g = population.get(i);
+
+                population.get(i).updatePosition(velocity);
+                task.setFeasible(population.get(i));
+                task.eval(population.get(i));
+                if (task.isFirstBetter(population.get(i), population.get(i).pBest))
+                    population.get(i).pBest = new PsoSolution(population.get(i));
+
+                if (task.isFirstBetter(population.get(i), gBest)) gBest = new PsoSolution(population.get(i));
                 if (task.isStopCriterion()) break;
             }
             task.incrementNumberOfIterations();
         }
-        return g;
+        return gBest;
     }
 
     private void initPopulation() throws StopCriterionException {
         population = new ArrayList<>();
         for (int i = 0; i < popSize; i++) {
-            population.add(new MyPSOSolution(task));
-            if (i == 0) g = population.get(0);
-            else if (task.isFirstBetter(population.get(i), g)) g = population.get(i);
             if (task.isStopCriterion()) break;
+            population.add(new PsoSolution(task));
+            if (i == 0) gBest = population.get(0);
+            else if (task.isFirstBetter(population.get(i), gBest)) gBest = new PsoSolution(population.get(i));
         }
     }
 

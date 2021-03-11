@@ -148,7 +148,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
             while ((remain > 0) && (remain >= front.size())) {
                 // Assign crowding distance to individuals
-                distance.crowdingDistanceAssignment(front, num_obj);
+                distance.crowdingDistanceAssignment(front, numObj);
                 // Add the individuals of this front
                 for (int k = 0; k < front.size(); k++) {
                     population.add(front.get(k));
@@ -167,7 +167,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
             // remain is less than front(index).size, insert only the best one
             if (remain > 0) { // front contains individuals to insert
                 while (front.size() > remain) {
-                    distance.crowdingDistanceAssignment(front, num_obj);
+                    distance.crowdingDistanceAssignment(front, numObj);
                     front.remove(front.indexWorst(new CrowdingComparator<>()));
                 }
                 for (int k = 0; k < front.size(); k++) {

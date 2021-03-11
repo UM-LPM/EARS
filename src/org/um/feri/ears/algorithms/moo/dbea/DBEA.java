@@ -351,10 +351,10 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * initial population.
      */
     void initializeIdealPointAndIntercepts() {
-        idealPoint = new double[num_obj];
-        intercepts = new double[num_obj];
+        idealPoint = new double[numObj];
+        intercepts = new double[numObj];
 
-        for (int i = 0; i < num_obj; i++) {
+        for (int i = 0; i < numObj; i++) {
             idealPoint[i] = Double.POSITIVE_INFINITY;
             intercepts[i] = Double.NEGATIVE_INFINITY;
         }
@@ -363,7 +363,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
         if (!feasibleSolutions.isEmpty()) {
             for (int i = 0; i < feasibleSolutions.size(); i++) {
-                for (int j = 0; j < num_obj; j++) {
+                for (int j = 0; j < numObj; j++) {
                     idealPoint[j] = Math.min(idealPoint[j],
                             feasibleSolutions.get(i).getObjective(j));
                     intercepts[j] = Math.max(intercepts[j],
@@ -398,13 +398,13 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         for (MOSolutionBase<Type> otherSolution : getFeasibleSolutions(combinedPopulation).solutions) {
             int count = 0;
 
-            for (int i = 0; i < num_obj; i++) {
+            for (int i = 0; i < numObj; i++) {
                 if (otherSolution.getObjective(i) < solution.getObjective(i)) {
                     count++;
                 }
             }
 
-            if (count == num_obj) {
+            if (count == numObj) {
                 return true;
             }
 
@@ -419,7 +419,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     void preserveCorner() {
         ParetoSolution<Type> feasibleSolutions = getFeasibleSolutions(population);
 
-        if (feasibleSolutions.size() >= 2 * num_obj) {
+        if (feasibleSolutions.size() >= 2 * numObj) {
             corner = corner_sort(feasibleSolutions);
         }
     }
@@ -459,11 +459,11 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         // sort the solutions
         List<ParetoSolution<Type>> sortedSets = new ArrayList<ParetoSolution<Type>>();
 
-        for (int i = 0; i < num_obj; i++) {
+        for (int i = 0; i < numObj; i++) {
             sortedSets.add(orderBySmallestObjective(i, unique));
         }
 
-        for (int i = 0; i < num_obj; i++) {
+        for (int i = 0; i < numObj; i++) {
             sortedSets.add(orderBySmallestSquaredValue(i, unique));
         }
 
@@ -481,7 +481,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
             current_f++;
 
-            if (current_f >= 2 * num_obj) {
+            if (current_f >= 2 * numObj) {
                 current_f = 0;
                 current_id++;
             }
@@ -492,7 +492,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         // reduce the set to 2*M solutions
         ParetoSolution<Type> prunedSet = new ParetoSolution<Type>();
 
-        for (int i = 0; i < 2 * num_obj; i++) {
+        for (int i = 0; i < 2 * numObj; i++) {
             prunedSet.add(result.get(i));
         }
 
@@ -536,7 +536,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 double sum1 = 0.0;
                 double sum2 = 0.0;
 
-                for (int i = 0; i < num_obj; i++) {
+                for (int i = 0; i < numObj; i++) {
                     if (i != objective) {
                         sum1 += Math.pow(s1.getObjective(i), 2.0);
                         sum2 += Math.pow(s2.getObjective(i), 2.0);
@@ -577,7 +577,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     void updateIdealPointAndIntercepts(MOSolutionBase<Type> solution) {
         if (!solution.violatesConstraints()) {
             // update the ideal point
-            for (int j = 0; j < num_obj; j++) {
+            for (int j = 0; j < numObj; j++) {
                 idealPoint[j] = Math.min(idealPoint[j], solution.getObjective(j));
                 intercepts[j] = Math.max(intercepts[j], solution.getObjective(j));
             }
@@ -592,23 +592,23 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 // find the points with the largest value in each objective
                 ParetoSolution<Type> extremePoints = new ParetoSolution<Type>();
 
-                for (int i = 0; i < num_obj; i++) {
+                for (int i = 0; i < numObj; i++) {
                     extremePoints.add(largestObjectiveValue(i, nondominatedSolutions));
                 }
 
-                if (numberOfUniqueSolutions(extremePoints) != num_obj) {
-                    for (int i = 0; i < num_obj; i++) {
+                if (numberOfUniqueSolutions(extremePoints) != numObj) {
+                    for (int i = 0; i < numObj; i++) {
                         intercepts[i] = extremePoints.get(i).getObjective(i);
                     }
                 } else {
                     try {
-                        RealMatrix b = new Array2DRowRealMatrix(num_obj, 1);
-                        RealMatrix A = new Array2DRowRealMatrix(num_obj, num_obj);
+                        RealMatrix b = new Array2DRowRealMatrix(numObj, 1);
+                        RealMatrix A = new Array2DRowRealMatrix(numObj, numObj);
 
-                        for (int i = 0; i < num_obj; i++) {
+                        for (int i = 0; i < numObj; i++) {
                             b.setEntry(i, 0, 1.0);
 
-                            for (int j = 0; j < num_obj; j++) {
+                            for (int j = 0; j < numObj; j++) {
                                 A.setEntry(i, j, extremePoints.get(i).getObjective(j));
                             }
                         }
@@ -617,7 +617,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                         b.scalarMultiply(numerator);
                         RealMatrix normal = MatrixUtils.inverse(A).multiply(b);
 
-                        for (int i = 0; i < num_obj; i++) {
+                        for (int i = 0; i < numObj; i++) {
                             intercepts[i] = numerator / normal.getEntry(i, 0);
 
                             if (intercepts[i] <= 0 || Double.isNaN(intercepts[i]) || Double.isInfinite(intercepts[i])) {
@@ -625,7 +625,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                             }
                         }
                     } catch (RuntimeException e) {
-                        for (int i = 0; i < num_obj; i++) {
+                        for (int i = 0; i < numObj; i++) {
                             intercepts[i] = extremePoints.get(i).getObjective(i);
                         }
                     }
@@ -705,7 +705,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      */
     void generateWeights() {
         if (divisionsInner > 0) {
-            if (divisionsOuter >= num_obj) {
+            if (divisionsOuter >= numObj) {
                 System.err.println("The specified number of outer divisions produces intermediate reference points, recommend setting divisionsOuter < numberOfObjectives.");
             }
 
@@ -718,13 +718,13 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 double[] weight = inner.get(i);
 
                 for (int j = 0; j < weight.length; j++) {
-                    weight[j] = (1.0 / num_obj + weight[j]) / 2;
+                    weight[j] = (1.0 / numObj + weight[j]) / 2;
                 }
             }
 
             weights.addAll(inner);
         } else {
-            if (divisionsOuter < num_obj) {
+            if (divisionsOuter < numObj) {
                 System.err.println("No intermediate reference points will be generated for the specified number of divisions, recommend increasing divisions");
             }
 
@@ -743,7 +743,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     private double distanceD1(double[] f, double[] w) {
         double dn = normVector(w);
 
-        for (int j = 0; j < num_obj; j++) {
+        for (int j = 0; j < numObj; j++) {
             w[j] = w[j] / dn;
         }
 
@@ -770,7 +770,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     private double normVector(double[] z) {
         double sum = 0;
 
-        for (int i = 0; i < num_obj; i++) {
+        for (int i = 0; i < numObj; i++) {
             sum += z[i] * z[i];
         }
 
@@ -826,9 +826,9 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @return the normalized objective values
      */
     private double[] normalizedObjectives(MOSolutionBase<Type> solution) {
-        double[] objectiveValues = new double[num_obj];
+        double[] objectiveValues = new double[numObj];
 
-        for (int j = 0; j < num_obj; j++) {
+        for (int j = 0; j < numObj; j++) {
             objectiveValues[j] = (solution.getObjective(j) - idealPoint[j]) /
                     (intercepts[j] - idealPoint[j]);
         }
@@ -845,9 +845,9 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      */
     private List<double[]> generateWeights(int divisions) {
         List<double[]> result = new ArrayList<double[]>();
-        double[] weight = new double[num_obj];
+        double[] weight = new double[numObj];
 
-        generateRecursive(result, weight, num_obj, divisions, divisions, 0);
+        generateRecursive(result, weight, numObj, divisions, divisions, 0);
 
         return result;
     }

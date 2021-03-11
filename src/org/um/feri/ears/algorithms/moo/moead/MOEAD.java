@@ -109,7 +109,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
     protected void init() throws StopCriterionException {
 
         if (optimalParam) {
-            switch (num_obj) {
+            switch (numObj) {
                 case 1: {
                     populationSize = 100;
                     break;
@@ -134,13 +134,13 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         population = new ParetoSolution<Type>(populationSize);
         savedValues = new MOSolutionBase[populationSize];
 
-        indArray = new MOSolutionBase[num_obj];
+        indArray = new MOSolutionBase[numObj];
 
         neighborhood = new int[populationSize][T];
 
-        z = new double[num_obj];
+        z = new double[numObj];
         // lambda_ = new Vector(problem_.getNumberOfObjectives()) ;
-        lambda = new double[populationSize][num_obj];
+        lambda = new double[populationSize][numObj];
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -221,7 +221,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
     public void initUniformWeight() {
 
-        lambda = InitWeight.generate(num_obj, populationSize, true);
+        lambda = InitWeight.generate(numObj, populationSize, true);
 		/*
 		if ((num_obj == 2) && (populationSize <= 100)) {
 			for (int n = 0; n < populationSize; n++) {
@@ -309,7 +309,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
     }
 
     void initIdealPoint() throws StopCriterionException {
-        for (int i = 0; i < num_obj; i++) {
+        for (int i = 0; i < numObj; i++) {
             z[i] = 1.0e+30;
             if (task.isStopCriterion())
                 return;
@@ -355,7 +355,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
     }
 
     void updateReference(MOSolutionBase<Type> individual) {
-        for (int n = 0; n < num_obj; n++) {
+        for (int n = 0; n < numObj; n++) {
             if (individual.getObjective(n) < z[n]) {
                 z[n] = individual.getObjective(n);
 
@@ -410,7 +410,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         fitness = 0.0;
         double maxFun = -1.0e+30;
 
-        for (int n = 0; n < num_obj; n++) {
+        for (int n = 0; n < numObj; n++) {
             double diff = Math.abs(individual.getObjective(n) - z[n]);
 
             double feval;

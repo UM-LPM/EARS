@@ -166,8 +166,8 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      */
 
     private MOSolutionBase<Type>[] performSelection(int pop_size, ParetoSolution<Type> population) {
-        VEGASelection<Type>[] selectors = new VEGASelection[num_obj];
-        for (int i = 0; i < num_obj; i++) {
+        VEGASelection<Type>[] selectors = new VEGASelection[numObj];
+        for (int i = 0; i < numObj; i++) {
             selectors[i] = new VEGASelection<Type>(
                     new ObjectiveComparator(i));
         }
@@ -175,7 +175,7 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         MOSolutionBase<Type>[] result = new MOSolutionBase[pop_size];
 
         for (int i = 0; i < pop_size; i++) {
-            VEGASelection<Type> selector = selectors[i % num_obj];
+            VEGASelection<Type> selector = selectors[i % numObj];
             result[i] = new MOSolutionBase<Type>(selector.execute(population));
         }
 

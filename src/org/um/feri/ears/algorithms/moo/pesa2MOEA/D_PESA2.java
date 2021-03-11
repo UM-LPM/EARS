@@ -1,12 +1,10 @@
 package org.um.feri.ears.algorithms.moo.pesa2MOEA;
 
-import org.um.feri.ears.algorithms.moo.pesa2.PESAII;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.StopCriterionException;
 
 public class D_PESA2 extends PESA2<DoubleMOTask, Double> {
@@ -26,7 +24,7 @@ public class D_PESA2 extends PESA2<DoubleMOTask, Double> {
 	@Override
 	public void start() throws StopCriterionException {
 		super.start();
-		mut.setProbability(1.0 / num_var);
+		mut.setProbability(1.0 / numVar);
 	}
 	
 }

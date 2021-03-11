@@ -121,7 +121,7 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 
             while ((remain > 0) && (remain >= front.size())) {
                 // Assign crowding distance to individuals
-                distance.crowdingDistanceAssignment(front, num_obj);
+                distance.crowdingDistanceAssignment(front, numObj);
                 // Add the individuals of this front
                 for (int k = 0; k < front.size(); k++) {
                     population.add(front.get(k));
@@ -139,7 +139,7 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
 
             // Remain is less than front(index).size, insert only the best one
             if (remain > 0) { // front contains individuals to insert
-                distance.crowdingDistanceAssignment(front, num_obj);
+                distance.crowdingDistanceAssignment(front, numObj);
                 front.sort(new CrowdingComparator<>());
                 for (int k = 0; k < remain; k++) {
                     population.add(front.get(k));
@@ -157,7 +157,7 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
     protected void init() {
 
         if (optimalParam) {
-            switch (num_obj) {
+            switch (numObj) {
                 case 1: {
                     populationSize = 100;
                     break;

@@ -28,6 +28,6 @@ public class D_SPEA2 extends SPEA2<DoubleMOTask, Double> {
 	@Override
 	public void start() throws StopCriterionException {
 		super.start();
-		mut.setProbability(1.0 / num_var);
+		mut.setProbability(1.0 / numVar);
 	}
 }

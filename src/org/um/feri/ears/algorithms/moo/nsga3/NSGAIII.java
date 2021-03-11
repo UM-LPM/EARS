@@ -23,7 +23,6 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.Ranking;
 
 
@@ -162,7 +161,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
         }
 
         // A copy of the reference list should be used as parameter of the environmental selection
-        EnvironmentalSelection<Type> selection = new EnvironmentalSelection(fronts, populationSize, getReferencePointsCopy(), num_obj);
+        EnvironmentalSelection<Type> selection = new EnvironmentalSelection(fronts, populationSize, getReferencePointsCopy(), numObj);
 
         pop = selection.execute(pop);
 
@@ -190,7 +189,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
     @Override
     protected void init() {
 
-        switch (num_obj) {
+        switch (numObj) {
             case 1: {
                 populationSize = 100;
                 break;
@@ -213,9 +212,9 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 
         bt2 = new BinaryTournament2<Type>();
         sbx = new SBXCrossover(0.9, 20.0);
-        plm = new PolynomialMutation(1.0 / num_var, 20.0);
+        plm = new PolynomialMutation(1.0 / numVar, 20.0);
         referencePoints.clear();
-        switch (num_obj) {
+        switch (numObj) {
             case 2:
                 numberOfDivisions = new Vector<>(1);
                 numberOfDivisions.add(99);
@@ -247,7 +246,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
                 break;
         }
 
-        (new ReferencePoint()).generateReferencePoints(referencePoints, num_obj, numberOfDivisions);
+        (new ReferencePoint()).generateReferencePoints(referencePoints, numObj, numberOfDivisions);
         System.out.println(populationSize);
         populationSize = referencePoints.size();
         while (populationSize % 4 > 0) {

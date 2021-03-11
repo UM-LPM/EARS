@@ -193,7 +193,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     private boolean areSolutionsTheSame(MOSolutionBase<Type> parent, MOSolutionBase<Type> child) {
 
-        for (int i = 0; i < num_var; i++) {
+        for (int i = 0; i < numVar; i++) {
             if (parent.getValue(i) != child.getValue(i))
                 return false;
         }
@@ -234,16 +234,16 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     public Object[] calculateFitness(ParetoSolution solutionSet) {
         // Obtains the lower and upper bounds of the population
-        double[] maximumValues = new double[num_obj];
-        double[] minimumValues = new double[num_obj];
+        double[] maximumValues = new double[numObj];
+        double[] minimumValues = new double[numObj];
 
-        for (int i = 0; i < num_obj; i++) {
+        for (int i = 0; i < numObj; i++) {
             maximumValues[i] = -Double.MAX_VALUE; // i.e., the minus maxium value
             minimumValues[i] = Double.MAX_VALUE; // i.e., the maximum value
         }
 
         for (int pos = 0; pos < solutionSet.size(); pos++) {
-            for (int obj = 0; obj < num_obj; obj++) {
+            for (int obj = 0; obj < numObj; obj++) {
                 double value = solutionSet.get(pos).getObjective(obj);
                 if (value > maximumValues[obj]) {
                     maximumValues[obj] = value;
@@ -284,9 +284,9 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
                 double value = 0.0;
                 if (flag == -1) {
-                    value = -calcHypervolumeIndicator(A.get(0), B.get(0), num_obj, maximumValues, minimumValues);
+                    value = -calcHypervolumeIndicator(A.get(0), B.get(0), numObj, maximumValues, minimumValues);
                 } else {
-                    value = calcHypervolumeIndicator(B.get(0), A.get(0), num_obj, maximumValues, minimumValues);
+                    value = calcHypervolumeIndicator(B.get(0), A.get(0), numObj, maximumValues, minimumValues);
                 }
                 //double value = epsilon.epsilon(matrixA,matrixB,problem_.getNumberOfObjectives());
 
@@ -380,7 +380,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
         while ((remain > 0) && (remain >= front.size())) {
             //Assign crowding distance to individuals
-            distance.crowdingDistanceAssignment(front, num_obj);
+            distance.crowdingDistanceAssignment(front, numObj);
 
             for (int k = 0; k < front.size(); k++) {
                 finalPop.add(front.get(k));
@@ -399,7 +399,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         // remain is less than front(index).size, insert only the best one
         if (remain > 0) {  // front contains individuals to insert
             while (front.size() > remain) {
-                distance.crowdingDistanceAssignment(front, num_obj);
+                distance.crowdingDistanceAssignment(front, numObj);
                 front.remove(front.indexWorst(new CrowdingComparator()));
             }
             for (int k = 0; k < front.size(); k++) {

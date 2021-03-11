@@ -148,7 +148,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     protected void init() {
 
         if (optimalParam) {
-            switch (num_obj) {
+            switch (numObj) {
                 case 1: {
                     populationSize = 100;
                     archiveSize = 100;
@@ -251,9 +251,9 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
                 double value = 0.0;
                 if (flag == -1) {
-                    value = -calcHypervolumeIndicator(A.get(0), B.get(0), num_obj, maximumValues, minimumValues);
+                    value = -calcHypervolumeIndicator(A.get(0), B.get(0), numObj, maximumValues, minimumValues);
                 } else {
-                    value = calcHypervolumeIndicator(B.get(0), A.get(0), num_obj, maximumValues, minimumValues);
+                    value = calcHypervolumeIndicator(B.get(0), A.get(0), numObj, maximumValues, minimumValues);
                 }
                 //double value = epsilon.epsilon(matrixA,matrixB,problem_.getNumberOfObjectives());
 
@@ -289,16 +289,16 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      **/
     public void calculateFitness(ParetoSolution<Type> solutionSet) {
         // Obtains the lower and upper bounds of the population
-        double[] maximumValues = new double[num_obj];
-        double[] minimumValues = new double[num_obj];
+        double[] maximumValues = new double[numObj];
+        double[] minimumValues = new double[numObj];
 
-        for (int i = 0; i < num_obj; i++) {
+        for (int i = 0; i < numObj; i++) {
             maximumValues[i] = -Double.MAX_VALUE; // i.e., the minus maxium value
             minimumValues[i] = Double.MAX_VALUE; // i.e., the maximum value
         }
 
         for (int pos = 0; pos < solutionSet.size(); pos++) {
-            for (int obj = 0; obj < num_obj; obj++) {
+            for (int obj = 0; obj < numObj; obj++) {
                 double value = solutionSet.get(pos).getObjective(obj);
                 if (value > maximumValues[obj])
                     maximumValues[obj] = value;

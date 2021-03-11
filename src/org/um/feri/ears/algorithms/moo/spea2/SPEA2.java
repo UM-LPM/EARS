@@ -59,7 +59,7 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
     protected void init() {
 
         if (optimalParam) {
-            switch (num_obj) {
+            switch (numObj) {
                 case 1: {
                     populationSize = 100;
                     archiveSize = 100;
