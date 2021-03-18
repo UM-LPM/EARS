@@ -9,13 +9,14 @@ public class EvaluationStorage {
     public EvaluationStorage(String randomGenerator, long seed, Algorithm algorithm, Problem problem, int resolution, int numberOfRuns, int evaluationsPerRun) {
         this.randomGenerator = randomGenerator;
         this.seed = seed;
-        this.algorithmName = algorithm.getAlgorithmInfo().getAcronym();
-        this.algorithmVersion = algorithm.getVersion();
-        this.problemName = problem.getName();
-        this.problemVersion = problem.getVersion();
-        this.problemDimensions = problem.getNumberOfDimensions();
-        this.upperLimit = problem.upperLimit.stream().mapToDouble(i->i).toArray();
-        this.lowerLimit = problem.lowerLimit.stream().mapToDouble(i->i).toArray();
+        algorithmName = algorithm.getAlgorithmInfo().getAcronym();
+        algorithmVersion = algorithm.getVersion();
+        algorithmParameters = algorithm.getParametersString();
+        problemName = problem.getName();
+        problemVersion = problem.getVersion();
+        problemDimensions = problem.getNumberOfDimensions();
+        upperLimit = problem.upperLimit.stream().mapToDouble(i->i).toArray();
+        lowerLimit = problem.lowerLimit.stream().mapToDouble(i->i).toArray();
         this.resolution = resolution;
         this.numberOfRuns = numberOfRuns;
         this.evaluationsPerRun = evaluationsPerRun;
@@ -26,6 +27,7 @@ public class EvaluationStorage {
     public long seed;
     public String algorithmName;
     public String algorithmVersion;
+    public String algorithmParameters;
     public String problemName;
     public String problemVersion;
     public int problemDimensions;

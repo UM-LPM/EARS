@@ -8,6 +8,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 
@@ -15,18 +16,14 @@ import java.util.ArrayList;
 
 public class GWO extends Algorithm {
 
-    private DoubleSolution alpha, beta, delta;
-
+    @AlgorithmParameter(
+            name = "population size"
+    )
     private int popSize;
-    private Task task;
-
-    private double r1;
-    private double r2;
-    private double A;
-    private double C;
-    private double X1, X2, X3;
 
     private ArrayList<DoubleSolution> population;
+    private DoubleSolution alpha, beta, delta;
+    private Task task;
 
     public GWO() {
         this(30);
@@ -51,8 +48,8 @@ public class GWO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public DoubleSolution execute(Task task) throws StopCriterionException {
+        this.task = task;
         initPopulation();
         int maxIt = 10000;
         if (task.getStopCriterion() == EnumStopCriterion.ITERATIONS) {
@@ -72,36 +69,36 @@ public class GWO extends Algorithm {
                 double[] newPosition = new double[task.getNumberOfDimensions()];
                 for (int i = 0; i < task.getNumberOfDimensions(); i++) {
 
-                    r1 = Util.nextDouble();
-                    r2 = Util.nextDouble();
+                    double r1 = Util.nextDouble();
+                    double r2 = Util.nextDouble();
 
-                    A = 2 * a * r1 - a; // Equation (3.3)
-                    C = 2 * r2; // Equation (3.4)
+                    double a1 = 2 * a * r1 - a; // Equation (3.3)
+                    double c = 2 * r2; // Equation (3.4)
 
-                    double D_alpha = Math.abs(C * alpha.getValue(i) - wolf.getValue(i)); //Equation (3.5)-part 1
-                    X1 = alpha.getValue(i) - A * D_alpha; //Equation (3.6)-part 1
-
-
-                    r1 = Util.nextDouble();
-                    r2 = Util.nextDouble();
-
-                    A = 2 * a * r1 - a; // Equation (3.3)
-                    C = 2 * r2; // Equation (3.4)
-
-                    double D_beta = Math.abs(C * beta.getValue(i) - wolf.getValue(i)); //Equation (3.5)-part 2
-                    X2 = beta.getValue(i) - A * D_beta; //Equation (3.6)-part 2
+                    double D_alpha = Math.abs(c * alpha.getValue(i) - wolf.getValue(i)); //Equation (3.5)-part 1
+                    double x1 = alpha.getValue(i) - a1 * D_alpha; //Equation (3.6)-part 1
 
 
                     r1 = Util.nextDouble();
                     r2 = Util.nextDouble();
 
-                    A = 2 * a * r1 - a; // Equation (3.3)
-                    C = 2 * r2; // Equation (3.4)
+                    a1 = 2 * a * r1 - a; // Equation (3.3)
+                    c = 2 * r2; // Equation (3.4)
 
-                    double D_delta = Math.abs(C * delta.getValue(i) - wolf.getValue(i)); //Equation (3.5)-part 3
-                    X3 = delta.getValue(i) - A * D_delta; //Equation (3.6)-part 3
+                    double D_beta = Math.abs(c * beta.getValue(i) - wolf.getValue(i)); //Equation (3.5)-part 2
+                    double x2 = beta.getValue(i) - a1 * D_beta; //Equation (3.6)-part 2
 
-                    newPosition[i] = (X1 + X2 + X3) / 3; // Equation (3.7)
+
+                    r1 = Util.nextDouble();
+                    r2 = Util.nextDouble();
+
+                    a1 = 2 * a * r1 - a; // Equation (3.3)
+                    c = 2 * r2; // Equation (3.4)
+
+                    double D_delta = Math.abs(c * delta.getValue(i) - wolf.getValue(i)); //Equation (3.5)-part 3
+                    double x3 = delta.getValue(i) - a1 * D_delta; //Equation (3.6)-part 3
+
+                    newPosition[i] = (x1 + x2 + x3) / 3; // Equation (3.7)
                 }
                 newPosition = task.setFeasible(newPosition);
 

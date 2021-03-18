@@ -1,20 +1,17 @@
 package org.um.feri.ears.algorithms;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
-
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.util.Cache;
+import org.um.feri.ears.util.annotation.AnnotationUtil;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> {
 
@@ -112,12 +109,13 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
 
     /**
      * Returns a filename safe string which contains the algorithm acronym and version
+     *
      * @return filename safe string which contains the algorithm acronym and version
      */
     public String getFileNameString() {
         String fileName = ai.getAcronym().trim().replaceAll("[\\s_]", "-"); // replace all spaces and underscores with hyphen/dash
         fileName = fileName.replaceAll("[\\\\/:*?\"<>'%&@,.|{}+]", ""); // remove invalid characters
-        fileName += "-"+version;
+        fileName += "-" + version;
         return fileName;
     }
 
@@ -128,6 +126,10 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
 
     public String getVersion() {
         return version;
+    }
+
+    public String getParametersString() {
+        return AnnotationUtil.getParameterNamesAndValues(this);
     }
 
     public String shortAlgorithmInfo() {

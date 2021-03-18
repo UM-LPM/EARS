@@ -7,17 +7,35 @@ import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 
 public class PSO extends Algorithm {
 
+    @AlgorithmParameter(
+            name = "population size"
+    )
     private int popSize;
+    @AlgorithmParameter (
+            name = "omega",
+            description = "inertia weight"
+    )
+    private double omega;
+    @AlgorithmParameter (
+            name = "c1",
+            description = "cognitive coefficient (acceleration constant)"
+    )
+    private double c1;
+    @AlgorithmParameter (
+            name = "c2",
+            description = "social coefficient (acceleration constant)"
+    )
+    private double c2;
+
     private ArrayList<PsoSolution> population;
     private DoubleSolution gBest; //global best
-    // C1- cognitive coefficient, C2 - social coefficient, omega- inertia weight
-    private double omega, phiG, phiP;
     private Task task;
 
     public PSO() {
@@ -28,8 +46,8 @@ public class PSO extends Algorithm {
         super();
         this.popSize = popSize;
         this.omega = om;
-        this.phiP = c1;
-        this.phiG = c2;
+        this.c1 = c1;
+        this.c2 = c2;
         setDebug(debug);  //EARS prints some debug info
         ai = new AlgorithmInfo("PSO", "Particle Swarm Optimization", "");
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
@@ -52,8 +70,8 @@ public class PSO extends Algorithm {
                 for (int d = 0; d < task.getNumberOfDimensions(); d++) {
                     velocity[d] = omega * (
                             population.get(i).velocity[d]) +
-                            phiP * Util.rnd.nextDouble() * (population.get(i).pBest.getValue(d) - population.get(i).getValue(d)) +
-                            phiG * Util.rnd.nextDouble() * (gBest.getValue(d) - population.get(i).getValue(d));
+                            c1 * Util.rnd.nextDouble() * (population.get(i).pBest.getValue(d) - population.get(i).getValue(d)) +
+                            c2 * Util.rnd.nextDouble() * (gBest.getValue(d) - population.get(i).getValue(d));
                     //if (v[d]>(taskProblem.getIntervalLength()[d])) v[d]=taskProblem.getIntervalLength()[d];
                     //if (v[d]<(taskProblem.getIntervalLength()[d])) v[d]=-taskProblem.getIntervalLength()[d];
                 }
