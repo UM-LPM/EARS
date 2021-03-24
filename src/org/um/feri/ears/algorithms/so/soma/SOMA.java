@@ -8,6 +8,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
@@ -15,16 +16,30 @@ public class SOMA extends Algorithm {
 
     public enum Strategy {ALL_TO_ALL, ALL_TO_ALL_ADAPTIVE, ALL_TO_ONE, ALL_TO_ONE_RANDOM}
 
+    @AlgorithmParameter(name = "population size",
+            min = "10")
+    private int popSize;
+    @AlgorithmParameter(name = "path length",
+            description = "defines how far an individual stops behind the Leader",
+            min = "1.1",
+            max = "5")
+    private double pathLength;
+    @AlgorithmParameter(name = "step",
+            description = "defines the granularity with what the search space is sampled",
+            min = "0.11",
+            max = "pathLength")
+    private double step;
+    @AlgorithmParameter(name = "perturbation",
+            description = "determines whether an individual will travel directly towards the Leader, or not",
+            min = "0",
+            max = "1")
+    private double prt;
+    @AlgorithmParameter(name = "strategy")
     private Strategy strategy;
+
     private DoubleSolution best;
     private int leaderId; //index of the best solution
     private Task task;
-
-    private int popSize;
-    private double step;
-    private double pathLength;
-    private double prt;
-
     private DoubleSolution[] population;
 
     public SOMA() {
@@ -46,6 +61,9 @@ public class SOMA extends Algorithm {
         this.step = step;
         this.pathLength = pathLength;
         this.prt = prt;
+
+        // if step parameter is larger than pathLength it will cause an infinite loop
+        assert (step <= pathLength);
 
         au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo("SOMA_" + strategy.name(), "Self-Organizing Migrating Algorithm " + strategy.name(),

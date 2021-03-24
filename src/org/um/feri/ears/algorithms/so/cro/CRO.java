@@ -15,18 +15,32 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 public class CRO extends Algorithm {
 
-	private int N, M; // Grid sizes
-	private double rho; // Percentage of initial occupied reef
-	private double Fbs, Fbr; // Percentage of broadcast spawners and brooders Fbr = (1 - Fbs)
-	private double Fa, Fd; // Percentage of budders and depredated corals
-	private double Pd; // Probability of depredation
-	private int attemptsToSettle;
+	@AlgorithmParameter(name = "population size")
 	private int popSize;
-	private Task task;
+	@AlgorithmParameter(description = "width of Coral Reef Grid")
+	private int n;
+	@AlgorithmParameter(description = "height of Coral Reef Grid")
+	private int m;
+	@AlgorithmParameter(description = "percentage of initial occupied reef")
+	private double rho;
+	@AlgorithmParameter(description = "percentage of broadcast spawners")
+	private double fbs;
+	@AlgorithmParameter(description = "percentage of broadcast brooders fbr = (1 - fbs)")
+	private double fbr;
+	@AlgorithmParameter(name = "percentage of budders")
+	private double fa;
+	@AlgorithmParameter(name = "percentage of depredated corals")
+	private double fd;
+	@AlgorithmParameter(name = "probability of depredation")
+	private double pd;
+	@AlgorithmParameter(name = "attempts to settle")
+	private int attemptsToSettle;
 
+	private Task task;
 	private TaskComparator comparator;
 	private TournamentSelection selectionOperator;
 	private SBXCrossoverSO crossoverOperator = new SBXCrossoverSO(0.9, 20.0);
@@ -59,16 +73,16 @@ public class CRO extends Algorithm {
 	public CRO(int n, int m, double rho, double fbs, double fa, double pd,
 			int attemptsToSettle) {
 		super();
-		N = n;
-		M = m;
+		this.n = n;
+		this.m = m;
 		this.rho = rho;
-		Fbs = fbs;
-		Fbr =  1 - Fbs;
-		Fa = fa;
-		Fd = Fa;
-		Pd = pd;
+		this.fbs = fbs;
+		this.fbr =  1 - this.fbs;
+		this.fa = fa;
+		this.fd = this.fa;
+		this.pd = pd;
 		this.attemptsToSettle = attemptsToSettle;
-		popSize = N * M;
+		popSize = this.n * this.m;
 
 		au = new Author("miha", "miha.ravber@um.si");
 		ai = new AlgorithmInfo("CRO", "Coral Reefs Optimization",
@@ -96,7 +110,7 @@ public class CRO extends Algorithm {
 
 		while (!task.isStopCriterion()) {
 			
-			int quantity = (int) (Fbs * coralReef.size());
+			int quantity = (int) (fbs * coralReef.size());
 
 			if ((quantity % 2) == 1) {
 				quantity--;
@@ -120,11 +134,10 @@ public class CRO extends Algorithm {
 
 			// Larvae settlement phase
 			coralReef = larvaeSettlementPhase(larvae, coralReef);
-
 			
 			// Asexual reproduction (budding)
 			coralReef.sort(comparator);
-			budders = new ArrayList<DoubleSolution>((int) (Fa * coralReef.size()));
+			budders = new ArrayList<DoubleSolution>((int) (fa * coralReef.size()));
 			for (int i = 0; i < budders.size(); i++) {
 				budders.add(coralReef.get(i));
 			}
@@ -141,10 +154,10 @@ public class CRO extends Algorithm {
 
 	private void createInitialPopulation() throws StopCriterionException {
 		// At inizialiazation populate only part of the coral reef (rho)
-		int quantity = (int) (rho * N * M);
-		coralReef = new ArrayList<>(N * M);
+		int quantity = (int) (rho * n * m);
+		coralReef = new ArrayList<>(n * m);
 		CoralSolution newCoral = new CoralSolution(task.getRandomEvaluatedSolution());
-		Coordinate co = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M ));
+		Coordinate co = new Coordinate(Util.nextInt(0, n), Util.nextInt(0, m));
 		newCoral.setCoralPosition(co);
 		coralReef.add(newCoral);
 		
@@ -152,17 +165,15 @@ public class CRO extends Algorithm {
 			if(task.isStopCriterion())
 				break;
 			newCoral = new CoralSolution(task.getRandomEvaluatedSolution());
-			co = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M));
+			co = new Coordinate(Util.nextInt(0, n), Util.nextInt(0, m));
 			while(getCoralFromPosition(co) != null)
 			{
-				co = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M));
+				co = new Coordinate(Util.nextInt(0, n), Util.nextInt(0, m));
 			}
 			newCoral.setCoralPosition(co);
 			coralReef.add(newCoral);
 		}
-
 	}
-
 
 	private CoralSolution getCoralFromPosition(Coordinate co) {
 		
@@ -171,7 +182,6 @@ public class CRO extends Algorithm {
 			if(coral.getCoralPosition() != null && coral.getCoralPosition().equals(co))
 				return coral;
 		}
-		
 		return null;
 	}
 
@@ -217,9 +227,7 @@ public class CRO extends Algorithm {
 			larvae.add(newSolution);
 
 			parents = new CoralSolution[2];
-
 		}
-
 		return larvae;
 	}
 
@@ -246,7 +254,7 @@ public class CRO extends Algorithm {
 		for (DoubleSolution larva : larvae) {
 
  			for (int attempt = 0; attempt < attempts; attempt++) {
-				Coordinate C = new Coordinate(Util.nextInt(0, N), Util.nextInt(0, M));
+				Coordinate C = new Coordinate(Util.nextInt(0, n), Util.nextInt(0, m));
 
 				// Add larva to the reef
 				CoralSolution coral = getCoralFromPosition(C);
@@ -267,13 +275,12 @@ public class CRO extends Algorithm {
 				}
 			}
 		}
-
 		return population;
 	}
 
 	private List<CoralSolution> depredation(List<CoralSolution> population) {
 		int popSize = population.size();
-		int quantity = (int) (Fd * popSize);
+		int quantity = (int) (fd * popSize);
 
 		quantity = popSize - quantity;
 
@@ -281,18 +288,14 @@ public class CRO extends Algorithm {
 		for (int i = popSize - 1; i > quantity; i--) {
 			coin = Util.rnd.nextDouble();
 
-			if (coin < Pd) {
+			if (coin < pd) {
 				population.remove(population.size() - 1);
 			}
-
 		}
-
 		return population;
 	}
 
 	@Override
 	public void resetToDefaultsBeforeNewRun() {
-
 	}
-
 }

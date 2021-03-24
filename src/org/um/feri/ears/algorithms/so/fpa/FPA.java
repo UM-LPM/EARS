@@ -1,5 +1,4 @@
 /*
- * Flower Pollination Algorithm (FPA)
  * Flower Pollination Algorithm by Xin-She Yang in Java.
  */
 package org.um.feri.ears.algorithms.so.fpa;
@@ -14,22 +13,24 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
 public class FPA extends Algorithm {
 
-    private DoubleSolution best;
-
+    @AlgorithmParameter(name = "population size")
     private int popSize;
-    private Task task;
-
+    @AlgorithmParameter
     private double lambda;
+    @AlgorithmParameter(name = "switch probability")
     private double switchProbability;
     // ND: Normal distribution
     private static final double meanND = 0.0;
     private static final double stdDevND = 1.0;
 
+    private Task task;
+    private DoubleSolution best;
     private ArrayList<DoubleSolution> population;
 
     public FPA() {
@@ -56,25 +57,25 @@ public class FPA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public DoubleSolution execute(Task task) throws StopCriterionException {
+        this.task = task;
         initPopulation();
 
         double[] candidate;
-        double[] levy = new double[task.getNumberOfDimensions()];
+        double[] levy = new double[this.task.getNumberOfDimensions()];
 
         int rand1, rand2;
         double epsilon;
-        while (!task.isStopCriterion()) {
+        while (!this.task.isStopCriterion()) {
 
             for (int i = 0; i < popSize; i++) {
 
-                candidate = new double[task.getNumberOfDimensions()];
+                candidate = new double[this.task.getNumberOfDimensions()];
                 if (Util.nextDouble() > switchProbability) {
                     /* Global Pollination */
                     levy = levy();
 
-                    for (int j = 0; j < task.getNumberOfDimensions(); j++) {
+                    for (int j = 0; j < this.task.getNumberOfDimensions(); j++) {
                         candidate[j] = population.get(i).getValue(j) + levy[j] * (best.getValue(j) - population.get(i).getValue(j));
                     }
                 } else {
@@ -88,31 +89,31 @@ public class FPA extends Algorithm {
                         rand2 = Util.nextInt(popSize);
                     } while (rand2 == rand1);
 
-                    for (int j = 0; j < task.getNumberOfDimensions(); j++)
+                    for (int j = 0; j < this.task.getNumberOfDimensions(); j++)
                         candidate[j] += epsilon * (population.get(rand1).getValue(j) - population.get(rand2).getValue(j));
                 }
 
                 // Check bounds
-                candidate = task.setFeasible(candidate);
+                candidate = this.task.setFeasible(candidate);
 
                 // Evaluate new solution
-                if (task.isStopCriterion())
+                if (this.task.isStopCriterion())
                     break;
-                DoubleSolution newSolution = task.eval(candidate);
+                DoubleSolution newSolution = this.task.eval(candidate);
 
                 // If the new solution is better: Replace
-                if (task.isFirstBetter(newSolution, population.get(i))) {
+                if (this.task.isFirstBetter(newSolution, population.get(i))) {
                     population.set(i, newSolution);
                 }
 
                 // Update best solution
-                if (task.isFirstBetter(newSolution, best)) {
+                if (this.task.isFirstBetter(newSolution, best)) {
                     best = new DoubleSolution(newSolution);
                 }
 
             }
 
-            task.incrementNumberOfIterations();
+            this.task.incrementNumberOfIterations();
         }
 
         return best;
@@ -151,9 +152,7 @@ public class FPA extends Algorithm {
         best = new DoubleSolution(population.get(0));
     }
 
-
     @Override
     public void resetToDefaultsBeforeNewRun() {
     }
-
 }

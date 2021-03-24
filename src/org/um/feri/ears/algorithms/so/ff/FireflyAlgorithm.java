@@ -10,22 +10,26 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FireflyAlgorithm extends Algorithm { //needs to me extended 
-    //private DoubleSolution i; //EARS Individual includes solution vector and its fitness value
+public class FireflyAlgorithm extends Algorithm {
+
+    @AlgorithmParameter(name = "population size")
+    private int popSize;
+    @AlgorithmParameter
+    private double alpha = 0.5;
+    @AlgorithmParameter
+    private double betamin = 0.2;
+    @AlgorithmParameter
+    private double gamma = 1.0;
+
     private boolean debug = true;
     private Task task;
     FireflySolution best;
     ArrayList<FireflySolution> population;
-
-    private double alpha = 0.5;        // alpha parameter. copy value from C++ and Matlab version
-    private double betamin = 0.2;   // beta parameter. copy value from C++ and Matlab version
-    private double gamma = 1.0;        // gamma parameter. copy value from C++ and Matlab version
-
-    private int popSize;
 
     private double[] ub;
     private double[] lb;
@@ -52,7 +56,6 @@ public class FireflyAlgorithm extends Algorithm { //needs to me extended
 
     public FireflyAlgorithm() {
         this(20, 10);
-        //default value from C++ code of Fister. 1000 is dimension and 20 is pop_size
     }
 
 

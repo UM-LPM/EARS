@@ -8,6 +8,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,14 +19,17 @@ import java.util.Comparator;
  */
 
 public class GSA extends Algorithm {
-    private static double eps = 2.2204e-16; //http://www.mathworks.com/help/matlab/ref/eps.html?searchHighlight=eps
+
+    @AlgorithmParameter(name = "population size")
     private int popSize;
     private double Rpower = 1; //in main
     private int Rnorm = 2; //in GSA it is not used
-    private int final_per = 2; //Gfield %In the last iteration, only 2 percent of agents apply force to the others.
-    private double alfa = 20; //Gconstant
+    private int finalPer = 2; //Gfield %In the last iteration, only 2 percent of agents apply force to the others.
+    private double alpha = 20; //Gconstant
     private double G0 = 100; //Gconstant
     private int D; //dimension
+    
+    private static double eps = 2.2204e-16; //http://www.mathworks.com/help/matlab/ref/eps.html?searchHighlight=eps
     private boolean elitistCheck = true;
     private ArrayList<GSAIndividual> popX; //population
     private GSAIndividual g; //global best in matlab Fbest (fitness best),Lbest (location best)
@@ -38,18 +42,18 @@ public class GSA extends Algorithm {
         this(popSize, 2, 1, 20, 100); //Mathlab settings
     }
 
-    public GSA(double RPower, double alfa, double G0) {
-        this(50, 2, RPower, alfa, G0);
+    public GSA(double RPower, double alpha, double G0) {
+        this(50, 2, RPower, alpha, G0);
     }
 
-    public GSA(int popSize, int final_per, double RPower, double alfa, double G0) {
+    public GSA(int popSize, int finalPer, double RPower, double alpha, double G0) {
         super();
-        this.alfa = alfa;
+        this.alpha = alpha;
         this.G0 = G0;
         this.Rpower = RPower;
         this.popSize = popSize;
         this.Rpower = 1;
-        this.final_per = final_per;
+        this.finalPer = finalPer;
         setDebug(debug);  //EARS prints some debug info
         ai = new AlgorithmInfo("GSA2", "Matlab GSA2",
                 "@article{Rashedi20092232," +
@@ -66,9 +70,9 @@ public class GSA extends Algorithm {
                 "author = \"Esmat Rashedi and Hossein Nezamabadi-pour and Saeid Saryazdi\"}"
         );
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
-        ai.addParameter(EnumAlgorithmParameters.UNNAMED1, final_per + "");
+        ai.addParameter(EnumAlgorithmParameters.UNNAMED1, finalPer + "");
         ai.addParameter(EnumAlgorithmParameters.UNNAMED2, RPower + "");
-        ai.addParameter(EnumAlgorithmParameters.UNNAMED3, alfa + "");
+        ai.addParameter(EnumAlgorithmParameters.UNNAMED3, alpha + "");
         ai.addParameter(EnumAlgorithmParameters.UNNAMED4, G0 + "");
         au = new Author("Matej", "matej.crepinsek@um.si");
     }
@@ -84,7 +88,7 @@ public class GSA extends Algorithm {
         D = t.getNumberOfDimensions();
         GSAIndividual tmpIn;
         while (!t.isStopCriterion()) {
-            G = G0 * Math.exp(-alfa * iteration / maxIt); //%eq. 28. Gconstant;
+            G = G0 * Math.exp(-alpha * iteration / maxIt); //%eq. 28. Gconstant;
             if (debug) {
                 System.out.println("Current iteration is " + iteration + "/" + maxIt + " G=" + G);
             }
@@ -207,7 +211,7 @@ M=M./sum(M); %eq. 16.
         int kbest;
         double dkbest = 0;
         if (elitistCheck) {
-            dkbest = final_per + (1. - (double) iteration / max_it) * (100. - final_per);// %kbest in eq. 21.
+            dkbest = finalPer + (1. - (double) iteration / max_it) * (100. - finalPer);// %kbest in eq. 21.
             kbest = (int) Math.ceil(popSize * dkbest / 100); //CM instead round that return 0 in last iter
         } else {
             kbest = popSize;// %eq.9.

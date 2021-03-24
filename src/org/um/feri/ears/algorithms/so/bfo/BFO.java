@@ -7,12 +7,16 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class BFO extends Algorithm {
-    private int S, Nc, Ns, Nre, Ned, Sr;
+
+    @AlgorithmParameter(name = "population size")
+    private int popSize;
+    private int Nc, Ns, Nre, Ned, Sr;
     private double Ped, Ci;
     private ArrayList<Double> C;
     private ArrayList<Bacteria> swarm;
@@ -34,14 +38,14 @@ public class BFO extends Algorithm {
 //		this(60, 10, 10, 5, 2, 0.01);
     }
 
-    public BFO(int S, int Nc, int Ns, int Nre, int Ned, double Ped) {
-        this.S = S;
+    public BFO(int popSize, int Nc, int Ns, int Nre, int Ned, double Ped) {
+        this.popSize = popSize;
         this.Nc = Nc;
         this.Ns = Ns;
         this.Nre = Nre;
         this.Ned = Ned;
         this.Ped = Ped;
-        Sr = S / 2;
+        Sr = popSize / 2;
         swarm = new ArrayList<>();
         ai = new AlgorithmInfo("BFO", "Bacterial Foraging Optimization", "");
         au = new Author("Monika Bozhinova", "N/A"); //EARS author info
@@ -50,7 +54,7 @@ public class BFO extends Algorithm {
     private void initSwarm(Task task) throws StopCriterionException {
         swarm.clear();
         best = null;
-        for (int i = 0; i < S; i++) {
+        for (int i = 0; i < popSize; i++) {
             tmp = new Bacteria(task, Ci);
             if (best == null) best = tmp;
             else if (task.isFirstBetter(tmp, best)) {
@@ -144,7 +148,7 @@ public class BFO extends Algorithm {
             for (int l = 0; l < Ned; l++) {
                 for (int k = 0; k < Nre; k++) {
                     for (int j = 0; j < Nc; j++) {
-                        for (int i = 0; i < S; i++) {
+                        for (int i = 0; i < popSize; i++) {
                             swarm.get(i).health = 0;
                             tmp = chemotaxis(swarm.get(i), task);
                             if (task.isFirstBetter(tmp, swarm.get(i))) swarm.set(i, tmp);
@@ -154,7 +158,7 @@ public class BFO extends Algorithm {
                     reproduction();
                     if (task.isStopCriterion()) return best;
                 }
-                for (int i = 0; i < S; i++) {
+                for (int i = 0; i < popSize; i++) {
                     tmp = eliminationAndDispersal(swarm.get(i), task, i);
                     if (tmp != null) swarm.set(i, tmp);
                     if (task.isStopCriterion()) return best;

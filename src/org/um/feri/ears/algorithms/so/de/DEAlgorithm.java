@@ -14,6 +14,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 /* jDE[1] - Janez Brest */
 /* =========================== */
@@ -110,38 +111,13 @@ public class DEAlgorithm extends Algorithm {
         Strategy(String label) {
             this.label = label;
         }
+
     }
 
-    private DESolution[] c;
-    private DESolution[] d; // double c[MAXPOP][MAXDIM], d[MAXPOP][MAXDIM];
-    private DESolution[] pold; // double pold[MAXPOP][MAXDIM]
-    private DESolution[] pnew; // pnew[MAXPOP][MAXDIM]
-    private DESolution[] pswap; // (*pswap)[MAXPOP][MAXDIM];
-    private Task task;
-
-
-    private Strategy strategy; /* choice parameter for screen output */
-    private int i, j, L, n; /* counting variables */
-    private int r1, r2, r3, r4; /* placeholders for random indexes */
-    private int r5; /* placeholders for random indexes */
-    private int D; /* Dimension of parameter vector */
-    private int NP; /* number of population members */
-    // int genmax, seed;
-
-    // long nfeval; /* number of function evaluations */
-
-    private double trial_cost; /* buffer variable */
-    // double inibound_h; /* upper parameter bound */
-    // double inibound_l; /* lower parameter bound */
-    private double[] tmp; // , best[], bestit[]; /* members MAXDIM*/
-    private double tmpF, tmpCR, tmp3;
-    // double cost[]; /* obj. funct. valuesMAXPOP */
-    private double cvar; /* computes the cost variance */
-    private double cmean; /* mean cost */
-    private double F, memF, CR, memCR; /* control variables of DE */
-    // double cmin; /* help variables */
-    private DESolution best, bestit, bestI;// best, best iteration, best I
-    private boolean debug;
+    @AlgorithmParameter(name = "population size")
+    private int popSize;
+    @AlgorithmParameter
+    private Strategy strategy;
     /* --------- jDE constants ----------- */
     private final static double Finit = 0.5; // F INITIAL FACTOR VALUE
     private final static double CRinit = 0.9; // CR INITIAL FACTOR VALUE
@@ -155,24 +131,44 @@ public class DEAlgorithm extends Algorithm {
     private final static double tao1 = 0.1; // probability to adjust F
     private final static double tao2 = 0.1; // probability to adjust CR
 
+    private DESolution[] c;
+    private DESolution[] d; // double c[MAXPOP][MAXDIM], d[MAXPOP][MAXDIM];
+    private DESolution[] pold; // double pold[MAXPOP][MAXDIM]
+    private DESolution[] pnew; // pnew[MAXPOP][MAXDIM]
+    private DESolution[] pswap; // (*pswap)[MAXPOP][MAXDIM];
+    private Task task;
+
+
+    private int i, j, L, n; /* counting variables */
+    private int r1, r2, r3, r4; /* placeholders for random indexes */
+    private int r5; /* placeholders for random indexes */
+    private int D; /* Dimension of parameter vector */
+
+
+    private double[] tmp; // , best[], bestit[]; /* members MAXDIM*/
+    private double tmpF, tmpCR, tmp3;
+    private double cvar; /* computes the cost variance */
+    private double cmean; /* mean cost */
+    private double F, memF, CR, memCR; /* control variables of DE */
+    private DESolution best, bestit, bestI;// best, best iteration, best I
+
     public DEAlgorithm(Strategy strategy) {
         this(strategy, 30, Finit, CRinit);
     }
 
-    public DEAlgorithm(Strategy strategy, int NP) {
-        this(strategy, NP, Finit, CRinit);
+    public DEAlgorithm(Strategy strategy, int popSize) {
+        this(strategy, popSize, Finit, CRinit);
     }
 
-    public DEAlgorithm(Strategy strategy, int NP, double F, double CR) {
+    public DEAlgorithm(Strategy strategy, int popSize, double F, double CR) {
         this.strategy = strategy;
         memF = F;
         memCR = CR;
         this.F = F;
         this.CR = CR;
-        this.NP = NP;
+        this.popSize = popSize;
 
-        if (NP < 6)
-            System.err.println("DEAlgorithm: population size smaller than 6 will cause an infinite loop!");
+        assert (popSize > 5); // population size smaller than 6 will cause an infinite loop
 
         au = new Author("matej", "matej.crepinsek@um.si");
         ai = new AlgorithmInfo(strategy.label, strategy.label,
@@ -183,7 +179,7 @@ public class DEAlgorithm extends Algorithm {
 
         ai.addParameter(EnumAlgorithmParameters.F, F + "");
         ai.addParameter(EnumAlgorithmParameters.CR, CR + "");
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, NP + "");
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 
     }
 
@@ -198,9 +194,9 @@ public class DEAlgorithm extends Algorithm {
         this.F = memF;
         this.CR = memCR;
         tmp = new double[D];
-        c = new DESolution[NP];
-        d = new DESolution[NP];
-        for (i = 0; i < NP; i++) {
+        c = new DESolution[popSize];
+        d = new DESolution[popSize];
+        for (i = 0; i < popSize; i++) {
             c[i] = new DESolution(task.getRandomEvaluatedSolution(), Finit, CRinit);
             // System.out.println(i+". "+c[i]);
         }
@@ -214,7 +210,7 @@ public class DEAlgorithm extends Algorithm {
         c[0] = new IndividualSA(task.eval(x7), Finit, CRinit);
         */
         bestI = c[0];
-        for (i = 0; i < NP; i++) {
+        for (i = 0; i < popSize; i++) {
             if (task.isFirstBetter(c[i], bestI))
                 bestI = c[i];
         }
@@ -232,31 +228,31 @@ public class DEAlgorithm extends Algorithm {
         // if (strategy == 20) System.out.println("NP="+NP+" Start:"+best);
         while (!task.isStopCriterion()) {
 
-            for (i = 0; i < NP; i++) /* Start of loop through ensemble */ {
+            for (i = 0; i < popSize; i++) /* Start of loop through ensemble */ {
                 if (task.isStopCriterion())
                     break;
                 do /* Pick a random population member */ { /* Endless loop for NP < 2 !!! */
-                    r1 = Util.rnd.nextInt(NP); // (int) (Util.rnd.nextDouble() *
+                    r1 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
                     // NP);
                 } while (r1 == i);
 
                 do /* Pick a random population member */ { /* Endless loop for NP < 3 !!! */
-                    r2 = Util.rnd.nextInt(NP); // (int) (Util.rnd.nextDouble() *
+                    r2 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
                     // NP);
                 } while ((r2 == i) || (r2 == r1));
 
                 do /* Pick a random population member */ { /* Endless loop for NP < 4 !!! */
-                    r3 = Util.rnd.nextInt(NP); // (int) (Util.rnd.nextDouble() *
+                    r3 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
                     // NP);
                 } while ((r3 == i) || (r3 == r1) || (r3 == r2));
 
                 do /* Pick a random population member */ { /* Endless loop for NP < 5 !!! */
-                    r4 = Util.rnd.nextInt(NP); // (int) (Util.rnd.nextDouble() *
+                    r4 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
                     // NP);
                 } while ((r4 == i) || (r4 == r1) || (r4 == r2) || (r4 == r3));
 
                 do /* Pick a random population member */ { /* Endless loop for NP < 6 !!! */
-                    r5 = Util.rnd.nextInt(NP); // (int) (Util.rnd.nextDouble() *
+                    r5 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
                     // NP);
                 } while ((r5 == i) || (r5 == r1) || (r5 == r2) || (r5 == r3) || (r5 == r4));
 

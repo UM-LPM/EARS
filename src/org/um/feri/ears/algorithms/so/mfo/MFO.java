@@ -9,18 +9,18 @@ import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
 public class MFO extends Algorithm {
 
-    private DoubleSolution bestFlame;
-
+    @AlgorithmParameter(name = "population size")
     private int popSize;
+
+    private DoubleSolution bestFlame;
     private double flameNum;
-
     private Task task;
-
     private ArrayList<DoubleSolution> population;
 
     public MFO() {
@@ -56,8 +56,8 @@ public class MFO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-
+    public DoubleSolution execute(Task task) throws StopCriterionException {
+        this.task = task;
         initPopulation();
 
         population.sort(new TaskComparator(task));

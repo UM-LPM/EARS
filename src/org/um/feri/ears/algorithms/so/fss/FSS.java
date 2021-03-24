@@ -17,13 +17,16 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.qualityIndicator.QualityIndicatorUtil;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
 public class FSS extends Algorithm {
 
+    @AlgorithmParameter(name = "population size")
+    private int popSize;
+
     private DoubleSolution best;
-    private int popSize; //school size
     private Task task;
 
     //Parameters
@@ -59,17 +62,17 @@ public class FSS extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public DoubleSolution execute(Task task) throws StopCriterionException {
+        this.task = task;
         initPopulation();
 
-        while (!task.isStopCriterion()) {
+        while (!this.task.isStopCriterion()) {
             double stepIndividual = 1.0;
 
             //TODO iterations and cpu time
-            if (task.getStopCriterion() == EnumStopCriterion.EVALUATIONS) {
+            if (this.task.getStopCriterion() == EnumStopCriterion.EVALUATIONS) {
 
-                stepIndividual = FSS.STEP_INDIVIDUAL_INIT - (FSS.STEP_INDIVIDUAL_INIT - FSS.STEP_INDIVIDUAL_FINAL) * ((double) task.getNumberOfEvaluations() / (double) task.getMaxEvaluations());
+                stepIndividual = FSS.STEP_INDIVIDUAL_INIT - (FSS.STEP_INDIVIDUAL_INIT - FSS.STEP_INDIVIDUAL_FINAL) * ((double) this.task.getNumberOfEvaluations() / (double) this.task.getMaxEvaluations());
             }
 
             individualOperator(stepIndividual);
@@ -79,13 +82,13 @@ public class FSS extends Algorithm {
             double[] schoolInstinctive = colletiveInstinctiveOperator();
 
             //TODO iterations and cpu time
-            double stepVolatile = FSS.STEP_VOLATILE_INIT - (FSS.STEP_VOLATILE_INIT - FSS.STEP_VOLATILE_FINAL) * ((double) task.getNumberOfEvaluations() / (double) task.getMaxEvaluations());
+            double stepVolatile = FSS.STEP_VOLATILE_INIT - (FSS.STEP_VOLATILE_INIT - FSS.STEP_VOLATILE_FINAL) * ((double) this.task.getNumberOfEvaluations() / (double) this.task.getMaxEvaluations());
 
             individualOperator(stepIndividual);
 
-            collectivesVolatileOperator(stepVolatile * (task.getUpperLimit(0) - task.getLowerLimit(0)), schoolInstinctive);
+            collectivesVolatileOperator(stepVolatile * (this.task.getUpperLimit(0) - this.task.getLowerLimit(0)), schoolInstinctive);
 
-            task.incrementNumberOfIterations();
+            this.task.incrementNumberOfIterations();
         }
         return best;
     }

@@ -8,13 +8,18 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
 public class JADE extends Algorithm {
+
+    @AlgorithmParameter(name = "population size")
     private int popSize;
     // private int arch_size;
     private int eliteSize; // calculated by p*pop_size pbest
+    private double p; // % DE/Current-to-pbest
+    private double c; // helps
     // private double F,CR;
     private ArrayList<JADESolution> elite; // pbest
     private JADESolution[] popX; // population
@@ -24,9 +29,37 @@ public class JADE extends Algorithm {
     private ArrayList<Double> SCR; // list of successful F, CR in current gen
     private ArrayList<Double> SF; //
 
-    private Task task; // set it in run
-    private double p; // % DE/Current-to-pbest
-    private double c; // helps
+    private Task task;
+
+    public JADE() {
+        this(30, .05, .1);
+    }
+
+    public JADE(int popSize, double p, double c) {
+        super();
+        // by paper p is in [0.05-0.2]
+        // by paper c is in [0.05-0.2]
+        // by paper pop_size (D < 10) = 30; (D=30) = 100; (D=100) = 400
+        debug = false;
+        this.popSize = popSize;
+        this.c = c;
+        this.p = p;
+        eliteSize = (int) Math.round(popSize * p);
+        elite = new ArrayList<JADESolution>();
+        archX = new ArrayList<JADESolution>();
+        SCR = new ArrayList<Double>();
+        SF = new ArrayList<Double>();
+        if (eliteSize == 0)
+            eliteSize = 1;
+        setDebug(debug); // EARS prints some debug info
+        ai = new AlgorithmInfo(
+                "JADE",
+                "Adaptive Differential Evolution With Optional External Archive",
+                "Jingqiao Zhang, Arthur C. Sanderson");
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
+        // ai.addParameter(EnumAlgorithmParameters., F + "");
+        au = new Author("Matej", "matej.crepinsek@um.si");
+    }
 
     /*
      * Keep track of best individuals pbest! Also sets global best
@@ -60,37 +93,6 @@ public class JADE extends Algorithm {
             if (task.isStopCriterion())
                 break;
         }
-    }
-
-    public JADE(int popSize, double p, double c) {
-        super();
-        // by paper p is in [0.05-0.2]
-        // by paper c is in [0.05-0.2]
-        // by paper pop_size (D < 10) = 30; (D=30) = 100; (D=100) = 400
-        debug = false;
-        this.popSize = popSize;
-        this.c = c;
-        this.p = p;
-        eliteSize = (int) Math.round(popSize * p);
-        elite = new ArrayList<JADESolution>();
-        archX = new ArrayList<JADESolution>();
-        SCR = new ArrayList<Double>();
-        SF = new ArrayList<Double>();
-        if (eliteSize == 0)
-            eliteSize = 1;
-        setDebug(debug); // EARS prints some debug info
-        ai = new AlgorithmInfo(
-                "JADE",
-                "Adaptive Differential Evolution With Optional External Archive",
-                "Jingqiao Zhang, Arthur C. Sanderson");
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
-        // ai.addParameter(EnumAlgorithmParameters., F + "");
-        au = new Author("Matej", "matej.crepinsek@um.si");
-        // info
-    }
-
-    public JADE() {
-        this(30, .05, .1);
     }
 
     @Override

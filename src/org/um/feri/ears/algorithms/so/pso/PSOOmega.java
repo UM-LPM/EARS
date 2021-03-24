@@ -8,12 +8,15 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
 public class PSOOmega extends Algorithm {
 
+    @AlgorithmParameter(name = "population size")
     private int popSize;
+
     private ArrayList<PsoSolution> population;
     private Task task;
     private PsoSolution gBest; //global best

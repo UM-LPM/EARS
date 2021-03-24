@@ -9,21 +9,23 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MBF extends Algorithm {
 
-    private DoubleSolution best;
+    @AlgorithmParameter(name = "population size")
+    private int popSize = 50;
 
+    private DoubleSolution best;
     private Task task;
 
     private double SP = 0.8;        //Mother Power
     private double SPdamp = 0.95;   //Mother Power Damping Ratio
     private double Dis = 1.8;         //Amount of Dispersion Coefficient
     private double Pdis = 0.2;      //Amount of Probability of Dispersion Coefficient
-    private int popSize = 50;      //Population Size (Fish Numbers)
     private double ASDP; //Additional Surrounding Dispersion of Wild
     private double ASDN;                   //Additional Surrounding Dispersion of Mother
     private int nCrossover = 2;

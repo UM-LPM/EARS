@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.Arrays;
 
@@ -16,9 +17,11 @@ import static java.util.Arrays.stream;
 
 public class OSSTLBO extends Algorithm {
 
+    @AlgorithmParameter(name = "population size")
+    private int popSize;
+
     private DoubleSolution best;
     private Task task;
-    private int popSize;
     private DoubleSolution[] population;
 
     private int m = 0;

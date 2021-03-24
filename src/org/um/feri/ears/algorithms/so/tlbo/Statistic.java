@@ -1,12 +1,10 @@
 package org.um.feri.ears.algorithms.so.tlbo;
 
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.Task;
 
 import java.util.ArrayList;
 
 public class Statistic {
-    private Task task;
     private ArrayList<StatisticGeneration> a;
     private long evalCount;
     private StatisticGeneration current_g;
@@ -34,10 +32,9 @@ public class Statistic {
         return a.get(a.size() - 1).best;
     }
 
-    public Statistic(Task p2) {
+    public Statistic() {
         super();
         evalCount = 0;
-        this.task = p2;
         a = new ArrayList<StatisticGeneration>();
         current_g = new StatisticGeneration(INIT_GEN_ID, 0); //
         a.add(current_g);

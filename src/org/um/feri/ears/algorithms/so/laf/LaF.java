@@ -9,24 +9,31 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
 public class LaF extends Algorithm {
 
+    @AlgorithmParameter(name = "population size")
+    private int popSize;
+
     private boolean debug = true;
     private Task task;
-    //FireflySolution best;
+
     private ArrayList<DoubleSolution> leaders;
     private ArrayList<DoubleSolution> followers;
 
-    private int pop_size;
 
     private double[] ub;
     private double[] lb;
     private int dimension;
 
-    public LaF(int pop_size, int dimension) {
+    public LaF() {
+        this(20);
+    }
+
+    public LaF(int popSize) {
 
         super();
         setDebug(debug);  //EARS prints some debug info
@@ -41,62 +48,53 @@ public class LaF extends Algorithm {
         );
         au = new Author("alex", "shliu@mail.fresnostate.edu"); //EARS author info
 
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
-        this.pop_size = pop_size;
-    }
-
-    public LaF() {
-        this(20, 10);
-
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
+        this.popSize = popSize;
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException { //EARS main evaluation loop
-        task = taskProblem;
+    public DoubleSolution execute(Task task) throws StopCriterionException { //EARS main evaluation loop
+        this.task = task;
         DoubleSolution best = null;
-        dimension = task.getNumberOfDimensions();
-        ub = task.getUpperLimit();
-        lb = task.getLowerLimit();
+        dimension = this.task.getNumberOfDimensions();
+        ub = this.task.getUpperLimit();
+        lb = this.task.getLowerLimit();
 
         initPopulation();
         int leaderIndex;
         int followerIndex;
-        while (!task.isStopCriterion()) {
-            for (int i = 0; i < pop_size; i++) {
-                if (task.isStopCriterion())
+        while (!this.task.isStopCriterion()) {
+            for (int i = 0; i < popSize; i++) {
+                if (this.task.isStopCriterion())
                     break;
-                leaderIndex = Util.nextInt(pop_size);
+                leaderIndex = Util.nextInt(popSize);
                 DoubleSolution leader = leaders.get(leaderIndex);
-                followerIndex = Util.nextInt(pop_size);
+                followerIndex = Util.nextInt(popSize);
                 DoubleSolution follower = followers.get(followerIndex);
                 DoubleSolution trial = trial(leader, follower); //one fit eval here
                 //System.out.println(trailCost);
-                if (task.isFirstBetter(trial, followers.get(followerIndex))) //eval done earlier
+                if (this.task.isFirstBetter(trial, followers.get(followerIndex))) //eval done earlier
                     followers.set(followerIndex, trial);
             }
-            if (task.isFirstBetter(findMedianSolution(followers), findMedianSolution(leaders))) {
+            if (this.task.isFirstBetter(findMedianSolution(followers), findMedianSolution(leaders))) {
                 leaders = merge(followers, leaders);
             }
             best = new DoubleSolution(leaders.get(findMinIndex(leaders)));
-            task.incrementNumberOfIterations();
+            this.task.incrementNumberOfIterations();
         }
         return best;
-    }
-
-    @Override
-    public void resetToDefaultsBeforeNewRun() {
     }
 
     public void initPopulation() throws StopCriterionException {
         leaders = new ArrayList<DoubleSolution>();
         followers = new ArrayList<DoubleSolution>();
-        for (int i = 0; i < pop_size; i++) {
+        for (int i = 0; i < popSize; i++) {
             DoubleSolution newLeader = new DoubleSolution(task.getRandomEvaluatedSolution());
             leaders.add(newLeader);
             if (task.isStopCriterion())
                 break;
         }
-        for (int i = 0; i < pop_size; i++) {
+        for (int i = 0; i < popSize; i++) {
             DoubleSolution newFollower = new DoubleSolution(task.getRandomEvaluatedSolution());
             followers.add(newFollower);
             if (task.isStopCriterion())
@@ -134,7 +132,7 @@ public class LaF extends Algorithm {
 
     private DoubleSolution findMedianSolution(ArrayList<DoubleSolution> mArrayList) {
         mArrayList.sort(new TaskComparator(task));
-        return mArrayList.get(pop_size / 2);
+        return mArrayList.get(popSize / 2);
     }
 
     private ArrayList<DoubleSolution> merge(ArrayList<DoubleSolution> followers, ArrayList<DoubleSolution> leaders) {
@@ -142,14 +140,14 @@ public class LaF extends Algorithm {
         merged.addAll(followers);
         boolean[] selected = new boolean[merged.size()];
 
-		ArrayList<DoubleSolution> selectedLeaders = new ArrayList<DoubleSolution>(pop_size);
+		ArrayList<DoubleSolution> selectedLeaders = new ArrayList<DoubleSolution>(popSize);
 
         //add best solution
         int min_index = findMinIndex(merged);
         selectedLeaders.add(merged.get(min_index));
         selected[min_index] = true;
 
-        for (int i = 0; i < pop_size; i++) {
+        for (int i = 0; i < popSize; i++) {
             int[] pick2 = randomSample(selected);
             int winner_index = compete(merged, pick2);
             selectedLeaders.add(merged.get(winner_index));
@@ -195,5 +193,9 @@ public class LaF extends Algorithm {
         if (task.isFirstBetter(newLeaders.get(r1), newLeaders.get(r2)))
             return r1;
         return r2;
+    }
+
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
     }
 }

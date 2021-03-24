@@ -10,24 +10,28 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 public class ABC extends Algorithm {
 
-    private int cs; // The number of colony size (employed bees + onlooker bees)
+    @AlgorithmParameter(name = "population size")
+    private int popSize; // The colony size (employed bees + onlooker bees)
     private int foodNumber;
+    @AlgorithmParameter(description = "maximum cycle number")
+    private int limit;
+
     private Task task;
     private ABCSolution best;
-    private int limit;
     private ArrayList<ABCSolution> population;
 
     public ABC() {
         this(60);
     }
 
-    public ABC(int cs) {
+    public ABC(int popSize) {
         super();
-        this.cs = cs;
-        this.foodNumber = cs / 2;
+        this.popSize = popSize;
+        this.foodNumber = popSize / 2;
 
         au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo("ABC", "Artificial Bee Colony",
@@ -40,13 +44,13 @@ public class ABC extends Algorithm {
                         + "pages={459--471},"
                         + "year={2007},"
                 );
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, cs + "");
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
-        limit = (cs * task.getNumberOfDimensions()) / 2;
+        limit = (popSize * task.getNumberOfDimensions()) / 2;
         initPopulation();
 
         while (!task.isStopCriterion()) {
@@ -89,10 +93,9 @@ public class ABC extends Algorithm {
 
         int neighbour, param2change;
         double phi, newValue;
-        int t = 0, i = 0, r;
+        int t = 0, i = 0;
 
         while (t < foodNumber) {
-            r = Util.nextInt(foodNumber);
             if (Util.nextDouble() < population.get(i).getProb()) {
                 t++;
 
@@ -186,7 +189,7 @@ public class ABC extends Algorithm {
     }
 
     private void initPopulation() throws StopCriterionException {
-        population = new ArrayList<ABCSolution>();
+        population = new ArrayList<>();
         ABCSolution bee = new ABCSolution(task.getRandomEvaluatedSolution());
         population.add(bee);
         best = new ABCSolution(bee);

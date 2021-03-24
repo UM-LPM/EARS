@@ -14,9 +14,7 @@ import java.util.ArrayList;
 
 public class PSO extends Algorithm {
 
-    @AlgorithmParameter(
-            name = "population size"
-    )
+    @AlgorithmParameter(name = "population size")
     private int popSize;
     @AlgorithmParameter (
             name = "omega",

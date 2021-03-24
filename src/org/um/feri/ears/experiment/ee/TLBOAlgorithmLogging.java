@@ -74,7 +74,7 @@ public class TLBOAlgorithmLogging extends Algorithm {
         task = taskProblem;
         num_var = task.getNumberOfDimensions();
         // max_eval = task.getMaxEvaluations();
-        stat = new Statistic(task);
+        stat = new Statistic();
         init();
         try {
         aTeacher();

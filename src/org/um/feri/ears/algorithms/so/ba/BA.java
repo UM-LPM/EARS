@@ -10,17 +10,20 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 public class BA extends Algorithm{
 
+	@AlgorithmParameter(name = "population size")
 	private int popSize; //typically 10 to 40
-	private Task task;
-	
-    private double A; //Loudness  (constant or decreasing)
-    private double r; //Pulse rate (constant or decreasing)
-    private double Qmin, Qmax; //min and max frequency
-    private double alpha, gamma; // 0 < alpha < 1, gamma > 0
+	@AlgorithmParameter(name = "loudness")
+	private double A; // (constant or decreasing)
+	@AlgorithmParameter(name = "pulse rate")
+	private double r; // (constant or decreasing)
+	private double Qmin, Qmax; //min and max frequency
+	private double alpha, gamma; // 0 < alpha < 1, gamma > 0
 
+	private Task task;
 	private BatSolution best;
 	private ArrayList<BatSolution> population;
 	

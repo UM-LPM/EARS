@@ -16,9 +16,7 @@ import java.util.ArrayList;
 
 public class GWO extends Algorithm {
 
-    @AlgorithmParameter(
-            name = "population size"
-    )
+    @AlgorithmParameter(name = "population size")
     private int popSize;
 
     private ArrayList<DoubleSolution> population;

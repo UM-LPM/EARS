@@ -9,19 +9,21 @@ import org.um.feri.ears.problems.EnumStopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
 public class GOA extends Algorithm {
 
-    private DoubleSolution best;
-
+    @AlgorithmParameter(name = "population size")
     private int popSize;
-    private Task task;
-
+    @AlgorithmParameter
     private double cMax = 1;
+    @AlgorithmParameter
     private double cMin = 0.00001;
 
+    private Task task;
+    private DoubleSolution best;
     private ArrayList<DoubleSolution> population;
     private ArrayList<DoubleSolution> offspringPopulation;
 
@@ -48,8 +50,8 @@ public class GOA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public DoubleSolution execute(Task task) throws StopCriterionException {
+        this.task = task;
         initPopulation();
         int maxIt = 10000;
         if (task.getStopCriterion() == EnumStopCriterion.ITERATIONS) {
@@ -121,24 +123,6 @@ public class GOA extends Algorithm {
 
             task.incrementNumberOfIterations();
         }
-		
-		/*StringBuilder sb = new StringBuilder();
-		for(ArrayList<DoubleSolution> pop : populationHistory)
-		{
-			sb.append(pop.toString());
-			sb.append("\n");
-		}
-		
-		try {
-			FileOutputStream fos = new FileOutputStream("D:\\population_history.txt");
-			OutputStreamWriter osw = new OutputStreamWriter(fos);
-			BufferedWriter bw = new BufferedWriter(osw);
-			bw.write(sb.toString());
-			bw.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
         return best;
     }
 
@@ -153,7 +137,7 @@ public class GOA extends Algorithm {
     }
 
     private void initPopulation() throws StopCriterionException {
-        population = new ArrayList<DoubleSolution>();
+        population = new ArrayList<>();
 
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
@@ -164,30 +148,9 @@ public class GOA extends Algorithm {
 
         population.sort(new TaskComparator(task));
         best = new DoubleSolution(population.get(0));
-		
-		/*StringBuilder sb = new StringBuilder();
-		
-		sb.append("[");
-		for(int k = 0; k < pop_size; k++)
-		{
-			
-			double[] var = population.get(k).getDoubleVariables();
-			for (int i = 0; i < var.length; i++) {
-				sb.append(var[i]);
-				if(i+1 < var.length)
-					sb.append("\t");
-			}
-			if(k+1 < pop_size)
-				sb.append(";");
-
-		}
-		sb.append("]");
-		System.out.println(sb.toString());*/
     }
-
 
     @Override
     public void resetToDefaultsBeforeNewRun() {
     }
-
 }

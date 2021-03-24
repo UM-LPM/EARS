@@ -7,6 +7,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,47 +15,41 @@ import java.util.EnumMap;
 import java.util.List;
 
 public class TLBOAlgorithm extends Algorithm {
-    private int popSize; // = 50000; //defaults from authors
-    private Task task; // To calculate fitness
-    private int gen;
-    private int numVar = 5;
-    // double pmutate = 0;
-    private DoubleSolution[] population; // pop_size X dimension
-    // double eval[]; // pop_size
 
-    // double averageCost; //for stat
-    // double minCost; //for stat
+    @AlgorithmParameter(name = "population size")
+    private int popSize;
+
+    private Task task;
+
+    private int gen;
+    private DoubleSolution[] population;
+
     private static boolean removeDuplicates = true;
     public Statistic stat;
     private static boolean useTF = true;
     private static boolean useAll4Mean = true;// used for internal tests
+    private int dimensions;
     private double[] lowerLimit;
     private double[] upperLimit;
     private ArrayList<DoubleSolution> keepList;
     public static boolean test = false;
 
-    public Statistic getStat() {
-        return stat;
-    }
-
-    private int Keep = 0; // copy best from ex generation
+    private int keep = 0; // copy best from ex generation
 
     public TLBOAlgorithm() {
         this(0, 20);
     }
 
-    /**
-     * stopCondition GENERATION_STOP_CONDITION or EVALUATIONS_STOP_CONDITION
-     */
-    public TLBOAlgorithm(int Keep, int popSize) {
-        this.Keep = Keep;
+
+    public TLBOAlgorithm(int keep, int popSize) {
+        this.keep = keep;
         this.popSize = popSize;
         au = new Author("matej", "matej.crepinsek@um.si");
         ai = new AlgorithmInfo(
                 "TLBO", "Teaching Learning Based Optimization",
                 "\\bibitem{Rao2011}\nR.V.~Rao, V.J.~Savsani, D.P.~Vakharia.\n\\newblock Teaching-learning-based optimization: A novel method for constrained mechanical design optimization problems.\n\\newblock \\emph{Computer-Aided Design}, 43(3):303--315, 2011."
         );
-        ai.addParameter(EnumAlgorithmParameters.ELITE, "" + Keep);
+        ai.addParameter(EnumAlgorithmParameters.ELITE, "" + keep);
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 
     }
@@ -62,9 +57,9 @@ public class TLBOAlgorithm extends Algorithm {
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
-        numVar = task.getNumberOfDimensions();
+        dimensions = task.getNumberOfDimensions();
         // max_eval = task.getMaxEvaluations();
-        stat = new Statistic(task);
+        stat = new Statistic();
         init();
         aTeacher();
 
@@ -72,7 +67,7 @@ public class TLBOAlgorithm extends Algorithm {
     }
 
     private double[] mean() {
-        double[] d = new double[numVar];
+        double[] d = new double[dimensions];
         int min;
         if (useAll4Mean)
             min = 0;
@@ -80,11 +75,11 @@ public class TLBOAlgorithm extends Algorithm {
             min = (int) (popSize * 0.075);
         int max = popSize - min;
         for (int i = min; i < max; i++) {
-            for (int j = 0; j < numVar; j++) {
+            for (int j = 0; j < dimensions; j++) {
                 d[j] += population[i].getValue(j);
             }
         }
-        for (int j = 0; j < numVar; j++) {
+        for (int j = 0; j < dimensions; j++) {
             d[j] = d[j] / (max - min);
         }
         return d;
@@ -93,22 +88,22 @@ public class TLBOAlgorithm extends Algorithm {
     /**
      * Implemented by code Close to, but not 100% duplicates clear
      */
-    private void clearDups() throws StopCriterionException {
-        double[] tmp1 = new double[numVar];
-        double[] tmp2 = new double[numVar];
+    private void clearDuplicates() throws StopCriterionException {
+        double[] tmp1 = new double[dimensions];
+        double[] tmp2 = new double[dimensions];
         double[] tmp3;
         for (int i = 0; i < popSize; i++) {
             for (int j = i + 1; j < popSize; j++) {
                 if (task.isStopCriterion())
                     return; // end jump out
-                System.arraycopy(population[i].getDoubleVariables(), 0, tmp1, 0, numVar);
-                System.arraycopy(population[j].getDoubleVariables(), 0, tmp2, 0, numVar);
+                System.arraycopy(population[i].getDoubleVariables(), 0, tmp1, 0, dimensions);
+                System.arraycopy(population[j].getDoubleVariables(), 0, tmp2, 0, dimensions);
                 Arrays.sort(tmp1);
                 Arrays.sort(tmp2);
                 if (Arrays.equals(tmp1, tmp2)) {
                     // on random place change value
                     stat.getCurrent_g().incDouple();
-                    int pos = Util.rnd.nextInt(numVar);
+                    int pos = Util.rnd.nextInt(dimensions);
                     tmp3 = population[j].getDoubleVariables();
 
                     tmp3[pos] = Util.nextDouble(lowerLimit[pos], upperLimit[pos]);
@@ -144,14 +139,13 @@ public class TLBOAlgorithm extends Algorithm {
             }
         }
 
-        if (TLBOAlgorithm.removeDuplicates) {
-            clearDups(); // stop condition inside
+        if (removeDuplicates) {
+            clearDuplicates(); // stop condition inside
         }
 
-        // printAllPopulation();
         sortByFirstBetterCondition();
         stat.getCurrent_g().setBest(population[0]);
-        keepList = new ArrayList<DoubleSolution>();
+        keepList = new ArrayList<>();
     }
 
     private void aTeacher() throws StopCriterionException {
@@ -160,9 +154,9 @@ public class TLBOAlgorithm extends Algorithm {
         double[] tmpX;
         double[] tmpY;
         double[] tmpIsland;
-        double[] newMean = new double[numVar];
-        double[] difMean = new double[numVar];
-        double[][] popTmp = new double[popSize][numVar];
+        double[] newMean = new double[dimensions];
+        double[] difMean = new double[dimensions];
+        double[][] popTmp = new double[popSize][dimensions];
         DoubleSolution[] evalTmp = new DoubleSolution[popSize];
         DoubleSolution[] island1 = new DoubleSolution[popSize];
         gen = 0;
@@ -174,11 +168,11 @@ public class TLBOAlgorithm extends Algorithm {
                 System.out.println("mean M=" + Arrays.toString(M));
             newMean = population[0].getDoubleVariables();
             // Keep not in paper
-            for (int k = 0; k < Keep; k++)
+            for (int k = 0; k < keep; k++)
                 keepList.add(new DoubleSolution(population[k]));
             // Teacher phase
             // For every dimension it calculates dif_mean
-            for (int n = 0; n < numVar; n++) {
+            for (int n = 0; n < dimensions; n++) {
                 if (useTF)
                     TF = Util.rnd.nextInt(2) + 1; // in source code is fix to 1
                 difMean[n] = Util.rnd.nextDouble() * (newMean[n] - TF * M[n]);
@@ -189,7 +183,7 @@ public class TLBOAlgorithm extends Algorithm {
                 if (task.isStopCriterion())
                     break; // in loop after incEval
                 tmpX = population[i].getDoubleVariables();
-                for (int n = 0; n < numVar; n++) {
+                for (int n = 0; n < dimensions; n++) {
                     popTmp[i][n] = task.setFeasible(tmpX[n] + difMean[n], n);
                 }
                 evalTmp[i] = task.eval(popTmp[i]);
@@ -206,7 +200,7 @@ public class TLBOAlgorithm extends Algorithm {
                 }
             }
             // Learner phase
-            int ii = 0;
+            int ii;
             int i_first = 0;
             for (; i_first < popSize; i_first++) {
                 if (task.isStopCriterion())
@@ -223,13 +217,13 @@ public class TLBOAlgorithm extends Algorithm {
                     System.out.println("Learning partner " + population[ii]);
                 tmpX = population[i_first].getDoubleVariables();
                 tmpY = population[ii].getDoubleVariables();
-                tmpIsland = new double[numVar];
+                tmpIsland = new double[dimensions];
                 if (task.isFirstBetter(population[i_first], population[ii])) {
-                    for (int n = 0; n < numVar; n++) {
+                    for (int n = 0; n < dimensions; n++) {
                         tmpIsland[n] = task.setFeasible(tmpX[n] + rand * (tmpX[n] - tmpY[n]), n);
                     }
                 } else {
-                    for (int n = 0; n < numVar; n++) {
+                    for (int n = 0; n < dimensions; n++) {
                         tmpIsland[n] = task.setFeasible(tmpX[n] + rand * (tmpY[n] - tmpX[n]), n);
                     }
                 }
@@ -250,18 +244,16 @@ public class TLBOAlgorithm extends Algorithm {
             }
             sortByFirstBetterCondition();
             // Keep back change worst chromosomes
-            int back = popSize - 1 - Keep;
+            int back = popSize - 1 - keep;
             // int back= (int) (pop_size*0.9);
-            for (int k = 0; k < Keep; k++)
+            for (int k = 0; k < keep; k++)
                 population[back + k] = keepList.get(k);
             keepList.clear();
             if (TLBOAlgorithm.removeDuplicates) {
-                clearDups(); // stop condition inside
+                clearDuplicates(); // stop condition inside
             }
             sortByFirstBetterCondition();
-            // averageCost = average(eval);
-            // minCost = eval[0];
-            // stat.getCurrent_g().setAvrEval(averageCost);
+
             stat.getCurrent_g().setBest(population[0]);
             gen++;
             task.incrementNumberOfIterations();
@@ -269,13 +261,8 @@ public class TLBOAlgorithm extends Algorithm {
     }
 
     @Override
-    public void resetToDefaultsBeforeNewRun() {
-        // it sets in init!
-    }
-
-    @Override
     public List<AlgorithmBase> getAlgorithmParameterTest(EnumMap<EnumBenchmarkInfoParameters, String> param, int maxCombinations) {
-        List<AlgorithmBase> alternative = new ArrayList<AlgorithmBase>();
+        List<AlgorithmBase> alternative = new ArrayList<>();
         int dim = 10;
         String sd = param.get(EnumBenchmarkInfoParameters.DIMENSION);
         if (sd != null) dim = Integer.parseInt(sd);
@@ -295,4 +282,7 @@ public class TLBOAlgorithm extends Algorithm {
         return alternative;
     }
 
+    @Override
+    public void resetToDefaultsBeforeNewRun() {
+    }
 }

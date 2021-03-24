@@ -13,6 +13,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,17 +21,25 @@ import java.util.List;
 
 public class ICA extends Algorithm {
 
-    // ICA parameters
-    private int popSize; // Number of initial countries
-    private int numOfInitialImperialists = 6;            // Number of initial imperialists
+    @AlgorithmParameter(name = "population size")
+    private int popSize;
+    @AlgorithmParameter(name = "number of initial imperialists")
+    private int numOfInitialImperialists = 6;
     private int numOfAllColonies = popSize - numOfInitialImperialists;
-    private double revolutionRate = 0.1;                // Revolution is the process in which the socio-political characteristics of a country change suddenly
-    private double assimilationCoefficient = 2;            // In the original paper assimilation coefficient is shown by "beta"  matlab -> 1.5
-    private double assimilationAngleCoefficient = 0.5;    // In the original paper assimilation angle coefficient is shown by "gama"
-    private double zeta = 0.02;                            // Total Cost of Empire = Cost of Imperialist + Zeta * mean(Cost of All Colonies)
-    private double dampRatio = 0.99;                    // The damp ratio
-    private boolean stopIfJustOneEmpire = false;        // Use "true" to stop the algorithm when just one empire is remaining. Use "false" to continue the algorithm
-    private double unitingThreshold = 0.02;            // The percent of search space size, which enables the uniting process of two empires
+    @AlgorithmParameter(name = "revolution rate", description = "Revolution is the process in which the socio-political characteristics of a country change suddenly")
+    private double revolutionRate = 0.1;
+    @AlgorithmParameter(name = "assimilation coefficient", description = "In the original paper assimilation coefficient is shown by \"beta\" MATLAB -> 1.5")
+    private double assimilationCoefficient = 2;
+    @AlgorithmParameter(name = "assimilation angle coefficient", description = "In the original paper assimilation angle coefficient is shown by \"gama\"")
+    private double assimilationAngleCoefficient = 0.5;
+    @AlgorithmParameter(description = "Total Cost of Empire = Cost of Imperialist + Zeta * mean(Cost of All Colonies)")
+    private double zeta = 0.02;
+    @AlgorithmParameter(name = "damp ratio")
+    private double dampRatio = 0.99;
+    @AlgorithmParameter(name = "one empire", description = "Set to true to stop the algorithm when just one empire is remaining. Set to false to continue the algorithm")
+    private boolean stopIfJustOneEmpire = false;
+    @AlgorithmParameter(name = "uniting threshold", description = "The percent of search space size, which enables the uniting process of two empires")
+    private double unitingThreshold = 0.02;
 
 
     private double[] searchSpaceSize;                    // The search space size (between the min and max bounds)
@@ -76,14 +85,14 @@ public class ICA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public DoubleSolution execute(Task task) throws StopCriterionException {
+        this.task = task;
 
-        searchSpaceSize = new double[task.getNumberOfDimensions()];
+        searchSpaceSize = new double[this.task.getNumberOfDimensions()];
 
         // Compute the problem search space, between the min and max bounds
-        for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-            searchSpaceSize[i] = task.getUpperLimit(i) - task.getLowerLimit(i);
+        for (int i = 0; i < this.task.getNumberOfDimensions(); i++) {
+            searchSpaceSize[i] = this.task.getUpperLimit(i) - this.task.getLowerLimit(i);
         }
 
         initPopulation();
@@ -91,7 +100,7 @@ public class ICA extends Algorithm {
         // Create the initial empires
         createInitialEmpires();
 
-        while (!task.isStopCriterion()) {
+        while (!this.task.isStopCriterion()) {
 
             // Update the revolution rate
             revolutionRate = dampRatio * revolutionRate;
@@ -121,7 +130,7 @@ public class ICA extends Algorithm {
                 break;
             }
 
-            task.incrementNumberOfIterations();
+            this.task.incrementNumberOfIterations();
         }
         return best;
     }

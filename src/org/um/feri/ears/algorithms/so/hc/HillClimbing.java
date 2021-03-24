@@ -6,15 +6,19 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 public class HillClimbing extends Algorithm {
 
     public enum HillClimbingStrategy {ANY_ASCENT, STEEPEST_ASCENT, RANDOM_RESTART}
 
+    @AlgorithmParameter(name = "strategy")
+    private HillClimbingStrategy strategy;
+    @AlgorithmParameter
+    private double dxPercent;
+
     private DoubleSolution globalBest, currentBest;
     private Task task;
-    private double dxPercent;
-    private HillClimbingStrategy strategy;
 
     public HillClimbing() {
         this(HillClimbingStrategy.RANDOM_RESTART, 0.001);

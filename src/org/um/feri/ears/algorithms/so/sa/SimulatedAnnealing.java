@@ -7,24 +7,23 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 // source: https://uk.mathworks.com/matlabcentral/fileexchange/53149-real-coded-simulated-annealing-sa
 
 public class SimulatedAnnealing extends Algorithm {
 
-    private DoubleSolution globalBest, currentBest;
-    private Task task;
-
-    private double mu = 0.5; // mutation Rate
-    private double[] sigma;
-
+    @AlgorithmParameter(name = "mutation rate")
+    private double mu = 0.5;
+    @AlgorithmParameter(name = "temperature", description = "initial and final temperature")
+    public static double T = 0.1;
+    @AlgorithmParameter(name = "alpha", description = "temperature Reduction Rate")
+    private static final double ALPHA = 0.99;
     private int subIterations = 20;
 
-    // Initial and final temperature
-    public static double T = 0.1;
-
-    // Temperature Reduction Rate
-    private static final double ALPHA = 0.99;
+    private DoubleSolution globalBest, currentBest;
+    private Task task;
+    private double[] sigma;
 
     public SimulatedAnnealing() {
         super();

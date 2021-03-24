@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,21 +17,28 @@ import java.util.List;
 
 public class LSHADE extends Algorithm {
 
-    private DoubleSolution best;
-    private Task task;
-
-    private DoubleSolution[] population;
-    private DoubleSolution[] offspringPopulation;
-
+    @AlgorithmParameter(name = "population size")
     private int popSize;
+    @AlgorithmParameter(name = "archive size")
     private int arcSize;
+    @AlgorithmParameter(name = "population rate")
+    private int popRate;
+    @AlgorithmParameter(name = "archive rate")
     private double arcRate;
+    @AlgorithmParameter(name = "current best mutation", description = "value for current-to-pbest/1 mutation")
     private double pBestRate;
+    @AlgorithmParameter(name = "historical memory size")
     private int memorySize;
     private int reductionIndNum;
 
+    private DoubleSolution[] population;
+    private DoubleSolution[] offspringPopulation;
+    private DoubleSolution best;
+    private Task task;
+
     public LSHADE() {
         arcRate = 2.6;
+        popRate = 18;
         pBestRate = 0.11;
         memorySize = 6;
 
@@ -50,7 +58,7 @@ public class LSHADE extends Algorithm {
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
-        popSize = Math.round(task.getNumberOfDimensions() * 18);
+        popSize = Math.round(task.getNumberOfDimensions() * popRate);
         arcSize = (int) Math.round(popSize * arcRate);
 
         initPopulation();

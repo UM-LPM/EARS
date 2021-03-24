@@ -8,27 +8,33 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 public class FWA extends Algorithm {
 
-    private DoubleSolution bestSpark;
-
+    @AlgorithmParameter(name = "population size")
     private int popSize;
-    private Task task;
-
+    @AlgorithmParameter(name = "max number of sparks")
+    private int numMaxSparks;
+    @AlgorithmParameter(name = "max amplitude")
     private double numMaxAmplitude;
+    @AlgorithmParameter(name = "number of gaussian sparks")
     private int numGaussianSparks;
+    @AlgorithmParameter(name = "bound a")
     private double numBoundA;
+    @AlgorithmParameter(name = "bound b")
     private double numBoundB;
     private double eps;
-    private int numMaxSparks;
+
+    private Task task;
+    private DoubleSolution bestSpark;
 
     private double[] maxBound;
     private double[] minBound;
 
     private DoubleSolution[] fireworks;
     private DoubleSolution[][] sparks;
-    private DoubleSolution[] gaussiansparks;
+    private DoubleSolution[] gaussianSparks;
 
     public FWA() {
         this(5, 50, 0.04, 0.8, 40, 5);
@@ -69,11 +75,11 @@ public class FWA extends Algorithm {
         while (!task.isStopCriterion()) {
 
             //set off n fireworks
-            setoff();
+            setOff();
             if (task.isStopCriterion())
                 break;
             //select n locations
-            selectlocations();
+            selectLocations();
 
             task.incrementNumberOfIterations();
         }
@@ -81,8 +87,9 @@ public class FWA extends Algorithm {
     }
 
     //set off n fireworks
-    private void setoff() throws StopCriterionException {
+    private void setOff() throws StopCriterionException {
 
+        //TODO minimization maximization
         //get max(worst) and min(best) value
         double maxvalue = fireworks[0].getEval();
         double minvalue = fireworks[0].getEval();
@@ -104,16 +111,16 @@ public class FWA extends Algorithm {
 
         //get number of sparks for all fireworks
         int[] numSparks = new int[popSize];
-        double tmpcoef;
+        double tmpCoef;
         for (i = 0; i < popSize; i++) {
-            tmpcoef = (maxvalue - fireworks[i].getEval() + eps) / (summaxdiff + eps);
-            if (tmpcoef < numBoundA) {
-                tmpcoef = numBoundA;
+            tmpCoef = (maxvalue - fireworks[i].getEval() + eps) / (summaxdiff + eps);
+            if (tmpCoef < numBoundA) {
+                tmpCoef = numBoundA;
             }
-            if (tmpcoef > numBoundB) {
-                tmpcoef = numBoundB;
+            if (tmpCoef > numBoundB) {
+                tmpCoef = numBoundB;
             }
-            numSparks[i] = (int) (numMaxSparks * tmpcoef);
+            numSparks[i] = (int) (numMaxSparks * tmpCoef);
         }
 
         //get amplitude of explosion for all fireworks
@@ -125,11 +132,11 @@ public class FWA extends Algorithm {
         //generate sparks for all fireworks
         sparks = new DoubleSolution[popSize][];
         //temporary position
-        double[] tmppos = new double[task.getNumberOfDimensions()];
-        double[] fireworkpos;
+        double[] tmpPos = new double[task.getNumberOfDimensions()];
+        double[] fireworkPos;
         for (i = 0; i < popSize; i++) {
             sparks[i] = new DoubleSolution[numSparks[i]];
-            fireworkpos = fireworks[i].getDoubleVariables();
+            fireworkPos = fireworks[i].getDoubleVariables();
             //get all sparks' position
             int k;
             for (k = 0; k < numSparks[i]; k++) {
@@ -142,97 +149,97 @@ public class FWA extends Algorithm {
                     randflag[j] = false;
                 }
                 int numExplosionDirections = (int) (task.getNumberOfDimensions() * Util.nextDouble());
-                int randomcount = 0;
-                int tmprand;
-                while (randomcount < numExplosionDirections) {
-                    tmprand = Util.nextInt(task.getNumberOfDimensions());
-                    if (!randflag[tmprand]) {
-                        randflag[tmprand] = true;
-                        randomcount++;
+                int randomCount = 0;
+                int tmpRand;
+                while (randomCount < numExplosionDirections) {
+                    tmpRand = Util.nextInt(task.getNumberOfDimensions());
+                    if (!randflag[tmpRand]) {
+                        randflag[tmpRand] = true;
+                        randomCount++;
                     }
                 }
                 //explode
                 double displacement = ampExplosion[i] * (Util.nextDouble() - 0.5) * 2;
                 for (j = 0; j < task.getNumberOfDimensions(); j++) {
                     if (randflag[j]) {
-                        tmppos[j] = fireworkpos[j] + displacement;
+                        tmpPos[j] = fireworkPos[j] + displacement;
                         //out of bound
-                        if (tmppos[j] < minBound[j] || tmppos[j] > maxBound[j]) {
-                            double abspos = Math.abs(tmppos[j]);
+                        if (tmpPos[j] < minBound[j] || tmpPos[j] > maxBound[j]) {
+                            double abspos = Math.abs(tmpPos[j]);
                             while (abspos >= 0) {
                                 abspos -= (maxBound[j] - minBound[j]);
                             }
                             abspos += (maxBound[j] - minBound[j]);
-                            tmppos[j] = minBound[j] + abspos;
+                            tmpPos[j] = minBound[j] + abspos;
                         }
                     } else {
-                        tmppos[j] = fireworkpos[j];
+                        tmpPos[j] = fireworkPos[j];
                     }
                 }
                 //set position of the spark
                 // Check bounds
-                tmppos = task.setFeasible(tmppos);
+                tmpPos = task.setFeasible(tmpPos);
                 // Evaluate new solution
                 if (task.isStopCriterion())
                     break;
-                sparks[i][k] = task.eval(tmppos);
+                sparks[i][k] = task.eval(tmpPos);
             }
         }
 
         //gaussian explode
-        gaussiansparks = new DoubleSolution[numGaussianSparks];
+        gaussianSparks = new DoubleSolution[numGaussianSparks];
         int k;
         for (k = 0; k < numGaussianSparks; k++) {
             //gaussiansparks[k] = new DoubleSolution();
             //randomly select a firework
             i = Math.abs(Util.nextInt()) % popSize;
-            fireworkpos = fireworks[i].getDoubleVariables();
+            fireworkPos = fireworks[i].getDoubleVariables();
             //select z directions
-            boolean[] randflag = new boolean[task.getNumberOfDimensions()];
+            boolean[] randFlag = new boolean[task.getNumberOfDimensions()];
             int j;
             for (j = 0; j < task.getNumberOfDimensions(); j++) {
-                randflag[j] = false;
+                randFlag[j] = false;
             }
             int numExplosionDirections = (int) (task.getNumberOfDimensions() * Util.nextDouble());
             int randomcount = 0;
             int tmprand;
             while (randomcount < numExplosionDirections) {
                 tmprand = Math.abs(Util.nextInt()) % task.getNumberOfDimensions();
-                if (!randflag[tmprand]) {
-                    randflag[tmprand] = true;
+                if (!randFlag[tmprand]) {
+                    randFlag[tmprand] = true;
                     randomcount++;
                 }
             }
             //explode
             double gaussianCoef = 1.0 + Util.nextGaussian();
             for (j = 0; j < task.getNumberOfDimensions(); j++) {
-                if (randflag[j]) {
-                    tmppos[j] = fireworkpos[j] * gaussianCoef;
+                if (randFlag[j]) {
+                    tmpPos[j] = fireworkPos[j] * gaussianCoef;
                     //out of bound
-                    if (tmppos[j] < minBound[j] || tmppos[j] > maxBound[j]) {
-                        double abspos = Math.abs(tmppos[j]);
+                    if (tmpPos[j] < minBound[j] || tmpPos[j] > maxBound[j]) {
+                        double abspos = Math.abs(tmpPos[j]);
                         while (abspos >= 0) {
                             abspos -= (maxBound[j] - minBound[j]);
                         }
                         abspos += (maxBound[j] - minBound[j]);
-                        tmppos[j] = minBound[j] + abspos;
+                        tmpPos[j] = minBound[j] + abspos;
                     }
                 } else {
-                    tmppos[j] = fireworkpos[j];
+                    tmpPos[j] = fireworkPos[j];
                 }
             }
             //set position of the spark
             // Check bounds
-            tmppos = task.setFeasible(tmppos);
+            tmpPos = task.setFeasible(tmpPos);
             // Evaluate new solution
             if (task.isStopCriterion())
                 break;
-            gaussiansparks[k] = task.eval(tmppos);
+            gaussianSparks[k] = task.eval(tmpPos);
         }
     }
 
     //select n locations
-    private void selectlocations() {
+    private void selectLocations() {
         //select the best location
         int i, j, k;
         for (i = 0; i < popSize; i++) {
@@ -248,8 +255,8 @@ public class FWA extends Algorithm {
             }
         }
         for (i = 0; i < numGaussianSparks; i++) {
-            if (task.isFirstBetter(gaussiansparks[i], bestSpark)) {
-                bestSpark = gaussiansparks[i];
+            if (task.isFirstBetter(gaussianSparks[i], bestSpark)) {
+                bestSpark = gaussianSparks[i];
             }
         }
         //select the rest n-1 locations
@@ -262,106 +269,105 @@ public class FWA extends Algorithm {
         }
 
         //put all the fireworks and sparks in an array
-        double[][] fireworkspos = new double[numFireworksSparks][];
+        double[][] fireworksPos = new double[numFireworksSparks][];
         int idx = 0;
         for (i = 0; i < popSize; i++) {
-            fireworkspos[idx] = fireworks[i].getDoubleVariables();
+            fireworksPos[idx] = fireworks[i].getDoubleVariables();
             idx++;
         }
         for (i = 0; i < popSize; i++) {
             for (j = 0; j < sparks[i].length; j++) {
-                fireworkspos[idx] = sparks[i][j].getDoubleVariables();
+                fireworksPos[idx] = sparks[i][j].getDoubleVariables();
                 idx++;
             }
         }
         for (i = 0; i < numGaussianSparks; i++) {
-            fireworkspos[idx] = gaussiansparks[i].getDoubleVariables();
+            fireworksPos[idx] = gaussianSparks[i].getDoubleVariables();
             idx++;
         }
         //calculate the selection probability of each location
-        double[] selectionprobability = new double[numFireworksSparks];
-        double sumprob = 0;
+        double[] selectionProbability = new double[numFireworksSparks];
+        double sumProb = 0;
         for (i = 0; i < numFireworksSparks; i++) {
-            selectionprobability[i] = 0;
+            selectionProbability[i] = 0;
             for (j = 0; j < numFireworksSparks; j++) {
                 double tmpdis = 0;
                 for (k = 0; k < task.getNumberOfDimensions(); k++) {
-                    tmpdis += (fireworkspos[i][k] - fireworkspos[j][k]) * (fireworkspos[i][k] - fireworkspos[j][k]);
+                    tmpdis += (fireworksPos[i][k] - fireworksPos[j][k]) * (fireworksPos[i][k] - fireworksPos[j][k]);
                 }
-                selectionprobability[i] += Math.sqrt(tmpdis);
+                selectionProbability[i] += Math.sqrt(tmpdis);
             }
-            sumprob += selectionprobability[i];
+            sumProb += selectionProbability[i];
         }
-        double[] cumulativeprobability = new double[numFireworksSparks];
+        double[] cumulativeProbability = new double[numFireworksSparks];
         for (i = 0; i < numFireworksSparks; i++) {
-            if (sumprob < eps) {
-                selectionprobability[i] = 1.0 / numFireworksSparks;
+            if (sumProb < eps) {
+                selectionProbability[i] = 1.0 / numFireworksSparks;
             } else {
-                selectionprobability[i] /= sumprob;
+                selectionProbability[i] /= sumProb;
             }
             if (i == 0) {
-                cumulativeprobability[i] = selectionprobability[i];
+                cumulativeProbability[i] = selectionProbability[i];
             } else {
-                cumulativeprobability[i] = cumulativeprobability[i - 1] + selectionprobability[i];
+                cumulativeProbability[i] = cumulativeProbability[i - 1] + selectionProbability[i];
             }
         }
         //select n-1 locations according to the selection probability
-        int[] nextlocations = new int[popSize - 1];
+        int[] nextLocations = new int[popSize - 1];
         for (k = 0; k < popSize - 1; k++) {
-            double randpointer = Util.nextDouble();
+            double randPointer = Util.nextDouble();
             for (i = 0; i < numFireworksSparks; i++) {
-                if (randpointer <= cumulativeprobability[i]) {
+                if (randPointer <= cumulativeProbability[i]) {
                     break;
                 }
             }
-            nextlocations[k] = i;
+            nextLocations[k] = i;
         }
         //set next generations
-        DoubleSolution[] nextfireworks = new DoubleSolution[popSize];
-        nextfireworks[popSize - 1] = bestSpark;
-        boolean breakflag;
+        DoubleSolution[] nextFireworks = new DoubleSolution[popSize];
+        nextFireworks[popSize - 1] = bestSpark;
+        boolean breakFlag;
         for (k = 0; k < popSize - 1; k++) {
             idx = 0;
-            breakflag = false;
+            breakFlag = false;
             for (i = 0; i < popSize; i++) {
-                if (idx == nextlocations[k]) {
-                    nextfireworks[k] = fireworks[i];
-                    breakflag = true;
+                if (idx == nextLocations[k]) {
+                    nextFireworks[k] = fireworks[i];
+                    breakFlag = true;
                     break;
                 }
                 idx++;
             }
-            if (breakflag) {
+            if (breakFlag) {
                 continue;
             }
             for (i = 0; i < popSize; i++) {
                 for (j = 0; j < sparks[i].length; j++) {
-                    if (idx == nextlocations[k]) {
-                        nextfireworks[k] = sparks[i][j];
-                        breakflag = true;
+                    if (idx == nextLocations[k]) {
+                        nextFireworks[k] = sparks[i][j];
+                        breakFlag = true;
                         break;
                     }
                     idx++;
                 }
-                if (breakflag) {
+                if (breakFlag) {
                     break;
                 }
             }
-            if (breakflag) {
+            if (breakFlag) {
                 continue;
             }
             for (i = 0; i < numGaussianSparks; i++) {
-                if (idx == nextlocations[k]) {
-                    nextfireworks[k] = gaussiansparks[i];
-                    breakflag = true;
+                if (idx == nextLocations[k]) {
+                    nextFireworks[k] = gaussianSparks[i];
+                    breakFlag = true;
                     break;
                 }
                 idx++;
             }
         }
-        fireworks = nextfireworks;
+        fireworks = nextFireworks;
     }
-
 
     private void initPopulation() throws StopCriterionException {
         fireworks = new DoubleSolution[popSize];
@@ -379,9 +385,7 @@ public class FWA extends Algorithm {
         }
     }
 
-
     @Override
     public void resetToDefaultsBeforeNewRun() {
     }
-
 }
