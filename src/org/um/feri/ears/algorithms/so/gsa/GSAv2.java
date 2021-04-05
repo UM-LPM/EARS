@@ -3,7 +3,7 @@ import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
@@ -177,11 +177,11 @@ public class GSAv2 extends Algorithm {
         initPop(taskProblem);
         int generation = 1;
         while (!taskProblem.isStopCriterion()) {
-            if(taskProblem.getStopCriterion() == EnumStopCriterion.EVALUATIONS
-            		|| taskProblem.getStopCriterion() == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS
-            		|| taskProblem.getStopCriterion() == EnumStopCriterion.STAGNATION)
+            if(taskProblem.getStopCriterion() == StopCriterion.EVALUATIONS
+            		|| taskProblem.getStopCriterion() == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS
+            		|| taskProblem.getStopCriterion() == StopCriterion.STAGNATION)
             	nextGeneration(taskProblem, generation, taskProblem.getMaxEvaluations()/pop_size);
-            if(taskProblem.getStopCriterion() == EnumStopCriterion.ITERATIONS)
+            if(taskProblem.getStopCriterion() == StopCriterion.ITERATIONS)
             	nextGeneration(taskProblem, generation, taskProblem.getMaxIterations());
            //TODO stop criteria stagnation 	
             generation++;

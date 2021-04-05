@@ -11,7 +11,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.qualityIndicator.QualityIndicatorUtil;
@@ -70,7 +70,7 @@ public class FSS extends Algorithm {
             double stepIndividual = 1.0;
 
             //TODO iterations and cpu time
-            if (this.task.getStopCriterion() == EnumStopCriterion.EVALUATIONS) {
+            if (this.task.getStopCriterion() == StopCriterion.EVALUATIONS) {
 
                 stepIndividual = FSS.STEP_INDIVIDUAL_INIT - (FSS.STEP_INDIVIDUAL_INIT - FSS.STEP_INDIVIDUAL_FINAL) * ((double) this.task.getNumberOfEvaluations() / (double) this.task.getMaxEvaluations());
             }

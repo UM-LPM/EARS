@@ -1,6 +1,6 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.cec2010.*;
@@ -16,7 +16,7 @@ public class CEC2010Benchmark extends Benchmark {
         super();
         String name = "Benchmark CEC 2010";
         this.drawLimit = draw_limit;
-        stopCriterion = EnumStopCriterion.EVALUATIONS;
+        stopCriterion = StopCriterion.EVALUATIONS;
         maxEvaluations = 10000; //(int) (1 * 1e6);
         maxIterations = 0;
         addParameter(EnumBenchmarkInfoParameters.DIMENSION, "" + dimension);
@@ -25,7 +25,7 @@ public class CEC2010Benchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem p, StopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
 

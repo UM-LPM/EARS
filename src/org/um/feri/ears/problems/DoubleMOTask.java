@@ -6,7 +6,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
 
-    public DoubleMOTask(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
+    public DoubleMOTask(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
         super(stop, eval, allowedTime, maxIterations, epsilon, p);
     }
 
@@ -17,19 +17,19 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
     public MOSolutionBase<Double> getRandomMOSolution() throws StopCriterionException {
 
 
-        if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
+        if (stopCriterion == StopCriterion.EVALUATIONS) {
             incrementNumberOfEvaluations();
             MOSolutionBase<Double> newSolution = p.getRandomSolution();
             //p.evaluateConstraints(newSolution);
             return newSolution;
-        } else if (stopCriterion == EnumStopCriterion.ITERATIONS) {
+        } else if (stopCriterion == StopCriterion.ITERATIONS) {
             if (isStop)
                 throw new StopCriterionException("Max iterations");
             incrementNumberOfEvaluations();
             MOSolutionBase<Double> newSolution = p.getRandomSolution();
             return newSolution;
 
-        } else if (stopCriterion == EnumStopCriterion.CPU_TIME) {
+        } else if (stopCriterion == StopCriterion.CPU_TIME) {
             // check if the CPU time is not exceeded yet
             if (!isStop) {
                 hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval

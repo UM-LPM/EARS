@@ -1,6 +1,6 @@
 package org.um.feri.ears.algorithms.so.cmaes;
 
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Task;
 
 /*
@@ -148,9 +148,9 @@ public class CMAParameters implements java.io.Serializable {
 		if (damps <= 0)
 		{
 			long opt = Long.MAX_VALUE;
-			if(task.getStopCriterion() == EnumStopCriterion.EVALUATIONS)
+			if(task.getStopCriterion() == StopCriterion.EVALUATIONS)
 				opt = task.getMaxEvaluations() / lambda;
-			if(task.getStopCriterion() == EnumStopCriterion.ITERATIONS)
+			if(task.getStopCriterion() == StopCriterion.ITERATIONS)
 				opt = task.getMaxIterations();
 			
 			damps = (1 + 2 * Math.max(0, Math.sqrt((mueff - 1.) / (N + 1.)) - 1)) * Math.max(0.3, 1 - N / (1e-6 + opt)) + cs;

@@ -7,7 +7,7 @@ import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_STM;
 import org.um.feri.ears.algorithms.moo.nsga3.D_NSGAIII;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.zdt.*;
 import org.um.feri.ears.util.Cache;
@@ -45,11 +45,11 @@ public class FillCache {
         DoubleMOTask t8 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem8());
         DoubleMOTask t9 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem9());
         DoubleMOTask t10 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem10());*/
-        DoubleMOTask t1 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT1());
-        DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT2());
-        DoubleMOTask t3 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT3());
-        DoubleMOTask t4 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT4());
-        DoubleMOTask t5 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT6());
+        DoubleMOTask t1 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT1());
+        DoubleMOTask t2 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT2());
+        DoubleMOTask t3 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT3());
+        DoubleMOTask t4 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT4());
+        DoubleMOTask t5 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT6());
 
         //DoubleMOTask t1 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG1(2));
         /*DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG2(2));

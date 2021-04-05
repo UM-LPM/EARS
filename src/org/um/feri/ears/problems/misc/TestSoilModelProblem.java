@@ -2,7 +2,7 @@ package org.um.feri.ears.problems.misc;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -25,8 +25,8 @@ public class TestSoilModelProblem {
             Task ti2, ti3;
             for (int i = 0; i < run_num; i++) {
                 System.out.println(i);
-                ti2 = new Task(EnumStopCriterion.EVALUATIONS, 20790, 0, 0, 0.0001, i2);
-                ti3 = new Task(EnumStopCriterion.EVALUATIONS, 20790, 0, 0, 0.0001, i3);
+                ti2 = new Task(StopCriterion.EVALUATIONS, 20790, 0, 0, 0.0001, i2);
+                ti3 = new Task(StopCriterion.EVALUATIONS, 20790, 0, 0, 0.0001, i3);
                 System.out.println(algorithm.execute(ti2).getEval());
                 System.out.println(algorithm.execute(ti3).getEval());
             }

@@ -1,7 +1,7 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.*;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
@@ -24,7 +24,7 @@ public class BIOMABenchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMOPr
         this.randomIndicator = randomIndicator;
         this.drawLimit = drawLimit;
         maxEvaluations = 300000;
-        stopCriterion = EnumStopCriterion.EVALUATIONS;
+        stopCriterion = StopCriterion.EVALUATIONS;
         maxIterations = 500;
         timeLimit = 5000; //millisecnods
         addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(maxEvaluations));
@@ -32,7 +32,7 @@ public class BIOMABenchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMOPr
     }
 
     @Override
-    protected void addTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
+    protected void addTask(StopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
         tasks.add(new DoubleMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
 

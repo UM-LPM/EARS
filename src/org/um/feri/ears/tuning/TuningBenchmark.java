@@ -2,7 +2,7 @@ package org.um.feri.ears.tuning;
 
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.*;
@@ -43,7 +43,7 @@ public class TuningBenchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations,
+    protected void addTask(Problem p, StopCriterion sc, int eval, long time, int maxIterations,
                            double epsilon) {
         tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
         String[] optimum = new String[2];

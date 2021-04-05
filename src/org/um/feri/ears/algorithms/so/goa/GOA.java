@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Comparator.TaskComparator;
@@ -54,11 +54,11 @@ public class GOA extends Algorithm {
         this.task = task;
         initPopulation();
         int maxIt = 10000;
-        if (task.getStopCriterion() == EnumStopCriterion.ITERATIONS) {
+        if (task.getStopCriterion() == StopCriterion.ITERATIONS) {
             maxIt = task.getMaxIterations();
         }
 
-        if (task.getStopCriterion() == EnumStopCriterion.EVALUATIONS) {
+        if (task.getStopCriterion() == StopCriterion.EVALUATIONS) {
             maxIt = task.getMaxEvaluations() / popSize;
         }
 

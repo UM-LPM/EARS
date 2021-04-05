@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class TaskBase<T extends ProblemBase<?>> {
 
-    protected EnumStopCriterion stopCriterion;
+    protected StopCriterion stopCriterion;
     protected int maxEvaluations; // for Stop criterion
     protected int numberOfEvaluations = 0; // for Stop criterion
 	protected int maxIterations;
@@ -66,7 +66,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
         return TimeUnit.NANOSECONDS.toMillis(evaluationTime);
     }
 
-    public EnumStopCriterion getStopCriterion() {
+    public StopCriterion getStopCriterion() {
         return stopCriterion;
     }
 
@@ -84,13 +84,13 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
      * @throws StopCriterionException if the number of iterations exceeds the maximum number of iterations.
      */
     public void incrementNumberOfIterations() throws StopCriterionException {
-        if (stopCriterion == EnumStopCriterion.ITERATIONS) {
+        if (stopCriterion == StopCriterion.ITERATIONS) {
             if (numberOfIterations >= maxIterations)
                 throw new StopCriterionException("Max iterations");
         }
 
         numberOfIterations++;
-        if (numberOfIterations >= maxIterations && stopCriterion == EnumStopCriterion.ITERATIONS) {
+        if (numberOfIterations >= maxIterations && stopCriterion == StopCriterion.ITERATIONS) {
             isStop = true;
         }
     }
@@ -101,10 +101,10 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
      * @throws StopCriterionException if the number of evaluations exceeds the maximum number of evaluations .
      */
     public void incrementNumberOfEvaluations() throws StopCriterionException {
-        if (numberOfEvaluations >= maxEvaluations && stopCriterion == EnumStopCriterion.EVALUATIONS)
+        if (numberOfEvaluations >= maxEvaluations && stopCriterion == StopCriterion.EVALUATIONS)
             throw new StopCriterionException("Max evaluations");
         numberOfEvaluations++;
-        if (numberOfEvaluations >= maxEvaluations && (stopCriterion == EnumStopCriterion.EVALUATIONS || stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS))
+        if (numberOfEvaluations >= maxEvaluations && (stopCriterion == StopCriterion.EVALUATIONS || stopCriterion == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS))
             isStop = true;
     }
 
@@ -197,12 +197,12 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
 
     public boolean isStopCriterion() {
 
-        if (stopCriterion == EnumStopCriterion.CPU_TIME) {
+        if (stopCriterion == StopCriterion.CPU_TIME) {
             hasTheCpuTimeBeenExceeded();
         }
 
         //stop only if stop criteria set to global optimum
-        if (stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS && isGlobal)
+        if (stopCriterion == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS && isGlobal)
             return true;
 
         return isStop;
@@ -221,19 +221,19 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
     }
 
     public String getStopCriterionDescription() {
-        if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
+        if (stopCriterion == StopCriterion.EVALUATIONS) {
             return "E=" + getMaxEvaluations();
         }
-        if (stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
+        if (stopCriterion == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
             return "Global optimum epsilon=" + epsilonForGlobal + " or  E=" + getMaxEvaluations();
         }
-        if (stopCriterion == EnumStopCriterion.ITERATIONS) {
+        if (stopCriterion == StopCriterion.ITERATIONS) {
             return "ITERATIONS=" + getMaxIterations();
         }
-        if (stopCriterion == EnumStopCriterion.CPU_TIME) {
+        if (stopCriterion == StopCriterion.CPU_TIME) {
             return "TIME=" + TimeUnit.NANOSECONDS.toMillis(getAllowedCPUTime()) + " ms";
         }
-        if (stopCriterion == EnumStopCriterion.STAGNATION) {
+        if (stopCriterion == StopCriterion.STAGNATION) {
             return "STAGNATION= trials: " + stagnationTrialCounter;
         }
         return "not defined";
@@ -296,15 +296,15 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
      */
     public String getTaskInfo() {
 
-        if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
+        if (stopCriterion == StopCriterion.EVALUATIONS) {
             return "Task = " + p + " stopCriterion=" + stopCriterion + ", maxEvaluations=" + maxEvaluations + ", epsilon="
                     + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                     + precisionOfRealNumbersInDecimalPlaces;
-        } else if (stopCriterion == EnumStopCriterion.ITERATIONS) {
+        } else if (stopCriterion == StopCriterion.ITERATIONS) {
             return "Task = " + p + " stopCriterion=" + stopCriterion + ", maxIterations=" + maxIterations + ", epsilon="
                     + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                     + precisionOfRealNumbersInDecimalPlaces;
-        } else if (stopCriterion == EnumStopCriterion.CPU_TIME) {
+        } else if (stopCriterion == StopCriterion.CPU_TIME) {
             return "Task = " + p + " stopCriterion=" + stopCriterion + ", allowedCPUTime=" + allowedCPUTime + ", epsilon="
                     + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                     + precisionOfRealNumbersInDecimalPlaces;

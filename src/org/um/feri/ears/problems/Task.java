@@ -14,7 +14,7 @@ public class Task extends TaskBase<Problem> {
      * @param epsilonForGlobal     the epsilon value for global optimum
      * @param p           the problem
      */
-    public Task(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, Problem p) {
+    public Task(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, Problem p) {
         precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
         stopCriterion = stop;
         maxEvaluations = eval;
@@ -237,24 +237,24 @@ public class Task extends TaskBase<Problem> {
         //Double[] ds = ArrayUtils.toObject(x);
         //List<Double> ds = Arrays.asList(ArrayUtils.toObject(x));
         DoubleSolution tmpSolution = null;
-        if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
+        if (stopCriterion == StopCriterion.EVALUATIONS) {
             tmpSolution = performEvaluation(x);
-        } else if (stopCriterion == EnumStopCriterion.ITERATIONS) {
+        } else if (stopCriterion == StopCriterion.ITERATIONS) {
             if (isStop)
                 throw new StopCriterionException("Max iterations");
             tmpSolution = performEvaluation(x);
-        } else if (stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
+        } else if (stopCriterion == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
             if (isGlobal)
                 throw new StopCriterionException("Global optimum already found");
             tmpSolution = performEvaluation(x);
-        } else if (stopCriterion == EnumStopCriterion.CPU_TIME) {
+        } else if (stopCriterion == StopCriterion.CPU_TIME) {
             if (!isStop) {
                 hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
                 tmpSolution = performEvaluation(x);
             } else {
                 throw new StopCriterionException("CPU Time");
             }
-        } else if (stopCriterion == EnumStopCriterion.STAGNATION) {
+        } else if (stopCriterion == StopCriterion.STAGNATION) {
             if (isStop)
                 throw new StopCriterionException("Solution stagnation");
 

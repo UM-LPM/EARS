@@ -1,6 +1,6 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.*;
@@ -10,7 +10,7 @@ public class RPUOed2Benchmark extends Benchmark {
         super();
         name="Real Parameter Unconstrained Optimization Problems with maximum evaluation condition";
         shortName = "RPUOed2";
-        stopCriterion = EnumStopCriterion.EVALUATIONS;
+        stopCriterion = StopCriterion.EVALUATIONS;
         timeLimit = 10;
         maxEvaluations=10000;
         maxIterations = 500; 
@@ -20,7 +20,7 @@ public class RPUOed2Benchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem p, StopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
     

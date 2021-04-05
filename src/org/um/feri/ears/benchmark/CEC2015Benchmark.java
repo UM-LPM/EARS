@@ -1,6 +1,6 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.cec2015.*;
@@ -26,7 +26,7 @@ public class CEC2015Benchmark extends Benchmark {
         dimension = 30;
         timeLimit = 2500;
         maxIterations = 2500;
-        stopCriterion = EnumStopCriterion.EVALUATIONS;
+        stopCriterion = StopCriterion.EVALUATIONS;
         /*addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+stopCriterion);
         addParameter(EnumBenchmarkInfoParameters.DIMENSION,""+dimension);
         addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
@@ -34,7 +34,7 @@ public class CEC2015Benchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem p, StopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
     }
 
@@ -72,7 +72,7 @@ public class CEC2015Benchmark extends Benchmark {
     			timeLimit = calculateTime(p);
     		}*/
 
-            if (stopCriterion == EnumStopCriterion.CPU_TIME) {
+            if (stopCriterion == StopCriterion.CPU_TIME) {
                 for (int i = 0; i < warmupIterations; i++) {
                     p.getRandomEvaluatedSolution();
                 }

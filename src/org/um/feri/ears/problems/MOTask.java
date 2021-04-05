@@ -19,7 +19,7 @@ public abstract class MOTask<T extends Number, P extends MOProblemBase<T>> exten
 	 * @param epsilonForGlobal     the epsilon value for global optimum
 	 * @param p           the problem
      */
-    public MOTask(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, P p) {
+    public MOTask(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, P p) {
 
         this(stop, eval, allowedTime, maxIterations, epsilonForGlobal, p, (int) Math.log10((1. / epsilonForGlobal) + 1));
     }
@@ -35,7 +35,7 @@ public abstract class MOTask<T extends Number, P extends MOProblemBase<T>> exten
 	 * @param epsilonForGlobal     the epsilon value for global optimum
 	 * @param p           the problem
      */
-    public MOTask(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, P p, int precisionOfRealNumbers) {
+    public MOTask(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, P p, int precisionOfRealNumbers) {
 
         precisionOfRealNumbersInDecimalPlaces = precisionOfRealNumbers;
         stopCriterion = stop;
@@ -98,19 +98,19 @@ public abstract class MOTask<T extends Number, P extends MOProblemBase<T>> exten
 	 */
     public void eval(MOSolutionBase<T> solution) throws StopCriterionException {
 
-        if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
+        if (stopCriterion == StopCriterion.EVALUATIONS) {
             incrementNumberOfEvaluations();
             p.evaluate(solution);
             p.evaluateConstraints(solution);
             GraphDataRecorder.AddRecord(solution, this.getProblemName());
-        } else if (stopCriterion == EnumStopCriterion.ITERATIONS) {
+        } else if (stopCriterion == StopCriterion.ITERATIONS) {
             if (isStop)
                 throw new StopCriterionException("Max iterations");
             incrementNumberOfEvaluations();
             p.evaluate(solution);
             p.evaluateConstraints(solution);
             GraphDataRecorder.AddRecord(solution, this.getProblemName());
-        } else if (stopCriterion == EnumStopCriterion.CPU_TIME) {
+        } else if (stopCriterion == StopCriterion.CPU_TIME) {
             if (!isStop) {
                 hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
                 incrementNumberOfEvaluations();

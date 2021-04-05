@@ -1,6 +1,6 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.IntegerMOProblem;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
@@ -29,7 +29,7 @@ public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, IntegerMO
     }
 
     @Override
-    protected void addTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
+    protected void addTask(StopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
         tasks.add(new IntegerMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
     }
 

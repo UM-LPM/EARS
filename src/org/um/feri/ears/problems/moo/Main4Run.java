@@ -13,7 +13,7 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
@@ -51,7 +51,7 @@ public class Main4Run {
     	//det.run(50, indicators, players, new ZDT1(),50);
         
 
-        DoubleMOTask t1 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new UnconstrainedProblem1());
+        DoubleMOTask t1 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new UnconstrainedProblem1());
        /*DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem2());
         DoubleMOTask t3 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem3());
         DoubleMOTask t4 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem4());
@@ -99,7 +99,7 @@ public class Main4Run {
             	
             	// OA_AJHsqldb OO_BCEL OO_MyBatis
             
-            	ParetoSolution best = nsga.execute(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new CITOProblem("OO_MyBatis")));
+            	ParetoSolution best = nsga.execute(new IntegerMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new CITOProblem("OO_MyBatis")));
             	
             	//ParetoSolution best = moead.execute(new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
             	

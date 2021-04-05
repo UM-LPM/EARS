@@ -2,7 +2,7 @@ package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.rating.Game;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algorithm> {
 
-    protected abstract void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon);
+    protected abstract void addTask(Problem p, StopCriterion sc, int eval, long time, int maxIterations, double epsilon);
 
     @Override
     protected void performTournament() {
@@ -76,7 +76,7 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
 
         boolean isDraw = Math.abs(a.solution.getEval() - b.solution.getEval()) < drawLimit;
         // if the results are equal in case of global optimum stop criterion then compare number of evaluations used
-        if (isDraw && a.task.getStopCriterion() == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
+        if (isDraw && a.task.getStopCriterion() == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
             isDraw = a.task.getNumberOfEvaluations() == b.task.getNumberOfEvaluations();
         }
 

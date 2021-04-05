@@ -7,7 +7,7 @@ public class TaskWithMemory extends Task {
     int xPrecision;
     StringBuilder sb;
 
-    public TaskWithMemory(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
+    public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
                           Problem p, int xPrecision, DuplicationRemovalStrategy strategy) {
         super(stop, eval, allowedTime, maxIterations, epsilon, p);
         this.xPrecision = xPrecision;

@@ -2,7 +2,7 @@ package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.memory.DuplicationRemovalStrategyRandom;
 import org.um.feri.ears.memory.TaskWithMemory;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.unconstrained.*;
 
@@ -28,7 +28,7 @@ public class RPUOed30MemoryBenchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem p, EnumStopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem p, StopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
         tasks.add(new TaskWithMemory(sc, eval, time, maxIterations, epsilon, p, precision, new DuplicationRemovalStrategyRandom(maxHits)));
     }
 

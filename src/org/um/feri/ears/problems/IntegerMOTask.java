@@ -6,7 +6,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
 
-    public IntegerMOTask(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
+    public IntegerMOTask(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
         super(stop, eval, allowedTime, maxIterations, epsilon, p);
     }
 
@@ -16,12 +16,12 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
 
     public MOSolutionBase<Integer> getRandomMOSolution() throws StopCriterionException {
 
-        if (stopCriterion == EnumStopCriterion.EVALUATIONS) {
+        if (stopCriterion == StopCriterion.EVALUATIONS) {
             incrementNumberOfEvaluations();
             MOSolutionBase<Integer> newSolution = p.getRandomSolution();
             //p.evaluateConstraints(newSolution);
             return newSolution;
-        } else if (stopCriterion == EnumStopCriterion.ITERATIONS) {
+        } else if (stopCriterion == StopCriterion.ITERATIONS) {
             if (isStop)
                 throw new StopCriterionException("Max iterations");
 
@@ -29,7 +29,7 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
             MOSolutionBase<Integer> newSolution = p.getRandomSolution();
             return newSolution;
 
-        } else if (stopCriterion == EnumStopCriterion.CPU_TIME) {
+        } else if (stopCriterion == StopCriterion.CPU_TIME) {
             // check if the CPU time is not exceeded yet
             if (!isStop) {
                 hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval

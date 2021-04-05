@@ -3,7 +3,7 @@ package org.um.feri.ears.benchmark;
 import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
@@ -23,7 +23,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     protected String info;
 
     // Default benchmark settings
-    protected EnumStopCriterion stopCriterion = EnumStopCriterion.EVALUATIONS;
+    protected StopCriterion stopCriterion = StopCriterion.EVALUATIONS;
     protected int maxEvaluations = 1500;
     protected long timeLimit = TimeUnit.MILLISECONDS.toNanos(500); //milliseconds
     protected int maxIterations = 500;
@@ -88,7 +88,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         return numberOfRuns;
     }
 
-    public EnumStopCriterion getStopCriterion() {
+    public StopCriterion getStopCriterion() {
         return stopCriterion;
     }
 

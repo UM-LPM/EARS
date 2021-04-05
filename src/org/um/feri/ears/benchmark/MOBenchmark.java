@@ -1,7 +1,7 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.EnumStopCriterion;
+import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -55,7 +55,7 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
         return false;
     }
 
-    protected abstract void addTask(EnumStopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, P p);
+    protected abstract void addTask(StopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, P p);
 
     protected IndicatorName getRandomIndicator() {
         if (indicatorWeights != null) {
