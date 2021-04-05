@@ -14,7 +14,7 @@ public class SOSingleRun {
 
         Problem problem = new Sphere(5); // problem Sphere with five dimensions
 
-        Task sphere = new Task(StopCriterion.EVALUATIONS, 10000, 0, 0, 0.001, problem); // set the stopping criterion to max 10000 evaluations
+        Task sphere = new Task(problem, StopCriterion.EVALUATIONS, 10000, 0, 0); // set the stopping criterion to max 10000 evaluations
 
         Algorithm alg = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN);
         DoubleSolution best;

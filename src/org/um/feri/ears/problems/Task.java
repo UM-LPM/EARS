@@ -8,26 +8,37 @@ import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 public class Task extends TaskBase<Problem> {
 
     /**
-     * @param stop        the stopping criterion
-     * @param eval        the maximum number of evaluations allowed
+     * @param problem the problem to be solved
+     * @param stopCriterion the stopping criterion
+     * @param maxEvaluations the maximum number of evaluations allowed
      * @param allowedTime the maximum CPU time allowed in milliseconds
-     * @param epsilonForGlobal     the epsilon value for global optimum
-     * @param p           the problem
+     * @param maxIterations the maximum number of iterations
+     * @param epsilonForGlobal the epsilon value used to check closeness to the global optimum
      */
-    public Task(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, Problem p) {
-        precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
-        stopCriterion = stop;
-        maxEvaluations = eval;
-        numberOfEvaluations = 0;
+    public Task(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilonForGlobal) {
+        this(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations);
         this.epsilonForGlobal = epsilonForGlobal;
+    }
+    /**
+     * @param problem the problem to be solved
+     * @param stopCriterion the stopping criterion
+     * @param maxEvaluations the maximum number of evaluations allowed
+     * @param allowedTime the maximum CPU time allowed in milliseconds
+     * @param maxIterations the maximum number of iterations
+     */
+    public Task(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
+        precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
+        this.stopCriterion = stopCriterion;
+        this.maxEvaluations = maxEvaluations;
+        numberOfEvaluations = 0;
         this.maxIterations = maxIterations;
         isStop = false;
         isGlobal = false;
-        this.p = p;
+        this.p = problem;
         this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
 
         // set initial best eval
-        bestEval = p.isMinimize() ? Double.MAX_VALUE : Double.MIN_VALUE;
+        bestEval = problem.isMinimize() ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
     public Task(Task task) {

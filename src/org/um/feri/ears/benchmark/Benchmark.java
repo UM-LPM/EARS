@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algorithm> {
 
-    protected abstract void addTask(Problem p, StopCriterion sc, int eval, long time, int maxIterations, double epsilon);
+    protected abstract void addTask(Problem problem, StopCriterion stopCriterion, int eval, long time, int maxIterations, double epsilon);
 
     @Override
     protected void performTournament() {

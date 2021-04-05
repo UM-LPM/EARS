@@ -20,8 +20,8 @@ public class RPUOed2Benchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem p, StopCriterion sc, int eval, long time, int maxIterations, double epsilon) {
-        tasks.add(new Task(sc, eval, time, maxIterations, epsilon, p));
+    protected void addTask(Problem problem, StopCriterion stopCriterion, int eval, long time, int maxIterations, double epsilon) {
+        tasks.add(new Task(problem, stopCriterion, eval, time, maxIterations));
     }
     
     @Override

@@ -33,7 +33,7 @@ public class SOBenchmarkExample {
             for (int pr = 0; pr < problems.length; ++pr) {
                 Problem p = problems[pr];
                 try {
-                    Task t = new Task(StopCriterion.EVALUATIONS, 5000 * dimmensions[i], 0, 0, 0.001, p);
+                    Task t = new Task(p, StopCriterion.EVALUATIONS, 5000 * dimmensions[i], 0, 0);
                     t.enableAncestorLogging();
                     psoLogging.execute(t);
                     AncestorUtil.saveAncestorLogging(psoLogging.getID() + "_" + p.getName(), t);
@@ -44,7 +44,7 @@ public class SOBenchmarkExample {
 
                 Task.resetLoggingID();
                 try {
-                    Task t = new Task(StopCriterion.EVALUATIONS, 5000 * dimmensions[i], 0, 0, 0.001, p);
+                    Task t = new Task(p, StopCriterion.EVALUATIONS, 5000 * dimmensions[i], 0, 0);
                     t.enableAncestorLogging();
                     jadeLogging.execute(t);
                     AncestorUtil.saveAncestorLogging(jadeLogging.getID() + "_" + p.getName(), t);
@@ -55,7 +55,7 @@ public class SOBenchmarkExample {
 
                 Task.resetLoggingID();
                 try {
-                    Task t = new Task(StopCriterion.EVALUATIONS, 5000 * dimmensions[i], 0, 0, 0.001, p);
+                    Task t = new Task(p, StopCriterion.EVALUATIONS, 5000 * dimmensions[i], 0, 0);
                     t.enableAncestorLogging();
                     deLogging.execute(t);
                     AncestorUtil.saveAncestorLogging(deLogging.getID().replaceAll("/", "-") + "_" + p.getName(), t);

@@ -25,8 +25,8 @@ public class TestSoilModelProblem {
             Task ti2, ti3;
             for (int i = 0; i < run_num; i++) {
                 System.out.println(i);
-                ti2 = new Task(StopCriterion.EVALUATIONS, 20790, 0, 0, 0.0001, i2);
-                ti3 = new Task(StopCriterion.EVALUATIONS, 20790, 0, 0, 0.0001, i3);
+                ti2 = new Task(i2, StopCriterion.EVALUATIONS, 20790, 0, 0);
+                ti3 = new Task(i3, StopCriterion.EVALUATIONS, 20790, 0, 0, 0.0001);
                 System.out.println(algorithm.execute(ti2).getEval());
                 System.out.println(algorithm.execute(ti3).getEval());
             }

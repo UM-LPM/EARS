@@ -9,7 +9,7 @@ public class TaskWithMemory extends Task {
 
     public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
                           Problem p, int xPrecision, DuplicationRemovalStrategy strategy) {
-        super(stop, eval, allowedTime, maxIterations, epsilon, p);
+        super(p, stop, eval, allowedTime, maxIterations, epsilon);
         this.xPrecision = xPrecision;
         strategy.setTask(this);
         mb = new MemoryBankDoubleSolution(xPrecision, strategy);

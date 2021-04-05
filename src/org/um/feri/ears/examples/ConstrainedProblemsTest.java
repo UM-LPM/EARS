@@ -26,7 +26,7 @@ public class ConstrainedProblemsTest {
 	public static ArrayList<DoubleSolution> TestWOAWithProblem(Problem prob, int repetitions) {
 		ArrayList<DoubleSolution> listOfBests = new ArrayList<DoubleSolution>();
 		for(int i = 0; i < repetitions; i++) {
-			Task problem = new Task(StopCriterion.EVALUATIONS, 10000, 0, 0, 0.001, prob);
+			Task problem = new Task(prob, StopCriterion.EVALUATIONS, 10000, 0, 0);
 			int populationSize = 30;
 			Algorithm woa = new WOA(populationSize, false);
 			try {
