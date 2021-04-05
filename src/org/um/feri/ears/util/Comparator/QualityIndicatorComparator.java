@@ -20,25 +20,25 @@ public class QualityIndicatorComparator<T extends Number, Task extends MOTask<T,
 
     @Override
     public int compare(AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task> r1, AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task> r2) {
-        if (r1.getSolution() != null) {
-            if (r2.getSolution() != null) {
+        if (r1.solution != null) {
+            if (r2.solution != null) {
                 // if (resultEqual(r1.getBest(), r2.getBest())) return 0; Normal sor later!
                 if (qi.getIndicatorType() == QualityIndicator.IndicatorType.UNARY) {
                     try {
-                        r1.getSolution().evaluate(qi);
-                        r2.getSolution().evaluate(qi);
+                        r1.solution.evaluate(qi);
+                        r2.solution.evaluate(qi);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 try {
-                    if (t.isFirstBetter(r1.getSolution(), r2.getSolution(), qi)) return -1;
+                    if (t.isFirstBetter(r1.solution, r2.solution, qi)) return -1;
                     else return 1;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else return -1; //second is null
-        } else if (r2.getSolution() != null) return 1; //first null
+        } else if (r2.solution != null) return 1; //first null
         return 0; //both equal
     }
 }

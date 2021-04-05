@@ -89,18 +89,18 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
 
                             try {
                                 if (qi.getIndicatorType() == IndicatorType.UNARY) {
-                                    first.getSolution().evaluate(qi);
-                                    second.getSolution().evaluate(qi);
+                                    first.solution.evaluate(qi);
+                                    second.solution.evaluate(qi);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            if (resultEqual(first.getSolution(), second.getSolution(), qi)) {
-                                resultArena.addGameResult(Game.DRAW, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
-                            } else if (t.isFirstBetter(first.getSolution(), second.getSolution(), qi)) {
-                                resultArena.addGameResult(Game.WIN, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
+                            if (resultEqual(first.solution, second.solution, qi)) {
+                                resultArena.addGameResult(Game.DRAW, first.algorithm.getID(), second.algorithm.getID(), t.getProblemName(), indicatorName.toString());
+                            } else if (t.isFirstBetter(first.solution, second.solution, qi)) {
+                                resultArena.addGameResult(Game.WIN, first.algorithm.getID(), second.algorithm.getID(), t.getProblemName(), indicatorName.toString());
                             } else {
-                                resultArena.addGameResult(Game.WIN, second.getAlgorithm().getID(), first.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
+                                resultArena.addGameResult(Game.WIN, second.algorithm.getID(), first.algorithm.getID(), t.getProblemName(), indicatorName.toString());
                             }
                         }
                     }
@@ -114,16 +114,16 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
                             first = results.get(i);
                             for (int j = i + 1; j < results.size(); j++) {
                                 second = results.get(j);
-                                if (resultEqual(first.getSolution(), second.getSolution(), qi)) {
-                                    resultArena.addGameResult(Game.DRAW, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
+                                if (resultEqual(first.solution, second.solution, qi)) {
+                                    resultArena.addGameResult(Game.DRAW, first.algorithm.getID(), second.algorithm.getID(), t.getProblemName(), indicatorName.toString());
                                 } else {
-                                    if (first.getSolution() == null) {
-                                        System.out.println(first.getAlgorithm().getID() + " NULL");
+                                    if (first.solution == null) {
+                                        System.out.println(first.algorithm.getID() + " NULL");
                                     }
-                                    if (second.getSolution() == null) {
-                                        System.out.println(second.getAlgorithm().getID() + " NULL");
+                                    if (second.solution == null) {
+                                        System.out.println(second.algorithm.getID() + " NULL");
                                     }
-                                    resultArena.addGameResult(Game.WIN, first.getAlgorithm().getID(), second.getAlgorithm().getID(), t.getProblemName(), indicatorName.toString());
+                                    resultArena.addGameResult(Game.WIN, first.algorithm.getID(), second.algorithm.getID(), t.getProblemName(), indicatorName.toString());
                                 }
                             }
                         }

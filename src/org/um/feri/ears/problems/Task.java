@@ -15,11 +15,7 @@ public class Task extends TaskBase<Problem> {
      * @param p           the problem
      */
     public Task(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, Problem p) {
-        this(stop, eval, allowedTime, maxIterations, epsilonForGlobal, p, (int) Math.log10((1. / epsilonForGlobal) + 1));
-    }
-
-    public Task(EnumStopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, Problem p, int precisionOfRealNumbers) {
-        precisionOfRealNumbersInDecimalPlaces = precisionOfRealNumbers;
+        precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
         stopCriterion = stop;
         maxEvaluations = eval;
         numberOfEvaluations = 0;

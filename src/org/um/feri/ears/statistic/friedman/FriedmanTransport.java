@@ -70,7 +70,7 @@ public class FriedmanTransport {
                 algorithmRunResults = algorithmHm.get(p);
                 ArrayList<Double> results = new ArrayList<>();
                 for(AlgorithmRunResult<DoubleSolution, Algorithm, Task> res: algorithmRunResults)
-                    results.add(res.getSolution().getEval());
+                    results.add(res.solution.getEval());
                 std = new MeanStDev(results);
                 sb.append(a.getID()).append('\t').append(p.getProblemName());
                 sb.append('\t').append(std.getMean());

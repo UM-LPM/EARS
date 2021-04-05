@@ -31,28 +31,28 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
                     win = results.get(i);
                     for (int j = i + 1; j < results.size(); j++) {
                         lose = results.get(j);
-                        if (resultEqual(win.solution, lose.solution)) { // Special for this benchmark
+                        if (resultEqual(win, lose)) { // Special for this benchmark
                             if (printInfo)
-                                System.out.println("draw of " + win.getAlgorithm().getID() + " ("
-                                        + Util.df3.format(win.getSolution().getEval()) + ", feasable=" + win.getSolution().areConstraintsMet()
-                                        + ") against " + lose.getAlgorithm().getID() + " (" + Util.df3.format(lose.getSolution().getEval())
-                                        + ", feasable=" + lose.getSolution().areConstraintsMet() + ") for " + t.getProblemName());
-                            resultArena.addGameResult(Game.DRAW, win.getAlgorithm().getAlgorithmInfo().getAcronym(),
-                                    lose.getAlgorithm().getAlgorithmInfo().getAcronym(), t.getProblemName());
+                                System.out.println("draw of " + win.algorithm.getID() + " ("
+                                        + Util.df3.format(win.solution.getEval()) + ", feasable=" + win.solution.areConstraintsMet()
+                                        + ") against " + lose.algorithm.getID() + " (" + Util.df3.format(lose.solution.getEval())
+                                        + ", feasable=" + lose.solution.areConstraintsMet() + ") for " + t.getProblemName());
+                            resultArena.addGameResult(Game.DRAW, win.algorithm.getAlgorithmInfo().getAcronym(),
+                                    lose.algorithm.getAlgorithmInfo().getAcronym(), t.getProblemName());
                         } else {
-                            if (win.getSolution() == null) {
-                                System.out.println(win.getAlgorithm().getID() + " NULL");
+                            if (win.solution == null) {
+                                System.out.println(win.algorithm.getID() + " NULL");
                             }
-                            if (lose.getSolution() == null) {
-                                System.out.println(lose.getAlgorithm().getID() + " NULL");
+                            if (lose.solution == null) {
+                                System.out.println(lose.algorithm.getID() + " NULL");
                             }
                             if (printInfo)
-                                System.out.println("win of " + win.getAlgorithm().getID() + " ("
-                                        + Util.df3.format(win.getSolution().getEval()) + ", feasable=" + win.getSolution().areConstraintsMet()
-                                        + ") against " + lose.getAlgorithm().getID() + " (" + Util.df3.format(lose.getSolution().getEval())
-                                        + ", feasable=" + lose.getSolution().areConstraintsMet() + ") for " + t.getProblemName());
-                            resultArena.addGameResult(Game.WIN, win.getAlgorithm().getAlgorithmInfo().getAcronym(),
-                                    lose.getAlgorithm().getAlgorithmInfo().getAcronym(), t.getProblemName());
+                                System.out.println("win of " + win.algorithm.getID() + " ("
+                                        + Util.df3.format(win.solution.getEval()) + ", feasable=" + win.solution.areConstraintsMet()
+                                        + ") against " + lose.algorithm.getID() + " (" + Util.df3.format(lose.solution.getEval())
+                                        + ", feasable=" + lose.solution.areConstraintsMet() + ") for " + t.getProblemName());
+                            resultArena.addGameResult(Game.WIN, win.algorithm.getAlgorithmInfo().getAcronym(),
+                                    lose.algorithm.getAlgorithmInfo().getAcronym(), t.getProblemName());
                         }
                     }
                 }
@@ -60,29 +60,26 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
         }
     }
 
-    public boolean resultEqual(DoubleSolution a, DoubleSolution b) {
+    public boolean resultEqual(AlgorithmRunResult<DoubleSolution, Algorithm, Task> a, AlgorithmRunResult<DoubleSolution, Algorithm, Task> b) {
         if ((a == null) && (b == null))
             return true;
         if (a == null)
             return false;
         if (b == null)
             return false;
-        if (!a.areConstraintsMet() && b.areConstraintsMet())
+        if (!a.solution.areConstraintsMet() && b.solution.areConstraintsMet())
             return false;
-        if (a.areConstraintsMet() && !b.areConstraintsMet())
+        if (a.solution.areConstraintsMet() && !b.solution.areConstraintsMet())
             return false;
-        if (!a.areConstraintsMet() && !b.areConstraintsMet())
+        if (!a.solution.areConstraintsMet() && !b.solution.areConstraintsMet())
             return true;
 
-        // TODO global optimum (requires number of evaluations)
-        // if global optimum first check if draw then compare number of
-        // evaluations
-        /*
-         * if(stopCriterion == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
-         * // if results are equal check number of evaluations
-         * if(Math.abs(a.getEval()-b.getEval())<draw_limit){ } }
-         */
+        boolean isDraw = Math.abs(a.solution.getEval() - b.solution.getEval()) < drawLimit;
+        // if the results are equal in case of global optimum stop criterion then compare number of evaluations used
+        if (isDraw && a.task.getStopCriterion() == EnumStopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
+            isDraw = a.task.getNumberOfEvaluations() == b.task.getNumberOfEvaluations();
+        }
 
-        return Math.abs(a.getEval() - b.getEval()) < drawLimit;
+        return isDraw;
     }
 }

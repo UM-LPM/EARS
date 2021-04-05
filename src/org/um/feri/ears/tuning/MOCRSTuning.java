@@ -422,7 +422,7 @@ public class MOCRSTuning {
 					for (Future<AlgorithmRunResult> future : set) {
 
 						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>,DoubleMOTask> res = future.get();
-						sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.getSolution(), defaultObject, res.getTask()));
+						sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.solution, defaultObject, res.task));
 					}
 
 					service.shutdown();
@@ -457,8 +457,8 @@ public class MOCRSTuning {
 				//Order results by tasks
 				for(MOTask task : tasks) {
 					for(AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>,DoubleMOTask> res: futureResults) {
-						if(task.getProblemName().equals(res.getTask().getProblemName())) {
-							sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.getSolution(), defaultObject, res.getTask()));
+						if(task.getProblemName().equals(res.task.getProblemName())) {
+							sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.solution, defaultObject, res.task));
 							break;
 						}
 					}

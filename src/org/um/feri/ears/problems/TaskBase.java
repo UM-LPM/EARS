@@ -13,7 +13,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
 	protected long allowedCPUTime; // nanoseconds
 	protected long evaluationTime = 0;
 	protected long timerStart;
-	protected double epsilonForGlobal; // epsilon representing the error margin difference when comparing a solution to the global optimum
+	protected double epsilonForGlobal = 0; // epsilon representing the error margin difference when comparing a solution to the global optimum
 	protected boolean isStop;
 	protected boolean isGlobal;
 	protected int precisionOfRealNumbersInDecimalPlaces; //used only for discreet problem presentation (bit presentation in GA)

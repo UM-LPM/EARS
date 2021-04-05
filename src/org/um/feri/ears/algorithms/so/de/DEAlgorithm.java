@@ -152,6 +152,10 @@ public class DEAlgorithm extends Algorithm {
     private double F, memF, CR, memCR; /* control variables of DE */
     private DESolution best, bestit, bestI;// best, best iteration, best I
 
+    public DEAlgorithm() {
+        this(Strategy.DE_RAND_1_BIN, 30, Finit, CRinit);
+    }
+
     public DEAlgorithm(Strategy strategy) {
         this(strategy, 30, Finit, CRinit);
     }
