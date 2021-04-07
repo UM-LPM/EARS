@@ -7,6 +7,7 @@ import org.um.feri.ears.problems.unconstrained.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 /**
  * <p>This class shows the various options of the HeatMap.</p>
@@ -109,6 +110,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
             new org.um.feri.ears.problems.unconstrained.cec2005.F23(2),
             new org.um.feri.ears.problems.unconstrained.cec2005.F24(2),
             new org.um.feri.ears.problems.unconstrained.cec2005.F25(2),
+            new Griewank(2),
             new SplitDropWave1(),
             new SplitDropWave2(),
             new WayburnSeader3(),
@@ -481,13 +483,18 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
         OKButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("Running");
+                try {
+                    panel.saveImage(selectedProblem.getName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                /*System.out.println("Running");
                 // set max eval selectedProblem
                 panel.drawData(); //repaint the heatmap to clear previous population
                 //TODO run EA on selected problem and draw population with drawPoint method
                 //TODO map solution x values to x and y coordinates on the heatmap
                 //TODO check useGraphicsYAxis
-                panel.drawPoint(400, 400, 10, Color.magenta);
+                panel.drawPoint(400, 400, 10, Color.magenta);*/
             }
         });
 

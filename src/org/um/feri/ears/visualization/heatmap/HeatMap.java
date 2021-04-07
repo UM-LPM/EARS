@@ -1,8 +1,11 @@
 package org.um.feri.ears.visualization.heatmap;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 /**
@@ -112,6 +115,10 @@ public class HeatMap extends JPanel
         // BufferedImage. The data plot is then cheaply drawn to the screen when
         // needed, saving us a lot of time in the end.
         drawData();
+    }
+
+    public void saveImage(String name) throws IOException {
+        ImageIO.write(bufferedImage, "PNG", new File(name+".png"));
     }
 
     /**
