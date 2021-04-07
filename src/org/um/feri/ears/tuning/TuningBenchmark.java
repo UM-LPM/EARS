@@ -43,9 +43,9 @@ public class TuningBenchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int eval, long time, int maxIterations,
+    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations,
                            double epsilon) {
-        tasks.add(new Task(problem, stopCriterion, eval, time, maxIterations, epsilon));
+        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations, epsilon));
         String[] optimum = new String[2];
         optimum[0] = problem.getName();
         optimum[1] = problem.getGlobalOptimum() + "";

@@ -16,8 +16,20 @@ public class Task extends TaskBase<Problem> {
      * @param epsilonForGlobal the epsilon value used to check closeness to the global optimum
      */
     public Task(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilonForGlobal) {
-        this(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations);
+
         this.epsilonForGlobal = epsilonForGlobal;
+        precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
+        this.stopCriterion = stopCriterion;
+        this.maxEvaluations = maxEvaluations;
+        numberOfEvaluations = 0;
+        this.maxIterations = maxIterations;
+        isStop = false;
+        isGlobal = false;
+        this.problem = problem;
+        this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
+
+        // set initial best eval
+        bestEval = problem.isMinimize() ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
     /**
      * @param problem the problem to be solved
@@ -27,18 +39,7 @@ public class Task extends TaskBase<Problem> {
      * @param maxIterations the maximum number of iterations
      */
     public Task(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
-        precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
-        this.stopCriterion = stopCriterion;
-        this.maxEvaluations = maxEvaluations;
-        numberOfEvaluations = 0;
-        this.maxIterations = maxIterations;
-        isStop = false;
-        isGlobal = false;
-        this.p = problem;
-        this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
-
-        // set initial best eval
-        bestEval = problem.isMinimize() ? Double.MAX_VALUE : Double.MIN_VALUE;
+        this(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations,0);
     }
 
     public Task(Task task) {
@@ -46,9 +47,9 @@ public class Task extends TaskBase<Problem> {
     }
 
     public double[] getInterval() {
-        double[] interval = new double[p.upperLimit.size()];
+        double[] interval = new double[problem.upperLimit.size()];
         for (int i = 0; i < interval.length; i++) {
-            interval[i] = p.upperLimit.get(i) - p.lowerLimit.get(i);
+            interval[i] = problem.upperLimit.get(i) - problem.lowerLimit.get(i);
         }
         return interval;
     }
@@ -63,7 +64,7 @@ public class Task extends TaskBase<Problem> {
      * @return feasible value
      */
     public double setFeasible(double value, int d) {
-        return p.setFeasible(value, d);
+        return problem.setFeasible(value, d);
     }
 
     /**
@@ -74,7 +75,7 @@ public class Task extends TaskBase<Problem> {
      * @return array with feasible values
      */
     public double[] setFeasible(double[] x) {
-        return p.setFeasible(x);
+        return problem.setFeasible(x);
     }
 
     /**
@@ -84,7 +85,7 @@ public class Task extends TaskBase<Problem> {
      * @param solution to be set feasible
      */
     public void setFeasible(DoubleSolution solution) {
-        solution.variable = p.setFeasible(solution.variable);
+        solution.variable = problem.setFeasible(solution.variable);
     }
 
     /**
@@ -94,7 +95,7 @@ public class Task extends TaskBase<Problem> {
      * @return true if the value is inside the upper and lower bounds, false otherwise
      */
     public boolean isFeasible(double x, int d) {
-        return p.isFeasible(x, d);
+        return problem.isFeasible(x, d);
     }
 
     /**
@@ -104,7 +105,7 @@ public class Task extends TaskBase<Problem> {
      * @return true if all the values in the solution are inside upper and lower bounds, false otherwise
      */
     public boolean isFeasible(DoubleSolution solution) {
-        return p.isFeasible(solution.getVariables());
+        return problem.isFeasible(solution.getVariables());
     }
 
     /**
@@ -114,7 +115,7 @@ public class Task extends TaskBase<Problem> {
      * @return true if all the values in the array are inside upper and lower bounds, false otherwise
      */
     public boolean isFeasible(double[] x) {
-        return p.isFeasible(x);
+        return problem.isFeasible(x);
     }
 
     /**
@@ -124,40 +125,40 @@ public class Task extends TaskBase<Problem> {
      * @return true if all the values in the vector are inside upper and lower bounds, false otherwise
      */
     public boolean isFeasible(List<Double> x) {
-        return p.isFeasible(x);
+        return problem.isFeasible(x);
     }
 
     public boolean isFirstBetter(DoubleSolution first, DoubleSolution second) {
-        return p.isFirstBetter(first.getVariables(), first.getEval(), second.getVariables(), second.getEval());
+        return problem.isFirstBetter(first.getVariables(), first.getEval(), second.getVariables(), second.getEval());
     }
 
     public boolean isFirstBetter(double a, double b) {
-        return p.isFirstBetter(a, b);
+        return problem.isFirstBetter(a, b);
     }
 
     public double[] getLowerLimit() {
 
-        double[] target = new double[p.lowerLimit.size()];
+        double[] target = new double[problem.lowerLimit.size()];
         for (int i = 0; i < target.length; i++) {
-            target[i] = p.lowerLimit.get(i);
+            target[i] = problem.lowerLimit.get(i);
         }
         return target;
     }
 
     public double[] getUpperLimit() {
-        double[] target = new double[p.upperLimit.size()];
+        double[] target = new double[problem.upperLimit.size()];
         for (int i = 0; i < target.length; i++) {
-            target[i] = p.upperLimit.get(i);
+            target[i] = problem.upperLimit.get(i);
         }
         return target;
     }
 
     public double getLowerLimit(int i) {
-        return p.lowerLimit.get(i);
+        return problem.lowerLimit.get(i);
     }
 
     public double getUpperLimit(int i) {
-        return p.upperLimit.get(i);
+        return problem.upperLimit.get(i);
     }
 
     private void checkIfGlobalReached(double d) {
@@ -165,7 +166,7 @@ public class Task extends TaskBase<Problem> {
     }
 
     public boolean isEqualToGlobalOptimum(double d) {
-        return Math.abs(d - p.getGlobalOptimum()) <= epsilonForGlobal;
+        return Math.abs(d - problem.getGlobalOptimum()) <= epsilonForGlobal;
     }
 
     public void addAncestors(DoubleSolution solution, List<DoubleSolution> parents) {
@@ -186,11 +187,11 @@ public class Task extends TaskBase<Problem> {
      * @deprecated
      */
     public double[] evaluateConstrains(List<Double> ds) {
-        return p.evaluateConstrains(ds);
+        return problem.evaluateConstrains(ds);
     }
 
     public double[] getRandomVariables() {
-        return p.getRandomVariables();
+        return problem.getRandomVariables();
     }
 
     /**
@@ -199,7 +200,7 @@ public class Task extends TaskBase<Problem> {
      * @return randomly generated unevaluated solution
      */
     public DoubleSolution getRandomSolution() {
-        return p.getRandomSolution();
+        return problem.getRandomSolution();
     }
 
     /**
@@ -289,7 +290,7 @@ public class Task extends TaskBase<Problem> {
     private DoubleSolution performEvaluation(double[] x) throws StopCriterionException {
         incrementNumberOfEvaluations();
         long start = System.nanoTime();
-        DoubleSolution tmpSolution = new DoubleSolution(x, p.eval(x), p.evaluateConstrains(x));
+        DoubleSolution tmpSolution = new DoubleSolution(x, problem.eval(x), problem.evaluateConstrains(x));
         evaluationTime += System.nanoTime() - start;
         checkIfGlobalReached(tmpSolution.getEval());
         GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
@@ -305,7 +306,7 @@ public class Task extends TaskBase<Problem> {
      */
     private void checkImprovement(double eval) {
 
-        if(p.isFirstBetter(eval, bestEval)){
+        if(problem.isFirstBetter(eval, bestEval)){
             bestEval = eval;
             stagnationTrialCounter = 0;
         }

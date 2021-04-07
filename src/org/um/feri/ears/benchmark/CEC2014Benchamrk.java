@@ -27,8 +27,8 @@ public class CEC2014Benchamrk extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int eval, long time, int maxIterations, double epsilon) {
-        tasks.add(new Task(problem, stopCriterion, eval, time, maxIterations));
+    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations, double epsilon) {
+        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
     @Override

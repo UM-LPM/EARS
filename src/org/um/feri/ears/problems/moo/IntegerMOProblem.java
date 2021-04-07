@@ -6,88 +6,82 @@ import java.util.List;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.util.Util;
 
-public abstract class IntegerMOProblem extends MOProblemBase<Integer>{
+public abstract class IntegerMOProblem extends MOProblemBase<Integer> {
 
-	public IntegerMOProblem(int numberOfDimensions, int numberOfConstraints, int numberOfObjectives) {
-		super(numberOfDimensions, numberOfConstraints, numberOfObjectives);
+    public IntegerMOProblem(int numberOfDimensions, int numberOfConstraints, int numberOfObjectives) {
+        super(numberOfDimensions, numberOfConstraints, numberOfObjectives);
+    }
 
-	}
-	
-	public void evaluate(MOSolutionBase<Integer> solution) {
-		double obj[] = evaluate(solution.getVariables());
-		solution.setObjectives(obj);
-	}
-	
-	@Override
-	public double[] evaluate(Integer[] ds) {
-		
-		double[] x = new double[numberOfDimensions];
-		for (int i = 0; i < numberOfDimensions; i++)
-			x[i] = ds[i];
-		double obj[] = new double[functions.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
-		}
+    public void evaluate(MOSolutionBase<Integer> solution) {
+        double[] obj = evaluate(solution.getVariables());
+        solution.setObjectives(obj);
+    }
 
-		return obj;
-	}
-	
-	public double[] evaluate(List<Integer> ds) {
-		
-		double[] x = new double[numberOfDimensions];
-		for (int i = 0; i < numberOfDimensions; i++)
-			x[i] = ds.get(i);
-		double obj[] = new double[functions.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
-		}
+    @Override
+    public double[] evaluate(Integer[] ds) {
 
-		return obj;
-	}
+        double[] x = new double[numberOfDimensions];
+        for (int i = 0; i < numberOfDimensions; i++)
+            x[i] = ds[i];
+        double[] obj = new double[functions.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = functions.get(i).eval(x);
+        }
+        return obj;
+    }
 
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Integer> solution) {
-	}
+    public double[] evaluate(List<Integer> ds) {
 
-	@Override
-	public MOSolutionBase<Integer> getRandomSolution() {
+        double[] x = new double[numberOfDimensions];
+        for (int i = 0; i < numberOfDimensions; i++)
+            x[i] = ds.get(i);
+        double[] obj = new double[functions.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = functions.get(i).eval(x);
+        }
 
-		List<Integer> var = new ArrayList<Integer>(numberOfDimensions);
-		//Integer[] var = new Integer[numberOfDimensions];
-		List<Integer> randomSequence = new ArrayList<>(numberOfDimensions);
+        return obj;
+    }
 
-		for (int j = 0; j < numberOfDimensions; j++) {
-			randomSequence.add(j);
-		}
+    @Override
+    public void evaluateConstraints(MOSolutionBase<Integer> solution) {
+    }
 
-		Util.shuffle(randomSequence);
+    @Override
+    public MOSolutionBase<Integer> getRandomSolution() {
 
-		for (int i = 0; i < numberOfDimensions; i++) {
-			//var[i]= randomSequence.get(i);
-			var.add(randomSequence.get(i));
-		}
+        List<Integer> var = new ArrayList<Integer>(numberOfDimensions);
+        //Integer[] var = new Integer[numberOfDimensions];
+        List<Integer> randomSequence = new ArrayList<>(numberOfDimensions);
 
-		MOSolutionBase<Integer> sol = new MOSolutionBase<Integer>(var, evaluate(var), upperLimit, lowerLimit);
-		evaluateConstraints(sol);
+        for (int j = 0; j < numberOfDimensions; j++) {
+            randomSequence.add(j);
+        }
 
-		return sol;
+        Util.shuffle(randomSequence);
 
-	}
+        for (int i = 0; i < numberOfDimensions; i++) {
+            //var[i]= randomSequence.get(i);
+            var.add(randomSequence.get(i));
+        }
 
-	@Override
-	public boolean areDimensionsInFeasableInterval(ParetoSolution<Integer> ps) {
-		
-		for(MOSolutionBase<Integer> sol : ps)
-		{
-			for (int i=0; i<numberOfDimensions; i++) {
-				if (sol.getValue(i) < lowerLimit.get(i))
-					return false;
-				if (sol.getValue(i) > upperLimit.get(i))
-					return false;
-			}
-		}
+        MOSolutionBase<Integer> sol = new MOSolutionBase<Integer>(var, evaluate(var), upperLimit, lowerLimit);
+        evaluateConstraints(sol);
 
-		return true;
-	}
+        return sol;
+    }
 
+    @Override
+    public boolean areDimensionsInFeasableInterval(ParetoSolution<Integer> ps) {
+
+        for (MOSolutionBase<Integer> sol : ps) {
+            for (int i = 0; i < numberOfDimensions; i++) {
+                if (sol.getValue(i) < lowerLimit.get(i))
+                    return false;
+                if (sol.getValue(i) > upperLimit.get(i))
+                    return false;
+            }
+        }
+        return true;
+    }
 }

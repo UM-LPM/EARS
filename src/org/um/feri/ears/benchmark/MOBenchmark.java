@@ -55,7 +55,7 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
         return false;
     }
 
-    protected abstract void addTask(StopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, P p);
+    protected abstract void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon, P problem);
 
     protected IndicatorName getRandomIndicator() {
         if (indicatorWeights != null) {

@@ -43,7 +43,7 @@ public class SOMA extends Algorithm {
     private DoubleSolution[] population;
 
     public SOMA() {
-        this(Strategy.ALL_TO_ONE);
+        this(Strategy.ALL_TO_ALL);
     }
 
     public SOMA(Strategy strategy) {

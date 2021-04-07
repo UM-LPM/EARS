@@ -11,42 +11,36 @@ import java.util.concurrent.TimeUnit;
 public abstract class MOTask<T extends Number, P extends MOProblemBase<T>> extends TaskBase<P> {
 
     /**
-     * Task constructor for multiobjective optimization.
-     *
-	 * @param stop        the stopping criterion
-	 * @param eval        the maximum number of evaluations allowed
-	 * @param allowedTime the maximum CPU time allowed in milliseconds
-	 * @param epsilonForGlobal     the epsilon value for global optimum
-	 * @param p           the problem
+     * @param problem the problem to be solved
+     * @param stopCriterion the stopping criterion
+     * @param maxEvaluations the maximum number of evaluations allowed
+     * @param allowedTime the maximum CPU time allowed in milliseconds
+     * @param maxIterations the maximum number of iterations
+     * @param epsilonForGlobal the epsilon value used to check closeness to the global optimum
      */
-    public MOTask(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, P p) {
+    public MOTask(P problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilonForGlobal) {
 
-        this(stop, eval, allowedTime, maxIterations, epsilonForGlobal, p, (int) Math.log10((1. / epsilonForGlobal) + 1));
-    }
-
-    abstract public boolean areDimensionsInFeasibleInterval(ParetoSolution<T> bestByALg);
-
-    /**
-     * Task constructor for multi-objective optimization.
-     *
-	 * @param stop        the stopping criterion
-	 * @param eval        the maximum number of evaluations allowed
-	 * @param allowedTime the maximum CPU time allowed in milliseconds
-	 * @param epsilonForGlobal     the epsilon value for global optimum
-	 * @param p           the problem
-     */
-    public MOTask(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilonForGlobal, P p, int precisionOfRealNumbers) {
-
-        precisionOfRealNumbersInDecimalPlaces = precisionOfRealNumbers;
-        stopCriterion = stop;
-        maxEvaluations = eval;
+        precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
+        this.stopCriterion = stopCriterion;
+        this.maxEvaluations = maxEvaluations;
         numberOfEvaluations = 0;
         this.epsilonForGlobal = epsilonForGlobal;
         isStop = false;
         isGlobal = false;
-        super.p = p; // TODO generic type in TaskBase
+        super.problem = problem; // TODO generic type in TaskBase
         this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
         this.maxIterations = maxIterations;
+    }
+
+    /**
+     * @param problem the problem to be solved
+     * @param stopCriterion the stopping criterion
+     * @param maxEvaluations the maximum number of evaluations allowed
+     * @param allowedTime the maximum CPU time allowed in milliseconds
+     * @param maxIterations the maximum number of iterations
+     */
+    public MOTask(P problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
+        this(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, 0);
     }
 
     public MOTask(MOTask<T, P> task) {
@@ -59,35 +53,37 @@ public abstract class MOTask<T extends Number, P extends MOProblemBase<T>> exten
         isGlobal = task.isGlobal;
         maxIterations = task.maxIterations;
         allowedCPUTime = task.allowedCPUTime;
-        super.p = task.p;  //TODO deep copy?
+        super.problem = task.problem;  //TODO deep copy?
     }
+
+    abstract public boolean areDimensionsInFeasibleInterval(ParetoSolution<T> solution);
 
     /**
      * @return The number of objectives
      */
     public int getNumberOfObjectives() {
-        return p.getNumberOfObjectives();
+        return problem.getNumberOfObjectives();
     }
 
     /**
      * @return The file name of the problem
      */
     public String getProblemFileName() {
-        return p.getFileName();
+        return problem.getFileName();
     }
 
     public String getBenchmarkName() {
-        return p.getBenchmarkName();
+        return problem.getBenchmarkName();
     }
 
     public int getNumberOfConstrains() {
-        return p.getNumberOfConstraints();
+        return problem.getNumberOfConstraints();
     }
 
     abstract public MOSolutionBase<T> getRandomMOSolution() throws StopCriterionException;
 
     public boolean isFirstBetter(ParetoSolution<T> x, ParetoSolution<T> y, QualityIndicator<T> qi) {
-        return p.isFirstBetter(x, y, qi);
+        return problem.isFirstBetter(x, y, qi);
     }
 
 	/**
@@ -100,22 +96,22 @@ public abstract class MOTask<T extends Number, P extends MOProblemBase<T>> exten
 
         if (stopCriterion == StopCriterion.EVALUATIONS) {
             incrementNumberOfEvaluations();
-            p.evaluate(solution);
-            p.evaluateConstraints(solution);
+            problem.evaluate(solution);
+            problem.evaluateConstraints(solution);
             GraphDataRecorder.AddRecord(solution, this.getProblemName());
         } else if (stopCriterion == StopCriterion.ITERATIONS) {
             if (isStop)
                 throw new StopCriterionException("Max iterations");
             incrementNumberOfEvaluations();
-            p.evaluate(solution);
-            p.evaluateConstraints(solution);
+            problem.evaluate(solution);
+            problem.evaluateConstraints(solution);
             GraphDataRecorder.AddRecord(solution, this.getProblemName());
         } else if (stopCriterion == StopCriterion.CPU_TIME) {
             if (!isStop) {
                 hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
                 incrementNumberOfEvaluations();
-                p.evaluate(solution);
-                p.evaluateConstraints(solution);
+                problem.evaluate(solution);
+                problem.evaluateConstraints(solution);
                 GraphDataRecorder.AddRecord(solution, this.getProblemName());
             } else {
                 throw new StopCriterionException("CPU Time");

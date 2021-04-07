@@ -17,7 +17,7 @@ public class QualityIndicatorExample {
 
 		D_NSGAII nsga2 = new D_NSGAII();
 		DoubleMOProblem problem = new UnconstrainedProblem1();
-		DoubleMOTask t = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 0, 0, 0.0001,  new UnconstrainedProblem1());
+		DoubleMOTask t = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 0, 0);
 		
 		QualityIndicator qi = IndicatorFactory.createIndicator(IndicatorName.NATIVE_HV, t.getNumberOfObjectives(), t.getProblemFileName());
 		

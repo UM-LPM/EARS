@@ -17,7 +17,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
 	protected boolean isStop;
 	protected boolean isGlobal;
 	protected int precisionOfRealNumbersInDecimalPlaces; //used only for discreet problem presentation (bit presentation in GA)
-	protected T p;
+	protected T problem;
 	private int resetCount;
     protected int maxTrialsBeforeStagnation = 10000;
     protected int stagnationTrialCounter = 0;
@@ -39,7 +39,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
         isGlobal = task.isGlobal;
         maxIterations = task.maxIterations;
         allowedCPUTime = task.allowedCPUTime;
-        p = task.p;  //TODO deep copy?
+        problem = task.problem;  //TODO deep copy?
     }
 
     /**
@@ -119,11 +119,11 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
     }
 
     public int getNumberOfDimensions() {
-        return p.getNumberOfDimensions();
+        return problem.getNumberOfDimensions();
     }
 
     public int getNumberOfConstrains() {
-        return p.numberOfConstraints;
+        return problem.numberOfConstraints;
     }
 
     public void enableAncestorLogging() {
@@ -245,22 +245,22 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
      * @return true if the problem is to be minimized
      */
     public boolean isMinimize() {
-        return p.isMinimize();
+        return problem.isMinimize();
     }
 
     /**
      * @return name of the problem
      */
     public String getProblemName() {
-        return p.getName();
+        return problem.getName();
     }
 
     public String getFileNameString() {
-        return p.getFileNameString();
+        return problem.getFileNameString();
     }
 
     public int getProblemHashCode() {
-        return p.hashCode();
+        return problem.hashCode();
     }
 
     public void resetCounter() {
@@ -282,11 +282,11 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
     public String toString() {
         return "Task [stopCriterion=" + stopCriterion + ", maxEvaluations=" + maxEvaluations + ", numberOfEvaluations=" + numberOfEvaluations + ", epsilon="
                 + epsilonForGlobal + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
-                + precisionOfRealNumbersInDecimalPlaces + ", p=" + p + "]";
+                + precisionOfRealNumbersInDecimalPlaces + ", p=" + problem + "]";
     }
 
     public String getTaskInfoCSV() {
-        return p.getProblemInfoCSV() + "task stop criterion:" + stopCriterion + ",maxEvaluations:" + maxEvaluations + ",epsilon:" + epsilonForGlobal + ",";
+        return problem.getProblemInfoCSV() + "task stop criterion:" + stopCriterion + ",maxEvaluations:" + maxEvaluations + ",epsilon:" + epsilonForGlobal + ",";
     }
 
     /**
@@ -297,15 +297,15 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
     public String getTaskInfo() {
 
         if (stopCriterion == StopCriterion.EVALUATIONS) {
-            return "Task = " + p + " stopCriterion=" + stopCriterion + ", maxEvaluations=" + maxEvaluations + ", epsilon="
+            return "Task = " + problem + " stopCriterion=" + stopCriterion + ", maxEvaluations=" + maxEvaluations + ", epsilon="
                     + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                     + precisionOfRealNumbersInDecimalPlaces;
         } else if (stopCriterion == StopCriterion.ITERATIONS) {
-            return "Task = " + p + " stopCriterion=" + stopCriterion + ", maxIterations=" + maxIterations + ", epsilon="
+            return "Task = " + problem + " stopCriterion=" + stopCriterion + ", maxIterations=" + maxIterations + ", epsilon="
                     + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                     + precisionOfRealNumbersInDecimalPlaces;
         } else if (stopCriterion == StopCriterion.CPU_TIME) {
-            return "Task = " + p + " stopCriterion=" + stopCriterion + ", allowedCPUTime=" + allowedCPUTime + ", epsilon="
+            return "Task = " + problem + " stopCriterion=" + stopCriterion + ", allowedCPUTime=" + allowedCPUTime + ", epsilon="
                     + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                     + precisionOfRealNumbersInDecimalPlaces;
         } else

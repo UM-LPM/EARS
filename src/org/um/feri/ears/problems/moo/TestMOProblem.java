@@ -22,8 +22,8 @@ public class TestMOProblem {
 
     	
 
-    	DoubleMOTask t1 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new UnconstrainedProblem1());
-    	DoubleMOTask t2 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new UnconstrainedProblem1());
+    	DoubleMOTask t1 = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
+    	DoubleMOTask t2 = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
 
 
 

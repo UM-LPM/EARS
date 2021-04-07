@@ -29,8 +29,8 @@ public class CEC2009Benchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMO
     }
 
     @Override
-    protected void addTask(StopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
-        tasks.add(new DoubleMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
+    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem problem) {
+        tasks.add(new DoubleMOTask(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 
     @Override

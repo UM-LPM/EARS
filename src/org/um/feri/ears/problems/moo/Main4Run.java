@@ -51,7 +51,7 @@ public class Main4Run {
     	//det.run(50, indicators, players, new ZDT1(),50);
         
 
-        DoubleMOTask t1 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new UnconstrainedProblem1());
+        DoubleMOTask t1 = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300);
        /*DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem2());
         DoubleMOTask t3 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem3());
         DoubleMOTask t4 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem4());
@@ -99,7 +99,7 @@ public class Main4Run {
             	
             	// OA_AJHsqldb OO_BCEL OO_MyBatis
             
-            	ParetoSolution best = nsga.execute(new IntegerMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new CITOProblem("OO_MyBatis")));
+            	ParetoSolution best = nsga.execute(new IntegerMOTask(new CITOProblem("OO_MyBatis"), StopCriterion.EVALUATIONS, 300000, 500, 300));
             	
             	//ParetoSolution best = moead.execute(new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
             	

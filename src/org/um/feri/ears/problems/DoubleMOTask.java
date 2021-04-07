@@ -6,8 +6,12 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
 
-    public DoubleMOTask(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem p) {
-        super(stop, eval, allowedTime, maxIterations, epsilon, p);
+    public DoubleMOTask(DoubleMOProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon) {
+        super(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, epsilon);
+    }
+
+    public DoubleMOTask(DoubleMOProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
+        super(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, 0);
     }
 
     public DoubleMOTask(DoubleMOTask task) {
@@ -19,14 +23,14 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
 
         if (stopCriterion == StopCriterion.EVALUATIONS) {
             incrementNumberOfEvaluations();
-            MOSolutionBase<Double> newSolution = p.getRandomSolution();
+            MOSolutionBase<Double> newSolution = problem.getRandomSolution();
             //p.evaluateConstraints(newSolution);
             return newSolution;
         } else if (stopCriterion == StopCriterion.ITERATIONS) {
             if (isStop)
                 throw new StopCriterionException("Max iterations");
             incrementNumberOfEvaluations();
-            MOSolutionBase<Double> newSolution = p.getRandomSolution();
+            MOSolutionBase<Double> newSolution = problem.getRandomSolution();
             return newSolution;
 
         } else if (stopCriterion == StopCriterion.CPU_TIME) {
@@ -34,7 +38,7 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
             if (!isStop) {
                 hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
                 incrementNumberOfEvaluations();
-                MOSolutionBase<Double> newSolution = p.getRandomSolution();
+                MOSolutionBase<Double> newSolution = problem.getRandomSolution();
                 return newSolution;
             } else {
                 throw new StopCriterionException("CPU Time");
@@ -50,31 +54,31 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
      * This is not checking constrains, just basic intervals!
      * Delegated from Problem!
      *
-     * @param paretoSolution vector of possible solution
+     * @param solution vector of possible solution
      * @return
      */
-    public boolean areDimensionsInFeasibleInterval(ParetoSolution<Double> paretoSolution) {
-        return p.areDimensionsInFeasableInterval(paretoSolution);
+    public boolean areDimensionsInFeasibleInterval(ParetoSolution<Double> solution) {
+        return problem.areDimensionsInFeasableInterval(solution);
     }
 
     public Double[] getLowerLimit() {
-        Double[] arr = new Double[p.lowerLimit.size()];
-        arr = p.lowerLimit.toArray(arr);
+        Double[] arr = new Double[problem.lowerLimit.size()];
+        arr = problem.lowerLimit.toArray(arr);
         return arr;
     }
 
     public Double[] getUpperLimit() {
-        Double[] arr = new Double[p.upperLimit.size()];
-        arr = p.upperLimit.toArray(arr);
+        Double[] arr = new Double[problem.upperLimit.size()];
+        arr = problem.upperLimit.toArray(arr);
         return arr;
     }
 
     public double getLowerLimit(int i) {
-        return p.lowerLimit.get(i);
+        return problem.lowerLimit.get(i);
     }
 
     public double getUpperLimit(int i) {
-        return p.upperLimit.get(i);
+        return problem.upperLimit.get(i);
     }
 
     @Override

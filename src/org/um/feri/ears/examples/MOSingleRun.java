@@ -43,7 +43,7 @@ public class MOSingleRun {
 			ZDT6 p = new ZDT6(10);
 
 
-			DoubleMOTask task = new DoubleMOTask(StopCriterion.EVALUATIONS, 30000, 5000, 100, 0.0001, p);
+			DoubleMOTask task = new DoubleMOTask(p, StopCriterion.EVALUATIONS, 30000, 5000, 100);
 			ParetoSolution best = moead.execute(task);
 			best.printObjectivesToCSVFile("test");
 

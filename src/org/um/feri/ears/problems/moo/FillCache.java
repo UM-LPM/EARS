@@ -45,11 +45,11 @@ public class FillCache {
         DoubleMOTask t8 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem8());
         DoubleMOTask t9 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem9());
         DoubleMOTask t10 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem10());*/
-        DoubleMOTask t1 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT1());
-        DoubleMOTask t2 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT2());
-        DoubleMOTask t3 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT3());
-        DoubleMOTask t4 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT4());
-        DoubleMOTask t5 = new DoubleMOTask(StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001, new ZDT6());
+        DoubleMOTask t1 = new DoubleMOTask(new ZDT1(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+        DoubleMOTask t2 = new DoubleMOTask(new ZDT2(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+        DoubleMOTask t3 = new DoubleMOTask(new ZDT3(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+        DoubleMOTask t4 = new DoubleMOTask(new ZDT4(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+        DoubleMOTask t5 = new DoubleMOTask(new ZDT6(), StopCriterion.EVALUATIONS, 300000, 500, 300);
 
         //DoubleMOTask t1 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG1(2));
         /*DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG2(2));

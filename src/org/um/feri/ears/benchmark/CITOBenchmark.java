@@ -29,8 +29,8 @@ public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, IntegerMO
     }
 
     @Override
-    protected void addTask(StopCriterion sc, int eval, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem p) {
-        tasks.add(new IntegerMOTask(sc, eval, allowedTime, maxIterations, epsilon, p));
+    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem problem) {
+        tasks.add(new IntegerMOTask(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 
     @Override
