@@ -67,26 +67,33 @@ public class AAA extends Algorithm {
                     while (neighbor == i) {
                         neighbor = tournamentMethod();
                     }
-                    int dim1 = (int) (this.task.getNumberOfDimensions() * Util.nextDouble());
-                    int dim2 = (int) (this.task.getNumberOfDimensions() * Util.nextDouble());
-                    int dim3 = (int) (this.task.getNumberOfDimensions() * Util.nextDouble());
-                    while (dim1 == dim2 || dim1 == dim3 || dim2 == dim3) {
-                        dim2 = (int) (this.task.getNumberOfDimensions() * Util.nextDouble());
-                        dim3 = (int) (this.task.getNumberOfDimensions() * Util.nextDouble());
-                    }
-                    double[] newColony;
-                    newColony = population[i].getDoubleVariables().clone();
-                    double p = -1 + (2 * Util.nextDouble());
-                    int degree1 = (int) (360 * Util.nextDouble());
-                    int degree2 = (int) (360 * Util.nextDouble());
-                    newColony[dim1] = newColony[dim1] + (population[neighbor].getValue(dim1) - newColony[dim1]) * (shearForce - population[i].getFriction()) * p;
-                    newColony[dim1] = this.task.setFeasible(newColony[dim1], dim1);
-                    newColony[dim2] = newColony[dim2] + (population[neighbor].getValue(dim2) - newColony[dim2]) * (shearForce - population[i].getFriction()) * Math.cos(Math.toRadians(degree1));
-                    newColony[dim2] = this.task.setFeasible(newColony[dim2], dim2);
-                    newColony[dim3] = newColony[dim3] + (population[neighbor].getValue(dim3) - newColony[dim3]) * (shearForce - population[i].getFriction()) * Math.sin(Math.toRadians(degree2));
-                    newColony[dim3] = this.task.setFeasible(newColony[dim3], dim3);
+                    double[] newColony = population[i].getDoubleVariables().clone();
 
-                    if (this.task.isStopCriterion())
+                    int dim1 = Util.nextInt(task.getNumberOfDimensions());
+                    int dim2 = Util.nextInt(task.getNumberOfDimensions());
+                    while (dim1 == dim2 ) {
+                        dim2 = Util.nextInt(task.getNumberOfDimensions());
+                    }
+
+                    //In two-dimensional problems, algal movement is sinusoidal
+                    double p = Util.nextDouble(-1,1);
+                    newColony[dim1] = newColony[dim1] + (population[neighbor].getValue(dim1) - newColony[dim1]) * (shearForce - population[i].getFriction()) * p;
+                    int degree = (int) (360 * Util.nextDouble());
+                    newColony[dim2] = newColony[dim2] + (population[neighbor].getValue(dim2) - newColony[dim2]) * (shearForce - population[i].getFriction()) * Math.sin(Math.toRadians(degree));
+
+                    //In case of three or more dimensions, algal movement is helical
+                    if(task.getNumberOfDimensions() > 2) {
+                        int dim3 = Util.nextInt(task.getNumberOfDimensions());
+                        while (dim1 == dim3 || dim2 == dim3) {
+                            dim3 = Util.nextInt(task.getNumberOfDimensions());
+                        }
+                        degree = (int) (360 * Util.nextDouble());
+                        newColony[dim3] = newColony[dim3] + (population[neighbor].getValue(dim3) - newColony[dim3]) * (shearForce - population[i].getFriction()) * Math.cos(Math.toRadians(degree));
+                    }
+
+                    newColony = task.setFeasible(newColony);
+
+                    if (task.isStopCriterion())
                         break;
 
                     Alga newAlga = new Alga(this.task.eval(newColony));
@@ -95,7 +102,7 @@ public class AAA extends Algorithm {
                         newAlga.copyAttributes(population[i]);
                         population[i] = newAlga;
                         iStarve = 1;
-                        if (this.task.isFirstBetter(newAlga, best))
+                        if (task.isFirstBetter(newAlga, best))
                             best = new DoubleSolution(newAlga);
                     } else {
                         population[i].setEnergy(population[i].getEnergy() - (energyLoss / 2));
