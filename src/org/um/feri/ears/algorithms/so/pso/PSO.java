@@ -37,7 +37,11 @@ public class PSO extends Algorithm {
     private Task task;
 
     public PSO() {
-        this(10, 0.7, 2, 2);
+        this(10);
+    }
+
+    public PSO(int popSize) {
+        this(popSize, 0.7, 2, 2);
     }
 
     public PSO(int popSize, double om, double c1, double c2) {

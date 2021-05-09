@@ -46,6 +46,10 @@ public class SOMA extends Algorithm {
         this(Strategy.ALL_TO_ALL);
     }
 
+    public SOMA(int popSize) {
+        this(Strategy.ALL_TO_ALL, popSize);
+    }
+
     public SOMA(Strategy strategy) {
         this(strategy, 50);
     }
