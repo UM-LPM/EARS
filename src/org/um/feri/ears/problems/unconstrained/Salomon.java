@@ -14,8 +14,8 @@ http://benchmarkfcns.xyz/benchmarkfcns/salomonfcn.html
  */
 public class Salomon extends Problem {
 
-    public Salomon() {
-        super(2, 0);
+    public Salomon(int d) {
+        super(d, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
         name = "Salomon";

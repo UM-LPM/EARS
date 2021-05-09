@@ -28,14 +28,10 @@ public class Zakharov extends Problem {
         double sum1 = 0, sum2 = 0, sum3 = 0;
         for (int i = 0; i < numberOfDimensions; i++) {
             sum1 += pow(x[i], 2);
-        }
-        for (int i = 0; i < numberOfDimensions; i++) {
             sum2 += 0.5 * (i + 1) * x[i];
-        }
-        sum2 = pow(sum2, 2);
-        for (int i = 0; i < numberOfDimensions; i++) {
             sum3 += 0.5 * (i + 1) * x[i];
         }
+        sum2 = pow(sum2, 2);
         sum3 = pow(sum3, 4);
         return sum1 + sum2 + sum3;
     }
