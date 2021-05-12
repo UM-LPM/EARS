@@ -13,7 +13,7 @@ import org.um.feri.ears.util.Util;
 public class DummyAlgorithm extends Algorithm {
 
     HashMap<String, double[]> results;
-    HashMap<String, EvaluationStorage> problemEvaluations;
+    HashMap<String, EvaluationStorage.Evaluation[]> problemEvaluations;
     HashMap<String, Integer> positions; //stores the position of the current result of the current problem
     String algorithmName;
     String filesDir;
@@ -102,12 +102,11 @@ public class DummyAlgorithm extends Algorithm {
     public DummySolution execute(Task task) {
 
         if (readFromJson) {
-            String fileName = algorithmName + "_" + task.getFileNameString() + ".json";
+            String key = task.getFileNameString() + task.getStopCriterionString();
 
-            // key by task with stopping criterion (name + dimension + stopping criterion)
-            // array with evaluations for each run
-
-            if (!problemEvaluations.containsKey(fileName)) {
+            //load evaluations from file
+            if (!problemEvaluations.containsKey(key)) {
+                String fileName = algorithmName + "_" + task.getFileNameString() + ".json";
                 String path = filesDir + File.separator + fileName;
 
                 if (new File(path).isFile()) {
@@ -116,8 +115,97 @@ public class DummyAlgorithm extends Algorithm {
                         ObjectMapper mapper = new ObjectMapper();
                         //TODO check json file metadata (versions, dimensions...)
                         EvaluationStorage es = mapper.readValue(json, EvaluationStorage.class);
-                        problemEvaluations.put(fileName, es);
-                        positions.put(fileName, 0);
+                        EvaluationStorage.Evaluation[] evaluations = new EvaluationStorage.Evaluation[es.numberOfRuns];
+                        //find the evaluation corresponding to the stopping criterion for each run
+                        for (int i = 0; i < es.numberOfRuns; i++) {
+                            EvaluationStorage.Evaluation[] evaluationsPerRun = es.evaluations[i];
+                            switch (task.getStopCriterion()) {
+                                case CPU_TIME: {
+                                    long stopCpuTime = task.getAllowedCPUTime();
+                                    int index;
+                                    for (index = 0; index < evaluationsPerRun.length; index++) {
+                                        long cpuTime = evaluationsPerRun[index].time;
+                                        if (cpuTime == stopCpuTime) { //if evaluation with the same stopping criterion found break
+                                            break;
+                                        } else if (index + 1 < evaluationsPerRun.length) { //if the next evaluation has a higher cpu time return the current evaluation
+                                            if (evaluationsPerRun[index + 1].time > stopCpuTime)
+                                                break;
+                                        }
+                                    }
+                                    index = Math.min(index, evaluationsPerRun.length - 1);
+                                    evaluations[i] = evaluationsPerRun[index];
+                                    break;
+                                }
+                                case ITERATIONS: {
+                                    int stopIteration = task.getMaxIterations();
+                                    int index;
+                                    for (index = 0; index < evaluationsPerRun.length; index++) {
+                                        int iteration = evaluationsPerRun[index].iteration;
+                                        if (iteration == stopIteration) { //if evaluation with the same stopping criterion found break
+                                            break;
+                                        } else if (index + 1 < evaluationsPerRun.length) { //if the next evaluation has a higher iteration number return the current evaluation
+                                            if (evaluationsPerRun[index + 1].iteration > stopIteration)
+                                                break;
+                                        }
+                                    }
+                                    index = Math.min(index, evaluationsPerRun.length - 1);
+                                    evaluations[i] = evaluationsPerRun[index];
+                                    break;
+                                }
+                                case EVALUATIONS: {
+                                    int stopEvaluation = task.getMaxEvaluations();
+                                    int index;
+                                    for (index = 0; index < evaluationsPerRun.length; index++) {
+                                        int evaluation = evaluationsPerRun[index].evalNum;
+                                        if (evaluation == stopEvaluation) { //if evaluation with the same stopping criterion found break
+                                            break;
+                                        } else if (index + 1 < evaluationsPerRun.length) { //if the next evaluation has a higher evaluation number return the current evaluation
+                                            if (evaluationsPerRun[index + 1].evalNum > stopEvaluation)
+                                                break;
+                                        }
+                                    }
+                                    index = Math.min(index, evaluationsPerRun.length - 1);
+                                    evaluations[i] = evaluationsPerRun[index];
+                                    break;
+                                }
+                                case STAGNATION: {
+                                    int stagnationTrialCounter = 0;
+                                    int index = 0;
+                                    double best = evaluationsPerRun[index++].fitness;
+                                    for (; index < evaluationsPerRun.length; index++) {
+
+                                        if (task.isFirstBetter(evaluationsPerRun[index].fitness, best)) {
+                                            best = evaluationsPerRun[index].fitness;
+                                            stagnationTrialCounter = 0;
+                                        } else {
+                                            stagnationTrialCounter += evaluationsPerRun[index].evalNum - evaluationsPerRun[index - 1].evalNum; // increment by number of evaluations between two indices
+                                        }
+
+                                        if (stagnationTrialCounter >= task.getMaxTrialsBeforeStagnation()) {
+                                            break;
+                                        }
+                                    }
+                                    index = Math.min(index, evaluationsPerRun.length - 1);
+                                    evaluations[i] = evaluationsPerRun[index];
+                                    break;
+                                }
+                                case GLOBAL_OPTIMUM_OR_EVALUATIONS: {
+                                    int index;
+                                    for (index = 0; index < evaluationsPerRun.length; index++) {
+                                        if (task.isEqualToGlobalOptimum(evaluationsPerRun[index].fitness))
+                                            break;
+                                    }
+                                    index = Math.min(index, evaluationsPerRun.length - 1);
+                                    evaluations[i] = evaluationsPerRun[index];
+                                    break;
+                                }
+                                default:
+                                    break;
+                            }
+                        }
+
+                        problemEvaluations.put(key, evaluations);
+                        positions.put(key, 0);
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
@@ -127,94 +215,20 @@ public class DummyAlgorithm extends Algorithm {
                 }
             }
 
-            EvaluationStorage es = problemEvaluations.get(fileName);
-            int currentRun = positions.get(fileName);
-            EvaluationStorage.Evaluation[] evaluations = es.evaluations[currentRun];
-            positions.put(fileName, currentRun + 1);
-
-            switch (task.getStopCriterion()) {
-                case CPU_TIME: {
-                    long stopCpuTime = task.getAllowedCPUTime();
-                    int index;
-                    for (index = 0; index < evaluations.length; index++) {
-                        long cpuTime = evaluations[index].time;
-                        if (cpuTime == stopCpuTime) { //if evaluation with the same stopping criterion found break
-                            break;
-                        } else if (index + 1 < evaluations.length) { //if the next evaluation has a higher cpu time return the current evaluation
-                            if (evaluations[index + 1].time > stopCpuTime)
-                                break;
-                        }
-                    }
-                    index = Math.min(index, evaluations.length - 1);
-                    updateTask(task, evaluations[index]);
-                    return new DummySolution(evaluations[index].fitness);
-                }
-                case ITERATIONS: {
-                    int stopIteration = task.getMaxIterations();
-                    int index;
-                    for (index = 0; index < evaluations.length; index++) {
-                        int iteration = evaluations[index].iteration;
-                        if (iteration == stopIteration) { //if evaluation with the same stopping criterion found break
-                            break;
-                        } else if (index + 1 < evaluations.length) { //if the next evaluation has a higher iteration number return the current evaluation
-                            if (evaluations[index + 1].iteration > stopIteration)
-                                break;
-                        }
-                    }
-                    index = Math.min(index, evaluations.length - 1);
-                    updateTask(task, evaluations[index]);
-                    return new DummySolution(evaluations[index].fitness);
-                }
-                case EVALUATIONS: {
-                    int stopEvaluation = task.getMaxEvaluations();
-                    int index;
-                    for (index = 0; index < evaluations.length; index++) {
-                        int evaluation = evaluations[index].evalNum;
-                        if (evaluation == stopEvaluation) { //if evaluation with the same stopping criterion found break
-                            break;
-                        } else if (index + 1 < evaluations.length) { //if the next evaluation has a higher evaluation number return the current evaluation
-                            if (evaluations[index + 1].evalNum > stopEvaluation)
-                                break;
-                        }
-                    }
-                    index = Math.min(index, evaluations.length - 1);
-                    updateTask(task, evaluations[index]);
-                    return new DummySolution(evaluations[index].fitness);
-                }
-                case STAGNATION: {
-                    int stagnationTrialCounter = 0;
-                    int index = 0;
-                    double best = evaluations[index++].fitness;
-                    for (; index < evaluations.length; index++) {
-
-                        if (task.isFirstBetter(evaluations[index].fitness, best)) {
-                            best = evaluations[index].fitness;
-                            stagnationTrialCounter = 0;
-                        } else {
-                            stagnationTrialCounter += evaluations[index].evalNum - evaluations[index - 1].evalNum; // increment by number of evaluations between two indices
-                        }
-
-                        if (stagnationTrialCounter >= task.getMaxTrialsBeforeStagnation()) {
-                            break;
-                        }
-                    }
-                    index = Math.min(index, evaluations.length - 1);
-                    updateTask(task, evaluations[index]);
-                    return new DummySolution(evaluations[index].fitness);
-                }
-                case GLOBAL_OPTIMUM_OR_EVALUATIONS: {
-                    int index;
-                    for (index = 0; index < evaluations.length; index++) {
-                        if (task.isEqualToGlobalOptimum(evaluations[index].fitness))
-                            break;
-                    }
-                    index = Math.min(index, evaluations.length - 1);
-                    updateTask(task, evaluations[index]);
-                    return new DummySolution(evaluations[index].fitness);
-                }
-                default:
-                    break;
+            if(!positions.containsKey(key)) {
+                System.err.println("No evaluation with key: "+key+" found!");
+                return null;
             }
+            int currentRun = positions.get(key);
+            if(currentRun >= problemEvaluations.get(key).length){
+                System.err.println("No evaluation for run: "+(currentRun+1)+"!");
+                return null;
+            }
+            EvaluationStorage.Evaluation evaluation = problemEvaluations.get(key)[currentRun];
+            positions.put(key, currentRun + 1);
+            updateTask(task, evaluation);
+            return new DummySolution(evaluation.fitness);
+
         } else {
             //TODO lazy load results
             String problemName = task.getProblemName();

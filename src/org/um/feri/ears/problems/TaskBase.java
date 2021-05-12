@@ -220,25 +220,6 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
         return false;
     }
 
-    public String getStopCriterionDescription() {
-        if (stopCriterion == StopCriterion.EVALUATIONS) {
-            return "E=" + getMaxEvaluations();
-        }
-        if (stopCriterion == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
-            return "Global optimum epsilon=" + epsilonForGlobal + " or  E=" + getMaxEvaluations();
-        }
-        if (stopCriterion == StopCriterion.ITERATIONS) {
-            return "ITERATIONS=" + getMaxIterations();
-        }
-        if (stopCriterion == StopCriterion.CPU_TIME) {
-            return "TIME=" + TimeUnit.NANOSECONDS.toMillis(getAllowedCPUTime()) + " ms";
-        }
-        if (stopCriterion == StopCriterion.STAGNATION) {
-            return "STAGNATION= trials: " + stagnationTrialCounter;
-        }
-        return "not defined";
-    }
-
     /**
      * Use to check if the problem is to be minimized.
      *
@@ -278,15 +259,34 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
         return resetCount;
     }
 
+    public String getStopCriterionString() {
+        if (stopCriterion == StopCriterion.EVALUATIONS) {
+            return "Max evaluation = " + getMaxEvaluations();
+        }
+        if (stopCriterion == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
+            return "Global optimum epsilon = " + epsilonForGlobal + " or  max evaluations = " + getMaxEvaluations();
+        }
+        if (stopCriterion == StopCriterion.ITERATIONS) {
+            return "Max iterations = " + getMaxIterations();
+        }
+        if (stopCriterion == StopCriterion.CPU_TIME) {
+            return "CPU time = " + TimeUnit.NANOSECONDS.toMillis(getAllowedCPUTime()) + " ms";
+        }
+        if (stopCriterion == StopCriterion.STAGNATION) {
+            return "Stagnation trials = " + stagnationTrialCounter;
+        }
+        return "not defined";
+    }
+
     @Override
     public String toString() {
-        return "Task [stopCriterion=" + stopCriterion + ", maxEvaluations=" + maxEvaluations + ", numberOfEvaluations=" + numberOfEvaluations + ", epsilon="
+        return "Task [stopCriterion= [" + getStopCriterionString() + "], epsilon="
                 + epsilonForGlobal + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                 + precisionOfRealNumbersInDecimalPlaces + ", p=" + problem + "]";
     }
 
     public String getTaskInfoCSV() {
-        return problem.getProblemInfoCSV() + "task stop criterion:" + stopCriterion + ",maxEvaluations:" + maxEvaluations + ",epsilon:" + epsilonForGlobal + ",";
+        return problem.getProblemInfoCSV() + "task stop criterion:" + getStopCriterionString() + ",epsilon:" + epsilonForGlobal + ",";
     }
 
     /**
