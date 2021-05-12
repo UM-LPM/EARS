@@ -32,7 +32,11 @@ public class JADE extends Algorithm {
     private Task task;
 
     public JADE() {
-        this(30, .05, .1);
+        this(30);
+    }
+
+    public JADE(int popSize) {
+        this(popSize, .05, .1);
     }
 
     public JADE(int popSize, double p, double c) {

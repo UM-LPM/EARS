@@ -37,9 +37,12 @@ public class TLBOAlgorithm extends Algorithm {
     private int keep = 0; // copy best from ex generation
 
     public TLBOAlgorithm() {
-        this(0, 20);
+        this(20);
     }
 
+    public TLBOAlgorithm(int popSize) {
+        this(0, popSize);
+    }
 
     public TLBOAlgorithm(int keep, int popSize) {
         this.keep = keep;

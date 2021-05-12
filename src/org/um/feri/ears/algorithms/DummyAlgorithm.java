@@ -104,6 +104,9 @@ public class DummyAlgorithm extends Algorithm {
         if (readFromJson) {
             String fileName = algorithmName + "_" + task.getFileNameString() + ".json";
 
+            // key by task with stopping criterion (name + dimension + stopping criterion)
+            // array with evaluations for each run
+
             if (!problemEvaluations.containsKey(fileName)) {
                 String path = filesDir + File.separator + fileName;
 
