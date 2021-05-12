@@ -182,7 +182,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
             new Schaffer3(),
             new Schaffer4(),
             new Sargan(),
-            new Salomon(),
+            new Salomon(2),
             new RotatedEllipse1(),
             new RotatedEllipse2(),
             new Ripple1(),
