@@ -55,7 +55,7 @@ sourceSets {
             srcDir 'src'
         }
         resources {
-            srcDirs 'Weight', 'test_data', 'src'
+            srcDirs 'Weight', 'test_data', 'src', 'res'
         }
    }
 }
