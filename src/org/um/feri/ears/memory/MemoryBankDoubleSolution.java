@@ -12,6 +12,8 @@ public class MemoryBankDoubleSolution {
     public static final String CONVERGENCE = "CON";
     public static final String CONVERGENCE_DUPLICATE = "CONdUP";
     public static final String CONVERGENCE_DUPLICATE_VALUE = "CONdUPvAL";
+    public static final String DUPLICATE_CONVERGENCE = "DupCon";
+    public static final String DUPLICATE_CONVERGENCE_NOT = "DupConUnique";
     double precisionPower;
     int precisionInDecimalPlaces;
     int duplicationHitSum;
@@ -135,6 +137,7 @@ public class MemoryBankDoubleSolution {
                 // eval+1 one plus becuse we fake that we need additional evaluation
                 ReportBank.addPairValue(CONVERGENCE_DUPLICATE, new Pair(task.getNumberOfEvaluations() + 1, best4ConvergenceGraph.getEval()));
                 ReportBank.addPairValue(CONVERGENCE_DUPLICATE_VALUE, new Pair(task.getNumberOfEvaluations() + 1, ds.getEval()));
+                ReportBank.addPairValue(DUPLICATE_CONVERGENCE, new Pair(task.getNumberOfEvaluations() + 1, duplicationHitSum));
             }
 
             if (updateStrategy.criteria4Change(hashMapMemoryHits.get(key))) {
@@ -172,7 +175,7 @@ public class MemoryBankDoubleSolution {
                 clearMemory();
             }
             return ds;
-        } else {
+        } else { //not duplicate
             hashMapMemoryHits.put(key, 1); // new one�
             ds = task.evalOrg(x);
             if (best4ConvergenceGraph == null)
@@ -182,6 +185,7 @@ public class MemoryBankDoubleSolution {
             if (convergenceGraphDataCollect) {
                 ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConvergenceGraph.getEval()));
                 ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));
+                ReportBank.addPairValue(DUPLICATE_CONVERGENCE_NOT, new Pair(task.getNumberOfEvaluations() + 1, task.getNumberOfEvaluations() + 1-duplicationHitSum));
             }
             hashMapMemory.put(key, ds);
             if (task.isStopCriterion())

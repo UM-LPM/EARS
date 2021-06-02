@@ -22,7 +22,7 @@ public class ABC extends Algorithm {
 
     private Task task;
     private ABCSolution best;
-    private ArrayList<ABCSolution> population;
+    protected ArrayList<ABCSolution> population;
 
     public ABC() {
         this(60);
