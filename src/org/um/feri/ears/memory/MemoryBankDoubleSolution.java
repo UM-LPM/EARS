@@ -14,6 +14,7 @@ public class MemoryBankDoubleSolution {
     public static final String CONVERGENCE_DUPLICATE_VALUE = "CONdUPvAL";
     public static final String DUPLICATE_CONVERGENCE = "DupCon";
     public static final String DUPLICATE_CONVERGENCE_NOT = "DupConUnique";
+    public static final String EVALUATIONS_IF_DUPLICATE_STOP = "evalStopByDup";
     double precisionPower;
     int precisionInDecimalPlaces;
     int duplicationHitSum;
