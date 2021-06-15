@@ -241,18 +241,11 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         for (Player p : resultArena.getPlayers()) System.out.println(p); //print ratings
 
         if (displayRatingIntervalChart) {
-            displayRatingIntervalsChart(resultArena.getPlayers());
+            RatingIntervalPlot.displayChart(resultArena.getPlayers(), "Rating Interval", 1000, 500);
         }
     }
 
     protected abstract void performTournament();
-
-    public void displayRatingIntervalsChart(ArrayList<Player> list) {
-        RatingIntervalPlot plot = new RatingIntervalPlot("Rating Interval", list);
-        plot.pack();
-        RefineryUtilities.centerFrameOnScreen(plot);
-        plot.setVisible(true);
-    }
 
     public void allPlayed() {
         for (AlgorithmBase al : algorithms) {

@@ -10,6 +10,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.rating.Player;
 
 import javax.swing.*;
@@ -22,14 +23,20 @@ import java.util.ArrayList;
 
 public class RatingIntervalPlot extends ApplicationFrame {
 
-	protected int width = 1000, height = 500, rangeLower = 1100, rangeUpper = 2000;
+	protected int width, height , rangeLower = 1100, rangeUpper = 2000;
 	protected String categoryAxisName = "",numberAxisName = "Rating";
 	protected int plotIndex = 0;
 	final CategoryPlot plot;
-	
+
 
 	public RatingIntervalPlot(String title, ArrayList<Player> players) {
+		this(players, title,1000, 500);
+	}
+
+	public RatingIntervalPlot(ArrayList<Player> players, String title, int width, int height) {
 		super(title);
+		this.width = width;
+		this.height = height;
 
 		DefaultCategoryDataset dataset = generateDataSet(players);
 
@@ -76,7 +83,13 @@ public class RatingIntervalPlot extends ApplicationFrame {
 		setContentPane(chartPanel);
 		chart.setBackgroundPaint(Color.white);
         chart.setPadding(new RectangleInsets(10, 10, 10, 10)); // Fix: tick label cut off
+	}
 
+	public static void displayChart(ArrayList<Player> list, String title, int width, int height) {
+		RatingIntervalPlot plot = new RatingIntervalPlot(list, title, width, height);
+		plot.pack();
+		RefineryUtilities.centerFrameOnScreen(plot);
+		plot.setVisible(true);
 	}
 
 	private MyMinMaxCategoryRenderer createRenderer(Color color) {
@@ -92,7 +105,6 @@ public class RatingIntervalPlot extends ApplicationFrame {
 		renderer.setSeriesPaint(0, new Color(0,0,0,0)); // invisible
 		renderer.setSeriesPaint(1, color);
 		renderer.setSeriesPaint(2, new Color(0,0,0,0)); // invisible
-
 
 		renderer.setMinIcon(getIcon(new Line2D.Double(0, -6, 0, 6), true, true));
 		renderer.setMaxIcon(getIcon(new Line2D.Double(0, -6, 0, 6), true, true));
