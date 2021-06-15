@@ -89,7 +89,7 @@ public class Gradient
     /**
      *Produces a parula gradient
      */
-    public final static Color[] GRADIENT_VIRDIS = createMultiGradient(
+    public final static Color[] GRADIENT_VIRIDIS = createMultiGradient(
             new Color[]{
                     new Color(72, 0, 84),
                     new Color(79, 48, 127),

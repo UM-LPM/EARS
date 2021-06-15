@@ -71,7 +71,8 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                       "GRADIENT_RED_TO_GREEN",
                       "GRADIENT_ROY",
                       "GRADIENT_PARULA",
-                      "GRADIENT_VIRDIS"};
+                      "GRADIENT_VIRIDIS"};
+
     Color[][] gradients = {Gradient.GRADIENT_BLACK_TO_WHITE,
                            Gradient.GRADIENT_BLUE_TO_RED,
                            Gradient.GRADIENT_GREEN_YELLOW_ORANGE_RED,
@@ -82,7 +83,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                            Gradient.GRADIENT_RED_TO_GREEN,
                            Gradient.GRADIENT_ROY,
                            Gradient.GRADIENT_PARULA,
-                           Gradient.GRADIENT_VIRDIS};
+                           Gradient.GRADIENT_VIRIDIS};
 
     Problem[] problems = {
             new org.um.feri.ears.problems.unconstrained.cec2005.F01(2),
@@ -448,7 +449,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
         Integer[] intArray = new Integer[names.length];
         for (int i = 0; i < names.length; i++)
         {
-            intArray[i] = new Integer(i);
+            intArray[i] = i;
             icons[i] = createImageIcon(names[i] + ".gif");
         }
 
@@ -573,7 +574,9 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                 d = Double.parseDouble(textXMin.getText());
                 panel.setXMinCoordinateBounds(d);
             }
-            catch (Exception ex){}
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
         else if (source == textXMax)
         {
@@ -583,7 +586,9 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                 d = Double.parseDouble(textXMax.getText());
                 panel.setXMaxCoordinateBounds(d);
             }
-            catch (Exception ex){}
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
         else if (source == textYMin)
         {
@@ -593,7 +598,9 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                 d = Double.parseDouble(textYMin.getText());
                 panel.setYMinCoordinateBounds(d);
             }
-            catch (Exception ex){}
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
         else if (source == textYMax)
         {
@@ -603,7 +610,9 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                 d = Double.parseDouble(textYMax.getText());
                 panel.setYMaxCoordinateBounds(d);
             }
-            catch (Exception ex){}
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
         else if (source == textFGColor)
         {
@@ -776,7 +785,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                 boolean isSelected,
                 boolean cellHasFocus)
         {
-            int selectedIndex = ((Integer)value).intValue();
+            int selectedIndex = (Integer) value;
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
@@ -806,7 +815,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                                                 boolean isSelected,
                                                 boolean cellHasFocus)
         {
-            int selectedIndex = ((Integer)value).intValue();
+            int selectedIndex = (Integer) value;
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
