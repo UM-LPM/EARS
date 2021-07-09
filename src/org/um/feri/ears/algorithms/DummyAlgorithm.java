@@ -17,21 +17,26 @@ public class DummyAlgorithm extends Algorithm {
     HashMap<String, Integer> positions; //stores the position of the current result of the current problem
     String algorithmName;
     String filesDir;
+    String nameInFile;
     public static boolean readFromJson = true;
 
-    public DummyAlgorithm(String name) {
-        this(name, "D:/Results/");
+    public DummyAlgorithm(String algorithmName) {
+        this(algorithmName, algorithmName, "D:/Results/");
+    }
+    public DummyAlgorithm(String algorithmName, String filesDir)  {
+        this(algorithmName, algorithmName, filesDir);
     }
 
-    public DummyAlgorithm(String algorithmName, String filesDir) {
+    public DummyAlgorithm(String algorithmName, String nameInFile, String filesDir) {
         this.algorithmName = algorithmName;
+        this.nameInFile = nameInFile;
         this.filesDir = filesDir;
         ai = new AlgorithmInfo(algorithmName, algorithmName, "");
         results = new HashMap<>();
         positions = new HashMap<>();
         problemEvaluations = new HashMap<>();
         if (!readFromJson)
-            fillResults(algorithmName); //TODO lazy load
+            fillResults(nameInFile); //TODO lazy load
     }
 
     private void fillResults(String name) {
@@ -106,7 +111,7 @@ public class DummyAlgorithm extends Algorithm {
 
             //load evaluations from file
             if (!problemEvaluations.containsKey(key)) {
-                String fileName = algorithmName + "_" + task.getFileNameString() + ".json";
+                String fileName = nameInFile + "_" + task.getFileNameString() + ".json";
                 String path = filesDir + File.separator + fileName;
 
                 if (new File(path).isFile()) {
