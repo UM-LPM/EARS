@@ -52,7 +52,7 @@ public class FWA extends Algorithm {
         eps = 1e-38;
 
         au = new Author("miha", "miha.ravber@um.si");
-        ai = new AlgorithmInfo("FWA", "Flower Pollination Algorithm",
+        ai = new AlgorithmInfo("FWA", "Fireworks algorithm for optimization",
                 "@inproceedings{tan2010fireworks,"
                         + "title={Fireworks algorithm for optimization},"
                         + "author={Tan, Ying and Zhu, Yuanchun},"

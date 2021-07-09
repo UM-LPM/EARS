@@ -8,7 +8,6 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
-import org.um.feri.ears.rating.Player;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;

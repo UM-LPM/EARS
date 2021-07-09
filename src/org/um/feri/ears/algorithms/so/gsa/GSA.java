@@ -35,11 +35,11 @@ public class GSA extends Algorithm {
     private GSAIndividual g; //global best in matlab Fbest (fitness best),Lbest (location best)
 
     public GSA() {
-        this(50, 2, 1, 20, 100); //Mathlab settings
+        this(50, 2, 1, 20, 100); //Matlab settings
     }
 
     public GSA(int popSize) {
-        this(popSize, 2, 1, 20, 100); //Mathlab settings
+        this(popSize, 2, 1, 20, 100); //Matlab settings
     }
 
     public GSA(double RPower, double alpha, double G0) {
@@ -55,7 +55,7 @@ public class GSA extends Algorithm {
         this.Rpower = 1;
         this.finalPer = finalPer;
         setDebug(debug);  //EARS prints some debug info
-        ai = new AlgorithmInfo("GSA2", "Matlab GSA2",
+        ai = new AlgorithmInfo("GSA", "Gravitational Search Algorithm",
                 "@article{Rashedi20092232," +
                 "title = \"GSA: A Gravitational Search Algorithm \"," +
                 "journal = \"Information Sciences \"," +
