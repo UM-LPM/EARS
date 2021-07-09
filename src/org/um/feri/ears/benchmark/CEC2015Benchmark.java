@@ -45,7 +45,7 @@ public class CEC2015Benchmark extends Benchmark {
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
 
         ArrayList<Problem> problems = new ArrayList<Problem>();
 

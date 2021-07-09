@@ -37,7 +37,7 @@ public class BIOMABenchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMOPr
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
 
         ArrayList<DoubleMOProblem> problems = new ArrayList<DoubleMOProblem>();
 

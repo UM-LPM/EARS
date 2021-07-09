@@ -25,7 +25,7 @@ public class RPUOed30Benchmark extends Benchmark {
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
         addTask(new Ackley1(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
         addTask(new Griewank(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
         addTask(new Rastrigin(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);

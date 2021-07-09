@@ -52,8 +52,8 @@ public class BenchmarkRunner {
 		
 		//RandomWalkAlgorithm algorithm = new RandomWalkAlgorithm();
 		TLBOAlgorithm algorithm = new TLBOAlgorithm();
-		RPUOed2Benchmark benchmark = new RPUOed2Benchmark(); // Create banchmark
-		
+		RPUOed2Benchmark benchmark = new RPUOed2Benchmark(); // Create benchmark
+		benchmark.initAllProblems(); //manually initialize problems
 		algorithm.addCustomInfo("submissionAuthor", "author");
 		algorithm.addCustomInfo("submissionId", "id");
 		

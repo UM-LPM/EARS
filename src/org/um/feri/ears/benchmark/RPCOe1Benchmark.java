@@ -22,7 +22,7 @@ public class RPCOe1Benchmark extends Benchmark {
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
         addTask(new TLBOBenchmarkFunction1(), stopCriterion, 200000, 0, maxIterations, 0.001);
         addTask(new TLBOBenchmarkFunction2(), stopCriterion, 200000, 0, maxIterations, 0.001);
         addTask(new TLBOBenchmarkFunction3(), stopCriterion, 200000, 0, maxIterations, 0.001);

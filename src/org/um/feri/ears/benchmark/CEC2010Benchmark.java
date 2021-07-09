@@ -30,7 +30,7 @@ public class CEC2010Benchmark extends Benchmark {
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
 
         addTask(new F1(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);
         addTask(new F2(dimension), stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001);

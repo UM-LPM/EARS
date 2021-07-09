@@ -129,7 +129,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         this.displayRatingIntervalChart = displayRatingIntervalChart;
     }
 
-    protected abstract void initAllProblems();
+    public abstract void initAllProblems();
 
     public void addAlgorithm(A al) {
         algorithms.add(al);

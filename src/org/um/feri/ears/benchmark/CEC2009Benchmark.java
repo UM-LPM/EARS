@@ -34,7 +34,7 @@ public class CEC2009Benchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMO
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
 
         ArrayList<DoubleMOProblem> problems = new ArrayList<DoubleMOProblem>();
 

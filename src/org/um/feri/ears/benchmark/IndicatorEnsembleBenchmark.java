@@ -51,7 +51,7 @@ public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, DoubleMOTask
     }
     
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
     	
     	ArrayList<DoubleMOProblem> problems = new ArrayList<DoubleMOProblem>();
     	

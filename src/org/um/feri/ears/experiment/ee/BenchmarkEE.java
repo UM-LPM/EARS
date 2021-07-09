@@ -38,7 +38,7 @@ public class BenchmarkEE extends Benchmark {
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
         addTask(new Ackley1(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
         addTask(new Griewank(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
         addTask(new Rastrigin(dim), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);

@@ -569,8 +569,8 @@ public class ExecuteTournaments {
 			logger.log(Level.SEVERE,"Exception creating class from name: "+BENCHMARK_PACKAGE+"."+benchmarkName,e);
 			e.printStackTrace();
 		}
-		
 
+		DummyAlgorithm.readFromJson = false; //engine only works with .txt files
 		ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
 		DummyBenchmark dr = new DummyBenchmark(0.000001); //Create banchmark
 		dr.setDisplayRatingIntervalChart(false);

@@ -34,7 +34,7 @@ public class DummyBenchmark extends Benchmark {
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
     	
     	
     	/*registerTask(new DummyProblem("i3_te1"),stopCriterion,  maxEvaluations, 0, maxIterations, 0.001);

@@ -34,7 +34,7 @@ public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, IntegerMO
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
 
         ArrayList<IntegerMOProblem> problems = new ArrayList<IntegerMOProblem>();
 

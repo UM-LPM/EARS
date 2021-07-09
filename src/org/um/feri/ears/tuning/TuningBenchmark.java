@@ -53,7 +53,7 @@ public class TuningBenchmark extends Benchmark {
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
         addTask(new Sphere(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);      // f1
         addTask(new RosenbrockDeJong2(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);  // f2
         addTask(new Step1(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);        // f3

@@ -48,7 +48,7 @@ public class BenchmarkRunner {
 		
 		@ALGORITHM_NAME algorithm = new @ALGORITHM_CONSTRUCTOR;
 		@BENCHMARK_NAME benchmark = new @BENCHMARK_NAME(); // Create benchmark
-		
+		benchmark.initAllProblems(); //manually initialize problems
 		algorithm.addCustomInfo("submissionAuthor", "@SUBMISSION_AUTHOR");
 		algorithm.addCustomInfo("submissionId", "@SUBMISSION_ID");
 		

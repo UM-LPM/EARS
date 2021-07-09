@@ -28,7 +28,7 @@ public class ThirtySixFunctionsBenchmark extends Benchmark {
     }
 
     @Override
-    protected void initAllProblems() {
+    public void initAllProblems() {
         ArrayList<Problem> problems = new ArrayList<Problem>();
 
         problems.add(new Beale());
