@@ -38,23 +38,27 @@ public class SoilModelProblem extends Problem {
     Map<Double, Integer> freq = new HashMap<Double, Integer>();
     int call = 1;
 
+    String fileName;
+
     //simplified two-layered model
-    public SoilModelProblem(int numberOfDimensions, String filename) {
+    public SoilModelProblem(int numberOfDimensions, String fileName) {
         this(numberOfDimensions, 0);
 
         this.simplified = true;
         this.layers = 2;
-        loadData(filename);
+        this.fileName = fileName;
+        loadData(fileName);
     }
 
-    public SoilModelProblem(int numberOfDimensions, int layers, String filename) {
+    public SoilModelProblem(int numberOfDimensions, int layers, String fileName) {
         this(numberOfDimensions, 0);
 
         xx = new double[15000]; // velikost?
         y1 = new double[15000]; // velikost?
 
         this.layers = layers;
-        loadData(filename);
+        this.fileName = fileName;
+        loadData(fileName);
     }
 
     private SoilModelProblem(int numberOfDimensions, int numberOfConstraints) {
@@ -75,7 +79,12 @@ public class SoilModelProblem extends Problem {
             }
         }
 
-        name = "Earth Model";
+        name = "Soil Model";
+    }
+
+    @Override
+    public String getFileNameString() {
+        return super.getFileNameString() + "-" + fileName;
     }
 
     private double simplifiedModel(double[] ds) {
