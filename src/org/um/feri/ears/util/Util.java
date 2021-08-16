@@ -1,13 +1,6 @@
 package org.um.feri.ears.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -358,7 +351,15 @@ public class Util {
 	}
 
     public static void writeToFile(String fileLocation, String data) {
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileLocation)))) {
+
+        File file = new File(fileLocation);
+        try {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false)))) {
             bw.write(data);
         } catch (IOException e) {
             e.printStackTrace();
