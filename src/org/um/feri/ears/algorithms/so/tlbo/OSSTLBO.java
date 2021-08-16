@@ -33,10 +33,10 @@ public class OSSTLBO extends Algorithm {
     public OSSTLBO(int popSize) {
 
         this.popSize = popSize;
-
+        //https://github.com/MohammadJomaa/OSS-TLBO
         au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo("OSSTLBO", "Opposite Stopping Swarm Teaching–learning-Based Optimization",
-                "@article{tanabe2014improving,"
+                "@article{jomaa2014opposite,"
                         + "title={Opposite Stopping Swarm Teaching–learning-Based Optimization},"
                         + "author={Jomaa, Mohammad and Juneidi, Wassim },"
                         + "booktitle={Higher Institute for Applied Sciences and Technology}}"

@@ -16,6 +16,12 @@ public class JADE extends Algorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
+    @AlgorithmParameter(description = "CR mean - adaptive control parameter")
+    double muCR = 0.5;
+    @AlgorithmParameter(description = "location parameter - adaptive control parameter")
+    double muF = 0.5;
+
+
     // private int arch_size;
     private int eliteSize; // calculated by p*pop_size pbest
     private double p; // % DE/Current-to-pbest
@@ -113,9 +119,6 @@ public class JADE extends Algorithm {
         double Fpom;
         JADESolution inR2, tmpIn;
 
-        double muCR = 0.5; // adaptive control parameters
-        double muF = 0.5;
-
         initPopulation();
 
         while (!task.isStopCriterion()) {
@@ -175,8 +178,8 @@ public class JADE extends Algorithm {
                 if (task.isStopCriterion())
                     break;
             }
-			// new generation
-			if (popSize >= 0) System.arraycopy(popNew, 0, popX, 0, popSize);
+            // new generation
+            if (popSize >= 0) System.arraycopy(popNew, 0, popX, 0, popSize);
             // empty archive if it is too big
             while (archX.size() > popSize)
                 archX.remove(Util.rnd.nextInt(archX.size())); // arch full
@@ -200,17 +203,17 @@ public class JADE extends Algorithm {
 
     private double sum(ArrayList<Double> a) {
         double s = 0;
-		for (Double aDouble : a) {
-			s += aDouble;
-		}
+        for (Double aDouble : a) {
+            s += aDouble;
+        }
         return s;
     }
 
     private double sum2(ArrayList<Double> a) {
         double s = 0;
-		for (Double aDouble : a) {
-			s += aDouble * aDouble;
-		}
+        for (Double aDouble : a) {
+            s += aDouble * aDouble;
+        }
         return s;
     }
 

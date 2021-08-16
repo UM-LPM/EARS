@@ -21,20 +21,30 @@ public class LSHADE extends Algorithm {
     private int popSize;
     @AlgorithmParameter(name = "archive size")
     private int arcSize;
-    @AlgorithmParameter(name = "population rate")
+    @AlgorithmParameter(name = "population rate", min = "15", max = "25")
     private int popRate;
-    @AlgorithmParameter(name = "archive rate")
+    @AlgorithmParameter(name = "archive rate", min = "1.0", max = "3.0")
     private double arcRate;
-    @AlgorithmParameter(name = "current best mutation", description = "value for current-to-pbest/1 mutation")
+    @AlgorithmParameter(name = "current best mutation", description = "value for current-to-pbest/1 mutation", min = "0.05", max = "0.15")
     private double pBestRate;
-    @AlgorithmParameter(name = "historical memory size")
+    @AlgorithmParameter(name = "historical memory size", description = "H", min = "2", max = "10")
     private int memorySize;
+
     private int reductionIndNum;
 
     private DoubleSolution[] population;
     private DoubleSolution[] offspringPopulation;
     private DoubleSolution best;
     private Task task;
+
+    boolean popSizeSet = false;
+
+    public LSHADE(int initialPopSize) {
+        this();
+        popSize = initialPopSize;
+        popSizeSet = true;
+        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
+    }
 
     public LSHADE() {
         arcRate = 2.6;
@@ -52,13 +62,14 @@ public class LSHADE extends Algorithm {
                         + "year={2014},"
                         + "organization={IEEE}}"
         );
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
-        popSize = Math.round(task.getNumberOfDimensions() * popRate);
+        if(!popSizeSet) // if initial population size is not yet set
+            popSize = Math.round(task.getNumberOfDimensions() * popRate);
+
         arcSize = (int) Math.round(popSize * arcRate);
 
         initPopulation();
