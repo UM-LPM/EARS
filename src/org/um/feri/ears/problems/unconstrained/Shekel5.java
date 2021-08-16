@@ -55,6 +55,6 @@ public class Shekel5 extends Problem {
 
     @Override
     public double getGlobalOptimum() {
-        return -10.15319585;
+        return -10.1532;
     }
 }
