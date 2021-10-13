@@ -37,20 +37,21 @@ public class LSHADE extends Algorithm {
     private DoubleSolution best;
     private Task task;
 
-    boolean popSizeSet = false;
+    boolean initPopSizeSet = false;
+    int initialPopSize;
 
     public LSHADE(int initialPopSize) {
         this();
-        popSize = initialPopSize;
-        popSizeSet = true;
+        this.initialPopSize = initialPopSize;
+        initPopSizeSet = true;
         ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 
     public LSHADE() {
         arcRate = 2.6;
         popRate = 18;
-        pBestRate = 0.11;
-        memorySize = 6;
+        pBestRate = 0.11; //p value for current-to-pbest/1 mutation
+        memorySize = 6; //H historical memory size
 
         au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo("LSHADE", "Linear Population Size Reduction Success-History based Adaptive DE",
@@ -67,7 +68,9 @@ public class LSHADE extends Algorithm {
     @Override
     public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
-        if(!popSizeSet) // if initial population size is not yet set
+        if(initPopSizeSet) // if initial population size set
+            popSize = initialPopSize;
+        else
             popSize = Math.round(task.getNumberOfDimensions() * popRate);
 
         arcSize = (int) Math.round(popSize * arcRate);
