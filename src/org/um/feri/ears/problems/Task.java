@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 
+import javax.annotation.CheckReturnValue;
+
 public class Task extends TaskBase<Problem> {
 
     /**
@@ -74,6 +76,7 @@ public class Task extends TaskBase<Problem> {
      * @param x array to be set feasible
      * @return array with feasible values
      */
+    @CheckReturnValue
     public double[] setFeasible(double[] x) {
         return problem.setFeasible(x);
     }
