@@ -96,6 +96,7 @@ public class AAA extends Algorithm {
                     if (task.isStopCriterion())
                         break;
 
+                    newColony = task.setFeasible(newColony);
                     Alga newAlga = new Alga(this.task.eval(newColony));
                     population[i].setEnergy(population[i].getEnergy() - (energyLoss / 2));
                     if (this.task.isFirstBetter(newAlga, population[i])) {

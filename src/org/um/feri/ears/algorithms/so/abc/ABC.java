@@ -118,6 +118,7 @@ public class ABC extends Algorithm {
                 if (task.isStopCriterion())
                     return;
 
+                task.setFeasible(newBee);
                 task.eval(newBee);
 
                 if (newBee.getABCEval() > population.get(i).getABCEval()) {
