@@ -51,7 +51,7 @@ public class EvaluationStorage {
 
         public int evalNum;
         public int iteration;
-        public long time;
+        public long time; // nano time
         public double fitness;
     }
 }
