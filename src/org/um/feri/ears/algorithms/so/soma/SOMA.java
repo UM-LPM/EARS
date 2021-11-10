@@ -103,9 +103,9 @@ public class SOMA extends Algorithm {
                     population = allToOneAdaptive();
                     break;
             }
+            updateBestSolution();
             task.incrementNumberOfIterations();
         }
-        updateBestSolution();
         return best;
     }
 
@@ -115,7 +115,7 @@ public class SOMA extends Algorithm {
             ArrayList<DoubleSolution> solutions = new ArrayList<>();
             for (int j = 0; j < popSize; j++) {
                 if (i != j) {
-                    solutions.addAll(getSoluitionsOnJumpingPositions(population[i], population[j]));
+                    solutions.addAll(getSolutionsOnJumpingPositions(population[i], population[j]));
                 }
             }
             newPopulation[i] = getBestSolution(solutions);
@@ -130,7 +130,7 @@ public class SOMA extends Algorithm {
             if (i == leaderId) {
                 newPopulation[i] = new DoubleSolution(best);
             } else {
-                ArrayList<DoubleSolution> soluitions = getSoluitionsOnJumpingPositions(population[i], best);
+                ArrayList<DoubleSolution> soluitions = getSolutionsOnJumpingPositions(population[i], best);
                 newPopulation[i] = getBestSolution(soluitions);
             }
         }
@@ -145,7 +145,7 @@ public class SOMA extends Algorithm {
             if (i == leaderId) {
                 newPopulation[i] = new DoubleSolution(leader);
             } else {
-                ArrayList<DoubleSolution> solutions = getSoluitionsOnJumpingPositions(population[i], leader);
+                ArrayList<DoubleSolution> solutions = getSolutionsOnJumpingPositions(population[i], leader);
                 newPopulation[i] = getBestSolution(solutions);
             }
         }
@@ -158,8 +158,8 @@ public class SOMA extends Algorithm {
             DoubleSolution jumpingSolution = population[i];
             for (int j = 0; j < popSize; j++) {
                 if (i != j) {
-                    ArrayList<DoubleSolution> soluitions = getSoluitionsOnJumpingPositions(jumpingSolution, population[j]);
-                    jumpingSolution = getBestSolution(soluitions);
+                    ArrayList<DoubleSolution> solutions = getSolutionsOnJumpingPositions(jumpingSolution, population[j]);
+                    jumpingSolution = getBestSolution(solutions);
                 }
             }
             newPopulation[i] = jumpingSolution;
@@ -204,7 +204,7 @@ public class SOMA extends Algorithm {
         return bestSolution;
     }
 
-    private ArrayList<DoubleSolution> getSoluitionsOnJumpingPositions(DoubleSolution jumpingSolution, DoubleSolution towardsSolution) throws StopCriterionException {
+    private ArrayList<DoubleSolution> getSolutionsOnJumpingPositions(DoubleSolution jumpingSolution, DoubleSolution towardsSolution) throws StopCriterionException {
         ArrayList<DoubleSolution> solutions = new ArrayList<>();
         solutions.add(jumpingSolution);
         for (int i = 1; i * step <= pathLength; i++) {
