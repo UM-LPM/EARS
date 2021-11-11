@@ -166,7 +166,7 @@ N. Veček, M. Črepinšek, M. Mernik, D. Hrnčič. "A comparison between differe
 
 N. Veček, M. Mernik, B. Filipič, and M. Črepinšek. "Parameter tuning with Chess Rating System (CRS-Tuning) for meta-heuristic algorithms." Information Sciences 372 (2016): 446-469. https://www.sciencedirect.com/science/article/pii/S0020025516306430
 
-N. Veček, M. Črepinšek, and M. Mernik. "On the influence of the number of algorithms, problems, and independent runs in the comparison of evolutionary algorithms." Applied Soft Computing 54 (2017): 23-45. https://www.sciencedirect.com/science/article/pii/S0020025516306430
+N. Veček, M. Črepinšek, and M. Mernik. "On the influence of the number of algorithms, problems, and independent runs in the comparison of evolutionary algorithms." Applied Soft Computing 54 (2017): 23-45. https://doi.org/10.1016/j.asoc.2017.01.011
 
 N. Veček, S. H. Liu, M. Črepinšek, and M. Mernik. "On the importance of the artificial bee colony control parameter ‘limit’." Information Technology And Control 46.4 (2017): 566-604. http://www.itc.ktu.lt/index.php/ITC/article/view/18215
 
