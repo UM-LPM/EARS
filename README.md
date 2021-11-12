@@ -176,6 +176,9 @@ M. Ravber, M. Mernik, and M. Črepinšek. "Ranking multi-objective evolutionary 
 
 M. Ravber, M. Črepinšek, M. Mernik, and T. Kosar. "Tuning Multi-Objective Optimization Algorithms for the Integration and Testing Order Problem." International Conference on Bioinspired Methods and Their Applications. Springer, Cham, 2018. https://link.springer.com/chapter/10.1007/978-3-319-91641-5_20
 
+M. Jesenik, M. Mernik, M. Črepinšek, M. Ravber, and M. Trlep. "Searching for soil models’ parameters using metaheuristics." Applied Soft Computing 69 (2018): 131-148.
+https://doi.org/10.1016/j.asoc.2018.04.045
+
 M. Črepinšek, M. Ravber, M. Mernik, and T. Kosar. "Tuning Multi-Objective Evolutionary Algorithms on Different Sized Problem Sets." Mathematics, 7.9 (2019): 824. https://www.mdpi.com/2227-7390/7/9/824 
 
 M. Črepinšek, S. H. Liu, M. Mernik, and M. Ravber. "Long term memory assistance for evolutionary algorithms." Mathematics, 7(11) (2019): 1129. https://www.mdpi.com/2227-7390/7/11/1129
