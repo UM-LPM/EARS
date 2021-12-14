@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -261,9 +263,21 @@ public class DummyAlgorithm extends Algorithm {
             }
             while (task.getNumberOfIterations() < evaluation.iteration)
                 task.incrementNumberOfIterations();
+
+            task.startTimer();
+            task.setEvaluationTime(evaluation.time);
+
         } catch (StopCriterionException e) {
             e.printStackTrace();
         }
+    }
+
+    public void resetRunNumbers() {
+        positions.replaceAll((k, v) -> 0);
+    }
+
+    public String getAlgorithmName() {
+        return algorithmName;
     }
 
     @Override

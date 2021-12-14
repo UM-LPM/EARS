@@ -209,7 +209,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
                     GraphDataRecorder.SetContext(algorithm, task);
                     T taskCopy = (T) task.clone();
                     start = System.nanoTime();
-                    S result = algorithm.execute(taskCopy); // this can be done parallel
+                    S result = algorithm.execute(taskCopy);
                     duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
                     algorithm.addRunDuration(duration, duration - taskCopy.getEvaluationTimeMs());
 

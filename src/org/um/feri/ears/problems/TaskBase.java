@@ -30,16 +30,24 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
     protected boolean isEvaluationHistoryEnabled = false;
 
     public TaskBase (TaskBase<T> task) {
-        precisionOfRealNumbersInDecimalPlaces = task.precisionOfRealNumbersInDecimalPlaces;
+
         stopCriterion = task.stopCriterion;
         maxEvaluations = task.maxEvaluations;
         numberOfEvaluations = task.numberOfEvaluations;
+        maxIterations = task.maxIterations;
+        numberOfIterations = task.numberOfIterations;
+        allowedCPUTime = task.allowedCPUTime;
+        evaluationTime = task.evaluationTime;
+        timerStart = task.timerStart;
         epsilonForGlobal = task.epsilonForGlobal;
         isStop = task.isStop;
         isGlobal = task.isGlobal;
-        maxIterations = task.maxIterations;
-        allowedCPUTime = task.allowedCPUTime;
+        precisionOfRealNumbersInDecimalPlaces = task.precisionOfRealNumbersInDecimalPlaces;
         problem = task.problem;  //TODO deep copy?
+        resetCount = task.resetCount;
+        maxTrialsBeforeStagnation = task.maxTrialsBeforeStagnation;
+        stagnationTrialCounter = task.stagnationTrialCounter;
+        bestEval = task.bestEval;
     }
 
     /**
@@ -76,6 +84,10 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
 
     public void startTimer() {
         timerStart = System.nanoTime();
+    }
+
+    public void setEvaluationTime(long evaluationTime) {
+        this.evaluationTime = evaluationTime;
     }
 
     /**
