@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class RatingIntervalPlot extends ApplicationFrame {
 
-	protected int width, height , rangeLower = 1100, rangeUpper = 2000;
+	protected int width, height , rangeLower = 1000, rangeUpper = 2000;
 	protected String categoryAxisName = "",numberAxisName = "Rating";
 	protected int plotIndex = 0;
 	final CategoryPlot plot;

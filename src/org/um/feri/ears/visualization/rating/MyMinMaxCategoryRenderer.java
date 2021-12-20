@@ -36,6 +36,7 @@ public class MyMinMaxCategoryRenderer extends MinMaxCategoryRenderer {
             int width = g2.getFontMetrics().stringWidth(name);
 
 
+            //g2.drawString(name, (int) y1 + 5, (int) x1 + 5);
             g2.drawString(name, (int) y1 - width, (int) x1 - 12);
         }
     }
