@@ -5,8 +5,8 @@ import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkResults;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.statistic.glicko2.Player;
+import org.um.feri.ears.statistic.glicko2.Rating;
 import org.um.feri.ears.util.Comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
 

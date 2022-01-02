@@ -1,6 +1,6 @@
 package org.um.feri.ears.util.Comparator;
 
-import org.um.feri.ears.rating.Player;
+import org.um.feri.ears.statistic.glicko2.Player;
 
 import java.util.Comparator;
 

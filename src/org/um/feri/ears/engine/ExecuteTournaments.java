@@ -8,7 +8,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.benchmark.BenchmarkBase;
-import org.um.feri.ears.rating.Player;
+import org.um.feri.ears.statistic.glicko2.Player;
 import org.um.feri.ears.util.Util;
 
 import java.io.*;

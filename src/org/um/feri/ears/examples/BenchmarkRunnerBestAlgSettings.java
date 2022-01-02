@@ -6,8 +6,8 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.statistic.glicko2.Player;
+import org.um.feri.ears.statistic.glicko2.Rating;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,7 +7,7 @@ import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.RPUOed2Benchmark;
 import org.um.feri.ears.examples.BenchmarkRunnerBestAlgSettings;
-import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.statistic.glicko2.Rating;
 import org.um.feri.ears.util.Util;
 
 //import net.sourceforge.jswarm_pso.SwarmAlgorithm;

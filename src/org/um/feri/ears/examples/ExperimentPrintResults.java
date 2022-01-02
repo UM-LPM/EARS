@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.benchmark.BenchmarkResults;
 import org.um.feri.ears.benchmark.RPUOed2Benchmark;
 import org.um.feri.ears.statistic.friedman.FriedmanTransport;
-import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.statistic.glicko2.Rating;
 
 public class ExperimentPrintResults {
     public static void main(String[] args) {

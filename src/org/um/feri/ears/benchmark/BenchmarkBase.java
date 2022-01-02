@@ -1,14 +1,13 @@
 package org.um.feri.ears.benchmark;
 
-import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.statistic.glicko2.Player;
+import org.um.feri.ears.statistic.glicko2.ResultArena;
 import org.um.feri.ears.visualization.rating.RatingIntervalPlot;
 
 import java.util.*;

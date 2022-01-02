@@ -10,7 +10,7 @@ import org.um.feri.ears.examples.BenchmarkRunnerBestAlgSettings;
 import org.um.feri.ears.visualization.graphing.data.RecordedCombination;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.statistic.glicko2.Rating;
 import org.um.feri.ears.util.Util;
 
 //import net.sourceforge.jswarm_pso.SwarmAlgorithm;

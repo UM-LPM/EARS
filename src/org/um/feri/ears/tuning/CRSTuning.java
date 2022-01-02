@@ -3,8 +3,8 @@ package org.um.feri.ears.tuning;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.statistic.glicko2.Player;
+import org.um.feri.ears.statistic.glicko2.Rating;
 import org.um.feri.ears.util.Comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
 

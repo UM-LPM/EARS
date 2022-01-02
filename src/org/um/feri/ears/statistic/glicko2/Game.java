@@ -1,4 +1,4 @@
-package org.um.feri.ears.rating;
+package org.um.feri.ears.statistic.glicko2;
 
 public class Game {
     public static final double LOSS = 0;

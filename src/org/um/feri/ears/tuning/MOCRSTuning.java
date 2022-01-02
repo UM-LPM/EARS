@@ -28,10 +28,10 @@ import org.um.feri.ears.qualityIndicator.IndicatorFactory;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
-import org.um.feri.ears.rating.Game;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.statistic.glicko2.Game;
+import org.um.feri.ears.statistic.glicko2.Player;
+import org.um.feri.ears.statistic.glicko2.Rating;
+import org.um.feri.ears.statistic.glicko2.ResultArena;
 import org.um.feri.ears.util.Util;
 
 public class MOCRSTuning {

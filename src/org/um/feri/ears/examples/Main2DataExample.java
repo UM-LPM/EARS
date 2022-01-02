@@ -6,7 +6,7 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
-import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.statistic.glicko2.Rating;
 
 public class Main2DataExample {
     public static void main(String[] args) {
@@ -77,7 +77,7 @@ public class Main2DataExample {
                         p2pTmp.idPlayerOne = p.getPlayerId();
                         p2pTmp.idPlayerTwo = alid;
                         p2pTmp.data = new EDWinnLossDraw();
-                        org.um.feri.ears.rating.WinLossDraw wl = p.wldPlayers.get(alid);
+                        org.um.feri.ears.statistic.glicko2.WinLossDraw wl = p.wldPlayers.get(alid);
                         p2pTmp.data.d = wl.getDraw();
                         p2pTmp.data.w = wl.getWin();
                         p2pTmp.data.l = wl.getLoss();
@@ -89,7 +89,7 @@ public class Main2DataExample {
             EDStatPlayer2Task sptTmp;
             for (String probid: problist) {
                 sptTmp = new EDStatPlayer2Task();
-                org.um.feri.ears.rating.WinLossDraw wl = p.wldProblems.get(probid);
+                org.um.feri.ears.statistic.glicko2.WinLossDraw wl = p.wldProblems.get(probid);
                 sptTmp.taskID = probid;
                 sptTmp.stat = new EDWinnLossDraw();;
                 sptTmp.stat.d = wl.getDraw();

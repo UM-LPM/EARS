@@ -1,9 +1,8 @@
-package org.um.feri.ears.rating;
+package org.um.feri.ears.statistic.glicko2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 public class RatingCalculations {
     private static double T = 0.5; // Constant that constrains the change in

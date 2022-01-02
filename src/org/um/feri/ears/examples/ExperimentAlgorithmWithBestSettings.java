@@ -6,7 +6,7 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RPUOed2Benchmark;
-import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.statistic.glicko2.Rating;
 
 
 public class ExperimentAlgorithmWithBestSettings {

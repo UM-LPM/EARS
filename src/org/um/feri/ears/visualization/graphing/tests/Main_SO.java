@@ -9,7 +9,7 @@ import org.um.feri.ears.visualization.graphing.GraphSet;
 import org.um.feri.ears.visualization.graphing.PlotType;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.GraphDataSet;
-import org.um.feri.ears.rating.Rating;
+import org.um.feri.ears.statistic.glicko2.Rating;
 import org.um.feri.ears.util.Util;
 
 

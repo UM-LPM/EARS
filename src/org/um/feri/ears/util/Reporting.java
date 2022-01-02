@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.rating.Player;
+import org.um.feri.ears.statistic.glicko2.Player;
 
 public class Reporting {
 

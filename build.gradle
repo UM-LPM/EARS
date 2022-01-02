@@ -34,6 +34,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.12.1'
     implementation group: 'org.apache.commons', name: 'commons-rng-simple', version: '1.4'
     implementation group: 'org.apache.commons', name: 'commons-rng-core', version: '1.4'
+    compile 'org.jetbrains:annotations:13.0'
 }
 
 version = '1.0'

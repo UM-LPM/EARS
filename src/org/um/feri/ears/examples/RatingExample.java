@@ -1,9 +1,9 @@
 package org.um.feri.ears.examples;
 
-import org.um.feri.ears.rating.Game;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.rating.RatingCalculations;
+import org.um.feri.ears.statistic.glicko2.Game;
+import org.um.feri.ears.statistic.glicko2.Player;
+import org.um.feri.ears.statistic.glicko2.Rating;
+import org.um.feri.ears.statistic.glicko2.RatingCalculations;
 
 import java.util.HashMap;
 

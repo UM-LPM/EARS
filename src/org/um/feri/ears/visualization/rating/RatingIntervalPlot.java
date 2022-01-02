@@ -11,7 +11,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
-import org.um.feri.ears.rating.Player;
+import org.um.feri.ears.statistic.glicko2.Player;
 
 import javax.swing.*;
 import java.awt.*;

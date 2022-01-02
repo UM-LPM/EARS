@@ -1,4 +1,4 @@
-package org.um.feri.ears.rating;
+package org.um.feri.ears.statistic.glicko2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
