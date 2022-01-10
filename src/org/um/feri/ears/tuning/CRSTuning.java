@@ -3,8 +3,8 @@ package org.um.feri.ears.tuning;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.statistic.glicko2.Player;
-import org.um.feri.ears.statistic.glicko2.Rating;
+import org.um.feri.ears.statistic.rating_system.GameInfo;
+import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
 
@@ -14,156 +14,117 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CRSTuning {
-	
-	// Control parameters
-	private int max_execs;
-	private double Cr_rate = 1.00;
-	private double F_rate = 1.00;
-	private int M = 25; //number of players
-	private int E = M/2;
-		
-    private ArrayList<Player> listAll;
+
+    // Control parameters
+    private int max_execs;
+    private double Cr_rate = 1.00;
+    private double F_rate = 1.00;
+    private int M = 25; //number of players
+    private int E = M / 2;
+
+    private ArrayList<Player> players;
     private boolean printDebug;
     private boolean printSingleRunDuration;
-    private ArrayList<Algorithm> players;
-    protected Benchmark benchMark; // suopm = new RatingRPUOed2();
+    private HashMap<String, Algorithm> algorithms;
+    protected Benchmark benchmark; // suopm = new RatingRPUOed2();
     private long duration;
     private int noRepeats;
-    
-    public static void writeToFile(String pFilename, StringBuffer pData) throws IOException {  
-        BufferedWriter out = new BufferedWriter(new FileWriter(pFilename));  
-        out.write(pData.toString());  
-        out.flush();  
-        out.close();  
-    } 
-    
-    public StringBuffer outputRanking(int run){
-    	StringBuffer sb = new StringBuffer();
-    	sb.append("CRS4EAs output " + run + "\n");
-    	sb.append("i \t Age \t Algorithm \t Rating \t RD \t RI \t RV" + "\n");
-    	for (int i=0;i<listAll.size();i++){
-    		sb.append((i) + " \t " + (listAll.get(i).getAlgorithm().getAge()) 
-    				+ " \t " + (listAll.get(i).getAlgorithm().getID().replace("\n", "").replace("\r", "")) 
-    				+ " \t " + Math.round(listAll.get(i).getRatingData().getRating()) 
-    				+ " \t " + Math.round(listAll.get(i).getRatingData().getRD()) 
-    				+ " \t [" + Math.round(listAll.get(i).getRatingData().getRating() - 2*listAll.get(i).getRatingData().getRD()) 
-    				+ "," + Math.round(listAll.get(i).getRatingData().getRating() + 2*listAll.get(i).getRatingData().getRD()) 
-    				+ "] \t " + Math.round(listAll.get(i).getRatingData().getRatingVolatility()) + "\n");
-    	}
-    	sb.append("-------------------------------------------------------------");
-    	return sb;
+
+    public static void writeToFile(String pFilename, StringBuffer pData) throws IOException {
+        BufferedWriter out = new BufferedWriter(new FileWriter(pFilename));
+        out.write(pData.toString());
+        out.flush();
+        out.close();
     }
-    
-    public void restartRatings(){
-        for (Player al : listAll){
-        	al.setRatingData(new Rating(1500,350,0.06));
+
+    public StringBuffer outputRanking(int run) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("CRS4EAs output " + run + "\n");
+        sb.append("i \t Age \t Algorithm \t Rating \t RD \t RI \t RV" + "\n");
+        for (int i = 0; i < players.size(); i++) {
+            Algorithm algorithm = algorithms.get(players.get(i).getId());
+            sb.append((i) + " \t " + (algorithm.getAge())
+                    + " \t " + (algorithm.getId().replace("\n", "").replace("\r", ""))
+                    + " \t " + Math.round(players.get(i).getGlicko2Rating().getRating())
+                    + " \t " + Math.round(players.get(i).getGlicko2Rating().getRatingDeviation())
+                    + " \t [" + Math.round(players.get(i).getGlicko2Rating().getRating() - 2 * players.get(i).getGlicko2Rating().getRatingDeviation())
+                    + "," + Math.round(players.get(i).getGlicko2Rating().getRating() + 2 * players.get(i).getGlicko2Rating().getRatingDeviation())
+                    + "] \t " + Math.round(players.get(i).getGlicko2Rating().getRatingVolatility()) + "\n");
+        }
+        sb.append("-------------------------------------------------------------");
+        return sb;
+    }
+
+    public void restartRatings() {
+        for (Player al : players) {
+            al.setGlicko2Rating(GameInfo.getDefaultGlicko2Rating());
         }
     }
 
-    /**
-     * Set all data!
-     * 
-     * @param printDebug
-     * @param benchmark
-     * @param arenaName
-     * @param arenaOwner
-     */
-    public static final boolean DEBUG_ON = true; 
-    public static final boolean DEBUG_OFF = false;
-    
     public CRSTuning(boolean printDebug, boolean printSingleRunDuration, Benchmark benchmark, int max_execs) {
         Util.rnd.setSeed(System.currentTimeMillis());
-        players = new ArrayList<Algorithm>();
+        algorithms = new HashMap<>();
         this.printDebug = printDebug;
-        benchMark = benchmark;
-        listAll = new ArrayList<Player>();
+        this.benchmark = benchmark;
+        players = new ArrayList<>();
         Util.rnd.setSeed(System.currentTimeMillis());
         this.printSingleRunDuration = printSingleRunDuration;
         this.max_execs = max_execs;
     }
-    /**
-     * Add algorithms in arena.
-     * Then run!
-     * 
-     * @param al
-     * @param startRating
-     */
-    public void addAlgorithm(Algorithm al, Rating startRating) {
-    	int violation = 0;
-    	for (int k=0; k<players.size(); k++){
-			for (int l=0; l<players.size();l++){
-				if (players.get(l).getID().equals(al.getID())){
-					violation++;
-				}
-			}
-		}
-    	/*if (al.getControlParameters().get(0) < al.getControlParameters().get(3)){
-    		violation++;
-    	}*/
-    	if (violation==0){
-	        players.add(al);
-	        if (al==null) System.out.println("Add null algorithm");
-	        if (al.getAlgorithmInfo()==null) System.out.println("Add algorithm with null AlgorithmInfo "+al.getClass().getName());
-	        if (al.getImplementationAuthor()==null)  System.out.println("Add algorithm with null Author "+al.getClass().getName());
-	        Player tmp;
-	        tmp = new Player(al, al.getID(), startRating, 0, 0, 0);
-	        listAll.add(tmp);
-	        benchMark.addAlgorithm(al);
-	  /*      if (benchMark.size() != ra.size()){
-	        	System.out.println(al.getID());
-	        	System.out.println("exit");
-	        	System.exit(-1);
-	        }
-	        */
-    	}
-    }
-    
-    public void removeAlgorithm(AlgorithmBase al) {
-    	benchMark.removeAlgorithm(al);
-		players.remove(al);
-		benchMark.getResultArena().removePlayer(al.getID());
-        for (int i=0;i<listAll.size();i++){
-        	if (listAll.get(i).getPlayerId().compareTo(al.getID())==0){
-        		listAll.remove(i);
-        		break;
-        	}
-        }
-    /*    if (benchMark.size() != ra.size()){
-        	System.out.println(al.getID());
-        	System.out.println("exit");
-        	System.exit(-1);
-        }
-        */
-    }
-     
-    public void tune(int repeat, ArrayList<ControlParameter> control_parameters, Class<? extends Algorithm> classAlg, String aName, int decimals) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-    	noRepeats = repeat;
-    	String file = "CRS tuning" + "_" + aName + "M" + M + "F" + F_rate + "Cr" + Cr_rate + "_" + System.currentTimeMillis() + ".txt";
-    	StringBuffer sb = new StringBuffer();
 
-    	sb.append("CR: " + Cr_rate + "\nF: " + F_rate + "\nMu: " + M + "\nEa: " + E + "\nMaximum number of executions: " + max_execs + "\n------------------\n\n");
-    	
-   	
-    	//Class<?> classAlg = null;
-    	Constructor<?> ctor = null;
-		try {
-			//classAlg = Class.forName(classAlg);
-			ctor = classAlg.getConstructor(ArrayList.class, String.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    	
-     
-        while (players.size()<=M){
-        	ArrayList<Double> configuration = new ArrayList<Double>();
-        	for (ControlParameter cp : control_parameters){
-        		configuration.add(cp.randomValue());
-        	}
-        	
-        	Algorithm object = (Algorithm) ctor.newInstance(configuration,aName);
-			this.addAlgorithm(object,new Rating(1500, 350, 0.06));
+    public void addAlgorithm(Algorithm algorithm) {
+        if (!algorithms.containsKey(algorithm.getId())) {
+            algorithms.put(algorithm.getId(), algorithm);
+            if (algorithm.getAlgorithmInfo() == null)
+                System.out.println("Add algorithm with null AlgorithmInfo " + algorithm.getClass().getName());
+            if (algorithm.getImplementationAuthor() == null)
+                System.out.println("Add algorithm with null Author " + algorithm.getClass().getName());
+            players.add(new Player(algorithm.getId()));
+            benchmark.addAlgorithm(algorithm);
+        }
+    }
+
+    public void removeAlgorithm(AlgorithmBase algorithm) {
+        benchmark.removeAlgorithm(algorithm);
+        algorithms.remove(algorithm.getId());
+        benchmark.getResultArena().removePlayer(algorithm.getId());
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getId().compareTo(algorithm.getId()) == 0) {
+                players.remove(i);
+                break;
+            }
+        }
+    }
+
+    public void tune(int repeat, ArrayList<ControlParameter> control_parameters, Class<? extends Algorithm> classAlg, String aName, int decimals) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        noRepeats = repeat;
+        String file = "CRS tuning" + "_" + aName + "M" + M + "F" + F_rate + "Cr" + Cr_rate + "_" + System.currentTimeMillis() + ".txt";
+        StringBuffer sb = new StringBuffer();
+
+        sb.append("CR: " + Cr_rate + "\nF: " + F_rate + "\nMu: " + M + "\nEa: " + E + "\nMaximum number of executions: " + max_execs + "\n------------------\n\n");
+
+
+        //Class<?> classAlg = null;
+        Constructor<?> ctor = null;
+        try {
+            //classAlg = Class.forName(classAlg);
+            ctor = classAlg.getConstructor(ArrayList.class, String.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        while (algorithms.size() <= M) {
+            ArrayList<Double> configuration = new ArrayList<Double>();
+            for (ControlParameter cp : control_parameters) {
+                configuration.add(cp.randomValue());
+            }
+
+            Algorithm object = (Algorithm) ctor.newInstance(configuration, aName);
+            this.addAlgorithm(object);
         }
 
         long stTime = System.currentTimeMillis();
@@ -172,100 +133,102 @@ public class CRSTuning {
         sb.append(outputRanking(0));
         System.out.println(outputRanking(0));
 
-        int i=players.size();
+        int i = algorithms.size();
         int gen = 0;
-        while (i<max_execs){
-        	benchMark.run(repeat);
-        	benchMark.allPlayed();
-        	listAll.sort(new RatingComparator());
-        	// Remove significantly worse algorithms
-	    	for (int j=1;j<listAll.size();j++){
-	    		double difference = Math.abs(Math.round(listAll.get(0).getRatingData().getRating() - listAll.get(j).getRatingData().getRating()));
-    			if (difference > 200 || j>E){
-    				removeAlgorithm(listAll.get(j).getAlgorithm());
-	    	        j--;
-    			}
-	    	}
-	    	int n_players = players.size();
-        	int cr1 = 0, cr2 = 0;
-    		Algorithm new_alg1 = null;
-    		Algorithm new_alg2 = null;
-    		i = i + (M - players.size());
-        	// Create new player through crossover and mutation
-	    	if (i<max_execs){
-	    		while (players.size()<M){
-	    			for (int j=0;j<n_players;j++){
-		        		// Find two individuals for crossover
-		        		if (Util.rnd.nextDouble()<Cr_rate && players.size()<M){
-		        			if (cr1!=0) cr2 = j; else cr1 = j;        		
-		        		}
-		        		// Uniform Crossover
-		        		if (cr1!=0 && cr2!=0){
-		        			ArrayList<Double> child1 = new ArrayList<Double>();
-		        			ArrayList<Double> child2 = new ArrayList<Double>();
-		        			for (int k=0;k<control_parameters.size();k++){
-		        				if(Util.rnd.nextDouble()<0.5){
-		        					child1.add(players.get(cr1).getControlParameters().get(k));
-		        					child2.add(players.get(cr2).getControlParameters().get(k));
-		        				}else{
-		        					child1.add(players.get(cr2).getControlParameters().get(k));
-		        					child2.add(players.get(cr1).getControlParameters().get(k));
-		        				}
-		        			}
-							new_alg1 = (Algorithm) ctor.newInstance(child1,aName);
-							new_alg2 = (Algorithm) ctor.newInstance(child2,aName);
-			    			if (players.size()<M) this.addAlgorithm(new_alg1,new Rating(1500, 350, 0.06));
-			    			if (players.size()<M) this.addAlgorithm(new_alg2,new Rating(1500, 350, 0.06));
-			    			cr1=0;
-		        			cr2=0;
-		        		}
-		        		
-		        		ArrayList<Double> child = new ArrayList<Double>();
-		        		// Mutation
-		        		int mutated = 0;
-		        		for (int m=0; m<control_parameters.size();m++){
-		        			if (Util.rnd.nextDouble()<F_rate && players.size()<M){
-		        				child.add(control_parameters.get(m).randomValue());
-		        				mutated = 1;
-		        			}else{
-		        				child.add(players.get(j).getControlParameters().get(m));
-		        			}
-		        		}
-		        		if (mutated==1){
-							new_alg1 = (Algorithm) ctor.newInstance(child,aName);
-							if (players.size()<M) this.addAlgorithm(new_alg1,new Rating(1500, 350, 0.06));
-		        		}
-					}
-    			}
-    		}else{
-    			break;
-    		}
-    		// Output
-    		sb.append(outputRanking(gen));
-    		System.out.println(outputRanking(gen));
-    		System.out.println(i);
-    		gen++;
-    		//this.restartRatings();
+        while (i < max_execs) {
+            benchmark.run(repeat);
+            benchmark.allPlayed();
+            players.sort(new RatingComparator());
+            // Remove significantly worse algorithms
+            for (int j = 1; j < players.size(); j++) {
+                double difference = Math.abs(Math.round(players.get(0).getGlicko2Rating().getRating() - players.get(j).getGlicko2Rating().getRating()));
+                if (difference > 200 || j > E) {
+                    removeAlgorithm(algorithms.get(players.get(j).getId()));
+                    j--;
+                }
+            }
+            int n_players = algorithms.size();
+            int cr1 = 0, cr2 = 0;
+            Algorithm new_alg1 = null;
+            Algorithm new_alg2 = null;
+            i = i + (M - algorithms.size());
+            // Create new player through crossover and mutation
+            if (i < max_execs) {
+                while (algorithms.size() < M) {
+                    for (int j = 0; j < n_players; j++) {
+                        // Find two individuals for crossover
+                        if (Util.rnd.nextDouble() < Cr_rate && algorithms.size() < M) {
+                            if (cr1 != 0) cr2 = j;
+                            else cr1 = j;
+                        }
+                        // Uniform Crossover
+                        if (cr1 != 0 && cr2 != 0) {
+                            ArrayList<Double> child1 = new ArrayList<Double>();
+                            ArrayList<Double> child2 = new ArrayList<Double>();
+                            for (int k = 0; k < control_parameters.size(); k++) {
+                                if (Util.rnd.nextDouble() < 0.5) {
+                                    child1.add(algorithms.get(cr1).getControlParameters().get(k));
+                                    child2.add(algorithms.get(cr2).getControlParameters().get(k));
+                                } else {
+                                    child1.add(algorithms.get(cr2).getControlParameters().get(k));
+                                    child2.add(algorithms.get(cr1).getControlParameters().get(k));
+                                }
+                            }
+                            new_alg1 = (Algorithm) ctor.newInstance(child1, aName);
+                            new_alg2 = (Algorithm) ctor.newInstance(child2, aName);
+                            if (algorithms.size() < M) this.addAlgorithm(new_alg1);
+                            if (algorithms.size() < M) this.addAlgorithm(new_alg2);
+                            cr1 = 0;
+                            cr2 = 0;
+                        }
+
+                        ArrayList<Double> child = new ArrayList<Double>();
+                        // Mutation
+                        int mutated = 0;
+                        for (int m = 0; m < control_parameters.size(); m++) {
+                            if (Util.rnd.nextDouble() < F_rate && algorithms.size() < M) {
+                                child.add(control_parameters.get(m).randomValue());
+                                mutated = 1;
+                            } else {
+                                child.add(algorithms.get(j).getControlParameters().get(m));
+                            }
+                        }
+                        if (mutated == 1) {
+                            new_alg1 = (Algorithm) ctor.newInstance(child, aName);
+                            if (algorithms.size() < M) this.addAlgorithm(new_alg1);
+                        }
+                    }
+                }
+            } else {
+                break;
+            }
+            // Output
+            sb.append(outputRanking(gen));
+            System.out.println(outputRanking(gen));
+            System.out.println(i);
+            gen++;
+            //this.restartRatings();
         }
 
         long endTime = System.currentTimeMillis();
         duration = endTime - stTime;
-        System.out.println("DURATION: "+duration/1000+"s");
-        sb.append("\n\nDURATION: "+duration/1000+"s\n");
-        try {  
-            writeToFile(file,sb);  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        } 
-        
+        System.out.println("DURATION: " + duration / 1000 + "s");
+        sb.append("\n\nDURATION: " + duration / 1000 + "s\n");
+        try {
+            writeToFile(file, sb);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("Results for benchmark:").append(benchMark.getShortName()).append("Benchmark DURATION: ("+duration/1000+"s)").append("\n").append("\n");;
-        for (Player a:listAll) {
-            sb.append(a.getPlayerId()).append(" ").append(a.getRatingData().toString()).append("\n");
+        sb.append("Results for benchmark:").append(benchmark.getShortName()).append("Benchmark DURATION: (" + duration / 1000 + "s)").append("\n").append("\n");
+        ;
+        for (Player a : players) {
+            sb.append(a.getId()).append(" ").append(a.getGlicko2Rating().toString()).append("\n");
         }
-       return sb.toString();
+        return sb.toString();
     }
 }

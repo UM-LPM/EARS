@@ -9,7 +9,6 @@ import org.um.feri.ears.visualization.graphing.GraphSet;
 import org.um.feri.ears.visualization.graphing.PlotType;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.GraphDataSet;
-import org.um.feri.ears.statistic.glicko2.Rating;
 import org.um.feri.ears.util.Util;
 
 
@@ -17,10 +16,6 @@ import org.um.feri.ears.util.Util;
 //import com.erciyes.karaboga.bee.BeeColonyAlgorithm;
 //import com.um.feri.brest.de.DEAlgorithm;
 
-/**
- * @author Administrator
- *
- */
 public class Main_SO {
 
     /**
@@ -31,12 +26,12 @@ public class Main_SO {
         Benchmark.printInfo = true; //prints one on one results
         BenchmarkRunnerBestAlgSettings rbs = new BenchmarkRunnerBestAlgSettings(true,false, new RPUOed2Benchmark());
         
-//        rbs.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06));  
-        //rbs.addAlgorithm(new RandomWalkAMAlgorithm(),new Rating(1500, 350, 0.06));   
-        rbs.addAlgorithm(new PSO(),new Rating(1500, 350, 0.06)); 
-        //rbs.addAlgorithm(new DEAlgorithm(3,20),new Rating(1500, 350, 0.06)); 	// Ne dela, zastarela koda?
-//        rbs.addAlgorithm(new ES1p1sAlgorithm(),new Rating(1500, 350, 0.06));  
-        rbs.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));
+//        rbs.addAlgorithm(new RandomWalkAlgorithm());
+        //rbs.addAlgorithm(new RandomWalkAMAlgorithm());
+        rbs.addAlgorithm(new PSO());
+        //rbs.addAlgorithm(new DEAlgorithm(3,20)); 	// Ne dela, zastarela koda?
+//        rbs.addAlgorithm(new ES1p1sAlgorithm());
+        rbs.addAlgorithm(new TLBOAlgorithm());
         
         rbs.run(50);
         System.out.println(rbs);

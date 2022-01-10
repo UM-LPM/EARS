@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.statistic.glicko2.Player;
+import org.um.feri.ears.statistic.rating_system.Player;
 
 public class Reporting {
 
@@ -27,12 +27,12 @@ public class Reporting {
             double rating, RD, voaltility;
             String interval;
             for (Player p : players) {
-                rating = p.getRatingData().getRating();
-                RD = p.getRatingData().getRD();
-                voaltility = p.getRatingData().getRatingVolatility();
+                rating = p.getGlicko2Rating().getRating();
+                RD = p.getGlicko2Rating().getRatingDeviation();
+                voaltility = p.getGlicko2Rating().getRatingVolatility();
                 interval = "[" + df.format(rating - 2 * RD) + "," + df.format(rating + 2 * RD) + "]";
 
-                bw.write(rank + ". " + p.getPlayerId() + " " + df.format(rating) + " " + RD + " " + interval);
+                bw.write(rank + ". " + p.getId() + " " + df.format(rating) + " " + RD + " " + interval);
                 bw.newLine();
                 rank++;
             }
@@ -75,7 +75,7 @@ public class Reporting {
 
         sb.append("\t");
         for (int i = 0; i < players.size(); i++) {
-            sb.append(players.get(i).getPlayerId());
+            sb.append(players.get(i).getId());
             if (i + 1 < players.size())
                 sb.append(" & ");
             else
@@ -86,8 +86,8 @@ public class Reporting {
         double rating, RD;
         sb.append("\t");
         for (int i = 0; i < players.size(); i++) {
-            rating = players.get(i).getRatingData().getRating();
-            RD = players.get(i).getRatingData().getRD();
+            rating = players.get(i).getGlicko2Rating().getRating();
+            RD = players.get(i).getGlicko2Rating().getRatingDeviation();
 
             sb.append(df.format(rating));
             if (i + 1 < players.size())
@@ -125,7 +125,7 @@ public class Reporting {
             row.sort(new Comparator<Player>() {
 				@Override
 				public int compare(Player p1, Player p2) {
-					return p1.getPlayerId().compareTo(p2.getPlayerId());
+					return p1.getId().compareTo(p2.getId());
 				}
 			});
 
@@ -135,7 +135,7 @@ public class Reporting {
                 sb.append("\t");
                 sb.append("~ & "); //first cell is empty
                 for (int i = 0; i < row.size(); i++) {
-                    sb.append(row.get(i).getPlayerId());
+                    sb.append(row.get(i).getId());
                     if (i + 1 < row.size())
                         sb.append(" & ");
                     else
@@ -151,8 +151,8 @@ public class Reporting {
 
             int[] ranks = getRanks(row);
             for (int i = 0; i < row.size(); i++) {
-                rating = row.get(i).getRatingData().getRating();
-                RD = row.get(i).getRatingData().getRD();
+                rating = row.get(i).getGlicko2Rating().getRating();
+                RD = row.get(i).getGlicko2Rating().getRatingDeviation();
                 RDline += "[" + df.format(rating - 2 * RD) + "," + df.format(rating + 2 * RD) + "]";
 
                 sb.append(df.format(rating)).append(" (").append(ranks[i]).append(")"); //df.format(RD)
@@ -185,13 +185,13 @@ public class Reporting {
         int[] ranks = new int[row.size()];
         Double[] ratings = new Double[row.size()];
         for (int i = 0; i < row.size(); i++) {
-            ratings[i] = row.get(i).getRatingData().getRating();
+            ratings[i] = row.get(i).getGlicko2Rating().getRating();
         }
         Arrays.sort(ratings, Collections.reverseOrder());
 
         for (int k = 0; k < ranks.length; k++) {
             for (int i = 0; i < row.size(); i++) {
-                if (ratings[i] == row.get(k).getRatingData().getRating())
+                if (ratings[i] == row.get(k).getGlicko2Rating().getRating())
                     ranks[k] = i + 1;
             }
         }

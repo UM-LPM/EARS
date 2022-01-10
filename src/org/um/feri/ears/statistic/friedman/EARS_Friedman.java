@@ -10,19 +10,18 @@ import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.BenchmarkResults;
 import org.um.feri.ears.benchmark.CEC2010Benchmark;
 import org.um.feri.ears.examples.BenchmarkRunner;
-import org.um.feri.ears.statistic.glicko2.Player;
-import org.um.feri.ears.statistic.glicko2.Rating;
+import org.um.feri.ears.statistic.rating_system.Player;
 
 public class EARS_Friedman {
     public static void main(String[] args) {
     	CEC2010Benchmark b2 = new CEC2010Benchmark(0.001);
         BenchmarkRunner m = new BenchmarkRunner(false, false, b2) ;
-        m.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06)); // RWSi
-        //m.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));  // ABC
-        m.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));       // TLBO
-        m.addAlgorithm(new ES1p1sAlgorithm(),new Rating(1500, 350, 0.06)); // ES
+        m.addAlgorithm(new RandomWalkAlgorithm()); // RWSi
+        //m.addAlgorithm(new BeeColonyAlgorithm());  // ABC
+        m.addAlgorithm(new TLBOAlgorithm());       // TLBO
+        m.addAlgorithm(new ES1p1sAlgorithm()); // ES
 		for (DEAlgorithm.Strategy strategy : DEAlgorithm.Strategy.values())
-			m.addAlgorithm(new DEAlgorithm(strategy, 20), new Rating(1500, 350, 0.06));
+			m.addAlgorithm(new DEAlgorithm(strategy, 20));
 		m.run(25);
         BenchmarkResults br = m.getBenchmarkResults();
         FriedmanTransport fr = FriedmanTransport.calc4Friedman(br.getResultsByAlgorithm());
@@ -31,7 +30,7 @@ public class EARS_Friedman {
         //System.out.println(br);
         System.out.println(m);
         
-        ArrayList<Player> vsi = m.getListAll();
+        ArrayList<Player> vsi = m.getPlayers();
         
         Friedman_2.setStatistics(fr.getDatasets(), fr.getAlgoritms(), fr.getMean());
         Results[] statistics_results = Friedman_2.getResults();
@@ -54,13 +53,13 @@ public class EARS_Friedman {
        
         for (int k=0; k<vsi.size();k++) {
         	for (int l=0;l<statistics_results.length;l++){
-				if (statistics_results[l].Name == (String)vsi.get(k).getPlayerId()){
-					statistics_results[l].Rating = vsi.get(k).getRatingData().getRating();
-					statistics_results[l].RatingDev = vsi.get(k).getRatingData().getRD();
-					statistics_results[l].RatingVol = vsi.get(k).getRatingData().getRatingVolatility();
-					statistics_results[l].DiffersNeme = Friedman_2.getDiffers((String)vsi.get(k).getPlayerId(), 0.05, "Nemenyi");
-					statistics_results[l].DiffersHolm = Friedman_2.getDiffers((String)vsi.get(k).getPlayerId(), 0.05, "Holm");
-					statistics_results[l].DiffersShaf = Friedman_2.getDiffers((String)vsi.get(k).getPlayerId(), 0.05, "Shaffer");
+				if (statistics_results[l].Name == (String)vsi.get(k).getId()){
+					statistics_results[l].Rating = vsi.get(k).getGlicko2Rating().getRating();
+					statistics_results[l].RatingDev = vsi.get(k).getGlicko2Rating().getRatingDeviation();
+					statistics_results[l].RatingVol = vsi.get(k).getGlicko2Rating().getRatingVolatility();
+					statistics_results[l].DiffersNeme = Friedman_2.getDiffers((String)vsi.get(k).getId(), 0.05, "Nemenyi");
+					statistics_results[l].DiffersHolm = Friedman_2.getDiffers((String)vsi.get(k).getId(), 0.05, "Holm");
+					statistics_results[l].DiffersShaf = Friedman_2.getDiffers((String)vsi.get(k).getId(), 0.05, "Shaffer");
 					break;
 				}
         	}

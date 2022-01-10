@@ -2,7 +2,7 @@ package org.um.feri.ears.engine;
 
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.DummyBenchmark;
-import org.um.feri.ears.statistic.glicko2.Player;
+import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Util;
 
 import java.io.*;
@@ -31,7 +31,7 @@ public class RunBenchmarkFromFiles {
 
         ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
         DummyBenchmark dr = new DummyBenchmark(0.000001); //Create banchmark
-        dr.setDisplayRatingIntervalChart(false);
+        dr.setDisplayRatingCharts(false);
 
         //parse algorithm and problem names
         String algorithmName, problemName, fileName;

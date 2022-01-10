@@ -6,19 +6,18 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
-import org.um.feri.ears.statistic.glicko2.Rating;
 
 public class Main2DataExample {
     public static void main(String[] args) {
         BenchmarkRunner m = new BenchmarkRunner(false, false, new RPUOed30Benchmark());
-        m.addAlgorithm(new RandomWalkAlgorithm(), new Rating(1500, 350, 0.06));
-        m.addAlgorithm(new RandomWalkAMAlgorithm(), new Rating(1500, 350, 0.06));
-        m.addAlgorithm(new ES1p1sAlgorithm(), new Rating(1500, 350, 0.06));
-        //m.addAlgorithm(new SwarmAlgorithm(),new Rating(1500, 350, 0.06));
-        //m.addAlgorithm(new BeeColonyAlgorithm(),new Rating(1500, 350, 0.06));
-        m.addAlgorithm(new TLBOAlgorithm(), new Rating(1500, 350, 0.06));
+        m.addAlgorithm(new RandomWalkAlgorithm());
+        m.addAlgorithm(new RandomWalkAMAlgorithm());
+        m.addAlgorithm(new ES1p1sAlgorithm());
+        //m.addAlgorithm(new SwarmAlgorithm());
+        //m.addAlgorithm(new BeeColonyAlgorithm());
+        m.addAlgorithm(new TLBOAlgorithm());
         for (DEAlgorithm.Strategy strategy : DEAlgorithm.Strategy.values())
-            m.addAlgorithm(new DEAlgorithm(strategy, 20), new Rating(1500, 350, 0.06));
+            m.addAlgorithm(new DEAlgorithm(strategy, 20));
         m.run(30);
         System.out.println(m);
     }
@@ -77,7 +76,7 @@ public class Main2DataExample {
                         p2pTmp.idPlayerOne = p.getPlayerId();
                         p2pTmp.idPlayerTwo = alid;
                         p2pTmp.data = new EDWinnLossDraw();
-                        org.um.feri.ears.statistic.glicko2.WinLossDraw wl = p.wldPlayers.get(alid);
+                        org.um.feri.ears.statistic.rating_system.glicko2.WinLossDraw wl = p.wldPlayers.get(alid);
                         p2pTmp.data.d = wl.getDraw();
                         p2pTmp.data.w = wl.getWin();
                         p2pTmp.data.l = wl.getLoss();
@@ -89,7 +88,7 @@ public class Main2DataExample {
             EDStatPlayer2Task sptTmp;
             for (String probid: problist) {
                 sptTmp = new EDStatPlayer2Task();
-                org.um.feri.ears.statistic.glicko2.WinLossDraw wl = p.wldProblems.get(probid);
+                org.um.feri.ears.statistic.rating_system.glicko2.WinLossDraw wl = p.wldProblems.get(probid);
                 sptTmp.taskID = probid;
                 sptTmp.stat = new EDWinnLossDraw();;
                 sptTmp.stat.d = wl.getDraw();

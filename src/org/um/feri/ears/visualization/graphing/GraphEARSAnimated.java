@@ -96,7 +96,7 @@ public class GraphEARSAnimated extends GraphEARS
 		outputAutomatic = true;
 		if (data != null)
 		{
-			String tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".gif";
+			String tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".gif";
 			setOutputFilePrivate(tmp, overwrite);
 		}
 	}
@@ -162,7 +162,7 @@ public class GraphEARSAnimated extends GraphEARS
 		super.setData(data);
 		if (outputAutomatic)
 		{
-			String tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+".gif";
+			String tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".gif";
 			setOutputFilePrivate(tmp, false);
 			RefreshGraphData();
 		}
@@ -608,7 +608,7 @@ public class GraphEARSAnimated extends GraphEARS
 		graphs = new MOGraphSet(groupsCurrentData, 1, axisX, axisY);
 		int l = graphs.graphs.size();
 		GraphEARS g;
-		String title = groupsCurrentData[0][0].algorithm.getID().replaceAll("_", "\\_") + " solving " + groupsCurrentData[0][0].problemName;
+		String title = groupsCurrentData[0][0].algorithm.getId().replaceAll("_", "\\_") + " solving " + groupsCurrentData[0][0].problemName;
 		for (int i=0; i<l; i++)
 		{
 			g = graphs.getGraph(i);

@@ -11,7 +11,6 @@ import org.um.feri.ears.visualization.graphing.GraphSet;
 import org.um.feri.ears.visualization.graphing.PlotType;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.GraphDataSet;
-import org.um.feri.ears.statistic.glicko2.Rating;
 import org.um.feri.ears.util.Util;
 
 //import net.sourceforge.jswarm_pso.SwarmAlgorithm;
@@ -31,10 +30,10 @@ public class Test_11_MainV3 {
         Util.rnd.setSeed(System.currentTimeMillis());
         Benchmark.printInfo = true; //prints one on one results
         BenchmarkRunnerBestAlgSettings rbs = new BenchmarkRunnerBestAlgSettings(true,false, new RPUOed2Benchmark());
-        rbs.addAlgorithm(new RandomWalkAlgorithm(),new Rating(1500, 350, 0.06));  
-        rbs.addAlgorithm(new RandomWalkAMAlgorithm(),new Rating(1500, 350, 0.06));  
-        rbs.addAlgorithm(new ES1p1sAlgorithm(),new Rating(1500, 350, 0.06));  
-        rbs.addAlgorithm(new TLBOAlgorithm(),new Rating(1500, 350, 0.06));  
+        rbs.addAlgorithm(new RandomWalkAlgorithm());
+        rbs.addAlgorithm(new RandomWalkAMAlgorithm());
+        rbs.addAlgorithm(new ES1p1sAlgorithm());
+        rbs.addAlgorithm(new TLBOAlgorithm());
         rbs.run(20);
         System.out.println(rbs);
         

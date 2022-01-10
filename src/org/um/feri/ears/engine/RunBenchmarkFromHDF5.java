@@ -6,7 +6,7 @@ import ch.systemsx.cisd.hdf5.IHDF5SimpleWriter;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.DummyBenchmark;
-import org.um.feri.ears.statistic.glicko2.Player;
+import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class RunBenchmarkFromHDF5 {
 
         ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
         DummyBenchmark dr = new DummyBenchmark(0.000001); //Create banchmark
-        dr.setDisplayRatingIntervalChart(false);
+        dr.setDisplayRatingCharts(false);
 
         IHDF5SimpleReader reader = HDF5Factory.openForReading(srcFile);
         String[] playerList = reader.readStringArray("players");
@@ -85,8 +85,8 @@ public class RunBenchmarkFromHDF5 {
 
         for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i)); //print ranks
-            ratings[i] = list.get(i).getRatingData().getRating();
-            algorithms[i] = list.get(i).getPlayerId();
+            ratings[i] = list.get(i).getGlicko2Rating().getRating();
+            algorithms[i] = list.get(i).getId();
         }
 
         IHDF5SimpleWriter writer = HDF5Factory.open(destFile);

@@ -6,9 +6,7 @@ import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
-import org.um.feri.ears.statistic.glicko2.Player;
-import org.um.feri.ears.statistic.glicko2.ResultArena;
-import org.um.feri.ears.visualization.rating.RatingIntervalPlot;
+import org.um.feri.ears.statistic.rating_system.glicko2.ResultArena;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -30,7 +28,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     protected int dimension = 2;
     protected int numberOfRuns = 15;
     protected boolean runInParallel = false;
-    protected boolean displayRatingIntervalChart = true;
+    protected boolean displayRatingCharts = true;
 
     ResultArena resultArena = new ResultArena();
     BenchmarkResults<T, S, A> benchmarkResults = new BenchmarkResults();
@@ -116,16 +114,16 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         addParameter(EnumBenchmarkInfoParameters.DIMENSION, "" + dimension);
         addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(maxEvaluations));
         addParameter(EnumBenchmarkInfoParameters.CPU_TIME, String.valueOf(timeLimit));
-        addParameter(EnumBenchmarkInfoParameters.ITTERATIONS, String.valueOf(maxIterations));
+        addParameter(EnumBenchmarkInfoParameters.ITERATIONS, String.valueOf(maxIterations));
         addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + drawLimit);
     }
 
-    public boolean isDisplayRatingIntervalChart() {
-        return displayRatingIntervalChart;
+    public boolean isDisplayRatingCharts() {
+        return displayRatingCharts;
     }
 
-    public void setDisplayRatingIntervalChart(boolean displayRatingIntervalChart) {
-        this.displayRatingIntervalChart = displayRatingIntervalChart;
+    public void setDisplayRatingCharts(boolean displayRatingCharts) {
+        this.displayRatingCharts = displayRatingCharts;
     }
 
     public abstract void initAllProblems();
@@ -191,7 +189,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
                     AlgorithmRunResult result = future.get();
 
                     if (printInfo)
-                        System.out.println("Total execution time for " + result.algorithm.getID() + ": " + result.algorithm.getLastRunDuration());
+                        System.out.println("Total execution time for " + result.algorithm.getId() + ": " + result.algorithm.getLastRunDuration());
 
                     //TODO generic feasibility check for result
                     runResults.add(result);
@@ -213,11 +211,11 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
                     algorithm.addRunDuration(duration, duration - taskCopy.getEvaluationTimeMs());
 
                     if (printInfo)
-                        System.out.println(algorithm.getID() + ": " + duration / 1000.0);
+                        System.out.println(algorithm.getId() + ": " + duration / 1000.0);
                     runResults.add(new AlgorithmRunResult(result, algorithm, taskCopy));
                     //TODO generic feasibility check
                 } catch (StopCriterionException e) {
-                    System.err.println(algorithm.getID() + " StopCriterionException for:" + task + "\n" + e);
+                    System.err.println(algorithm.getId() + " StopCriterionException for:" + task + "\n" + e);
                 }
             }
         }
@@ -227,21 +225,10 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     private void performStatistics() {
 
         for (A algorithm : algorithms) {
-            resultArena.addPlayer(algorithm, algorithm.getID());
+            resultArena.addPlayer(algorithm.getId());
         }
         performTournament();
-        resultArena.calculateRatings();
-
-        //variable display statistics
-        //other statistical methods
-        //package statistics
-
-
-        for (Player p : resultArena.getPlayers()) System.out.println(p); //print ratings
-
-        if (displayRatingIntervalChart) {
-            RatingIntervalPlot.displayChart(resultArena.getPlayers(), "Rating Interval", 1000, 500);
-        }
+        resultArena.displayResults(displayRatingCharts);
     }
 
     protected abstract void performTournament();
@@ -252,7 +239,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         }
     }
 
-    public String getStopCondition() {
+    public String getStoppingCriterion() {
         switch (stopCriterion) {
             case EVALUATIONS:
                 return Integer.toString(maxEvaluations);

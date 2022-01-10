@@ -9,7 +9,8 @@ import org.um.feri.ears.qualityIndicator.IndicatorFactory;
 import org.um.feri.ears.qualityIndicator.QualityIndicator;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
-import org.um.feri.ears.statistic.glicko2.Game;
+import org.um.feri.ears.statistic.rating_system.GameResult;
+import org.um.feri.ears.statistic.rating_system.glicko2.Game;
 import org.um.feri.ears.util.Comparator.QualityIndicatorComparator;
 import org.um.feri.ears.util.Util;
 
@@ -96,11 +97,11 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
                                 e.printStackTrace();
                             }
                             if (resultEqual(first.solution, second.solution, qi)) {
-                                resultArena.addGameResult(Game.DRAW, first.algorithm.getID(), second.algorithm.getID(), t.getProblemName(), indicatorName.toString());
+                                resultArena.addGameResult(GameResult.DRAW, first.algorithm.getId(), second.algorithm.getId(), t.getProblemName(), indicatorName.toString());
                             } else if (t.isFirstBetter(first.solution, second.solution, qi)) {
-                                resultArena.addGameResult(Game.WIN, first.algorithm.getID(), second.algorithm.getID(), t.getProblemName(), indicatorName.toString());
+                                resultArena.addGameResult(GameResult.WIN, first.algorithm.getId(), second.algorithm.getId(), t.getProblemName(), indicatorName.toString());
                             } else {
-                                resultArena.addGameResult(Game.WIN, second.algorithm.getID(), first.algorithm.getID(), t.getProblemName(), indicatorName.toString());
+                                resultArena.addGameResult(GameResult.WIN, second.algorithm.getId(), first.algorithm.getId(), t.getProblemName(), indicatorName.toString());
                             }
                         }
                     }
@@ -115,15 +116,15 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
                             for (int j = i + 1; j < results.size(); j++) {
                                 second = results.get(j);
                                 if (resultEqual(first.solution, second.solution, qi)) {
-                                    resultArena.addGameResult(Game.DRAW, first.algorithm.getID(), second.algorithm.getID(), t.getProblemName(), indicatorName.toString());
+                                    resultArena.addGameResult(GameResult.DRAW, first.algorithm.getId(), second.algorithm.getId(), t.getProblemName(), indicatorName.toString());
                                 } else {
                                     if (first.solution == null) {
-                                        System.out.println(first.algorithm.getID() + " NULL");
+                                        System.out.println(first.algorithm.getId() + " NULL");
                                     }
                                     if (second.solution == null) {
-                                        System.out.println(second.algorithm.getID() + " NULL");
+                                        System.out.println(second.algorithm.getId() + " NULL");
                                     }
-                                    resultArena.addGameResult(Game.WIN, first.algorithm.getID(), second.algorithm.getID(), t.getProblemName(), indicatorName.toString());
+                                    resultArena.addGameResult(GameResult.WIN, first.algorithm.getId(), second.algorithm.getId(), t.getProblemName(), indicatorName.toString());
                                 }
                             }
                         }
@@ -131,5 +132,6 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
                 }
             }
         }
+        resultArena.calculateRatings();
     }
 }

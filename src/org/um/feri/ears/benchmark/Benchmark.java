@@ -5,15 +5,16 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.statistic.glicko2.Game;
-import org.um.feri.ears.statistic.true_skill.*;
+import org.um.feri.ears.statistic.rating_system.GameInfo;
+import org.um.feri.ears.statistic.rating_system.GameResult;
+import org.um.feri.ears.statistic.rating_system.Player;
+import org.um.feri.ears.statistic.rating_system.Rating;
+import org.um.feri.ears.statistic.rating_system.glicko2.Game;
+import org.um.feri.ears.statistic.rating_system.true_skill.*;
 import org.um.feri.ears.util.Comparator.AlgorithmResultComparator;
 import org.um.feri.ears.util.Util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algorithm> {
 
@@ -22,113 +23,112 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
     @Override
     protected void performTournament() {
 
-        for (HashMap<Task, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
-            for (ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>> results : problemMap.values()) {
-                Task t = results.get(0).task;
-
-                AlgorithmRunResult<DoubleSolution, Algorithm, Task> win;
-                AlgorithmRunResult<DoubleSolution, Algorithm, Task> lose;
-                AlgorithmResultComparator rc = new AlgorithmResultComparator(t);
-                results.sort(rc); // best first
-                for (int i = 0; i < results.size() - 1; i++) {
-                    win = results.get(i);
-                    for (int j = i + 1; j < results.size(); j++) {
-                        lose = results.get(j);
-                        if (resultEqual(win, lose)) { // Special for this benchmark
-                            if (printInfo)
-                                System.out.println("draw of " + win.algorithm.getID() + " ("
-                                        + Util.df3.format(win.solution.getEval()) + ", feasible=" + win.solution.areConstraintsMet()
-                                        + ") against " + lose.algorithm.getID() + " (" + Util.df3.format(lose.solution.getEval())
-                                        + ", feasible=" + lose.solution.areConstraintsMet() + ") for " + t.getProblemName());
-                            resultArena.addGameResult(Game.DRAW, win.algorithm.getID(),
-                                    lose.algorithm.getID(), t.getProblemName());
-                        } else {
-                            if (win.solution == null) {
-                                System.out.println(win.algorithm.getID() + " NULL");
-                            }
-                            if (lose.solution == null) {
-                                System.out.println(lose.algorithm.getID() + " NULL");
-                            }
-                            if (printInfo)
-                                System.out.println("win of " + win.algorithm.getID() + " ("
-                                        + Util.df3.format(win.solution.getEval()) + ", feasible=" + win.solution.areConstraintsMet()
-                                        + ") against " + lose.algorithm.getID() + " (" + Util.df3.format(lose.solution.getEval())
-                                        + ", feasible=" + lose.solution.areConstraintsMet() + ") for " + t.getProblemName());
-                            resultArena.addGameResult(Game.WIN, win.algorithm.getID(),
-                                    lose.algorithm.getID(), t.getProblemName());
-                        }
-                    }
-                }
-            }
-        }
-        calculateTrueSkill();
-    }
-
-    private void calculateTrueSkill() {
-
-        TwoPlayerTrueSkillCalculator calculator = new TwoPlayerTrueSkillCalculator();
         GameInfo gameInfo = GameInfo.getDefaultGameInfo();
-        Map<String, Player<String>> players = new HashMap<>();
-        Map<String, Team> teams = new HashMap<>();
-
-        //////////////////////
-        int[] ranks = new int[algorithms.size()];
-        int rank = 1;
+        TwoPlayerTrueSkillCalculator calculator = new TwoPlayerTrueSkillCalculator();
+        Map<String, Team> oneOnOneTeams = new HashMap<>();
         FactorGraphTrueSkillCalculator fgCalculator = new FactorGraphTrueSkillCalculator();
-        Map<String, Team> teams2 = new HashMap<>();
+        Map<String, Team> freeForAllTeams = new HashMap<>();
 
+        int[] ranks;
+        int rank;
+        Team[] teamArray;
 
-        for(Algorithm algorithm : algorithms) {
-            Player<String> player = new Player<>(algorithm.getID());
-            players.put(algorithm.getID(),player);
-            Team team = new Team(player, gameInfo.getDefaultRating());
-            teams.put(algorithm.getID(),team);
-            teams2.put(algorithm.getID(),team);
+        for(Player player : resultArena.getPlayers()) {
+            Team team = new Team(player, GameInfo.getDefaultTrueSkillRating());
+            oneOnOneTeams.put(player.getId(),team);
+            freeForAllTeams.put(player.getId(),team);
         }
+
+        AlgorithmRunResult<DoubleSolution, Algorithm, Task> result1;
+        AlgorithmRunResult<DoubleSolution, Algorithm, Task> result2;
+        Team team1, team2;
+        String algorithm1Id, algorithm2Id;
 
         for (HashMap<Task, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
             for (ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>> results : problemMap.values()) {
                 Task t = results.get(0).task;
 
-                AlgorithmRunResult<DoubleSolution, Algorithm, Task> algorithm1;
-                AlgorithmRunResult<DoubleSolution, Algorithm, Task> algorithm2;
-                Team team1, team2;
-
                 AlgorithmResultComparator rc = new AlgorithmResultComparator(t);
                 results.sort(rc); // best first
+
+                ranks = new int[algorithms.size()];
+                teamArray = new Team[algorithms.size()];
+                rank = 1;
+                ranks[0] = rank;
+                teamArray[0] = freeForAllTeams.get(results.get(0).algorithm.getId());
+
+                for (int i = 1; i < results.size(); i++) {
+                    result1 = results.get(i-1);
+                    result2 = results.get(i);
+                    if (!resultEqual(result1, result2))
+                        rank++;
+                    ranks[i] = rank;
+                    teamArray[i] = freeForAllTeams.get(result2.algorithm.getId());
+                }
+
+                Map<Player, Rating> newTeamRatings = fgCalculator.calculateNewRatings(gameInfo, Arrays.asList(teamArray), ranks);
+                for (Map.Entry<Player, Rating> entry: newTeamRatings.entrySet()) {
+                    Player player = entry.getKey();
+                    Rating rating = entry.getValue();
+                    freeForAllTeams.put(player.getId(), new Team(player, rating));
+                }
+
                 for (int i = 0; i < results.size() - 1; i++) {
-                    algorithm1 = results.get(i);
-                    team1 = teams.get(algorithm1.algorithm.getID());
+                    result1 = results.get(i);
+                    algorithm1Id = result1.algorithm.getId();
+                    team1 = oneOnOneTeams.get(algorithm1Id);
                     for (int j = i + 1; j < results.size(); j++) {
-                        algorithm2 = results.get(j);
-                        team2 = teams.get(algorithm2.algorithm.getID());
+                        result2 = results.get(j);
+                        algorithm2Id = result2.algorithm.getId();
+                        team2 = oneOnOneTeams.get(algorithm2Id);
                         Collection<ITeam> competingTeams = Team.concat(team1, team2);
-                        Map<IPlayer, Rating> newRatings;
-                        if (resultEqual(algorithm1, algorithm2)) {
+                        Map<Player, Rating> newRatings;
+                        if (resultEqual(result1, result2)) {
                             newRatings = calculator.calculateNewRatings(gameInfo, competingTeams, 1, 1);
+                            if (printInfo)
+                                System.out.println("draw of " + algorithm1Id + " ("
+                                        + Util.df3.format(result1.solution.getEval()) + ", feasible=" + result1.solution.areConstraintsMet()
+                                        + ") against " + algorithm2Id + " (" + Util.df3.format(result2.solution.getEval())
+                                        + ", feasible=" + result2.solution.areConstraintsMet() + ") for " + t.getProblemName());
+                            resultArena.addGameResult(GameResult.DRAW, algorithm1Id,
+                                    algorithm2Id, t.getProblemName());
                         } else {
                             newRatings = calculator.calculateNewRatings(gameInfo, competingTeams, 1, 2);
+                            if (result1.solution == null) {
+                                System.out.println(algorithm1Id + " NULL");
+                            }
+                            if (result2.solution == null) {
+                                System.out.println(algorithm2Id + " NULL");
+                            }
+                            if (printInfo)
+                                System.out.println("win of " + algorithm1Id + " ("
+                                        + Util.df3.format(result1.solution.getEval()) + ", feasible=" + result1.solution.areConstraintsMet()
+                                        + ") against " + algorithm2Id + " (" + Util.df3.format(result2.solution.getEval())
+                                        + ", feasible=" + result2.solution.areConstraintsMet() + ") for " + t.getProblemName());
+                            resultArena.addGameResult(GameResult.WIN, algorithm1Id,
+                                    algorithm2Id, t.getProblemName());
                         }
-                        Player<String> player1 = players.get(algorithm1.algorithm.getID());
-                        Player<String> player2 = players.get(algorithm2.algorithm.getID());
+                        Player player1 = resultArena.getPlayer(algorithm1Id);
+                        Player player2 = resultArena.getPlayer(algorithm2Id);
                         Rating player1NewRating = newRatings.get(player1);
                         Rating player2NewRating = newRatings.get(player2);
-                        teams.put(algorithm1.algorithm.getID(), new Team(player1, player1NewRating));
-                        teams.put(algorithm2.algorithm.getID(), new Team(player2, player2NewRating));
+                        oneOnOneTeams.put(algorithm1Id, new Team(player1, player1NewRating));
+                        oneOnOneTeams.put(algorithm2Id, new Team(player2, player2NewRating));
                     }
                 }
             }
         }
 
-        for(Team t: teams.values()) {
-            for (Map.Entry<IPlayer, Rating> es : t.entrySet()) {
-                System.out.println(es.getKey().toString() + " " + es.getValue());
-            }
+        for(Player player : resultArena.getPlayers()) {
+            Team team = oneOnOneTeams.get(player.getId());
+            Rating rating = team.get(player);
+            player.setOneOnOneTrueSkill(new TrueSkillRating(rating.getRating(), rating.getRatingDeviation()));
+
+            team = freeForAllTeams.get(player.getId());
+            rating = team.get(player);
+            player.setFreeForAllTrueSkill(new TrueSkillRating(rating.getRating(), rating.getRatingDeviation()));
         }
-
-        //TODO check if same
-
-        //Map<IPlayer, Rating> newRatings = calculator.calculateNewRatings(gameInfo, Team.concat(team1, team2, team3, team4, team5, team6, team7, team8, team9, team10, team11, team12, team13, team14, team15, team16),1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+        resultArena.calculateRatings();
     }
 
     public boolean resultEqual(AlgorithmRunResult<DoubleSolution, Algorithm, Task> a, AlgorithmRunResult<DoubleSolution, Algorithm, Task> b) {

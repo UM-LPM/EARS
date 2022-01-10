@@ -210,7 +210,7 @@ public abstract class GraphEARS
 			if (data != null)
 			{
 
-				plotFile = data[0].algorithm.getID()+" solving "+data[0].problemName+".plot";
+				plotFile = data[0].algorithm.getId()+" solving "+data[0].problemName+".plot";
 			}
 			else
 			{

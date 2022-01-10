@@ -194,7 +194,7 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
         return ai;
     }
 
-    public String getID() {
+    public String getId() {
         return ai.getAcronym();
     }
 

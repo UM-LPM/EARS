@@ -5,22 +5,26 @@ import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkResults;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.statistic.glicko2.Player;
-import org.um.feri.ears.statistic.glicko2.Rating;
+import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BenchmarkRunner {
-    private ArrayList<Player> listAll;
+    private ArrayList<Player> players;
     private boolean printDebug;
-    private ArrayList<Algorithm> players;
-    protected Benchmark benchMark; // suopm = new RatingRPUOed2();
+    private HashMap<String, Algorithm> algorithms;
+    protected Benchmark benchmark;
     private long duration;
 
-    public ArrayList<Player> getListAll() {
-        return listAll;
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Algorithm getAlgorithm(String id) {
+        return algorithms.get(id);
     }
 
     public boolean isPrintDebug() {
@@ -28,45 +32,26 @@ public class BenchmarkRunner {
     }
 
     public Benchmark getBenchmark() {
-        return benchMark;
+        return benchmark;
     }
 
     public long getDuration() {
         return duration;
     }
 
-    /**
-     * Set all data!
-     *
-     * @param printDebug
-     * @param banchmark
-     */
-    public BenchmarkRunner(boolean printDebug, boolean printSingleRunDuration, Benchmark banchmark) {
+    public BenchmarkRunner(boolean printDebug, boolean printSingleRunDuration, Benchmark benchmark) {
         Util.rnd.setSeed(System.currentTimeMillis());
-        players = new ArrayList<Algorithm>();
+        players = new ArrayList<>();
+        algorithms = new HashMap<>();
         this.printDebug = printDebug;
-        benchMark = banchmark;
-        listAll = new ArrayList<>();
+        this.benchmark = benchmark;
     }
 
-    /**
-     * Add algorithms in arena.
-     * Then run!
-     *
-     * @param al
-     * @param startRating
-     */
-    public void addAlgorithm(Algorithm al, Rating startRating) {
+    public void addAlgorithm(Algorithm algorithm) {
 
-        players.add(al);
-        if (al == null) System.out.println("Add null algorithm");
-        if (al.getAlgorithmInfo() == null)
-            System.out.println("Add algorithm with null AlgorithmInfo " + al.getClass().getName());
-        if (al.getImplementationAuthor() == null)
-            System.out.println("Add algorithm with null Author " + al.getClass().getName());
-        Player tmp = new Player(al, al.getID(), startRating, 0, 0, 0);
-        listAll.add(tmp);
-        benchMark.addAlgorithm(al);
+        algorithms.put(algorithm.getId(), algorithm);
+        players.add(new Player(algorithm.getId()));
+        benchmark.addAlgorithm(algorithm);
     }
 
     /**
@@ -77,8 +62,8 @@ public class BenchmarkRunner {
     public void run(int repeat) {
         long stTime = System.currentTimeMillis();
         Benchmark.printInfo = printDebug; // prints one on one results
-        benchMark.run(repeat);
-        listAll.sort(new RatingComparator());
+        benchmark.run(repeat);
+        players.sort(new RatingComparator());
         long endTime = System.currentTimeMillis();
         duration = endTime - stTime;
         // System.out.println("Benchmark DURATION: "+duration/1000+"s");
@@ -86,15 +71,15 @@ public class BenchmarkRunner {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Results for benchmark:").append(benchMark.getShortName()).append("Benchmark DURATION: (" + duration / 1000 + "s)").append("\n").append("\n");
+        sb.append("Results for benchmark:").append(benchmark.getShortName()).append("Benchmark DURATION: (" + duration / 1000 + "s)").append("\n").append("\n");
         ;
-        for (Player a : listAll) {
-            sb.append(a.getPlayerId()).append(" ").append(a.getRatingData().toString()).append("\n");
+        for (Player a : players) {
+            sb.append(a.getId()).append(" ").append(a.getGlicko2Rating().toString()).append("\n");
         }
         return sb.toString();
     }
 
     public BenchmarkResults<Task, DoubleSolution, Algorithm> getBenchmarkResults() {
-        return benchMark.getBenchmarkResults();
+        return benchmark.getBenchmarkResults();
     }
 }

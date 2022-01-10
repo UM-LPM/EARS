@@ -6,7 +6,7 @@ package org.um.feri.ears.benchmark;
 public enum EnumBenchmarkInfoParameters {
     DIMENSION("number of real parameters/dimensions","D"),
     STOPPING_CRITERIA("stopping criteria used in the benchmark","STOPPING_CRITERIA"),
-    ITTERATIONS("number of itterations","IT"),
+    ITERATIONS("number of iterations","IT"),
     CPU_TIME("CPU time allowed fore evaluation","CT"),
     EVAL("number of evaluations","E"),
     CONSTRAINED("constrained optimization","C_O"),

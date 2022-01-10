@@ -27,8 +27,8 @@ public class SoCEC2014Bwnchmark {
         jDElscopLogging jDElscopLog = new jDElscopLogging();
         TLBOAlgorithmLogging TLBOLog = new TLBOAlgorithmLogging();
         
-        System.out.println(randomLog.getID()+ " "+ hillClimb.getID()+" "+jadeLogging.getID()+" "+
-        		          deLogging.getID()+" "+ jDElscopLog.getID() +" "+TLBOLog.getID());
+        System.out.println(randomLog.getId()+ " "+ hillClimb.getId()+" "+jadeLogging.getId()+" "+
+        		          deLogging.getId()+" "+ jDElscopLog.getId() +" "+TLBOLog.getId());
         
         for(int run = 0; run < 10; ++run)
         {

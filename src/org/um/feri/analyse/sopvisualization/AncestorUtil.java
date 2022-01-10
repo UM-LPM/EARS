@@ -21,7 +21,7 @@ public class AncestorUtil {
     }
 
     public static void saveAncestorLogging4Visualization(String path, Task task, Algorithm alg, int runID) {
-        String algID = alg.getID();
+        String algID = alg.getId();
         algID = algID.replaceAll("_", "");
         algID = algID.replaceAll("\\\\", "");
         algID = algID.replaceAll("/", "");
@@ -30,7 +30,7 @@ public class AncestorUtil {
         String pop_size = alg.getAlgorithmInfo().getParameters().get(EnumAlgorithmParameters.POP_SIZE);
         StringBuilder head = new StringBuilder();
         if (pop_size == null) pop_size = "1";
-        head.append(alg.getID()).append(";").append(";[\"").append(pop_size).append("\"];").append(runID).append(";"); //X id
+        head.append(alg.getId()).append(";").append(";[\"").append(pop_size).append("\"];").append(runID).append(";"); //X id
         head.append(task.getProblemName()).append(";").append(task.getNumberOfDimensions()).append(";[").append(task.getMaxEvaluations()).append("];").append("\n");
 
         ArrayList<DoubleSolution> ancestors = task.getAncestors();
@@ -98,7 +98,7 @@ public class AncestorUtil {
             String algorithmParams = sb.toString();
             algorithmParams = algorithmParams.substring(0, algorithmParams.length() - 1);
 
-            bw.write("'" + alg.getID() + ";[" + algorithmParams + "];" + task.getProblemName() + ";" + task.getNumberOfDimensions() + ";[\"" + task.getStopCriterion().getName() + "\"];'+\n");
+            bw.write("'" + alg.getId() + ";[" + algorithmParams + "];" + task.getProblemName() + ";" + task.getNumberOfDimensions() + ";[\"" + task.getStopCriterion().getName() + "\"];'+\n");
 
             for (int i = 0; i < ancestors.size(); ++i) {
                 List<DoubleSolution> parents = ancestors.get(i).parents;

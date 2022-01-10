@@ -575,7 +575,7 @@ public class GraphSet
 					if (!inLegend)
 					{
 						//String tmpTitle = tmpPlot.get("title");	// REMOVE '
-						tmpPlot.setTitle(g.data[0].algorithm.getID().replace("_", "\\_")/*+" "+tmpTitle*/);
+						tmpPlot.setTitle(g.data[0].algorithm.getId().replace("_", "\\_")/*+" "+tmpTitle*/);
 						inLegend = true;
 					}
 					else

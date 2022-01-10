@@ -133,12 +133,12 @@ public class GraphEARSStatic extends GraphEARS
 			String tmp="";
 			if (data[0].algorithm instanceof MOAlgorithm)
 			{
-				tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
+				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
 			}
 			else if (data[0].algorithm instanceof Algorithm)
 			{
 				//tmp = data[0].algorithm.getID()+" solving "+data[0].problem.name+" it"+data[0].iteration+".png";
-				tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+".png";
+				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".png";
 			}
 			setOutputFilePrivate(tmp, overwrite);
 		}
@@ -219,12 +219,12 @@ public class GraphEARSStatic extends GraphEARS
 			String tmp="";
 			if (data[0].algorithm instanceof MOAlgorithm)
 			{
-				tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
+				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
 			}
 			else if (data[0].algorithm instanceof Algorithm)
 			{
 				//tmp = data[0].algorithm.getID()+" solving "+data[0].problem.name+" it"+data[0].iteration+".png";
-				tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+".png";
+				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".png";
 			}
 			setOutputFilePrivate(tmp, false);
 		}
@@ -242,7 +242,7 @@ public class GraphEARSStatic extends GraphEARS
 			if (data != null)
 			{
 
-				statisticsFile = data[0].algorithm.getID()+" solving "+data[0].problemName+".csv";
+				statisticsFile = data[0].algorithm.getId()+" solving "+data[0].problemName+".csv";
 			}
 			else
 			{
@@ -464,7 +464,7 @@ public class GraphEARSStatic extends GraphEARS
 			}
 			else*/
 			{
-				plot.setTitle(data[0].algorithm.getID().replace("_", "\\_")+" solving "+data[0].problemName);
+				plot.setTitle(data[0].algorithm.getId().replace("_", "\\_")+" solving "+data[0].problemName);
 			}
 		}
 		plot.plot();
