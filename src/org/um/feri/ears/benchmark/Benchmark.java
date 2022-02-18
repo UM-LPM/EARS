@@ -21,7 +21,7 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
     protected abstract void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations, double epsilon);
 
     @Override
-    protected void performTournament() {
+    protected void performTournament(int evaluationNumber) {
 
         GameInfo gameInfo = GameInfo.getDefaultGameInfo();
         TwoPlayerTrueSkillCalculator calculator = new TwoPlayerTrueSkillCalculator();
@@ -48,7 +48,7 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
             for (ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>> results : problemMap.values()) {
                 Task t = results.get(0).task;
 
-                AlgorithmResultComparator rc = new AlgorithmResultComparator(t);
+                AlgorithmResultComparator rc = new AlgorithmResultComparator(t, evaluationNumber);
                 results.sort(rc); // best first
 
                 ranks = new int[algorithms.size()];

@@ -1,6 +1,9 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.statistic.rating_system.Player;
+import org.um.feri.ears.statistic.rating_system.glicko2.Glicko2Rating;
+import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.SolutionBase;
@@ -29,6 +32,8 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     protected int numberOfRuns = 15;
     protected boolean runInParallel = false;
     protected boolean displayRatingCharts = true;
+    boolean displayRatingIntervalBand = false;
+    int evaluationsPerTick = 100;
 
     ResultArena resultArena = new ResultArena();
     BenchmarkResults<T, S, A> benchmarkResults = new BenchmarkResults();
@@ -175,6 +180,11 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
 
     protected ArrayList<AlgorithmRunResult<S, A, T>> runOneTask(T task) {
 
+        if(displayRatingIntervalBand) {
+            task.enableEvaluationHistory();
+            task.setStoreEveryNthEvaluation(evaluationsPerTick);
+        }
+
         ArrayList<AlgorithmRunResult<S, A, T>> runResults = new ArrayList<>();
         if (runInParallel) {
             ExecutorService pool = Executors.newFixedThreadPool(algorithms.size());
@@ -224,14 +234,77 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
 
     private void performStatistics() {
 
-        for (A algorithm : algorithms) {
-            resultArena.addPlayer(algorithm.getId());
+        //TODO check if stopping criterion max evaluations
+        if (displayRatingIntervalBand) {
+            int numberOfTicks = maxEvaluations / evaluationsPerTick;
+            HashMap<String, Glicko2Rating[]> ratingLists = new HashMap<>();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Evaluations;");
+
+            for (A algorithm : algorithms) {
+                resultArena.addPlayer(algorithm.getId());
+                ratingLists.put(algorithm.getId(), new Glicko2Rating[numberOfTicks]);
+            }
+
+            for (int i = 1; i <= numberOfTicks; i++) {
+                performTournament(i * evaluationsPerTick);
+                sb.append(i * evaluationsPerTick).append(";");
+                for (Player p : resultArena.getPlayers()) {
+                    ratingLists.get(p.getId())[i - 1] = p.getGlicko2Rating();
+                }
+
+                resultArena = new ResultArena();
+                for (A algorithm : algorithms) {
+                    resultArena.addPlayer(algorithm.getId());
+                }
+            }
+
+            StringBuilder ratingsSb = new StringBuilder();
+            StringBuilder deviationsSb = new StringBuilder();
+            StringBuilder upperSb = new StringBuilder();
+            StringBuilder lowerSb = new StringBuilder();
+
+            for (Map.Entry<String, Glicko2Rating[]> entry : ratingLists.entrySet()) {
+                //System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
+                String algorithm = entry.getKey();
+                Glicko2Rating[] ratings = entry.getValue();
+                ratingsSb.append(algorithm).append(";");
+                deviationsSb.append("RD ").append(algorithm).append(";");
+                upperSb.append(algorithm).append(" band upper;");
+                lowerSb.append(algorithm).append(" band lower;");
+                for(Glicko2Rating glicko2Rating : ratings) {
+                    double rating = glicko2Rating.getRating();
+                    double RD = glicko2Rating.getRatingDeviation();
+                    double upper = rating + 2 * RD;
+                    double lower = rating - 2 * RD;
+                    ratingsSb.append(Util.df1.format(rating)).append(";");
+                    deviationsSb.append(RD).append(";");
+                    upperSb.append(Util.df1.format(upper)).append(";");
+                    lowerSb.append(Util.df1.format(lower)).append(";");
+                }
+                ratingsSb.append("\n");
+                deviationsSb.append("\n");
+                upperSb.append("\n");
+                lowerSb.append("\n");
+            }
+            sb.append("\n").append(ratingsSb).append(deviationsSb).append(upperSb).append(lowerSb);
+            String output = sb.toString();
+            output = output.replace(",","");
+            output = output.replace(".",",");
+            System.out.println(output);
+
+        } else {
+            for (A algorithm : algorithms) {
+                resultArena.addPlayer(algorithm.getId());
+            }
+
+            performTournament(-1);
+            resultArena.displayResults(displayRatingCharts);
         }
-        performTournament();
-        resultArena.displayResults(displayRatingCharts);
     }
 
-    protected abstract void performTournament();
+    protected abstract void performTournament(int evaluationNumber);
 
     public void allPlayed() {
         for (AlgorithmBase al : algorithms) {

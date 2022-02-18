@@ -9,6 +9,8 @@ import javax.annotation.CheckReturnValue;
 
 public class Task extends TaskBase<Problem> {
 
+    protected DoubleSolution bestSolution; //Keeps track of the best solution found.
+
     /**
      * @param problem the problem to be solved
      * @param stopCriterion the stopping criterion
@@ -29,9 +31,9 @@ public class Task extends TaskBase<Problem> {
         isGlobal = false;
         this.problem = problem;
         this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
-
+        bestSolution = new DoubleSolution();
         // set initial best eval
-        bestEval = problem.isMinimize() ? Double.MAX_VALUE : Double.MIN_VALUE;
+        bestSolution.setEval(problem.isMinimize() ? Double.MAX_VALUE : Double.MIN_VALUE);
     }
     /**
      * @param problem the problem to be solved
@@ -272,10 +274,9 @@ public class Task extends TaskBase<Problem> {
         } else if (stopCriterion == StopCriterion.STAGNATION) {
             if (isStop)
                 throw new StopCriterionException("Solution stagnation");
-
             tmpSolution = performEvaluation(x);
-            checkImprovement(tmpSolution.getEval());
         }
+
         if (tmpSolution != null) {
             if (isAncestorLoggingEnabled) {
                 tmpSolution.timeStamp = System.currentTimeMillis();
@@ -294,23 +295,24 @@ public class Task extends TaskBase<Problem> {
         incrementNumberOfEvaluations();
         long start = System.nanoTime();
         DoubleSolution tmpSolution = new DoubleSolution(x, problem.eval(x), problem.evaluateConstrains(x));
+        checkImprovement(tmpSolution);
         evaluationTime += System.nanoTime() - start;
         checkIfGlobalReached(tmpSolution.getEval());
         GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-        if(isEvaluationHistoryEnabled)
-            evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTime, tmpSolution.getEval()));
+        if(isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
+            evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTime, bestSolution.getEval()));
         return tmpSolution;
     }
 
     /**
-     * Checks if the current evaluation {@code eval} is better than the best evaluation. If there is no improvement after
+     * Checks if the current {@code solution} is better than the current best solution. If there is no improvement after
      * a certain amount of tries the stopping criterion is met. If there is an improvement the stagnation trial counter is reset.
-     * @param eval current evaluation
+     * @param solution current evaluation
      */
-    private void checkImprovement(double eval) {
+    private void checkImprovement(DoubleSolution solution) {
 
-        if(problem.isFirstBetter(eval, bestEval)){
-            bestEval = eval;
+        if(isFirstBetter(solution, bestSolution)){
+            bestSolution = new DoubleSolution(solution);
             stagnationTrialCounter = 0;
         }
         else {

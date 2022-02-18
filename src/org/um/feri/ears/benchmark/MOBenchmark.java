@@ -70,7 +70,7 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
     }
 
     @Override
-    protected void performTournament() {
+    protected void performTournament(int evaluationNumber) {
 
         for (HashMap<Task, ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
             for (ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>> results : problemMap.values()) {
