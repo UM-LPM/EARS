@@ -3,6 +3,8 @@ package org.um.feri.ears.algorithms;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +18,7 @@ public class DummyAlgorithm extends Algorithm {
 
     HashMap<String, double[]> results;
     HashMap<String, EvaluationStorage.Evaluation[]> problemEvaluations;
+    HashMap<String, ArrayList<EvaluationStorage.Evaluation>[]> problemEvaluationHistory; //stores the evaluation history for each problem and each run
     HashMap<String, Integer> positions; //stores the position of the current result of the current problem
     String algorithmName;
     String filesDir;
@@ -25,7 +28,8 @@ public class DummyAlgorithm extends Algorithm {
     public DummyAlgorithm(String algorithmName) {
         this(algorithmName, algorithmName, "D:/Results/");
     }
-    public DummyAlgorithm(String algorithmName, String filesDir)  {
+
+    public DummyAlgorithm(String algorithmName, String filesDir) {
         this(algorithmName, algorithmName, filesDir);
     }
 
@@ -37,6 +41,7 @@ public class DummyAlgorithm extends Algorithm {
         results = new HashMap<>();
         positions = new HashMap<>();
         problemEvaluations = new HashMap<>();
+        problemEvaluationHistory = new HashMap<>();
         if (!readFromJson)
             fillResults(nameInFile); //TODO lazy load
     }
@@ -122,10 +127,25 @@ public class DummyAlgorithm extends Algorithm {
                         ObjectMapper mapper = new ObjectMapper();
                         //TODO check json file metadata (versions, dimensions...)
                         EvaluationStorage es = mapper.readValue(json, EvaluationStorage.class);
+
                         EvaluationStorage.Evaluation[] evaluations = new EvaluationStorage.Evaluation[es.numberOfRuns];
+
+                        ArrayList<EvaluationStorage.Evaluation>[] evaluationHistory = new ArrayList[es.numberOfRuns];
+
                         //find the evaluation corresponding to the stopping criterion for each run
                         for (int i = 0; i < es.numberOfRuns; i++) {
+
                             EvaluationStorage.Evaluation[] evaluationsPerRun = es.evaluations[i];
+
+                            ArrayList<EvaluationStorage.Evaluation> filteredEvaluations = new ArrayList<>();
+                            for (EvaluationStorage.Evaluation value : evaluationsPerRun) {
+
+                                if (value.evalNum % task.getStoreEveryNthEvaluation() == 0) {
+                                    filteredEvaluations.add(value);
+                                }
+                            }
+                            evaluationHistory[i] = filteredEvaluations;
+
                             switch (task.getStopCriterion()) {
                                 case CPU_TIME: {
                                     long stopCpuTime = task.getAllowedCPUTime();
@@ -210,7 +230,7 @@ public class DummyAlgorithm extends Algorithm {
                                     break;
                             }
                         }
-
+                        problemEvaluationHistory.put(key, evaluationHistory);
                         problemEvaluations.put(key, evaluations);
                         positions.put(key, 0);
                     } catch (JsonProcessingException e) {
@@ -222,16 +242,17 @@ public class DummyAlgorithm extends Algorithm {
                 }
             }
 
-            if(!positions.containsKey(key)) {
-                System.err.println("No evaluation with key: "+key+" found!");
+            if (!positions.containsKey(key)) {
+                System.err.println("No evaluation with key: " + key + " found!");
                 return null;
             }
             int currentRun = positions.get(key);
-            if(currentRun >= problemEvaluations.get(key).length){
-                System.err.println("No evaluation for run: "+(currentRun+1)+"!");
+            if (currentRun >= problemEvaluations.get(key).length) {
+                System.err.println("No evaluation for run: " + (currentRun + 1) + "!");
                 return null;
             }
             EvaluationStorage.Evaluation evaluation = problemEvaluations.get(key)[currentRun];
+            task.setEvaluationHistory(problemEvaluationHistory.get(key)[currentRun]);
             positions.put(key, currentRun + 1);
             updateTask(task, evaluation);
             return new DummySolution(evaluation.fitness);
@@ -245,6 +266,7 @@ public class DummyAlgorithm extends Algorithm {
                 return new DummySolution(val);
             }
         }
+        System.err.println(task.getProblemName() + " not found for algorithm " + algorithmName);
         return new DummySolution(Double.MAX_VALUE);
     }
 
@@ -283,5 +305,4 @@ public class DummyAlgorithm extends Algorithm {
     @Override
     public void resetToDefaultsBeforeNewRun() {
     }
-
 }
