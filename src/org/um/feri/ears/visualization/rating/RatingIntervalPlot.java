@@ -96,11 +96,12 @@ public class RatingIntervalPlot extends ApplicationFrame {
                 rangeUpper = (int) (rating + 2 * RD);
             }
         }
-
         rangeLower -= 1;
 
-        if (rangeLower < 0) {
-            rangeLower = 0;
+        if(ratingType == RatingType.GLICKO2) {
+            if (rangeLower < 0) {
+                rangeLower = 0;
+            }
         }
 
         if(rangeUpper < rangeLower)
