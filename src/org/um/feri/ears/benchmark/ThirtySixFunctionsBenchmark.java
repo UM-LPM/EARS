@@ -46,7 +46,7 @@ public class ThirtySixFunctionsBenchmark extends Benchmark {
         problems.add(new Michalewicz5());
         problems.add(new Zakharov(30));
         problems.add(new Michalewicz10());
-        problems.add(new Step1(30)); //x[-5.12,5.12]
+        problems.add(new Step2(30)); //x[-5.12,5.12]
         problems.add(new Sphere(30));
         problems.add(new SumSquares(30));
         problems.add(new Quartic(30)); //paper uses noise

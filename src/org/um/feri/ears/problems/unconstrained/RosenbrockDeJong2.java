@@ -9,8 +9,8 @@ import java.util.Collections;
 import static java.lang.Math.pow;
 
 /**
- * https://www.sfu.ca/~ssurjano/rosen.html
- * http://www.geatbx.com/ver_3_5/fcnfun2.html
+ https://www.sfu.ca/~ssurjano/rosen.html
+ http://www.geatbx.com/ver_3_5/fcnfun2.html
  */
 public class RosenbrockDeJong2 extends Problem {
     public RosenbrockDeJong2(int d) {

@@ -5,28 +5,27 @@ import org.um.feri.ears.problems.Problem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.lang.Math.*;
+import static java.lang.Math.floor;
+import static java.lang.Math.pow;
 
 /*
-https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/184-salomon-s-function
-http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Salomon
+https://al-roomi.org/benchmarks/unconstrained/n-dimensions/193-step-function-no-2
+http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Step
  */
-public class Salomon extends Problem {
-
-    public Salomon(int d) {
+public class Step2 extends Problem {
+    public Step2(int d) {
         super(d, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Salomon";
+        name = "Step1";
     }
 
     @Override
     public double eval(double[] x) {
-        double norm = 0;
+        double fitness = 0;
         for (int i = 0; i < numberOfDimensions; i++) {
-            norm += pow(x[i], 2);
+            fitness += pow(floor(x[i] + 0.5), 2);
         }
-        norm = sqrt(norm);
-        return 1 - cos(2 * PI * norm) + 0.1 * norm;
+        return fitness;
     }
 }

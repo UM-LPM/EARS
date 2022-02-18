@@ -56,7 +56,7 @@ public class TuningBenchmark extends Benchmark {
     public void initAllProblems() {
         addTask(new Sphere(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);      // f1
         addTask(new RosenbrockDeJong2(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);  // f2
-        addTask(new Step1(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);        // f3
+        addTask(new Step2(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);        // f3
         addTask(new Schaffer1(), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);    // f4
         addTask(new Rastrigin(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);   // f5
         addTask(new Schwefel226(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);    // f6

@@ -11,13 +11,13 @@ import static java.lang.Math.pow;
 https://www.sfu.ca/~ssurjano/trid.html
  */
 
-public class Trid2 extends Problem {
+public class Trid extends Problem {
 
-    public Trid2() {
-        super(2, 0);
+    public Trid(int d) {
+        super(d, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -pow(numberOfDimensions, 2)));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, pow(numberOfDimensions, 2)));
-        name = "Trid2";
+        name = "Trid";
 
         for (int i = 0; i < numberOfDimensions; i++) {
             optimum[0][i] = (i + 1) * (numberOfDimensions + 1 - (i + 1));
