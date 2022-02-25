@@ -18,7 +18,7 @@
 package org.um.feri.ears.operators;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Comparator.ObjectiveComparator;
+import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
 
 public class VEGASelection<Type extends Number> {

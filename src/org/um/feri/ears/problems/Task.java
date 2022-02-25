@@ -311,6 +311,9 @@ public class Task extends TaskBase<Problem> {
      */
     private void checkImprovement(DoubleSolution solution) {
 
+        if(bestSolution == null)
+            bestSolution = new DoubleSolution(solution);
+
         if(isFirstBetter(solution, bestSolution)){
             bestSolution = new DoubleSolution(solution);
             stagnationTrialCounter = 0;

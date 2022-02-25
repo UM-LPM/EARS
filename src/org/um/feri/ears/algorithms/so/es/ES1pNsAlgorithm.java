@@ -1,14 +1,12 @@
 package org.um.feri.ears.algorithms.so.es;
 
 import org.um.feri.ears.algorithms.*;
-import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 
 public class ES1pNsAlgorithm extends Algorithm {
@@ -34,10 +32,6 @@ public class ES1pNsAlgorithm extends Algorithm {
                 "ES(1+N)", "ES(1+N)", //ES(1+1) 1/5 rule
                 "@book{Rechenberg1973,\n author = {Rechenberg, I.}, \n publisher = {Frommann-Holzboog}, \n title = {Evolutionsstrategie: optimierung technischer systeme nach prinzipien der biologischen evolution},\n year = {1973}}"
          );
-        ai.addParameter(EnumAlgorithmParameters.K_ITERATIONS, "" + k);
-        ai.addParameter(EnumAlgorithmParameters.C_FACTOR, "" + c);
-        ai.addParameter(EnumAlgorithmParameters.MU, "" + n);
-
     }
 
     @Override
@@ -101,7 +95,7 @@ public class ES1pNsAlgorithm extends Algorithm {
     }
 
     @Override
-    public List<AlgorithmBase> getAlgorithmParameterTest(EnumMap<EnumBenchmarkInfoParameters, String> param, int maxCombinations) {
+    public List<AlgorithmBase> getAlgorithmParameterTest(int dimension, int maxCombinations) {
         List<AlgorithmBase> alternative = new ArrayList<AlgorithmBase>();
         if (maxCombinations == 1) {
             alternative.add(this);

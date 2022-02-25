@@ -6,7 +6,7 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.RPUOed2Benchmark;
-import org.um.feri.ears.examples.BenchmarkRunnerBestAlgSettings;
+import org.um.feri.ears.benchmark.BenchmarkRunnerBestAlgSettings;
 import org.um.feri.ears.visualization.graphing.data.RecordedCombination;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;

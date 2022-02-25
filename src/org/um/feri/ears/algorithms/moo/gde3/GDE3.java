@@ -23,7 +23,6 @@ package org.um.feri.ears.algorithms.moo.gde3;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionSelection;
@@ -31,9 +30,9 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Comparator.CrowdingComparator;
+import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
-import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
 import java.util.Comparator;
@@ -59,9 +58,6 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 "GDE3", "Generalized Differential Evolution 3",
                 "\\bibitem{Kukkonen2009}\nS.~Kukkonen, J.~Lampinen\n\\newblock Performance Assessment of Generalized Differential Evolution 3 with a Given Set of Constrained Multi-Objective Test Problems.\n\\newblock \\emph{2009 IEEE Congress on Evolutionary Computation}, 1943--1950, 2009."
                 );
-
-        ai.addParameters(crossover.getOperatorParameters());
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
     }
 
     @Override

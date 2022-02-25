@@ -6,14 +6,13 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.operators.PolynomialMutationSO;
 import org.um.feri.ears.operators.SBXCrossoverSO;
 import org.um.feri.ears.operators.TournamentSelection;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.Comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
@@ -29,7 +28,7 @@ public class CRO extends Algorithm {
 	private double rho;
 	@AlgorithmParameter(description = "percentage of broadcast spawners")
 	private double fbs;
-	@AlgorithmParameter(description = "percentage of broadcast brooders fbr = (1 - fbs)")
+	@AlgorithmParameter(description = "percentage of broadcast brooders fbr = (1 - fbs)", isTunable = false)
 	private double fbr;
 	@AlgorithmParameter(name = "percentage of budders")
 	private double fa;
@@ -91,7 +90,6 @@ public class CRO extends Algorithm {
 				+ "author={Salcedo-Sanz, S and Del Ser, J and Landa-Torres, I and Gil-L{\'o}pez, S and Portilla-Figueras, JA}, "
 				+ "journal={The Scientific World Journal}, volume={2014},year={2014},publisher={Hindawi Publishing Corporation}}"
 		);
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
 	@Override

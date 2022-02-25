@@ -8,8 +8,8 @@
 package org.um.feri.ears.algorithms.moo.spea2;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Comparator.DominanceComparator;
-import org.um.feri.ears.util.Comparator.MOFitnessComparator;
+import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.MOFitnessComparator;
 import org.um.feri.ears.util.Distance;
 
 import java.util.*;

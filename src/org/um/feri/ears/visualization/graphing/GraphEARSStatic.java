@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.visualization.graphing.data.AlgorithmStatistics;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
@@ -1212,7 +1211,7 @@ public class GraphEARSStatic extends GraphEARS
 		String pop_size_string = null;
 		popSize = GraphEARSStatic.DEFAULT_EVALUATIONS_PER_STEP;
 		
-		pop_size_string = alg.getAlgorithmInfo().getParameters().get(EnumAlgorithmParameters.POP_SIZE);
+		pop_size_string = alg.getParameterValue("popSize");
 		if (pop_size_string == null)
 		{
 			System.err.println("Error: Could not resolve pop size for algorithm " + alg.getClass().toString() + ".");

@@ -3,7 +3,6 @@ package org.um.feri.ears.algorithms.so.pso;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -34,11 +33,6 @@ public class PSOOmega extends Algorithm {
         this.phiG = p2;
         setDebug(debug);  //EARS prints some debug info
         ai = new AlgorithmInfo("PSOomega", "Particle Swarm Optimization Omega", "");
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
-        ai.addParameter(EnumAlgorithmParameters.C1, p1 + "");
-        ai.addParameter(EnumAlgorithmParameters.C2, p2 + "");
-        ai.addParameter(EnumAlgorithmParameters.UNNAMED1, om + "");
-        //ai.addParameter(EnumAlgorithmParameters., F + "");
         au = new Author("Matej", "matej.crepinsek@um.si");
     }
 

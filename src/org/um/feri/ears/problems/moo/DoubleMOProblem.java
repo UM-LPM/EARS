@@ -3,9 +3,7 @@ package org.um.feri.ears.problems.moo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.ProblemBase;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
 import org.um.feri.ears.util.Util;
 
 public abstract class DoubleMOProblem extends MOProblemBase<Double> {

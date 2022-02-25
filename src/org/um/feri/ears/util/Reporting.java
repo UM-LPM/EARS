@@ -14,8 +14,9 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.statistic.rating_system.Player;
+import org.um.feri.ears.statistic.rating_system.Rating;
 
 public class Reporting {
 
@@ -30,7 +31,7 @@ public class Reporting {
                 rating = p.getGlicko2Rating().getRating();
                 RD = p.getGlicko2Rating().getRatingDeviation();
                 voaltility = p.getGlicko2Rating().getRatingVolatility();
-                interval = "[" + df.format(rating - 2 * RD) + "," + df.format(rating + 2 * RD) + "]";
+                interval = "[" + df.format(p.getGlicko2Rating().getRatingIntervalLower()) + "," + df.format(p.getGlicko2Rating().getRatingIntervalUpper()) + "]";
 
                 bw.write(rank + ". " + p.getId() + " " + df.format(rating) + " " + RD + " " + interval);
                 bw.newLine();
@@ -109,7 +110,7 @@ public class Reporting {
 
         DecimalFormat df = getFormat(0);
         df.setRoundingMode(RoundingMode.HALF_UP);
-        double rating, RD;
+        Rating rating;
         boolean isFirst = true;
         String RDline = "";
 
@@ -151,11 +152,10 @@ public class Reporting {
 
             int[] ranks = getRanks(row);
             for (int i = 0; i < row.size(); i++) {
-                rating = row.get(i).getGlicko2Rating().getRating();
-                RD = row.get(i).getGlicko2Rating().getRatingDeviation();
-                RDline += "[" + df.format(rating - 2 * RD) + "," + df.format(rating + 2 * RD) + "]";
+                rating = row.get(i).getGlicko2Rating();
+                RDline += "[" + df.format(rating.getRatingIntervalLower()) + "," + df.format(rating.getRatingIntervalUpper()) + "]";
 
-                sb.append(df.format(rating)).append(" (").append(ranks[i]).append(")"); //df.format(RD)
+                sb.append(df.format(rating.getRating())).append(" (").append(ranks[i]).append(")"); //df.format(RD)
                 if (i + 1 < row.size()) {
                     sb.append(" & ");
                     RDline += " & ";

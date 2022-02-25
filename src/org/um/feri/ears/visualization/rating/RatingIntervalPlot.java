@@ -12,6 +12,7 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.statistic.rating_system.Player;
+import org.um.feri.ears.statistic.rating_system.Rating;
 import org.um.feri.ears.statistic.rating_system.RatingType;
 
 import javax.swing.*;
@@ -83,17 +84,15 @@ public class RatingIntervalPlot extends ApplicationFrame {
 
     public static void displayChart(ArrayList<Player> players, RatingType ratingType, String title) {
 
-        double rating, RD;
         int rangeLower = Integer.MAX_VALUE, rangeUpper = Integer.MIN_VALUE;
         for (Player p : players) {
-            rating = p.getRating(ratingType).getRating();
-            RD = p.getRating(ratingType).getRatingDeviation();
+            Rating rating = p.getRating(ratingType);
 
-            if (rangeLower > rating - 2 * RD) {
-                rangeLower = (int) (rating - 2 * RD);
+            if (rangeLower > rating.getRatingIntervalLower()) {
+                rangeLower = (int) rating.getRatingIntervalLower();
             }
-            if (rangeUpper < rating + 2 * RD) {
-                rangeUpper = (int) (rating + 2 * RD);
+            if (rangeUpper < rating.getRatingIntervalUpper()) {
+                rangeUpper = (int) rating.getRatingIntervalUpper();
             }
         }
         rangeLower -= 1;
@@ -142,21 +141,19 @@ public class RatingIntervalPlot extends ApplicationFrame {
     private DefaultCategoryDataset generateDataSet(ArrayList<Player> players) {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        double rating, RD;
         int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
         for (Player p : players) {
-            rating = p.getRating(ratingType).getRating();
-            RD = p.getRating(ratingType).getRatingDeviation();
+            Rating rating = p.getRating(ratingType);
 
-            dataset.addValue(rating - 2 * RD, "1", p.getId());
-            dataset.addValue(rating, "2", p.getId());
-            dataset.addValue(rating + 2 * RD, "3", p.getId());
+            dataset.addValue(rating.getRatingIntervalLower(), "1", p.getId());
+            dataset.addValue(rating.getRating(), "2", p.getId());
+            dataset.addValue(rating.getRatingIntervalUpper(), "3", p.getId());
 
-            if (min > rating - 2 * RD) {
-                min = (int) (rating - 2 * RD);
+            if (min > rating.getRatingIntervalLower()) {
+                min = (int) rating.getRatingIntervalLower();
             }
-            if (max < rating + 2 * RD) {
-                max = (int) (rating + 2 * RD);
+            if (max < rating.getRatingIntervalUpper()) {
+                max = (int) rating.getRatingIntervalUpper();
             }
         }
 

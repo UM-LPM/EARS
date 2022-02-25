@@ -3,7 +3,6 @@ package org.um.feri.ears.algorithms.so.aaa;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -47,7 +46,6 @@ public class AAA extends Algorithm {
                         "year={2015}, " +
                         "publisher={Elsevier}}"
                 );
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 
     @Override

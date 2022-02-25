@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
@@ -632,7 +631,7 @@ public class GraphEARSAnimated extends GraphEARS
 		String pop_size_string = null;
 		popSize = GraphEARSStatic.DEFAULT_EVALUATIONS_PER_STEP;
 		
-		pop_size_string = alg.getAlgorithmInfo().getParameters().get(EnumAlgorithmParameters.POP_SIZE);
+		pop_size_string = alg.getParameterValue("popSize");
 		if (pop_size_string == null)
 		{
 			System.err.println("Error: Could not resolve pop size for algorithm " + alg.getClass().toString() + ".");

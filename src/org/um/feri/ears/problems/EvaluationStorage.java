@@ -11,7 +11,7 @@ public class EvaluationStorage {
         this.seed = seed;
         algorithmName = algorithm.getAlgorithmInfo().getAcronym();
         algorithmVersion = algorithm.getVersion();
-        algorithmParameters = algorithm.getParametersString();
+        algorithmParameters = algorithm.getParametersAsString();
         problemName = problem.getName();
         problemVersion = problem.getVersion();
         problemDimensions = problem.getNumberOfDimensions();

@@ -18,6 +18,7 @@ public class SOBenchmarkExample {
         Util.rnd.setSeed(System.currentTimeMillis()); //set the seed of the random generator
         Benchmark.printInfo = false; //prints one on one results
         //add algorithms to a list
+
         ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
         algorithms.add(new ABC());
         algorithms.add(new GWO());

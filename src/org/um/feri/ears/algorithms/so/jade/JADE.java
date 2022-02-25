@@ -3,7 +3,6 @@ package org.um.feri.ears.algorithms.so.jade;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -66,7 +65,6 @@ public class JADE extends Algorithm {
                 "JADE",
                 "Adaptive Differential Evolution With Optional External Archive",
                 "Jingqiao Zhang, Arthur C. Sanderson");
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
         // ai.addParameter(EnumAlgorithmParameters., F + "");
         au = new Author("Matej", "matej.crepinsek@um.si");
     }

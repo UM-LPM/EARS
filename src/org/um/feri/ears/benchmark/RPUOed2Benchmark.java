@@ -14,37 +14,34 @@ public class RPUOed2Benchmark extends Benchmark {
         timeLimit = 10;
         maxEvaluations=10000;
         maxIterations = 500; 
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION,"2");
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations*2));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+ drawLimit);
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
         tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
     
     @Override
     public void initAllProblems() {
-        addTask(new Ackley1(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new Bohachevsky1(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new Beale(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new Booth(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new Branin1(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new Easom(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new GoldsteinPrice(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new Griewank(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new MartinAndGaddy(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new PowellBadlyScaledFunction(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new Rastrigin(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new RosenbrockDeJong2(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new Schwefel226(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new SchwefelRidge(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
-        addTask(new Sphere(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations, 0.001);
+        addTask(new Ackley1(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new Bohachevsky1(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new Beale(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new Booth(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new Branin1(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new Easom(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new GoldsteinPrice(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new Griewank(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new MartinAndGaddy(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new PowellBadlyScaledFunction(), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new Rastrigin(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new RosenbrockDeJong2(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new Schwefel226(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new SchwefelRidge(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
+        addTask(new Sphere(2), stopCriterion, 2*maxEvaluations, timeLimit, maxIterations);
     }
         
     @Override
     public String getName() {
-        return name + "("+ getParameters().get(EnumBenchmarkInfoParameters.DIMENSION)+")";
+        return name + " D=" + dimension;
     }
 }

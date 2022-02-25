@@ -1,7 +1,6 @@
 package org.um.feri.ears.algorithms;
 
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
-import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
@@ -9,7 +8,6 @@ import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.annotation.AnnotationUtil;
 
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -31,14 +29,21 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
     protected ArrayList<Double> controlParameters;
     protected boolean played = false;
 
-    public Callable<AlgorithmRunResult> createRunnable(final AlgorithmBase<T, S> al, final T task) {
+    /**
+     * Method for creating callable object to run algorithms in parallel
+     *
+     * @param algorithm to be run in parallel
+     * @param task      to be executed
+     * @return callable object
+     */
+    public Callable<AlgorithmRunResult> createRunnable(final AlgorithmBase<T, S> algorithm, final T task) {
 
         return () -> {
             long duration = System.nanoTime();
             S res = execute(task);
             duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - duration);
-            al.addRunDuration(duration, duration - task.getEvaluationTimeMs());
-            AlgorithmRunResult future = new AlgorithmRunResult(res, al, task);
+            algorithm.addRunDuration(duration, duration - task.getEvaluationTimeMs());
+            AlgorithmRunResult future = new AlgorithmRunResult(res, algorithm, task);
             return future;
         };
     }
@@ -62,12 +67,6 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
 
     public HashMap<String, String> getCustomInfo() {
         return ai.getCustomInfo();
-    }
-
-    public String getCustomInfoByKey(String key) {
-        if (ai != null)
-            return ai.getCustomInfoByKey(key);
-        return "";
     }
 
     /**
@@ -101,9 +100,11 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
     }
 
     /**
-     * @param task
-     * @return
-     * @throws StopCriterionException
+     * Main method which executes the algorithm
+     *
+     * @param task to be executed
+     * @return best found solution
+     * @throws StopCriterionException if the stopping criterion is violated
      */
     public abstract S execute(T task) throws StopCriterionException;
 
@@ -121,44 +122,19 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
 
     public String getCacheKey(String taskString) {
 
-        return "Algorithm = " + ai.getAcronym() + " version: " + version + ", " + shortAlgorithmInfo() + " " + taskString;
+        return "Algorithm = " + ai.getAcronym() + " version: " + version + ", " + getParametersAsString() + " " + taskString;
     }
 
     public String getVersion() {
         return version;
     }
 
-    public String getParametersString() {
+    public String getParametersAsString() {
         return AnnotationUtil.getParameterNamesAndValues(this);
     }
 
-    public String shortAlgorithmInfo() {
-
-        String info = "";
-
-        for (Entry<EnumAlgorithmParameters, String> entry : ai.getParameters().entrySet()) {
-            info += entry.getKey().getShortName() + ":" + entry.getValue() + ",";
-        }
-
-        //remove last comma
-        if (info.length() > 1)
-            info = info.substring(0, info.length() - 2);
-
-        return info;
-    }
-
-    public String longAlgorithmInfo() {
-
-        String info = "";
-
-        for (Entry<EnumAlgorithmParameters, String> entry : ai.getParameters().entrySet()) {
-            info += entry.getKey().getDescription() + ": " + entry.getValue() + ", ";
-        }
-
-        if (info.length() > 1)
-            info = info.substring(0, info.length() - 2);
-
-        return info;
+    public String getParameterValue(String parameterName) {
+        return AnnotationUtil.getParameterValue(this, parameterName);
     }
 
     public String getAlgorithmInfoCSV() {
@@ -170,11 +146,11 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
             customInfoCSV += entry.getKey() + ":" + entry.getValue() + ",";
         }
 
-        return "algorithm name:" + ai.getAcronym() + ",algorithm version:" + version + "," + shortAlgorithmInfo() + "," + customInfoCSV;
+        return "algorithm name:" + ai.getAcronym() + ",algorithm version:" + version + "," + getParametersAsString() + "," + customInfoCSV;
     }
 
     /**
-     * It is called every time before every run!
+     * Used to reset algorithm's parameters before every run.
      */
     public abstract void resetToDefaultsBeforeNewRun();
 
@@ -198,7 +174,7 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
         return ai.getAcronym();
     }
 
-    public AlgorithmBase<T, S> setID(String id) {
+    public AlgorithmBase<T, S> setId(String id) {
         ai.setAcronym(id);
         return this;
     }
@@ -208,11 +184,10 @@ public abstract class AlgorithmBase<T extends TaskBase, S extends SolutionBase> 
      * maxCombinations is usually set to 8!
      * If maxCombinations==1 than return combination that is expected to perform best!
      * <p>
-     * NOTE not static because java doesn't support abstract static!
      *
      * @return
      */
-    public List<AlgorithmBase> getAlgorithmParameterTest(EnumMap<EnumBenchmarkInfoParameters, String> parameters, int maxCombinations) {
+    public List<AlgorithmBase> getAlgorithmParameterTest(int dimension, int maxCombinations) {
         List<AlgorithmBase> noAlternative = new ArrayList<AlgorithmBase>();
         noAlternative.add(this);
         return noAlternative;

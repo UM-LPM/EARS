@@ -7,13 +7,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 public class DESolution extends DoubleSolution {
     private double F;
     private double CR;
-    
-    public DESolution(List<Double> x, double eval, double F, double CR) {
-        super(x, eval);
-        this.F = F;
-        this.CR =CR;
-    }
-    
+
     public DESolution(DESolution i) {
         super(i);
         this.F = i.F;

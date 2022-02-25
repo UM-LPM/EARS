@@ -19,7 +19,6 @@ package org.um.feri.ears.algorithms.moo.vega;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
@@ -28,7 +27,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Comparator.ObjectiveComparator;
+import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -71,9 +70,6 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 "VEGA", "Vector Evaluated Genetic Algorithm",
                 "\\bibitem{Schaffer1985}\nD.~Schaffer.\n\\newblock Multiple Objective Optimization with Vector Evaluated Genetic Algorithms.\n\\newblock \\emph{Proceedings of the 1st International Conference on Genetic Algorithms}, 93--100, 1985."
         );
-        ai.addParameters(crossover.getOperatorParameters());
-        ai.addParameters(mutation.getOperatorParameters());
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
     }
 
     @Override

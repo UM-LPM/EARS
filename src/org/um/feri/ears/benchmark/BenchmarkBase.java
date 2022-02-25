@@ -9,7 +9,7 @@ import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
-import org.um.feri.ears.statistic.rating_system.glicko2.ResultArena;
+import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -35,14 +35,12 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     boolean displayRatingIntervalBand = false;
     int evaluationsPerTick = 100;
 
-    ResultArena resultArena = new ResultArena();
+    TournamentResults tournamentResults = new TournamentResults();
     BenchmarkResults<T, S, A> benchmarkResults = new BenchmarkResults();
-    protected EnumMap<EnumBenchmarkInfoParameters, String> parameters; //add all specific parameters
 
     public BenchmarkBase() {
         tasks = new ArrayList<>();
         algorithms = new ArrayList<>();
-        parameters = new EnumMap<>(EnumBenchmarkInfoParameters.class);
     }
 
     public boolean isRunInParallel() {
@@ -53,16 +51,12 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         this.runInParallel = runInParallel;
     }
 
-    public ResultArena getResultArena() {
-        return resultArena;
+    public TournamentResults getResultArena() {
+        return tournamentResults;
     }
 
-    public void addParameter(EnumBenchmarkInfoParameters id, String value) {
-        parameters.put(id, value);
-    }
-
-    public EnumMap<EnumBenchmarkInfoParameters, String> getParameters() {
-        return parameters;
+    public String getParameters(String name) {
+        return ""; //TODO reflection
     }
 
     public void clearPlayers() {
@@ -104,25 +98,6 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         benchmarkResults.removeAlgorithm(algorithm);
     }
 
-    public String getParams() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Parameters:\n");
-        for (EnumBenchmarkInfoParameters a : parameters.keySet()) {
-            sb.append(a.getShortName()).append(" = ").append(parameters.get(a)).append("\t").append("(").append(a.getDescription()).append(")\n");
-        }
-        return sb.toString();
-    }
-
-    public void updateParameters() {
-        parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_TASKS, "" + tasks.size());
-        addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA, "" + stopCriterion);
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION, "" + dimension);
-        addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.CPU_TIME, String.valueOf(timeLimit));
-        addParameter(EnumBenchmarkInfoParameters.ITERATIONS, String.valueOf(maxIterations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + drawLimit);
-    }
-
     public boolean isDisplayRatingCharts() {
         return displayRatingCharts;
     }
@@ -161,7 +136,6 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     public void run(int numberOfRuns) {
         this.numberOfRuns = numberOfRuns;
         initAllProblems();
-        addParameter(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, "" + numberOfRuns);
         long start = System.nanoTime();
         for (int i = 0; i < numberOfRuns; i++) {
             if (printInfo) System.out.println("Current run: " + (i + 1));
@@ -171,10 +145,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
                 benchmarkResults.addResults(i, task, runResults);
             }
         }
-
-        addParameter(EnumBenchmarkInfoParameters.BENCHMARK_RUN_DURATION,
-                "" + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
-
+        long duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
         performStatistics();
     }
 
@@ -189,8 +160,8 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         if (runInParallel) {
             ExecutorService pool = Executors.newFixedThreadPool(algorithms.size());
             Set<Future<AlgorithmRunResult>> set = new HashSet<>();
-            for (A al : algorithms) {
-                Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, (T) task.clone()));
+            for (A algorithm : algorithms) {
+                Future<AlgorithmRunResult> future = pool.submit(algorithm.createRunnable(algorithm, (T) task.clone()));
                 set.add(future);
             }
 
@@ -243,20 +214,20 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
             sb.append("Evaluations;");
 
             for (A algorithm : algorithms) {
-                resultArena.addPlayer(algorithm.getId());
+                tournamentResults.addPlayer(algorithm.getId());
                 ratingLists.put(algorithm.getId(), new Glicko2Rating[numberOfTicks]);
             }
 
             for (int i = 1; i <= numberOfTicks; i++) {
                 performTournament(i * evaluationsPerTick);
                 sb.append(i * evaluationsPerTick).append(";");
-                for (Player p : resultArena.getPlayers()) {
+                for (Player p : tournamentResults.getPlayers()) {
                     ratingLists.get(p.getId())[i - 1] = p.getGlicko2Rating();
                 }
 
-                resultArena = new ResultArena();
+                tournamentResults = new TournamentResults();
                 for (A algorithm : algorithms) {
-                    resultArena.addPlayer(algorithm.getId());
+                    tournamentResults.addPlayer(algorithm.getId());
                 }
             }
 
@@ -276,8 +247,8 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
                 for(Glicko2Rating glicko2Rating : ratings) {
                     double rating = glicko2Rating.getRating();
                     double RD = glicko2Rating.getRatingDeviation();
-                    double upper = rating + 2 * RD;
-                    double lower = rating - 2 * RD;
+                    double upper = glicko2Rating.getRatingIntervalUpper();
+                    double lower = glicko2Rating.getRatingIntervalLower();
                     ratingsSb.append(Util.df1.format(rating)).append(";");
                     deviationsSb.append(RD).append(";");
                     upperSb.append(Util.df1.format(upper)).append(";");
@@ -296,11 +267,11 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
 
         } else {
             for (A algorithm : algorithms) {
-                resultArena.addPlayer(algorithm.getId());
+                tournamentResults.addPlayer(algorithm.getId());
             }
 
             performTournament(-1);
-            resultArena.displayResults(displayRatingCharts);
+            tournamentResults.displayResults(displayRatingCharts);
         }
     }
 

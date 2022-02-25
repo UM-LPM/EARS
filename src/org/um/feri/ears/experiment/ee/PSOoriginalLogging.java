@@ -6,7 +6,6 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -31,10 +30,6 @@ public class PSOoriginalLogging extends Algorithm {
 		this.c2 = c2;
 		setDebug(debug);
 		ai = new AlgorithmInfo("PSO", "Particle Swarm Optimization", "");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
-		ai.addParameter(EnumAlgorithmParameters.C1, c1 + "");
-		ai.addParameter(EnumAlgorithmParameters.C2, c2 + "");
-		//ai.addParameter(EnumAlgorithmParameters., F + "");
 		au = new Author("Matej", "matej.crepinsek@um.si");
 	}
 //Originalni algoritem PSO

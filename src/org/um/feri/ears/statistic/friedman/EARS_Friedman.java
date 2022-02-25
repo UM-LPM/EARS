@@ -9,7 +9,7 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.BenchmarkResults;
 import org.um.feri.ears.benchmark.CEC2010Benchmark;
-import org.um.feri.ears.examples.BenchmarkRunner;
+import org.um.feri.ears.benchmark.BenchmarkRunner;
 import org.um.feri.ears.statistic.rating_system.Player;
 
 public class EARS_Friedman {

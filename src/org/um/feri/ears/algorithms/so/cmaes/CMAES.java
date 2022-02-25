@@ -22,11 +22,10 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.Comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 
 public class CMAES extends Algorithm {
@@ -111,7 +110,6 @@ public class CMAES extends Algorithm {
 						+ "	  year={2003},"
 						+ "	  publisher={MIT Press}}"
 				);
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
 	}
 
 	public void init() {

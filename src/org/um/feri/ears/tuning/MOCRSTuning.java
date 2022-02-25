@@ -24,14 +24,13 @@ import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.qualityIndicator.IndicatorFactory;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
+import org.um.feri.ears.quality_indicator.IndicatorFactory;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.statistic.rating_system.GameResult;
-import org.um.feri.ears.statistic.rating_system.glicko2.Game;
 import org.um.feri.ears.statistic.rating_system.Player;
-import org.um.feri.ears.statistic.rating_system.glicko2.ResultArena;
+import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
 import org.um.feri.ears.util.Util;
 
 public class MOCRSTuning {
@@ -501,7 +500,7 @@ public class MOCRSTuning {
 		if(newSolution != null)
 			System.out.println("Creating player for: "+newSolution.name);
 		
-		ResultArena arena = new ResultArena(100);
+		TournamentResults arena = new TournamentResults(100);
     	//add players to the arena
 		for(int i = 0; i < population.length; i++){
 			

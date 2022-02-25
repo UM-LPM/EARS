@@ -1,17 +1,15 @@
 package org.um.feri.ears.algorithms.so.tlbo;
 
 import org.um.feri.ears.algorithms.*;
-import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.Comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.List;
 
 public class TLBOAlgorithm extends Algorithm {
@@ -52,9 +50,6 @@ public class TLBOAlgorithm extends Algorithm {
                 "TLBO", "Teaching Learning Based Optimization",
                 "\\bibitem{Rao2011}\nR.V.~Rao, V.J.~Savsani, D.P.~Vakharia.\n\\newblock Teaching-learning-based optimization: A novel method for constrained mechanical design optimization problems.\n\\newblock \\emph{Computer-Aided Design}, 43(3):303--315, 2011."
         );
-        ai.addParameter(EnumAlgorithmParameters.ELITE, "" + keep);
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
-
     }
 
     @Override
@@ -264,16 +259,13 @@ public class TLBOAlgorithm extends Algorithm {
     }
 
     @Override
-    public List<AlgorithmBase> getAlgorithmParameterTest(EnumMap<EnumBenchmarkInfoParameters, String> param, int maxCombinations) {
+    public List<AlgorithmBase> getAlgorithmParameterTest(int dimension, int maxCombinations) {
         List<AlgorithmBase> alternative = new ArrayList<>();
-        int dim = 10;
-        String sd = param.get(EnumBenchmarkInfoParameters.DIMENSION);
-        if (sd != null) dim = Integer.parseInt(sd);
         if (maxCombinations == 1) {
             alternative.add(this);
         } else {
             int[][] paramCombinations = { // {elite, pop_size}
-                    {4, 5 + dim * 2}, {0, 20}, {4, 20}, {0, 5 + dim * 2}, {0, 50}, {4, 50}, {0, 100}, {4, 100},
+                    {4, 5 + dimension * 2}, {0, 20}, {4, 20}, {0, 5 + dimension * 2}, {0, 50}, {4, 50}, {0, 100}, {4, 100},
                     {8, 100}};
             int counter = 0;
             for (int i = 0; (i < paramCombinations.length) && (counter < maxCombinations); i++) {

@@ -2,7 +2,6 @@ package org.um.feri.analyse.sopvisualization;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Task;
 
@@ -13,7 +12,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class AncestorUtil {
 
@@ -27,7 +25,7 @@ public class AncestorUtil {
         algID = algID.replaceAll("/", "");
         String fileName = path + "\\" + algID + "_" + task.getProblemName() + "_D" + task.getNumberOfDimensions();
 
-        String pop_size = alg.getAlgorithmInfo().getParameters().get(EnumAlgorithmParameters.POP_SIZE);
+        String pop_size = alg.getParameterValue("popSize");
         StringBuilder head = new StringBuilder();
         if (pop_size == null) pop_size = "1";
         head.append(alg.getId()).append(";").append(";[\"").append(pop_size).append("\"];").append(runID).append(";"); //X id
@@ -89,16 +87,8 @@ public class AncestorUtil {
             ArrayList<DoubleSolution> ancestors = task.getAncestors();
 
             AlgorithmInfo info = alg.getAlgorithmInfo();
-            Map<EnumAlgorithmParameters, String> algParams = info.getParameters();
 
-            StringBuilder sb = new StringBuilder();
-            for (EnumAlgorithmParameters t : algParams.keySet()) {
-                sb.append("\"").append(algParams.get(t)).append("\",");
-            }
-            String algorithmParams = sb.toString();
-            algorithmParams = algorithmParams.substring(0, algorithmParams.length() - 1);
-
-            bw.write("'" + alg.getId() + ";[" + algorithmParams + "];" + task.getProblemName() + ";" + task.getNumberOfDimensions() + ";[\"" + task.getStopCriterion().getName() + "\"];'+\n");
+            bw.write("'" + alg.getId() + ";[" + alg.getParametersAsString() + "];" + task.getProblemName() + ";" + task.getNumberOfDimensions() + ";[\"" + task.getStopCriterion().getName() + "\"];'+\n");
 
             for (int i = 0; i < ancestors.size(); ++i) {
                 List<DoubleSolution> parents = ancestors.get(i).parents;

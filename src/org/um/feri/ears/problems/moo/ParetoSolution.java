@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -18,10 +17,10 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.qualityIndicator.IndicatorFactory;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
+import org.um.feri.ears.quality_indicator.IndicatorFactory;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.util.Util;
 
 import com.panayotis.gnuplot.JavaPlot;

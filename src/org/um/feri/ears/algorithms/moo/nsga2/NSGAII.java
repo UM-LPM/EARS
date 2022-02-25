@@ -9,7 +9,6 @@ package org.um.feri.ears.algorithms.moo.nsga2;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
@@ -18,7 +17,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Comparator.CrowdingComparator;
+import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.Ranking;
 
@@ -55,10 +54,6 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
                 "NSGAII", "Nondominated Sorting Genetic Algorithm II",
                 "\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002."
         );
-
-        ai.addParameters(crossover.getOperatorParameters());
-        ai.addParameters(mutation.getOperatorParameters());
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
     }
 
 
@@ -176,8 +171,6 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
                 }
             }
         }
-
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 
         population = new ParetoSolution<Type>(populationSize);
     }

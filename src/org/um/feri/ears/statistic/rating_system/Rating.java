@@ -31,6 +31,10 @@ public class Rating {
         this.rating = rating;
     }
 
+    public double getRatingIntervalLower() {return rating - 2 * ratingDeviation;}
+
+    public double getRatingIntervalUpper() {return rating + 2 * ratingDeviation;}
+
     /**
      * The Rating deviation in Glicko2 or the standard deviation (the spread) of the rating in TrueSkill (also known as σ).
      **/

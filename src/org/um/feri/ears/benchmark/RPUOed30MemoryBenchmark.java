@@ -22,29 +22,26 @@ public class RPUOed30MemoryBenchmark extends Benchmark {
         maxIterations = 0;
         dimension = D;
         precision = prec;
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION, String.valueOf(D));
-        addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + drawLimit);
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations, double epsilon) {
-        tasks.add(new TaskWithMemory(stopCriterion, maxEvaluations, time, maxIterations, epsilon, problem, precision, new DuplicationRemovalStrategyRandom(maxHits)));
+    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+        tasks.add(new TaskWithMemory(stopCriterion, maxEvaluations, time, maxIterations, problem, precision, new DuplicationRemovalStrategyRandom(maxHits)));
     }
 
     @Override
     public void initAllProblems() {
-        addTask(new Ackley1(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.0001);
-        addTask(new Griewank(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.0001);
-        addTask(new Rastrigin(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.0001);
-        addTask(new RosenbrockDeJong2(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.0001);
-        addTask(new Schwefel226(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.0001);
-        addTask(new SchwefelRidge(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.0001);
-        addTask(new Sphere(dimension), stopCriterion, maxEvaluations, 0, maxIterations, 0.0001);
+        addTask(new Ackley1(dimension), stopCriterion, maxEvaluations, 0, maxIterations);
+        addTask(new Griewank(dimension), stopCriterion, maxEvaluations, 0, maxIterations);
+        addTask(new Rastrigin(dimension), stopCriterion, maxEvaluations, 0, maxIterations);
+        addTask(new RosenbrockDeJong2(dimension), stopCriterion, maxEvaluations, 0, maxIterations);
+        addTask(new Schwefel226(dimension), stopCriterion, maxEvaluations, 0, maxIterations);
+        addTask(new SchwefelRidge(dimension), stopCriterion, maxEvaluations, 0, maxIterations);
+        addTask(new Sphere(dimension), stopCriterion, maxEvaluations, 0, maxIterations);
     }
 
     @Override
     public String getName() {
-        return name + "(" + getParameters().get(EnumBenchmarkInfoParameters.DIMENSION) + ")";
+        return name + "  D=" + dimension;
     }
 }

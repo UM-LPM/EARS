@@ -27,14 +27,10 @@ public class CEC2015Benchmark extends Benchmark {
         timeLimit = 2500;
         maxIterations = 2500;
         stopCriterion = StopCriterion.EVALUATIONS;
-        /*addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA,""+stopCriterion);
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION,""+dimension);
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+drawLimit);*/
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
         tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
@@ -78,7 +74,7 @@ public class CEC2015Benchmark extends Benchmark {
                 }
             }
 
-            addTask(p, stopCriterion, maxEvaluations, timeLimit, maxIterations, optimumEpsilon);
+            addTask(p, stopCriterion, maxEvaluations, timeLimit, maxIterations);
         }
     }
 

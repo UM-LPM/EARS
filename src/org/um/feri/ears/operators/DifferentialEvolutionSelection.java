@@ -20,9 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package org.um.feri.ears.operators;
-import java.util.EnumMap;
 
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -80,10 +78,5 @@ public class DifferentialEvolutionSelection<Type extends Number> implements Sele
 		parents[2] = population.get(r3);
 
 		return parents;
-	}
-	
-	@Override
-	public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
-		return null;
 	}
 }

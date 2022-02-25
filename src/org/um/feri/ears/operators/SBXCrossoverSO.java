@@ -1,8 +1,5 @@
 package org.um.feri.ears.operators;
 
-import java.util.EnumMap;
-
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
@@ -138,13 +135,4 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task, DoubleSol
 	public void setCurrentSolution(MOSolutionBase<Double> current) {
 		
 	}
-	
-	@Override
-	public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
-		EnumMap<EnumAlgorithmParameters, String> para = new EnumMap<EnumAlgorithmParameters, String>(EnumAlgorithmParameters.class);
-		para.put(EnumAlgorithmParameters.CR, crossoverProbability+"");
-		para.put(EnumAlgorithmParameters.ETA, distributionIndex+"");
-		return para;
-	}
-
 }

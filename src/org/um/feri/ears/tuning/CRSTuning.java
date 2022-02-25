@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.statistic.rating_system.GameInfo;
 import org.um.feri.ears.statistic.rating_system.Player;
-import org.um.feri.ears.util.Comparator.RatingComparator;
+import org.um.feri.ears.util.comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
 
 import java.io.BufferedWriter;

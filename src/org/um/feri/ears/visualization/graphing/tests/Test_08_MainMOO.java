@@ -12,7 +12,7 @@ import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.GraphDataSet;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;

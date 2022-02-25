@@ -5,7 +5,6 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -83,10 +82,7 @@ public class JADELogging extends Algorithm {
 				"JADE",
 				"Adaptive Differential Evolution With Optional External Archive",
 				"Jingqiao Zhang, Arthur C. Sanderson");
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
-		// ai.addParameter(EnumAlgorithmParameters., F + "");
 		au = new Author("Matej", "matej.crepinsek@um.si");
-																// info
 	}
 
 	public JADELogging() {

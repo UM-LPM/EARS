@@ -4,7 +4,7 @@ import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
 
 import java.util.concurrent.TimeUnit;
 

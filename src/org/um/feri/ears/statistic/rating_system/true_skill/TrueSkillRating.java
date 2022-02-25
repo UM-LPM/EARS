@@ -44,6 +44,6 @@ public class TrueSkillRating extends Rating {
     }
 
     public String toString() {
-        return String.format("Mean(μ)=%s, Std-Dev(σ)=%s", Util.df.format(rating), Util.df.format(ratingDeviation));
+        return String.format("Mean(μ)=%s, Std-Dev(σ)=%s RI=[%s, %s]", Util.df.format(rating), Util.df.format(ratingDeviation), Util.df0.format(getRatingIntervalLower()), Util.df0.format(getRatingIntervalUpper()));
     }
 }

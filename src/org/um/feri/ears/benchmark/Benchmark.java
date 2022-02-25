@@ -9,16 +9,15 @@ import org.um.feri.ears.statistic.rating_system.GameInfo;
 import org.um.feri.ears.statistic.rating_system.GameResult;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.statistic.rating_system.Rating;
-import org.um.feri.ears.statistic.rating_system.glicko2.Game;
 import org.um.feri.ears.statistic.rating_system.true_skill.*;
-import org.um.feri.ears.util.Comparator.AlgorithmResultComparator;
+import org.um.feri.ears.util.comparator.AlgorithmResultComparator;
 import org.um.feri.ears.util.Util;
 
 import java.util.*;
 
 public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algorithm> {
 
-    protected abstract void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations, double epsilon);
+    protected abstract void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations);
 
     @Override
     protected void performTournament(int evaluationNumber) {
@@ -33,7 +32,7 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
         int rank;
         Team[] teamArray;
 
-        for(Player player : resultArena.getPlayers()) {
+        for(Player player : tournamentResults.getPlayers()) {
             Team team = new Team(player, GameInfo.getDefaultTrueSkillRating());
             oneOnOneTeams.put(player.getId(),team);
             freeForAllTeams.put(player.getId(),team);
@@ -90,7 +89,7 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
                                         + Util.df3.format(result1.solution.getEval()) + ", feasible=" + result1.solution.areConstraintsMet()
                                         + ") against " + algorithm2Id + " (" + Util.df3.format(result2.solution.getEval())
                                         + ", feasible=" + result2.solution.areConstraintsMet() + ") for " + t.getProblemName());
-                            resultArena.addGameResult(GameResult.DRAW, algorithm1Id,
+                            tournamentResults.addGameResult(GameResult.DRAW, algorithm1Id,
                                     algorithm2Id, t.getProblemName());
                         } else {
                             newRatings = calculator.calculateNewRatings(gameInfo, competingTeams, 1, 2);
@@ -105,11 +104,11 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
                                         + Util.df3.format(result1.solution.getEval()) + ", feasible=" + result1.solution.areConstraintsMet()
                                         + ") against " + algorithm2Id + " (" + Util.df3.format(result2.solution.getEval())
                                         + ", feasible=" + result2.solution.areConstraintsMet() + ") for " + t.getProblemName());
-                            resultArena.addGameResult(GameResult.WIN, algorithm1Id,
+                            tournamentResults.addGameResult(GameResult.WIN, algorithm1Id,
                                     algorithm2Id, t.getProblemName());
                         }
-                        Player player1 = resultArena.getPlayer(algorithm1Id);
-                        Player player2 = resultArena.getPlayer(algorithm2Id);
+                        Player player1 = tournamentResults.getPlayer(algorithm1Id);
+                        Player player2 = tournamentResults.getPlayer(algorithm2Id);
                         Rating player1NewRating = newRatings.get(player1);
                         Rating player2NewRating = newRatings.get(player2);
                         oneOnOneTeams.put(algorithm1Id, new Team(player1, player1NewRating));
@@ -119,7 +118,7 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
             }
         }
 
-        for(Player player : resultArena.getPlayers()) {
+        for(Player player : tournamentResults.getPlayers()) {
             Team team = oneOnOneTeams.get(player.getId());
             Rating rating = team.get(player);
             player.setOneOnOneTrueSkill(new TrueSkillRating(rating.getRating(), rating.getRatingDeviation()));
@@ -128,7 +127,7 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
             rating = team.get(player);
             player.setFreeForAllTrueSkill(new TrueSkillRating(rating.getRating(), rating.getRatingDeviation()));
         }
-        resultArena.calculateRatings();
+        tournamentResults.calculateRatings();
     }
 
     public boolean resultEqual(AlgorithmRunResult<DoubleSolution, Algorithm, Task> a, AlgorithmRunResult<DoubleSolution, Algorithm, Task> b) {

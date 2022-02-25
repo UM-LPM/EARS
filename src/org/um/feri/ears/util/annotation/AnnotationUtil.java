@@ -1,5 +1,9 @@
 package org.um.feri.ears.util.annotation;
 
+import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.TaskBase;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +39,25 @@ public class AnnotationUtil {
         }
 
         return parametersString;
+    }
+
+    public static String getParameterValue(Object object, String parameterName) {
+        try {
+            Class<?> objectClass = requireNonNull(object).getClass();
+            for (Field field: objectClass.getDeclaredFields()) {
+                field.setAccessible(true);
+                if (field.isAnnotationPresent(AlgorithmParameter.class)) {
+                    if(field.getName().equals(parameterName) || field.getAnnotation(AlgorithmParameter.class).name().equals(parameterName)) {
+                        return field.get(object).toString();
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
     private static String getParameterDescription(Field field) {

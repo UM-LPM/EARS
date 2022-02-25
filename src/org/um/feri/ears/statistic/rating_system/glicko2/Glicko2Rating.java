@@ -54,6 +54,6 @@ public class Glicko2Rating extends Rating {
     }
 
     public String toString() {
-        return String.format("Rating=%s RD=%s ro=%s", Util.df1.format(rating), Util.df1.format(ratingDeviation), Util.df3.format(this.ratingVolatility));
+        return String.format("Rating=%s RD=%s ro=%s RI=[%s, %s]", Util.df1.format(rating), Util.df1.format(ratingDeviation), Util.df3.format(this.ratingVolatility), Util.df0.format(getRatingIntervalLower()), Util.df0.format(getRatingIntervalUpper()));
     }
 }

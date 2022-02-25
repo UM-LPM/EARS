@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 import org.apache.commons.math3.util.ArithmeticUtils;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
 
 /**

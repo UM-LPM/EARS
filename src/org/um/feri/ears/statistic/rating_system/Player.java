@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import org.um.feri.ears.statistic.rating_system.glicko2.Game;
 import org.um.feri.ears.statistic.rating_system.glicko2.Glicko2Rating;
-import org.um.feri.ears.statistic.rating_system.glicko2.WinLoseDraw;
+import org.um.feri.ears.statistic.rating_system.glicko2.GameOutcomes;
 import org.um.feri.ears.statistic.rating_system.true_skill.Guard;
 import org.um.feri.ears.statistic.rating_system.true_skill.TrueSkillRating;
 
@@ -16,10 +16,10 @@ public class Player {
     protected TrueSkillRating freeForAllTrueSkill; // TrueSkill Free-For-All rating
     protected ArrayList<Glicko2Rating> ratingHistory;
     protected ArrayList<Game> listOfGamesPlayed; // in last period (not evaluated yet)
-    protected WinLoseDraw sumWinLoseDraw;
-    public HashMap<String, WinLoseDraw> wldPlayers; //id is algorithm
-    public HashMap<String, WinLoseDraw> wldProblems; //id is problem
-    public HashMap<String, WinLoseDraw> wldIndicator; //id is indicator
+    protected GameOutcomes sumGameOutcomes;
+    public HashMap<String, GameOutcomes> wldPlayers; //id is algorithm
+    public HashMap<String, GameOutcomes> wldProblems; //id is problem
+    public HashMap<String, GameOutcomes> wldIndicator; //id is indicator
 
     private static final double DefaultPartialPlayPercentage = 1.0; // = 100% play time
     private static final double DefaultPartialUpdatePercentage = 1.0; // = receive 100% update
@@ -76,7 +76,7 @@ public class Player {
         wldPlayers = new HashMap<>();
         wldProblems = new HashMap<>();
         wldIndicator = new HashMap<>();
-        sumWinLoseDraw = new WinLoseDraw(0, 0, 0);
+        sumGameOutcomes = new GameOutcomes(0, 0, 0);
         listOfGamesPlayed = new ArrayList<>();
         ratingHistory = new ArrayList<>();
         ratingHistory.add(glicko2rating);
@@ -93,7 +93,7 @@ public class Player {
         glicko2rating = new Glicko2Rating(player.glicko2rating);
         freeForAllTrueSkill = new TrueSkillRating(player.freeForAllTrueSkill);
         oneOnOneTrueSkill = new TrueSkillRating(player.oneOnOneTrueSkill);
-        sumWinLoseDraw = new WinLoseDraw(player.sumWinLoseDraw);
+        sumGameOutcomes = new GameOutcomes(player.sumGameOutcomes);
         partialPlayPercentage = player.partialPlayPercentage;
         partialUpdatePercentage = player.partialUpdatePercentage;
     }
@@ -104,35 +104,35 @@ public class Player {
      * @param game to be added.
      */
     public void addGame(Game game) {
-        WinLoseDraw tmpPlayer = wldPlayers.get(game.getOpponent(id));
-        WinLoseDraw tmpProblem = wldProblems.get(game.getProblemName());
-        WinLoseDraw tmpIndicator = wldIndicator.get(game.getIndicator());
+        GameOutcomes tmpPlayer = wldPlayers.get(game.getOpponent(id));
+        GameOutcomes tmpProblem = wldProblems.get(game.getProblemName());
+        GameOutcomes tmpIndicator = wldIndicator.get(game.getIndicator());
 
         if (tmpPlayer == null) {
-            tmpPlayer = new WinLoseDraw(0, 0, 0);
+            tmpPlayer = new GameOutcomes(0, 0, 0);
             wldPlayers.put(game.getOpponent(id), tmpPlayer);
         }
         if (tmpProblem == null) {
-            tmpProblem = new WinLoseDraw(0, 0, 0);
+            tmpProblem = new GameOutcomes(0, 0, 0);
             wldProblems.put(game.getProblemName(), tmpProblem);
         }
         if (tmpIndicator == null) {
-            tmpIndicator = new WinLoseDraw(0, 0, 0);
+            tmpIndicator = new GameOutcomes(0, 0, 0);
             if (game.getIndicator() != null)
                 wldIndicator.put(game.getIndicator(), tmpIndicator);
         }
         if (game.getGameResult(id) == GameResult.DRAW) {
-            sumWinLoseDraw.incDraw();
+            sumGameOutcomes.incDraw();
             tmpPlayer.incDraw();
             tmpProblem.incDraw();
             tmpIndicator.incDraw();
         } else if (game.getGameResult(id) == GameResult.WIN) {
-            sumWinLoseDraw.incWin();
+            sumGameOutcomes.incWin();
             tmpPlayer.incWin();
             tmpProblem.incWin();
             tmpIndicator.incWin();
         } else {
-            sumWinLoseDraw.incLoss();
+            sumGameOutcomes.incLoss();
             tmpPlayer.incLoss();
             tmpProblem.incLoss();
             tmpIndicator.incLoss();
@@ -206,8 +206,8 @@ public class Player {
         ratingHistory.add(rating);
     }
 
-    public WinLoseDraw getSumWinLossDraw() {
-        return sumWinLoseDraw;
+    public GameOutcomes getSumWinLossDraw() {
+        return sumGameOutcomes;
     }
 
     public double getPartialPlayPercentage() {
@@ -230,7 +230,7 @@ public class Player {
     }
 
     public String toString() {
-        return id + " " + sumWinLoseDraw + "\n\t Against:" + wldPlayers + "\n\t Problems:" + wldProblems + ((wldIndicator.size() == 0) ? "" : "\n\t Indicators:" + wldIndicator);
+        return id + " " + sumGameOutcomes + "\n\t Against:" + wldPlayers + "\n\t Problems:" + wldProblems + ((wldIndicator.size() == 0) ? "" : "\n\t Indicators:" + wldIndicator);
     }
 
     public class JsonPlayer {
@@ -251,7 +251,7 @@ public class Player {
         jp.ratingIntervalLeft = jp.rating - 2 * jp.RD;
         jp.ratingIntervalRight = jp.rating + 2 * jp.RD;
         jp.ratingVolatility = glicko2rating.getRatingVolatility();
-        jp.sumWinLossDraw = sumWinLoseDraw.toString() + " Against:" + wldPlayers.toString() + " Problems:" + wldProblems.toString() + ((wldIndicator.size() == 0) ? "" : " Indicators:" + wldIndicator.toString());
+        jp.sumWinLossDraw = sumGameOutcomes.toString() + " Against:" + wldPlayers.toString() + " Problems:" + wldProblems.toString() + ((wldIndicator.size() == 0) ? "" : " Indicators:" + wldIndicator.toString());
         return jp;
     }
 }

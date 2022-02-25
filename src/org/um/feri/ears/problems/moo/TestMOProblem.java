@@ -6,8 +6,8 @@ import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
-import org.um.feri.ears.qualityIndicator.GenerationalDistance;
-import org.um.feri.ears.qualityIndicator.InvertedGenerationalDistance;
+import org.um.feri.ears.quality_indicator.GenerationalDistance;
+import org.um.feri.ears.quality_indicator.InvertedGenerationalDistance;
 import org.um.feri.ears.util.Util;
 
 public class TestMOProblem {

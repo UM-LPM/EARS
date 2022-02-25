@@ -26,13 +26,12 @@ import java.util.Comparator;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
 import org.um.feri.ears.util.Util;
 
@@ -93,12 +92,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
                 "OMOPSO", "Multi Objective Particle Swarm Optimization",
                 "\\bibitem{Deb2002}\nK.~Deb, S.~Agrawal, A.~Pratap, T.~Meyarivan\n\\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 6(2):182--197, 2002."
         );
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize + "");
-        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
-        ai.addParameter(EnumAlgorithmParameters.ETA, eta + "");
-        ai.addParameter(EnumAlgorithmParameters.P_M, (1.0 / numVar) + "");
     }
-
 
     protected void initializeLeader(ParetoSolution<Double> swarm) {
         for (MOSolutionBase<Double> solution : swarm) {
@@ -248,9 +242,6 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
                 }
             }
         }
-
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, swarmSize + "");
-        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
 
         currentIteration = 1;
         swarm = new ParetoSolution<Double>(swarmSize);
