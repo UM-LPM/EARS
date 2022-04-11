@@ -159,6 +159,139 @@ public class SOBenchmarkExample {
 }
 ```
 
+
+To use ExpBas, user has to define ExpBas setting (see main method) and modify the implementation of their optimisation algorithm (see runDE method) accordingly:
+* To check if the algorithm was in the exploration phase or not (then it is in the exploitation phase), pass reference solutions, new solution and setting to method ExpBas.isExploration(...).
+* User has to count exploration phases manually for each newly created solution (exploration is assumed for random solutions)
+* At the end user has to divide number of exploration phases with the number of evaluations to get the expbas measure
+
+```java
+import org.apache.commons.lang3.ArrayUtils;
+import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.unconstrained.*;
+import org.um.feri.ears.util.Util;
+import java.util.*;
+
+public class ExpBasExample {
+    
+    public static void main(String[] args) {
+        Problem problem = new Rastrigin(2); // Get some problem
+        
+        // First initialize settings!
+        ExpBas.ExpBasSettings setting = new ExpBas.ExpBasSettings(problem, 0.1); // Second parameter is in percentages and decides the step per each dimension
+        setting.lsVariant = ExpBas.LocalSearchVariant.DeterministicBestImprovement;
+        setting.nType = ExpBas.NeighbourhoodType.Sparse;
+        setting.nOrder = ExpBas.NeighbourhoodOrder.NonReversed;
+        
+        Object[] result = runDE(problem, setting); // Pass this setting to some metaheuristic
+        // Print your results
+        System.out.println("Best fitness: " + result[1] + " -> ExpBas: " + result[2]);
+        System.out.print("Solution: [ ");
+        for(int i = 0; i < problem.getNumberOfDimensions(); i++) {
+            ArrayList<Double> solution = (ArrayList<Double>) (result[0]);
+            System.out.print(solution.get(i).toString() + " ");
+        }
+        System.out.println("]");
+    }
+
+    // Simple implementation of DE - EXAMPLE
+    public static Object[] runDE(Problem problem, final ExpBas.ExpBasSettings setting){
+        double F = 0.5;
+        double CR = 0.9;
+        int NP = 25;
+        int maxFES = problem.getNumberOfDimensions() * 1000;
+
+        ArrayList<ArrayList<Double>> population = new ArrayList<>();
+        ArrayList<Double> populationFitnesses = new ArrayList<>();
+        population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.getRandomVariables()))));
+        populationFitnesses.add(problem.eval(population.get(0)));
+        ArrayList<Double> bestSolution = new ArrayList<>(population.get(0));
+        double bestFitness = populationFitnesses.get(0);
+
+        ExpBas metric = new ExpBas(); // Initialize EXPBAS
+        int explorationPhases = 1; // Exploration is assumed for random solutions
+        int cntFES = 1;
+
+        // Initialize population
+        for(int i = 1; i < NP; i++){
+            population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.getRandomVariables()))));
+            explorationPhases++; // Exploration is assumed for random solutions
+            populationFitnesses.add(problem.eval(population.get(i)));
+            cntFES++;
+            if(populationFitnesses.get(i) < bestFitness){
+                bestFitness = populationFitnesses.get(i);
+                bestSolution = new ArrayList<>(population.get(i));
+            }
+        }
+
+        // Main loop
+        while(cntFES < maxFES){
+            for(int i = 0; i < NP; i++){
+                // Mutation
+                Set<Integer> mySet = new LinkedHashSet<Integer>();
+                while (mySet.size() < 3) {
+                    mySet.add(org.um.feri.ears.util.Util.rnd.nextInt(NP));
+                }
+                List<Integer> uniqInds = new ArrayList<Integer>();
+                uniqInds.addAll(mySet);
+
+                ArrayList<Double> v = new ArrayList<>();
+                for(int j = 0; j < problem.getNumberOfDimensions(); j++){
+                    v.add(population.get(uniqInds.get(0)).get(j) + F * (population.get(uniqInds.get(1)).get(j) - population.get(uniqInds.get(2)).get(j)));
+                }
+
+                // Crossover
+                ArrayList<Double> u = new ArrayList<>();
+                for(int j = 0; j < problem.getNumberOfDimensions(); j++){
+                    if(org.um.feri.ears.util.Util.rnd.nextDouble() <= CR || i == Util.rnd.nextInt(NP))
+                        u.add(v.get(j));
+                    else
+                        u.add(population.get(i).get(j));
+                }
+
+                // To find out if exploration or exploitation we have to pass reference solutions and new solution 
+                // Since in DE 4 solutions are used to create new solution, these solutions are reference solutions
+                ArrayList<ArrayList<Double>> referenceSols = new ArrayList<>();
+                referenceSols.add(new ArrayList<>(population.get(uniqInds.get(0))));
+                referenceSols.add(new ArrayList<>(population.get(uniqInds.get(1))));
+                referenceSols.add(new ArrayList<>(population.get(uniqInds.get(2))));
+                referenceSols.add(new ArrayList<>(population.get(i)));
+
+                boolean isRandom = false;  // Flag remembers if new solution is created randomly
+                if(!problem.isFeasible(u)){
+                    u = new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.getRandomVariables())));
+                    explorationPhases++;  // Exploration is assumed for random solutions
+                    isRandom = true;
+                }
+                double uFitness = problem.eval(u);
+                cntFES++;
+
+                // Selection
+                if(uFitness < populationFitnesses.get(i)){
+                    population.set(i, u);
+                    populationFitnesses.set(i, uFitness);
+                }
+
+                if(uFitness < bestFitness){
+                    bestSolution = new ArrayList<>(u);
+                    bestFitness = uFitness;
+                }
+                if(!isRandom){
+                    // In case new solution was not generated randomly, we call our metric and check if exploration
+                    // We pass reference solutions, new solution and concrete ExpBas setting
+                    if(metric.isExploration(referenceSols, u, setting)){
+                        explorationPhases++;
+                    }
+                }
+            }
+        }
+        // Total ExpBas is calculated by the number of exploration phases divided by number of evaluated individuals.
+        double expbas = (double) explorationPhases / (double) cntFES;
+        return new Object[] { bestSolution, bestFitness, expbas };
+    }
+}
+```
+
 ## Publications
 N. Veček, M. Mernik, and M. Črepinšek. "A chess rating system for evolutionary algorithms: A new method for the comparison and ranking of evolutionary algorithms." Information Sciences 277 (2014): 656-679. http://www.sciencedirect.com/science/article/pii/S002002551400276X
 
@@ -184,5 +317,7 @@ M. Črepinšek, M. Ravber, M. Mernik, and T. Kosar. "Tuning Multi-Objective Evol
 M. Črepinšek, S. H. Liu, M. Mernik, and M. Ravber. "Long term memory assistance for evolutionary algorithms." Mathematics, 7(11) (2019): 1129. https://www.mdpi.com/2227-7390/7/11/1129
 
 M. Ravber, Ž. Kovačević, M. Črepinšek, and M. Mernik. "Inferring Absolutely Non-Circular Attribute Grammars with a Memetic Algorithm." Applied Soft Computing 100 (2021), 106956. https://www.sciencedirect.com/science/article/abs/pii/S1568494620308942
+
+J. Jerebic, M. Mernik, S. Liu, M. Ravber, M. Baketarić, L. Mernik, and M. Črepinšek. "A novel direct measure of exploration and exploitation based on attraction basins." Expert Systems with Applications 167 (2021), 114353. https://doi.org/10.1016/j.eswa.2020.114353
 
 *The authors acknowledge the financial support from the Slovenian Research Agency (research core funding No. P2-0041 COMPUTER SYSTEMS, METHODOLOGIES, AND INTELLIGENT SERVICES)* http://p2-0041.feri.um.si/en/
