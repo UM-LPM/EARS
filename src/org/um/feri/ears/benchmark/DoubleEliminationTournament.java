@@ -20,10 +20,10 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.qualityIndicator.IndicatorFactory;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
+import org.um.feri.ears.quality_indicator.IndicatorFactory;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.util.Util;
 
 public class DoubleEliminationTournament {
@@ -55,7 +55,7 @@ public class DoubleEliminationTournament {
 		averageRanks = new HashMap<>();
 		
 		for (MOAlgorithm moAlgorithm : players) {
-			averageRanks.put(moAlgorithm.getID(), 0.0);
+			averageRanks.put(moAlgorithm.getId(), 0.0);
 		}
 		
 	}
@@ -127,7 +127,7 @@ public class DoubleEliminationTournament {
 			}
 
 			for (int j = 0; j < ranking.size(); j++) {
-				averageRanks.put(ranking.get(j).getAl().getID(), averageRanks.get(ranking.get(j).getAl().getID()) + (j+1));
+				averageRanks.put(ranking.get(j).getAl().getId(), averageRanks.get(ranking.get(j).getAl().getId()) + (j+1));
 			}
 			
 			if(ranking.size() != playerCount)
@@ -161,7 +161,7 @@ public class DoubleEliminationTournament {
 			
 			found = false;
 			for (MOAlgorithmEvalResult alRes : ranking) {
-				if(alRes.getAl().getID().equals(player.getID()))
+				if(alRes.getAl().getId().equals(player.getId()))
 				{
 					found = true;
 					break;
@@ -170,7 +170,7 @@ public class DoubleEliminationTournament {
 			
 			if(!found)
 			{
-				averageRanks.put(player.getID(), averageRanks.get(player.getID()) + loseRank);
+				averageRanks.put(player.getId(), averageRanks.get(player.getId()) + loseRank);
 			}
 		}
 	}
@@ -265,7 +265,7 @@ public class DoubleEliminationTournament {
 
 		while (i.hasNext()) {
 			MOAlgorithmEvalResult res = i.next(); 
-			if(res.getAl().getID().equals(winner.getAl().getID()))
+			if(res.getAl().getId().equals(winner.getAl().getId()))
 				i.remove();
 		}
 

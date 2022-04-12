@@ -2,7 +2,7 @@ package org.um.feri.analyse.EE.metrics;
 
 import java.util.ArrayList;
 
-import org.um.feri.analyse.EE.treeData.NodeEARS;
+import org.um.feri.analyse.EE.tree_data.NodeEARS;
 import org.um.feri.analyse.EE.util.MeanStDev;
 
 

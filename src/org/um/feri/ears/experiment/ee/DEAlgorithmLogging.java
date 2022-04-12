@@ -1,15 +1,12 @@
 package org.um.feri.ears.experiment.ee;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
-import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -180,11 +177,6 @@ public class DEAlgorithmLogging extends Algorithm {
                         + "Self-adapting control parameters in differential evolution: a\n" + "comparative study on numerical benchmark problems.\n"
                         + "IEEE Transactions on Evolutionary Computation, 2006, vol. 10,\n" + "no. 6, pp. 646-657. DOI 10.1109/TEVC.2006.872133"
         );
-
-        ai.addParameter(EnumAlgorithmParameters.F, F + "");
-        ai.addParameter(EnumAlgorithmParameters.CR, CR + "");
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, NP + "");
-
     }
 
     void assignd(int D, double a[], double b[]) {
@@ -554,16 +546,12 @@ public class DEAlgorithmLogging extends Algorithm {
 
 
     @Override
-    public List<AlgorithmBase> getAlgorithmParameterTest(EnumMap<EnumBenchmarkInfoParameters, String> param, int maxCombinations) {
+    public List<AlgorithmBase> getAlgorithmParameterTest(int dimension, int maxCombinations) {
         List<AlgorithmBase> alternative = new ArrayList<AlgorithmBase>();
         if (maxCombinations == 1) {
             alternative.add(this);
         } else {
-            String sdim=param.get(EnumBenchmarkInfoParameters.DIMENSION);
-            int dim=10;
-            if (sdim!=null) {
-                dim = Integer.parseInt(sdim);
-            }
+
             int counter = 0;
             if (strategy == JDE_rand_1_bin) { //self adaptive no need for CR and F parameter
                 int paramCombinations[] = { 25,50,15,75,100, 10, 30, 40};
@@ -576,7 +564,7 @@ public class DEAlgorithmLogging extends Algorithm {
             } else
             {
                 double paramCombinations[][] = { // {k, c}
-                        {10 * dim, 0.5, 0.9}, {10 * dim, 0.5, 0.85}, {25, 0.5, 0.9},  {50, 0.5, 0.9 }, 
+                        {10 * dimension, 0.5, 0.9}, {10 * dimension, 0.5, 0.85}, {25, 0.5, 0.9},  {50, 0.5, 0.9 },
                         {10, 0.5, 0.9},  {50, 0.5, 0.9 } , {25, 0.5, 0.8},  {25, 0.5, 0.9 }};
                 
                 for (int i = 0; (i < paramCombinations.length) && (counter < maxCombinations); i++) {

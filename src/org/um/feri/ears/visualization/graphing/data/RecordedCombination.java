@@ -98,7 +98,7 @@ public class RecordedCombination
 	public String toString()
 	{
 		//return algorithm.getAlgorithmInfo().getPublishedAcronym() + "  solving  " + problem.getName();
-		return algorithm.getID()+"{"+algorithm.getAlgorithmInfo().getAcronym()+ "}" + "  solving  " + problemName;
+		return algorithm.getId()+"{"+algorithm.getAlgorithmInfo().getAcronym()+ "}" + "  solving  " + problemName;
 	}
 	
 	@Override

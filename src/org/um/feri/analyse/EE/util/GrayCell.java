@@ -2,7 +2,7 @@ package org.um.feri.analyse.EE.util;
 
 import java.util.ArrayList;
 
-import org.um.feri.analyse.EE.treeData.NodeEARS;
+import org.um.feri.analyse.EE.tree_data.NodeEARS;
 
 
 public class GrayCell {

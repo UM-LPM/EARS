@@ -1,8 +1,5 @@
 package org.um.feri.ears.operators;
 
-import java.util.EnumMap;
-
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -59,15 +56,6 @@ public class PolynomialMutationSO implements MutationOperator<Double, Task, Doub
 			}
 		}
 	}
-
-	@Override
-	public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
-		EnumMap<EnumAlgorithmParameters, String> para = new EnumMap<EnumAlgorithmParameters, String>(EnumAlgorithmParameters.class);
-		para.put(EnumAlgorithmParameters.P_C, mutationProbability+"");
-		para.put(EnumAlgorithmParameters.ETA, distributionIndex+"");
-		return para;
-	}
-
 	@Override
 	public void setProbability(double mutationProbability) {
 		this.mutationProbability = 1.0 / mutationProbability;

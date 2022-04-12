@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
@@ -96,7 +95,7 @@ public class GraphEARSAnimated extends GraphEARS
 		outputAutomatic = true;
 		if (data != null)
 		{
-			String tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".gif";
+			String tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".gif";
 			setOutputFilePrivate(tmp, overwrite);
 		}
 	}
@@ -162,7 +161,7 @@ public class GraphEARSAnimated extends GraphEARS
 		super.setData(data);
 		if (outputAutomatic)
 		{
-			String tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+".gif";
+			String tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".gif";
 			setOutputFilePrivate(tmp, false);
 			RefreshGraphData();
 		}
@@ -608,7 +607,7 @@ public class GraphEARSAnimated extends GraphEARS
 		graphs = new MOGraphSet(groupsCurrentData, 1, axisX, axisY);
 		int l = graphs.graphs.size();
 		GraphEARS g;
-		String title = groupsCurrentData[0][0].algorithm.getID().replaceAll("_", "\\_") + " solving " + groupsCurrentData[0][0].problemName;
+		String title = groupsCurrentData[0][0].algorithm.getId().replaceAll("_", "\\_") + " solving " + groupsCurrentData[0][0].problemName;
 		for (int i=0; i<l; i++)
 		{
 			g = graphs.getGraph(i);
@@ -632,7 +631,7 @@ public class GraphEARSAnimated extends GraphEARS
 		String pop_size_string = null;
 		popSize = GraphEARSStatic.DEFAULT_EVALUATIONS_PER_STEP;
 		
-		pop_size_string = alg.getAlgorithmInfo().getParameters().get(EnumAlgorithmParameters.POP_SIZE);
+		pop_size_string = alg.getParameterValue("popSize");
 		if (pop_size_string == null)
 		{
 			System.err.println("Error: Could not resolve pop size for algorithm " + alg.getClass().toString() + ".");

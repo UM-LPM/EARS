@@ -19,18 +19,15 @@ public class DummyBenchmark extends Benchmark {
         maxEvaluations = 3000;
         dimension = 3;
         maxIterations = 0;
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION, "3");
-        addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + drawLimit);
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
         tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
     public void addDummyTask(String name) {
-        addTask(new DummyProblem(name), stopCriterion, maxEvaluations, 0, maxIterations, 0.001);
+        addTask(new DummyProblem(name), stopCriterion, maxEvaluations, 0, maxIterations);
     }
 
     @Override

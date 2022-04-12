@@ -3,7 +3,6 @@ package org.um.feri.ears.algorithms.so.gsa;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -69,11 +68,6 @@ public class GSA extends Algorithm {
                 "url = \"http://www.sciencedirect.com/science/article/pii/S0020025509001200\"," +
                 "author = \"Esmat Rashedi and Hossein Nezamabadi-pour and Saeid Saryazdi\"}"
         );
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
-        ai.addParameter(EnumAlgorithmParameters.UNNAMED1, finalPer + "");
-        ai.addParameter(EnumAlgorithmParameters.UNNAMED2, RPower + "");
-        ai.addParameter(EnumAlgorithmParameters.UNNAMED3, alpha + "");
-        ai.addParameter(EnumAlgorithmParameters.UNNAMED4, G0 + "");
         au = new Author("Matej", "matej.crepinsek@um.si");
     }
 

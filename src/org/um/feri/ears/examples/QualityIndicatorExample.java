@@ -7,9 +7,9 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
-import org.um.feri.ears.qualityIndicator.IndicatorFactory;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.IndicatorFactory;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 
 public class QualityIndicatorExample {
 

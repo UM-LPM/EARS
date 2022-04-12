@@ -7,7 +7,7 @@ import org.um.feri.analyse.EE.metrics.ATMetrics;
 import org.um.feri.analyse.EE.metrics.PrintAMetrics;
 import org.um.feri.analyse.EE.metrics.PrintStatATMetrics;
 import org.um.feri.analyse.EE.metrics.StatATMetrics;
-import org.um.feri.analyse.EE.treeData.NodesEARS;
+import org.um.feri.analyse.EE.tree_data.NodesEARS;
 
 public class EARSExploreFitnessOnly {
 	// RastriginEEstatPSO_a1.stat

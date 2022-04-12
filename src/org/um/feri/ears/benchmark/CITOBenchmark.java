@@ -4,7 +4,7 @@ import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.IntegerMOProblem;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +24,10 @@ public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, IntegerMO
         this.randomIndicator = randomIndicator;
         this.drawLimit = drawLimit;
         maxEvaluations = 60000;
-        addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + drawLimit);
     }
 
     @Override
-    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon, IntegerMOProblem problem) {
+    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, IntegerMOProblem problem) {
         tasks.add(new IntegerMOTask(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 
@@ -48,7 +46,7 @@ public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, IntegerMO
 //		problems.add(new CITOProblem(CITOProblem.Problems.OO_MyBatis.name()));
 
         for (IntegerMOProblem moProblem : problems) {
-            addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.001, moProblem);
+            addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, moProblem);
         }
     }
 }

@@ -50,7 +50,7 @@ public class FriedmanTransport {
         int j;
         for (AlgorithmBase a : tmp) {
             i++;
-            algorithms.add(a.getID());
+            algorithms.add(a.getId());
             algorithmHm = all.get(a);
             tmpProblem = new ArrayList<>(algorithmHm.keySet());
             //mean[i] = new double[tmpProblem.size()];
@@ -72,7 +72,7 @@ public class FriedmanTransport {
                 for(AlgorithmRunResult<DoubleSolution, Algorithm, Task> res: algorithmRunResults)
                     results.add(res.solution.getEval());
                 std = new MeanStDev(results);
-                sb.append(a.getID()).append('\t').append(p.getProblemName());
+                sb.append(a.getId()).append('\t').append(p.getProblemName());
                 sb.append('\t').append(std.getMean());
                 sb.append("\n");
                 mean[j][i] = std.mean;

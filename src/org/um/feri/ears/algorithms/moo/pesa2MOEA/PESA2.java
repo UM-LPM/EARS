@@ -28,7 +28,6 @@ import java.util.NoSuchElementException;
 import org.apache.commons.math3.util.ArithmeticUtils;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
@@ -82,10 +81,6 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
                 "PESA2", "Pareto Envelope-Based Selection Algorithm",
                 "\\bibitem{corne2001}\nD.W.~Corne,N.R.~Jerram,J.D.~Knowles,M.J.~Oates\n\\newblock PESA-II: Region-based Selection in Evolutionary Multiobjective Optimization.\n\\newblock \\emph{Proceedings of the Genetic and Evolutionary Computation Conference (GECCO-2001)}, 283--290, 2001."
         );
-        ai.addParameters(crossover.getOperatorParameters());
-        ai.addParameters(mutation.getOperatorParameters());
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
-        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
     }
 
     @Override
@@ -256,9 +251,6 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
                 }
             }
         }
-
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
-        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
 
         archive = new AdaptiveGridArchive<Type>(archiveSize, numObj, ArithmeticUtils.pow(2, bisections));
         population = new ParetoSolution<Type>(populationSize);

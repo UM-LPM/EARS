@@ -12,4 +12,5 @@ public @interface AlgorithmParameter {
     String description() default "";
     String min() default "";
     String max() default "";
+    boolean isTunable() default true;
 }

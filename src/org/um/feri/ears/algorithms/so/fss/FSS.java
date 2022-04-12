@@ -9,13 +9,12 @@ package org.um.feri.ears.algorithms.so.fss;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.qualityIndicator.QualityIndicatorUtil;
-import org.um.feri.ears.util.Comparator.TaskComparator;
+import org.um.feri.ears.quality_indicator.QualityIndicatorUtil;
+import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
@@ -58,7 +57,6 @@ public class FSS extends Algorithm {
                         + "year={2008},"
                         + "organization={IEEE}}"
         );
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 
     @Override

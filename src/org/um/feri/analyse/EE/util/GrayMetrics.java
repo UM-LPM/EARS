@@ -3,8 +3,7 @@ package org.um.feri.analyse.EE.util;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.um.feri.analyse.EE.treeData.NodeEARS;
-import org.um.feri.analyse.EE.treeData.NodesEARS;
+import org.um.feri.analyse.EE.tree_data.NodeEARS;
 
 
 public class GrayMetrics {

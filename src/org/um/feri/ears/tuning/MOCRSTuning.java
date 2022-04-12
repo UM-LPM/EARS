@@ -24,14 +24,13 @@ import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
 import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.qualityIndicator.IndicatorFactory;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorType;
-import org.um.feri.ears.rating.Game;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.Rating;
-import org.um.feri.ears.rating.ResultArena;
+import org.um.feri.ears.quality_indicator.IndicatorFactory;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorType;
+import org.um.feri.ears.statistic.rating_system.GameResult;
+import org.um.feri.ears.statistic.rating_system.Player;
+import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
 import org.um.feri.ears.util.Util;
 
 public class MOCRSTuning {
@@ -96,7 +95,7 @@ public class MOCRSTuning {
 		this.indicators = indicators;
 		this.pop_size = popSize;
 		this.max_gen = maxGen;
-		//Player algorithm = new Player("IBEA", new Rating(1500, 350, 0.06),0,0,0);
+		//Player algorithm = new Player("IBEA");
 		
 
 		execute();
@@ -222,7 +221,7 @@ public class MOCRSTuning {
         System.out.println("New best solution:");
         System.out.println(best.name);
         System.out.println("Rating: "+best.getEval());
-        System.out.println("RD: "+best.p.getRatingData().getRD());
+        System.out.println("RD: "+best.p.getGlicko2Rating().getRatingDeviation());
     	
 	}
 
@@ -501,14 +500,14 @@ public class MOCRSTuning {
 		if(newSolution != null)
 			System.out.println("Creating player for: "+newSolution.name);
 		
-		ResultArena arena = new ResultArena(100);
+		TournamentResults arena = new TournamentResults(100);
     	//add players to the arena
 		for(int i = 0; i < population.length; i++){
 			
 			if(i == solIndex)
-				arena.addPlayer(new Player(null, newSolution.name, new Rating(1500, 350, 0.06),0,0,0));
+				arena.addPlayer(new Player(newSolution.name));
 			else
-				arena.addPlayer(new Player(null, population[i].name, new Rating(1500, 350, 0.06),0,0,0));
+				arena.addPlayer(new Player(population[i].name));
 		}
 
 		int index = 0;
@@ -540,21 +539,21 @@ public class MOCRSTuning {
 						for (int j=i+1; j<sameGameResults.size(); j++) {
 							lose = sameGameResults.get(j);
 							if (resultEqual(win.getBest(), lose.getBest(), qi)) {
-								arena.addGameResult(Game.DRAW, win.getAl().getAlgorithmInfo().getAcronym(), lose.getAl().getAlgorithmInfo().getAcronym(), task.getProblemName(), qi.getName());
+								arena.addGameResult(GameResult.DRAW, win.getAl().getAlgorithmInfo().getAcronym(), lose.getAl().getAlgorithmInfo().getAcronym(), task.getProblemName(), qi.getName());
 							} else {
 								if (win.getAl()==null) {
 									System.out.println("NULL ID "+win.getClass().getName());
 								}
 								if (win.getBest()==null) {
-									System.out.println(win.getAl().getID()+" NULL");
+									System.out.println(win.getAl().getId()+" NULL");
 								}                    
 								if (lose.getAl()==null) {
 									System.out.println("NULL ID "+lose.getClass().getName());
 								}
 								if (lose.getBest()==null) {
-									System.out.println(lose.getAl().getID()+" NULL");
+									System.out.println(lose.getAl().getId()+" NULL");
 								}                     
-								arena.addGameResult(Game.WIN, win.getAl().getAlgorithmInfo().getAcronym(), lose.getAl().getAlgorithmInfo().getAcronym(), task.getProblemName(), qi.getName());
+								arena.addGameResult(GameResult.WIN, win.getAl().getAlgorithmInfo().getAcronym(), lose.getAl().getAlgorithmInfo().getAcronym(), task.getProblemName(), qi.getName());
 							}
 						}
 					}

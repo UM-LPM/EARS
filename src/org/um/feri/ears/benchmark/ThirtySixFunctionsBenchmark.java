@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class ThirtySixFunctionsBenchmark extends Benchmark {
 
-    private double optimumEpsilon = 0.000001;
     public ThirtySixFunctionsBenchmark() {
         super();
         name="Benchmark containing 36 functions from the paper: A conceptual comparison of several metaheuristic algorithms on continuous optimisation problems";
@@ -17,13 +16,10 @@ public class ThirtySixFunctionsBenchmark extends Benchmark {
         maxIterations = 0;
         dimension = 30;
         maxEvaluations = 100000;
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION,String.valueOf(dimension));
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+ drawLimit);
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations, double epsilon) {
+    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
         tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
@@ -46,7 +42,7 @@ public class ThirtySixFunctionsBenchmark extends Benchmark {
         problems.add(new Michalewicz5());
         problems.add(new Zakharov(30));
         problems.add(new Michalewicz10());
-        problems.add(new Step1(30)); //x[-5.12,5.12]
+        problems.add(new Step2(30)); //x[-5.12,5.12]
         problems.add(new Sphere(30));
         problems.add(new SumSquares(30));
         problems.add(new Quartic(30)); //paper uses noise
@@ -69,12 +65,12 @@ public class ThirtySixFunctionsBenchmark extends Benchmark {
         problems.add(new Salomon(6)); //error in table Salomon10 instead of Salomon6
 
         for (Problem p : problems) {
-            addTask(p, stopCriterion, maxEvaluations, timeLimit, maxIterations, optimumEpsilon);
+            addTask(p, stopCriterion, maxEvaluations, timeLimit, maxIterations);
         }
     }
 
     @Override
     public String getName() {
-        return name + "("+ getParameters().get(EnumBenchmarkInfoParameters.DIMENSION)+")";
+        return name + "  D="+ dimension;
     }
 }

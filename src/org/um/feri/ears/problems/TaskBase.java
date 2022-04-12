@@ -21,13 +21,13 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
 	private int resetCount;
     protected int maxTrialsBeforeStagnation = 10000;
     protected int stagnationTrialCounter = 0;
-    protected double bestEval; //Keeps track of the best solution found.
 
     //protected StringBuilder ancestorSB;
     protected ArrayList<DoubleSolution> ancestors;
     protected boolean isAncestorLoggingEnabled = false;
     protected ArrayList<EvaluationStorage.Evaluation> evaluationHistory;
     protected boolean isEvaluationHistoryEnabled = false;
+    protected int storeEveryNthEvaluation = 10000;
 
     public TaskBase (TaskBase<T> task) {
 
@@ -47,7 +47,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
         resetCount = task.resetCount;
         maxTrialsBeforeStagnation = task.maxTrialsBeforeStagnation;
         stagnationTrialCounter = task.stagnationTrialCounter;
-        bestEval = task.bestEval;
+        storeEveryNthEvaluation = task.storeEveryNthEvaluation;
     }
 
     /**
@@ -160,6 +160,18 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
 
     public ArrayList<EvaluationStorage.Evaluation> getEvaluationHistory() {
         return evaluationHistory;
+    }
+
+    public void setEvaluationHistory(ArrayList<EvaluationStorage.Evaluation> evaluationHistory) {
+        this.evaluationHistory = evaluationHistory;
+    }
+
+    public int getStoreEveryNthEvaluation() {
+        return storeEveryNthEvaluation;
+    }
+
+    public void setStoreEveryNthEvaluation(int storeEveryNthEvaluation) {
+        this.storeEveryNthEvaluation = storeEveryNthEvaluation;
     }
 
     public ArrayList<DoubleSolution> getAncestors() {

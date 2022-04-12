@@ -54,7 +54,7 @@ public class RNG {
     //TODO remove old Mersenne Twister
     //TODO nextGaussian
     //TODO annotations from apache
-    //TODO test benchmark before replacing Util.rnd + speed test
+    //TODO test benchmark before replacing Util.rnd with RNG + speed test
     //TODO separate methods for default and specific RNG
     //TODO synchronized causes overhead, ThreadLocalRandom, separate generator for each thread
 

@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.visualization.graphing.data.AlgorithmStatistics;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
@@ -133,12 +132,12 @@ public class GraphEARSStatic extends GraphEARS
 			String tmp="";
 			if (data[0].algorithm instanceof MOAlgorithm)
 			{
-				tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
+				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
 			}
 			else if (data[0].algorithm instanceof Algorithm)
 			{
 				//tmp = data[0].algorithm.getID()+" solving "+data[0].problem.name+" it"+data[0].iteration+".png";
-				tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+".png";
+				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".png";
 			}
 			setOutputFilePrivate(tmp, overwrite);
 		}
@@ -219,12 +218,12 @@ public class GraphEARSStatic extends GraphEARS
 			String tmp="";
 			if (data[0].algorithm instanceof MOAlgorithm)
 			{
-				tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
+				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
 			}
 			else if (data[0].algorithm instanceof Algorithm)
 			{
 				//tmp = data[0].algorithm.getID()+" solving "+data[0].problem.name+" it"+data[0].iteration+".png";
-				tmp = data[0].algorithm.getID()+" solving "+data[0].problemName+".png";
+				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".png";
 			}
 			setOutputFilePrivate(tmp, false);
 		}
@@ -242,7 +241,7 @@ public class GraphEARSStatic extends GraphEARS
 			if (data != null)
 			{
 
-				statisticsFile = data[0].algorithm.getID()+" solving "+data[0].problemName+".csv";
+				statisticsFile = data[0].algorithm.getId()+" solving "+data[0].problemName+".csv";
 			}
 			else
 			{
@@ -464,7 +463,7 @@ public class GraphEARSStatic extends GraphEARS
 			}
 			else*/
 			{
-				plot.setTitle(data[0].algorithm.getID().replace("_", "\\_")+" solving "+data[0].problemName);
+				plot.setTitle(data[0].algorithm.getId().replace("_", "\\_")+" solving "+data[0].problemName);
 			}
 		}
 		plot.plot();
@@ -1212,7 +1211,7 @@ public class GraphEARSStatic extends GraphEARS
 		String pop_size_string = null;
 		popSize = GraphEARSStatic.DEFAULT_EVALUATIONS_PER_STEP;
 		
-		pop_size_string = alg.getAlgorithmInfo().getParameters().get(EnumAlgorithmParameters.POP_SIZE);
+		pop_size_string = alg.getParameterValue("popSize");
 		if (pop_size_string == null)
 		{
 			System.err.println("Error: Could not resolve pop size for algorithm " + alg.getClass().toString() + ".");

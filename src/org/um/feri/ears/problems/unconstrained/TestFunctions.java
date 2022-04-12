@@ -226,7 +226,7 @@ public class TestFunctions {
 		System.out.println(p44.getGlobalOptimum());
 		System.out.println(p44.eval(p44.getOptimalVector()[0]));
 		
-		Step1 p45 = new Step1(2);
+		Step2 p45 = new Step2(2);
 		System.out.println(p45.getName());
 		System.out.println(p45.getGlobalOptimum());
 		System.out.println(p45.eval(p45.getOptimalVector()[0]));

@@ -183,17 +183,10 @@ public class Util {
 		}
 	}*/
 
-    public static double divide(double a, double b) {
-        if (b == 0)
-            return 0;
-        return a / b;
-    }
-
     /**
-     *
      * @param upperBound
      * @return the next random, uniformly distributed {@code int} value between
-     *         {@code 0} (inclusive) and {@code upperBound} (exclusive).
+     * {@code 0} (inclusive) and {@code upperBound} (exclusive).
      */
     public static int nextInt(int upperBound) {
         return rnd.nextInt(upperBound);
@@ -208,7 +201,7 @@ public class Util {
      * {@code 0} (inclusive) and {@code n} (exclusive).
      *
      * @return the next random, uniformly distributed {@code int} value between
-     *         {@code lowerBound} (inclusive) and {@code upperBound} (exclusive).
+     * {@code lowerBound} (inclusive) and {@code upperBound} (exclusive).
      */
     public static int nextInt(int lowerBound, int upperBound) {
         return lowerBound + rnd.nextInt(upperBound - lowerBound);
@@ -227,7 +220,7 @@ public class Util {
      * between {@code lowerBound} and {@code upperBound}.
      *
      * @return the next random, uniformly distributed {@code double} value
-     *         between {@code lowerBound} and {@code upperBound}
+     * between {@code lowerBound} and {@code upperBound}
      */
     public static double nextDouble(double lowerBound, double upperBound) {
         return lowerBound + rnd.nextDouble() * (upperBound - lowerBound);
@@ -241,7 +234,7 @@ public class Util {
      * Shuffles the elements of the specified array using the same algorithm as
      * {@link Collections#shuffle}.
      *
-     * @param <T> the type of element stored in the array
+     * @param <T>   the type of element stored in the array
      * @param array the array to be shuffled
      */
     public static <T> void shuffle(T[] array) {
@@ -261,7 +254,7 @@ public class Util {
      * Shuffles the elements of the specified list using the same algorithm as
      * {@link Collections#shuffle}.
      *
-     * @param <T> the type of element stored in the List
+     * @param <T>  the type of element stored in the List
      * @param list the list to be shuffled
      */
     public static <T> void shuffle(List<T> list) {
@@ -316,7 +309,7 @@ public class Util {
     /**
      * Returns a randomly selected item from the specified list.
      *
-     * @param <T> the type of the elements stored in the list
+     * @param <T>  the type of the elements stored in the list
      * @param list the list from which the item is randomly selected
      * @return a randomly selected item from the specified list
      */
@@ -337,28 +330,36 @@ public class Util {
         return rnd.nextGaussian();
     }
 
-	/**
-	 * Returns a random real number from a Gaussian distribution with mean &mu;
-	 * and standard deviation &sigma;.
-	 *
-	 * @param  mu the mean
-	 * @param  sigma the standard deviation
-	 * @return a real number distributed according to the Gaussian distribution
-	 *         with mean <tt>mu</tt> and standard deviation <tt>sigma</tt>
-	 */
-	public static double nextGaussian(double mu, double sigma) {
-		return mu + sigma * rnd.nextGaussian();
-	}
+    /**
+     * Returns a random real number from a Gaussian distribution with mean &mu;
+     * and standard deviation &sigma;.
+     *
+     * @param mu    the mean
+     * @param sigma the standard deviation
+     * @return a real number distributed according to the Gaussian distribution
+     * with mean <tt>mu</tt> and standard deviation <tt>sigma</tt>
+     */
+    public static double nextGaussian(double mu, double sigma) {
+        return mu + sigma * rnd.nextGaussian();
+    }
 
     public static void writeToFile(String fileLocation, String data) {
 
         File file = new File(fileLocation);
+        String directory = file.getParent();
+        if (directory == null) {
+            directory = System.getProperty("user.dir");
+            fileLocation = directory + File.separator + fileLocation;
+            file = new File(fileLocation);
+        }
+        File fileDirectory = new File(directory);
         try {
-            file.getParentFile().mkdirs();
+            fileDirectory.mkdirs();
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false)))) {
             bw.write(data);
         } catch (IOException e) {
@@ -367,7 +368,7 @@ public class Util {
     }
 
     public static String readFromFile(String fileLocation) {
-	    StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(fileLocation))) {
             String line;
             while ((line = br.readLine()) != null)
@@ -379,7 +380,7 @@ public class Util {
     }
 
     public static double max(double... args) {
-	    double maxValue = args[0];
+        double maxValue = args[0];
         for (double arg : args) {
             maxValue = Math.max(maxValue, arg);
         }

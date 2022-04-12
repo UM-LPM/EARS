@@ -8,7 +8,7 @@ import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.CEC2009Benchmark;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;

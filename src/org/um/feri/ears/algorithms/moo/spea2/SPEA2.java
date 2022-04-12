@@ -9,7 +9,6 @@ package org.um.feri.ears.algorithms.moo.spea2;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
@@ -45,10 +44,6 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
                 "SPEA2", "Strength Pareto Evolutionary Algorithm 2",
                 "\\bibitem{Zitzler2002}\nE.~Zitzler,M.~Laumanns,L.~Thiele\n\\newblock SPEA2: Improving the Strength Pareto Evolutionary Algorithm for Multiobjective Optimization.\n\\newblock \\emph{EUROGEN 2001. Evolutionary Methods for Design, Optimization and Control with Applications to Industrial Problems}, 95--100, 2002."
         );
-        ai.addParameters(crossover.getOperatorParameters());
-        ai.addParameters(mutation.getOperatorParameters());
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
-        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
     }
 
     @Override
@@ -84,9 +79,6 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         }
 
         //archiveSize = populationSize;
-
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
-        ai.addParameter(EnumAlgorithmParameters.ARCHIVE_SIZE, archiveSize + "");
 
         population = new ParetoSolution<Type>(populationSize);
         archive = new ParetoSolution<Type>(archiveSize);

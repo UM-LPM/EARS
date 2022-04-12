@@ -32,7 +32,7 @@ public class BenchmarkRunner {
 		String fileName;
 		
 		URL url = BenchmarkRunner.class.getResource(".");
-		String logLocation = url.getPath().toString();
+		String logLocation = url.getPath();
 		if(SystemUtils.IS_OS_WINDOWS)
 			logLocation = logLocation.substring(1);
 		
@@ -90,7 +90,7 @@ public class BenchmarkRunner {
 				logger.log(Level.INFO, "run duration "+ TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runDuration) + "ms");
 			}
 			logger.log(Level.INFO, "finished task "+t.getProblemName() +" in "+TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - taskDuration) + "ms");
-			fileName = algorithm.getID().replace("_", " ")+"_"+t.getProblemName()+".txt";
+			fileName = algorithm.getId().replace("_", " ")+"_"+t.getProblemName()+".txt";
 			
 			try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+fileName)))) {
 				bw.write(sb.toString());

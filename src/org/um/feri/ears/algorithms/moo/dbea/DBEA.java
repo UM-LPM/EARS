@@ -29,7 +29,6 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
@@ -37,7 +36,7 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Comparator.ObjectiveComparator;
+import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
 import org.um.feri.ears.util.Util;
 
@@ -168,7 +167,6 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 "DBEA", "Decomposition-Based Evolutionary Algorithm",
                 "\\bibitem{Asafuddoula2015}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock A Decomposition-Based Evolutionary Algorithm for Many-Objective Optimization.\n\\newblock \\emph{IEEE Transaction on Evolutionary Computation}, 19(3):445--460, 2015."
         );
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 
         this.divisionsOuter = divisionsOuter;
         this.divisionsInner = divisionsInner;
@@ -185,7 +183,6 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 "DBEA", "Decomposition-Based Evolutionary Algorithm",
                 "\\bibitem{Asafuddoula2015}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock A Decomposition-Based Evolutionary Algorithm for Many-Objective Optimization.\n\\newblock \\emph{IEEE Transaction on Evolutionary Computation}, 19(3):445--460, 2015."
         );
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 
         this.divisionsOuter = divisionsOuter;
         this.divisionsInner = divisionsInner;

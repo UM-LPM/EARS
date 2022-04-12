@@ -7,13 +7,7 @@ import org.um.feri.ears.problems.DoubleSolution;
 public class IndividualSA extends DoubleSolution {
     private double F;
     private double CR;
-    
-    public IndividualSA(List<Double> x, double eval, double F, double CR) {
-        super(x, eval);
-        this.F = F;
-        this.CR =CR;
-    }
-    
+
     public IndividualSA(IndividualSA i) {
         super(i);
         this.F = i.F;

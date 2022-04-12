@@ -8,7 +8,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.benchmark.BenchmarkBase;
-import org.um.feri.ears.rating.Player;
+import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Util;
 
 import java.io.*;
@@ -567,7 +567,7 @@ public class ExecuteTournamentsTest {
 
 		ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
 		DummyBenchmark dr = new DummyBenchmark(0.000001); //Create banchmark
-		dr.setDisplayRatingIntervalChart(false);
+		dr.setDisplayRatingCharts(false);
 		BenchmarkBase.printInfo = false;
 
 		//parse algorithm and problem names

@@ -17,7 +17,6 @@ import java.util.Vector;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.moo.moead.Utils;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
@@ -45,9 +44,6 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
                 "MOEAD_STM", "Multiobjective Evolutionary Algorithm Based on Decomposition",
                 "\\bibitem{Zhang2009}\nQ.~Zhang, W.~Liu, H.~Li.\n\\newblock The Performance of a New Version of MOEA/D on CEC09 Unconstrained MOP Test Instances.\n\\newblock \\emph{IEEE Congress on Evolutionary Computation}, 203--208, 2009."
         );
-        ai.addParameters(crossover.getOperatorParameters());
-        ai.addParameters(mutation.getOperatorParameters());
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
     }
 
     @Override

@@ -11,18 +11,18 @@ public class TaskWithMemory extends Task {
     int stopIfDuplicatesCount;
     private static int NOT_SET_EVAL=-1;
 
-    public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
+    public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations,
                           Problem p, int xPrecision, DuplicationRemovalStrategy strategy, int stopDuplicatesPerc) {
-        this(stop, eval, allowedTime, maxIterations, epsilon, p, xPrecision, strategy);
+        this(stop, eval, allowedTime, maxIterations, p, xPrecision, strategy);
         stopWhenPercDuplicates = true;
         stopIfDuplicatesCount = eval/stopDuplicatesPerc;
         stopAtEval=NOT_SET_EVAL; //NOT_REACH
 
     }
 
-    public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
+    public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations,
                           Problem p, int xPrecision, DuplicationRemovalStrategy strategy) {
-        super(p, stop, eval, allowedTime, maxIterations, epsilon);
+        super(p, stop, eval, allowedTime, maxIterations);
         stopWhenPercDuplicates = false;
         this.xPrecision = xPrecision;
         strategy.setTask(this);

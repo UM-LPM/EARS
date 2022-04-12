@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.spea2.Spea2fitness;
 import org.um.feri.ears.operators.CrossoverOperator;
@@ -36,9 +35,9 @@ import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Comparator.CrowdingComparator;
+import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
-import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
 public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
@@ -74,9 +73,6 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         ai = new AlgorithmInfo(
                 "DEMO", "Differential Evolution for Multiobjective Optimization",
                 "\\bibitem{Robic2005}\nT.~Robi�, B.~Filipi�\n\\newblock DEMO: Differential Evolution for Multiobjective Optimization.\n\\newblock \\emph{Evolutionary Multi-Criterion Optimization}, 520-533, 2005.");
-
-        ai.addParameters(crossover.getOperatorParameters());
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 
     }
 

@@ -11,14 +11,13 @@ import java.util.Comparator;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
-import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.DominanceComparator;
 
 public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
 
@@ -38,8 +37,6 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 "PAES", "Pareto Archived Evolution Strategy",
                 "\\bibitem{knowles1999}\nJ.~Knowles,D.W.~Corne\n\\newblock The Pareto Archived Evolution Strategy: A New Baseline Algorithm for Pareto Multiobjective Optimisation.\n\\newblock \\emph{Proceedings of the Congress of Evolutionary Computation}, 98--105, 1999."
         );
-        ai.addParameters(mutation.getOperatorParameters());
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
     }
 
     @Override

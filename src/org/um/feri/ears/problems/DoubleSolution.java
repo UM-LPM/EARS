@@ -21,28 +21,6 @@ public class DoubleSolution extends SolutionBase<Double> {
     public DoubleSolution() {
     }
 
-    /**
-     * !!!This constructor is for unconstrained optimization!
-     *
-     * @param x
-     * @param eval
-     * @deprecated
-     */
-    public DoubleSolution(List<Double> x, double eval) {
-
-        //variable = Arrays.copyOf(x,x.length);
-        variable = new ArrayList<Double>(x);
-        this.eval = eval;
-        constraintsMet = true;
-    }
-
-    /**
-     * Use this constructor only in case of constrained optimization
-     *
-     * @param x
-     * @param eval
-     * @param constrains
-     */
     public DoubleSolution(List<Double> x, double eval, double[] constrains) {
         variable = new ArrayList<Double>(x);
         checkConstraints(constrains);

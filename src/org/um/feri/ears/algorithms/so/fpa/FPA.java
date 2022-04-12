@@ -7,11 +7,10 @@ import org.apache.commons.math3.special.Gamma;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.Comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
@@ -53,7 +52,6 @@ public class FPA extends Algorithm {
                         + "year={2012},"
                         + "organization={Springer}}"
         );
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, popSize + "");
     }
 
     @Override

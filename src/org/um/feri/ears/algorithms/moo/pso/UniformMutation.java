@@ -13,12 +13,8 @@
 
 package org.um.feri.ears.algorithms.moo.pso;
 
-import java.util.EnumMap;
-
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
 
@@ -81,13 +77,5 @@ public class UniformMutation implements MutationOperator<Double, DoubleMOTask, M
     @Override
     public void setProbability(double mutationProbability) {
         this.mutationProbability = mutationProbability;
-    }
-
-    @Override
-    public EnumMap<EnumAlgorithmParameters, String> getOperatorParameters() {
-        EnumMap<EnumAlgorithmParameters, String> para = new EnumMap<EnumAlgorithmParameters, String>(EnumAlgorithmParameters.class);
-        para.put(EnumAlgorithmParameters.P_C, mutationProbability + "");
-        para.put(EnumAlgorithmParameters.B, perturbation + "");
-        return para;
     }
 }

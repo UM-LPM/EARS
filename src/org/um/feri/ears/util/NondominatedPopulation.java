@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.DominanceComparator;
 
 /**
  * A population that maintains the property of pair-wise non-dominance between

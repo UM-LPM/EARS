@@ -15,8 +15,8 @@ public class Trid6 extends Problem {
 
     public Trid6() {
         super(6, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -pow(numberOfDimensions, numberOfDimensions)));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, pow(numberOfDimensions, numberOfDimensions)));
+        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -pow(numberOfDimensions, 2)));
+        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, pow(numberOfDimensions, 2)));
         name = "Trid6";
 
         for (int i = 0; i < numberOfDimensions; i++) {

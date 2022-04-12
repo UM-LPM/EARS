@@ -10,7 +10,6 @@ import static java.lang.Math.*;
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/184-salomon-s-function
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Salomon
-http://benchmarkfcns.xyz/benchmarkfcns/salomonfcn.html
  */
 public class Salomon extends Problem {
 

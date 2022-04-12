@@ -73,7 +73,7 @@ public class GenerateBenchmarksFile {
                             b.numberOfRuns = ((BenchmarkBase) benchmark).getNumberOfRuns();
                             b.type = "Multi-Objective";
                             b.stopCriteria = ((BenchmarkBase) benchmark).getStopCriterion().toString();
-                            b.stopCondition = ((BenchmarkBase) benchmark).getStopCondition();
+                            b.stopCondition = ((BenchmarkBase) benchmark).getStoppingCriterion();
                             b.problems = ((BenchmarkBase) benchmark).getProblems();
                             benchmarks.add(b);
 
@@ -86,7 +86,7 @@ public class GenerateBenchmarksFile {
                             b.numberOfRuns = ((BenchmarkBase) benchmark).getNumberOfRuns();
                             b.type = "Single-Objective";
                             b.stopCriteria = ((BenchmarkBase) benchmark).getStopCriterion().toString();
-                            b.stopCondition = ((BenchmarkBase) benchmark).getStopCondition();
+                            b.stopCondition = ((BenchmarkBase) benchmark).getStoppingCriterion();
                             b.problems = ((BenchmarkBase) benchmark).getProblems();
                             benchmarks.add(b);
                         }

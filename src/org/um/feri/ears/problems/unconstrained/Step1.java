@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.floor;
-import static java.lang.Math.pow;
 
 /*
-https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/192-step-function-no-1
-http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Step
+https://al-roomi.org/benchmarks/unconstrained/n-dimensions/192-step-function-no-1
  */
+
 public class Step1 extends Problem {
     public Step1(int d) {
         super(d, 0);
@@ -24,7 +23,7 @@ public class Step1 extends Problem {
     public double eval(double[] x) {
         double fitness = 0;
         for (int i = 0; i < numberOfDimensions; i++) {
-            fitness += pow(floor(x[i] + 0.5), 2);
+            fitness += floor(x[i]);
         }
         return fitness;
     }

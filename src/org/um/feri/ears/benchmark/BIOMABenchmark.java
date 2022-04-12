@@ -4,7 +4,7 @@ import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.*;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +26,11 @@ public class BIOMABenchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMOPr
         maxEvaluations = 300000;
         stopCriterion = StopCriterion.EVALUATIONS;
         maxIterations = 500;
-        timeLimit = 5000; //millisecnods
-        addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + drawLimit);
+        timeLimit = 5000; //milliseconds
     }
 
     @Override
-    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem problem) {
+    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, DoubleMOProblem problem) {
         tasks.add(new DoubleMOTask(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 
@@ -53,7 +51,7 @@ public class BIOMABenchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMOPr
         problems.add(new UnconstrainedProblem10());
 
         for (DoubleMOProblem moProblem : problems) {
-            addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 1.0E-4, moProblem);
+            addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, moProblem);
         }
     }
 }

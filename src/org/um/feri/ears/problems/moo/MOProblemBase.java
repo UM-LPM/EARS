@@ -1,7 +1,7 @@
 package org.um.feri.ears.problems.moo;
 
 import org.um.feri.ears.problems.ProblemBase;
-import org.um.feri.ears.qualityIndicator.QualityIndicator;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
 
 import java.util.ArrayList;
 import java.util.List;

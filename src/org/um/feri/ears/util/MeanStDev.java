@@ -3,6 +3,7 @@ package org.um.feri.ears.util;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MeanStDev {
     public double mean, stdev;
@@ -64,6 +65,12 @@ public class MeanStDev {
         return list;
     }
 
+    public static double divide(double a, double b) {
+        if (b == 0)
+            return 0;
+        return a / b;
+    }
+
     /**
      * @param population an array containing the population
      * @return the variance
@@ -79,7 +86,7 @@ public class MeanStDev {
             mean += delta / n;
             s += delta * (x - mean);
         }
-        return Util.divide(s, (n - 1));
+        return divide(s, (n - 1));
         //return (s / n);
     }
 
@@ -101,6 +108,6 @@ public class MeanStDev {
         for (Double d : population) {
             sum += d;
         }
-        return Util.divide(sum, population.size());
+        return divide(sum, population.size());
     }
 }

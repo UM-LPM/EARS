@@ -3,7 +3,7 @@ package org.um.feri.ears.tuning;
 import java.util.ArrayList;
 
 import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
-import org.um.feri.ears.rating.Player;
+import org.um.feri.ears.statistic.rating_system.Player;
 
 public class CRSSolution {
 	
@@ -49,7 +49,7 @@ public class CRSSolution {
     }
     
     public double getEval() {
-    	return p.getRatingData().getRating();
+    	return p.getGlicko2Rating().getRating();
     }
 	
     public double getF() {

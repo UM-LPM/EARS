@@ -12,7 +12,6 @@ import java.util.Vector;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
@@ -71,10 +70,6 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
                 "NSGAIII", "Nondominated Sorting Genetic Algorithm III",
                 "\\bibitem{Deb2014}\nK.~Deb, H.~Jain\n\\newblock An evolutionary many-objective optimization algorithm using reference-point-based nondominated sorting approach, part I: Solving problems with box constraints.\n\\newblock \\emph{IEEE Transactions on Evolutionary Computation}, 18(4):577--601, 2014."
         );
-
-        ai.addParameters(crossover.getOperatorParameters());
-        ai.addParameters(mutation.getOperatorParameters());
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
     }
 
     @Override
@@ -207,8 +202,6 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
                 break;
             }
         }
-
-        ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize + "");
 
         bt2 = new BinaryTournament2<Type>();
         sbx = new SBXCrossover(0.9, 20.0);

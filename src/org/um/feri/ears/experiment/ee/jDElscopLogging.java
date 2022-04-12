@@ -7,7 +7,6 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.EnumAlgorithmParameters;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -62,8 +61,6 @@ public class jDElscopLogging extends Algorithm {
 				"jDElscop", "jDElscop",
 				"@Article{Brest2010,author=\"Brest, Janez and Mau{\\v{c}}ec, Mirjam Sepesy\",title=\"Self-adaptive differential evolution algorithm using population size reduction and three strategies\",journal=\"Soft Computing\",year=\"2010\",volume=\"15\",number=\"11\",pages=\"2157--2174\",issn=\"1433-7479\",doi=\"10.1007/s00500-010-0644-5\",url=\"http://dx.doi.org/10.1007/s00500-010-0644-5\"}"
 		);
-		ai.addParameter(EnumAlgorithmParameters.POP_SIZE, pop_size + "");
-		// ai.addParameter(EnumAlgorithmParameters., F + "");
 		au = new Author("Matej", "matej.crepinsek@um.si");
 	}
 

@@ -1,7 +1,6 @@
 package org.um.feri.ears.tuning;
 
 import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.benchmark.EnumBenchmarkInfoParameters;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
@@ -27,9 +26,6 @@ public class TuningBenchmark extends Benchmark {
         this.draw_limit = draw_limit;
         evaluationsOnDimension = 10000;
         dimension = 10;
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION, "10");
-        addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(evaluationsOnDimension));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + draw_limit);
     }
 
     public TuningBenchmark(double draw_limit, int aDim, int aEval) {
@@ -37,15 +33,11 @@ public class TuningBenchmark extends Benchmark {
         this.draw_limit = draw_limit;
         evaluationsOnDimension = aEval;
         dimension = aDim;
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION, String.valueOf(dimension));
-        addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(evaluationsOnDimension));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + draw_limit);
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations,
-                           double epsilon) {
-        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations, epsilon));
+    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
         String[] optimum = new String[2];
         optimum[0] = problem.getName();
         optimum[1] = problem.getGlobalOptimum() + "";
@@ -54,13 +46,13 @@ public class TuningBenchmark extends Benchmark {
 
     @Override
     public void initAllProblems() {
-        addTask(new Sphere(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);      // f1
-        addTask(new RosenbrockDeJong2(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);  // f2
-        addTask(new Step1(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);        // f3
-        addTask(new Schaffer1(), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);    // f4
-        addTask(new Rastrigin(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);   // f5
-        addTask(new Schwefel226(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);    // f6
-        addTask(new Griewank(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);    // f7
-        addTask(new Ackley1(dimension), stopCriterion, evaluationsOnDimension, 1000, 500, draw_limit);      // f8
+        addTask(new Sphere(dimension), stopCriterion, evaluationsOnDimension, 1000, 500);      // f1
+        addTask(new RosenbrockDeJong2(dimension), stopCriterion, evaluationsOnDimension, 1000, 500);  // f2
+        addTask(new Step2(dimension), stopCriterion, evaluationsOnDimension, 1000, 500);        // f3
+        addTask(new Schaffer1(), stopCriterion, evaluationsOnDimension, 1000, 500);    // f4
+        addTask(new Rastrigin(dimension), stopCriterion, evaluationsOnDimension, 1000, 500);   // f5
+        addTask(new Schwefel226(dimension), stopCriterion, evaluationsOnDimension, 1000, 500);    // f6
+        addTask(new Griewank(dimension), stopCriterion, evaluationsOnDimension, 1000, 500);    // f7
+        addTask(new Ackley1(dimension), stopCriterion, evaluationsOnDimension, 1000, 500);      // f8
     }
 }

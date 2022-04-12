@@ -1,15 +1,15 @@
 package org.um.feri.ears.benchmark;
 
-import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.statistic.rating_system.Player;
+import org.um.feri.ears.statistic.rating_system.glicko2.Glicko2Rating;
+import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
-import org.um.feri.ears.rating.Player;
-import org.um.feri.ears.rating.ResultArena;
-import org.um.feri.ears.visualization.rating.RatingIntervalPlot;
+import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -31,16 +31,16 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     protected int dimension = 2;
     protected int numberOfRuns = 15;
     protected boolean runInParallel = false;
-    protected boolean displayRatingIntervalChart = true;
+    protected boolean displayRatingCharts = true;
+    boolean displayRatingIntervalBand = false;
+    int evaluationsPerTick = 100;
 
-    ResultArena resultArena = new ResultArena();
+    TournamentResults tournamentResults = new TournamentResults();
     BenchmarkResults<T, S, A> benchmarkResults = new BenchmarkResults();
-    protected EnumMap<EnumBenchmarkInfoParameters, String> parameters; //add all specific parameters
 
     public BenchmarkBase() {
         tasks = new ArrayList<>();
         algorithms = new ArrayList<>();
-        parameters = new EnumMap<>(EnumBenchmarkInfoParameters.class);
     }
 
     public boolean isRunInParallel() {
@@ -51,16 +51,12 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         this.runInParallel = runInParallel;
     }
 
-    public ResultArena getResultArena() {
-        return resultArena;
+    public TournamentResults getResultArena() {
+        return tournamentResults;
     }
 
-    public void addParameter(EnumBenchmarkInfoParameters id, String value) {
-        parameters.put(id, value);
-    }
-
-    public EnumMap<EnumBenchmarkInfoParameters, String> getParameters() {
-        return parameters;
+    public String getParameters(String name) {
+        return ""; //TODO reflection
     }
 
     public void clearPlayers() {
@@ -102,31 +98,12 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         benchmarkResults.removeAlgorithm(algorithm);
     }
 
-    public String getParams() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Parameters:\n");
-        for (EnumBenchmarkInfoParameters a : parameters.keySet()) {
-            sb.append(a.getShortName()).append(" = ").append(parameters.get(a)).append("\t").append("(").append(a.getDescription()).append(")\n");
-        }
-        return sb.toString();
+    public boolean isDisplayRatingCharts() {
+        return displayRatingCharts;
     }
 
-    public void updateParameters() {
-        parameters.put(EnumBenchmarkInfoParameters.NUMBER_OF_TASKS, "" + tasks.size());
-        addParameter(EnumBenchmarkInfoParameters.STOPPING_CRITERIA, "" + stopCriterion);
-        addParameter(EnumBenchmarkInfoParameters.DIMENSION, "" + dimension);
-        addParameter(EnumBenchmarkInfoParameters.EVAL, String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.CPU_TIME, String.valueOf(timeLimit));
-        addParameter(EnumBenchmarkInfoParameters.ITTERATIONS, String.valueOf(maxIterations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM, "abs(evaluation_diff) < " + drawLimit);
-    }
-
-    public boolean isDisplayRatingIntervalChart() {
-        return displayRatingIntervalChart;
-    }
-
-    public void setDisplayRatingIntervalChart(boolean displayRatingIntervalChart) {
-        this.displayRatingIntervalChart = displayRatingIntervalChart;
+    public void setDisplayRatingCharts(boolean displayRatingCharts) {
+        this.displayRatingCharts = displayRatingCharts;
     }
 
     public abstract void initAllProblems();
@@ -159,7 +136,6 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     public void run(int numberOfRuns) {
         this.numberOfRuns = numberOfRuns;
         initAllProblems();
-        addParameter(EnumBenchmarkInfoParameters.NUMBER_OF_DUELS, "" + numberOfRuns);
         long start = System.nanoTime();
         for (int i = 0; i < numberOfRuns; i++) {
             if (printInfo) System.out.println("Current run: " + (i + 1));
@@ -169,21 +145,23 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
                 benchmarkResults.addResults(i, task, runResults);
             }
         }
-
-        addParameter(EnumBenchmarkInfoParameters.BENCHMARK_RUN_DURATION,
-                "" + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
-
+        long duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
         performStatistics();
     }
 
     protected ArrayList<AlgorithmRunResult<S, A, T>> runOneTask(T task) {
 
+        if(displayRatingIntervalBand) {
+            task.enableEvaluationHistory();
+            task.setStoreEveryNthEvaluation(evaluationsPerTick);
+        }
+
         ArrayList<AlgorithmRunResult<S, A, T>> runResults = new ArrayList<>();
         if (runInParallel) {
             ExecutorService pool = Executors.newFixedThreadPool(algorithms.size());
             Set<Future<AlgorithmRunResult>> set = new HashSet<>();
-            for (A al : algorithms) {
-                Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, (T) task.clone()));
+            for (A algorithm : algorithms) {
+                Future<AlgorithmRunResult> future = pool.submit(algorithm.createRunnable(algorithm, (T) task.clone()));
                 set.add(future);
             }
 
@@ -192,7 +170,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
                     AlgorithmRunResult result = future.get();
 
                     if (printInfo)
-                        System.out.println("Total execution time for " + result.algorithm.getID() + ": " + result.algorithm.getLastRunDuration());
+                        System.out.println("Total execution time for " + result.algorithm.getId() + ": " + result.algorithm.getLastRunDuration());
 
                     //TODO generic feasibility check for result
                     runResults.add(result);
@@ -214,11 +192,11 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
                     algorithm.addRunDuration(duration, duration - taskCopy.getEvaluationTimeMs());
 
                     if (printInfo)
-                        System.out.println(algorithm.getID() + ": " + duration / 1000.0);
+                        System.out.println(algorithm.getId() + ": " + duration / 1000.0);
                     runResults.add(new AlgorithmRunResult(result, algorithm, taskCopy));
                     //TODO generic feasibility check
                 } catch (StopCriterionException e) {
-                    System.err.println(algorithm.getID() + " StopCriterionException for:" + task + "\n" + e);
+                    System.err.println(algorithm.getId() + " StopCriterionException for:" + task + "\n" + e);
                 }
             }
         }
@@ -227,25 +205,77 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
 
     private void performStatistics() {
 
-        for (A algorithm : algorithms) {
-            resultArena.addPlayer(algorithm, algorithm.getID());
-        }
-        performTournament();
-        resultArena.calculateRatings();
+        //TODO check if stopping criterion max evaluations
+        if (displayRatingIntervalBand) {
+            int numberOfTicks = maxEvaluations / evaluationsPerTick;
+            HashMap<String, Glicko2Rating[]> ratingLists = new HashMap<>();
 
-        //variable display statistics
-        //other statistical methods
-        //package statistics
+            StringBuilder sb = new StringBuilder();
+            sb.append("Evaluations;");
 
+            for (A algorithm : algorithms) {
+                tournamentResults.addPlayer(algorithm.getId());
+                ratingLists.put(algorithm.getId(), new Glicko2Rating[numberOfTicks]);
+            }
 
-        for (Player p : resultArena.getPlayers()) System.out.println(p); //print ratings
+            for (int i = 1; i <= numberOfTicks; i++) {
+                performTournament(i * evaluationsPerTick);
+                sb.append(i * evaluationsPerTick).append(";");
+                for (Player p : tournamentResults.getPlayers()) {
+                    ratingLists.get(p.getId())[i - 1] = p.getGlicko2Rating();
+                }
 
-        if (displayRatingIntervalChart) {
-            RatingIntervalPlot.displayChart(resultArena.getPlayers(), "Rating Interval", 1000, 500);
+                tournamentResults = new TournamentResults();
+                for (A algorithm : algorithms) {
+                    tournamentResults.addPlayer(algorithm.getId());
+                }
+            }
+
+            StringBuilder ratingsSb = new StringBuilder();
+            StringBuilder deviationsSb = new StringBuilder();
+            StringBuilder upperSb = new StringBuilder();
+            StringBuilder lowerSb = new StringBuilder();
+
+            for (Map.Entry<String, Glicko2Rating[]> entry : ratingLists.entrySet()) {
+                //System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
+                String algorithm = entry.getKey();
+                Glicko2Rating[] ratings = entry.getValue();
+                ratingsSb.append(algorithm).append(";");
+                deviationsSb.append("RD ").append(algorithm).append(";");
+                upperSb.append(algorithm).append(" band upper;");
+                lowerSb.append(algorithm).append(" band lower;");
+                for(Glicko2Rating glicko2Rating : ratings) {
+                    double rating = glicko2Rating.getRating();
+                    double RD = glicko2Rating.getRatingDeviation();
+                    double upper = glicko2Rating.getRatingIntervalUpper();
+                    double lower = glicko2Rating.getRatingIntervalLower();
+                    ratingsSb.append(Util.df1.format(rating)).append(";");
+                    deviationsSb.append(RD).append(";");
+                    upperSb.append(Util.df1.format(upper)).append(";");
+                    lowerSb.append(Util.df1.format(lower)).append(";");
+                }
+                ratingsSb.append("\n");
+                deviationsSb.append("\n");
+                upperSb.append("\n");
+                lowerSb.append("\n");
+            }
+            sb.append("\n").append(ratingsSb).append(deviationsSb).append(upperSb).append(lowerSb);
+            String output = sb.toString();
+            output = output.replace(",","");
+            output = output.replace(".",",");
+            System.out.println(output);
+
+        } else {
+            for (A algorithm : algorithms) {
+                tournamentResults.addPlayer(algorithm.getId());
+            }
+
+            performTournament(-1);
+            tournamentResults.displayResults(displayRatingCharts);
         }
     }
 
-    protected abstract void performTournament();
+    protected abstract void performTournament(int evaluationNumber);
 
     public void allPlayed() {
         for (AlgorithmBase al : algorithms) {
@@ -253,7 +283,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
         }
     }
 
-    public String getStopCondition() {
+    public String getStoppingCriterion() {
         switch (stopCriterion) {
             case EVALUATIONS:
                 return Integer.toString(maxEvaluations);

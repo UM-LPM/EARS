@@ -16,7 +16,7 @@ import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem6
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem7;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
-import org.um.feri.ears.qualityIndicator.QualityIndicator.IndicatorName;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 
 public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, DoubleMOTask, DoubleMOProblem> {
 
@@ -32,8 +32,6 @@ public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, DoubleMOTask
 		name = "Rating Ensemble";
         this.drawLimit = drawLimit;
         maxEvaluations=300000;
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+drawLimit);
 
     }
     public IndicatorEnsembleBenchmark(ArrayList<IndicatorName> indicators, double[] weights, double drawLimit) {
@@ -41,12 +39,10 @@ public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, DoubleMOTask
 		name = "Rating Ensemble";
         this.drawLimit = drawLimit;
         maxEvaluations=300000;
-        addParameter(EnumBenchmarkInfoParameters.EVAL,String.valueOf(maxEvaluations));
-        addParameter(EnumBenchmarkInfoParameters.DRAW_PARAM,"abs(evaluation_diff) < "+drawLimit);
 	}
 
     @Override
-    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon, DoubleMOProblem problem) {
+    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, DoubleMOProblem problem) {
         tasks.add(new DoubleMOTask(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
     
@@ -106,7 +102,7 @@ public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, DoubleMOTask
     	
     	
     	for (DoubleMOProblem moProblem : problems) {
-    		addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, 0.0001, moProblem);
+    		addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, moProblem);
 		}
     }
 }
