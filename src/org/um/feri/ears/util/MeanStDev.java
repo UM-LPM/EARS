@@ -110,4 +110,43 @@ public class MeanStDev {
         }
         return divide(sum, population.size());
     }
+
+    public String toString2Lines() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("\\begin{tabular}{@{}r@{}} ");
+        if (this.stdev < 1.0E-12D) {
+            sb.append("$").append(meanFormat.format(this.mean) + "$ \\\\ $\\pm 0$");
+        } else {
+            sb.append("$").append(meanFormat.format(this.mean) + "$ \\\\ $\\pm" + stdFormat.format(this.stdev) + "$");
+        }
+
+        sb.append("\\end{tabular}");
+        return sb.toString();
+    }
+
+    public String toString2Lines(int devide) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("\\begin{tabular}{@{}r@{}} ");
+        if (this.stdev < 1.0E-12D) {
+            sb.append("$").append(meanFormat.format(this.mean / (double)devide) + "$ \\\\ $\\pm 0$");
+        } else {
+            sb.append("$").append(meanFormat.format(this.mean / (double)devide) + "$ \\\\ $\\pm" + stdFormat.format(this.stdev / (double)devide) + "$");
+        }
+
+        sb.append("\\end{tabular}");
+        return sb.toString();
+    }
+
+    public String toString2LinesFootsize() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("{\\footnotesize \\begin{tabular}{@{}r@{}} ");
+        if (this.stdev < 1.0E-12D) {
+            sb.append("$").append(meanFormat.format(this.mean) + "$ \\\\ $\\pm 0$");
+        } else {
+            sb.append("$").append(meanFormat.format(this.mean) + "$ \\\\ $\\pm" + stdFormat.format(this.stdev) + "$");
+        }
+
+        sb.append("\\end{tabular}}");
+        return sb.toString();
+    }
 }
