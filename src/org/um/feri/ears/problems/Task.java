@@ -322,7 +322,7 @@ public class Task extends TaskBase<Problem> {
             stagnationTrialCounter++;
         }
 
-        if (stagnationTrialCounter >= maxTrialsBeforeStagnation) {
+        if (stopCriterion == StopCriterion.STAGNATION && stagnationTrialCounter >= maxTrialsBeforeStagnation) {
             isStop = true;
         }
     }
