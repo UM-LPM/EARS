@@ -24,7 +24,7 @@ EARS is a free and open-source Java-based framework for ranking, developing and 
 * Select the directory where you want to save the project (example: "path to my projects/EARS")
 * Import Gradle project
 
-**Second create new project and set EARS Project dependency**
+**Second create new project (select GRADLE) and set EARS Project dependency**
 
 *Gradle*
 
