@@ -10,19 +10,30 @@ public class TaskWithMemory extends Task {
     boolean stopWhenPercDuplicates;
     int stopIfDuplicatesCount;
     private static int NOT_SET_EVAL=-1;
+    private boolean isStagnation;
+    int internalStagnationCounter;
+    DoubleSolution best;
 
-    public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations,
-                          Problem p, int xPrecision, DuplicationRemovalStrategy strategy, int stopDuplicatesPerc) {
-        this(stop, eval, allowedTime, maxIterations, p, xPrecision, strategy);
+    public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
+                          Problem p, int xPrecision, DuplicationRemovalStrategy strategy, int stopDuplicatesStagnationPerc) {
+        this(stop, eval, allowedTime, maxIterations, epsilon, p, xPrecision, strategy);
         stopWhenPercDuplicates = true;
-        stopIfDuplicatesCount = eval/stopDuplicatesPerc;
+        stopIfDuplicatesCount = eval/stopDuplicatesStagnationPerc;
         stopAtEval=NOT_SET_EVAL; //NOT_REACH
+        internalStagnationCounter = 0;
+        if (stop==StopCriterion.STAGNATION) { //fake it TODO
+            isStagnation = (stop == StopCriterion.STAGNATION);
+            this.stopCriterion=StopCriterion.EVALUATIONS; //
+            stopWhenPercDuplicates = false;
+            maxTrialsBeforeStagnation = eval/stopDuplicatesStagnationPerc;
+        }
+
 
     }
 
-    public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations,
+    public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
                           Problem p, int xPrecision, DuplicationRemovalStrategy strategy) {
-        super(p, stop, eval, allowedTime, maxIterations);
+        super(p, stop, eval, allowedTime, maxIterations, epsilon);
         stopWhenPercDuplicates = false;
         this.xPrecision = xPrecision;
         strategy.setTask(this);
@@ -31,7 +42,21 @@ public class TaskWithMemory extends Task {
     }
 
     public DoubleSolution evalOrg(double[] x) throws StopCriterionException {
-        return super.eval(x);
+        DoubleSolution tmp = super.eval(x);
+        if (isStagnation) {
+            if (best == null) {
+                best = tmp;
+                internalStagnationCounter = 1;
+            }
+            else {
+                if (isFirstBetter(tmp,best)) {
+                    best= tmp;
+                    internalStagnationCounter = 0;
+                } else
+                    ++internalStagnationCounter;
+            }
+        }
+        return tmp;
     }
 
     @Override
@@ -54,6 +79,13 @@ public class TaskWithMemory extends Task {
 
     @Override
     public boolean isStopCriterion() {
+        if (isStagnation) {
+           if (internalStagnationCounter>=getMaxTrialsBeforeStagnation()) {
+               stopAtEval = numberOfEvaluations;
+               isStop = true;
+               return true;
+           }
+        }
         if (stopWhenPercDuplicates) {
             if (mb.getDuplicationHitSum()>=stopIfDuplicatesCount) {
                 stopAtEval = numberOfEvaluations;

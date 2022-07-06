@@ -26,7 +26,7 @@ public class RPUOed30MemoryBenchmark extends Benchmark {
 
     @Override
     protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
-        tasks.add(new TaskWithMemory(stopCriterion, maxEvaluations, time, maxIterations, problem, precision, new DuplicationRemovalStrategyRandom(maxHits)));
+        tasks.add(new TaskWithMemory(stopCriterion, maxEvaluations, time, maxIterations,0.00001, problem, precision, new DuplicationRemovalStrategyRandom(maxHits)));
     }
 
     @Override

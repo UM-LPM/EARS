@@ -114,6 +114,7 @@ public class MemoryBankDoubleSolution {
         // round(x);
         DoubleSolution ds;
         String key = encodeKeyPerc(x);
+        //last evaluation record data
         if (1 + duplicationHitSum + task.getNumberOfEvaluations() == task.getMaxEvaluations()) {
             //Log
             ReportBank.logMemory(ReportBank.MEMORY_END + ReportBank.MFES);

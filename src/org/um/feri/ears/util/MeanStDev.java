@@ -3,13 +3,24 @@ package org.um.feri.ears.util;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Locale;
+
 
 public class MeanStDev {
     public double mean, stdev;
     ArrayList<Double> list;
     public static NumberFormat meanFormat = new DecimalFormat("#,##0.0"), stdFormat = new DecimalFormat("#,##0.0");
-
+    public static void SetLocalEnglish() {
+        SetLocal(new Locale("en", "US"));
+    }
+    public static void SetLocal(Locale locale) {
+        NumberFormat  tmp = NumberFormat.getInstance(locale);
+        ((DecimalFormat) tmp).applyPattern("#,##0.0");
+        meanFormat = tmp;
+        tmp = NumberFormat.getInstance(locale);
+        ((DecimalFormat) tmp).applyPattern("#,##0.0");
+        stdFormat = tmp;
+    }
     public MeanStDev(double m, double s) {
         mean = m;
         stdev = s;
