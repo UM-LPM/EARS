@@ -76,7 +76,6 @@ public class FireflyAlgorithm extends Algorithm {
             sortFfa();
             // deep copy
             best = new FireflySolution(population.get(0));
-            System.out.println(best.getEval());
             task.incrementNumberOfIterations();
         }
         return best;
