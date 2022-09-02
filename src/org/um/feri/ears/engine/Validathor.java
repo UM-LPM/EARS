@@ -2,9 +2,9 @@ package org.um.feri.ears.engine;
 
 /******************************************************************************
  *  Compilation:  javac Validathor.java
- *  Execution:    java Validathor [programyouwanttocompile.java] [path_to_output_directory]
+ *  Execution:    java Validathor [programyouwanttocompile.java] [path_to_output_directory] [path_to_ears]
  *
- *  Tries to compile inputed java class.
+ *  Tries to compile inputted java class.
  *
  *
  ******************************************************************************/
@@ -44,7 +44,7 @@ public class Validathor {
 		File folder = new File(algorithmDir);
 		File[] listOfFiles = folder.listFiles();
 		String fileName, line, fileData;
-		boolean hasPackage = false;
+		boolean hasPackage;
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
 				fileName = file.getName();
@@ -94,7 +94,7 @@ public class Validathor {
 			}
 
 		} catch (Exception e) {
-			System.err.println("Error when checking for paramterless public constructor at: "+algorithmDir);
+			System.err.println("Error when checking for parameterless public constructor at: "+algorithmDir);
 			e.printStackTrace();
 		}
 		
@@ -103,19 +103,24 @@ public class Validathor {
 
 	public static void main(String[] args) {
 		errors = new StringBuilder();
-		if (args.length == 2) {
+		if (args.length > 1) {
 			String targetFile = args[1];
 			String userAlgorithmFolder = new File(args[0]).getParentFile().toString();
-			String userAlgorithmFilename = new File(args[0]).getName().toString();
-			final File f = new File(Validathor.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-			String earsPath = f.getPath();
-			
+			String userAlgorithmFilename = new File(args[0]).getName();
+			String earsPath;
+			if (args.length == 3)
+				earsPath = args[2];
+			else {
+				final File f = new File(Validathor.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+				earsPath = f.getPath();
+			}
+
 			removePackageFromFiles(userAlgorithmFolder);
 			
 			try 
 			{
 				ProcessBuilder pb= new ProcessBuilder("javac","-sourcepath",userAlgorithmFolder,"-cp",earsPath, userAlgorithmFilename);
-				//System.out.println("pb command: "+pb.command().toString());
+				//System.out.println("pb command: " + String.join(" ",pb.command().toArray(new String[0]));
 				//pb = new ProcessBuilder("javac","-sourcepath",userAlgorithmFolder,"-cp",earsPath+File.pathSeparator+userAlgorithmFolder+"/",userAlgorithmFilename);
 
 				pb.directory(new File(userAlgorithmFolder));
@@ -128,7 +133,7 @@ public class Validathor {
 				return;
 			}
 
-			// write error if algorithm 
+			// write error if algorithm doesn't have parameterless public constructor
 			if(!hasParameterlessPublicConstructor(userAlgorithmFolder,userAlgorithmFilename.substring(0, userAlgorithmFilename.lastIndexOf(".")))) {
 				errors.append(" No parameterless public constructor found!");
 			}
@@ -141,11 +146,10 @@ public class Validathor {
 			try( PrintWriter out = new PrintWriter(targetFile) )
 			{
 				out.println("{\"error_list\": \""+errors.toString().replaceAll("\"","\\\\\"")+"\"}");
-			} catch(Exception b) {
+			} catch(Exception ex) {
 				//TODO write error to log
 			}
 		} else
-			System.out.println(
-					"Error, invalid startup. Run the program with command: \njava Validathor [programyouwanttocompile.java] [path_to_output_directory]");
+			System.out.println("Error, invalid startup. Run the program with command: \njava Validathor [programyouwanttocompile.java] [path_to_output_directory] [EARS path (optional)]");
 	}
 }

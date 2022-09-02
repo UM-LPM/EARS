@@ -86,7 +86,7 @@ public class BenchmarkRunner {
 				logger.log(Level.INFO, "run duration "+ TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runDuration) + "ms");
 			}
 			logger.log(Level.INFO, "finished task "+t.getProblemName() +" in "+TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - taskDuration) + "ms");
-			fileName = algorithm.getId().replace("_", " ")+"_"+t.getProblemName()+".txt";
+			fileName = algorithm.getClass().getSimpleName().replace("_", " ")+"_"+t.getProblemName()+".txt";
 			
 			try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+fileName)))) {
 				bw.write(sb.toString());

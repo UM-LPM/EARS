@@ -1,10 +1,14 @@
 package org.um.feri.ears.engine;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import org.apache.commons.lang3.SystemUtils;
+import org.um.feri.ears.algorithms.so.ff.FireflyAlgorithm;
+import org.um.feri.ears.benchmark.RPUOed30Benchmark;
+import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.util.Util;
+
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -13,14 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import org.apache.commons.lang3.SystemUtils;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
-import org.um.feri.ears.benchmark.RPUOed2Benchmark;
-import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.Util;
-
 public class BenchmarkRunner {
 
 	static Logger logger = Logger.getLogger(BenchmarkRunner.class.getName());
@@ -28,7 +24,7 @@ public class BenchmarkRunner {
 	public static void main(String args[]) {
 		Util.rnd.setSeed(System.currentTimeMillis());
 
-		String destFolder = "D:\\Benchmark results\\test_rating_files2\\";
+		String destFolder = "D:\\Benchmark results\\test\\";
 		String fileName;
 		
 		URL url = BenchmarkRunner.class.getResource(".");
@@ -51,8 +47,8 @@ public class BenchmarkRunner {
 		}
 		
 		//RandomWalkAlgorithm algorithm = new RandomWalkAlgorithm();
-		TLBOAlgorithm algorithm = new TLBOAlgorithm();
-		RPUOed2Benchmark benchmark = new RPUOed2Benchmark(); // Create benchmark
+		FireflyAlgorithm algorithm = new FireflyAlgorithm();
+		RPUOed30Benchmark benchmark = new RPUOed30Benchmark(); // Create benchmark
 		benchmark.initAllProblems(); //manually initialize problems
 		algorithm.addCustomInfo("submissionAuthor", "author");
 		algorithm.addCustomInfo("submissionId", "id");
@@ -90,11 +86,10 @@ public class BenchmarkRunner {
 				logger.log(Level.INFO, "run duration "+ TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runDuration) + "ms");
 			}
 			logger.log(Level.INFO, "finished task "+t.getProblemName() +" in "+TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - taskDuration) + "ms");
-			fileName = algorithm.getId().replace("_", " ")+"_"+t.getProblemName()+".txt";
+			fileName = algorithm.getClass().getSimpleName().replace("_", " ")+"_"+t.getProblemName()+".txt";
 			
 			try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+fileName)))) {
 				bw.write(sb.toString());
-				bw.close();
 			} catch (IOException e) {
 				logger.log(Level.SEVERE, e.getMessage());
 				e.printStackTrace();
