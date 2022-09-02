@@ -15,6 +15,9 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBase<?>, A extends AlgorithmBase<T, S>> {
+
+    public enum RatingCalculation {NORMAL, RATING_CONVERGENCE_GRAPH, RATING_CONVERGENCE_SUM}
+
     public static boolean printInfo = false;
     protected ArrayList<T> tasks;
     protected ArrayList<A> algorithms;
@@ -33,6 +36,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     protected boolean runInParallel = false;
     protected boolean displayRatingCharts = true;
     boolean displayRatingIntervalBand = false;
+    protected RatingCalculation ratingCalculation= RatingCalculation.NORMAL;
     int evaluationsPerTick = 100;
 
     TournamentResults tournamentResults = new TournamentResults();
@@ -151,7 +155,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
 
     protected ArrayList<AlgorithmRunResult<S, A, T>> runOneTask(T task) {
 
-        if(displayRatingIntervalBand) {
+        if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_GRAPH || ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM) {
             task.enableEvaluationHistory();
             task.setStoreEveryNthEvaluation(evaluationsPerTick);
         }
@@ -206,12 +210,10 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     private void performStatistics() {
 
         //TODO check if stopping criterion max evaluations
-        if (displayRatingIntervalBand) {
+        if (ratingCalculation == RatingCalculation.RATING_CONVERGENCE_GRAPH) {
             int numberOfTicks = maxEvaluations / evaluationsPerTick;
             HashMap<String, Glicko2Rating[]> ratingLists = new HashMap<>();
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("Evaluations;");
 
             for (A algorithm : algorithms) {
                 tournamentResults.addPlayer(algorithm.getId());
@@ -220,7 +222,6 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
 
             for (int i = 1; i <= numberOfTicks; i++) {
                 performTournament(i * evaluationsPerTick);
-                sb.append(i * evaluationsPerTick).append(";");
                 for (Player p : tournamentResults.getPlayers()) {
                     ratingLists.get(p.getId())[i - 1] = p.getGlicko2Rating();
                 }
@@ -231,39 +232,26 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
                 }
             }
 
-            StringBuilder ratingsSb = new StringBuilder();
-            StringBuilder deviationsSb = new StringBuilder();
-            StringBuilder upperSb = new StringBuilder();
-            StringBuilder lowerSb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
             for (Map.Entry<String, Glicko2Rating[]> entry : ratingLists.entrySet()) {
                 //System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
                 String algorithm = entry.getKey();
                 Glicko2Rating[] ratings = entry.getValue();
-                ratingsSb.append(algorithm).append(";");
-                deviationsSb.append("RD ").append(algorithm).append(";");
-                upperSb.append(algorithm).append(" band upper;");
-                lowerSb.append(algorithm).append(" band lower;");
-                for(Glicko2Rating glicko2Rating : ratings) {
-                    double rating = glicko2Rating.getRating();
-                    double RD = glicko2Rating.getRatingDeviation();
-                    double upper = glicko2Rating.getRatingIntervalUpper();
-                    double lower = glicko2Rating.getRatingIntervalLower();
-                    ratingsSb.append(Util.df1.format(rating)).append(";");
-                    deviationsSb.append(RD).append(";");
-                    upperSb.append(Util.df1.format(upper)).append(";");
-                    lowerSb.append(Util.df1.format(lower)).append(";");
+                sb.setLength(0);
+                sb.append("Evaluations\tRating\tRD\n");
+                for (int i = 0; i < ratings.length; i++) {
+                    double rating = ratings[i].getRating();
+                    double RD = ratings[i].getRatingDeviation();
+                    sb.append((i+1) * evaluationsPerTick).append("\t");
+                    sb.append(Util.df1.format(rating)).append("\t");
+                    sb.append(RD).append("\n");
                 }
-                ratingsSb.append("\n");
-                deviationsSb.append("\n");
-                upperSb.append("\n");
-                lowerSb.append("\n");
+                String output = sb.toString();
+                output = output.replace(",","");
+
+                Util.writeToFile("D:\\"+algorithm + ".txt", output);
             }
-            sb.append("\n").append(ratingsSb).append(deviationsSb).append(upperSb).append(lowerSb);
-            String output = sb.toString();
-            output = output.replace(",","");
-            output = output.replace(".",",");
-            System.out.println(output);
 
         } else {
             for (A algorithm : algorithms) {
@@ -306,5 +294,21 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
             problems[i] = tasks.get(i).getProblemName();
         }
         return problems;
+    }
+
+    public void setDisplayRatingIntervalBand(boolean displayRatingIntervalBand) {
+        this.displayRatingIntervalBand = displayRatingIntervalBand;
+    }
+
+    public void setEvaluationsPerTick(int evaluationsPerTick) {
+        this.evaluationsPerTick = evaluationsPerTick;
+    }
+
+    public RatingCalculation getRatingCalculation() {
+        return ratingCalculation;
+    }
+
+    public void setRatingCalculation(RatingCalculation ratingCalculation) {
+        this.ratingCalculation = ratingCalculation;
     }
 }
