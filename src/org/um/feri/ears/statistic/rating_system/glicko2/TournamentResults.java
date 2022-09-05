@@ -150,7 +150,7 @@ public class TournamentResults {
         playersMap.remove(id);
     }
 
-    public String getPlayersJson() {
+    public Player.JsonPlayer[] getPlayersJson() {
 
         Player.JsonPlayer[] jsonPlayers = new Player.JsonPlayer[playersMap.size()];
         int index = 0;
@@ -158,8 +158,6 @@ public class TournamentResults {
             jsonPlayers[index++] = p.toJson();
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(jsonPlayers);
+        return jsonPlayers;
     }
 }

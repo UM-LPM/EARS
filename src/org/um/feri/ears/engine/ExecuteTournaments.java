@@ -127,24 +127,7 @@ public class ExecuteTournaments {
                     continue;
                 }
 
-                br = new BufferedReader(new FileReader(submissionFile));
-                type = new TypeToken<List<Submission>>() {
-                }.getType();
-                List<Submission> submissions = gson.fromJson(br, type);
-
-                HashMap<String, Submission> newestSubmission = new HashMap<String, Submission>();
-
-                //get only the newest submission for each author
-                for (Submission sub : submissions) {
-                    String author = sub.author;
-                    Timestamp ts = new Timestamp(sub.timestamp);
-                    Submission current = newestSubmission.get(author);
-                    if (current == null) {
-                        newestSubmission.put(author, sub);
-                    } else if (ts.after(new Timestamp(current.timestamp))) {
-                        newestSubmission.put(author, sub);
-                    }
-                }
+                HashMap<String, Submission> newestSubmission = getNewestSubmissions(benchmarkId);
 
                 int threads = Runtime.getRuntime().availableProcessors();
                 ExecutorService service = Executors.newFixedThreadPool(threads);
@@ -179,13 +162,53 @@ public class ExecuteTournaments {
 
                 if (benchmarkFilesChanged) {
                     logger.log(Level.INFO, "Performing rating for tournament " + tournamentName + " with benchmark " + benchmarkName);
-                    performRating(benchmarkResultsDir, benchmarkName);
+                    performRating(benchmarkResultsDir, benchmarkName, benchmarkId);
                 } else
                     logger.log(Level.INFO, "No file has changed for tournament " + tournamentName);
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Exception while running tournaments", e);
         }
+    }
+
+    /**
+     * Go through all of the submissions and return only the newest submission for each author
+     * @param benchmarkId ID of the benchmark
+     * @return list of newest submissions for each author
+     */
+    private static HashMap<String, Submission> getNewestSubmissions(String benchmarkId) {
+
+        String submissionFileLocation = tournamentDir + File.separator + benchmarkId + File.separator + "submissions" + File.separator + SUBMISSION_FILE;
+        logger.log(Level.INFO, "Reading " + SUBMISSION_FILE + " at " + submissionFileLocation);
+        File submissionFile = new File(submissionFileLocation);
+
+        Gson gson = new Gson();
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(submissionFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            logger.log(Level.WARNING, "Submission.json file missing for benchamrk wit ID: " + benchmarkId);
+            return null;
+        }
+        Type type = new TypeToken<List<Submission>>() {
+        }.getType();
+        List<Submission> submissions = gson.fromJson(br, type);
+
+        HashMap<String, Submission> newestSubmission = new HashMap<>();
+
+        /* get through all of the submissions and check only the newest submission for each author */
+        for (Submission sub : submissions) {
+            String author = sub.author;
+            Timestamp ts = new Timestamp(sub.timestamp);
+            Submission current = newestSubmission.get(author);
+            if (current == null) {
+                newestSubmission.put(author, sub);
+            } else if (ts.after(new Timestamp(current.timestamp))) {
+                newestSubmission.put(author, sub);
+            }
+        }
+        return newestSubmission;
     }
 
     //check if the benchmark needs to be executed
@@ -527,7 +550,7 @@ public class ExecuteTournaments {
         }
     }
 
-    private static void performRating(String benchmarkResultsDir, String benchmarkName) {
+    private static void performRating(String benchmarkResultsDir, String benchmarkName, String benchmarkId) {
 
         Util.rnd.setSeed(System.currentTimeMillis());
 
@@ -596,14 +619,32 @@ public class ExecuteTournaments {
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         logger.log(Level.INFO, "Total execution time: " + estimatedTime + "s");
         ArrayList<Player> list = dr.getResultArena().getPlayers();
-        String results = dr.getResultArena().getPlayersJson();
+        Player.JsonPlayer[] jsonPlayers = dr.getResultArena().getPlayersJson();
         StringBuilder sb = new StringBuilder();
         for (Player p : list) {
             //System.out.println(p); //print ranks
             sb.append(p.toString());
             sb.append("\n");
         }
-        Util.writeToFile(benchmarkResultsDir + File.separator + RESULTS_FILE, results);
+
+        HashMap<String, Submission> newestSubmissions = getNewestSubmissions(benchmarkId);
+
+        if(newestSubmissions != null) {
+
+            for(Player.JsonPlayer player : jsonPlayers) {
+                for(Submission sub : newestSubmissions.values()) {
+                    if(sub.algorithm.equals(player.playerId)) {
+                        player.submissionId = sub.id;
+                        player.submissionAuthor =  sub.author;
+                        break;
+                    }
+                }
+            }
+        }
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        Util.writeToFile(benchmarkResultsDir + File.separator + RESULTS_FILE, gson.toJson(jsonPlayers));
         Util.writeToFile(benchmarkResultsDir + File.separator + REPORT_FILE, sb.toString());
     }
 

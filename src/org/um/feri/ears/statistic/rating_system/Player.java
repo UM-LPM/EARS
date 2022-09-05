@@ -233,14 +233,16 @@ public class Player {
         return id + " " + sumGameOutcomes + "\n\t Against:" + wldPlayers + "\n\t Problems:" + wldProblems + ((wldIndicator.size() == 0) ? "" : "\n\t Indicators:" + wldIndicator);
     }
 
-    public class JsonPlayer {
-        String playerId;
-        double rating;
-        double RD;
-        double ratingIntervalLeft;
-        double ratingIntervalRight;
-        double ratingVolatility;
-        String sumWinLossDraw;
+    public static class JsonPlayer {
+        public String playerId;
+        public String submissionId;
+        public String submissionAuthor;
+        public double rating;
+        public double RD;
+        public double ratingIntervalLeft;
+        public double ratingIntervalRight;
+        public double ratingVolatility;
+        public String sumWinLossDraw;
     }
 
     public JsonPlayer toJson() {
