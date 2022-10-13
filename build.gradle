@@ -39,11 +39,12 @@ dependencies {
 }
 
 version = '1.0'
+
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Implementation-Title': 'EARS',
-                   'Implementation-Version': version,
+                   'Implementation-Version': '1.0',
                    'Main-Class': 'org.um.feri.ears.engine.ExecuteTournaments'
     }
     from {
@@ -66,7 +67,7 @@ sourceSets {
 }
 
 configurations {
-    jar.archiveName = 'ears.jar'
+    jar.archiveFileName = 'ears.jar'
 }
 
 repositories {

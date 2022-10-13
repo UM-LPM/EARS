@@ -39,7 +39,7 @@ In file  **build.gradle** add:
 
 ```
 dependencies {
-    compile project(':EARS')
+    implementation project(':EARS')
 }
 ```
 
