@@ -17,6 +17,9 @@ import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.um.feri.ears.algorithms.so.ica.EmpireSolution;
+import org.um.feri.ears.algorithms.so.ica.ICAUtils;
+
 
 public class ICA extends Algorithm {
 
@@ -46,7 +49,7 @@ public class ICA extends Algorithm {
 
     private DoubleSolution best;
 
-    private Empire[] empiresList;
+    private EmpireSolution[] empiresList;
     private DoubleSolution[] initialCountries;
     //ArrayList<DoubleSolution> offspringPopulation;
 
@@ -103,7 +106,7 @@ public class ICA extends Algorithm {
             // Update the revolution rate
             revolutionRate = dampRatio * revolutionRate;
 
-            for (Empire empire : empiresList) {
+            for (EmpireSolution empire : empiresList) {
                 // Assimilation: movement of colonies toward their imperialist
                 assimilateColonies(empire);
 
@@ -316,7 +319,7 @@ public class ICA extends Algorithm {
      *
      * @param empire to revolve
      */
-    private void revolution(Empire empire) throws StopCriterionException {
+    private void revolution(EmpireSolution empire) throws StopCriterionException {
 
         // Get the number of colonies to revolve
         int numOfRevolvingColonies = (int) Math.round((revolutionRate * empire.colonies.length));
@@ -347,7 +350,7 @@ public class ICA extends Algorithm {
      *
      * @param empire empire to posses
      */
-    private void possesEmpire(Empire empire) {
+    private void possesEmpire(EmpireSolution empire) {
         // Get the cost of the best colony (the lowest cost)
         int bestColonyId = utils.getMinIndex(empire.colonies);
 
@@ -364,7 +367,7 @@ public class ICA extends Algorithm {
      *
      * @param empire assimilate colonies for this empire
      */
-    private void assimilateColonies(Empire empire) {
+    private void assimilateColonies(EmpireSolution empire) {
 
         // Get the number of colonies of the empire
         int numOfColonies = empire.colonies.length;
@@ -385,7 +388,7 @@ public class ICA extends Algorithm {
      * Generates the initial empires
      */
     private void createInitialEmpires() throws StopCriterionException {
-        empiresList = new Empire[numOfInitialImperialists];
+        empiresList = new EmpireSolution[numOfInitialImperialists];
 
         // Extract the best countries to create empires
         DoubleSolution[] allImperialists = Arrays.copyOfRange(initialCountries, 0, numOfInitialImperialists);
@@ -433,14 +436,14 @@ public class ICA extends Algorithm {
                 index++;
             }
 
-            empiresList[i] = new Empire();
+            empiresList[i] = new EmpireSolution();
             empiresList[i].imperialist = allImperialists[i];
             empiresList[i].colonies = colonies;
             updateTotalCost(empiresList[i]);
         }
 
         // If an empire has no colony, give it one
-        for (Empire empire : empiresList) {
+        for (EmpireSolution empire : empiresList) {
             if (empire.colonies.length == 0) {
                 empire.colonies = new DoubleSolution[]{task.getRandomEvaluatedSolution()};
             }
@@ -448,7 +451,7 @@ public class ICA extends Algorithm {
 
     }
 
-    private void updateTotalCost(Empire empire) {
+    private void updateTotalCost(EmpireSolution empire) {
 
         empire.totalCost = empire.imperialist.getEval() + zeta * utils.getMean(empire.colonies);
     }

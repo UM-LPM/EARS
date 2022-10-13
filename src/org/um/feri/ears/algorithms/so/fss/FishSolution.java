@@ -3,7 +3,18 @@ package org.um.feri.ears.algorithms.so.fss;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.util.Util;
 
+import java.util.Comparator;
+
 public class FishSolution extends DoubleSolution {
+
+    public static class FSSComparatorByFitnessGain implements Comparator<FishSolution> {
+
+        @Override
+        public int compare(FishSolution o1, FishSolution o2) {
+            return Double.compare(o1.delta_f, o2.delta_f);
+        }
+
+    }
 
     public DoubleSolution neighbor = null;
     public DoubleSolution best = null;

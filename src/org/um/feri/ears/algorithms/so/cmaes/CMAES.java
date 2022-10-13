@@ -27,6 +27,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.algorithms.so.cmaes.*;
 
 public class CMAES extends Algorithm {
 

@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * @author crepinsek
  */
-public class GSAIndividual extends DoubleSolution {
+public class GSASolution extends DoubleSolution {
     private double[] v; //velocity
     private double[] a; //Acceleration
     private double[] E;
@@ -41,7 +41,7 @@ public class GSAIndividual extends DoubleSolution {
         return v;
     }
 
-    public GSAIndividual(Task t) throws StopCriterionException {
+    public GSASolution(Task t) throws StopCriterionException {
         super(t.getRandomEvaluatedSolution());
         v = new double[t.getNumberOfDimensions()]; //init V=zeros(N,dim);
         a = new double[t.getNumberOfDimensions()]; //init
@@ -53,7 +53,7 @@ public class GSAIndividual extends DoubleSolution {
         Arrays.fill(E, 0);
     }
 
-    public GSAIndividual(DoubleSolution eval) {
+    public GSASolution(DoubleSolution eval) {
         super(eval);
         int D = eval.getVariables().size();
         v = new double[D]; //init V=zeros(N,dim);
@@ -67,7 +67,7 @@ public class GSAIndividual extends DoubleSolution {
         return super.toString() + " v:" + (Arrays.toString(v) + " a:" + (Arrays.toString(a)));
     }
 
-    public GSAIndividual move(Task t) throws StopCriterionException {
+    public GSASolution move(Task t) throws StopCriterionException {
 		/*
 		[N,dim]=size(X);
 		V=rand(N,dim).*V+a; %eq. 11.
@@ -89,7 +89,7 @@ public class GSAIndividual extends DoubleSolution {
         if (!feasable) { //if not feasable generate random
             x = t.getRandomVariables();
         }
-        GSAIndividual tmp = new GSAIndividual(t.eval(x));
+        GSASolution tmp = new GSASolution(t.eval(x));
         for (int d = 0; d < t.getNumberOfDimensions(); d++) {
             tmp.a[d] = a[d];
             tmp.E[d] = E[d];

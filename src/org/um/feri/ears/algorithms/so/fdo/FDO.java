@@ -10,6 +10,8 @@ import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
+import org.um.feri.ears.algorithms.so.fdo.Bee;
+
 
 public class FDO extends Algorithm {
 

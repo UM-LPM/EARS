@@ -12,6 +12,8 @@ import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import org.um.feri.ears.algorithms.so.gsa.GSASolution;
+
 
 /**
  * Code from http://www.mathworks.com/matlabcentral/fileexchange/27756-gravitational-search-algorithm--gsa-
@@ -30,8 +32,8 @@ public class GSA extends Algorithm {
     
     private static double eps = 2.2204e-16; //http://www.mathworks.com/help/matlab/ref/eps.html?searchHighlight=eps
     private boolean elitistCheck = true;
-    private ArrayList<GSAIndividual> popX; //population
-    private GSAIndividual g; //global best in matlab Fbest (fitness best),Lbest (location best)
+    private ArrayList<GSASolution> popX; //population
+    private GSASolution g; //global best in matlab Fbest (fitness best),Lbest (location best)
 
     public GSA() {
         this(50, 2, 1, 20, 100); //Matlab settings
@@ -80,7 +82,7 @@ public class GSA extends Algorithm {
         double[] M = new double[popSize];
         double G;
         D = t.getNumberOfDimensions();
-        GSAIndividual tmpIn;
+        GSASolution tmpIn;
         while (!t.isStopCriterion()) {
             G = G0 * Math.exp(-alpha * iteration / maxIt); //%eq. 28. Gconstant;
             if (debug) {
@@ -132,7 +134,7 @@ end
 M=M./sum(M); %eq. 16.
 		 * 
 		 */
-        GSAIndividual best, worst;
+        GSASolution best, worst;
         double sum = 0;
         best = popX.get(0);
         worst = popX.get(0);
@@ -216,9 +218,9 @@ M=M./sum(M); %eq. 16.
 			System.out.println("Take mass for k-best endividuals:"+kbest+" ("+dkbest+")");
 		}
 		*/
-        popX.sort(new Comparator<GSAIndividual>() {
+        popX.sort(new Comparator<GSASolution>() {
             @Override
-            public int compare(GSAIndividual o1, GSAIndividual o2) {
+            public int compare(GSASolution o1, GSASolution o2) {
                 if (o1.getMass() > o2.getMass()) return -1;
                 if (o1.getMass() < o2.getMass()) return 1;
                 return 0;
@@ -265,7 +267,7 @@ M=M./sum(M); %eq. 16.
     private void initPopulation(Task taskProblem) throws StopCriterionException {
         popX = new ArrayList<>();
         for (int i = 0; i < popSize; i++) {
-            popX.add(new GSAIndividual(taskProblem));
+            popX.add(new GSASolution(taskProblem));
             if (i == 0) g = popX.get(0);
             else if (taskProblem.isFirstBetter(popX.get(i), g)) g = popX.get(i);
             if (taskProblem.isStopCriterion()) break;

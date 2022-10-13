@@ -17,6 +17,7 @@ import org.um.feri.ears.quality_indicator.QualityIndicatorUtil;
 import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.algorithms.so.fss.FishSolution;
 
 import java.util.ArrayList;
 
@@ -236,7 +237,7 @@ public class FSS extends Algorithm {
     private void feedingOperator() {
 
         //sort school by fitness gain
-        school.sort(new FSSComparatorByFitnessGain());
+        school.sort(new FishSolution.FSSComparatorByFitnessGain());
 
         //max absolute value of fitness gain
         double absDeltaFMax = Math.abs(school.get(0).delta_f);

@@ -10,6 +10,8 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.algorithms.so.ff.FireflySolution;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;

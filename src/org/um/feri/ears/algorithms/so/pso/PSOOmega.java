@@ -8,6 +8,8 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.algorithms.so.pso.PsoSolution;
+
 
 import java.util.ArrayList;
 

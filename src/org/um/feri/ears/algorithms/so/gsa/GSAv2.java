@@ -6,6 +6,8 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.algorithms.so.gsa.Agent;
+
 
 import java.util.*;
 

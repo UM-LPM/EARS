@@ -10,6 +10,7 @@ import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
+import org.um.feri.ears.algorithms.so.pso.PsoSolution;
 
 public class PSO extends Algorithm {
 

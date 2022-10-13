@@ -6,6 +6,8 @@ import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.algorithms.so.jDElscop.jDElscopSolution;
+
 
 public class jDElscop extends Algorithm {
     /*
