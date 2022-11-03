@@ -114,9 +114,9 @@ public class GWO extends Algorithm {
         population = new ArrayList<DoubleSolution>();
 
         for (int i = 0; i < popSize; i++) {
-            population.add(task.getRandomEvaluatedSolution());
             if (task.isStopCriterion())
                 break;
+            population.add(task.getRandomEvaluatedSolution());
         }
         updateABD();
     }
