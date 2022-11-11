@@ -15,7 +15,7 @@ import org.um.feri.ears.util.Util;
  * This implementation is based on the code of Tsung-Che Chiang
  * http://web.ntnu.edu.tw/~tcchiang/publications/nsga3cpp/nsga3cpp.htm
  */
-public class ReferencePoint<Type> {
+public class ReferencePoint<Type extends Number> {
     public List<Double> position;
     private int memberSize;
     private List<Pair<MOSolutionBase<Type>, Double>> potentialMembers;

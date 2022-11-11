@@ -7,22 +7,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DoubleSolution extends SolutionBase<Double> {
+public class DoubleSolution extends SolutionBase {
+
+    protected List<Double> variables;
     private double eval;
     public List<DoubleSolution> parents;
 
     public DoubleSolution(DoubleSolution s) {
         super(s);
-
+        variables = new ArrayList<>(s.variables);
         eval = s.eval;
-        parents = new ArrayList<DoubleSolution>();
+        parents = new ArrayList<>();
     }
 
     public DoubleSolution() {
     }
 
     public DoubleSolution(List<Double> x, double eval, double[] constrains) {
-        variable = new ArrayList<Double>(x);
+        variables = new ArrayList<Double>(x);
         checkConstraints(constrains);
         this.eval = eval;
     }
@@ -42,6 +44,27 @@ public class DoubleSolution extends SolutionBase<Double> {
         }
     }
 
+    public List<Double> getVariables() {
+
+        return variables;
+    }
+
+    public int numberOfVariables() {
+        return variables.size();
+    }
+
+    public void setValue(int i, Double c) {
+        variables.set(i, c);
+    }
+
+    public void setVariables(List<Double> var) {
+        this.variables = var;
+    }
+
+    public Double getValue(int i) {
+        return variables.get(i);
+    }
+
     /**
      * Outboxes the array of variables to a primitive array.
      *
@@ -49,7 +72,7 @@ public class DoubleSolution extends SolutionBase<Double> {
      */
     public double[] getDoubleVariables() {
 
-        return variable.stream().mapToDouble(i -> i).toArray();
+        return variables.stream().mapToDouble(i -> i).toArray();
         //return  ArrayUtils.toPrimitive(variable);
     }
 

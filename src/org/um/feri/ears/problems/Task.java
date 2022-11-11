@@ -90,7 +90,7 @@ public class Task extends TaskBase<Problem> {
      * @param solution to be set feasible
      */
     public void setFeasible(DoubleSolution solution) {
-        solution.variable = problem.setFeasible(solution.variable);
+        solution.variables = problem.setFeasible(solution.variables);
     }
 
     /**

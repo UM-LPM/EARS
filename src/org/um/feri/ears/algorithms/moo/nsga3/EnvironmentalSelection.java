@@ -7,7 +7,7 @@ import java.util.List;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
 
-public class EnvironmentalSelection<Type> {
+public class EnvironmentalSelection<Type extends Number> {
 
     private List<List<MOSolutionBase<Type>>> fronts;
     private int solutionsToSelect;

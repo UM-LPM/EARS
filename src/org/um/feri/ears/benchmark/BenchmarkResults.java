@@ -11,7 +11,7 @@ import java.util.Hashtable;
 /**
  * Class for storing benchmark results in different data structures/formats
  */
-public class BenchmarkResults<T extends TaskBase<?>, S extends SolutionBase<?>, A extends AlgorithmBase<T, S>> {
+public class BenchmarkResults<T extends TaskBase<?>, S extends SolutionBase, A extends AlgorithmBase<T, S>> {
 
     ArrayList<HashMap<T, ArrayList<AlgorithmRunResult<S, A, T>>>> runTaskAlgorithm; //run - task - results from all algorithms for the task
     Hashtable<A, Hashtable<T, ArrayList<AlgorithmRunResult<S, A, T>>>> algorithmTaskRun; // algorithm - task - task results for all runs

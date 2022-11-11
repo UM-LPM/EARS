@@ -8,8 +8,9 @@ import java.util.Map;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.util.Util;
 
-public class MOSolutionBase<Type> extends SolutionBase<Type> {
-	
+public class MOSolutionBase<Type extends Number> extends SolutionBase {
+	protected List<Type> variables;
+
 	protected double[] eval; //more than one objective
     protected double fitness;
 	protected double rank; 
@@ -58,7 +59,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 	
 	
 	public MOSolutionBase(List<Type> var, double[] eval, List<Type> upperLimit, List<Type> lowerLimit) {
-		variable = new ArrayList<Type>(var);
+		variables = new ArrayList<Type>(var);
 		
 		//System.arraycopy(var, 0, variable, 0, var.length);
 		
@@ -83,7 +84,7 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 	 */
 	public MOSolutionBase(Type[] var, double[] eval) {
 
-		System.arraycopy(var, 0, variable, 0, var.length);
+		System.arraycopy(var, 0, variables, 0, var.length);
  		//System.arraycopy(x, 0, this.variable, 0, x.size());
 		this.eval = new double[eval.length];
 		System.arraycopy(eval, 0, this.eval, 0, eval.length);
@@ -92,6 +93,26 @@ public class MOSolutionBase<Type> extends SolutionBase<Type> {
 		normalizedObjective = new double[eval.length];
 	}
 
+	public List<Type> getVariables() {
+
+		return variables;
+	}
+
+	public int numberOfVariables() {
+		return variables.size();
+	}
+
+	public void setValue(int i, Type c) {
+		variables.set(i, c);
+	}
+
+	public void setVariables(List<Type> var) {
+		this.variables = var;
+	}
+
+	public Type getValue(int i) {
+		return variables.get(i);
+	}
 
 	public int numberOfObjectives() {
 		if (eval == null)

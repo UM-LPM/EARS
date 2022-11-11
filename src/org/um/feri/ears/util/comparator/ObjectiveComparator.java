@@ -8,7 +8,7 @@ import java.util.Comparator;
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on a objective values.
  */
-public class ObjectiveComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class ObjectiveComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
 
     /**
      * Stores the index of the objective to compare

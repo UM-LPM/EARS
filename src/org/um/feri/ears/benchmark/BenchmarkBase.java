@@ -14,7 +14,7 @@ import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
 import java.util.*;
 import java.util.concurrent.*;
 
-public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBase<?>, A extends AlgorithmBase<T, S>> {
+public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBase, A extends AlgorithmBase<T, S>> {
 
     public enum RatingCalculation {NORMAL, RATING_CONVERGENCE_GRAPH, RATING_CONVERGENCE_SUM}
 

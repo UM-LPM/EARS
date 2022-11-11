@@ -7,7 +7,7 @@ import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 
-public interface CrossoverOperator<Type, Task extends TaskBase, Solution extends SolutionBase<Type>> extends Operator<Solution[], Solution[], Task> {
+public interface CrossoverOperator<Type extends Number, Task extends TaskBase, Solution extends SolutionBase> extends Operator<Solution[], Solution[], Task> {
 	
 	public abstract void setCurrentSolution(MOSolutionBase<Type> current);
 

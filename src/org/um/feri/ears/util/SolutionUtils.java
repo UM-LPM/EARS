@@ -15,7 +15,7 @@ public class SolutionUtils {
      * @param solution2
      * @return The best solution
      */
-    public static <T> MOSolutionBase<T> getBestSolution(MOSolutionBase<T> solution1, MOSolutionBase<T> solution2, Comparator<MOSolutionBase<T>> comparator) {
+    public static <T extends Number> MOSolutionBase<T> getBestSolution(MOSolutionBase<T> solution1, MOSolutionBase<T> solution2, Comparator<MOSolutionBase<T>> comparator) {
         MOSolutionBase<T> result;
         int flag = comparator.compare(solution1, solution2);
         if (flag == -1) {
@@ -40,7 +40,7 @@ public class SolutionUtils {
      * @param secondSolution
      * @return
      */
-    static <T> double distanceBetweenObjectives(MOSolutionBase<T> firstSolution, MOSolutionBase<T> secondSolution) {
+    static <T extends Number> double distanceBetweenObjectives(MOSolutionBase<T> firstSolution, MOSolutionBase<T> secondSolution) {
 
         double diff;
         double distance = 0.0;

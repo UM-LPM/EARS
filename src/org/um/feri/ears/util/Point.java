@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 
-public class Point<Type> {
+public class Point<Type extends Number> {
 
     private double[] point;
 

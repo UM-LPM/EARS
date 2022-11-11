@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 
-public class MOFitnessComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class MOFitnessComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
 
     /**
      * Compares two solutions.

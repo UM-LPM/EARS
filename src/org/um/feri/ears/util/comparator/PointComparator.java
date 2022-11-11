@@ -26,7 +26,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
  *
  * @author Antonio J. Nebro
  */
-public class PointComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class PointComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
 	private boolean maximizing;
 
 	public PointComparator() {

@@ -29,9 +29,9 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on the crowding distance, as in NSGA-II.
  */
-public class CrowdingComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class CrowdingComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
 
-	public class RankComparator<Type> implements Comparator<MOSolutionBase<Type>>{
+	public class RankComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>>{
 		/**
 		 * Compares two solutions.
 		 * @param solution1 Object representing the first <code>Solution</code>.

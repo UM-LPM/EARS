@@ -31,7 +31,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
  * <code>Solution</code> objects) based on the overall constraint violation of
  * the solutions, as in NSGA-II.
  */
-public class OverallConstraintViolationComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class OverallConstraintViolationComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
 
 	/** 
 	 * Compares two solutions.

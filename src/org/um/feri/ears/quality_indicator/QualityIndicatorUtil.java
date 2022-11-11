@@ -436,7 +436,7 @@ public final class QualityIndicatorUtil<T> {
      *
      * @param path The path of the file containing the data
      */
-    public static <T> void readNonDominatedSolutionSet(String path, NondominatedPopulation solutionSet) {
+    public static <T extends Number> void readNonDominatedSolutionSet(String path, NondominatedPopulation solutionSet) {
         try {
             /* Open the file */
             FileInputStream fis = new FileInputStream(path);

@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 
-public interface MutationOperator<Type, Task extends TaskBase, Solution extends SolutionBase<Type>> extends Operator<Solution, Solution, Task> {
+public interface MutationOperator<Type, Task extends TaskBase, Solution extends SolutionBase> extends Operator<Solution, Solution, Task> {
 	
 	public void setProbability(double mutationProbability);
 }

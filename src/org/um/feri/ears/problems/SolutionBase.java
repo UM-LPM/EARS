@@ -3,9 +3,8 @@ package org.um.feri.ears.problems;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SolutionBase<Type> {
+public abstract class SolutionBase {
 
-    protected List<Type> variable;
     protected double[] constraints; //TODO refactor 2 types of individual for constrained optimization
     protected boolean constraintsMet = true; //checks if constrains are met
     protected double overallConstraintViolation;
@@ -38,8 +37,7 @@ public abstract class SolutionBase<Type> {
         return evaluationNumber;
     }
 
-    public SolutionBase(SolutionBase<Type> s) {
-        variable = new ArrayList<Type>(s.variable);
+    public SolutionBase(SolutionBase s) {
 
         this.constraintsMet = s.constraintsMet;
         if (s.constraints != null) {
@@ -58,32 +56,11 @@ public abstract class SolutionBase<Type> {
         return constraintsMet;
     }
 
-    public List<Type> getVariables() {
-
-        return variable;
-    }
-
     public abstract double getEval();
 
-    public boolean isEqual(SolutionBase<Type> b, double drawLimit) {
+    public boolean isEqual(SolutionBase b, double drawLimit) { //TODO this method shouldn't exists -> move to task
 		return Math.abs(this.getEval() - b.getEval()) < drawLimit;
 	}
-
-    public int numberOfVariables() {
-        return variable.size();
-    }
-
-    public void setValue(int i, Type c) {
-        variable.set(i, c);
-    }
-
-    public void setVariables(List<Type> var) {
-        this.variable = var;
-    }
-
-    public Type getValue(int i) {
-        return variable.get(i);
-    }
 
     /**
      * Sets all constraints of this solution.

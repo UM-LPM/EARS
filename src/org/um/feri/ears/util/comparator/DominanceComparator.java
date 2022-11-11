@@ -30,7 +30,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on a constraint violation test + dominance checking, as in NSGA-II.
  */
-public class DominanceComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class DominanceComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
 
     private double epsilon;
     OverallConstraintViolationComparator<Type> violationConstraintComparator;

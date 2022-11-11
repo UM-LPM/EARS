@@ -293,7 +293,7 @@ public class SolutionListUtils {
 	    return result ;
 	  }
 
-	  public static <T extends SolutionBase<?>> List<T> selectNRandomDifferentSolutions(int numberOfSolutionsToBeReturned, List<T> source) {
+	  public static <T extends SolutionBase> List<T> selectNRandomDifferentSolutions(int numberOfSolutionsToBeReturned, List<T> source) {
 
 		  List<T> resultList = new ArrayList<>(numberOfSolutionsToBeReturned);
 

@@ -29,7 +29,9 @@ import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.Style;
 import com.panayotis.gnuplot.terminal.PostscriptTerminal;
 
-public class ParetoSolution<Type extends Number> extends SolutionBase<Type> implements Iterable<MOSolutionBase<Type>> {
+public class ParetoSolution<Type extends Number> extends SolutionBase implements Iterable<MOSolutionBase<Type>> {
+
+    protected List<Type> variables;
 
     public ParetoSolution(ParetoSolution<Type> ps) {
 
@@ -235,11 +237,11 @@ public class ParetoSolution<Type extends Number> extends SolutionBase<Type> impl
         return false;
     }
 
-    @Override
+    /*@Override
     public List<Type> getVariables() {
         List<Type> x = null; //TODO check
         return x;
-    }
+    }*/
 
     public int getMaxSize() {
         return capacity;

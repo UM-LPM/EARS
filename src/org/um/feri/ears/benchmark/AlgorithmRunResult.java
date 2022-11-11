@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.TaskBase;
 
-public class AlgorithmRunResult<S extends SolutionBase<?>, A extends AlgorithmBase<?,?>, T extends TaskBase<?>> {
+public class AlgorithmRunResult<S extends SolutionBase, A extends AlgorithmBase<?,?>, T extends TaskBase<?>> {
     public S solution;
     public A algorithm;
     public T task; //stores info about stopping criterion
