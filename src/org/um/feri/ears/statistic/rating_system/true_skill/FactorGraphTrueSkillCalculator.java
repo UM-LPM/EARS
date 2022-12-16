@@ -29,7 +29,7 @@ public class FactorGraphTrueSkillCalculator extends SkillCalculator {
 
 		TrueSkillFactorGraph factorGraph = new TrueSkillFactorGraph(gameInfo, teamsl, teamRanks);
 		factorGraph.BuildGraph();
-		factorGraph.RunSchedule();
+		factorGraph.RunSchedule(); //TODO limit to 100
 
 		@SuppressWarnings("unused")
 		// TODO use this somehow?

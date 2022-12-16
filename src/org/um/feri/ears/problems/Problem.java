@@ -39,11 +39,7 @@ public abstract class Problem extends ProblemBase<Double> {
      */
     @CheckReturnValue
     public double setFeasible(double value, int dimension) {
-        if (value < lowerLimit.get(dimension))
-            return lowerLimit.get(dimension);
-        if (value > upperLimit.get(dimension))
-            return upperLimit.get(dimension);
-        return value;
+        return Math.max(Math.min(value, upperLimit.get(dimension)), lowerLimit.get(dimension));
     }
 
     /**
@@ -91,7 +87,7 @@ public abstract class Problem extends ProblemBase<Double> {
      */
     public boolean isFeasible(double[] x) {
         for (int i = 0; i < numberOfDimensions; i++) {
-            if (x[i] < lowerLimit.get(i) || x[i] > upperLimit.get(i))
+            if (!isFeasible(x[i],i))
                 return false;
         }
         return true;

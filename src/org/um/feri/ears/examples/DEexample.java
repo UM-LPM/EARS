@@ -17,7 +17,7 @@ public class DEexample extends Algorithm {
     DoubleSolution best;
 
     //Initialize all agents {\displaystyle \mathbf {x} } \mathbf {x}  with random positions in the search-space.
-    public DEexample(int ps, double CR, double F, String s) {
+    public DEexample(int ps, double CR, double F) {
         popSize = ps;
         this.CR = CR;
         this.F = F;
