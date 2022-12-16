@@ -189,8 +189,8 @@ public class Task extends TaskBase<Problem> {
      *
      * @param ds real vector to be evaluated (just calc constraints)
      * @return evaluated constrains
-     * @deprecated
      */
+    @Deprecated
     public double[] evaluateConstrains(List<Double> ds) {
         return problem.evaluateConstrains(ds);
     }

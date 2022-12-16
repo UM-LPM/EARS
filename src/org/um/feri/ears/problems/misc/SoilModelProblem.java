@@ -231,8 +231,8 @@ public class SoilModelProblem extends Problem {
                     StringTokenizer st = new StringTokenizer(aux);
 
                     if (st.hasMoreTokens()) {
-                        tempD.add(new Double(st.nextToken()));
-                        tempRM.add(new Double(st.nextToken()));
+                        tempD.add(Double.valueOf(st.nextToken()));
+                        tempRM.add(Double.valueOf(st.nextToken()));
                     }
                     aux = br.readLine();
                 }

@@ -1,6 +1,9 @@
-apply plugin: 'java-library'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+}
 
 idea {
     module {
@@ -68,9 +71,5 @@ sourceSets {
 
 configurations {
     jar.archiveFileName = 'ears.jar'
-}
-
-repositories {
-    mavenCentral()
 }
 
