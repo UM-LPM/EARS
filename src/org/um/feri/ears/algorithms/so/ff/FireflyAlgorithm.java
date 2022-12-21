@@ -4,13 +4,12 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.ff.FireflySolution;
 
 
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public class FireflyAlgorithm extends Algorithm {
 
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException { //EARS main evaluation loop
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException { //EARS main evaluation loop
         task = taskProblem;
         ub = task.getUpperLimit();
         lb = task.getLowerLimit();
@@ -165,8 +164,8 @@ public class FireflyAlgorithm extends Algorithm {
 
             for (j = 0; j < popSize; j++) {
                 double distance = 0.0; //it was called r in C++ version
-                double[] ffa_i = population.get(i).getDoubleVariables();
-                double[] ffa_j = population.get(j).getDoubleVariables();
+                double[] ffa_i = Util.toDoubleArray(population.get(i).getVariables());
+                double[] ffa_j = Util.toDoubleArray(population.get(j).getVariables());
                 for (k = 0; k < task.getNumberOfDimensions(); k++) {
                     //r += (ffa[i][k]-ffa[j][k])*(ffa[i][k]-ffa[j][k]);
                     distance += ((ffa_i[k] - ffa_j[k]) * (ffa_i[k] - ffa_j[k]));

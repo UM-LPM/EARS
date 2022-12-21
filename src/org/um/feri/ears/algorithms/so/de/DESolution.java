@@ -1,10 +1,8 @@
 package org.um.feri.ears.algorithms.so.de;
 
-import java.util.List;
+import org.um.feri.ears.problems.NumberSolution;
 
-import org.um.feri.ears.problems.DoubleSolution;
-
-public class DESolution extends DoubleSolution {
+public class DESolution extends NumberSolution<Double> {
     private double F;
     private double CR;
 
@@ -13,7 +11,7 @@ public class DESolution extends DoubleSolution {
         this.F = i.F;
         this.CR =i.CR;
     }
-    public DESolution(DoubleSolution i, double F, double CR) {
+    public DESolution(NumberSolution<Double> i, double F, double CR) {
         super(i);
         this.F = F;
         this.CR = CR;

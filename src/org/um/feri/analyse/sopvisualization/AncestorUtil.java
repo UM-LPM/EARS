@@ -2,8 +2,10 @@ package org.um.feri.analyse.sopvisualization;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.util.Util;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -31,13 +33,13 @@ public class AncestorUtil {
         head.append(alg.getId()).append(";").append(";[\"").append(pop_size).append("\"];").append(runID).append(";"); //X id
         head.append(task.getProblemName()).append(";").append(task.getNumberOfDimensions()).append(";[").append(task.getMaxEvaluations()).append("];").append("\n");
 
-        ArrayList<DoubleSolution> ancestors = task.getAncestors();
+        ArrayList<SolutionBase> ancestors = task.getAncestors();
 
         try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + ".txt")))) {
 
             bw.write(head.toString()); //first line
-            for (DoubleSolution ancestor : ancestors) {
-                List<DoubleSolution> parents = ancestor.parents;
+            for (SolutionBase ancestor : ancestors) {
+                List<SolutionBase> parents = ancestor.parents;
                 bw.write("{");
                 bw.write(ancestor.getID() + ";" + ancestor.getGenerationNumber() + ";");
                 bw.write("[");
@@ -49,7 +51,7 @@ public class AncestorUtil {
                     }
                 }
                 bw.write("];0;");
-                bw.write(ancestor.getID() + ";" + ancestor.getEval() + ";" + Arrays.toString(ancestor.getDoubleVariables()));
+                bw.write(ancestor.getID() + ";" + ancestor.getEval() + ";" + Arrays.toString(Util.toDoubleArray(((NumberSolution<Double>) ancestor).getVariables())));
                 bw.write("}\n");
             }
         } catch (IOException e) {
@@ -61,10 +63,10 @@ public class AncestorUtil {
 
         try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + ".csv")))) {
 
-            ArrayList<DoubleSolution> ancestors = task.getAncestors();
-            for (DoubleSolution ancestor : ancestors) {
-                List<DoubleSolution> parents = ancestor.parents;
-                bw.write(ancestor.getID() + ";" + ancestor.getEval() + ";" + Arrays.toString(ancestor.getDoubleVariables()) + ";");
+            ArrayList<SolutionBase> ancestors = task.getAncestors();
+            for (SolutionBase ancestor : ancestors) {
+                List<SolutionBase> parents = ancestor.parents;
+                bw.write(ancestor.getID() + ";" + ancestor.getEval() + ";" + Arrays.toString(Util.toDoubleArray(((NumberSolution<Double>) ancestor).getVariables())) + ";");
                 if (parents != null) {
                     bw.write("[");
                     for (int j = 0; j < parents.size(); ++j) {
@@ -84,14 +86,14 @@ public class AncestorUtil {
     public static void saveGraphingFile(String fileName, Task task, Algorithm alg) {
 
         try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + ".txt")))) {
-            ArrayList<DoubleSolution> ancestors = task.getAncestors();
+            ArrayList<SolutionBase> ancestors = task.getAncestors();
 
             AlgorithmInfo info = alg.getAlgorithmInfo();
 
             bw.write("'" + alg.getId() + ";[" + alg.getParametersAsString() + "];" + task.getProblemName() + ";" + task.getNumberOfDimensions() + ";[\"" + task.getStopCriterion().getName() + "\"];'+\n");
 
             for (int i = 0; i < ancestors.size(); ++i) {
-                List<DoubleSolution> parents = ancestors.get(i).parents;
+                List<SolutionBase> parents = ancestors.get(i).parents;
 
                 bw.write("'{" + ancestors.get(i).getID() + ";" + ancestors.get(i).getGenerationNumber() + ";");
 
@@ -108,7 +110,7 @@ public class AncestorUtil {
                     bw.write("[-1,-1];");
                 }
 
-                bw.write(ancestors.get(i).getTimeStamp() + ";" + ancestors.get(i).getEvaluationNumber() + ";" + ancestors.get(i).getEval() + ";" + Arrays.toString(ancestors.get(i).getDoubleVariables()) + "}'");
+                bw.write(ancestors.get(i).getTimeStamp() + ";" + ancestors.get(i).getEvaluationNumber() + ";" + ancestors.get(i).getEval() + ";" + Arrays.toString(Util.toDoubleArray(((NumberSolution<Double>) ancestors.get(i)).getVariables())) + "}'");
 
                 if (i + 1 < ancestors.size()) {
                     bw.write("+\n");

@@ -3,14 +3,13 @@ package org.um.feri.ears.algorithms.so.pso;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
-import org.um.feri.ears.algorithms.so.pso.PsoSolution;
 
 public class PSO extends Algorithm {
 
@@ -33,7 +32,7 @@ public class PSO extends Algorithm {
     private double c2;
 
     private ArrayList<PsoSolution> population;
-    private DoubleSolution gBest; //global best
+    private NumberSolution<Double> gBest; //global best
     private Task task;
 
     public PSO() {
@@ -56,7 +55,7 @@ public class PSO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
         double[] velocity;

@@ -1,7 +1,7 @@
 package org.um.feri.ears.algorithms.so.es;
 
 import org.um.feri.ears.algorithms.*;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ES1p1sAlgorithm extends Algorithm {
-    private DoubleSolution one;
+    private NumberSolution<Double> one;
     private double varianceOne;
     private int k, mem_k; // every k aVariance is calculated again
     private double c, mem_c;
@@ -52,10 +52,10 @@ public class ES1p1sAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         resetToDefaultsBeforeNewRun(); //usually no need for this call
         task = taskProblem;
-        DoubleSolution ii;
+        NumberSolution<Double> ii;
         one = taskProblem.getRandomEvaluatedSolution();
         int everyK = 0; //recalculate variance
         double succ = 0;
@@ -70,7 +70,7 @@ public class ES1p1sAlgorithm extends Algorithm {
                 else if ((succ / k) < 0.2) varianceOne = varianceOne * c;
                 succ = 0;
             }
-            oneplus = one.getDoubleVariables();
+            oneplus = Util.toDoubleArray(one.getVariables());
             mutate(oneplus, varianceOne);
             ii = taskProblem.eval(oneplus);
             if (taskProblem.isFirstBetter(ii, one)) {

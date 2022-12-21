@@ -1,11 +1,11 @@
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
 
-public class SBXCrossoverSO implements CrossoverOperator<Double, Task, DoubleSolution>{
+public class SBXCrossoverSO implements CrossoverOperator<Double, Task, NumberSolution<Double>>{
 
 
 	/**
@@ -34,22 +34,22 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task, DoubleSol
 	}
 
 	@Override
-	public DoubleSolution[] execute(DoubleSolution[] parents, Task task) {
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, Task task) {
 		if (parents.length != 2) {
 			return null;
 		}
 
-		DoubleSolution[] offSpring;
+		NumberSolution<Double>[] offSpring;
 		offSpring = doCrossover(crossoverProbability, parents[0], parents[1], task);
 		return offSpring;
 	}
 
-	private DoubleSolution[] doCrossover(Double probability, DoubleSolution parent1,
-			DoubleSolution parent2, Task task) {
-		DoubleSolution[] offSpring = new DoubleSolution[2];
+	private NumberSolution<Double>[] doCrossover(Double probability, NumberSolution<Double> parent1,
+												 NumberSolution<Double> parent2, Task task) {
+		NumberSolution<Double>[] offSpring = new NumberSolution[2];
 
-		offSpring[0] = new DoubleSolution(parent1);
-		offSpring[1] = new DoubleSolution(parent2);
+		offSpring[0] = new NumberSolution<>(parent1);
+		offSpring[1] = new NumberSolution<>(parent2);
 
 		int i;
 		double rand;

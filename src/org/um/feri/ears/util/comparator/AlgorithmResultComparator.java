@@ -2,7 +2,7 @@ package org.um.feri.ears.util.comparator;
 
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.EvaluationStorage;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Task;
@@ -10,7 +10,7 @@ import org.um.feri.ears.problems.Task;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class AlgorithmResultComparator implements Comparator<AlgorithmRunResult<DoubleSolution, Algorithm, Task>> {
+public class AlgorithmResultComparator implements Comparator<AlgorithmRunResult<NumberSolution, Algorithm, Task>> {
     TaskComparator tc;
     Task task;
     int evaluationNumber;
@@ -22,7 +22,7 @@ public class AlgorithmResultComparator implements Comparator<AlgorithmRunResult<
     }
 
     @Override
-    public int compare(AlgorithmRunResult<DoubleSolution, Algorithm, Task> r1, AlgorithmRunResult<DoubleSolution, Algorithm, Task> r2) {
+    public int compare(AlgorithmRunResult<NumberSolution, Algorithm, Task> r1, AlgorithmRunResult<NumberSolution, Algorithm, Task> r2) {
 
         if (evaluationNumber == -1) {
 
@@ -37,13 +37,10 @@ public class AlgorithmResultComparator implements Comparator<AlgorithmRunResult<
             ArrayList<EvaluationStorage.Evaluation> r1EvaluationHistory =  r1.task.getEvaluationHistory();
             ArrayList<EvaluationStorage.Evaluation> r2EvaluationHistory =  r2.task.getEvaluationHistory();
 
-            DoubleSolution r1Solution = new DoubleSolution();
-            DoubleSolution r2Solution = new DoubleSolution();
-
             for (int i = 0; i < r1EvaluationHistory.size(); i++) {
                 if(r1EvaluationHistory.get(i).evalNum == evaluationNumber) {
-                    r1Solution.setEval(r1EvaluationHistory.get(i).fitness);
-                    r2Solution.setEval(r2EvaluationHistory.get(i).fitness);
+                    NumberSolution r1Solution = new NumberSolution(r1EvaluationHistory.get(i).fitness);
+                    NumberSolution r2Solution = new NumberSolution(r2EvaluationHistory.get(i).fitness);
                     return tc.compare(r1Solution, r2Solution);
                 }
             }

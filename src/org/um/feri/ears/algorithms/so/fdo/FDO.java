@@ -3,14 +3,13 @@ package org.um.feri.ears.algorithms.so.fdo;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
-import org.um.feri.ears.algorithms.so.fdo.Bee;
 
 
 public class FDO extends Algorithm {
@@ -45,7 +44,7 @@ public class FDO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         initPopulation();
 
@@ -189,7 +188,7 @@ public class FDO extends Algorithm {
     private void initPopulation() throws StopCriterionException {
         population = new Bee[popSize];
         best = new Bee(task.getRandomEvaluatedSolution());
-        population[0] = new Bee(new DoubleSolution(best));
+        population[0] = new Bee(new NumberSolution(best));
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;

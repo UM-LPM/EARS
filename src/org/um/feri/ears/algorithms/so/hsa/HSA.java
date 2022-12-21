@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.hsa;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -20,9 +20,9 @@ public class HSA extends Algorithm {
     @AlgorithmParameter(description = "band width")
     private double BW = 0.5;
 
-    private DoubleSolution best;
+    private NumberSolution<Double> best;
     private Task task;
-    private DoubleSolution[] population;
+    private NumberSolution<Double>[] population;
 
     public HSA() {
         this(50);
@@ -46,7 +46,7 @@ public class HSA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
         this.task = task;
 
         initPopulation();
@@ -66,7 +66,7 @@ public class HSA extends Algorithm {
             if (this.task.isStopCriterion())
                 break;
 
-            DoubleSolution newSolution = this.task.eval(newHarmony);
+            NumberSolution<Double> newSolution = this.task.eval(newHarmony);
             //updateHarmonyMemory(newScore, newHarmony);
 
             //find worst harmony
@@ -81,7 +81,7 @@ public class HSA extends Algorithm {
             }
             //find best harmony
             if (this.task.isFirstBetter(newSolution, best)) {
-                best = new DoubleSolution(newSolution);
+                best = new NumberSolution<>(newSolution);
             }
             this.task.incrementNumberOfIterations();
         }
@@ -99,16 +99,16 @@ public class HSA extends Algorithm {
     }
 
     private void initPopulation() throws StopCriterionException {
-        population = new DoubleSolution[popSize];
+        population = new NumberSolution[popSize];
 
         best = task.getRandomEvaluatedSolution();
-        population[0] = new DoubleSolution(best);
+        population[0] = new NumberSolution<>(best);
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
             population[i] = task.getRandomEvaluatedSolution();
             if (task.isFirstBetter(population[i], best)) {
-                best = new DoubleSolution(population[i]);
+                best = new NumberSolution<>(population[i]);
             }
         }
     }

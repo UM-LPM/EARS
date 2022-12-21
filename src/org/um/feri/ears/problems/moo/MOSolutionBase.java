@@ -41,6 +41,7 @@ public class MOSolutionBase<Type extends Number> extends SolutionBase {
 	
 	public MOSolutionBase(MOSolutionBase<Type> s) {
 		super(s);
+		variables = new ArrayList<>(s.variables);
 		crowdingDistance = s.getCrowdingDistance();
 		eval = new double[s.eval.length];
 

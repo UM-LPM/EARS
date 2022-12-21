@@ -12,7 +12,6 @@ public abstract class MOProblemBase<Type extends Number> extends ProblemBase<Typ
         super(numberOfDimensions, numberOfConstraints);
     }
 
-    protected int numberOfObjectives;
     protected String fileName;
 
     public String getVersion() {

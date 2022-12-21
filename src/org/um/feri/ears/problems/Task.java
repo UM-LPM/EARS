@@ -1,15 +1,18 @@
 package org.um.feri.ears.problems;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
+import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 
 import javax.annotation.CheckReturnValue;
 
 public class Task extends TaskBase<Problem> {
 
-    protected DoubleSolution bestSolution; //Keeps track of the best solution found.
+    protected NumberSolution bestSolution; //Keeps track of the best solution found.
 
     /**
      * @param problem the problem to be solved
@@ -31,9 +34,6 @@ public class Task extends TaskBase<Problem> {
         isGlobal = false;
         this.problem = problem;
         this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
-        bestSolution = new DoubleSolution();
-        // set initial best eval
-        bestSolution.setEval(problem.isMinimize() ? Double.MAX_VALUE : Double.MIN_VALUE);
     }
     /**
      * @param problem the problem to be solved
@@ -89,7 +89,7 @@ public class Task extends TaskBase<Problem> {
      *
      * @param solution to be set feasible
      */
-    public void setFeasible(DoubleSolution solution) {
+    public void setFeasible(NumberSolution solution) {
         solution.variables = problem.setFeasible(solution.variables);
     }
 
@@ -109,7 +109,7 @@ public class Task extends TaskBase<Problem> {
      * @param solution to be checked
      * @return true if all the values in the solution are inside upper and lower bounds, false otherwise
      */
-    public boolean isFeasible(DoubleSolution solution) {
+    public boolean isFeasible(NumberSolution solution) {
         return problem.isFeasible(solution.getVariables());
     }
 
@@ -133,7 +133,7 @@ public class Task extends TaskBase<Problem> {
         return problem.isFeasible(x);
     }
 
-    public boolean isFirstBetter(DoubleSolution first, DoubleSolution second) {
+    public boolean isFirstBetter(NumberSolution first, NumberSolution second) {
         return problem.isFirstBetter(first.getVariables(), first.getEval(), second.getVariables(), second.getEval());
     }
 
@@ -174,7 +174,7 @@ public class Task extends TaskBase<Problem> {
         return Math.abs(d - problem.getGlobalOptimum()) <= epsilonForGlobal;
     }
 
-    public void addAncestors(DoubleSolution solution, List<DoubleSolution> parents) {
+    public void addAncestors(SolutionBase solution, List<SolutionBase> parents) {
         if (isAncestorLoggingEnabled) {
             solution.parents = parents;
             solution.timeStamp = System.currentTimeMillis();
@@ -204,7 +204,7 @@ public class Task extends TaskBase<Problem> {
      *
      * @return randomly generated unevaluated solution
      */
-    public DoubleSolution getRandomSolution() {
+    public NumberSolution getRandomSolution() {
         return problem.getRandomSolution();
     }
 
@@ -214,9 +214,9 @@ public class Task extends TaskBase<Problem> {
      * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
      * To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
      */
-    public DoubleSolution getRandomEvaluatedSolution() throws StopCriterionException {
+    public NumberSolution getRandomEvaluatedSolution() throws StopCriterionException {
 
-        DoubleSolution tmpSolution = getRandomSolution();
+        NumberSolution tmpSolution = getRandomSolution();
         eval(tmpSolution);
         return tmpSolution;
     }
@@ -227,16 +227,16 @@ public class Task extends TaskBase<Problem> {
      * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
      * To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
      */
-    public void eval(DoubleSolution solution) throws StopCriterionException {
-        DoubleSolution evaluatedSolution = eval(solution.getDoubleVariables());
+    public void eval(NumberSolution solution) throws StopCriterionException {
+        NumberSolution evaluatedSolution = eval(Util.toDoubleArray(solution.getVariables()));
         if(evaluatedSolution.getConstraints() != null)
             solution.setConstraints(evaluatedSolution.getConstraints());
-        solution.setEval(evaluatedSolution.getEval());
+        solution.setObjective(0, evaluatedSolution.getEval()); //TODO won't be needed in new version
     }
 
-    public DoubleSolution eval(double[] x, List<DoubleSolution> parents) throws StopCriterionException {
+    public NumberSolution eval(double[] x, List<SolutionBase> parents) throws StopCriterionException {
 
-        DoubleSolution tmpSolution = eval(x);
+        NumberSolution tmpSolution = eval(x);
 
         if (isAncestorLoggingEnabled) {
             tmpSolution.parents = parents;
@@ -249,11 +249,11 @@ public class Task extends TaskBase<Problem> {
         return tmpSolution;
     }
 
-    public DoubleSolution eval(double[] x) throws StopCriterionException {
+    public NumberSolution eval(double[] x) throws StopCriterionException {
 
         //Double[] ds = ArrayUtils.toObject(x);
         //List<Double> ds = Arrays.asList(ArrayUtils.toObject(x));
-        DoubleSolution tmpSolution = null;
+        NumberSolution tmpSolution = null;
         if (stopCriterion == StopCriterion.EVALUATIONS) {
             tmpSolution = performEvaluation(x);
         } else if (stopCriterion == StopCriterion.ITERATIONS) {
@@ -291,15 +291,15 @@ public class Task extends TaskBase<Problem> {
         }
     }
 
-    private DoubleSolution performEvaluation(double[] x) throws StopCriterionException {
+    private NumberSolution performEvaluation(double[] x) throws StopCriterionException {
         incrementNumberOfEvaluations();
         long start = System.nanoTime();
-        DoubleSolution tmpSolution = new DoubleSolution(x, problem.eval(x), problem.evaluateConstrains(x));
+        NumberSolution<Double> tmpSolution = new NumberSolution<>(Arrays.stream(x).boxed().collect(Collectors.toList()), problem.eval(x), problem.evaluateConstrains(x));
         checkImprovement(tmpSolution);
         evaluationTime += System.nanoTime() - start;
         checkIfGlobalReached(tmpSolution.getEval());
         GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-        if(isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
+        if(bestSolution != null && isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
             evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTime, bestSolution.getEval()));
         return tmpSolution;
     }
@@ -309,13 +309,13 @@ public class Task extends TaskBase<Problem> {
      * a certain amount of tries the stopping criterion is met. If there is an improvement the stagnation trial counter is reset.
      * @param solution current evaluation
      */
-    private void checkImprovement(DoubleSolution solution) {
+    private void checkImprovement(NumberSolution solution) {
 
         if(bestSolution == null)
-            bestSolution = new DoubleSolution(solution);
+            bestSolution = new NumberSolution(solution);
 
         if(isFirstBetter(solution, bestSolution)){
-            bestSolution = new DoubleSolution(solution);
+            bestSolution = new NumberSolution(solution);
             stagnationTrialCounter = 0;
         }
         else {

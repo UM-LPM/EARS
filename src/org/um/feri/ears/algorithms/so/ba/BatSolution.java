@@ -1,8 +1,8 @@
 package org.um.feri.ears.algorithms.so.ba;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
-public class BatSolution extends DoubleSolution{
+public class BatSolution extends NumberSolution<Double> {
 	
 	public double[] v; //Velocity
 	public double Q; //Frequency
@@ -17,7 +17,7 @@ public class BatSolution extends DoubleSolution{
 		this.r = s.r;
 	}
 	
-	public BatSolution(DoubleSolution s) {
+	public BatSolution(NumberSolution<Double> s) {
 		super(s);
 		Q = 0.0;
 	}

@@ -1,20 +1,13 @@
 package org.um.feri.ears.problems;
 
-public class DummySolution extends DoubleSolution {
-	
-	private double value;
-	
-	public DummySolution(double value) {
-		this.value = value;
-	}
+public class DummySolution extends NumberSolution<Double> {
 
-	@Override
-	public double getEval() {
-		return value;
-	}
+    public DummySolution(double value) {
+        super(value);
+    }
 
-	@Override
-	public String toString() {
-		return "DummySolution eval "+value;
-	}
+    @Override
+    public String toString() {
+        return "DummySolution eval " + getEval();
+    }
 }

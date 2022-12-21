@@ -7,6 +7,7 @@ public abstract class ProblemBase<Type> {
     public List<Type> upperLimit;
     public List<Type> lowerLimit;
     protected int numberOfDimensions;
+    protected int numberOfObjectives = 1; //TODO set in constructor
     protected boolean minimize = true;
     public int numberOfConstraints;
     protected Type[] max_constraints;

@@ -7,9 +7,11 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.util.Util;
 
 public class HillClimbingLogging extends Algorithm {
 	String algName;
@@ -26,25 +28,25 @@ public class HillClimbingLogging extends Algorithm {
 		);
     }
 
-    public static void print(int eval, DoubleSolution s,String a) {
-    	System.out.println(eval+";"+s.getEval()+" "+Arrays.toString(s.getDoubleVariables())+a);
+    public static void print(int eval, NumberSolution<Double> s, String a) {
+    	System.out.println(eval+";"+s.getEval()+" "+Arrays.toString(Util.toDoubleArray(s.getVariables()))+a);
     }
 	@Override
-	public DoubleSolution execute(Task task) throws StopCriterionException {
-		DoubleSolution bestGlobal = task.getRandomEvaluatedSolution();
-		DoubleSolution best = new DoubleSolution(bestGlobal); //clone
-		DoubleSolution tmpSolution;
-		double interval[] = task.getInterval();
-		ArrayList<DoubleSolution> list = new ArrayList<>();
-		double tmp[],  x[], bst[] ;
+	public NumberSolution<Double> execute(Task task) throws StopCriterionException {
+		NumberSolution<Double> bestGlobal = task.getRandomEvaluatedSolution();
+		NumberSolution<Double> best = new NumberSolution<>(bestGlobal); //clone
+		NumberSolution<Double> tmpSolution;
+		double[] interval = task.getInterval();
+		ArrayList<NumberSolution<Double>> list = new ArrayList<>();
+		double[] tmp,  x, bst;
 		boolean better=false;
 		while (!task.isStopCriterion()) {
 			while (!task.isStopCriterion()) { //is improvement
 				list.clear();
-				bst = best.getDoubleVariables();
+				bst = Util.toDoubleArray(best.getVariables());
 				better=false;
 				for (int i=0; i< task.getNumberOfDimensions(); i++) {
-					List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
+					List<SolutionBase> parents = new ArrayList<>();
 					if (i==2) {
 						//System.out.println("i:"+i);
 					}

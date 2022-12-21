@@ -9,7 +9,7 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.operators.PolynomialMutationSO;
 import org.um.feri.ears.operators.SBXCrossoverSO;
 import org.um.feri.ears.operators.TournamentSelection;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
@@ -93,13 +93,13 @@ public class CRO extends Algorithm {
 	}
 
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+	public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
 		task = taskProblem;
 
-		List<DoubleSolution> broadcastSpawners;
-		List<DoubleSolution> brooders;
-		List<DoubleSolution> larvae;
-		List<DoubleSolution> budders;
+		List<NumberSolution<Double>> broadcastSpawners;
+		List<NumberSolution<Double>> brooders;
+		List<NumberSolution<Double>> larvae;
+		List<NumberSolution<Double>> budders;
 
 		comparator = new TaskComparator(task);
 		selectionOperator = new TournamentSelection(2, comparator);
@@ -113,8 +113,8 @@ public class CRO extends Algorithm {
 			if ((quantity % 2) == 1) {
 				quantity--;
 			}
-			broadcastSpawners = new ArrayList<DoubleSolution>(quantity);
-			brooders = new ArrayList<DoubleSolution>(coralReef.size() - quantity);
+			broadcastSpawners = new ArrayList<>(quantity);
+			brooders = new ArrayList<>(coralReef.size() - quantity);
 			
 			selectBroadcastSpawners(quantity, broadcastSpawners, brooders);
 
@@ -135,7 +135,7 @@ public class CRO extends Algorithm {
 			
 			// Asexual reproduction (budding)
 			coralReef.sort(comparator);
-			budders = new ArrayList<DoubleSolution>((int) (fa * coralReef.size()));
+			budders = new ArrayList<>((int) (fa * coralReef.size()));
 			for (int i = 0; i < budders.size(); i++) {
 				budders.add(coralReef.get(i));
 			}
@@ -183,7 +183,7 @@ public class CRO extends Algorithm {
 		return null;
 	}
 
-	private void selectBroadcastSpawners(int quantity, List<DoubleSolution> spawners, List<DoubleSolution> brooders) {
+	private void selectBroadcastSpawners(int quantity, List<NumberSolution<Double>> spawners, List<NumberSolution<Double>> brooders) {
 
 		int[] per = Util.randomPermutation(coralReef.size());
 
@@ -200,10 +200,10 @@ public class CRO extends Algorithm {
 		}
 	}
 
-	private List<DoubleSolution> sexualReproduction(List<DoubleSolution> broadcastSpawners)
+	private List<NumberSolution<Double>> sexualReproduction(List<NumberSolution<Double>> broadcastSpawners)
 			throws StopCriterionException {
-		DoubleSolution[] parents = new DoubleSolution[2];
-		List<DoubleSolution> larvae = new ArrayList<DoubleSolution>(broadcastSpawners.size() / 2);
+		NumberSolution<Double>[] parents = new NumberSolution[2];
+		List<NumberSolution<Double>> larvae = new ArrayList<>(broadcastSpawners.size() / 2);
 
 		while (broadcastSpawners.size() > 0) {
 			parents[0] = selectionOperator.execute(broadcastSpawners, task);
@@ -215,7 +215,7 @@ public class CRO extends Algorithm {
 				broadcastSpawners.remove(parents[1]);
 			}
 
-			DoubleSolution newSolution = crossoverOperator.execute(parents, task)[0];
+			NumberSolution<Double> newSolution = crossoverOperator.execute(parents, task)[0];
 			if (task.isStopCriterion()) {
 				break;
 			}
@@ -229,13 +229,13 @@ public class CRO extends Algorithm {
 		return larvae;
 	}
 
-	private List<DoubleSolution> asexualReproduction(List<DoubleSolution> brooders) throws StopCriterionException {
+	private List<NumberSolution<Double>> asexualReproduction(List<NumberSolution<Double>> brooders) throws StopCriterionException {
 		int sz = brooders.size();
 
-		List<DoubleSolution> larvae = new ArrayList<DoubleSolution>(sz);
+		List<NumberSolution<Double>> larvae = new ArrayList<>(sz);
 
 		for (int i = 0; i < sz; i++) {
-			DoubleSolution newSolution = mutationOperator.execute(brooders.get(i), task);
+			NumberSolution<Double> newSolution = mutationOperator.execute(brooders.get(i), task);
 			if (task.isStopCriterion()) {
 				break;
 			}
@@ -246,10 +246,10 @@ public class CRO extends Algorithm {
 		return larvae;
 	}
 
-	private List<CoralSolution> larvaeSettlementPhase(List<DoubleSolution> larvae, List<CoralSolution> population) {
+	private List<CoralSolution> larvaeSettlementPhase(List<NumberSolution<Double>> larvae, List<CoralSolution> population) {
 
 		int attempts = attemptsToSettle;
-		for (DoubleSolution larva : larvae) {
+		for (NumberSolution<Double> larva : larvae) {
 
  			for (int attempt = 0; attempt < attempts; attempt++) {
 				Coordinate C = new Coordinate(Util.nextInt(0, n), Util.nextInt(0, m));
@@ -385,7 +385,7 @@ public class CRO extends Algorithm {
 
 	}
 
-	public class CoralSolution extends DoubleSolution {
+	public class CoralSolution extends NumberSolution<Double> {
 
 		/**
 		 * The position of the coral on the coral reef
@@ -397,7 +397,7 @@ public class CRO extends Algorithm {
 			this.coralPosition = coralSolution.coralPosition;
 		}
 
-		public CoralSolution(DoubleSolution solution) {
+		public CoralSolution(NumberSolution<Double> solution) {
 			super(solution);
 		}
 

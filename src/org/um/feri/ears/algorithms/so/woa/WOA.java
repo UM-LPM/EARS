@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.woa;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -18,7 +18,7 @@ public class WOA extends Algorithm {
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
-    private DoubleSolution bestSolution;
+    private NumberSolution<Double> bestSolution;
     private Task task;
 
     // Parameters
@@ -32,7 +32,7 @@ public class WOA extends Algorithm {
     private double l; // Parameter for Eq 2.5
     private double p; // 50% whether to choose Shrinking encircling mechanism or the spiral model to update the position of whale
 
-    private ArrayList<DoubleSolution> population;
+    private ArrayList<NumberSolution<Double>> population;
 
     public WOA() {
         this(30);
@@ -62,7 +62,7 @@ public class WOA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         initPopulation();
@@ -88,7 +88,7 @@ public class WOA extends Algorithm {
 
             // For each search agent
             for (int index = 0; index < popSize; index++) {
-                DoubleSolution currentAgent = population.get(index);
+                NumberSolution<Double> currentAgent = population.get(index);
                 double[] newPosition = new double[task.getNumberOfDimensions()];
 
                 // Randoms for A and C
@@ -113,7 +113,7 @@ public class WOA extends Algorithm {
                             // Exploration
                             // Select random agent and update position of current (Eq. 2.8)
                             int randAgentIndex = Util.nextInt(popSize);
-                            DoubleSolution randAgent = population.get(randAgentIndex);
+                            NumberSolution<Double> randAgent = population.get(randAgentIndex);
                             double dXRand = Math.abs(C * randAgent.getValue(i) - currentAgent.getValue(i));
                             newPosition[i] = randAgent.getValue(i) - A * dXRand;
                         } else if (Math.abs(A) < 1) {
@@ -135,7 +135,7 @@ public class WOA extends Algorithm {
                 if (task.isStopCriterion())
                     break;
 
-                DoubleSolution newWhale = task.eval(newPosition);
+                NumberSolution<Double> newWhale = task.eval(newPosition);
                 population.set(index, newWhale);
 
                 // Check if the changed is better ?
@@ -159,10 +159,10 @@ public class WOA extends Algorithm {
     }
 
     private void updateBest() {
-        ArrayList<DoubleSolution> popCopy = new ArrayList<DoubleSolution>(population);
+        ArrayList<NumberSolution<Double>> popCopy = new ArrayList<>(population);
         popCopy.sort(new TaskComparator(task));
         if (bestSolution == null || task.isFirstBetter(popCopy.get(0), bestSolution))
-            bestSolution = new DoubleSolution(popCopy.get(0));
+            bestSolution = new NumberSolution<>(popCopy.get(0));
     }
 
     @Override

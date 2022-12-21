@@ -1,11 +1,11 @@
 package org.um.feri.ears.algorithms.so.fss;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
 import java.util.Comparator;
 
-public class FishSolution extends DoubleSolution {
+public class FishSolution extends NumberSolution<Double> {
 
     public static class FSSComparatorByFitnessGain implements Comparator<FishSolution> {
 
@@ -16,9 +16,8 @@ public class FishSolution extends DoubleSolution {
 
     }
 
-    public DoubleSolution neighbor = null;
-    public DoubleSolution best = null;
-    public DoubleSolution current = null;
+    public NumberSolution<Double> neighbor = null;
+    public NumberSolution<Double> best = null;
     public double weightNow = Double.NaN;
     public double weightPast = Double.NaN;
     public double[] deltaX = null;
@@ -30,10 +29,10 @@ public class FishSolution extends DoubleSolution {
     public boolean volatileMoveSuccess = false;
 
 
-    public FishSolution(DoubleSolution s) {
-        current = s;
-        neighbor = new DoubleSolution(s);
-        best = new DoubleSolution(s);
+    public FishSolution(NumberSolution<Double> s) {
+        super(s);
+        neighbor = new NumberSolution<>(s);
+        best = new NumberSolution<>(s);
 
         deltaX = new double[s.getVariables().size()];
         //init fish weight

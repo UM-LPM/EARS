@@ -35,7 +35,7 @@ public class EA_SOP_VisualizationExample {
     public static void run(Algorithm alg, Task task) {
         Util.rnd.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run
         task.enableAncestorLogging();
-        DoubleSolution best;
+        NumberSolution best;
         try {
             best = alg.execute(task);
             System.out.println("Best found solution :" + best); // print the best solution found after 10000 evaluations

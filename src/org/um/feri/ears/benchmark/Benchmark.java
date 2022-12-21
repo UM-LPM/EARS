@@ -1,7 +1,7 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Task;
@@ -15,7 +15,7 @@ import org.um.feri.ears.util.Util;
 
 import java.util.*;
 
-public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algorithm> {
+public abstract class Benchmark extends BenchmarkBase<Task, NumberSolution, Algorithm> {
 
     protected abstract void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations);
 
@@ -38,8 +38,8 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
             freeForAllTeams.put(player.getId(),team);
         }
 
-        AlgorithmRunResult<DoubleSolution, Algorithm, Task> result1;
-        AlgorithmRunResult<DoubleSolution, Algorithm, Task> result2;
+        AlgorithmRunResult<NumberSolution, Algorithm, Task> result1;
+        AlgorithmRunResult<NumberSolution, Algorithm, Task> result2;
         Team team1, team2;
         String algorithm1Id, algorithm2Id;
 
@@ -55,8 +55,8 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
             if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM)
                 evaluationNumber = n * evaluationsPerTick;
 
-            for (HashMap<Task, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
-                for (ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>> results : problemMap.values()) {
+            for (HashMap<Task, ArrayList<AlgorithmRunResult<NumberSolution, Algorithm, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
+                for (ArrayList<AlgorithmRunResult<NumberSolution, Algorithm, Task>> results : problemMap.values()) {
                     Task t = results.get(0).task;
 
                     AlgorithmResultComparator rc = new AlgorithmResultComparator(t, evaluationNumber);
@@ -145,7 +145,7 @@ public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algo
         tournamentResults.calculateRatings();
     }
 
-    public boolean resultEqual(AlgorithmRunResult<DoubleSolution, Algorithm, Task> a, AlgorithmRunResult<DoubleSolution, Algorithm, Task> b) {
+    public boolean resultEqual(AlgorithmRunResult<NumberSolution, Algorithm, Task> a, AlgorithmRunResult<NumberSolution, Algorithm, Task> b) {
         if ((a == null) && (b == null))
             return true;
         if (a == null)

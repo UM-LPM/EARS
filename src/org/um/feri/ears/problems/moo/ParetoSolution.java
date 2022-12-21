@@ -31,7 +31,14 @@ import com.panayotis.gnuplot.terminal.PostscriptTerminal;
 
 public class ParetoSolution<Type extends Number> extends SolutionBase implements Iterable<MOSolutionBase<Type>> {
 
-    protected List<Type> variables;
+    public List<MOSolutionBase<Type>> solutions;
+    private double pareto_eval;
+    private HashMap<String, Double> qiEval = new HashMap<String, Double>();
+
+    /**
+     * Maximum size of the solution set
+     */
+    private int capacity = 0;
 
     public ParetoSolution(ParetoSolution<Type> ps) {
 
@@ -50,30 +57,6 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
             solutions.add(sol.copy());
         }
     }
-
-    public List<MOSolutionBase<Type>> solutions;
-    private double pareto_eval;
-
-    private HashMap<String, Double> qiEval = new HashMap<String, Double>();
-
-    /**
-     * Returns evaluations for all unary quality indicators.
-     *
-     * @return all unary quality indicators evaluations.
-     */
-    public HashMap<String, Double> getAllQiEval() {
-        return qiEval;
-    }
-
-    public void setEvalForAllUnaryQIs(HashMap<String, Double> qiEval) {
-        this.qiEval = qiEval;
-    }
-
-    /**
-     * Maximum size of the solution set
-     */
-    private int capacity = 0;
-
     public ParetoSolution() {
         solutions = new ArrayList<MOSolutionBase<Type>>();
         capacity = 1000;
@@ -100,6 +83,19 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
     public ParetoSolution(List<MOSolutionBase<Type>> pop) {
         solutions = pop;
         capacity = pop.size();
+    }
+
+    /**
+     * Returns evaluations for all unary quality indicators.
+     *
+     * @return all unary quality indicators evaluations.
+     */
+    public HashMap<String, Double> getAllQiEval() {
+        return qiEval;
+    }
+
+    public void setEvalForAllUnaryQIs(HashMap<String, Double> qiEval) {
+        this.qiEval = qiEval;
     }
 
     public boolean add(MOSolutionBase<Type> solution) {

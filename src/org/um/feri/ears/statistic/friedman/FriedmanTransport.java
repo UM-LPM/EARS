@@ -3,7 +3,7 @@ package org.um.feri.ears.statistic.friedman;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.util.MeanStDev;
@@ -33,7 +33,7 @@ public class FriedmanTransport {
 
     //allSingleProblemRunResults.add(task, result, algorithm);
     //Hashtable<AlgorithmBase, Hashtable<TaskBase, ArrayList<Double>>> all
-    public static FriedmanTransport calc4Friedman(Hashtable<Algorithm, Hashtable<TaskBase, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>>> all) {
+    public static FriedmanTransport calc4Friedman(Hashtable<Algorithm, Hashtable<TaskBase, ArrayList<AlgorithmRunResult<NumberSolution, Algorithm, Task>>>> all) {
         //FriedmanTransport
         double[][] mean;
         Vector<String> algorithms = new Vector<String>();
@@ -41,8 +41,8 @@ public class FriedmanTransport {
         StringBuffer sb = new StringBuffer();
         ArrayList<AlgorithmBase> tmp = new ArrayList<>(all.keySet());
         ArrayList<TaskBase> tmpProblem; // = new ArrayList(all.keySet());
-        Hashtable<TaskBase, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>> algorithmHm;
-        ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>> algorithmRunResults;
+        Hashtable<TaskBase, ArrayList<AlgorithmRunResult<NumberSolution, Algorithm, Task>>> algorithmHm;
+        ArrayList<AlgorithmRunResult<NumberSolution, Algorithm, Task>> algorithmRunResults;
         MeanStDev std;
         mean = null;
 
@@ -69,7 +69,7 @@ public class FriedmanTransport {
                 }
                 algorithmRunResults = algorithmHm.get(p);
                 ArrayList<Double> results = new ArrayList<>();
-                for(AlgorithmRunResult<DoubleSolution, Algorithm, Task> res: algorithmRunResults)
+                for(AlgorithmRunResult<NumberSolution, Algorithm, Task> res: algorithmRunResults)
                     results.add(res.solution.getEval());
                 std = new MeanStDev(results);
                 sb.append(a.getId()).append('\t').append(p.getProblemName());

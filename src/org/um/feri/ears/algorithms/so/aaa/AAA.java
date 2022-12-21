@@ -3,12 +3,11 @@ package org.um.feri.ears.algorithms.so.aaa;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.aaa.Alga;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +23,7 @@ public class AAA extends Algorithm {
     @AlgorithmParameter(name = "adaptation probability constant", description = "determines the speed of the process in which algal colony, which could not find good solutions, tries to resemble itself to the biggest algal colony in the environment")
     private double adaptationConstant = 0.5;
 
-    private DoubleSolution best;
+    private NumberSolution<Double> best;
     private Task task;
     private Alga[] population;
 
@@ -50,7 +49,7 @@ public class AAA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
         this.task = task;
 
         initPopulation();
@@ -66,7 +65,7 @@ public class AAA extends Algorithm {
                     while (neighbor == i) {
                         neighbor = tournamentMethod();
                     }
-                    double[] newColony = population[i].getDoubleVariables().clone();
+                    double[] newColony = Util.toDoubleArray(population[i].getVariables()).clone(); //clone necessary?
 
                     int dim1 = Util.nextInt(task.getNumberOfDimensions());
                     int dim2 = Util.nextInt(task.getNumberOfDimensions());
@@ -96,14 +95,14 @@ public class AAA extends Algorithm {
                         break;
 
                     newColony = task.setFeasible(newColony);
-                    Alga newAlga = new Alga(this.task.eval(newColony));
+                    Alga newAlga = new Alga(task.eval(newColony));
                     population[i].setEnergy(population[i].getEnergy() - (energyLoss / 2));
                     if (this.task.isFirstBetter(newAlga, population[i])) {
                         newAlga.copyAttributes(population[i]);
                         population[i] = newAlga;
                         iStarve = 1;
                         if (task.isFirstBetter(newAlga, best))
-                            best = new DoubleSolution(newAlga);
+                            best = new NumberSolution(newAlga);
                     } else {
                         population[i].setEnergy(population[i].getEnergy() - (energyLoss / 2));
                     }
@@ -247,7 +246,7 @@ public class AAA extends Algorithm {
                 break;
             population[i] = new Alga(task.getRandomEvaluatedSolution());
             if (task.isFirstBetter(population[i], best)) {
-                best = new DoubleSolution(population[i]);
+                best = new NumberSolution(population[i]);
             }
         }
     }

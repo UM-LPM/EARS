@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems;
 
 import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.util.Util;
 
 public class EvaluationStorage {
 
@@ -15,8 +16,8 @@ public class EvaluationStorage {
         problemName = problem.getName();
         problemVersion = problem.getVersion();
         problemDimensions = problem.getNumberOfDimensions();
-        upperLimit = problem.upperLimit.stream().mapToDouble(i->i).toArray();
-        lowerLimit = problem.lowerLimit.stream().mapToDouble(i->i).toArray();
+        upperLimit = Util.toDoubleArray(problem.upperLimit);
+        lowerLimit = Util.toDoubleArray(problem.lowerLimit);
         this.resolution = resolution;
         this.numberOfRuns = numberOfRuns;
         this.evaluationsPerRun = evaluationsPerRun;

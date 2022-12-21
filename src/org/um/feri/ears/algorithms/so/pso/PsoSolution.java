@@ -1,13 +1,11 @@
 package org.um.feri.ears.algorithms.so.pso;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-import java.util.Arrays;
-
-public class PsoSolution extends DoubleSolution {
+public class PsoSolution extends NumberSolution<Double> {
     public PsoSolution pBest;
     public double[] velocity;
 
@@ -24,7 +22,7 @@ public class PsoSolution extends DoubleSolution {
         pBest = new PsoSolution(this);
     }
 
-    public PsoSolution(DoubleSolution solution) {
+    public PsoSolution(NumberSolution<Double> solution) {
         super(solution);
     }
 

@@ -2,11 +2,11 @@ package org.um.feri.ears.algorithms.so.gsa;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.algorithms.so.gsa.Agent;
+import org.um.feri.ears.util.Util;
 
 
 import java.util.*;
@@ -105,7 +105,7 @@ public class GSAv2 extends Algorithm {
 
 
     Agent UpdatePosition(Task t,int popIndex) throws StopCriterionException {
-        double []positions = pop.get(popIndex).getDoubleVariables();
+        double []positions = Util.toDoubleArray(pop.get(popIndex).getVariables());
         double []velocites = pop.get(popIndex).getVelocities();
         double []newPosition = new double[positions.length];
         for(int i = 0; i < positions.length;i++){
@@ -142,7 +142,7 @@ public class GSAv2 extends Algorithm {
                     continue;
                 double M_i = pop.get(i).getMass();
                 double M_j = solutions.get(j).getMass();
-                tmpForces.add(getForceActingOnMi(G,M_i,M_j,pop.get(i).getDoubleVariables(),solutions.get(j).getDoubleVariables()));
+                tmpForces.add(getForceActingOnMi(G,M_i,M_j, Util.toDoubleArray(pop.get(i).getVariables()),Util.toDoubleArray(solutions.get(j).getVariables())));
             }
             pop.get(i).setForces(getTotalForces(tmpForces));
         }
@@ -159,7 +159,7 @@ public class GSAv2 extends Algorithm {
             if(task.isFirstBetter(tmpAgent,best)) {
                 best =  new Agent(tmpAgent,task);
                 //System.out.println("ID:" + best.getID() + "  Fitness:" + best.getEval() + "  Solution:" + best );
-                //System.out.println("[" +best.getDoubleVariables() + "]");
+                //System.out.println("[" +Util.toDoubleArray(best.getVariables()) + "]");
             }
 
             pop.set(i,tmpAgent);
@@ -172,7 +172,7 @@ public class GSAv2 extends Algorithm {
 
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         //get epsilon from task
         epsilon = taskProblem.getEpsilonForGlobal();
         //inicializacija populacije

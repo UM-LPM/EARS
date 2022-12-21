@@ -1,10 +1,10 @@
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class PolynomialMutationSO implements MutationOperator<Double, Task, DoubleSolution>{
+public class PolynomialMutationSO implements MutationOperator<Double, Task, NumberSolution<Double>>{
 
 	
 	private static final double ETA_M_DEFAULT_ = 20.0;
@@ -20,13 +20,13 @@ public class PolynomialMutationSO implements MutationOperator<Double, Task, Doub
 	}
 	
 	@Override
-	public DoubleSolution execute(DoubleSolution source, Task tb) {
+	public NumberSolution<Double> execute(NumberSolution<Double> source, Task tb) {
 		
 		doMutation(mutationProbability, source, tb);
 		return source;
 	}
 
-	private void doMutation(Double probability, DoubleSolution solution, Task task) {
+	private void doMutation(Double probability, NumberSolution<Double> solution, Task task) {
 		double rnd, delta1, delta2, mut_pow, deltaq;
 		double y, yl, yu, val, xy;
 		for (int var = 0; var < task.getNumberOfDimensions(); var++) {

@@ -1,6 +1,5 @@
 package org.um.feri.ears.problems;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -245,9 +244,9 @@ public abstract class Problem extends ProblemBase<Double> {
      *
      * @return evaluated random solution
      */
-    public DoubleSolution getRandomEvaluatedSolution() {
+    public NumberSolution getRandomEvaluatedSolution() {
         List<Double> var = Arrays.asList(ArrayUtils.toObject(getRandomVariables()));
-        return new DoubleSolution(var, eval(var), evaluateConstrains(var));
+        return new NumberSolution(var, eval(var), evaluateConstrains(var));
     }
 
     /**
@@ -255,10 +254,9 @@ public abstract class Problem extends ProblemBase<Double> {
      *
      * @return randomly generated unevaluated solution
      */
-    public DoubleSolution getRandomSolution() {
+    public NumberSolution getRandomSolution() {
         List<Double> var = Arrays.asList(ArrayUtils.toObject(getRandomVariables()));
-        DoubleSolution newSolution = new DoubleSolution();
-        newSolution.setVariables(var);
+        NumberSolution newSolution = new NumberSolution(numberOfObjectives, var);
         return newSolution;
     }
 }

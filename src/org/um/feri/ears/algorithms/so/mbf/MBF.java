@@ -3,13 +3,12 @@ package org.um.feri.ears.algorithms.so.mbf;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.mbf.CichlidsSolution;
 
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class MBF extends Algorithm {
     @AlgorithmParameter(name = "population size")
     private int popSize = 50;
 
-    private DoubleSolution best;
+    private NumberSolution<Double> best;
     private Task task;
 
     private double SP = 0.8;        //Mother Power
@@ -70,7 +69,7 @@ public class MBF extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         ASDP = 0.1 * (task.getUpperLimit(0) - task.getLowerLimit(0));
@@ -100,28 +99,28 @@ public class MBF extends Algorithm {
                     if (it > 1) {
                         if ((BestResult[1].getEval() / BestResult[0].getEval()) < 0.85) {
                             //Update Movement Cichilds Protected by Mother using Regularity
-                            solution.movment[d] = SP * solution.movment[d]
+                            solution.movement[d] = SP * solution.movement[d]
                                     + Dis * Util.nextDouble() * (solution.localBest.getValue(d) - solution.getValue(d))
                                     + Dis * Util.nextDouble() * (best.getValue(d) - solution.getValue(d));
                         } else {
                             //Update Movement Cichlids Protected by Mother using Force of Nature
-                            solution.movment[d] = SP * solution.movment[d]
+                            solution.movement[d] = SP * solution.movement[d]
                                     + Dis * Util.nextDouble() * (solution.localBest.getValue(d) - solution.getValue(d))
                                     + Dis * Util.nextDouble() * (BestResult[1].getValue(d) - solution.getValue(d))
-                                    + Dis * Util.nextDouble() * NatureForce[kk - 1].movment[d];
+                                    + Dis * Util.nextDouble() * NatureForce[kk - 1].movement[d];
                             checkCONV = checkCONV + 1;
                         }
                     }
                     //Apply Movement Limits
-                    solution.movment[d] = Math.max(solution.movment[d], ASDN);
-                    solution.movment[d] = Math.min(solution.movment[d], ASDP);
+                    solution.movement[d] = Math.max(solution.movement[d], ASDN);
+                    solution.movement[d] = Math.min(solution.movement[d], ASDP);
 
                     //Update Position
-                    newSolution.set(d, newSolution.get(d) + solution.movment[d]);
+                    newSolution.set(d, newSolution.get(d) + solution.movement[d]);
 
                     //Movement Mirror Effect
-                    if (solution.movment[d] > task.getUpperLimit(d) || solution.movment[d] < task.getLowerLimit(d)) {
-                        solution.movment[d] = -solution.movment[d];
+                    if (solution.movement[d] > task.getUpperLimit(d) || solution.movement[d] < task.getLowerLimit(d)) {
+                        solution.movement[d] = -solution.movement[d];
                     }
 
                 }
@@ -138,13 +137,13 @@ public class MBF extends Algorithm {
                 //Update Global Best
                 if (task.isFirstBetter(solution, best)) {
                     checkpoint = 1;
-                    best = new DoubleSolution(solution);
+                    best = new NumberSolution<>(solution);
                     BestResult[it + 1] = solution;
                 }
 
                 //Update Cichlids BestLocal
                 if (task.isFirstBetter(solution, solution.localBest))
-                    solution.localBest = new DoubleSolution(solution);
+                    solution.localBest = new NumberSolution<>(solution);
 
             }
 
@@ -170,7 +169,7 @@ public class MBF extends Algorithm {
 
                     //Update Movement of Left Out Cichilds
                     for (int j = 0; j < task.getNumberOfDimensions(); j++) {
-                        population.get(ind).movment[j] = population.get(ind).getValue(j) - p.get(j);
+                        population.get(ind).movement[j] = population.get(ind).getValue(j) - p.get(j);
                     }
 
                     //Apply Position Limits
@@ -186,13 +185,13 @@ public class MBF extends Algorithm {
                     //TODO no check in matlab code
                     //Update Cichlids BestLocal
                     if (task.isFirstBetter(population.get(ind), population.get(ind).localBest))
-                        population.get(ind).localBest = new DoubleSolution(population.get(ind));
+                        population.get(ind).localBest = new NumberSolution<>(population.get(ind));
 
                     //Update Global Best BestLocal
                     if (task.isFirstBetter(population.get(ind), best)) {
                         checkpoint = 1;
                         BestResult[it + 1] = population.get(ind);
-                        best = new DoubleSolution(population.get(ind));
+                        best = new NumberSolution<>(population.get(ind));
 
                     }
                 }
@@ -238,13 +237,12 @@ public class MBF extends Algorithm {
 
                 }
 
-                NatureForce[kk] = new CichlidsSolution(task.getNumberOfDimensions());
-                NatureForce[kk].setVariables(nPosition);
-                NatureForce[kk].movment = nMovement;
+                NatureForce[kk] = new CichlidsSolution(task.getNumberOfDimensions(), nPosition);
+                NatureForce[kk].movement = nMovement;
 
                 int ncc = 0; //number of elements in ncc
                 for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-                    double Sx = (max - NatureForce[kk].movment[i]) / (max - min);
+                    double Sx = (max - NatureForce[kk].movement[i]) / (max - min);
                     if (Sx < 0.4) {
                         NatureForce[kk].NCC[ncc] = i;
                         ncc++;
@@ -265,7 +263,7 @@ public class MBF extends Algorithm {
                 }
 
                 for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-                    NatureForce[kk].movment[i] = NatureForce[kk].getValue(i);
+                    NatureForce[kk].movement[i] = NatureForce[kk].getValue(i);
                 }
 
                 //Shark Attack Effects on Cichlids
@@ -284,7 +282,7 @@ public class MBF extends Algorithm {
 
                     //Update Movement Cichlids Under Shark Attack
                     for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-                        population.get(num).movment[i] = SharkAttack[kk].getValue(i) - p.get(i);
+                        population.get(num).movement[i] = SharkAttack[kk].getValue(i) - p.get(i);
                     }
 
                     //Evaluation
@@ -342,7 +340,7 @@ public class MBF extends Algorithm {
 
         if (task.isFirstBetter(sol1, best)) {
             checkpoint = 1;
-            best = new DoubleSolution(sol1);
+            best = new NumberSolution<>(sol1);
             BestResult[1] = sol1;
         }
 
@@ -354,7 +352,7 @@ public class MBF extends Algorithm {
 
         if (task.isFirstBetter(sol2, best)) {
             checkpoint = 1;
-            best = new DoubleSolution(sol2);
+            best = new NumberSolution<>(sol2);
             BestResult[1] = sol2;
         }
     }
@@ -370,10 +368,10 @@ public class MBF extends Algorithm {
 
         for (int i = 1; i < popSize; i++) {
             population.add(new CichlidsSolution(task.getRandomEvaluatedSolution()));
-            population.get(i).movment = new double[task.getNumberOfDimensions()];
+            population.get(i).movement = new double[task.getNumberOfDimensions()];
 
             if (task.isFirstBetter(population.get(i), best)) {
-                best = new DoubleSolution(population.get(i));
+                best = new NumberSolution<>(population.get(i));
             }
 
             if (task.isStopCriterion())

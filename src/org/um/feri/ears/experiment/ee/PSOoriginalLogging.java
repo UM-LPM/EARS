@@ -6,7 +6,8 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -35,7 +36,7 @@ public class PSOoriginalLogging extends Algorithm {
 //Originalni algoritem PSO
 	
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+	public NumberSolution execute(Task taskProblem) throws StopCriterionException {
 		
 		task = taskProblem;
 		taskProblem.enableAncestorLogging();
@@ -68,11 +69,11 @@ public class PSOoriginalLogging extends Algorithm {
 
 	private PSOoriginalSolution update(PSOoriginalSolution sol, double[] v) throws StopCriterionException {
 		
-		double x[] = sol.getDoubleVariables();
+		double[] x = Util.toDoubleArray(sol.getVariables());
 		for (int i = 0; i < x.length; i++) {
 			x[i] = task.setFeasible(x[i] + v[i], i);
 		}
-		List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
+		List<SolutionBase> parents = new ArrayList<>();
 		parents.add(sol.Pbest);
 		parents.add(PgBest);
 		parents.add(sol);

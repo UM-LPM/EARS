@@ -1,6 +1,6 @@
 package org.um.feri.ears.algorithms.so.gsa;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * @author crepinsek
  */
-public class GSASolution extends DoubleSolution {
+public class GSASolution extends NumberSolution<Double> {
     private double[] v; //velocity
     private double[] a; //Acceleration
     private double[] E;
@@ -53,7 +53,7 @@ public class GSASolution extends DoubleSolution {
         Arrays.fill(E, 0);
     }
 
-    public GSASolution(DoubleSolution eval) {
+    public GSASolution(NumberSolution<Double> eval) {
         super(eval);
         int D = eval.getVariables().size();
         v = new double[D]; //init V=zeros(N,dim);
@@ -73,7 +73,7 @@ public class GSASolution extends DoubleSolution {
 		V=rand(N,dim).*V+a; %eq. 11.
 		X=X+V; %eq. 12.
 		*/
-        double[] x = getDoubleVariables();
+        double[] x = Util.toDoubleArray(getVariables());
 
         boolean feasable = true;
         for (int i = 0; i < x.length; i++) {

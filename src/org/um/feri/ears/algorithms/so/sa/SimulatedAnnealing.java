@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.sa;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -21,7 +21,7 @@ public class SimulatedAnnealing extends Algorithm {
     private static final double ALPHA = 0.99;
     private int subIterations = 20;
 
-    private DoubleSolution globalBest, currentBest;
+    private NumberSolution<Double> globalBest, currentBest;
     private Task task;
     private double[] sigma;
 
@@ -44,7 +44,7 @@ public class SimulatedAnnealing extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         sigma = task.getInterval();
         for (int i = 0; i < task.getNumberOfDimensions(); i++) {
@@ -52,7 +52,7 @@ public class SimulatedAnnealing extends Algorithm {
         }
 
         globalBest = task.getRandomEvaluatedSolution();
-        currentBest = new DoubleSolution(globalBest);
+        currentBest = new NumberSolution<>(globalBest);
 
         while (!task.isStopCriterion()) {
 
@@ -61,7 +61,7 @@ public class SimulatedAnnealing extends Algorithm {
                 if (task.isStopCriterion())
                     break;
                 // create a neighbor by mutating the current best solution
-                DoubleSolution neighbor = neighbor(currentBest);
+                NumberSolution<Double> neighbor = neighbor(currentBest);
 
                 if (task.isFirstBetter(neighbor, currentBest)) {
                     currentBest = neighbor;
@@ -84,9 +84,9 @@ public class SimulatedAnnealing extends Algorithm {
         return globalBest;
     }
 
-    private DoubleSolution neighbor(DoubleSolution currentBest) throws StopCriterionException {
+    private NumberSolution<Double> neighbor(NumberSolution<Double> currentBest) throws StopCriterionException {
 
-        double[] currentVariables = currentBest.getDoubleVariables();
+        double[] currentVariables = Util.toDoubleArray(currentBest.getVariables());
         double[] x = new double[task.getNumberOfDimensions()];
         for (int i = 0; i < task.getNumberOfDimensions(); i++) {
             if (Util.nextDouble() <= mu) {

@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
@@ -55,7 +56,7 @@ import org.um.feri.ears.problems.Task;
  * 
  */
 public class RandomWalkAlgorithmLogging extends Algorithm {
-	DoubleSolution i;
+	NumberSolution i;
 	Task task;
 	
 	boolean debug=false;
@@ -70,14 +71,14 @@ public class RandomWalkAlgorithmLogging extends Algorithm {
 	}
 	
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+	public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
 		task = taskProblem;
-		DoubleSolution ii;
+		NumberSolution<Double> ii;
 		i = taskProblem.getRandomEvaluatedSolution();
 		if (debug)
 			System.out.println(taskProblem.getNumberOfEvaluations() + " " + i);
 		while (!taskProblem.isStopCriterion()) {
-			List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
+			List<SolutionBase> parents = new ArrayList<>();
 			ii = taskProblem.getRandomEvaluatedSolution();
 			parents.add(i);
 			taskProblem.addAncestors(ii, parents);

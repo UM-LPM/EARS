@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.mfo;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -17,10 +17,10 @@ public class MFO extends Algorithm {
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
-    private DoubleSolution bestFlame;
+    private NumberSolution<Double> bestFlame;
     private double flameNum;
     private Task task;
-    private ArrayList<DoubleSolution> population;
+    private ArrayList<NumberSolution<Double>> population;
 
     public MFO() {
         this(20);
@@ -44,7 +44,7 @@ public class MFO extends Algorithm {
     }
 
     private void initPopulation() throws StopCriterionException {
-        population = new ArrayList<DoubleSolution>();
+        population = new ArrayList<>();
 
         for (int i = 0; i < popSize; i++) {
             population.add(task.getRandomEvaluatedSolution());
@@ -54,13 +54,13 @@ public class MFO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
         this.task = task;
         initPopulation();
 
         population.sort(new TaskComparator(task));
 
-        bestFlame = new DoubleSolution(population.get(0));
+        bestFlame = new NumberSolution<>(population.get(0));
 
         int maxIt = 10000;
         if (task.getStopCriterion() == StopCriterion.ITERATIONS) {

@@ -22,12 +22,11 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
-import org.um.feri.ears.algorithms.so.cmaes.*;
 
 public class CMAES extends Algorithm {
 
@@ -35,7 +34,7 @@ public class CMAES extends Algorithm {
 	private Task task;
 	private int N;
 
-	private DoubleSolution best;
+	private NumberSolution<Double> best;
 
 	private final MyMath math = new MyMath();
 	private double axisratio;
@@ -74,9 +73,9 @@ public class CMAES extends Algorithm {
 	private long countCupdatesSinceEigenupdate;
 	private int idxRecentOffspring;
 
-	private DoubleSolution[] arx; //current population
+	private NumberSolution<Double>[] arx; //current population
 	/** recent population, no idea whether this is useful to be public */
-	private DoubleSolution[] population; // offspring population
+	private NumberSolution<Double>[] population; // offspring population
 	private double[] xold;
 
 	private double[] BDz;
@@ -213,8 +212,8 @@ public class CMAES extends Algorithm {
 		BDz = new double[N];
 		artmp = new double[N];
 
-		arx = new DoubleSolution[sp.getLambda()];
-		population = new DoubleSolution[sp.getLambda()];
+		arx = new NumberSolution[sp.getLambda()];
+		population = new NumberSolution[sp.getLambda()];
 
 		// initialization
 		for (i = 0; i < N; ++i) {
@@ -254,7 +253,7 @@ public class CMAES extends Algorithm {
 	}
 
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+	public NumberSolution execute(Task taskProblem) throws StopCriterionException {
 		
 		task = taskProblem;
 		timings = new Timing();
@@ -293,7 +292,7 @@ public class CMAES extends Algorithm {
 				else
 					return best;
 
-				population[i] = new DoubleSolution(arx[i]); 
+				population[i] = new NumberSolution<>(arx[i]);
 			}
 			
 			updateDistribution();         // pass fitness array to update search distribution
@@ -347,10 +346,10 @@ public class CMAES extends Algorithm {
 
 		/* save/update bestever-value */
 		if(best == null)
-			best = new DoubleSolution(arx[0]);
+			best = new NumberSolution<Double>(arx[0]);
 		
 		if(task.isFirstBetter(arx[0], best))
-			best = new DoubleSolution(arx[0]);
+			best = new NumberSolution<Double>(arx[0]);
 
 
 		/* re-calculate diagonal flag */
@@ -519,8 +518,7 @@ public class CMAES extends Algorithm {
 				}
 			}
 			// redo this while isOutOfBounds(arx[iNk])
-			DoubleSolution sol = new DoubleSolution();
-			sol.setVariables(var);
+			NumberSolution<Double> sol = new NumberSolution<>(1, var);
 			arx[iNk] = sol;
 		}
 

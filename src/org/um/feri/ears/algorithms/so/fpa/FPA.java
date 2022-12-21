@@ -7,13 +7,12 @@ import org.apache.commons.math3.special.Gamma;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.fpa.Distribution;
 
 
 import java.util.ArrayList;
@@ -31,8 +30,8 @@ public class FPA extends Algorithm {
     private static final double stdDevND = 1.0;
 
     private Task task;
-    private DoubleSolution best;
-    private ArrayList<DoubleSolution> population;
+    private NumberSolution<Double> best;
+    private ArrayList<NumberSolution<Double>> population;
 
     public FPA() {
         this(20, 1.5, 0.8);
@@ -57,7 +56,7 @@ public class FPA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
         this.task = task;
         initPopulation();
 
@@ -99,7 +98,7 @@ public class FPA extends Algorithm {
                 // Evaluate new solution
                 if (this.task.isStopCriterion())
                     break;
-                DoubleSolution newSolution = this.task.eval(candidate);
+                NumberSolution<Double> newSolution = this.task.eval(candidate);
 
                 // If the new solution is better: Replace
                 if (this.task.isFirstBetter(newSolution, population.get(i))) {
@@ -108,7 +107,7 @@ public class FPA extends Algorithm {
 
                 // Update best solution
                 if (this.task.isFirstBetter(newSolution, best)) {
-                    best = new DoubleSolution(newSolution);
+                    best = new NumberSolution<>(newSolution);
                 }
 
             }
@@ -139,17 +138,17 @@ public class FPA extends Algorithm {
     }
 
     private void initPopulation() throws StopCriterionException {
-        population = new ArrayList<DoubleSolution>();
+        population = new ArrayList<>();
 
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            DoubleSolution newSolution = task.getRandomEvaluatedSolution();
+            NumberSolution<Double> newSolution = task.getRandomEvaluatedSolution();
             population.add(newSolution);
         }
 
         population.sort(new TaskComparator(task));
-        best = new DoubleSolution(population.get(0));
+        best = new NumberSolution<>(population.get(0));
     }
 
     @Override

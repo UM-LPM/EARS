@@ -1,6 +1,6 @@
 package org.um.feri.ears.algorithms.so.gsa;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * Created by Nik Orter on 22. 10. 2016.
  */
-public class Agent extends DoubleSolution {
+public class Agent extends NumberSolution<Double> {
     private double mass;
     private double[] velocities;
     private double[] forces;
@@ -24,7 +24,7 @@ public class Agent extends DoubleSolution {
 
     }
 
-    public Agent(DoubleSolution ds, Task t) {
+    public Agent(NumberSolution<Double> ds, Task t) {
         super(ds);
         velocities = new double[t.getNumberOfDimensions()];
         //Arrayscopy

@@ -386,4 +386,12 @@ public class Util {
         }
         return maxValue;
     }
+
+    public static double[] toDoubleArray(List<Double> list) {
+        return list.stream().mapToDouble(d -> d).toArray();
+    }
+
+    public static int[] toIntArray(List<Integer> list) {
+        return list.stream().mapToInt(i -> i).toArray();
+    }
 }

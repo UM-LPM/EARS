@@ -1,6 +1,6 @@
 package org.um.feri.ears.memory;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.util.report.Pair;
 import org.um.feri.ears.util.report.ReportBank;
@@ -16,11 +16,11 @@ public class MemoryBankDoubleSolutionFast {
     int precisionInDecimalPlaces;
     int duplicationHitSum;
     int duplicationBeforeGlobal;
-    private HashMap<Long, DoubleSolution> hashMapMemory;
+    private HashMap<Long, NumberSolution> hashMapMemory;
     private HashMap<Long, Integer> hashMapMemoryHits;
     DuplicationRemovalStrategy updateStrategy;
     public static boolean convergenceGraphDataCollect = false;
-    DoubleSolution best4ConvergenceGraph;
+    NumberSolution<Double> best4ConvergenceGraph;
 
     public static void convergenceGraphRecord() {
         convergenceGraphDataCollect = true;
@@ -75,7 +75,7 @@ public class MemoryBankDoubleSolutionFast {
     }
 
 
-    public DoubleSolution getRandomSolution(TaskWithMemory task) throws StopCriterionException {
+    public NumberSolution<Double> getRandomSolution(TaskWithMemory task) throws StopCriterionException {
         double[] d = task.getRandomVariables();
         return eval(task, d);
     }
@@ -87,9 +87,9 @@ public class MemoryBankDoubleSolutionFast {
      * }
      */
 
-    public DoubleSolution eval(TaskWithMemory task, double[] x) throws StopCriterionException {
+    public NumberSolution<Double> eval(TaskWithMemory task, double[] x) throws StopCriterionException {
         round(x);
-        DoubleSolution ds;
+        NumberSolution<Double> ds;
         Long key = fastKeyNot100Unique(x);
         if (hashMapMemory.containsKey(key)) {
             duplicationHitSum++;

@@ -3,12 +3,11 @@ package org.um.feri.ears.algorithms.so.bfo;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.bfo.Bacteria;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +68,7 @@ public class BFO extends Algorithm {
 
     private Bacteria chemotaxis(Bacteria b, Task task) throws StopCriterionException {
         double[] di = new double[task.getNumberOfDimensions()];
-        double[] cb = b.getDoubleVariables();
+        double[] cb = Util.toDoubleArray(b.getVariables());
         double[] xn = new double[task.getNumberOfDimensions()];
         double rootProduct = 0;
         for (int i = 0; i < di.length; i++) {
@@ -113,7 +112,7 @@ public class BFO extends Algorithm {
     private void reproduction() throws StopCriterionException {
         Collections.sort(swarm);
         for (int i = 0; i < Sr; i++)
-            swarm.get(i).c = getAvgDistance(swarm.get(i).getDoubleVariables(), swarm.get(i + 1).getDoubleVariables());
+            swarm.get(i).c = getAvgDistance(Util.toDoubleArray(swarm.get(i).getVariables()), Util.toDoubleArray(swarm.get(i + 1).getVariables()));
 
         for (int i = 0; i < Sr; i++)
             swarm.set(i + Sr, new Bacteria(swarm.get(i)));
@@ -141,7 +140,7 @@ public class BFO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
         Ci = getAvgDistance(task.getUpperLimit(), task.getLowerLimit()) / 5;
 
         initSwarm(task);

@@ -12,7 +12,7 @@ public class TaskWithMemory extends Task {
     private static int NOT_SET_EVAL=-1;
     private boolean isStagnation;
     int internalStagnationCounter;
-    DoubleSolution best;
+    NumberSolution<Double> best;
 
     public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
                           Problem p, int xPrecision, DuplicationRemovalStrategy strategy, int stopDuplicatesStagnationPerc) {
@@ -41,8 +41,8 @@ public class TaskWithMemory extends Task {
         sb = new StringBuilder();
     }
 
-    public DoubleSolution evalOrg(double[] x) throws StopCriterionException {
-        DoubleSolution tmp = super.eval(x);
+    public NumberSolution<Double> evalOrg(double[] x) throws StopCriterionException {
+        NumberSolution<Double> tmp = super.eval(x);
         if (isStagnation) {
             if (best == null) {
                 best = tmp;
@@ -60,12 +60,12 @@ public class TaskWithMemory extends Task {
     }
 
     @Override
-    public DoubleSolution getRandomEvaluatedSolution() throws StopCriterionException {
+    public NumberSolution<Double> getRandomEvaluatedSolution() throws StopCriterionException {
         return mb.getRandomSolution(this);
     }
 
     @Override
-    public DoubleSolution eval(double[] x) throws StopCriterionException {
+    public NumberSolution<Double> eval(double[] x) throws StopCriterionException {
         return mb.eval(this, x);
     }
 

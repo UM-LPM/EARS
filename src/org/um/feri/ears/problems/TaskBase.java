@@ -23,7 +23,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
     protected int stagnationTrialCounter = 0;
 
     //protected StringBuilder ancestorSB;
-    protected ArrayList<DoubleSolution> ancestors;
+    protected ArrayList<SolutionBase> ancestors;
     protected boolean isAncestorLoggingEnabled = false;
     protected ArrayList<EvaluationStorage.Evaluation> evaluationHistory;
     protected boolean isEvaluationHistoryEnabled = false;
@@ -55,7 +55,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
      *
      * @return deep copy of the task object
      */
-    abstract public TaskBase clone();
+    abstract public TaskBase<T> clone();
 
     /**
      * Has the global optimum been reached.
@@ -141,7 +141,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
     public void enableAncestorLogging() {
         isAncestorLoggingEnabled = true;
         if (ancestors == null)
-            ancestors = new ArrayList<DoubleSolution>();
+            ancestors = new ArrayList<>();
     }
 
     public void disableAncestorLogging() {
@@ -174,7 +174,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
         this.storeEveryNthEvaluation = storeEveryNthEvaluation;
     }
 
-    public ArrayList<DoubleSolution> getAncestors() {
+    public ArrayList<SolutionBase> getAncestors() {
         return ancestors;
     }
 

@@ -5,7 +5,8 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -16,7 +17,7 @@ public class JADELogging extends Algorithm {
 	private int elite_size; // calculated by p*pop_size pbest
 	// private double F,CR;
 	private ArrayList<JADEIndividual> elite; // pbest
-	private JADEIndividual pop_x[]; // population
+	private JADEIndividual[] pop_x; // population
 	private ArrayList<JADEIndividual> arch_x; // population
 	private JADEIndividual g; // global best
 
@@ -71,10 +72,10 @@ public class JADELogging extends Algorithm {
 		this.c = c;
 		this.p = p;
 		elite_size = (int) Math.round(pop_size * p);
-		elite = new ArrayList<JADEIndividual>();
-		arch_x = new ArrayList<JADEIndividual>();
-		SCR = new ArrayList<Double>();
-		SF = new ArrayList<Double>();
+		elite = new ArrayList<>();
+		arch_x = new ArrayList<>();
+		SCR = new ArrayList<>();
+		SF = new ArrayList<>();
 		if (elite_size == 0)
 			elite_size = 1;
 		setDebug(debug); // EARS prints some debug info
@@ -90,13 +91,13 @@ public class JADELogging extends Algorithm {
 	}
 
 	@Override
-	public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+	public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
 		g=null;
 		task = taskProblem;
 		elite.clear();
 		arch_x.clear();
-		JADEIndividual pop_new[] = new JADEIndividual[pop_size];
-		double tmp[];
+		JADEIndividual[] pop_new = new JADEIndividual[pop_size];
+		double[] tmp;
 		int j_rand;
 		int D = task.getNumberOfDimensions();
 		int r1, r2, pBest;
@@ -126,7 +127,7 @@ public class JADELogging extends Algorithm {
 				// System.out.print(
 				// "("+pop_x[i].getCR()+", "+pop_x[i].getF()+") ");
 				j_rand = Util.rnd.nextInt(D);
-				tmp = pop_x[i].getDoubleVariables();
+				tmp = Util.toDoubleArray(pop_x[i].getVariables());
 				do {
 					r1 = Util.rnd.nextInt(pop_size);
 				} while (r1 == i);
@@ -151,7 +152,7 @@ public class JADELogging extends Algorithm {
 														.getValue(d)), d);
 					}
 				}
-				List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
+				List<SolutionBase> parents = new ArrayList<>();
 				parents.add(pop_x[i]);
 				parents.add(pop_x[r1]);
 				parents.add(in_r2);

@@ -3,7 +3,7 @@ package org.um.feri.ears.engine;
 import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.so.ff.FireflyAlgorithm;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -71,7 +71,7 @@ public class BenchmarkRunner {
 			for (int i = 0; i < numberOfRuns; i++) {
 				long runDuration = System.nanoTime();
 				logger.log(Level.INFO, "run "+ (i+1));
-				DoubleSolution result;
+				NumberSolution result;
 				try {
 					result = algorithm.execute(t);
 				} catch (StopCriterionException e) {

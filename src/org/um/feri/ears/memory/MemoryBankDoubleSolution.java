@@ -1,7 +1,8 @@
 package org.um.feri.ears.memory;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.report.Pair;
 import org.um.feri.ears.util.report.ReportBank;
 
@@ -20,11 +21,11 @@ public class MemoryBankDoubleSolution {
     int duplicationHitSum;
     int duplicationBeforeGlobal;
     StringBuilder sb;
-    private HashMap<String, DoubleSolution> hashMapMemory;
+    private HashMap<String, NumberSolution<Double>> hashMapMemory;
     private HashMap<String, Integer> hashMapMemoryHits;
     DuplicationRemovalStrategy updateStrategy;
     public static boolean convergenceGraphDataCollect = false;
-    DoubleSolution best4ConvergenceGraph;
+    NumberSolution<Double> best4ConvergenceGraph;
 
     public static void convergenceGraphRecord() {
         convergenceGraphDataCollect = true;
@@ -98,7 +99,7 @@ public class MemoryBankDoubleSolution {
 
     }
 
-    public DoubleSolution getRandomSolution(TaskWithMemory task) throws StopCriterionException {
+    public NumberSolution<Double> getRandomSolution(TaskWithMemory task) throws StopCriterionException {
         double[] d = task.getRandomVariables();
         return eval(task, d);
     }
@@ -110,9 +111,9 @@ public class MemoryBankDoubleSolution {
      * }
      */
 
-    public DoubleSolution eval(TaskWithMemory task, double[] x) throws StopCriterionException {
+    public NumberSolution<Double> eval(TaskWithMemory task, double[] x) throws StopCriterionException {
         // round(x);
-        DoubleSolution ds;
+        NumberSolution<Double> ds;
         String key = encodeKeyPerc(x);
         //last evaluation record data
         if (1 + duplicationHitSum + task.getNumberOfEvaluations() == task.getMaxEvaluations()) {
@@ -163,7 +164,7 @@ public class MemoryBankDoubleSolution {
                 }
                 hashMapMemoryHits.put(key, hashMapMemoryHits.get(key) + 1);
             }
-            ds = new DoubleSolution(hashMapMemory.get(key)); //do I need new?
+            ds = new NumberSolution<>(hashMapMemory.get(key)); //do I need new?
   /*    if (converganceGraphDataCollect) {
         if (best4ConverganceGraph == null)
           best4ConverganceGraph = ds;
@@ -203,8 +204,8 @@ public class MemoryBankDoubleSolution {
         hashMapMemoryHits.clear();
     }
 
-    public boolean contains(DoubleSolution ds) {
-        return hashMapMemory.containsKey(encodeKey(ds.getDoubleVariables()));
+    public boolean contains(NumberSolution<Double> ds) {
+        return hashMapMemory.containsKey(encodeKey(Util.toDoubleArray(ds.getVariables())));
     }
 
     public void clearMemory() {

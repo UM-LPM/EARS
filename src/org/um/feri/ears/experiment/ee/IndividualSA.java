@@ -1,10 +1,8 @@
 package org.um.feri.ears.experiment.ee;
 
-import java.util.List;
+import org.um.feri.ears.problems.NumberSolution;
 
-import org.um.feri.ears.problems.DoubleSolution;
-
-public class IndividualSA extends DoubleSolution {
+public class IndividualSA extends NumberSolution<Double> {
     private double F;
     private double CR;
 
@@ -13,7 +11,7 @@ public class IndividualSA extends DoubleSolution {
         this.F = i.F;
         this.CR =i.CR;
     }
-    public IndividualSA(DoubleSolution i, double F, double CR) {
+    public IndividualSA(NumberSolution<Double> i, double F, double CR) {
         super(i);
         this.F = F;
         this.CR = CR;

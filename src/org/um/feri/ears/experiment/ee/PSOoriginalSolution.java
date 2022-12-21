@@ -2,14 +2,14 @@ package org.um.feri.ears.experiment.ee;
 
 import java.util.Arrays;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class PSOoriginalSolution extends DoubleSolution {
+public class PSOoriginalSolution extends NumberSolution<Double> {
 	PSOoriginalSolution Pbest;
-	double v[];
+	double[] v;
 
 	public PSOoriginalSolution getPbest() {
 		return Pbest;
@@ -36,7 +36,7 @@ public class PSOoriginalSolution extends DoubleSolution {
 		Pbest = this;
 	}
 
-	public PSOoriginalSolution(DoubleSolution eval) {
+	public PSOoriginalSolution(NumberSolution<Double> eval) {
 		super(eval);
 
 	}
@@ -46,8 +46,8 @@ public class PSOoriginalSolution extends DoubleSolution {
 		return super.toString() + " v:" + (Arrays.toString(v) + " p:" + Pbest.getEval());
 	}
 
-	public PSOoriginalSolution update(Task t, double v[]) throws StopCriterionException {
-		double x[] = getDoubleVariables();
+	public PSOoriginalSolution update(Task t, double[] v) throws StopCriterionException {
+		double[] x = Util.toDoubleArray(getVariables());
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.setFeasible(x[i] + v[i], i);
 		}
@@ -62,7 +62,7 @@ public class PSOoriginalSolution extends DoubleSolution {
 	}
 	
 	public PSOoriginalSolution updateP(Task t, double sigma) throws StopCriterionException {
-		double x[] = getDoubleVariables();
+		double[] x = Util.toDoubleArray(getVariables());
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.setFeasible(x[i] + sigma * Util.rnd.nextDouble(), i);
 		}
@@ -78,7 +78,7 @@ public class PSOoriginalSolution extends DoubleSolution {
 	}
 	
 	public PSOoriginalSolution updatePa(Task t, double sigma) throws StopCriterionException {
-		double x[] = getDoubleVariables();
+		double[] x = Util.toDoubleArray(getVariables());
 		for (int i = 0; i < x.length; i++) {
 			x[i] = t.setFeasible(x[i] + sigma * Util.rnd.nextDouble(), i);
 		}

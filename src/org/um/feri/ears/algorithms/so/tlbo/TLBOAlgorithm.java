@@ -1,7 +1,7 @@
 package org.um.feri.ears.algorithms.so.tlbo;
 
 import org.um.feri.ears.algorithms.*;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
@@ -20,7 +20,7 @@ public class TLBOAlgorithm extends Algorithm {
     private Task task;
 
     private int gen;
-    private DoubleSolution[] population;
+    private NumberSolution<Double>[] population;
 
     private static boolean removeDuplicates = true;
     public Statistic stat;
@@ -29,7 +29,7 @@ public class TLBOAlgorithm extends Algorithm {
     private int dimensions;
     private double[] lowerLimit;
     private double[] upperLimit;
-    private ArrayList<DoubleSolution> keepList;
+    private ArrayList<NumberSolution<Double>> keepList;
     public static boolean test = false;
 
     private int keep = 0; // copy best from ex generation
@@ -53,7 +53,7 @@ public class TLBOAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         dimensions = task.getNumberOfDimensions();
         // max_eval = task.getMaxEvaluations();
@@ -94,15 +94,15 @@ public class TLBOAlgorithm extends Algorithm {
             for (int j = i + 1; j < popSize; j++) {
                 if (task.isStopCriterion())
                     return; // end jump out
-                System.arraycopy(population[i].getDoubleVariables(), 0, tmp1, 0, dimensions);
-                System.arraycopy(population[j].getDoubleVariables(), 0, tmp2, 0, dimensions);
+                System.arraycopy(Util.toDoubleArray(population[i].getVariables()), 0, tmp1, 0, dimensions);
+                System.arraycopy(Util.toDoubleArray(population[j].getVariables()), 0, tmp2, 0, dimensions);
                 Arrays.sort(tmp1);
                 Arrays.sort(tmp2);
                 if (Arrays.equals(tmp1, tmp2)) {
                     // on random place change value
                     stat.getCurrent_g().incDouple();
                     int pos = Util.rnd.nextInt(dimensions);
-                    tmp3 = population[j].getDoubleVariables();
+                    tmp3 = Util.toDoubleArray(population[j].getVariables());
 
                     tmp3[pos] = Util.nextDouble(lowerLimit[pos], upperLimit[pos]);
                     StopCriterionException.id = " 3";
@@ -120,10 +120,10 @@ public class TLBOAlgorithm extends Algorithm {
 
     private void init() throws StopCriterionException {
 
-        population = new DoubleSolution[popSize];
+        population = new NumberSolution[popSize];
         lowerLimit = task.getLowerLimit();
         upperLimit = task.getUpperLimit();
-        DoubleSolution best = task.getRandomEvaluatedSolution();
+        NumberSolution<Double> best = task.getRandomEvaluatedSolution();
         population[0] = best;
         for (int i = 1; i < popSize; i++) {
             population[i] = task.getRandomEvaluatedSolution();
@@ -155,19 +155,19 @@ public class TLBOAlgorithm extends Algorithm {
         double[] newMean = new double[dimensions];
         double[] difMean = new double[dimensions];
         double[][] popTmp = new double[popSize][dimensions];
-        DoubleSolution[] evalTmp = new DoubleSolution[popSize];
-        DoubleSolution[] island1 = new DoubleSolution[popSize];
+        NumberSolution<Double>[] evalTmp = new NumberSolution[popSize];
+        NumberSolution<Double>[] island1 = new NumberSolution[popSize];
         gen = 0;
-        DoubleSolution bestEvalCond = stat.getBest();
+        NumberSolution<Double> bestEvalCond = stat.getBest();
         while (!task.isStopCriterion()) { // generation or evaluations
             stat.newGeneration(gen);
             M = mean();
             if (test)
                 System.out.println("mean M=" + Arrays.toString(M));
-            newMean = population[0].getDoubleVariables();
+            newMean = Util.toDoubleArray(population[0].getVariables());
             // Keep not in paper
             for (int k = 0; k < keep; k++)
-                keepList.add(new DoubleSolution(population[k]));
+                keepList.add(new NumberSolution<>(population[k]));
             // Teacher phase
             // For every dimension it calculates dif_mean
             for (int n = 0; n < dimensions; n++) {
@@ -180,7 +180,7 @@ public class TLBOAlgorithm extends Algorithm {
             for (int i = 0; i < popSize; i++) {
                 if (task.isStopCriterion())
                     break; // in loop after incEval
-                tmpX = population[i].getDoubleVariables();
+                tmpX = Util.toDoubleArray(population[i].getVariables());
                 for (int n = 0; n < dimensions; n++) {
                     popTmp[i][n] = task.setFeasible(tmpX[n] + difMean[n], n);
                 }
@@ -213,8 +213,8 @@ public class TLBOAlgorithm extends Algorithm {
                     System.out.println("\nBasic " + population[i_first]);
                 if (test)
                     System.out.println("Learning partner " + population[ii]);
-                tmpX = population[i_first].getDoubleVariables();
-                tmpY = population[ii].getDoubleVariables();
+                tmpX = Util.toDoubleArray(population[i_first].getVariables());
+                tmpY = Util.toDoubleArray(population[ii].getVariables());
                 tmpIsland = new double[dimensions];
                 if (task.isFirstBetter(population[i_first], population[ii])) {
                     for (int n = 0; n < dimensions; n++) {

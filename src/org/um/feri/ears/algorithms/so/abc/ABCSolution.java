@@ -1,8 +1,8 @@
 package org.um.feri.ears.algorithms.so.abc;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
-public class ABCSolution extends DoubleSolution{
+public class ABCSolution extends NumberSolution<Double> {
 	
 	public int trials = 0;
 	private double prob;
@@ -15,7 +15,7 @@ public class ABCSolution extends DoubleSolution{
 		this.prob = prob;
 	}
 
-	public ABCSolution(DoubleSolution s)
+	public ABCSolution(NumberSolution<Double> s)
 	{
 		super(s);
 	}

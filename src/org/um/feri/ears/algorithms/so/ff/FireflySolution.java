@@ -1,8 +1,8 @@
 package org.um.feri.ears.algorithms.so.ff;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
-public class FireflySolution extends DoubleSolution {
+public class FireflySolution extends NumberSolution<Double> {
 
     private double I = 1.0; //I[i] in C++ version, intensity
     private double f = 1.0; //f[i] in C++ version, attractiveness
@@ -11,7 +11,7 @@ public class FireflySolution extends DoubleSolution {
     //but since attractiveness is relavent to distance of i and j fireflies 
     //by coding convention C++ code set I and f the same and f is actually computed inside move_ffa function
 
-    public FireflySolution(DoubleSolution s) {
+    public FireflySolution(NumberSolution<Double> s) {
         super(s); //holds ffa variable of C++. ffa is coordinate of firefly in search space
         f = s.getEval();
         I = f;

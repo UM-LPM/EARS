@@ -9,7 +9,7 @@ package org.um.feri.ears.algorithms.so.fss;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -17,8 +17,8 @@ import org.um.feri.ears.quality_indicator.QualityIndicatorUtil;
 import org.um.feri.ears.util.comparator.TaskComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.fss.FishSolution;
 
+import java.io.FileDescriptor;
 import java.util.ArrayList;
 
 public class FSS extends Algorithm {
@@ -26,7 +26,7 @@ public class FSS extends Algorithm {
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
-    private DoubleSolution best;
+    private NumberSolution<Double> best;
     private Task task;
 
     //Parameters
@@ -61,7 +61,7 @@ public class FSS extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
         this.task = task;
         initPopulation();
 
@@ -131,7 +131,7 @@ public class FSS extends Algorithm {
         int countSuccess = 0;
         for (FishSolution fish : school) {
 
-            double[] newSolution = fish.neighbor.getDoubleVariables();
+            double[] newSolution = Util.toDoubleArray(fish.neighbor.getVariables());
 
             double de = 0.0;
 
@@ -161,19 +161,19 @@ public class FSS extends Algorithm {
 
                 //update current if neighbor is best
                 fish.volatileMoveSuccess = false;
-                if (task.isFirstBetter(fish.neighbor, fish.current)) {
-                    fish.current = new DoubleSolution(fish.neighbor);
+                if (task.isFirstBetter(fish.neighbor, fish)) {
+                    fish = new FishSolution(fish.neighbor);
                     fish.volatileMoveSuccess = true;
                     countSuccess++;
                 }
 
                 //if need replace best solution
-                if (task.isFirstBetter(fish.current, fish.best)) {
-                    fish.best = new DoubleSolution(fish.current);
+                if (task.isFirstBetter(fish, fish.best)) {
+                    fish.best = new NumberSolution<>(fish);
                 }
 
                 if (task.isFirstBetter(fish.best, best)) {
-                    best = new DoubleSolution(fish.best);
+                    best = new NumberSolution<>(fish.best);
                 }
 
             } else {
@@ -191,7 +191,7 @@ public class FSS extends Algorithm {
 
         for (FishSolution fish : school) {
             //use current as template to neighbor
-            fish.neighbor = new DoubleSolution(fish.current);
+            fish.neighbor = new NumberSolution<>(fish);
 
             //update neighbor with instinctive direction
             for (int i = 0; i < task.getNumberOfDimensions(); i++) {
@@ -271,9 +271,9 @@ public class FSS extends Algorithm {
         int countSuccess = 0;
         for (FishSolution fish : school) {
             //use current as template for neighbor
-            fish.neighbor = new DoubleSolution(fish.current);
+            fish.neighbor = new NumberSolution<>(fish);
 
-            double[] newSolution = fish.neighbor.getDoubleVariables();
+            double[] newSolution = Util.toDoubleArray(fish.neighbor.getVariables());
 
             for (int i = 0; i < task.getNumberOfDimensions(); i++) {
                 //calculate displacement
@@ -293,23 +293,23 @@ public class FSS extends Algorithm {
             fish.neighbor = task.eval(newSolution);
 
             //calculate fitness difference
-            fish.delta_f = fish.neighbor.getEval() - fish.current.getEval();
+            fish.delta_f = fish.neighbor.getEval() - fish.getEval();
 
             //update current if neighbor is best
             fish.individualMoveSuccess = false;
-            if (task.isFirstBetter(fish.neighbor, fish.current)) {
-                fish.current = new DoubleSolution(fish.neighbor);
+            if (task.isFirstBetter(fish.neighbor, fish)) {
+                fish = new FishSolution(fish.neighbor);
                 fish.individualMoveSuccess = true;
                 countSuccess++;
             }
 
             //if need replace best solution
-            if (task.isFirstBetter(fish.current, fish.best)) {
-                fish.best = new DoubleSolution(fish.current);
+            if (task.isFirstBetter(fish, fish.best)) {
+                fish.best = new NumberSolution<>(fish);
             }
 
             if (task.isFirstBetter(fish.best, best)) {
-                best = new DoubleSolution(fish.best);
+                best = new NumberSolution<>(fish.best);
             }
 
         }
@@ -327,7 +327,7 @@ public class FSS extends Algorithm {
         }
 
         school.sort(new TaskComparator(task));
-        best = new DoubleSolution(school.get(0).current);
+        best = new NumberSolution<>(school.get(0));
 		
 		/*StringBuilder sb = new StringBuilder();
 		
@@ -335,7 +335,7 @@ public class FSS extends Algorithm {
 		for(int k = 0; k < pop_size; k++)
 		{
 			
-			double[] var = population.get(k).getDoubleVariables();
+			double[] var = Util.toDoubleArray(population.get(k).getVariables());
 			for (int i = 0; i < var.length; i++) {
 				sb.append(var[i]);
 				if(i+1 < var.length)

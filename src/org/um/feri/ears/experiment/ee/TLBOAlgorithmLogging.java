@@ -8,7 +8,8 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
@@ -22,7 +23,7 @@ public class TLBOAlgorithmLogging extends Algorithm {
     int gen;
     int num_var = 5;
     // double pmutate = 0;
-    DoubleSolution population[]; // pop_size X dimension
+    NumberSolution<Double>[] population; // pop_size X dimension
     // double eval[]; // pop_size
 
     // double averageCost; //for stat
@@ -31,9 +32,9 @@ public class TLBOAlgorithmLogging extends Algorithm {
     public Statistic stat;
     public static boolean useTF = true;
     public static boolean useAll4Mean = true;// used for internal tests
-    private double lowerLimit[];
-    private double upperLimit[];
-    private ArrayList<DoubleSolution> keepList;
+    private double[] lowerLimit;
+    private double[] upperLimit;
+    private ArrayList<NumberSolution<Double>> keepList;
     public static boolean test = false;
 
     public Statistic getStat() {
@@ -57,7 +58,7 @@ public class TLBOAlgorithmLogging extends Algorithm {
     }
     
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
         num_var = task.getNumberOfDimensions();
         // max_eval = task.getMaxEvaluations();
@@ -96,23 +97,23 @@ public class TLBOAlgorithmLogging extends Algorithm {
      * @throws StopCriterionException
      */
     private void clearDups() throws StopCriterionException {
-        double tmp1[] = new double[num_var];
-        double tmp2[] = new double[num_var];
-        double tmp3[];
+        double[] tmp1 = new double[num_var];
+        double[] tmp2 = new double[num_var];
+        double[] tmp3;
         for (int i = 0; i < pop_size; i++) {
             for (int j = i + 1; j < pop_size; j++) {
                 if (task.isStopCriterion())
                     return; // end jump out
-                System.arraycopy(population[i].getDoubleVariables(), 0, tmp1, 0, num_var);
-                System.arraycopy(population[j].getDoubleVariables(), 0, tmp2, 0, num_var);
+                System.arraycopy(Util.toDoubleArray(population[i].getVariables()), 0, tmp1, 0, num_var);
+                System.arraycopy(Util.toDoubleArray(population[j].getVariables()), 0, tmp2, 0, num_var);
                 Arrays.sort(tmp1);
                 Arrays.sort(tmp2);
                 if (Arrays.equals(tmp1, tmp2)) {
-                	List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
+                	List<SolutionBase> parents = new ArrayList<>();
                     // on random place change value
                     stat.getCurrent_g().incDouple();
                     int pos = Util.rnd.nextInt(num_var);
-                    tmp3 = population[j].getDoubleVariables();
+                    tmp3 = Util.toDoubleArray(population[j].getVariables());
                     
                     parents.add(population[j]);
                     tmp3[pos] = Util.nextDouble(lowerLimit[pos], upperLimit[pos]);
@@ -132,7 +133,7 @@ public class TLBOAlgorithmLogging extends Algorithm {
 
     private void init() throws StopCriterionException {
 
-        population = new DoubleSolution[pop_size];
+        population = new NumberSolution[pop_size];
         lowerLimit = task.getLowerLimit();
         upperLimit = task.getUpperLimit();
         for (int i = 0; i < pop_size; i++) {
@@ -146,29 +147,29 @@ public class TLBOAlgorithmLogging extends Algorithm {
         // printAllPopulation();
         sortByFirstBetterCondition();
         stat.getCurrent_g().setBest(population[0]);
-        keepList = new ArrayList<DoubleSolution>();
+        keepList = new ArrayList<>();
     }
 
     private void aTeacher() throws StopCriterionException {
         int TF = 1;
-        double M[];
-        double tmpX[], tmpY[], tmpIsland[];
-        double new_mean[] = new double[num_var];
-        double Dif_mean[] = new double[num_var];
-        double pop_tmp[][] = new double[pop_size][num_var];
-        DoubleSolution eval_tmp[] = new DoubleSolution[pop_size];
-        DoubleSolution Island_1[] = new DoubleSolution[pop_size];
+        double[] M;
+        double[] tmpX, tmpY, tmpIsland;
+        double[] new_mean = new double[num_var];
+        double[] Dif_mean = new double[num_var];
+        double[][] pop_tmp = new double[pop_size][num_var];
+        NumberSolution<Double>[] eval_tmp = new NumberSolution[pop_size];
+        NumberSolution<Double>[] Island_1 = new NumberSolution[pop_size];
         gen = 0;
-        DoubleSolution bestEvalCond = stat.getBest();
+        NumberSolution<Double> bestEvalCond = stat.getBest();
         while (!task.isStopCriterion()) { // generation or evaluations
             stat.newGeneration(gen);
             M = mean();
             if (test)
                 System.out.println("mean M=" + Arrays.toString(M));
-            new_mean = population[0].getDoubleVariables();
+            new_mean = Util.toDoubleArray(population[0].getVariables());
             // Keep not in paper
             for (int k = 0; k < Keep; k++)
-                keepList.add(new DoubleSolution(population[k]));
+                keepList.add(new NumberSolution<>(population[k]));
             // Teacher phase
             // For every dimension it calculates dif_mean
             for (int n = 0; n < num_var; n++) {
@@ -179,10 +180,10 @@ public class TLBOAlgorithmLogging extends Algorithm {
             if (test)
                 System.out.println("Dif_mean Dif_mean=" + Arrays.toString(Dif_mean));
             for (int i = 0; i < pop_size; i++) {
-            	List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
+            	List<SolutionBase> parents = new ArrayList<>();
                 if (task.isStopCriterion())
                     break; // in loop after incEval
-                tmpX = population[i].getDoubleVariables();
+                tmpX = Util.toDoubleArray(population[i].getVariables());
                 for (int n = 0; n < num_var; n++) {
                     pop_tmp[i][n] = task.setFeasible(tmpX[n] + Dif_mean[n], n);
                 }
@@ -216,8 +217,8 @@ public class TLBOAlgorithmLogging extends Algorithm {
                     System.out.println("\nBasic " + population[i_first]);
                 if (test)
                     System.out.println("Learning partner " + population[ii]);
-                tmpX = population[i_first].getDoubleVariables();
-                tmpY = population[ii].getDoubleVariables();
+                tmpX = Util.toDoubleArray(population[i_first].getVariables());
+                tmpY = Util.toDoubleArray(population[ii].getVariables());
                 tmpIsland = new double[num_var];
                 if (task.isFirstBetter(population[i_first], population[ii])) {
                     for (int n = 0; n < num_var; n++) {
@@ -231,7 +232,7 @@ public class TLBOAlgorithmLogging extends Algorithm {
                 if (test)
                     System.out.println("New " + Arrays.toString(tmpIsland));
                 
-                List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
+                List<SolutionBase> parents = new ArrayList<>();
                 parents.add(population[i_first]);
                 parents.add(population[ii]);
                 Island_1[i_first] = task.eval(tmpIsland, parents);
@@ -279,7 +280,7 @@ public class TLBOAlgorithmLogging extends Algorithm {
         if (maxCombinations == 1) {
             alternative.add(this);
         } else {
-            int paramCombinations[][] = { // {elite, pop_size}
+            int[][] paramCombinations = { // {elite, pop_size}
             { 4, 5 + dimension * 2 }, { 0, 20 }, { 4, 20 }, { 0, 5 + dimension * 2 }, { 0, 50 }, { 4, 50 }, { 0, 100 }, { 4, 100 },
                     { 8, 100 } };
             int counter = 0;

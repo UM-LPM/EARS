@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.rmo;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -16,7 +16,7 @@ public class RMO extends Algorithm {
     private double C1, C2, k;
     private double[][] X;
     private double[] cp;
-    private DoubleSolution cpS;
+    private NumberSolution<Double> cpS;
     private double[][] V;
 
     public RMO() {
@@ -34,10 +34,10 @@ public class RMO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
 
         double[] globalBestX = null;
-        DoubleSolution globalBest = null;
+        NumberSolution<Double> globalBest = null;
 
         X = new double[popSize][task.getNumberOfDimensions()];
         V = new double[popSize][task.getNumberOfDimensions()];
@@ -48,17 +48,17 @@ public class RMO extends Algorithm {
                 X[i][j] = Util.nextDouble(task.getLowerLimit()[j], task.getUpperLimit()[j]);
             }
 
-            DoubleSolution eval = task.eval(X[i]);
+            NumberSolution<Double> eval = task.eval(X[i]);
 
             //Pick best starting center
             if (i == 0) {
                 cp = X[i];
-                cpS = new DoubleSolution(eval);
+                cpS = new NumberSolution<>(eval);
 
                 //System.out.println(task.getNumberOfEvaluations()+" "+ cp_s);
             } else if (task.isFirstBetter(eval, cpS)) {
                 cp = X[i];
-                cpS = new DoubleSolution(eval);
+                cpS = new NumberSolution<>(eval);
 
             }
 
@@ -77,7 +77,7 @@ public class RMO extends Algorithm {
             double W = 1.0 - (1.0 / task.getMaxEvaluations()) * task.getNumberOfEvaluations();
             //W = 1;
             double[] currentBest = new double[task.getNumberOfDimensions()];
-            DoubleSolution currentBestS = null;
+            NumberSolution<Double> currentBestS = null;
 
             //Calculate velocity vectors and move particles
             for (int i = 0; i < popSize; ++i) {
@@ -89,7 +89,7 @@ public class RMO extends Algorithm {
                     X[i][j] = task.setFeasible(V[i][j] * W + cp[j], j);
                 }
 
-                DoubleSolution eval;
+                NumberSolution<Double> eval;
                 if (task.isStopCriterion()) {
                     if (globalBest != null)
                         return globalBest;
@@ -116,7 +116,7 @@ public class RMO extends Algorithm {
                 }
 
                 globalBestX = currentBest.clone();
-                globalBest = new DoubleSolution(currentBestS);
+                globalBest = new NumberSolution<>(currentBestS);
             } else {
                 for (int j = 0; j < cp.length; ++j) {
                     cp[j] = cp[j] + C1 * (globalBestX[j] - cp[j]) + C2 * (currentBest[j] - cp[j]);
@@ -124,7 +124,7 @@ public class RMO extends Algorithm {
 
                 if (task.isFirstBetter(currentBestS, globalBest)) {
                     globalBestX = currentBest.clone();
-                    globalBest = new DoubleSolution(currentBestS);
+                    globalBest = new NumberSolution<>(currentBestS);
 
                     //System.out.println(task.getNumberOfEvaluations()+" "+ globalBest);
                 }

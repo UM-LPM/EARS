@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.tlbo;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
@@ -19,9 +19,9 @@ public class OSSTLBO extends Algorithm {
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
-    private DoubleSolution best;
+    private NumberSolution<Double> best;
     private Task task;
-    private DoubleSolution[] population;
+    private NumberSolution<Double>[] population;
 
     private int m = 0;
 
@@ -43,7 +43,7 @@ public class OSSTLBO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         task = taskProblem;
 
         initPopulation();
@@ -60,16 +60,16 @@ public class OSSTLBO extends Algorithm {
     }
 
     private void initPopulation() throws StopCriterionException {
-        population = new DoubleSolution[popSize];
+        population = new NumberSolution[popSize];
 
         best = task.getRandomEvaluatedSolution();
-        population[0] = new DoubleSolution(best);
+        population[0] = new NumberSolution<>(best);
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
             population[i] = task.getRandomEvaluatedSolution();
             if (task.isFirstBetter(population[i], best)) {
-                best = new DoubleSolution(population[i]);
+                best = new NumberSolution<>(population[i]);
             }
         }
         dynamicOppositeLearning();
@@ -90,12 +90,12 @@ public class OSSTLBO extends Algorithm {
             if (task.isStopCriterion())
                 return;
 
-            DoubleSolution newSolution = task.eval(newX);
+            NumberSolution<Double> newSolution = task.eval(newX);
 
             if (task.isFirstBetter(newSolution, population[i])) {
                 population[i] = newSolution;
                 if (task.isFirstBetter(newSolution, best)) {
-                    best = new DoubleSolution(newSolution);
+                    best = new NumberSolution<>(newSolution);
                 }
             }
         }
@@ -121,13 +121,13 @@ public class OSSTLBO extends Algorithm {
             if (task.isStopCriterion())
                 return;
 
-            DoubleSolution newSolution = task.eval(newX);
+            NumberSolution<Double> newSolution = task.eval(newX);
 
             if (task.isFirstBetter(newSolution, population[i])) {
                 population[i] = newSolution;
 
                 if (task.isFirstBetter(newSolution, best)) {
-                    best = new DoubleSolution(newSolution);
+                    best = new NumberSolution<>(newSolution);
                 }
             }
         }
@@ -136,8 +136,8 @@ public class OSSTLBO extends Algorithm {
     private void learnerPhase() throws StopCriterionException {
 
         for (int i = 0; i < popSize; i++) {
-            DoubleSolution solution = population[i];
-            DoubleSolution randomSolution = population[Util.nextInt(popSize)];
+            NumberSolution<Double> solution = population[i];
+            NumberSolution<Double> randomSolution = population[Util.nextInt(popSize)];
             while (randomSolution == solution)
                 randomSolution = population[Util.nextInt(popSize)];
 
@@ -164,13 +164,13 @@ public class OSSTLBO extends Algorithm {
             if (task.isStopCriterion())
                 return;
 
-            DoubleSolution newSolution = task.eval(newX);
+            NumberSolution<Double> newSolution = task.eval(newX);
 
             if (task.isFirstBetter(newSolution, population[i])) {
                 population[i] = newSolution;
 
                 if (task.isFirstBetter(newSolution, best)) {
-                    best = new DoubleSolution(newSolution);
+                    best = new NumberSolution<>(newSolution);
                 }
             }
         }
@@ -189,7 +189,7 @@ public class OSSTLBO extends Algorithm {
     private double[] calculateXMean() {
         double[] means = new double[task.getNumberOfDimensions()];
 
-        for (DoubleSolution solution : population) {
+        for (NumberSolution<Double> solution : population) {
             for (int j = 0; j < task.getNumberOfDimensions(); j++) {
                 means[j] += solution.getValue(j);
             }

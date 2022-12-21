@@ -2,11 +2,10 @@ package org.um.feri.ears.algorithms.so.jDElscop;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
-import org.um.feri.ears.algorithms.so.jDElscop.jDElscopSolution;
 
 
 public class jDElscop extends Algorithm {
@@ -55,7 +54,7 @@ public class jDElscop extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
         this.task = task; // used in functions
         initPopulation();
         // int iteration=0;
@@ -85,7 +84,7 @@ public class jDElscop extends Algorithm {
                 else
                     strategy = Strategy.STRATEGY_JDE_EXP;
                 // jDe
-                tmp = popX[i].getDoubleVariables();
+                tmp = Util.toDoubleArray(popX[i].getVariables());
                 tmpPar = popX[i].getNewPara();
                 do {
                     r1 = Util.rnd.nextInt(variablePopSize);
@@ -173,7 +172,7 @@ public class jDElscop extends Algorithm {
                 for (int j = 0; j < D; j++) {
                     tmp[j] = task.setFeasible(tmp[j], j); // in bounds
                 }
-                DoubleSolution tmpI = task.eval(tmp);
+                NumberSolution<Double> tmpI = task.eval(tmp);
                 if (task.isFirstBetter(popX[i], tmpI)) { // old is better
                     popTmp[i] = popX[i];
                 } else {

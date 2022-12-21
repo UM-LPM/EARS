@@ -27,6 +27,7 @@ import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.Binh2_F1;
 import org.um.feri.ears.problems.moo.functions.Binh2_F2;
+import org.um.feri.ears.util.Util;
 
 /**
  * The Binh (2) problem.
@@ -79,7 +80,7 @@ public class Binh2 extends DoubleMOProblem{
 	   */
 	public void evaluate(MOSolutionBase<Double> solution) {
 
-		double[] x = solution.getVariables().stream().mapToDouble(i->i).toArray();
+		double[] x = Util.toDoubleArray(solution.getVariables());
 
 		double obj[] = new double[functions.size()];
 		for (int i = 0; i < obj.length; i++) {
@@ -91,7 +92,7 @@ public class Binh2 extends DoubleMOProblem{
 	public void evaluateConstraints(MOSolutionBase<Double> solution) {
 		double[] constraints = new double[numberOfConstraints];
 		
-		double[] dv = solution.getVariables().stream().mapToDouble(i->i).toArray();
+		double[] dv = Util.toDoubleArray(solution.getVariables());
 
 		constraints[0] = -Math.pow(dv[0] - 5.0, 2.0) - Math.pow(dv[1], 2.0) + 25.0;
 		constraints[1] = Math.pow(dv[0] - 8.0, 2.0) + Math.pow(dv[1] + 3.0, 2.0) - 7.7;

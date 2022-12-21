@@ -1,7 +1,7 @@
 package org.um.feri.ears.algorithms.so.es;
 
 import org.um.feri.ears.algorithms.*;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ES1cNsAlgorithm extends Algorithm {
-    private DoubleSolution one;
+    private NumberSolution<Double> one;
     private double varianceOne;
     private int k, mem_k, n; // every k aVariance is calculated again
     private double c, mem_c;
@@ -48,12 +48,12 @@ public class ES1cNsAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         resetToDefaultsBeforeNewRun(); // usually no need for this call
         task = taskProblem;
-        DoubleSolution ii;
+        NumberSolution<Double> ii;
         one = taskProblem.getRandomEvaluatedSolution();
-        DoubleSolution oneTmp;
+        NumberSolution<Double> oneTmp;
         int everyK = 0; // recalculate variance
         double succ = 0;
         double[] oneplus;
@@ -69,12 +69,12 @@ public class ES1cNsAlgorithm extends Algorithm {
                     varianceOne = varianceOne * c;
                 succ = 0;
             }
-            oneTmp = new DoubleSolution(one);
-            oneplus = oneTmp.getDoubleVariables();
+            oneTmp = new NumberSolution(one);
+            oneplus = Util.toDoubleArray(oneTmp.getVariables());
             mutate(oneplus, varianceOne);
             one = taskProblem.eval(oneplus);
             for (int i = 0; i < n - 1; i++) {
-                oneplus = oneTmp.getDoubleVariables();
+                oneplus = Util.toDoubleArray(oneTmp.getVariables());
                 mutate(oneplus, varianceOne);
                 ii = taskProblem.eval(oneplus);
                 if (taskProblem.isFirstBetter(ii, one)) {

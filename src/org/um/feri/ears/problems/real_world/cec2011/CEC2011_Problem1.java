@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.Util;
 
@@ -62,13 +62,13 @@ public class CEC2011_Problem1 extends Problem {
 	
 	
 	@Override
-	public DoubleSolution getRandomEvaluatedSolution() {
+	public NumberSolution getRandomEvaluatedSolution() {
 		//initialization range=[0,6.35]
 		List<Double> var=new ArrayList<Double>();
 		for (int j = 0; j < numberOfDimensions; j++) {
 			var.add(Util.nextDouble(0, 6.35));
 		}
-		DoubleSolution sol = new DoubleSolution(var, eval(var), evaluateConstrains(var));
+		NumberSolution sol = new NumberSolution(var, eval(var), evaluateConstrains(var));
 		return sol;
 	}
 }

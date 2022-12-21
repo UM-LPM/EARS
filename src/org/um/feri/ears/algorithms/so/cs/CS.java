@@ -6,7 +6,7 @@ import org.apache.commons.math3.special.Gamma;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.TaskComparator;
@@ -20,9 +20,9 @@ public class CS extends Algorithm {
 	@AlgorithmParameter(name = "discovery rate")
 	private double pa = 0.25; //Discovery rate of alien eggs/solutions
 
-    private DoubleSolution best;
+    private NumberSolution<Double> best;
     private Task task;
-    private ArrayList<DoubleSolution> nest;
+    private ArrayList<NumberSolution<Double>> nest;
 
     public CS() {
         this(25);
@@ -45,7 +45,7 @@ public class CS extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
         this.task = task;
         initPopulation();
 
@@ -65,7 +65,7 @@ public class CS extends Algorithm {
         return best;
     }
 
-    private void setBest(ArrayList<DoubleSolution> offspringPopulation) {
+    private void setBest(ArrayList<NumberSolution<Double>> offspringPopulation) {
 
         for (int i = 0; i < popSize; i++) {
             if (i >= offspringPopulation.size())
@@ -76,7 +76,7 @@ public class CS extends Algorithm {
             }
 
             if (task.isFirstBetter(offspringPopulation.get(i), best)) {
-                best = new DoubleSolution(offspringPopulation.get(i));
+                best = new NumberSolution<>(offspringPopulation.get(i));
             }
         }
     }
@@ -87,7 +87,7 @@ public class CS extends Algorithm {
     private void emptyNests() throws StopCriterionException {
 
         //A fraction of worse nests are discovered with probability pa
-        ArrayList<DoubleSolution> offspringPopulation = new ArrayList<DoubleSolution>();
+        ArrayList<NumberSolution<Double>> offspringPopulation = new ArrayList<>();
 
         int[] per1 = Util.randomPermutation(popSize);
         int[] per2 = Util.randomPermutation(popSize);
@@ -104,7 +104,7 @@ public class CS extends Algorithm {
                 newSolution = task.setFeasible(newSolution);
                 if (task.isStopCriterion())
                     break;
-                DoubleSolution newC = task.eval(newSolution);
+                NumberSolution<Double> newC = task.eval(newSolution);
                 offspringPopulation.add(newC);
             } else {
                 offspringPopulation.add(nest.get(i));
@@ -124,13 +124,13 @@ public class CS extends Algorithm {
         //For details, see equation (2.21), Page 16 (chapter 2) of the book
         //X. S. Yang, Nature-Inspired Metaheuristic Algorithms, 2nd Edition, Luniver Press, (2010).
 
-        ArrayList<DoubleSolution> offspringPopulation = new ArrayList<DoubleSolution>();
+        ArrayList<NumberSolution<Double>> offspringPopulation = new ArrayList<>();
         double beta = 3.0 / 2.0;
         double sigma = Math.pow((Gamma.gamma(1 + beta) * Math.sin(Math.PI * beta / 2) / (Gamma.gamma((1 + beta) / 2) * beta * Math.pow(2, (beta - 1) / 2))), (1 / beta));
 
         for (int i = 0; i < popSize; i++) {
 
-            DoubleSolution s = nest.get(i);
+            NumberSolution<Double> s = nest.get(i);
             double u, v, step, stepsize;
             double[] newSolution = new double[task.getNumberOfDimensions()];
             for (int j = 0; j < task.getNumberOfDimensions(); j++) {
@@ -146,7 +146,7 @@ public class CS extends Algorithm {
             newSolution = task.setFeasible(newSolution);
             if (task.isStopCriterion())
                 break;
-            DoubleSolution newC = task.eval(newSolution);
+            NumberSolution<Double> newC = task.eval(newSolution);
             offspringPopulation.add(newC);
         }
         setBest(offspringPopulation);

@@ -2,10 +2,10 @@ package org.um.feri.ears.util.comparator;
 
 import java.util.Comparator;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 
-public class TaskComparator implements Comparator<DoubleSolution>{
+public class TaskComparator implements Comparator<NumberSolution<Double>>{
 	
 	Task task;
 	
@@ -15,7 +15,7 @@ public class TaskComparator implements Comparator<DoubleSolution>{
 	}
 
 	@Override
-	public int compare(DoubleSolution sol1, DoubleSolution sol2) {
+	public int compare(NumberSolution<Double> sol1, NumberSolution<Double> sol2) {
 		
 		if (task.isFirstBetter(sol1, sol2)) {
 			return -1;

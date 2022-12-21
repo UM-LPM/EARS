@@ -1,7 +1,6 @@
 package org.um.feri.ears.algorithms.so.tlbo;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
 public class StatisticGeneration {
@@ -15,8 +14,8 @@ public class StatisticGeneration {
 	int generationID;
 	int dup_cound;
 	int eval;
-	public DoubleSolution best;
-	public DoubleSolution getBest() {
+	public NumberSolution<Double> best;
+	public NumberSolution<Double> getBest() {
 		return best;
 	}
 	long startEval;
@@ -26,7 +25,7 @@ public class StatisticGeneration {
 
 	
 
-	public void setBest(DoubleSolution best) {
+	public void setBest(NumberSolution<Double> best) {
 		this.best = best;
 		isBestSet = true;
 	}

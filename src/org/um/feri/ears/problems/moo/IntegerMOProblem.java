@@ -3,7 +3,6 @@ package org.um.feri.ears.problems.moo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.util.Util;
 
 public abstract class IntegerMOProblem extends MOProblemBase<Integer> {

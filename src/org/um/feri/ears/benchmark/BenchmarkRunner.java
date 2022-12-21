@@ -1,9 +1,7 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.benchmark.BenchmarkResults;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.comparator.RatingComparator;
@@ -79,7 +77,7 @@ public class BenchmarkRunner {
         return sb.toString();
     }
 
-    public BenchmarkResults<Task, DoubleSolution, Algorithm> getBenchmarkResults() {
+    public BenchmarkResults<Task, NumberSolution, Algorithm> getBenchmarkResults() {
         return benchmark.getBenchmarkResults();
     }
 }

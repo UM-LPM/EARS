@@ -1,13 +1,13 @@
 package org.um.feri.ears.algorithms.so.fdo;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
 import java.util.ArrayList;
 
-public class Bee extends DoubleSolution {
+public class Bee extends NumberSolution<Double> {
     private ArrayList<Double> lastPace = new ArrayList<>();
 
-    public Bee(DoubleSolution solution) {
+    public Bee(NumberSolution<Double> solution) {
         super(solution);
     }
 

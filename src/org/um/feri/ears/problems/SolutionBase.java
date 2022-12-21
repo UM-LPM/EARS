@@ -5,6 +5,10 @@ import java.util.List;
 
 public abstract class SolutionBase {
 
+    int numberOfObjectives;
+
+    protected double[] objectives;
+
     protected double[] constraints; //TODO refactor 2 types of individual for constrained optimization
     protected boolean constraintsMet = true; //checks if constrains are met
     protected double overallConstraintViolation;
@@ -17,8 +21,42 @@ public abstract class SolutionBase {
     protected int generationNumber;
     protected long evaluationNumber;
 
+    public List<SolutionBase> parents;
+
     public SolutionBase() {
         ID = currentID++;
+    }
+
+    public SolutionBase(SolutionBase s) {
+
+        parents = new ArrayList<>();
+        this.constraintsMet = s.constraintsMet;
+        if (s.constraints != null) {
+            constraints = new double[s.constraints.length];
+            System.arraycopy(s.constraints, 0, constraints, 0, constraints.length);
+        }
+        overallConstraintViolation = s.getOverallConstraintViolation();
+        numberOfViolatedConstraints = s.getNumberOfViolatedConstraint();
+        ID = s.ID;
+    }
+
+    /*
+        For single-objective optimization
+     */
+    public double getEval() {
+        return objectives[0];
+    }
+
+    public double[] getObjectives() {
+        return objectives;
+    }
+
+    public double getObjective(int index) {
+        return objectives[index];
+    }
+
+    public void setObjective(int index, double objective) {
+        objectives[index] = objective;
     }
 
     public long getID() {
@@ -37,18 +75,6 @@ public abstract class SolutionBase {
         return evaluationNumber;
     }
 
-    public SolutionBase(SolutionBase s) {
-
-        this.constraintsMet = s.constraintsMet;
-        if (s.constraints != null) {
-            constraints = new double[s.constraints.length];
-            System.arraycopy(s.constraints, 0, constraints, 0, constraints.length);
-        }
-        overallConstraintViolation = s.getOverallConstraintViolation();
-        numberOfViolatedConstraints = s.getNumberOfViolatedConstraint();
-        ID = s.ID;
-    }
-
     /**
      * @return true if the solution satisfies the constraints.
      */
@@ -56,7 +82,16 @@ public abstract class SolutionBase {
         return constraintsMet;
     }
 
-    public abstract double getEval();
+    protected void checkConstraints(double[] constrains) {
+        constraintsMet = true;
+        for (int i = 0; i < constrains.length; i++) {
+            if (constrains[i] > 0) { //equality constraints need to be solved in Problem (set 0 if<=0.001)
+                constraintsMet = false;
+                this.constraints = new double[constrains.length];
+                System.arraycopy(constrains, 0, this.constraints, 0, constrains.length);
+            }
+        }
+    }
 
     public boolean isEqual(SolutionBase b, double drawLimit) { //TODO this method shouldn't exists -> move to task
 		return Math.abs(this.getEval() - b.getEval()) < drawLimit;

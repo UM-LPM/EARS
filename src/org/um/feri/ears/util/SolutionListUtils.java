@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -275,8 +275,8 @@ public class SolutionListUtils {
 	   * @param solution2
 	   * @return The best solution
 	   */
-	  public static  DoubleSolution getBestSolution(DoubleSolution solution1, DoubleSolution solution2, Comparator<DoubleSolution> comparator) {
-		  DoubleSolution result ;
+	  public static NumberSolution<Double> getBestSolution(NumberSolution<Double> solution1, NumberSolution<Double> solution2, Comparator<NumberSolution<Double>> comparator) {
+		  NumberSolution<Double> result ;
 	    int flag = comparator.compare(solution1, solution2);
 	    if (flag == -1) {
 	      result = solution1;

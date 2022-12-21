@@ -26,6 +26,7 @@ import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.ConstrEx_F1;
 import org.um.feri.ears.problems.moo.functions.ConstrEx_F2;
+import org.um.feri.ears.util.Util;
 
 public class ConstrEx extends DoubleMOProblem{
 
@@ -51,10 +52,10 @@ public class ConstrEx extends DoubleMOProblem{
 	@Override
 	public void evaluate(MOSolutionBase<Double> solution) {
 		
-		double[] x = solution.getVariables().stream().mapToDouble(i->i).toArray();
+		double[] x = Util.toDoubleArray(solution.getVariables());
 
 
-		double obj[] = new double[functions.size()];
+		double[] obj = new double[functions.size()];
 		for (int i = 0; i < obj.length; i++) {
 			obj[i] = functions.get(i).eval(x);
 		}
@@ -66,7 +67,7 @@ public class ConstrEx extends DoubleMOProblem{
 	public void evaluateConstraints(MOSolutionBase<Double> solution) {
 		double[] constraints = new double[numberOfConstraints];
 		
-		double[] dv = solution.getVariables().stream().mapToDouble(i->i).toArray();
+		double[] dv = Util.toDoubleArray(solution.getVariables());
 		
 	    constraints[0] =  (dv[1] + 9*dv[0]-6.0) ;
 	    constraints[1] =  (-dv[1] + 9*dv[0] -1.0);

@@ -7,7 +7,8 @@ import java.util.List;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -36,8 +37,7 @@ public class jDElscopLogging extends Algorithm {
 	private void initPopulation() throws StopCriterionException {
 		pop_x = new jDElscopSolution[pop_size];
 		for (int i = 0; i < pop_size; i++) {
-			pop_x[i] = jDElscopSolution.setInitState(task
-					.getRandomEvaluatedSolution());
+			pop_x[i] = jDElscopSolution.setInitState(task.getRandomEvaluatedSolution());
 			if (i == 0)
 				g = pop_x[0];
 			else if (task.isFirstBetter(pop_x[i], g))
@@ -65,7 +65,7 @@ public class jDElscopLogging extends Algorithm {
 	}
 
 	@Override
-	public DoubleSolution execute(Task task) throws StopCriterionException {
+	public NumberSolution<Double> execute(Task task) throws StopCriterionException {
 		this.task = task; // used in functions
 		initPopulation();
 		// int iteration=0;
@@ -87,7 +87,7 @@ public class jDElscopLogging extends Algorithm {
 		while (!task.isStopCriterion()) {
 			// iteration++;
 			for (int i = 0; i < pop_size; i++) {
-				List<DoubleSolution> parents = new ArrayList<DoubleSolution>();
+				List<SolutionBase> parents = new ArrayList<>();
 				if (Util.rnd.nextDouble() < 0.1
 						&& task.getNumberOfEvaluations() > MaxFES / 2)
 					strategy = StrategyDE.STRATEGY_jDEbest;
@@ -96,7 +96,7 @@ public class jDElscopLogging extends Algorithm {
 				else
 					strategy = StrategyDE.STRATEGY_jDEexp;
 				// jDe
-				tmp = pop_x[i].getDoubleVariables();
+				tmp = Util.toDoubleArray(pop_x[i].getVariables());
 				tmp_par = pop_x[i].getNewPara();
 				do {
 					r1 = Util.rnd.nextInt(pop_size);
@@ -195,7 +195,7 @@ public class jDElscopLogging extends Algorithm {
 				for (int j = 0; j < D; j++) {
 					tmp[j] = task.setFeasible(tmp[j], j); // in bounds
 				}
-				DoubleSolution tmpI = task.eval(tmp, parents);
+				NumberSolution<Double> tmpI = task.eval(tmp, parents);
 				if (task.isFirstBetter(pop_x[i], tmpI)) { // old is better
 					pop_tmp[i] = pop_x[i];
 				} else {
@@ -216,8 +216,7 @@ public class jDElscopLogging extends Algorithm {
 			 * (NumReduce + 1)) == (MaxFES / (NumReduce + 1) - 1) && pop_size >
 			 * 10 && task.getNumberOfEvaluations() < MaxFES - 1) {
 			 */
-			if (NumReduce > 0
-					&& (task.getNumberOfEvaluations()
+			if (NumReduce > 0 && (task.getNumberOfEvaluations()
 							% (MaxFES / (NumReduce + 1)) == 0) && pop_size > 10) {
 				/*
 				 * ASK Not used imin ASK NumReduce--? if (imin < pop_size / 2)

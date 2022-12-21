@@ -1,7 +1,7 @@
 package org.um.feri.ears.experiment.ee;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
-public class JADEIndividual extends DoubleSolution{
+public class JADEIndividual extends NumberSolution<Double> {
 	double CR, F;
 /*	public JADEIndividual(Individual i) {
 		super(i);
@@ -13,7 +13,7 @@ public class JADEIndividual extends DoubleSolution{
 		CR = i.CR;
 		F = i.F;
 	}
-	public JADEIndividual(DoubleSolution eval, double cr2, double f2) {
+	public JADEIndividual(NumberSolution<Double> eval, double cr2, double f2) {
 		super(eval);
 		CR = cr2;
 		F = f2;
@@ -35,9 +35,7 @@ public class JADEIndividual extends DoubleSolution{
 	 * I think 1 is too low for max!
 	 */
 	public void setF(double f) {
-		if (f>1) F=1; else
-		F = f;
+		if (f>1) F=1;
+		else F = f;
 	}
-
-	
 }

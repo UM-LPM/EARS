@@ -1,21 +1,24 @@
 package org.um.feri.ears.algorithms.so.mbf;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
-public class CichlidsSolution extends DoubleSolution {
+import java.util.List;
 
-    public double[] movment;
+public class CichlidsSolution extends NumberSolution<Double> {
+
+    public double[] movement;
     public int[] NCC;
-    public DoubleSolution localBest;
+    public NumberSolution<Double> localBest;
 
 
-    public CichlidsSolution(DoubleSolution s) {
+    public CichlidsSolution(NumberSolution<Double> s) {
         super(s);
-        localBest = new DoubleSolution(s);
-        movment = new double[s.getVariables().size()];
+        localBest = new NumberSolution<>(s);
+        movement = new double[s.getVariables().size()];
     }
 
-    public CichlidsSolution(int size) {
+    public CichlidsSolution(int size, List<Double> position) {
+        super(1, position);
         NCC = new int[size];
     }
 }

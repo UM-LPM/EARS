@@ -1,10 +1,10 @@
 package org.um.feri.ears.algorithms.so.bfo;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
-public class Bacteria extends DoubleSolution implements Comparable<Bacteria> {
+public class Bacteria extends NumberSolution<Double> implements Comparable<Bacteria> {
 	Bacteria prev;
 	double health;
 	double c;
@@ -23,7 +23,7 @@ public class Bacteria extends DoubleSolution implements Comparable<Bacteria> {
 		c = b.c;
 	}
 
-	public Bacteria(DoubleSolution eval, Bacteria b) throws StopCriterionException {
+	public Bacteria(NumberSolution<Double> eval, Bacteria b) throws StopCriterionException {
 		super(eval);
 		prev = new Bacteria(b);
 		this.health += this.health + prev.getEval();

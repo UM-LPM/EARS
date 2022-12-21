@@ -3,12 +3,11 @@ package org.um.feri.ears.algorithms.so.jade;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.jade.JADESolution;
 
 import java.util.ArrayList;
 
@@ -105,7 +104,7 @@ public class JADE extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         g = null;
         task = taskProblem;
         elite.clear();
@@ -138,7 +137,7 @@ public class JADE extends Algorithm {
                 // System.out.print(
                 // "("+pop_x[i].getCR()+", "+pop_x[i].getF()+") ");
                 jRand = Util.rnd.nextInt(D);
-                tmp = popX[i].getDoubleVariables();
+                tmp = Util.toDoubleArray(popX[i].getVariables());
                 do {
                     r1 = Util.rnd.nextInt(popSize);
                 } while (r1 == i);

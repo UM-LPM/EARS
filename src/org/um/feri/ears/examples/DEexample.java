@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -13,8 +13,8 @@ import org.um.feri.ears.util.Util;
 public class DEexample extends Algorithm {
     int popSize;
     double CR, F;
-    ArrayList<DoubleSolution> pop;
-    DoubleSolution best;
+    ArrayList<NumberSolution<Double>> pop;
+    NumberSolution<Double> best;
 
     //Initialize all agents {\displaystyle \mathbf {x} } \mathbf {x}  with random positions in the search-space.
     public DEexample(int ps, double CR, double F, String s) {
@@ -28,7 +28,7 @@ public class DEexample extends Algorithm {
 
     public void init(Task taskProblem) throws StopCriterionException {
         pop = new ArrayList<>();
-        DoubleSolution tmp;
+        NumberSolution<Double> tmp;
         for (int i = 0; i < popSize; i++) {
             if (taskProblem.isStopCriterion()) break;
             tmp = taskProblem.getRandomEvaluatedSolution();
@@ -39,10 +39,10 @@ public class DEexample extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         init(taskProblem);
         int a, b, c, R;
-        DoubleSolution newSolution;
+        NumberSolution<Double> newSolution;
         while (!taskProblem.isStopCriterion()) {
             for (int i = 0; i < popSize; i++) {
                 if (taskProblem.isStopCriterion()) break;

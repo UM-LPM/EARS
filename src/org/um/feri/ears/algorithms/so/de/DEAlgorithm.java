@@ -7,12 +7,11 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.de.DESolution;
 
 
 /* jDE[1] - Janez Brest */
@@ -218,7 +217,7 @@ public class DEAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
         this.task = taskProblem;
         init(); // referesh all data
         pold = c; /* old population (generation G) */
@@ -255,7 +254,7 @@ public class DEAlgorithm extends Algorithm {
                 } while ((r5 == i) || (r5 == r1) || (r5 == r2) || (r5 == r3) || (r5 == r4));
 
                 if (strategy == Strategy.DE_BEST_1_EXP) /* strategy DE0 (not in our paper) */ {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
@@ -270,7 +269,7 @@ public class DEAlgorithm extends Algorithm {
                 /*-------"bestit[]"-schemes experience misconvergence. Try e.g. F=0.7 and CR=0.5---------*/
                 /*-------as a first guess.---------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_RAND_1_EXP) /* strategy DE1 in the techreport */ {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
@@ -285,7 +284,7 @@ public class DEAlgorithm extends Algorithm {
                 /*-------If you get misconvergence try to increase NP. If this doesn't help you----------*/
                 /*-------should play around with all three control variables.----------------------------*/
                 else if (strategy == Strategy.DE_RAND_TO_BEST_1_EXP) /* similiar to DE2 but generally better */ {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
@@ -297,7 +296,7 @@ public class DEAlgorithm extends Algorithm {
 
                 /*-------DE/best/2/exp is another powerful strategy worth trying--------------------------*/
                 else if (strategy == Strategy.DE_BEST_2_EXP) {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
@@ -308,7 +307,7 @@ public class DEAlgorithm extends Algorithm {
                 }
                 /*-------DE/rand/2/exp seems to be a robust optimizer for many functions-------------------*/
                 else if (strategy == Strategy.DE_RAND_2_EXP) {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     L = 0;
                     do {
@@ -320,7 +319,7 @@ public class DEAlgorithm extends Algorithm {
 
                 /*-------DE/best/1/bin--------------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_BEST_1_BIN) {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) /*
@@ -337,7 +336,7 @@ public class DEAlgorithm extends Algorithm {
                 }
                 /*-------DE/rand/1/bin-------------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_RAND_1_BIN) {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
@@ -360,7 +359,7 @@ public class DEAlgorithm extends Algorithm {
                 }
                 /*-- s20 -----JAN-DE/rand/1/bin-------------------------------------------------------------------*/
                 else if (strategy == Strategy.JDE_RAND_1_BIN) {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     tmpF = pold[i].getF();
                     tmpCR = pold[i].getCR();
                     n = (int) (Util.rnd.nextDouble() * D);
@@ -386,7 +385,7 @@ public class DEAlgorithm extends Algorithm {
 
                 /*-------DE/rand-to-best/1/bin-----------------------------------------------------------*/
                 else if (strategy == Strategy.DE_RAND_TO_BEST_1_BIN) {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) /*
@@ -403,7 +402,7 @@ public class DEAlgorithm extends Algorithm {
                 }
                 /*-------DE/best/2/bin--------------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_BEST_2_BIN) {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) /*
@@ -420,7 +419,7 @@ public class DEAlgorithm extends Algorithm {
                 }
                 /*-------DE/rand/2/bin--------------------------------------------------------------------*/
                 else {
-                    assignd(D, tmp, pold[i].getDoubleVariables());
+                    assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     n = (int) (Util.rnd.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) /*
@@ -439,7 +438,7 @@ public class DEAlgorithm extends Algorithm {
                 for (int kk = 0; kk < D; kk++) {
                     tmp[kk] = task.setFeasible(tmp[kk], kk);
                 }
-                DoubleSolution br = task.eval(tmp);
+                NumberSolution<Double> br = task.eval(tmp);
                 DESolution trial_cost = new DESolution(br, tmpF, tmpCR);
                 // if (strategy == 20) System.out.println(pnew[i]+
                 // " new best "+trial_cost);

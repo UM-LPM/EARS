@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.gwo;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -18,8 +18,8 @@ public class GWO extends Algorithm {
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
-    private ArrayList<DoubleSolution> population;
-    private DoubleSolution alpha, beta, delta;
+    private ArrayList<NumberSolution<Double>> population;
+    private NumberSolution<Double> alpha, beta, delta;
     private Task task;
 
     public GWO() {
@@ -44,7 +44,7 @@ public class GWO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
         this.task = task;
         initPopulation();
         int maxIt = 10000;
@@ -61,7 +61,7 @@ public class GWO extends Algorithm {
             double a = 2.0 - task.getNumberOfIterations() * (2.0 / maxIt);
 
             for (int index = 0; index < popSize; index++) {
-                DoubleSolution wolf = population.get(index);
+                NumberSolution<Double> wolf = population.get(index);
                 double[] newPosition = new double[task.getNumberOfDimensions()];
                 for (int i = 0; i < task.getNumberOfDimensions(); i++) {
 
@@ -100,7 +100,7 @@ public class GWO extends Algorithm {
 
                 if (task.isStopCriterion())
                     break;
-                DoubleSolution newWolf = task.eval(newPosition);
+                NumberSolution<Double> newWolf = task.eval(newPosition);
                 if (task.isFirstBetter(newWolf, population.get(index)))
                     population.set(index, newWolf);
             }
@@ -111,7 +111,7 @@ public class GWO extends Algorithm {
     }
 
     private void initPopulation() throws StopCriterionException {
-        population = new ArrayList<DoubleSolution>();
+        population = new ArrayList<>();
 
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())

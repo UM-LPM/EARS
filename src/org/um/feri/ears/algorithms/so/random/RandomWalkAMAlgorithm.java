@@ -3,12 +3,13 @@ package org.um.feri.ears.algorithms.so.random;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.util.Util;
 
 public class RandomWalkAMAlgorithm extends Algorithm {
-    private DoubleSolution bestSolution;
+    private NumberSolution<Double> bestSolution;
     private Task task;
 
     public RandomWalkAMAlgorithm() {
@@ -36,8 +37,8 @@ public class RandomWalkAMAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        DoubleSolution currentSolution, iAritmetic, iExtend;
+    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
+        NumberSolution<Double> currentSolution, iAritmetic, iExtend;
         task = taskProblem;
         bestSolution = taskProblem.getRandomEvaluatedSolution();
         if (debug)
@@ -46,12 +47,12 @@ public class RandomWalkAMAlgorithm extends Algorithm {
             currentSolution = taskProblem.getRandomEvaluatedSolution();
             if (taskProblem.isFirstBetter(currentSolution, bestSolution)) {
                 if (!taskProblem.isStopCriterion()) { // try also arithmetic mean
-                    iAritmetic = taskProblem.eval(xArithmeticMeanOf(bestSolution.getDoubleVariables(), currentSolution.getDoubleVariables()));
+                    iAritmetic = taskProblem.eval(xArithmeticMeanOf(Util.toDoubleArray(bestSolution.getVariables()), Util.toDoubleArray(currentSolution.getVariables())));
                     if (taskProblem.isFirstBetter(iAritmetic, currentSolution)) {
                         currentSolution = iAritmetic; // even better
                     } else {
                         if (!taskProblem.isStopCriterion()) { // try also extend
-                            iExtend = taskProblem.eval(xInSameDirection(bestSolution.getDoubleVariables(), currentSolution.getDoubleVariables()));
+                            iExtend = taskProblem.eval(xInSameDirection(Util.toDoubleArray(bestSolution.getVariables()), Util.toDoubleArray(currentSolution.getVariables())));
                             if (taskProblem.isFirstBetter(iExtend, currentSolution)) {
                                 currentSolution = iExtend; // even better
                             }

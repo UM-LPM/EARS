@@ -1,7 +1,6 @@
 package org.um.feri.analyse.EE.metrics;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.Util;
 

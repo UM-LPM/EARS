@@ -3,7 +3,7 @@ package org.um.feri.ears.algorithms.so.gsa;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -12,7 +12,6 @@ import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import org.um.feri.ears.algorithms.so.gsa.GSASolution;
 
 
 /**
@@ -75,7 +74,7 @@ public class GSA extends Algorithm {
 
 
     @Override
-    public DoubleSolution execute(Task t) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task t) throws StopCriterionException {
         initPopulation(t);
         int iteration = 1;
         int maxIt = (t.getMaxEvaluations() - popSize) / popSize;  //-initpopulation!
