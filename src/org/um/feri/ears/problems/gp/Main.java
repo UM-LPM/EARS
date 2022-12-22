@@ -4,10 +4,6 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.gpf.*;
-import org.um.feri.gpf.MathOp;
-import org.um.feri.gpf.algorithms.GPAlgorithm;
-import org.um.feri.gpf.algorithms.RandomWalkAlgorithm;
 
 import java.io.IOException;
 
@@ -27,7 +23,7 @@ public class Main {
                 new Target().when("x", 6).targetIs(96)));
 
         sgp.setMaxTreeHeight(4);
-        sgp.setMaxNodeChildrenNum(2); //TODO se več ne uporablja
+        sgp.setMaxNodeChildrenNum(2); //TODO se vec ne uporablja
 
         /*ProgramSolution<Double> ps = sgp.getRandomSolution();
         sgp.eval(ps);
@@ -38,17 +34,17 @@ public class Main {
         //Algorithm execution
         //ps.setEval(Double.MAX_VALUE);
 
-        Task<Double> symbolicRegression = new Task<>(sgp, StopCriterion.EVALUATIONS, 5000, 0, 0);
+        //Task<Double> symbolicRegression = new Task(sgp, StopCriterion.EVALUATIONS, 5000, 0, 0);
 
         GPAlgorithm alg = new DefaultGPAlgorithm();
 
-        try {
+        /*try {
             ProgramSolution<Double> sol = alg.execute(symbolicRegression);
             System.out.println("Best fitness: " + sol.getEval());
             sol.getProgram().displayTree("TestBTree");
         } catch (StopCriterionException e) {
             e.printStackTrace();
-        }
+        }*/
 
         /*final Op<Double> myop = MathOp.ADD;
 

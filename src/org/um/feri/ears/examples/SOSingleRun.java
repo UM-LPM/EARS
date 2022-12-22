@@ -17,7 +17,7 @@ public class SOSingleRun {
         Task sphere = new Task(problem, StopCriterion.EVALUATIONS, 10000, 0, 0); // set the stopping criterion to max 10000 evaluations
 
         Algorithm alg = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN);
-        DoubleSolution best;
+        NumberSolution<Double> best;
         try {
             best = alg.execute(sphere);
             System.out.println("Best found solution :" + best); // print the best solution found after 10000 evaluations

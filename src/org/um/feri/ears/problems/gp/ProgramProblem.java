@@ -18,11 +18,9 @@ public abstract class ProgramProblem<T> extends ProblemBase<T> {
      * List of base terminals which can be used during when generating tree individuals
      */
     protected List<Op<T>> baseTerminals;
-
     protected int minTreeHeight;
     protected int maxTreeHeight;
     protected int maxNodeChildrenNum;
-
     protected boolean useAllBaseFunctions;
     protected boolean useAllBaseTerminals;
 
@@ -113,7 +111,7 @@ public abstract class ProgramProblem<T> extends ProblemBase<T> {
         ProgramSolution<T> newSolution = new ProgramSolution<>();
         //Generate random valid solution
         /*Postopek generiranja drevesa...
-            Generiram en node (prvi more bit funckija, ker drugače se bo tukaj končalo)
+            Generiram en node (prvi more bit funckija, ker drugace se bo tukaj koncalo)
             Nato pa gradim drevo po en node naprej, dokler ne pridem do samih takšnih voz., ki so terminali
         */
 
