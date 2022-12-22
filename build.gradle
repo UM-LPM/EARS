@@ -11,6 +11,10 @@ idea {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 //compatibility for reflection support
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
