@@ -1,7 +1,6 @@
 package org.um.feri.ears.problems;
 
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
@@ -18,19 +17,19 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
         super(task);
     }
 
-    public MOSolutionBase<Double> getRandomMOSolution() throws StopCriterionException {
+    public NumberSolution<Double> getRandomMOSolution() throws StopCriterionException {
 
 
         if (stopCriterion == StopCriterion.EVALUATIONS) {
             incrementNumberOfEvaluations();
-            MOSolutionBase<Double> newSolution = problem.getRandomSolution();
+            NumberSolution<Double> newSolution = problem.getRandomSolution();
             //p.evaluateConstraints(newSolution);
             return newSolution;
         } else if (stopCriterion == StopCriterion.ITERATIONS) {
             if (isStop)
                 throw new StopCriterionException("Max iterations");
             incrementNumberOfEvaluations();
-            MOSolutionBase<Double> newSolution = problem.getRandomSolution();
+            NumberSolution<Double> newSolution = problem.getRandomSolution();
             return newSolution;
 
         } else if (stopCriterion == StopCriterion.CPU_TIME) {
@@ -38,7 +37,7 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
             if (!isStop) {
                 hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
                 incrementNumberOfEvaluations();
-                MOSolutionBase<Double> newSolution = problem.getRandomSolution();
+                NumberSolution<Double> newSolution = problem.getRandomSolution();
                 return newSolution;
             } else {
                 throw new StopCriterionException("CPU Time");
@@ -58,7 +57,7 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
      * @return
      */
     public boolean areDimensionsInFeasibleInterval(ParetoSolution<Double> solution) {
-        return problem.areDimensionsInFeasableInterval(solution);
+        return problem.areDimensionsInFeasibleInterval(solution);
     }
 
     public Double[] getLowerLimit() {

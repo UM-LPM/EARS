@@ -27,8 +27,8 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionSelection;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
@@ -47,9 +47,9 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     int populationSize;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
 
-    public GDE3(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, int populationSize) {
+    public GDE3(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, int populationSize) {
         this.populationSize = populationSize;
         this.cross = crossover;
 
@@ -73,21 +73,21 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     protected void start() throws StopCriterionException {
 
         Distance<Type> distance;
-        Comparator<MOSolutionBase<Type>> dominance;
+        Comparator<NumberSolution<Type>> dominance;
 
         distance = new Distance<>();
         dominance = new DominanceComparator<>();
 
-        MOSolutionBase<Type>[] parent;
+        NumberSolution<Type>[] parent;
 
         DifferentialEvolutionSelection<Type> des = new DifferentialEvolutionSelection<Type>();
 
         // Create the initial solutionSet
-        MOSolutionBase<Type> newSolution;
+        NumberSolution<Type> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<Type>(task.getRandomMOSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }
@@ -108,7 +108,7 @@ public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                     break;
                 }
 
-                MOSolutionBase<Type> child;
+                NumberSolution<Type> child;
                 // Crossover. Two parameters are required: the current
                 // individual and the array of parents
                 cross.setCurrentSolution(population.get(i));

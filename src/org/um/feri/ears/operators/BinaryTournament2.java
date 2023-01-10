@@ -23,7 +23,7 @@ package org.um.feri.ears.operators;
 
 import java.util.Comparator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.Util;
@@ -65,14 +65,14 @@ public class BinaryTournament2<Type extends Number> {
   * @param object Object representing a SolutionSet
   * @return the selected solution
   */
-	public MOSolutionBase<Type> execute(ParetoSolution<Type> object) {
+	public NumberSolution<Type> execute(ParetoSolution<Type> object) {
 		ParetoSolution<Type> population = object;
 		if (index == 0) // generate a permutation of indices
 		{
 			a = Util.randomPermutation(population.size());
 		}
 
-		MOSolutionBase<Type> solution1, solution2;
+		NumberSolution<Type> solution1, solution2;
 		solution1 = population.get(a[index]);
 		if(index + 1 == population.size())
 			solution2 = population.get(a[1]);

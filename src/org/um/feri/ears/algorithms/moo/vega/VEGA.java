@@ -24,8 +24,8 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.VEGASelection;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
@@ -56,8 +56,8 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     int populationSize;
     ParetoSolution<Type> population;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
     public VEGA(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
         this.populationSize = pop_size;
@@ -76,18 +76,18 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     protected void start() throws StopCriterionException {
 
         // Create the initial solutionSet
-        MOSolutionBase<Type> newSolution;
+        NumberSolution<Type> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<Type>(task.getRandomMOSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }
 
         do {
             // select the parents from the M different subgroups
-            MOSolutionBase<Type>[] parents = performSelection(populationSize, population);
+            NumberSolution<Type>[] parents = performSelection(populationSize, population);
 
             // shuffle the parents
             Util.shuffle(parents);
@@ -100,7 +100,7 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
             while (!filled) {
 
-                MOSolutionBase<Type>[] offSpring = cross.execute(select(parents, index, 2), task);
+                NumberSolution<Type>[] offSpring = cross.execute(select(parents, index, 2), task);
                 mut.execute(offSpring[0], task);
                 mut.execute(offSpring[1], task);
 
@@ -117,7 +117,7 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
             }
 
             // evaluate the offspring
-            for (MOSolutionBase<Type> ind : population.solutions) {
+            for (NumberSolution<Type> ind : population.solutions) {
                 if (task.isStopCriterion())
                     return;
                 task.eval(ind);
@@ -146,8 +146,8 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param size    the size of the subset
      * @return the subset of parents
      */
-    private MOSolutionBase<Type>[] select(MOSolutionBase<Type>[] parents, int index, int size) {
-        MOSolutionBase<Type>[] result = new MOSolutionBase[size];
+    private NumberSolution<Type>[] select(NumberSolution<Type>[] parents, int index, int size) {
+        NumberSolution<Type>[] result = new NumberSolution[size];
 
         for (int i = 0; i < size; i++) {
             result[i] = parents[(index + i) % parents.length];
@@ -161,18 +161,18 @@ public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * objectives.
      */
 
-    private MOSolutionBase<Type>[] performSelection(int pop_size, ParetoSolution<Type> population) {
+    private NumberSolution<Type>[] performSelection(int pop_size, ParetoSolution<Type> population) {
         VEGASelection<Type>[] selectors = new VEGASelection[numObj];
         for (int i = 0; i < numObj; i++) {
             selectors[i] = new VEGASelection<Type>(
                     new ObjectiveComparator(i));
         }
 
-        MOSolutionBase<Type>[] result = new MOSolutionBase[pop_size];
+        NumberSolution<Type>[] result = new NumberSolution[pop_size];
 
         for (int i = 0; i < pop_size; i++) {
             VEGASelection<Type> selector = selectors[i % numObj];
-            result[i] = new MOSolutionBase<Type>(selector.execute(population));
+            result[i] = new NumberSolution<Type>(selector.execute(population));
         }
 
         return result;

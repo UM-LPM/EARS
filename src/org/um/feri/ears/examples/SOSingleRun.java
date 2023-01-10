@@ -20,7 +20,7 @@ public class SOSingleRun {
         NumberSolution<Double> best;
         try {
             best = alg.execute(sphere);
-            System.out.println("Best found solution :" + best); // print the best solution found after 10000 evaluations
+            System.out.println("Best solution found = " + best); // print the best solution found after 10000 evaluations
         } catch (StopCriterionException e) {
             e.printStackTrace();
         }

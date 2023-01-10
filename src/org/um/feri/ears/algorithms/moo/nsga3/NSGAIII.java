@@ -19,8 +19,8 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Ranking;
 
@@ -55,8 +55,8 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
     SBXCrossover sbx;
     PolynomialMutation plm;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
 
     public NSGAIII(CrossoverOperator crossover, MutationOperator mutation) {
@@ -75,11 +75,11 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
     @Override
     protected void start() throws StopCriterionException {
         // Create the initial population
-        MOSolutionBase<Type> newSolution;
+        NumberSolution<Type> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<Type>(task.getRandomMOSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }
@@ -103,7 +103,7 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
 
         ParetoSolution<Type> matingPopulation = new ParetoSolution(population.size());
         for (int i = 0; i < population.size(); i++) {
-            MOSolutionBase<Type> solution = bt2.execute(population);
+            NumberSolution<Type> solution = bt2.execute(population);
             matingPopulation.add(solution);
         }
         return matingPopulation;
@@ -112,11 +112,11 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
     protected ParetoSolution<Type> reproduction(ParetoSolution<Type> population) throws StopCriterionException {
         ParetoSolution<Type> offspringPopulation = new ParetoSolution(population.size());
         for (int i = 0; i < population.size(); i += 2) {
-            MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+            NumberSolution<Type>[] parents = new NumberSolution[2];
             parents[0] = population.get(i);
             parents[1] = (population.get(Math.min(i + 1, population.size() - 1)));
 
-            MOSolutionBase<Type>[] offspring = cross.execute(parents, task);
+            NumberSolution<Type>[] offspring = cross.execute(parents, task);
 
             mut.execute(offspring[0], task);
             mut.execute(offspring[1], task);
@@ -143,8 +143,8 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
         Ranking<Type> ranking = new Ranking<Type>(jointPopulation);
 
 
-        List<MOSolutionBase<Type>> pop = new ArrayList<>();
-        List<List<MOSolutionBase<Type>>> fronts = new ArrayList<>();
+        List<NumberSolution<Type>> pop = new ArrayList<>();
+        List<List<NumberSolution<Type>>> fronts = new ArrayList<>();
         int rankingIndex = 0;
         int candidateSolutions = 0;
         while (candidateSolutions < populationSize) {
@@ -163,8 +163,8 @@ public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<
         return new ParetoSolution(pop);
     }
 
-    private void addRankedSolutionsToPopulation(Ranking<Type> ranking, int rank, List<MOSolutionBase<Type>> population) {
-        List<MOSolutionBase<Type>> front;
+    private void addRankedSolutionsToPopulation(Ranking<Type> ranking, int rank, List<NumberSolution<Type>> population) {
+        List<NumberSolution<Type>> front;
 
         front = ranking.getSubfront(rank).solutions;
 

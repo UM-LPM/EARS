@@ -5,8 +5,8 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.DoubleMOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 public class D_IBEA extends IBEA<DoubleMOTask, Double> {
 	
@@ -22,7 +22,7 @@ public class D_IBEA extends IBEA<DoubleMOTask, Double> {
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0), populationSize, archiveSize);
 	}
 
-	public D_IBEA(CrossoverOperator<Double, DoubleMOTask, MOSolutionBase<Double>> crossover, MutationOperator<Double, DoubleMOTask, MOSolutionBase<Double>> mutation, int populationSize, int archiveSize) {
+	public D_IBEA(CrossoverOperator<Double, DoubleMOTask, NumberSolution<Double>> crossover, MutationOperator<Double, DoubleMOTask, NumberSolution<Double>> mutation, int populationSize, int archiveSize) {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 

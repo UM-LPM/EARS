@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
@@ -35,13 +34,13 @@ public class SolutionListUtils {
 		return ranking.getSubfront(0);
 	}
 
-	public <T extends Number> MOSolutionBase<T> findWorstSolution(ParetoSolution<T> solutionList, Comparator comparator) {
+	public <T extends Number> NumberSolution<T> findWorstSolution(ParetoSolution<T> solutionList, Comparator comparator) {
 		if ((solutionList == null) || (solutionList.isEmpty())) {
 			throw new IllegalArgumentException("No solution provided: "+solutionList);
 		}
 
-		MOSolutionBase<T> worstKnown = solutionList.iterator().next();
-		for (MOSolutionBase<T> candidateSolution : solutionList) {
+		NumberSolution<T> worstKnown = solutionList.iterator().next();
+		for (NumberSolution<T> candidateSolution : solutionList) {
 			if (comparator.compare(worstKnown, candidateSolution) < 0) {
 				worstKnown = candidateSolution;
 			}
@@ -59,8 +58,8 @@ public class SolutionListUtils {
 	public static <T extends Number> int findIndexOfBestSolution(ParetoSolution<T> solutionList, Comparator comparator) {
 
 		int index = 0;
-		MOSolutionBase<T> bestKnown = solutionList.get(0) ;
-		MOSolutionBase<T> candidateSolution ;
+		NumberSolution<T> bestKnown = solutionList.get(0) ;
+		NumberSolution<T> candidateSolution ;
 
 		int flag;
 		for (int i = 1; i < solutionList.size(); i++) {
@@ -84,8 +83,8 @@ public class SolutionListUtils {
 	public static <T extends Number> int findIndexOfWorstSolution(ParetoSolution<T> solutionList, Comparator comparator) {
 
 		int index = 0;
-		MOSolutionBase<T> worstKnown = solutionList.get(0) ;
-		MOSolutionBase<T> candidateSolution ;
+		NumberSolution<T> worstKnown = solutionList.get(0) ;
+		NumberSolution<T> candidateSolution ;
 
 		int flag;
 		for (int i = 1; i < solutionList.size(); i++) {
@@ -100,7 +99,7 @@ public class SolutionListUtils {
 		return index;
 	}
 
-	public static <T extends Number> MOSolutionBase<T> findBestSolution(ParetoSolution<T> solutionList, Comparator comparator) {
+	public static <T extends Number> NumberSolution<T> findBestSolution(ParetoSolution<T> solutionList, Comparator comparator) {
 		return solutionList.get(findIndexOfBestSolution(solutionList, comparator)) ;
 	}
 
@@ -109,7 +108,7 @@ public class SolutionListUtils {
 			return new double[0][0];
 		}
 
-		int numberOfObjectives = solutionList.get(0).numberOfObjectives();
+		int numberOfObjectives = solutionList.get(0).getNumberOfObjectives();
 		int solutionListSize = solutionList.size();
 
 		double[][] objectives;
@@ -137,9 +136,9 @@ public class SolutionListUtils {
 
 		ParetoSolution<T> normalizedSolutionSet = new ParetoSolution<T>(solutionList.size()) ;
 
-		int numberOfObjectives = solutionList.get(0).numberOfObjectives() ;
+		int numberOfObjectives = solutionList.get(0).getNumberOfObjectives() ;
 		for (int i = 0; i < solutionList.size(); i++) {
-			MOSolutionBase<T> solution = solutionList.get(i).copy() ;
+			NumberSolution<T> solution = solutionList.get(i).copy() ;
 			for (int j = 0; j < numberOfObjectives; j++) {
 				double normalizedValue = (solutionList.get(i).getObjective(j) - minimumValue.get(j)) /
 						(maximumValue.get(j) - minimumValue.get(j));
@@ -159,7 +158,7 @@ public class SolutionListUtils {
 	@SuppressWarnings("unchecked")
 	public static <T extends Number> ParetoSolution<T> getInvertedFront(ParetoSolution<T> solutionSet) {
 		ParetoSolution<T> invertedFront = new ParetoSolution<T>(solutionSet.size()) ;
-		int numberOfObjectives = solutionSet.get(0).numberOfObjectives() ;
+		int numberOfObjectives = solutionSet.get(0).getNumberOfObjectives() ;
 
 		for (int i = 0; i < solutionSet.size(); i++) {
 			invertedFront.add(solutionSet.get(i).copy()) ;
@@ -177,7 +176,7 @@ public class SolutionListUtils {
 		return invertedFront;
 	}
 
-	public static <T extends Number> boolean isSolutionDominatedBySolutionList(MOSolutionBase<T> solution, ParetoSolution<T> solutionSet) {
+	public static <T extends Number> boolean isSolutionDominatedBySolutionList(NumberSolution<T> solution, ParetoSolution<T> solutionSet) {
 		boolean result = false ;
 		Comparator dominance = new DominanceComparator() ;
 

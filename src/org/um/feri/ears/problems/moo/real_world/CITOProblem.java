@@ -3,8 +3,8 @@ package org.um.feri.ears.problems.moo.real_world;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.IntegerMOProblem;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 public class CITOProblem extends IntegerMOProblem{
 
@@ -166,7 +166,7 @@ public class CITOProblem extends IntegerMOProblem{
 	}
 
 	@Override
-	public void evaluateConstraints(MOSolutionBase<Integer> solution) {
+	public void evaluateConstraints(NumberSolution<Integer> solution) {
 
 	}
 

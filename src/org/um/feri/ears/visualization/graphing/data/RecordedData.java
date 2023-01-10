@@ -1,8 +1,8 @@
 package org.um.feri.ears.visualization.graphing.data;
 
 import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 @SuppressWarnings("rawtypes")
 public class RecordedData //implements Comparable<RecordedData>
@@ -13,16 +13,16 @@ public class RecordedData //implements Comparable<RecordedData>
 	public AlgorithmBase algorithm;
 	public long iteration;
 	//public boolean isMemberOfParetoSolution = false;
-	public MOSolutionBase[] paretoFront = null;
+	public NumberSolution[] paretoFront = null;
 	
 	// Constructors:
-	public RecordedData(MOSolutionBase solution)
+	public RecordedData(NumberSolution solution)
 	{
 		this.solution = solution;
 	}
 	public RecordedData(double[] objectives)
 	{
-		MOSolutionBase debug = new MOSolutionBase(objectives.length);
+		NumberSolution debug = new NumberSolution(objectives.length);
 		for (int i=0; i<objectives.length; i++)
 			debug.setObjective(i, objectives[i]);
 		this.solution = debug;

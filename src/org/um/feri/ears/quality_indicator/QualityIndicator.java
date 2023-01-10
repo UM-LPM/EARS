@@ -1,6 +1,6 @@
 package org.um.feri.ears.quality_indicator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public abstract class QualityIndicator<Type extends Number> {
@@ -95,7 +95,7 @@ public abstract class QualityIndicator<Type extends Number> {
         }
 
         for (int i = 0; i < referenceSet.length; i++) {
-            MOSolutionBase<Type> solution = population.get(i);
+            NumberSolution<Type> solution = population.get(i);
 
             if (solution.violatesConstraints()) {
                 continue;

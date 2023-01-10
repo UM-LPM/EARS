@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 
@@ -54,8 +54,8 @@ public class CrowdingDistance<Type extends Number> {
         }
 
         //Use a new SolutionSet to avoid altering the original solutionSet
-        List<MOSolutionBase<Type>> front = new ArrayList<>(size);
-        for (MOSolutionBase<Type> solution : solutionList) {
+        List<NumberSolution<Type>> front = new ArrayList<>(size);
+        for (NumberSolution<Type> solution : solutionList) {
             front.add(solution);
         }
 
@@ -67,7 +67,7 @@ public class CrowdingDistance<Type extends Number> {
         double objetiveMinn;
         double distance;
 
-        int numberOfObjectives = solutionList.get(0).numberOfObjectives();
+        int numberOfObjectives = solutionList.get(0).getNumberOfObjectives();
 
         for (int i = 0; i < numberOfObjectives; i++) {
             // Sort the population by Obj n
@@ -89,12 +89,12 @@ public class CrowdingDistance<Type extends Number> {
     }
 
 
-    public Object getAttribute(MOSolutionBase<Type> solution) {
+    public Object getAttribute(NumberSolution<Type> solution) {
         return solution.getAttribute(getAttributeID());
     }
 
 
-    public void setAttribute(MOSolutionBase<Type> solution, Object value) {
+    public void setAttribute(NumberSolution<Type> solution, Object value) {
         solution.setAttribute(getAttributeID(), value);
     }
 

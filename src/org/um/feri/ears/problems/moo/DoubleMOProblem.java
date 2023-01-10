@@ -3,6 +3,7 @@ package org.um.feri.ears.problems.moo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
 import org.um.feri.ears.util.Util;
 
@@ -14,15 +15,15 @@ public abstract class DoubleMOProblem extends MOProblemBase<Double> {
         super(numberOfDimensions, numberOfConstraints, numberOfObjectives);
     }
 
-    public void evaluate(MOSolutionBase<Double> solution) {
+    public void evaluate(NumberSolution<Double> solution) {
         double[] obj = evaluate(solution.getVariables());
         solution.setObjectives(obj);
     }
 
     @Override
-    public boolean areDimensionsInFeasableInterval(ParetoSolution<Double> ps) {
+    public boolean areDimensionsInFeasibleInterval(ParetoSolution<Double> ps) {
 
-        for (MOSolutionBase<Double> sol : ps) {
+        for (NumberSolution<Double> sol : ps) {
             for (int i = 0; i < numberOfDimensions; i++) {
                 if (sol.getValue(i) < lowerLimit.get(i))
                     return false;
@@ -57,20 +58,20 @@ public abstract class DoubleMOProblem extends MOProblemBase<Double> {
     }
 
     @Override
-    public MOSolutionBase<Double> getRandomSolution() {
+    public NumberSolution<Double> getRandomSolution() {
 
         List<Double> var = new ArrayList<Double>(numberOfDimensions);
         //Double[] var = new Double[numberOfDimensions];
         for (int j = 0; j < numberOfDimensions; j++) {
             var.add(j, Util.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
         }
-        MOSolutionBase<Double> sol = new MOSolutionBase<Double>(var, evaluate(var), upperLimit, lowerLimit);
+        NumberSolution<Double> sol = new NumberSolution<>(var, evaluate(var));
         evaluateConstraints(sol);
 
         return sol;
     }
 
-    public abstract void evaluateConstraints(MOSolutionBase<Double> solution);
+    public abstract void evaluateConstraints(NumberSolution<Double> solution);
 
     public boolean isFirstBetter(ParetoSolution<Double> x, ParetoSolution<Double> y, QualityIndicator<Double> qi) {
         return x.isFirstBetter(y, qi);

@@ -21,7 +21,7 @@
 package org.um.feri.ears.problems.moo.wfg;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 
 /**
  * This class implements the WFG3 problem
@@ -165,7 +165,6 @@ public class WFG3 extends WFG {
 	 * Evaluates a solution
 	 *
 	 * @param solution The solution to evaluate
-	 * @throws org.uma.jmetal.util.JMetalException
 	 */
 	public double[] evaluate(double[] ds) {
 
@@ -181,7 +180,7 @@ public class WFG3 extends WFG {
 	}
 
 	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
+	public void evaluateConstraints(NumberSolution<Double> solution) {
 
 	}
 }

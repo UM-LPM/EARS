@@ -39,8 +39,10 @@ public class AlgorithmResultComparator implements Comparator<AlgorithmRunResult<
 
             for (int i = 0; i < r1EvaluationHistory.size(); i++) {
                 if(r1EvaluationHistory.get(i).evalNum == evaluationNumber) {
-                    NumberSolution r1Solution = new NumberSolution(r1EvaluationHistory.get(i).fitness);
-                    NumberSolution r2Solution = new NumberSolution(r2EvaluationHistory.get(i).fitness);
+                    NumberSolution r1Solution = new NumberSolution(1);
+                    r1Solution.setObjective(0, r1EvaluationHistory.get(i).fitness);
+                    NumberSolution r2Solution = new NumberSolution(1);
+                    r2Solution.setObjective(0, r2EvaluationHistory.get(i).fitness);
                     return tc.compare(r1Solution, r2Solution);
                 }
             }

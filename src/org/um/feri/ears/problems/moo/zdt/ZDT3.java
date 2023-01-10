@@ -22,7 +22,7 @@ package org.um.feri.ears.problems.moo.zdt;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.Objective;
 
 public class ZDT3 extends ZDT{
@@ -52,7 +52,7 @@ public class ZDT3 extends ZDT{
 	}
 
 	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
+	public void evaluateConstraints(NumberSolution<Double> solution) {
 	}
 	
 	public class ZDT3_F1 extends Objective{

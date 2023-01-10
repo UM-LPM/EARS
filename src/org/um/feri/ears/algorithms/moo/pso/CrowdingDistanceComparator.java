@@ -14,9 +14,10 @@
 
 package org.um.feri.ears.algorithms.moo.pso;
 
+import org.um.feri.ears.problems.NumberSolution;
+
 import java.util.Comparator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 /**
  * Compares two solutions according to the crowding distance attribute. The higher
@@ -24,7 +25,7 @@ import org.um.feri.ears.problems.moo.MOSolutionBase;
  *
  * @author Antonio J. Nebro
  */
-public class CrowdingDistanceComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
+public class CrowdingDistanceComparator<Type extends Number> implements Comparator<NumberSolution<Type>> {
     private final CrowdingDistance<Type> crowdingDistance = new CrowdingDistance<Type>();
 
     /**
@@ -36,7 +37,7 @@ public class CrowdingDistanceComparator<Type extends Number> implements Comparat
      * respectively.
      */
     @Override
-    public int compare(MOSolutionBase<Type> solution1, MOSolutionBase<Type> solution2) {
+    public int compare(NumberSolution<Type> solution1, NumberSolution<Type> solution2) {
         int result;
         if (solution1 == null) {
             if (solution2 == null) {

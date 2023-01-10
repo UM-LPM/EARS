@@ -2,7 +2,6 @@ package org.um.feri.ears.problems;
 
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.moo.MOProblemBase;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
 
@@ -80,7 +79,7 @@ public abstract class MOTask<T extends Number, P extends MOProblemBase<T>> exten
         return problem.getNumberOfConstraints();
     }
 
-    abstract public MOSolutionBase<T> getRandomMOSolution() throws StopCriterionException;
+    abstract public NumberSolution<T> getRandomMOSolution() throws StopCriterionException;
 
     public boolean isFirstBetter(ParetoSolution<T> x, ParetoSolution<T> y, QualityIndicator<T> qi) {
         return problem.isFirstBetter(x, y, qi);
@@ -92,7 +91,7 @@ public abstract class MOTask<T extends Number, P extends MOProblemBase<T>> exten
 	 * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
 	 * To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
 	 */
-    public void eval(MOSolutionBase<T> solution) throws StopCriterionException {
+    public void eval(NumberSolution<T> solution) throws StopCriterionException {
 
         if (stopCriterion == StopCriterion.EVALUATIONS) {
             incrementNumberOfEvaluations();

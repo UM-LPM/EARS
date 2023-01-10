@@ -2,7 +2,6 @@ package org.um.feri.ears.operators;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.Util;
 
 public class SBXCrossoverSO implements CrossoverOperator<Double, Task, NumberSolution<Double>>{
@@ -132,7 +131,7 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task, NumberSol
 		return offSpring;
 	}
 	@Override
-	public void setCurrentSolution(MOSolutionBase<Double> current) {
+	public void setCurrentSolution(NumberSolution<Double> current) {
 		
 	}
 }

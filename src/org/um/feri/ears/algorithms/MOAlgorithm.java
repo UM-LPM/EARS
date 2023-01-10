@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.ParetoSolutionCache;
@@ -51,7 +51,7 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
                         ParetoSolution<Type> solution = new ParetoSolution<Type>(pareto.pareto.size());
 
                         for (double[] obj : pareto.pareto) {
-                            MOSolutionBase<Type> sol = new MOSolutionBase<Type>(obj.length);
+                            NumberSolution<Type> sol = new NumberSolution<Type>(obj.length);
                             sol.setObjectives(obj);
                             solution.add(sol);
                         }

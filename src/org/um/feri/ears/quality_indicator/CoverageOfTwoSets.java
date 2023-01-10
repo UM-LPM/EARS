@@ -1,6 +1,6 @@
 package org.um.feri.ears.quality_indicator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
@@ -33,7 +33,7 @@ public class CoverageOfTwoSets<Type extends Number> extends QualityIndicator<Typ
     /**
      * stores a <code>Comparator</code> for dominance checking
      */
-    private final Comparator<MOSolutionBase<Type>> dominance = new DominanceComparator<>();
+    private final Comparator<NumberSolution<Type>> dominance = new DominanceComparator<>();
 
     @Override
     public double evaluate(ParetoSolution<Type> paretoFrontApproximation) {

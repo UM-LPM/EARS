@@ -6,12 +6,12 @@ import org.um.feri.ears.algorithms.moo.moead_dra.MOEAD_DRA;
 import org.um.feri.ears.algorithms.moo.nsga2.D_NSGAII;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.CEC2009Benchmark;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.GraphSet;
 import org.um.feri.ears.visualization.graphing.PlotType;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.GraphDataSet;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Util;
 
@@ -145,7 +145,7 @@ public class Test_08_MainMOO
 		System.err.println("COUNT: "+test.length);
 		for (int i=0; i<test.length; i++)
 		{
-			MOSolutionBase sol = (MOSolutionBase)test[i].solution;
+			NumberSolution sol = (NumberSolution)test[i].solution;
 			System.err.println(sol.getObjective(0) + "   " + sol.getObjective(1) + "   " + sol.getObjective(2));
 		}
 		return true;

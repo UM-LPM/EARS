@@ -22,16 +22,16 @@
 
 package org.um.feri.ears.util.comparator;
 
-import java.util.Comparator;
+import org.um.feri.ears.problems.NumberSolution;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import java.util.Comparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on the overall constraint violation of
  * the solutions, as in NSGA-II.
  */
-public class OverallConstraintViolationComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
+public class OverallConstraintViolationComparator<Type extends Number> implements Comparator<NumberSolution<Type>> {
 
 	/** 
 	 * Compares two solutions.
@@ -40,7 +40,7 @@ public class OverallConstraintViolationComparator<Type extends Number> implement
 	 * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
 	 * respectively.
 	 */
-	public int compare(MOSolutionBase<Type> o1, MOSolutionBase<Type> o2) {    
+	public int compare(NumberSolution<Type> o1, NumberSolution<Type> o2) {
 		double overall1, overall2;
 		overall1 = o1.getOverallConstraintViolation();
 		overall2 = o2.getOverallConstraintViolation();
@@ -66,7 +66,7 @@ public class OverallConstraintViolationComparator<Type extends Number> implement
 	 * Returns true if solutions s1 and/or s2 have an overall constraint
 	 * violation < 0
 	 */
-	public boolean needToCompare(MOSolutionBase<Type> s1, MOSolutionBase<Type> s2) {
+	public boolean needToCompare(NumberSolution<Type> s1, NumberSolution<Type> s2) {
 		boolean needToCompare ;
 		needToCompare = (s1.getOverallConstraintViolation() < 0) ||
 				(s2.getOverallConstraintViolation() < 0);

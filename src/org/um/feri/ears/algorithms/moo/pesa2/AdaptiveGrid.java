@@ -7,7 +7,7 @@
 
 package org.um.feri.ears.algorithms.moo.pesa2;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
@@ -54,7 +54,7 @@ public class AdaptiveGrid<Type extends Number> {
 
         // Find the max and min limits of objetives into the population
         for (int ind = 0; ind < solutionSet.size(); ind++) {
-            MOSolutionBase<Type> tmpIndividual = solutionSet.get(ind);
+            NumberSolution<Type> tmpIndividual = solutionSet.get(ind);
             for (int obj = 0; obj < objectives; obj++) {
                 if (tmpIndividual.getObjective(obj) < lowerLimits[obj]) {
                     lowerLimits[obj] = tmpIndividual.getObjective(obj);
@@ -98,7 +98,7 @@ public class AdaptiveGrid<Type extends Number> {
         addSolutionSet(solutionSet);
     }
 
-    public void updateGrid(MOSolutionBase<Type> solution, ParetoSolution<Type> solutionSet) {
+    public void updateGrid(NumberSolution<Type> solution, ParetoSolution<Type> solutionSet) {
 
         int location = location(solution);
         if (location == -1) {// Re-build the Adaptative-Grid Update lower and upper limits
@@ -124,7 +124,7 @@ public class AdaptiveGrid<Type extends Number> {
         }
     }
 
-    public int location(MOSolutionBase<Type> solution) {
+    public int location(NumberSolution<Type> solution) {
         // Create a int [] to store the range of each objetive
         int[] position = new int[objectives];
 

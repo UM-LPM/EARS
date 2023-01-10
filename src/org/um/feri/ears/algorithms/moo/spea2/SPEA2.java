@@ -14,8 +14,8 @@ import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Ranking;
 
@@ -27,8 +27,8 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
     ParetoSolution<Type> population;
     ParetoSolution<Type> archive;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
     public int tournamentRounds = 1;
 
@@ -95,7 +95,7 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            NumberSolution<Type> newSolution = new NumberSolution<Type>(task.getRandomMOSolution());
             // problem.evaluateConstraints(newSolution);;
             population.add(newSolution);
         }
@@ -107,7 +107,7 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
             archive = spea.environmentalSelection(archiveSize);
             // Create a new offspringPopulation
             offspringPopulation = new ParetoSolution<Type>(populationSize);
-            MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+            NumberSolution<Type>[] parents = new NumberSolution[2];
             while (offspringPopulation.size() < populationSize) {
                 int j = 0;
                 do {
@@ -121,7 +121,7 @@ public class SPEA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
                 } while (k < tournamentRounds);
 
                 // make the crossover
-                MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
+                NumberSolution<Type>[] offSpring = cross.execute(parents, task);
                 mut.execute(offSpring[0], task);
                 if (task.isStopCriterion())
                     break;

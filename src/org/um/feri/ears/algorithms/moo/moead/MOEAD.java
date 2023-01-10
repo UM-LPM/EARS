@@ -13,8 +13,8 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.InitWeight;
 import org.um.feri.ears.util.Ranking;
@@ -53,7 +53,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
     /**
      * Stores the values of the individuals
      */
-    MOSolutionBase<Type>[] savedValues;
+    NumberSolution<Type>[] savedValues;
 
     /**
      * Z vector (ideal point)
@@ -80,16 +80,16 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
      * nr: maximal number of solutions replaced by each child solution
      */
     int nr = 2;
-    MOSolutionBase<Type>[] indArray;
+    NumberSolution<Type>[] indArray;
     String functionType;
     int gen;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
     static String dataDirectory = "Weight";
 
-    public MOEAD(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int pop_size) {
+    public MOEAD(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int pop_size) {
         this.populationSize = pop_size;
         this.cross = crossover;
         this.mut = mutation;
@@ -126,9 +126,9 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         }
 
         population = new ParetoSolution<Type>(populationSize);
-        savedValues = new MOSolutionBase[populationSize];
+        savedValues = new NumberSolution[populationSize];
 
-        indArray = new MOSolutionBase[numObj];
+        indArray = new NumberSolution[numObj];
 
         neighborhood = new int[populationSize][T];
 
@@ -177,8 +177,8 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
                 matingSelection(p, n, 2, type);
 
                 // STEP 2.2. Reproduction
-                MOSolutionBase<Type> child;
-                MOSolutionBase<Type>[] parents = new MOSolutionBase[3];
+                NumberSolution<Type> child;
+                NumberSolution<Type>[] parents = new NumberSolution[3];
 
                 parents[0] = population.get(p.get(0));
                 parents[1] = population.get(p.get(1));
@@ -295,10 +295,10 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
 
             if (task.isStopCriterion())
                 return;
-            MOSolutionBase<Type> newSolution = task.getRandomMOSolution();
+            NumberSolution<Type> newSolution = task.getRandomMOSolution();
 
             population.add(newSolution);
-            savedValues[i] = new MOSolutionBase<Type>(newSolution);
+            savedValues[i] = new NumberSolution<Type>(newSolution);
         }
     }
 
@@ -348,7 +348,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         }
     }
 
-    void updateReference(MOSolutionBase<Type> individual) {
+    void updateReference(NumberSolution<Type> individual) {
         for (int n = 0; n < numObj; n++) {
             if (individual.getObjective(n) < z[n]) {
                 z[n] = individual.getObjective(n);
@@ -358,7 +358,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         }
     }
 
-    void updateProblem(MOSolutionBase<Type> indiv, int id, int type) {
+    void updateProblem(NumberSolution<Type> indiv, int id, int type) {
         // indiv: child solution
         // id: the id of current subproblem
         // type: update solutions in - neighborhood (1) or whole population (otherwise)
@@ -387,7 +387,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
             f2 = fitnessFunction(indiv, lambda[k]);
 
             if (f2 < f1) {
-                population.replace(k, new MOSolutionBase<Type>(indiv));
+                population.replace(k, new NumberSolution<Type>(indiv));
                 // population[k].indiv = indiv;
                 time++;
             }
@@ -398,7 +398,7 @@ public class MOEAD<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         }
     }
 
-    double fitnessFunction(MOSolutionBase<Type> individual, double[] lambda) {
+    double fitnessFunction(NumberSolution<Type> individual, double[] lambda) {
 
         double fitness;
         fitness = 0.0;

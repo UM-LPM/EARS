@@ -1,5 +1,6 @@
 package org.um.feri.ears.problems.moo;
 
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.ProblemBase;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
 
@@ -29,7 +30,7 @@ public abstract class MOProblemBase<Type extends Number> extends ProblemBase<Typ
         functions.add(o);
     }
 
-    public abstract void evaluate(MOSolutionBase<Type> solution);
+    public abstract void evaluate(NumberSolution<Type> solution);
 
     public Type getLowerLimit(int i) {
         return lowerLimit.get(i);
@@ -39,7 +40,7 @@ public abstract class MOProblemBase<Type extends Number> extends ProblemBase<Typ
         return upperLimit.get(i);
     }
 
-    public abstract boolean areDimensionsInFeasableInterval(ParetoSolution<Type> ps);
+    public abstract boolean areDimensionsInFeasibleInterval(ParetoSolution<Type> ps);
 
     /**
      * Evaluates a solution
@@ -48,9 +49,9 @@ public abstract class MOProblemBase<Type extends Number> extends ProblemBase<Typ
      */
     abstract public double[] evaluate(Type[] ds);
 
-    abstract public MOSolutionBase<Type> getRandomSolution();
+    abstract public NumberSolution<Type> getRandomSolution();
 
-    public abstract void evaluateConstraints(MOSolutionBase<Type> solution);
+    public abstract void evaluateConstraints(NumberSolution<Type> solution);
 
 
     public int getNumberOfObjectives() {
@@ -74,5 +75,4 @@ public abstract class MOProblemBase<Type extends Number> extends ProblemBase<Typ
 
         return "Problem: " + name + " version: " + version + " dimensions: " + numberOfDimensions + " objectives: " + numberOfObjectives + " constraints: " + numberOfConstraints;
     }
-
 }

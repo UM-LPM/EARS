@@ -14,8 +14,8 @@ import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
@@ -40,10 +40,10 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
     ParetoSolution<Type> union;
 
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
-    public NSGAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize) {
+    public NSGAII(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int populationSize) {
 
         this.cross = crossover;
         this.mut = mutation;
@@ -63,7 +63,7 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
         BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
 
         // Create the initial population
-        MOSolutionBase<Type> newSolution;
+        NumberSolution<Type> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
@@ -76,14 +76,14 @@ public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
         while (!task.isStopCriterion()) {
             // Create the offSpring solutionSet
             offspringPopulation = new ParetoSolution(populationSize);
-            MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+            NumberSolution<Type>[] parents = new NumberSolution[2];
 
             for (int i = 0; i < (populationSize / 2); i++) {
                 if (!task.isStopCriterion()) {
                     // obtain parents
                     parents[0] = bt2.execute(population);
                     parents[1] = bt2.execute(population);
-                    MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
+                    NumberSolution<Type>[] offSpring = cross.execute(parents, task);
 
                     mut.execute(offSpring[0], task);
                     mut.execute(offSpring[1], task);

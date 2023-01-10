@@ -21,8 +21,8 @@ import org.um.feri.ears.algorithms.moo.moead.Utils;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.InitWeight;
@@ -47,7 +47,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
     /**
      * Stores the values of the individuals
      */
-    MOSolutionBase<Type>[] savedValues;
+    NumberSolution<Type>[] savedValues;
 
     double[] utility;
     int[] frequency;
@@ -77,16 +77,16 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
      * nr: maximal number of solutions replaced by each child solution
      */
     int nr = 2;
-    MOSolutionBase<Type>[] indArray;
+    NumberSolution<Type>[] indArray;
     String functionType;
     int gen;
 
     static String dataDirectory = "Weight";
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
-    public MOEAD_DRA(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int pop_size) {
+    public MOEAD_DRA(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int pop_size) {
         this.populationSize = pop_size;
 
         this.cross = crossover;
@@ -124,11 +124,11 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
         }
 
         population = new ParetoSolution<Type>(populationSize);
-        savedValues = new MOSolutionBase[populationSize];
+        savedValues = new NumberSolution[populationSize];
         utility = new double[populationSize];
         frequency = new int[populationSize];
 
-        indArray = new MOSolutionBase[numObj];
+        indArray = new NumberSolution[numObj];
 
         neighborhood = new int[populationSize][T];
 
@@ -188,8 +188,8 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
                 matingSelection(p, n, 2, type);
 
                 // STEP 2.2. Reproduction
-                MOSolutionBase<Type> child;
-                MOSolutionBase<Type>[] parents = new MOSolutionBase[3];
+                NumberSolution<Type> child;
+                NumberSolution<Type>[] parents = new NumberSolution[3];
 
                 parents[0] = population.get(p.get(0));
                 parents[1] = population.get(p.get(1));
@@ -295,7 +295,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
                 uti = (0.95 + (0.05 * delta / 0.001)) * utility[n];
                 utility[n] = uti < 1.0 ? uti : 1.0;
             }
-            savedValues[n] = new MOSolutionBase<Type>(population.get(n));
+            savedValues[n] = new NumberSolution<Type>(population.get(n));
         }
     }
 
@@ -326,10 +326,10 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 
             if (task.isStopCriterion())
                 return;
-            MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            NumberSolution<Type> newSolution = new NumberSolution<Type>(task.getRandomMOSolution());
 
             population.add(newSolution);
-            savedValues[i] = new MOSolutionBase<Type>(newSolution);
+            savedValues[i] = new NumberSolution<Type>(newSolution);
         }
     }
 
@@ -338,7 +338,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
             z[i] = 1.0e+30;
             if (task.isStopCriterion())
                 return;
-            indArray[i] = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            indArray[i] = new NumberSolution<Type>(task.getRandomMOSolution());
         }
 
         for (int i = 0; i < populationSize; i++) {
@@ -417,7 +417,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
         return selected;
     }
 
-    void updateReference(MOSolutionBase<Type> individual) {
+    void updateReference(NumberSolution<Type> individual) {
         for (int n = 0; n < numObj; n++) {
             if (individual.getObjective(n) < z[n]) {
                 z[n] = individual.getObjective(n);
@@ -427,7 +427,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
         }
     }
 
-    void updateProblem(MOSolutionBase<Type> indiv, int id, int type) {
+    void updateProblem(NumberSolution<Type> indiv, int id, int type) {
         // indiv: child solution
         // id: the id of current subproblem
         // type: update solutions in - neighborhood (1) or whole population (otherwise)
@@ -458,7 +458,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
             f2 = fitnessFunction(indiv, lambda[k]);
 
             if (f2 < f1) {
-                population.replace(k, new MOSolutionBase<Type>(indiv));
+                population.replace(k, new NumberSolution<Type>(indiv));
                 // population[k].indiv = indiv;
                 time++;
             }
@@ -469,7 +469,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
         }
     }
 
-    double fitnessFunction(MOSolutionBase<Type> individual, double[] lambda) {
+    double fitnessFunction(NumberSolution<Type> individual, double[] lambda) {
 
         double fitness;
         fitness = 0.0;
@@ -527,7 +527,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 
             // we have now the weights, now select the best solution for each of them
             for (int i = 0; i < n; i++) {
-                MOSolutionBase<Type> current_best = population.get(0);
+                NumberSolution<Type> current_best = population.get(0);
 
                 double value = fitnessFunction(current_best, intern_lambda[i]);
                 for (int j = 1; j < n; j++) {
@@ -538,7 +538,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
                         current_best = population.get(j);
                     }
                 }
-                res.add(new MOSolutionBase<Type>(current_best));
+                res.add(new NumberSolution<Type>(current_best));
             }
 
         } else { // general case (more than two objectives)
@@ -547,7 +547,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
             int random_index = Util.rnd.nextInt(population.size());
 
             // create a list containing all the solutions but the selected one (only references to them)
-            List<MOSolutionBase<Type>> candidate = new LinkedList<MOSolutionBase<Type>>();
+            List<NumberSolution<Type>> candidate = new LinkedList<NumberSolution<Type>>();
             candidate.add(population.get(random_index));
 
             for (int i = 0; i < population.size(); i++) {
@@ -557,12 +557,12 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
 
             while (res.size() < n) {
                 int index = 0;
-                MOSolutionBase<Type> selected = candidate.get(0); // it should be a next! (n <= population size!)
+                NumberSolution<Type> selected = candidate.get(0); // it should be a next! (n <= population size!)
                 double distance_value = distance_utility
                         .distanceToSolutionSetInObjectiveSpace(selected, res);
                 int i = 1;
                 while (i < candidate.size()) {
-                    MOSolutionBase<Type> next_candidate = candidate.get(i);
+                    NumberSolution<Type> next_candidate = candidate.get(i);
                     double aux = distance_value = distance_utility.distanceToSolutionSetInObjectiveSpace(next_candidate, res);
                     if (aux > distance_value) {
                         distance_value = aux;
@@ -572,7 +572,7 @@ public class MOEAD_DRA<T extends MOTask, Type extends Number> extends MOAlgorith
                 }
 
                 // add the selected to res and remove from candidate list
-                res.add(new MOSolutionBase<Type>(candidate.remove(index)));
+                res.add(new NumberSolution<Type>(candidate.remove(index)));
             }
         }
         return res;

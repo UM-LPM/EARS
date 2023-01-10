@@ -15,8 +15,8 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
 public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
@@ -25,7 +25,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     int archiveSize = 100;
     int bisections = 5;
 
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
     public PAES(MutationOperator mutation, int populationSize) {
 
@@ -51,19 +51,19 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     public void start() throws StopCriterionException {
 
-        Comparator<MOSolutionBase<Type>> dominance;
+        Comparator<NumberSolution<Type>> dominance;
         dominance = new DominanceComparator();
 
         if (task.isStopCriterion())
             return;
-        MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+        NumberSolution<Type> solution = new NumberSolution<Type>(task.getRandomMOSolution());
         // problem.evaluateConstraints(solution);
 
-        archive.add(new MOSolutionBase<Type>(solution));
+        archive.add(new NumberSolution<Type>(solution));
 
         do {
             // Create the mutate one
-            MOSolutionBase<Type> mutatedIndividual = new MOSolutionBase<Type>(solution);
+            NumberSolution<Type> mutatedIndividual = new NumberSolution<Type>(solution);
             mut.execute(mutatedIndividual, task);
 
             if (task.isStopCriterion())
@@ -75,7 +75,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
             int flag = dominance.compare(solution, mutatedIndividual);
 
             if (flag == 1) { // If mutate solution dominate
-                solution = new MOSolutionBase<Type>(mutatedIndividual);
+                solution = new NumberSolution<Type>(mutatedIndividual);
                 archive.add(mutatedIndividual);
             } else if (flag == 0) { // If none dominate the other
                 if (archive.add(mutatedIndividual)) {
@@ -95,26 +95,26 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         best = archive;
     }
 
-    public MOSolutionBase<Type> test(MOSolutionBase<Type> solution,
-                                     MOSolutionBase<Type> mutatedSolution, AdaptiveGridArchive<Type> archive) {
+    public NumberSolution<Type> test(NumberSolution<Type> solution,
+                                     NumberSolution<Type> mutatedSolution, AdaptiveGridArchive<Type> archive) {
 
         int originalLocation = archive.getGrid().location(solution);
         int mutatedLocation = archive.getGrid().location(mutatedSolution);
 
         if (originalLocation == -1) {
-            return new MOSolutionBase<Type>(mutatedSolution);
+            return new NumberSolution<Type>(mutatedSolution);
         }
 
         if (mutatedLocation == -1) {
-            return new MOSolutionBase<Type>(solution);
+            return new NumberSolution<Type>(solution);
         }
 
         if (archive.getGrid().getLocationDensity(mutatedLocation) < archive
                 .getGrid().getLocationDensity(originalLocation)) {
-            return new MOSolutionBase<Type>(mutatedSolution);
+            return new NumberSolution<Type>(mutatedSolution);
         }
 
-        return new MOSolutionBase<Type>(solution);
+        return new NumberSolution<Type>(solution);
     }
 
 }

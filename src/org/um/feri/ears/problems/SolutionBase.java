@@ -1,7 +1,9 @@
 package org.um.feri.ears.problems;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class SolutionBase {
 
@@ -23,21 +25,78 @@ public abstract class SolutionBase {
 
     public List<SolutionBase> parents;
 
+    /* Multi-objective variables */
+    protected double paretoFitness;
+    protected double rank;
+    protected int location;
+    protected double crowdingDistance;
+    protected Map<Object, Object> attributes = new HashMap<>();
+
     public SolutionBase() {
         ID = currentID++;
     }
 
+    public SolutionBase(int numberOfObjectives) {
+        this();
+        this.numberOfObjectives = numberOfObjectives;
+        objectives = new double[numberOfObjectives];
+    }
+
     public SolutionBase(SolutionBase s) {
 
+        numberOfObjectives = s.numberOfObjectives;
+        objectives = new double[s.numberOfObjectives];
+        System.arraycopy(s.objectives, 0, objectives, 0, s.numberOfObjectives);
         parents = new ArrayList<>();
         this.constraintsMet = s.constraintsMet;
         if (s.constraints != null) {
             constraints = new double[s.constraints.length];
             System.arraycopy(s.constraints, 0, constraints, 0, constraints.length);
         }
+        this.attributes = new HashMap<>(s.attributes);
         overallConstraintViolation = s.getOverallConstraintViolation();
         numberOfViolatedConstraints = s.getNumberOfViolatedConstraint();
         ID = s.ID;
+    }
+
+    public double getParetoFitness() {
+        return paretoFitness;
+    }
+
+    public void setParetoFitness(double paretoFitness) {
+        this.paretoFitness = paretoFitness;
+    }
+
+    public double getRank() {
+        return rank;
+    }
+
+    public void setRank(double rank) {
+        this.rank = rank;
+    }
+
+    public double getCrowdingDistance() {
+        return crowdingDistance;
+    }
+
+    public void setCrowdingDistance(double crowdingDistance) {
+        this.crowdingDistance = crowdingDistance;
+    }
+
+    public int getLocation() {
+        return location;
+    }
+
+    public void setLocation(int location) {
+        this.location = location;
+    }
+
+    public void setAttribute(Object id, Object value) {
+        attributes.put(id, value);
+    }
+
+    public Object getAttribute(Object id) {
+        return attributes.get(id);
     }
 
     /*
@@ -57,6 +116,14 @@ public abstract class SolutionBase {
 
     public void setObjective(int index, double objective) {
         objectives[index] = objective;
+    }
+
+    public int getNumberOfObjectives() {
+        return numberOfObjectives;
+    }
+
+    public void setObjectives(double[] objectives) {
+        this.objectives = objectives;
     }
 
     public long getID() {
@@ -178,7 +245,6 @@ public abstract class SolutionBase {
                 return true;
             }
         }
-
         return false;
     }
 

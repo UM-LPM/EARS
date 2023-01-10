@@ -15,8 +15,8 @@ package org.um.feri.ears.algorithms.moo.pso;
 
 import java.util.Comparator;
 
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.NondominatedPopulation;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.SolutionListUtils;
 
@@ -25,7 +25,7 @@ import org.um.feri.ears.util.SolutionListUtils;
  * Modified by Juanjo on 07/04/2015
  */
 public class CrowdingDistanceArchive<Type extends Number> {
-    private Comparator<MOSolutionBase<Type>> crowdingDistanceComparator;
+    private Comparator<NumberSolution<Type>> crowdingDistanceComparator;
     private CrowdingDistance<Type> crowdingDistance;
     protected NondominatedPopulation<Type> archive;
     protected int maxSize;
@@ -41,12 +41,12 @@ public class CrowdingDistanceArchive<Type extends Number> {
     public void prune() {
         if (getSolutionList().size() > getMaxSize()) {
             computeDensityEstimator();
-            MOSolutionBase<Type> worst = new SolutionListUtils().findWorstSolution(getSolutionList(), crowdingDistanceComparator);
+            NumberSolution<Type> worst = new SolutionListUtils().findWorstSolution(getSolutionList(), crowdingDistanceComparator);
             getSolutionList().remove(worst);
         }
     }
 
-    public Comparator<MOSolutionBase<Type>> getComparator() {
+    public Comparator<NumberSolution<Type>> getComparator() {
         return crowdingDistanceComparator;
     }
 
@@ -55,7 +55,7 @@ public class CrowdingDistanceArchive<Type extends Number> {
     }
 
 
-    public boolean add(MOSolutionBase<Type> solution) {
+    public boolean add(NumberSolution<Type> solution) {
         boolean success = archive.add(solution);
         if (success) {
             prune();
@@ -64,7 +64,7 @@ public class CrowdingDistanceArchive<Type extends Number> {
         return success;
     }
 
-    public MOSolutionBase<Type> get(int index) {
+    public NumberSolution<Type> get(int index) {
         return getSolutionList().get(index);
     }
 

@@ -32,8 +32,8 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
@@ -65,10 +65,10 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
      * A mapping from grid index to the solutions occupying that grid index.
      * This enables PESA2's region-based selection.
      */
-    protected Map<Integer, List<MOSolutionBase<Type>>> gridMap;
+    protected Map<Integer, List<NumberSolution<Type>>> gridMap;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
     public PESA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
         this.populationSize = populationSize;
@@ -92,7 +92,7 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            NumberSolution<Type> solution = new NumberSolution<Type>(task.getRandomMOSolution());
             // problem.evaluateConstraints(solution);
             population.add(solution);
         }
@@ -110,8 +110,8 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
             gridMap = createGridMap();
 
             while (population.size() < populationSize) {
-                MOSolutionBase<Type>[] parents = selection.select(2, archive);
-                MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
+                NumberSolution<Type>[] parents = selection.select(2, archive);
+                NumberSolution<Type>[] offSpring = cross.execute(parents, task);
                 mut.execute(offSpring[0], task);
                 if (task.isStopCriterion())
                     break;
@@ -135,15 +135,15 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
      * @return a mapping from grid index to the solutions occupying that grid
      * index
      */
-    protected Map<Integer, List<MOSolutionBase<Type>>> createGridMap() {
-        Map<Integer, List<MOSolutionBase<Type>>> result = new HashMap<Integer, List<MOSolutionBase<Type>>>();
+    protected Map<Integer, List<NumberSolution<Type>>> createGridMap() {
+        Map<Integer, List<NumberSolution<Type>>> result = new HashMap<Integer, List<NumberSolution<Type>>>();
 
-        for (MOSolutionBase<Type> solution : archive) {
+        for (NumberSolution<Type> solution : archive) {
             int index = archive.findIndex(solution);
-            List<MOSolutionBase<Type>> solutions = result.get(index);
+            List<NumberSolution<Type>> solutions = result.get(index);
 
             if (solutions == null) {
-                solutions = new ArrayList<MOSolutionBase<Type>>();
+                solutions = new ArrayList<NumberSolution<Type>>();
                 result.put(index, solutions);
             }
 
@@ -168,8 +168,8 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
             super();
         }
 
-        public MOSolutionBase<Type>[] select(int arity, ParetoSolution<Type> population) {
-            MOSolutionBase<Type>[] result = new MOSolutionBase[arity];
+        public NumberSolution<Type>[] select(int arity, ParetoSolution<Type> population) {
+            NumberSolution<Type>[] result = new NumberSolution[arity];
 
             for (int i = 0; i < arity; i++) {
                 result[i] = select();
@@ -183,12 +183,12 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
          *
          * @return the randomly selected map entry
          */
-        protected Entry<Integer, List<MOSolutionBase<Type>>> draw() {
+        protected Entry<Integer, List<NumberSolution<Type>>> draw() {
             int index = Util.nextInt(gridMap.size());
-            Iterator<Entry<Integer, List<MOSolutionBase<Type>>>> iterator = gridMap.entrySet().iterator();
+            Iterator<Entry<Integer, List<NumberSolution<Type>>>> iterator = gridMap.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry<Integer, List<MOSolutionBase<Type>>> entry = iterator.next();
+                Entry<Integer, List<NumberSolution<Type>>> entry = iterator.next();
 
                 if (index == 0) {
                     return entry;
@@ -205,10 +205,10 @@ public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T,
          *
          * @return the selected solution
          */
-        protected MOSolutionBase<Type> select() {
-            Entry<Integer, List<MOSolutionBase<Type>>> entry1 = draw();
-            Entry<Integer, List<MOSolutionBase<Type>>> entry2 = draw();
-            Entry<Integer, List<MOSolutionBase<Type>>> selection = entry1;
+        protected NumberSolution<Type> select() {
+            Entry<Integer, List<NumberSolution<Type>>> entry1 = draw();
+            Entry<Integer, List<NumberSolution<Type>>> entry2 = draw();
+            Entry<Integer, List<NumberSolution<Type>>> selection = entry1;
 
             // pick the grid index with smaller density
             if (entry1 != entry2) {

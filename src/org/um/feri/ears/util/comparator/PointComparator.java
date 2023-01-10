@@ -17,16 +17,16 @@
 //Copyright (C) 2010 Lyndon While, Lucas Bradstreet.
 
 package org.um.feri.ears.util.comparator;
-import java.util.Comparator;
+import org.um.feri.ears.problems.NumberSolution;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import java.util.Comparator;
 
 /**
  * Point comparator. Starts the comparison from front last point dimension to the first one
  *
  * @author Antonio J. Nebro
  */
-public class PointComparator<Type extends Number> implements Comparator<MOSolutionBase<Type>> {
+public class PointComparator<Type extends Number> implements Comparator<NumberSolution<Type>> {
 	private boolean maximizing;
 
 	public PointComparator() {
@@ -48,9 +48,9 @@ public class PointComparator<Type extends Number> implements Comparator<MOSoluti
 	 * @return -1 if o1 < o1, 1 if o1 > o2 or 0 in other case.
 	 */
 	@Override
-	public int compare(MOSolutionBase<Type> pointOne, MOSolutionBase<Type> pointTwo) {
+	public int compare(NumberSolution<Type> pointOne, NumberSolution<Type> pointTwo) {
 
-		for (int i = pointOne.numberOfObjectives()-1; i >= 0; i--) {
+		for (int i = pointOne.getNumberOfObjectives()-1; i >= 0; i--) {
 			if (isBetter(pointOne.getObjective(i), pointTwo.getObjective(i))) {
 				return -1;
 			} else if (isBetter(pointTwo.getObjective(i), pointOne.getObjective(i))) {

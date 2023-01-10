@@ -22,8 +22,8 @@ package org.um.feri.ears.problems.moo.misc;
 
 import java.util.ArrayList;
 
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.Osyczka2_F1;
 import org.um.feri.ears.problems.moo.functions.Osyczka2_F2;
 import org.um.feri.ears.util.Util;
@@ -59,7 +59,7 @@ public class Ozyczka2 extends DoubleMOProblem{
 	}
 
 	@Override
-	public void evaluate(MOSolutionBase<Double> solution) {
+	public void evaluate(NumberSolution<Double> solution) {
 		
 		double[] x = Util.toDoubleArray(solution.getVariables());
 
@@ -72,7 +72,7 @@ public class Ozyczka2 extends DoubleMOProblem{
 	}
 
 	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
+	public void evaluateConstraints(NumberSolution<Double> solution) {
 		double[] constraints = new double[numberOfConstraints];
 		
 		double[] dv = Util.toDoubleArray(solution.getVariables());

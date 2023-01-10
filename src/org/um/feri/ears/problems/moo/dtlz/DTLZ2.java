@@ -20,9 +20,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.problems.moo.dtlz;
 
+import org.um.feri.ears.problems.NumberSolution;
+
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 public class DTLZ2 extends DTLZ{
 	
@@ -50,11 +51,11 @@ public class DTLZ2 extends DTLZ{
 	}
 
 	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
+	public void evaluateConstraints(NumberSolution<Double> solution) {
 	}
 	
 	@Override
-	public double[] evaluate(Double ds[]) {
+	public double[] evaluate(Double[] ds) {
 		
 		double [] x = new double[numberOfDimensions];
 	    double [] f = new double[numberOfObjectives];

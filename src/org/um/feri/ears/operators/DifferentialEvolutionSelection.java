@@ -22,7 +22,7 @@
 package org.um.feri.ears.operators;
 
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
@@ -30,7 +30,7 @@ import org.um.feri.ears.util.Util;
  * Class implementing the selection operator used in DE: three different
  * solutions are returned from a population.
  */
-public class DifferentialEvolutionSelection<Type extends Number> implements SelectionOperator<MOSolutionBase<Type>[], ParetoSolution<Type>, MOTask>{
+public class DifferentialEvolutionSelection<Type extends Number> implements SelectionOperator<NumberSolution<Type>[], ParetoSolution<Type>, MOTask>{
 
 	private int currentIndex;
 
@@ -51,10 +51,10 @@ public class DifferentialEvolutionSelection<Type extends Number> implements Sele
 	 * @throws Exception if the population has less than four solutions
 	 */
 	@Override
-	public MOSolutionBase<Type>[] execute(ParetoSolution<Type> population, MOTask tb) {
+	public NumberSolution<Type>[] execute(ParetoSolution<Type> population, MOTask tb) {
 
 		int index = currentIndex;
-		MOSolutionBase<Type>[] parents = new MOSolutionBase[3];
+		NumberSolution<Type>[] parents = new NumberSolution[3];
 		int r1, r2, r3;
 
 		if (population.size() < 4)

@@ -20,7 +20,7 @@ package org.um.feri.ears.util;
 
 import java.util.Iterator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
@@ -115,11 +115,11 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
      * {@code newSolution} is dominated and is not added to this population.
      */
     @Override
-    public boolean add(MOSolutionBase<T> newSolution) {
-        Iterator<MOSolutionBase<T>> iterator = iterator();
+    public boolean add(NumberSolution<T> newSolution) {
+        Iterator<NumberSolution<T>> iterator = iterator();
 
         while (iterator.hasNext()) {
-            MOSolutionBase<T> oldSolution = iterator.next();
+            NumberSolution<T> oldSolution = iterator.next();
             int flag = comparator.compare(newSolution, oldSolution);
 
             if (flag < 0) {
@@ -142,11 +142,11 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
      * be replaced.
      */
     @Override
-    public void replace(int index, MOSolutionBase<T> newSolution) {
-        Iterator<MOSolutionBase<T>> iterator = iterator();
+    public void replace(int index, NumberSolution<T> newSolution) {
+        Iterator<NumberSolution<T>> iterator = iterator();
 
         while (iterator.hasNext()) {
-            MOSolutionBase<T> oldSolution = iterator.next();
+            NumberSolution<T> oldSolution = iterator.next();
             int flag = comparator.compare(newSolution, oldSolution);
 
             if (flag < 0) {
@@ -173,7 +173,7 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
      * @param newSolution the solution to be added
      * @return true if the population was modified as a result of this operation
      */
-    protected boolean forceAddWithoutCheck(MOSolutionBase<T> newSolution) {
+    protected boolean forceAddWithoutCheck(NumberSolution<T> newSolution) {
         return super.add(newSolution);
     }
 
@@ -184,10 +184,10 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
      * @param s2 the second solution
      * @return the distance between the two solutions in objective space
      */
-    protected double distance(MOSolutionBase<T> s1, MOSolutionBase<T> s2) {
+    protected double distance(NumberSolution<T> s1, NumberSolution<T> s2) {
         double distance = 0.0;
 
-        for (int i = 0; i < s1.numberOfObjectives(); i++) {
+        for (int i = 0; i < s1.getNumberOfObjectives(); i++) {
             distance += Math.pow(s1.getObjective(i) - s2.getObjective(i), 2.0);
         }
 

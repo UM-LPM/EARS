@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
@@ -53,7 +53,7 @@ public class Ranking<Type extends Number> {
 	/**
 	 * stores a <code>Comparator</code> for dominance checking
 	 */
-	private static final Comparator<MOSolutionBase> dominance_ = new DominanceComparator();
+	private static final Comparator<NumberSolution> dominance_ = new DominanceComparator();
 
   /**
    * stores a <code>Comparator</code> for Overal Constraint Violation Comparator

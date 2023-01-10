@@ -6,9 +6,9 @@ import java.io.FileReader;
 import java.util.HashMap;
 
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
@@ -82,7 +82,7 @@ public class DummyMOAlgorithm<T extends MOTask, Type extends Number> extends MOA
 									while (line != null && line.compareTo("#") != 0)
 									{
 										value = line.split(" ");
-										MOSolutionBase<Type> mos = new MOSolutionBase<Type>(value.length);
+										NumberSolution<Type> mos = new NumberSolution<Type>(value.length);
 										for(int i=0;i<value.length;i++)
 										{
 											mos.setObjective(i, Double.parseDouble(value[i]));

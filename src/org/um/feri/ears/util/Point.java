@@ -1,8 +1,9 @@
 package org.um.feri.ears.util;
 
+import org.um.feri.ears.problems.NumberSolution;
+
 import java.util.Arrays;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 public class Point<Type extends Number> {
 
@@ -40,9 +41,9 @@ public class Point<Type extends Number> {
      *
      * @param solution
      */
-    public Point(MOSolutionBase<Type> solution) {
+    public Point(NumberSolution<Type> solution) {
 
-        int dimensions = solution.numberOfObjectives();
+        int dimensions = solution.getNumberOfObjectives();
         point = new double[dimensions];
         for (int i = 0; i < dimensions; i++) {
             point[i] = solution.getObjective(i);

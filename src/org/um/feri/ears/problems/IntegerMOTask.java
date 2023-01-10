@@ -1,7 +1,6 @@
 package org.um.feri.ears.problems;
 
 import org.um.feri.ears.problems.moo.IntegerMOProblem;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
@@ -18,11 +17,11 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
         super(task);
     }
 
-    public MOSolutionBase<Integer> getRandomMOSolution() throws StopCriterionException {
+    public NumberSolution<Integer> getRandomMOSolution() throws StopCriterionException {
 
         if (stopCriterion == StopCriterion.EVALUATIONS) {
             incrementNumberOfEvaluations();
-            MOSolutionBase<Integer> newSolution = problem.getRandomSolution();
+            NumberSolution<Integer> newSolution = problem.getRandomSolution();
             //p.evaluateConstraints(newSolution);
             return newSolution;
         } else if (stopCriterion == StopCriterion.ITERATIONS) {
@@ -30,7 +29,7 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
                 throw new StopCriterionException("Max iterations");
 
             incrementNumberOfEvaluations();
-            MOSolutionBase<Integer> newSolution = problem.getRandomSolution();
+            NumberSolution<Integer> newSolution = problem.getRandomSolution();
             return newSolution;
 
         } else if (stopCriterion == StopCriterion.CPU_TIME) {
@@ -38,7 +37,7 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
             if (!isStop) {
                 hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
                 incrementNumberOfEvaluations();
-                MOSolutionBase<Integer> newSolution = problem.getRandomSolution();
+                NumberSolution<Integer> newSolution = problem.getRandomSolution();
                 return newSolution;
             } else {
                 throw new StopCriterionException("CPU Time");
@@ -48,7 +47,7 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
     }
 
     public boolean areDimensionsInFeasibleInterval(ParetoSolution<Integer> solution) {
-        return problem.areDimensionsInFeasableInterval(solution);
+        return problem.areDimensionsInFeasibleInterval(solution);
     }
 
 

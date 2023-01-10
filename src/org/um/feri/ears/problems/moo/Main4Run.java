@@ -13,6 +13,7 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
 import org.um.feri.ears.problems.DoubleMOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
@@ -84,8 +85,8 @@ public class Main4Run {
     	for (DoubleMOTask task : tasks) {
     		
    	
-    		CrossoverOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> cross = new PMXCrossover();
-    		MutationOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> mut = new PermutationSwapMutation(0.2);
+    		CrossoverOperator<Integer, IntegerMOTask, NumberSolution<Integer>> cross = new PMXCrossover();
+    		MutationOperator<Integer, IntegerMOTask, NumberSolution<Integer>> mut = new PermutationSwapMutation(0.2);
 
     		
     		I_NSGAII nsga = new I_NSGAII();

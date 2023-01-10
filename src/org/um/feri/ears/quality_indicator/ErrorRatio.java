@@ -12,7 +12,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.quality_indicator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 /**
@@ -57,7 +57,7 @@ public class ErrorRatio<T extends Number> extends QualityIndicator<T> {
         boolean thePointIsInTheParetoFront, found;
 
         for (int i = 0; i < paretoFrontApproximation.size(); i++) {
-            MOSolutionBase<T> currentPoint = paretoFrontApproximation.get(i);
+            NumberSolution<T> currentPoint = paretoFrontApproximation.get(i);
             thePointIsInTheParetoFront = false;
             for (int j = 0; j < referenceSet.length; j++) {
                 double[] currentParetoFrontPoint = referenceSet[j];

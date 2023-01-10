@@ -10,7 +10,7 @@ package org.um.feri.ears.operators;
 import javax.management.JMException;
 
 import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
 public class PESA2Selection<Type extends Number> {
@@ -22,7 +22,7 @@ public class PESA2Selection<Type extends Number> {
 	  * @return the selected solution
 	   * @throws JMException 
 	  */
-	public MOSolutionBase<Type> execute(Object object) {
+	public NumberSolution<Type> execute(Object object) {
 		try {
 			AdaptiveGridArchive<Type> archive = (AdaptiveGridArchive<Type>) object;
 			int selected;
@@ -48,7 +48,7 @@ public class PESA2Selection<Type extends Number> {
 			int base = Util.rnd.nextInt(archive.size());
 			int cnt = 0;
 			while (cnt < archive.size()) {
-				MOSolutionBase<Type> individual = archive.get((base + cnt) % archive.size());
+				NumberSolution<Type> individual = archive.get((base + cnt) % archive.size());
 				if (archive.getGrid().location(individual) != selected) {
 					cnt++;
 				} else {

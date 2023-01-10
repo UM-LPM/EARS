@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 import com.google.gson.Gson;
@@ -82,7 +82,7 @@ public class Util {
 
             ParetoWithEval paretoList = new ParetoWithEval();
 
-            for (MOSolutionBase<T> s : best.solutions) {
+            for (NumberSolution<T> s : best.solutions) {
                 double[] objectives = s.getObjectives();
                 //check for NaN
                 for (int i = 0; i < objectives.length; i++) {
@@ -113,7 +113,7 @@ public class Util {
 
             ParetoWithEval paretoList = new ParetoWithEval();
 
-            for (MOSolutionBase<T> s : best.solutions) {
+            for (NumberSolution<T> s : best.solutions) {
                 double[] objectives = s.getObjectives();
                 //check for NaN
                 for (int i = 0; i < objectives.length; i++) {

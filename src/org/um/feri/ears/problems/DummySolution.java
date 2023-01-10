@@ -3,7 +3,8 @@ package org.um.feri.ears.problems;
 public class DummySolution extends NumberSolution<Double> {
 
     public DummySolution(double value) {
-        super(value);
+        super(1);
+        setObjective(0, value);
     }
 
     @Override

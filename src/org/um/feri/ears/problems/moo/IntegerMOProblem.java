@@ -3,6 +3,7 @@ package org.um.feri.ears.problems.moo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
 public abstract class IntegerMOProblem extends MOProblemBase<Integer> {
@@ -11,7 +12,7 @@ public abstract class IntegerMOProblem extends MOProblemBase<Integer> {
         super(numberOfDimensions, numberOfConstraints, numberOfObjectives);
     }
 
-    public void evaluate(MOSolutionBase<Integer> solution) {
+    public void evaluate(NumberSolution<Integer> solution) {
         double[] obj = evaluate(solution.getVariables());
         solution.setObjectives(obj);
     }
@@ -43,11 +44,11 @@ public abstract class IntegerMOProblem extends MOProblemBase<Integer> {
     }
 
     @Override
-    public void evaluateConstraints(MOSolutionBase<Integer> solution) {
+    public void evaluateConstraints(NumberSolution<Integer> solution) {
     }
 
     @Override
-    public MOSolutionBase<Integer> getRandomSolution() {
+    public NumberSolution<Integer> getRandomSolution() {
 
         List<Integer> var = new ArrayList<Integer>(numberOfDimensions);
         //Integer[] var = new Integer[numberOfDimensions];
@@ -64,16 +65,15 @@ public abstract class IntegerMOProblem extends MOProblemBase<Integer> {
             var.add(randomSequence.get(i));
         }
 
-        MOSolutionBase<Integer> sol = new MOSolutionBase<Integer>(var, evaluate(var), upperLimit, lowerLimit);
+        NumberSolution<Integer> sol = new NumberSolution<>(var, evaluate(var));
         evaluateConstraints(sol);
-
         return sol;
     }
 
     @Override
-    public boolean areDimensionsInFeasableInterval(ParetoSolution<Integer> ps) {
+    public boolean areDimensionsInFeasibleInterval(ParetoSolution<Integer> ps) {
 
-        for (MOSolutionBase<Integer> sol : ps) {
+        for (NumberSolution<Integer> sol : ps) {
             for (int i = 0; i < numberOfDimensions; i++) {
                 if (sol.getValue(i) < lowerLimit.get(i))
                     return false;

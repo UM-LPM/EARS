@@ -3,8 +3,8 @@ package org.um.feri.ears.visualization.graphing.data;
 import java.util.ArrayList;
 
 import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 @SuppressWarnings("rawtypes")
@@ -74,7 +74,7 @@ public class RecordedCombination
 		}*/
 		
 		// Save actual pareto front:
-		records.get(0).paretoFront = (MOSolutionBase[]) ps.solutions.toArray(new MOSolutionBase[0]);
+		records.get(0).paretoFront = (NumberSolution[]) ps.solutions.toArray(new NumberSolution[0]);
 	}
 	
 	public void Include(RecordedCombination other)

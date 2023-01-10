@@ -1,10 +1,10 @@
 package org.um.feri.ears.operators;
 
 import org.um.feri.ears.problems.IntegerMOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
-public class PermutationSwapMutation implements MutationOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> {
+public class PermutationSwapMutation implements MutationOperator<Integer, IntegerMOTask, NumberSolution<Integer>> {
 
     private double mutationProbability;
 
@@ -19,7 +19,7 @@ public class PermutationSwapMutation implements MutationOperator<Integer, Intege
     }
 
     @Override
-    public MOSolutionBase<Integer> execute(MOSolutionBase<Integer> solution, IntegerMOTask tb) {
+    public NumberSolution<Integer> execute(NumberSolution<Integer> solution, IntegerMOTask tb) {
         doMutation(solution, tb);
         return solution;
     }
@@ -29,7 +29,7 @@ public class PermutationSwapMutation implements MutationOperator<Integer, Intege
      *
      * @param tb
      */
-    public void doMutation(MOSolutionBase<Integer> solution, IntegerMOTask tb) {
+    public void doMutation(NumberSolution<Integer> solution, IntegerMOTask tb) {
         int permutationLength;
         permutationLength = tb.getNumberOfDimensions();
 

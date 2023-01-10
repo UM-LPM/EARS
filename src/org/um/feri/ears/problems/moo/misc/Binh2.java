@@ -23,8 +23,8 @@ import java.util.ArrayList;
 
 import javax.management.JMException;
 
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.Binh2_F1;
 import org.um.feri.ears.problems.moo.functions.Binh2_F2;
 import org.um.feri.ears.util.Util;
@@ -78,7 +78,7 @@ public class Binh2 extends DoubleMOProblem{
 	   * @param solution The solution to evaluate.
 	   * @throws JMException 
 	   */
-	public void evaluate(MOSolutionBase<Double> solution) {
+	public void evaluate(NumberSolution<Double> solution) {
 
 		double[] x = Util.toDoubleArray(solution.getVariables());
 
@@ -89,7 +89,7 @@ public class Binh2 extends DoubleMOProblem{
 		solution.setObjectives(obj);
 	}
 	
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
+	public void evaluateConstraints(NumberSolution<Double> solution) {
 		double[] constraints = new double[numberOfConstraints];
 		
 		double[] dv = Util.toDoubleArray(solution.getVariables());

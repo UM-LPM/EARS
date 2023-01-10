@@ -2,7 +2,7 @@ package org.um.feri.ears.problems.moo.unconstrained.cec2009;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.functions.UP7_1;
 import org.um.feri.ears.problems.moo.functions.UP7_2;
 
@@ -43,7 +43,7 @@ public class UnconstrainedProblem7 extends CEC2009 {
 	}
 
 	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
+	public void evaluateConstraints(NumberSolution<Double> solution) {
 		
 	}
 }

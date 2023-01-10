@@ -1,6 +1,6 @@
 package org.um.feri.ears.quality_indicator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
@@ -53,15 +53,15 @@ public class NR<T extends Number> extends QualityIndicator<T> {
 
         DominanceComparator<T> sc = new DominanceComparator<T>();
 
-        for (MOSolutionBase<T> s1 : front1) {
-            for (MOSolutionBase<T> ndSolution : ndp) {
+        for (NumberSolution<T> s1 : front1) {
+            for (NumberSolution<T> ndSolution : ndp) {
                 if (sc.compare(s1, ndSolution) == 0)
                     NR1++;
             }
         }
 
-        for (MOSolutionBase<T> s2 : front2) {
-            for (MOSolutionBase<T> ndSolution : ndp) {
+        for (NumberSolution<T> s2 : front2) {
+            for (NumberSolution<T> ndSolution : ndp) {
                 if (sc.compare(s2, ndSolution) == 0)
                     NR2++;
             }

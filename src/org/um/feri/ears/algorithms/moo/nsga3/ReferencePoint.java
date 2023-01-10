@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -18,7 +18,7 @@ import org.um.feri.ears.util.Util;
 public class ReferencePoint<Type extends Number> {
     public List<Double> position;
     private int memberSize;
-    private List<Pair<MOSolutionBase<Type>, Double>> potentialMembers;
+    private List<Pair<NumberSolution<Type>, Double>> potentialMembers;
 
     public ReferencePoint() {
     }
@@ -92,14 +92,14 @@ public class ReferencePoint<Type extends Number> {
         this.memberSize++;
     }
 
-    public void AddPotentialMember(MOSolutionBase<Type> member_ind, double distance) {
-        this.potentialMembers.add(new ImmutablePair<MOSolutionBase<Type>, Double>(member_ind, distance));
+    public void AddPotentialMember(NumberSolution<Type> member_ind, double distance) {
+        this.potentialMembers.add(new ImmutablePair<NumberSolution<Type>, Double>(member_ind, distance));
     }
 
-    public MOSolutionBase<Type> FindClosestMember() {
+    public NumberSolution<Type> FindClosestMember() {
         double minDistance = Double.MAX_VALUE;
-        MOSolutionBase<Type> closetMember = null;
-        for (Pair<MOSolutionBase<Type>, Double> p : this.potentialMembers) {
+        NumberSolution<Type> closetMember = null;
+        for (Pair<NumberSolution<Type>, Double> p : this.potentialMembers) {
             if (p.getRight() < minDistance) {
                 minDistance = p.getRight();
                 closetMember = p.getLeft();
@@ -109,13 +109,13 @@ public class ReferencePoint<Type extends Number> {
         return closetMember;
     }
 
-    public MOSolutionBase<Type> RandomMember() {
+    public NumberSolution<Type> RandomMember() {
         int index = this.potentialMembers.size() > 1 ? Util.rnd.nextInt(this.potentialMembers.size()) : 0;
         return this.potentialMembers.get(index).getLeft();
     }
 
-    public void RemovePotentialMember(MOSolutionBase<Type> solution) {
-        Iterator<Pair<MOSolutionBase<Type>, Double>> it = this.potentialMembers.iterator();
+    public void RemovePotentialMember(NumberSolution<Type> solution) {
+        Iterator<Pair<NumberSolution<Type>, Double>> it = this.potentialMembers.iterator();
         while (it.hasNext()) {
             if (it.next().getLeft() == solution) {
                 it.remove();

@@ -21,8 +21,8 @@ import org.um.feri.ears.algorithms.moo.moead.Utils;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
@@ -36,7 +36,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
     ParetoSolution<Type> jointPopulation;
 
 
-    public MOEAD_STM(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int pop_size) {
+    public MOEAD_STM(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int pop_size) {
         super(crossover, mutation, pop_size);
 
         au = new Author("miha", "miha.ravber at gamil.com");
@@ -86,8 +86,8 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
                 matingSelection(p, n, 2, type);
 
                 // STEP 2.2. Reproduction
-                MOSolutionBase<Type> child;
-                MOSolutionBase<Type>[] parents = new MOSolutionBase[3];
+                NumberSolution<Type> child;
+                NumberSolution<Type>[] parents = new NumberSolution[3];
 
                 parents[0] = population.get(p.get(0));
                 parents[1] = population.get(p.get(1));
@@ -147,7 +147,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
     }
 
     // update the current nadir point
-    void updateNadirPoint(MOSolutionBase<Type> individual) {
+    void updateNadirPoint(NumberSolution<Type> individual) {
         for (int i = 0; i < numObj; i++) {
             if (individual.getObjective(i) > nadirPoint[i]) {
                 nadirPoint[i] = individual.getObjective(i);
@@ -287,7 +287,7 @@ public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<
      * Calculate the perpendicular distance between the solution and reference
      * line
      */
-    public double calculateDistance(MOSolutionBase<Type> individual, double[] lambda) {
+    public double calculateDistance(NumberSolution<Type> individual, double[] lambda) {
         double scale;
         double distance;
 

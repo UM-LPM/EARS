@@ -4,25 +4,25 @@ package org.um.feri.ears.algorithms.moo.nsga3;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
 public class EnvironmentalSelection<Type extends Number> {
 
-    private List<List<MOSolutionBase<Type>>> fronts;
+    private List<List<NumberSolution<Type>>> fronts;
     private int solutionsToSelect;
     private List<ReferencePoint<Type>> referencePoints;
     private int numberOfObjectives;
 
 
-    public EnvironmentalSelection(List<List<MOSolutionBase<Type>>> fronts, int solutionsToSelect, List<ReferencePoint<Type>> referencePoints, int numberOfObjectives) {
+    public EnvironmentalSelection(List<List<NumberSolution<Type>>> fronts, int solutionsToSelect, List<ReferencePoint<Type>> referencePoints, int numberOfObjectives) {
         this.fronts = fronts;
         this.solutionsToSelect = solutionsToSelect;
         this.referencePoints = referencePoints;
         this.numberOfObjectives = numberOfObjectives;
     }
 
-    public List<Double> translateObjectives(List<MOSolutionBase<Type>> population) {
+    public List<Double> translateObjectives(List<NumberSolution<Type>> population) {
         List<Double> idealPoint;
 
         idealPoint = new ArrayList<>(numberOfObjectives);
@@ -35,8 +35,8 @@ public class EnvironmentalSelection<Type extends Number> {
             }
             idealPoint.add(minf);
 
-            for (List<MOSolutionBase<Type>> list : fronts) {
-                for (MOSolutionBase<Type> s : list) {
+            for (List<NumberSolution<Type>> list : fronts) {
+                for (NumberSolution<Type> s : list) {
                     if (f == 0) // in the first objective we create the vector of convObjs
                         setAttribute(s, new ArrayList<Double>());
 
@@ -56,9 +56,9 @@ public class EnvironmentalSelection<Type extends Number> {
     // of the objective which uses 1.0; the rest will use 0.00001. This is
     // different to the one impelemented in C++
     // ----------------------------------------------------------------------
-    private double ASF(MOSolutionBase<Type> s, int index) {
+    private double ASF(NumberSolution<Type> s, int index) {
         double maxRatio = Double.NEGATIVE_INFINITY;
-        for (int i = 0; i < s.numberOfObjectives(); i++) {
+        for (int i = 0; i < s.getNumberOfObjectives(); i++) {
             double weight = (index == i) ? 1.0 : 0.000001;
             maxRatio = Math.max(maxRatio, s.getObjective(i) / weight);
         }
@@ -66,12 +66,12 @@ public class EnvironmentalSelection<Type extends Number> {
     }
 
     // ----------------------------------------------------------------------
-    private List<MOSolutionBase<Type>> findExtremePoints(List<MOSolutionBase<Type>> population) {
-        List<MOSolutionBase<Type>> extremePoints = new ArrayList<>();
-        MOSolutionBase<Type> minIndv = null;
+    private List<NumberSolution<Type>> findExtremePoints(List<NumberSolution<Type>> population) {
+        List<NumberSolution<Type>> extremePoints = new ArrayList<>();
+        NumberSolution<Type> minIndv = null;
         for (int f = 0; f < numberOfObjectives; f += 1) {
             double minASF = Double.MAX_VALUE;
-            for (MOSolutionBase<Type> s : fronts.get(0)) { // only consider the individuals in the first front
+            for (NumberSolution<Type> s : fronts.get(0)) { // only consider the individuals in the first front
                 double asf = ASF(s, f);
                 if (asf < minASF) {
                     minASF = asf;
@@ -113,7 +113,7 @@ public class EnvironmentalSelection<Type extends Number> {
         return x;
     }
 
-    public List<Double> constructHyperplane(List<MOSolutionBase<Type>> population, List<MOSolutionBase<Type>> extremePoints) {
+    public List<Double> constructHyperplane(List<NumberSolution<Type>> population, List<NumberSolution<Type>> extremePoints) {
         // Check whether there are duplicate extreme points.
         // This might happen but the original paper does not mention how to deal with it.
         boolean duplicate = false;
@@ -138,7 +138,7 @@ public class EnvironmentalSelection<Type extends Number> {
                 b.add(1.0);
 
             List<List<Double>> A = new ArrayList<>();
-            for (MOSolutionBase<Type> s : extremePoints) {
+            for (NumberSolution<Type> s : extremePoints) {
                 List<Double> aux = new ArrayList<>();
                 for (int i = 0; i < numberOfObjectives; i++)
                     aux.add(s.getObjective(i));
@@ -155,9 +155,9 @@ public class EnvironmentalSelection<Type extends Number> {
         return intercepts;
     }
 
-    public void normalizeObjectives(List<MOSolutionBase<Type>> population, List<Double> intercepts, List<Double> idealPoint) {
+    public void normalizeObjectives(List<NumberSolution<Type>> population, List<Double> intercepts, List<Double> idealPoint) {
         for (int t = 0; t < fronts.size(); t += 1) {
-            for (MOSolutionBase<Type> s : fronts.get(t)) {
+            for (NumberSolution<Type> s : fronts.get(t)) {
 
                 for (int f = 0; f < numberOfObjectives; f++) {
                     List<Double> convObj = (List<Double>) getAttribute(s);
@@ -188,11 +188,11 @@ public class EnvironmentalSelection<Type extends Number> {
     }
 
 
-    public void associate(List<MOSolutionBase<Type>> population) {
+    public void associate(List<NumberSolution<Type>> population) {
 
         double d;
         for (int t = 0; t < fronts.size(); t++) {
-            for (MOSolutionBase<Type> s : fronts.get(t)) {
+            for (NumberSolution<Type> s : fronts.get(t)) {
                 int minRp = -1;
                 double minDist = Double.MAX_VALUE;
                 for (int r = 0; r < this.referencePoints.size(); r++) {
@@ -241,8 +241,8 @@ public class EnvironmentalSelection<Type extends Number> {
     //
     // Check the last two paragraphs in Section IV-E in the original paper.
     // ----------------------------------------------------------------------
-    MOSolutionBase<Type> SelectClusterMember(ReferencePoint rp) {
-        MOSolutionBase<Type> chosen = null;
+    NumberSolution<Type> SelectClusterMember(ReferencePoint rp) {
+        NumberSolution<Type> chosen = null;
         if (rp.HasPotentialMember()) {
             if (rp.MemberSize() == 0) // currently has no member
             {
@@ -256,7 +256,7 @@ public class EnvironmentalSelection<Type extends Number> {
 
 
     /* This method performs the environmental Selection indicated in the paper describing NSGAIII*/
-    public List<MOSolutionBase<Type>> execute(List<MOSolutionBase<Type>> source) {
+    public List<NumberSolution<Type>> execute(List<NumberSolution<Type>> source) {
         // The comments show the C++ code
 
         // ---------- Steps 9-10 in Algorithm 1 ----------
@@ -266,7 +266,7 @@ public class EnvironmentalSelection<Type extends Number> {
         // ---------- Step 14 / Algorithm 2 ----------
         //vector<double> idealPoint = TranslateObjectives(&cur, fronts);
         List<Double> idealPoint = translateObjectives(source);
-        List<MOSolutionBase<Type>> extremePoints = findExtremePoints(source);
+        List<NumberSolution<Type>> extremePoints = findExtremePoints(source);
         List<Double> intercepts = constructHyperplane(source, extremePoints);
 
         normalizeObjectives(source, intercepts, idealPoint);
@@ -277,7 +277,7 @@ public class EnvironmentalSelection<Type extends Number> {
         while (source.size() < this.solutionsToSelect) {
             int minRp = FindNicheReferencePoint();
 
-            MOSolutionBase<Type> chosen = SelectClusterMember(this.referencePoints.get(minRp));
+            NumberSolution<Type> chosen = SelectClusterMember(this.referencePoints.get(minRp));
             if (chosen == null) // no potential member in Fl, disregard this reference point
             {
                 this.referencePoints.remove(minRp);
@@ -291,12 +291,12 @@ public class EnvironmentalSelection<Type extends Number> {
         return source;
     }
 
-    public void setAttribute(MOSolutionBase<Type> solution, List<Double> value) {
+    public void setAttribute(NumberSolution<Type> solution, List<Double> value) {
         solution.setAttribute(getAttributeID(), value);
     }
 
 
-    public List<Double> getAttribute(MOSolutionBase<Type> solution) {
+    public List<Double> getAttribute(NumberSolution<Type> solution) {
         return (List<Double>) solution.getAttribute(getAttributeID());
     }
 

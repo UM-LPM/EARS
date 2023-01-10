@@ -22,14 +22,14 @@
 package org.um.feri.ears.operators;
 
 import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
 
 /**
  * This class allows to apply a SBX crossover operator using two parent solutions.
  */
-public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOSolutionBase<Double>>{
+public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, NumberSolution<Double>>{
   /**
    * EPS defines the minimum difference allowed between real values
    */
@@ -62,12 +62,12 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOS
    * @param parent2 The second parent
    * @return An array containing the two offsprings
    */
-	public MOSolutionBase<Double>[] doCrossover(double probability, MOSolutionBase<Double> parent1, MOSolutionBase<Double> parent2, DoubleMOTask task) {
+	public NumberSolution<Double>[] doCrossover(double probability, NumberSolution<Double> parent1, NumberSolution<Double> parent2, DoubleMOTask task) {
 
-		MOSolutionBase<Double>[] offSpring = new MOSolutionBase[2];
+		NumberSolution<Double>[] offSpring = new NumberSolution[2];
 
-		offSpring[0] = new MOSolutionBase<Double>(parent1);
-		offSpring[1] = new MOSolutionBase<Double>(parent2);
+		offSpring[0] = new NumberSolution<Double>(parent1);
+		offSpring[1] = new NumberSolution<Double>(parent2);
 
 		int i;
 		double rand;
@@ -150,18 +150,18 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOS
 		return offSpring;
 	}
 
-	public MOSolutionBase<Double>[] execute(MOSolutionBase<Double>[] parents, DoubleMOTask task) {
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, DoubleMOTask task) {
 
 		if (parents.length != 2) {
 			return null;
 		}
 
-		MOSolutionBase<Double>[] offSpring;
+		NumberSolution<Double>[] offSpring;
 		offSpring = doCrossover(crossoverProbability, parents[0], parents[1], task);
 		return offSpring;
 	}
 	@Override
-	public void setCurrentSolution(MOSolutionBase<Double> current) {
+	public void setCurrentSolution(NumberSolution<Double> current) {
 
 	}
 }

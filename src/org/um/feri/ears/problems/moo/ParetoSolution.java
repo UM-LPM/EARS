@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.SolutionBase;
 import org.um.feri.ears.quality_indicator.IndicatorFactory;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
@@ -29,9 +30,9 @@ import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.Style;
 import com.panayotis.gnuplot.terminal.PostscriptTerminal;
 
-public class ParetoSolution<Type extends Number> extends SolutionBase implements Iterable<MOSolutionBase<Type>> {
+public class ParetoSolution<Type extends Number> extends SolutionBase implements Iterable<NumberSolution<Type>> {
 
-    public List<MOSolutionBase<Type>> solutions;
+    public List<NumberSolution<Type>> solutions;
     private double pareto_eval;
     private HashMap<String, Double> qiEval = new HashMap<String, Double>();
 
@@ -52,27 +53,27 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
         overallConstraintViolation = ps.getOverallConstraintViolation();
         numberOfViolatedConstraints = ps.getNumberOfViolatedConstraint();
 
-        solutions = new ArrayList<MOSolutionBase<Type>>();
-        for (MOSolutionBase<Type> sol : ps) {
+        solutions = new ArrayList<>();
+        for (NumberSolution<Type> sol : ps) {
             solutions.add(sol.copy());
         }
     }
     public ParetoSolution() {
-        solutions = new ArrayList<MOSolutionBase<Type>>();
+        solutions = new ArrayList<NumberSolution<Type>>();
         capacity = 1000;
     }
 
     public ParetoSolution(int maximumSize) {
 
-        solutions = new ArrayList<MOSolutionBase<Type>>();
+        solutions = new ArrayList<NumberSolution<Type>>();
         capacity = maximumSize;
     }
 
     public ParetoSolution(int numberOfPoints, int numberOfObjectives) {
         capacity = numberOfPoints;
-        solutions = new ArrayList<MOSolutionBase<Type>>();
+        solutions = new ArrayList<>();
         for (int i = 0; i < numberOfPoints; i++) {
-            MOSolutionBase<Type> point = new MOSolutionBase<Type>(numberOfObjectives);
+            NumberSolution<Type> point = new NumberSolution<Type>(numberOfObjectives);
             for (int j = 0; j < numberOfObjectives; j++) {
                 point.setObjective(j, 0.0);
             }
@@ -80,7 +81,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
         }
     }
 
-    public ParetoSolution(List<MOSolutionBase<Type>> pop) {
+    public ParetoSolution(List<NumberSolution<Type>> pop) {
         solutions = pop;
         capacity = pop.size();
     }
@@ -98,7 +99,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
         this.qiEval = qiEval;
     }
 
-    public boolean add(MOSolutionBase<Type> solution) {
+    public boolean add(NumberSolution<Type> solution) {
         if (solutions.size() == capacity) {
             return false;
         }
@@ -113,7 +114,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
      * @param index    the index to replace
      * @param solution the new solution
      */
-    public void replace(int index, MOSolutionBase<Type> solution) {
+    public void replace(int index, NumberSolution<Type> solution) {
         solutions.set(index, solution);
     }
 
@@ -126,28 +127,28 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
     public boolean addAll(ParetoSolution<Type> population) {
         boolean changed = false;
 
-        for (MOSolutionBase<Type> solution : population.solutions) {
+        for (NumberSolution<Type> solution : population.solutions) {
             changed |= add(solution);
         }
 
         return changed;
     }
 
-    public void addAll(List<MOSolutionBase<Type>> pop) {
+    public void addAll(List<NumberSolution<Type>> pop) {
 
-        for (MOSolutionBase<Type> solution : pop) {
+        for (NumberSolution<Type> solution : pop) {
             add(solution);
         }
     }
 
-    public MOSolutionBase<Type> get(int i) {
+    public NumberSolution<Type> get(int i) {
         if (i >= solutions.size()) {
             throw new IndexOutOfBoundsException("Index out of Bound " + i);
         }
         return solutions.get(i);
     }
 
-    public void set(int index, MOSolutionBase<Type> solution) {
+    public void set(int index, NumberSolution<Type> solution) {
         solutions.set(index, solution);
     }
 
@@ -271,7 +272,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
      * @return {@code true} if this population was modified as a result of this
      * method; {@code false} otherwise
      */
-    public boolean remove(MOSolutionBase<Type> solution) {
+    public boolean remove(NumberSolution<Type> solution) {
         modCount++;
         return solutions.remove(solution);
     }
@@ -284,7 +285,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
      * @return {@code true} if this population contains the specified
      * solution; {@code false} otherwise
      */
-    public boolean contains(MOSolutionBase<Type> solution) {
+    public boolean contains(NumberSolution<Type> solution) {
         return solutions.contains(solution);
     }
 
@@ -313,14 +314,14 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
      * @return The index of the worst Solution attending to the comparator or
      * <code>-1<code> if the SolutionSet is empty
      */
-    public int indexWorst(Comparator<MOSolutionBase<Type>> comparator) {
+    public int indexWorst(Comparator<NumberSolution<Type>> comparator) {
 
         if ((solutions == null) || (this.solutions.isEmpty())) {
             return -1;
         }
 
         int index = 0;
-        MOSolutionBase<Type> worstKnown = solutions.get(0), candidateSolution;
+        NumberSolution<Type> worstKnown = solutions.get(0), candidateSolution;
         int flag;
         for (int i = 1; i < solutions.size(); i++) {
             candidateSolution = solutions.get(i);
@@ -360,7 +361,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
         return union;
     }
 
-    public void sort(Comparator<MOSolutionBase<Type>> comparator) {
+    public void sort(Comparator<NumberSolution<Type>> comparator) {
         if (comparator == null)
             return;
 
@@ -377,9 +378,9 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
             return null;
         }
         double[][] objectives;
-        objectives = new double[size()][get(0).numberOfObjectives()];
+        objectives = new double[size()][get(0).getNumberOfObjectives()];
         for (int i = 0; i < size(); i++) {
-            for (int j = 0; j < get(0).numberOfObjectives(); j++) {
+            for (int j = 0; j < get(0).getNumberOfObjectives(); j++) {
                 objectives[i][j] = get(i).getObjective(j);
             }
         }
@@ -395,7 +396,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
             while (aux != null) {
                 StringTokenizer st = new StringTokenizer(aux);
                 int i = 0;
-                MOSolutionBase<Type> solution = new MOSolutionBase<Type>(st.countTokens());
+                NumberSolution<Type> solution = new NumberSolution<Type>(st.countTokens());
                 while (st.hasMoreTokens()) {
                     double value = Double.parseDouble(st.nextToken());
                     solution.setObjective(i, value);
@@ -417,7 +418,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
      */
     public void printObjectivesToCSVFile(String fileName) {
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + ".csv")))) {
-            for (MOSolutionBase<Type> solution : solutions) {
+            for (NumberSolution<Type> solution : solutions) {
                 // if (this.vector[i].getFitness()<1.0) {
                 bw.write(solution.toStringCSV());
                 bw.newLine();
@@ -438,7 +439,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName)))) {
             if (solutions.size() > 0) {
                 int numberOfVariables = solutions.get(0).getVariables().size();
-                for (MOSolutionBase<Type> solution : solutions) {
+                for (NumberSolution<Type> solution : solutions) {
                     for (int j = 0; j < numberOfVariables; j++)
                         bw.write(solution.getValue(j) + " ");
                     bw.newLine();
@@ -457,7 +458,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
     public void printFeasibleFUN(String fileName) {
 
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName)))) {
-            for (MOSolutionBase<Type> solution : solutions) {
+            for (NumberSolution<Type> solution : solutions) {
                 bw.write(solution.toString());
                 bw.newLine();
             }
@@ -469,7 +470,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for (MOSolutionBase<Type> i : solutions) {
+        for (NumberSolution<Type> i : solutions) {
             s.append("[").append(Util.arrayToString(i.getObjectives())).append("] \n");
         }
         return s.toString();
@@ -543,7 +544,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
      * Returns an iterator for accessing the solutions in this population.
      */
     @Override
-    public Iterator<MOSolutionBase<Type>> iterator() {
+    public Iterator<NumberSolution<Type>> iterator() {
         return new PopulationIterator();
     }
 
@@ -577,7 +578,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
     /**
      * An iterator over the solutions in a population.
      */
-    private class PopulationIterator implements Iterator<MOSolutionBase<Type>> {
+    private class PopulationIterator implements Iterator<NumberSolution<Type>> {
 
         /**
          * The index of the next node to be returned.
@@ -616,7 +617,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
         }
 
         @Override
-        public MOSolutionBase<Type> next() {
+        public NumberSolution<Type> next() {
             checkModCount();
 
             if (!hasNext()) {
@@ -624,7 +625,7 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
             }
 
             try {
-                MOSolutionBase<Type> value = get(nextIndex);
+                NumberSolution<Type> value = get(nextIndex);
                 currentIndex = nextIndex++;
                 return value;
             } catch (IndexOutOfBoundsException e) {

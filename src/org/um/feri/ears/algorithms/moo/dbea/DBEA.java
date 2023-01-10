@@ -33,8 +33,8 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
@@ -116,8 +116,8 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      */
     private final int divisionsInner;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
 
     public DBEA(CrossoverOperator crossover, MutationOperator mutation, MOTask problem) {
@@ -205,11 +205,11 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
             for (int i = 0; i < population.size(); i++) {
                 int n = permutation[i];
 
-                MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+                NumberSolution<Type>[] parents = new NumberSolution[2];
                 parents[0] = population.get(i);
                 parents[1] = population.get(n);
 
-                MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
+                NumberSolution<Type>[] offSpring = cross.execute(parents, task);
                 mut.execute(offSpring[0], task);
 
                 if (task.isStopCriterion()) {
@@ -245,7 +245,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
             if (task.isStopCriterion())
                 return;
-            MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            NumberSolution<Type> newSolution = new NumberSolution<Type>(task.getRandomMOSolution());
 
             population.add(newSolution);
         }
@@ -257,7 +257,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param solution the solution
      * @return the constraint violation
      */
-    private double sumOfConstraintViolations(MOSolutionBase<Type> solution) {
+    private double sumOfConstraintViolations(NumberSolution<Type> solution) {
         double result = 0.0;
 
         for (int i = 0; i < solution.getNumberOfConstraints(); i++) {
@@ -293,7 +293,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      *
      * @param child the child solution
      */
-    void updatePopulation(MOSolutionBase<Type> child) {
+    void updatePopulation(NumberSolution<Type> child) {
         double eps = 0; // unused in I-DBEA
         double eps_con = constraintApproach(population);
         boolean success = false;
@@ -378,7 +378,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @return {@code true} if the solution is dominated; {@code false}
      * otherwise
      */
-    boolean checkDomination(MOSolutionBase<Type> solution) {
+    boolean checkDomination(NumberSolution<Type> solution) {
         if (solution.violatesConstraints()) {
             return false;
         }
@@ -392,7 +392,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         }
 
         // check for dominance
-        for (MOSolutionBase<Type> otherSolution : getFeasibleSolutions(combinedPopulation).solutions) {
+        for (NumberSolution<Type> otherSolution : getFeasibleSolutions(combinedPopulation).solutions) {
             int count = 0;
 
             for (int i = 0; i < numObj; i++) {
@@ -470,7 +470,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         int current_f = 0;
 
         while (result.size() < unique.size()) {
-            MOSolutionBase<Type> r = sortedSets.get(current_f).get(current_id);
+            NumberSolution<Type> r = sortedSets.get(current_f).get(current_id);
 
             if (!result.contains(r)) {
                 result.add(r);
@@ -526,10 +526,10 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         ParetoSolution<Type> result = new ParetoSolution<Type>();
         result.addAll(population);
 
-        result.sort(new Comparator<MOSolutionBase<Type>>() {
+        result.sort(new Comparator<NumberSolution<Type>>() {
 
             @Override
-            public int compare(MOSolutionBase<Type> s1, MOSolutionBase<Type> s2) {
+            public int compare(NumberSolution<Type> s1, NumberSolution<Type> s2) {
                 double sum1 = 0.0;
                 double sum2 = 0.0;
 
@@ -557,7 +557,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     private ParetoSolution<Type> getFeasibleSolutions(ParetoSolution<Type> population) {
         ParetoSolution<Type> feasibleSolutions = new ParetoSolution<Type>();
 
-        for (MOSolutionBase<Type> solution : population.solutions) {
+        for (NumberSolution<Type> solution : population.solutions) {
             if (!solution.violatesConstraints()) {
                 feasibleSolutions.add(solution);
             }
@@ -571,7 +571,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      *
      * @param solution the new solution
      */
-    void updateIdealPointAndIntercepts(MOSolutionBase<Type> solution) {
+    void updateIdealPointAndIntercepts(NumberSolution<Type> solution) {
         if (!solution.violatesConstraints()) {
             // update the ideal point
             for (int j = 0; j < numObj; j++) {
@@ -651,12 +651,12 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param population the population of solutions
      * @return the solution with the largest objective value
      */
-    private MOSolutionBase<Type> largestObjectiveValue(int objective,
+    private NumberSolution<Type> largestObjectiveValue(int objective,
                                                        ParetoSolution<Type> population) {
-        MOSolutionBase<Type> largest = null;
+        NumberSolution<Type> largest = null;
         double value = Double.NEGATIVE_INFINITY;
 
-        for (MOSolutionBase<Type> solution : population.solutions) {
+        for (NumberSolution<Type> solution : population.solutions) {
             if (solution.getObjective(objective) > value) {
                 largest = solution;
                 value = solution.getObjective(objective);
@@ -822,7 +822,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param solution the solution
      * @return the normalized objective values
      */
-    private double[] normalizedObjectives(MOSolutionBase<Type> solution) {
+    private double[] normalizedObjectives(NumberSolution<Type> solution) {
         double[] objectiveValues = new double[numObj];
 
         for (int j = 0; j < numObj; j++) {

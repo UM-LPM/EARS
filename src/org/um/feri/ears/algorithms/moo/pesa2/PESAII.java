@@ -14,8 +14,8 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PESA2Selection;
 import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
@@ -26,11 +26,11 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
     ParetoSolution<Type> population;
     AdaptiveGridArchive<Type> archive;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    MutationOperator<Type, T, NumberSolution<Type>> mut;
 
 
-    public PESAII(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize) {
+    public PESAII(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int populationSize, int archiveSize) {
         this.populationSize = populationSize;
         this.archiveSize = archiveSize;
 
@@ -89,7 +89,7 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            NumberSolution<Type> solution = new NumberSolution<Type>(task.getRandomMOSolution());
             // problem.evaluateConstraints(solution);
             population.add(solution);
         }
@@ -103,7 +103,7 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
         population.clear();
 
         // Iterations....
-        MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+        NumberSolution<Type>[] parents = new NumberSolution[2];
 
         do {
             // -> Create the offSpring solutionSet
@@ -111,7 +111,7 @@ public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T
                 parents[0] = selection.execute(archive);
                 parents[1] = selection.execute(archive);
 
-                MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
+                NumberSolution<Type>[] offSpring = cross.execute(parents, task);
                 mut.execute(offSpring[0], task);
                 if (task.isStopCriterion())
                     break;

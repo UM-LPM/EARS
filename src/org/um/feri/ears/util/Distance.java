@@ -23,7 +23,7 @@ package org.um.feri.ears.util;
 
 import java.util.List;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 
@@ -41,7 +41,7 @@ public class Distance<Type extends Number> {
     * @return a matrix with distances.
     */
 	public double[][] distanceMatrix(ParetoSolution<Type> solutionSet) {
-		MOSolutionBase<Type> solutionI, solutionJ;
+		NumberSolution<Type> solutionI, solutionJ;
 
 		// The matrix of distances
 		double[][] distance = new double[solutionSet.size()][solutionSet.size()];
@@ -65,7 +65,7 @@ public class Distance<Type extends Number> {
     * @param solutionSet The <code>SolutionSet</code>.
     * @return The minimum distance between solution and the set.
     */  
-	public double distanceToSolutionSetInObjectiveSpace(MOSolutionBase<Type> solution, ParetoSolution<Type> solutionSet) {
+	public double distanceToSolutionSetInObjectiveSpace(NumberSolution<Type> solution, ParetoSolution<Type> solutionSet) {
 		// At start point the distance is the max
 		double distance = Double.MAX_VALUE;
 
@@ -86,7 +86,7 @@ public class Distance<Type extends Number> {
     * @param solutionSet The <code>SolutionSet</code>.
     * @return The minimum distance between solution and the set.
     */  
-	public double distanceToSolutionSetInSolutionSpace(MOSolutionBase<Type> solution, ParetoSolution<Type> solutionSet) {
+	public double distanceToSolutionSetInSolutionSpace(NumberSolution<Type> solution, ParetoSolution<Type> solutionSet) {
 		// At start point the distance is the max
 		double distance = Double.MAX_VALUE;
 
@@ -105,7 +105,7 @@ public class Distance<Type extends Number> {
     *  @param solutionJ The second <code>Solution</code>.
     *  @return the distance between solutions. 
     */
-	public double distanceBetweenSolutions(MOSolutionBase<Type> solutionI, MOSolutionBase<Type> solutionJ) {
+	public double distanceBetweenSolutions(NumberSolution<Type> solutionI, NumberSolution<Type> solutionJ) {
 		double distance = 0.0;
 		
 		if ((solutionI.getVariables() != null)
@@ -129,11 +129,11 @@ public class Distance<Type extends Number> {
     *  @param solutionJ The second <code>Solution</code>.
     *  @return the distance between solutions in objective space.
     */
-	public double distanceBetweenObjectives(MOSolutionBase<Type> solutionI, MOSolutionBase<Type> solutionJ) {
+	public double distanceBetweenObjectives(NumberSolution<Type> solutionI, NumberSolution<Type> solutionJ) {
 		double diff; // Auxiliar var
 		double distance = 0.0;
 		// -> Calculate the euclidean distance
-		for (int nObj = 0; nObj < solutionI.numberOfObjectives(); nObj++) {
+		for (int nObj = 0; nObj < solutionI.getNumberOfObjectives(); nObj++) {
 			diff = solutionI.getObjective(nObj) - solutionJ.getObjective(nObj);
 			distance += Math.pow(diff, 2.0);
 		}
