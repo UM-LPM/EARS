@@ -135,8 +135,6 @@ public class DEAlgorithm extends NumberAlgorithm {
     private DESolution[] pold; // double pold[MAXPOP][MAXDIM]
     private DESolution[] pnew; // pnew[MAXPOP][MAXDIM]
     private DESolution[] pswap; // (*pswap)[MAXPOP][MAXDIM];
-    private Task<NumberSolution<Double>, DoubleProblem> task;
-
 
     private int i, j, L, n; /* counting variables */
     private int r1, r2, r3, r4; /* placeholders for random indexes */

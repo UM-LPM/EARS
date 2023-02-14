@@ -16,8 +16,6 @@ public class ES1cNsAlgorithm extends NumberAlgorithm {
     private int k, mem_k, n; // every k aVariance is calculated again
     private double c, mem_c;
 
-    private Task<NumberSolution<Double>, DoubleProblem> task;
-
     // source http://natcomp.liacs.nl/EA/slides/es_basic_algorithm.pdf
     public ES1cNsAlgorithm() {
         this(40, 0.8, 10);

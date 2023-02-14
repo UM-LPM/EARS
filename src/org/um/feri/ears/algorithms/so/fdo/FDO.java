@@ -19,7 +19,6 @@ public class FDO extends NumberAlgorithm {
     private int popSize;
 
     private Bee best;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private Bee[] population;
 
     private boolean solutionMustRemainInsideBoundary = true;

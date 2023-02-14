@@ -30,7 +30,6 @@ public class FPA extends NumberAlgorithm {
     private static final double meanND = 0.0;
     private static final double stdDevND = 1.0;
 
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private NumberSolution<Double> best;
     private ArrayList<NumberSolution<Double>> population;
 

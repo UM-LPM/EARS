@@ -39,7 +39,7 @@ public class SOMA extends NumberAlgorithm {
 
     private NumberSolution<Double> best;
     private int leaderId; //index of the best solution
-    private Task<NumberSolution<Double>, DoubleProblem> task;
+
     private NumberSolution<Double>[] population;
 
     public SOMA() {

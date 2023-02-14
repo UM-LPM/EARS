@@ -22,8 +22,6 @@ public class HillClimbing extends NumberAlgorithm {
     private double dxPercent;
 
     private NumberSolution<Double> globalBest, currentBest;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
-
     public HillClimbing() {
         this(HillClimbingStrategy.RANDOM_RESTART, 0.001);
     }

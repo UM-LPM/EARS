@@ -15,11 +15,15 @@ public class ES1p1sAlgorithm extends NumberAlgorithm {
     private double varianceOne;
     private int k, mem_k; // every k aVariance is calculated again
     private double c, mem_c;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     //source http://natcomp.liacs.nl/EA/slides/es_basic_algorithm.pdf
     public ES1p1sAlgorithm() {
         this(40, 0.8);
+    }
+
+    public ES1p1sAlgorithm(boolean d) {
+        this();
+        setDebug(d);
     }
 
     public ES1p1sAlgorithm(int k, double c) {
@@ -41,11 +45,6 @@ public class ES1p1sAlgorithm extends NumberAlgorithm {
         varianceOne = 1.;
         one = null;
 
-    }
-
-    public ES1p1sAlgorithm(boolean d) {
-        this();
-        setDebug(d);
     }
 
     private double getGaussian(double aMean, double aVariance) {

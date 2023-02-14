@@ -40,7 +40,6 @@ public class CRO extends NumberAlgorithm {
 	@AlgorithmParameter(name = "attempts to settle")
 	private int attemptsToSettle;
 
-	private Task<NumberSolution<Double>, DoubleProblem> task;
 	private ProblemComparator<NumberSolution<Double>> comparator;
 	private TournamentSelection selectionOperator;
 	private SBXCrossoverSO crossoverOperator = new SBXCrossoverSO(0.9, 20.0);

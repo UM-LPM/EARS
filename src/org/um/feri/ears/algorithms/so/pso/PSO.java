@@ -34,7 +34,6 @@ public class PSO extends NumberAlgorithm {
 
     private ArrayList<PsoSolution> population;
     private NumberSolution<Double> gBest; //global best
-    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     public PSO() {
         this(10);

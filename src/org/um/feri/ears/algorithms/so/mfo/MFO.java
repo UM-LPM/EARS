@@ -16,7 +16,6 @@ public class MFO extends NumberAlgorithm {
 
     private NumberSolution<Double> bestFlame;
     private double flameNum;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private ArrayList<NumberSolution<Double>> population;
 
     public MFO() {

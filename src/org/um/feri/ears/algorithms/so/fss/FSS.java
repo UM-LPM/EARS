@@ -23,9 +23,7 @@ public class FSS extends NumberAlgorithm {
     private int popSize;
 
     private NumberSolution<Double> best;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
 
-    //Parameters
     public static final double FISH_WEIGHT_MIN = 1;
     public static final double FISH_WEIGHT_MAX = 5000;
     private static final double STEP_INDIVIDUAL_INIT = 1.0;

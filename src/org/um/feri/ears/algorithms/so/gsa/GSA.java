@@ -31,8 +31,6 @@ public class GSA extends NumberAlgorithm {
     private ArrayList<GSASolution> popX; //population
     private GSASolution g; //global best in matlab Fbest (fitness best),Lbest (location best)
 
-    private Task<NumberSolution<Double>, DoubleProblem> task;
-
     public GSA() {
         this(50, 2, 1, 20, 100); //Matlab settings
     }

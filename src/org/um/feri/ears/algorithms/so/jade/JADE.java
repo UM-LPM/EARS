@@ -35,8 +35,6 @@ public class JADE extends NumberAlgorithm {
     private ArrayList<Double> SCR; // list of successful F, CR in current gen
     private ArrayList<Double> SF; //
 
-    private Task<NumberSolution<Double>, DoubleProblem> task;
-
     public JADE() {
         this(30);
     }

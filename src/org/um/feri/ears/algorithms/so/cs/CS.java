@@ -22,7 +22,6 @@ public class CS extends NumberAlgorithm {
 	private double pa = 0.25; //Discovery rate of alien eggs/solutions
 
     private NumberSolution<Double> best;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private ArrayList<NumberSolution<Double>> nest;
 
     public CS() {

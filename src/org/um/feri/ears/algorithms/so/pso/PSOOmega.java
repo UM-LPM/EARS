@@ -19,7 +19,6 @@ public class PSOOmega extends NumberAlgorithm {
     private int popSize;
 
     private ArrayList<PsoSolution> population;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private PsoSolution gBest; //global best
     private double omega, phiG, phiP;
 

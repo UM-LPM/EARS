@@ -21,7 +21,6 @@ public class OSSTLBO extends NumberAlgorithm {
     private int popSize;
 
     private NumberSolution<Double> best;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private NumberSolution<Double>[] population;
 
     private int m = 0;

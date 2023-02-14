@@ -24,8 +24,6 @@ public class BFO extends NumberAlgorithm {
     private ArrayList<Bacteria> swarm;
     private Bacteria best, tmp;
 
-    private Task<NumberSolution<Double>, DoubleProblem> task;
-
 //	S 	:	number of bacteria,
 //	Nc 	: 	number of chemotactic steps,
 //	Ns 	: 	number of swim steps,

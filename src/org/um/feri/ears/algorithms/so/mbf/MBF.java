@@ -21,8 +21,6 @@ public class MBF extends NumberAlgorithm {
     private int popSize = 50;
 
     private NumberSolution<Double> best;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
-
     private double SP = 0.8;        //Mother Power
     private double SPdamp = 0.95;   //Mother Power Damping Ratio
     private double Dis = 1.8;         //Amount of Dispersion Coefficient

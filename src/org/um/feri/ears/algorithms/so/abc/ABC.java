@@ -20,7 +20,6 @@ public class ABC extends NumberAlgorithm {
     @AlgorithmParameter(description = "maximum cycle number")
     private int limit;
 
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private ABCSolution best;
     protected ArrayList<ABCSolution> population;
 

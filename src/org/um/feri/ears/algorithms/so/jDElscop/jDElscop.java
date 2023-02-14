@@ -22,7 +22,6 @@ public class jDElscop extends NumberAlgorithm {
     private int popSize;
     private jDElscopSolution[] popX; // population
     private jDElscopSolution g; // global best
-    private Task<NumberSolution<Double>, DoubleProblem> task; // set it in run
 
     public jDElscop() {
         this(100);

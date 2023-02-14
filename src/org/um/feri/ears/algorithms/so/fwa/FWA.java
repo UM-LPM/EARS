@@ -28,7 +28,6 @@ public class FWA extends NumberAlgorithm {
     private double numBoundB;
     private double eps;
 
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private NumberSolution<Double> bestSpark;
 
     private List<Double> maxBound;

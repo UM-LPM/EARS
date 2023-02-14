@@ -17,8 +17,6 @@ public class DEexample extends NumberAlgorithm {
     ArrayList<NumberSolution<Double>> pop;
     NumberSolution<Double> best;
 
-    Task<NumberSolution<Double>, DoubleProblem> task;
-
     //Initialize all agents {\displaystyle \mathbf {x} } \mathbf {x}  with random positions in the search-space.
     public DEexample(int ps, double CR, double F, String s) {
         popSize = ps;

@@ -20,10 +20,8 @@ public class HSA extends NumberAlgorithm {
     private double PAR = 0.5;
     @AlgorithmParameter(description = "band width")
     private double BW = 0.5;
-
     private NumberSolution<Double> best;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
-    private NumberSolution<Double>[] population;
+     private NumberSolution<Double>[] population;
 
     public HSA() {
         this(50);

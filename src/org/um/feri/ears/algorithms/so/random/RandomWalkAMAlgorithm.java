@@ -11,7 +11,6 @@ import org.um.feri.ears.util.Util;
 
 public class RandomWalkAMAlgorithm extends NumberAlgorithm {
     private NumberSolution<Double> bestSolution;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     public RandomWalkAMAlgorithm() {
         this.debug = false;

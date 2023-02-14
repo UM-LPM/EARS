@@ -35,7 +35,6 @@ public class LSHADE extends NumberAlgorithm {
     private NumberSolution<Double>[] population;
     private NumberSolution<Double>[] offspringPopulation;
     private NumberSolution<Double> best;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     private List<Double> lowerLimit;
     private List<Double> upperLimit;

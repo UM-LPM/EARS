@@ -18,8 +18,6 @@ public class GSAv2 extends NumberAlgorithm {
     ArrayList<Agent> pop;
     Agent best;
 
-    Task<NumberSolution<Double>, DoubleProblem> task;
-
     double G;
     double epsilon = 0.0000000000000000000000000001;
 

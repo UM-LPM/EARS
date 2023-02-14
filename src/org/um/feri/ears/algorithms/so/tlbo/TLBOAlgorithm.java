@@ -18,8 +18,6 @@ public class TLBOAlgorithm extends NumberAlgorithm {
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
-    private Task<NumberSolution<Double>, DoubleProblem> task;
-
     private NumberSolution<Double>[] population;
 
     private static boolean removeDuplicates = true;

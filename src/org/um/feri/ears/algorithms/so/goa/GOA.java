@@ -20,7 +20,6 @@ public class GOA extends NumberAlgorithm {
     @AlgorithmParameter
     private double cMin = 0.00001;
 
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private NumberSolution<Double> best;
     private ArrayList<NumberSolution<Double>> population;
     private ArrayList<NumberSolution<Double>> offspringPopulation;

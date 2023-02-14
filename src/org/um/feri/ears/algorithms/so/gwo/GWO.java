@@ -17,7 +17,6 @@ public class GWO extends NumberAlgorithm {
 
     private ArrayList<NumberSolution<Double>> population;
     private NumberSolution<Double> alpha, beta, delta;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     public GWO() {
         this(30);

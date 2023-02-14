@@ -20,11 +20,9 @@ public class LaF extends NumberAlgorithm {
     private int popSize;
 
     private boolean debug = true;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     private ArrayList<NumberSolution<Double>> leaders;
     private ArrayList<NumberSolution<Double>> followers;
-
 
     private List<Double> ub;
     private List<Double> lb;

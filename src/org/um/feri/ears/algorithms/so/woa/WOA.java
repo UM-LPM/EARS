@@ -16,9 +16,7 @@ public class WOA extends NumberAlgorithm {
     private int popSize;
 
     private NumberSolution<Double> bestSolution;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
 
-    // Parameters
     private double A;
     private double C;
     private double r1;

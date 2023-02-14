@@ -24,7 +24,6 @@ public class FireflyAlgorithm extends NumberAlgorithm {
     private double gamma = 1.0;
 
     private boolean debug = true;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     FireflySolution best;
     ArrayList<FireflySolution> population;
 

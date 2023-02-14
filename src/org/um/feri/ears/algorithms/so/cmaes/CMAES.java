@@ -32,7 +32,6 @@ import org.um.feri.ears.util.Util;
 public class CMAES extends NumberAlgorithm {
 
 	private int popSize;
-	private Task<NumberSolution<Double>, DoubleProblem> task;
 	private int N;
 
 	private NumberSolution<Double> best;

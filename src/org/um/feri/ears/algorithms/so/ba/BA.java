@@ -23,7 +23,6 @@ public class BA extends NumberAlgorithm {
 	private double Qmin, Qmax; //min and max frequency
 	private double alpha, gamma; // 0 < alpha < 1, gamma > 0
 
-	private Task<NumberSolution<Double>, DoubleProblem> task;
 	private BatSolution best;
 	private ArrayList<BatSolution> population;
 	

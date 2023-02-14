@@ -41,17 +41,12 @@ public class ICA extends NumberAlgorithm {
     @AlgorithmParameter(name = "uniting threshold", description = "The percent of search space size, which enables the uniting process of two empires")
     private double unitingThreshold = 0.02;
 
-
     private double[] searchSpaceSize;                    // The search space size (between the min and max bounds)
     private ICAUtils utils = new ICAUtils();            // A class with useful methods for array operations
-
     private NumberSolution<Double> best;
-
     private EmpireSolution[] empiresList;
     private NumberSolution<Double>[] initialCountries;
     //ArrayList<DoubleSolution> offspringPopulation;
-
-    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     public ICA() {
         this(50, 6, 0.1, 2, 0.5, 0.02, 0.99, false, 0.02);

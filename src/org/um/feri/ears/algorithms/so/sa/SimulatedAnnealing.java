@@ -23,7 +23,6 @@ public class SimulatedAnnealing extends NumberAlgorithm {
     private int subIterations = 20;
 
     private NumberSolution<Double> globalBest, currentBest;
-    private Task<NumberSolution<Double>, DoubleProblem> task;
     private double[] sigma;
 
     public SimulatedAnnealing() {
