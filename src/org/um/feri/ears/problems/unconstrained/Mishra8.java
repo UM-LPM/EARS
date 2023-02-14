@@ -16,10 +16,10 @@ https://al-roomi.org/benchmarks/unconstrained/2-dimensions/49-mishra-s-function-
 public class Mishra8 extends DoubleProblem {
 
     public Mishra8() {
-        super(2, 1, 1, 0);
+        super("Mishra8", 2, 1, 1, 0);
+        //also known as Decanomial
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Mishra8"; //also known as Decanomial
 
         decisionSpaceOptima[0] = new double[]{2, -3.0};
     }

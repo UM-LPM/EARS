@@ -12,12 +12,8 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
 
     DominanceComparator<Double> dominanceComparator = new DominanceComparator<>();
 
-    public DoubleProblem(int numberOfDimensions) {
-        super(numberOfDimensions);
-    }
-
-    public DoubleProblem(int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
-        super(numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
+    public DoubleProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
+        super(name, numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
     }
 
     @Override

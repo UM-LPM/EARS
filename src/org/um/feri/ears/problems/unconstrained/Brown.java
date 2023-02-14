@@ -16,10 +16,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/brownfcn.html
 public class Brown extends DoubleProblem {
 
     public Brown() {
-        super(2, 1, 1, 0);
+        super("Brown", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 4.0));
-        name = "Brown";
     }
 
     @Override

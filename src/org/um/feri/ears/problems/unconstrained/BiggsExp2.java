@@ -16,7 +16,7 @@ http://infinity77.net/global_optimization/test_functions_nd_E.html#go_benchmark.
 public class BiggsExp2 extends DoubleProblem {
 
     public BiggsExp2() {
-        super(2, 1, 1, 0);
+        super("BiggsExp2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 20.0));
         name = "BiggsExp2";

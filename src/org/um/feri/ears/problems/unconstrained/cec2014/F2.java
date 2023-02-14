@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F2 extends CEC2014 {
 
     public F2(int d) {
-        super(d, 2);
-
-        name = "F02 Bent Cigar Function";
+        super("F02 Bent Cigar Function", d, 2);
     }
 
     @Override

@@ -166,7 +166,7 @@ public class UnconstrainedProblem11 extends CEC2009 {
 
     public UnconstrainedProblem11(Integer numberOfVariables, int numberOfObjectives) {
 
-        super(numberOfVariables, 0, numberOfObjectives);
+        super("UF11", numberOfVariables, 0, numberOfObjectives);
 
         if ((numberOfVariables != 10) && (numberOfVariables != 30)) {
             throw new IllegalArgumentException(
@@ -176,7 +176,6 @@ public class UnconstrainedProblem11 extends CEC2009 {
         problem = new DTLZ2(numberOfVariables, numberOfObjectives);
 
         referenceSetFileName = "UF11";
-        name = "UF11";
 
         upperLimit = new ArrayList<>(numberOfDimensions);
         lowerLimit = new ArrayList<>(numberOfDimensions);

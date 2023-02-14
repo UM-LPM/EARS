@@ -31,20 +31,17 @@ public class DTLZ6 extends DTLZ {
 
     public DTLZ6(int numberOfVariables, int numberOfObjectives) {
 
-        super(numberOfVariables, 0, numberOfObjectives);
+        super("DTLZ6", numberOfVariables, 0, numberOfObjectives);
 
         referenceSetFileName = "DTLZ6." + numberOfObjectives + "D";
-        name = "DTLZ6";
 
         upperLimit = new ArrayList<>(numberOfDimensions);
         lowerLimit = new ArrayList<>(numberOfDimensions);
-
 
         for (int i = 0; i < numberOfDimensions; i++) {
             lowerLimit.add(0.0);
             upperLimit.add(1.0);
         }
-
     }
 
     @Override
@@ -83,5 +80,4 @@ public class DTLZ6 extends DTLZ {
 
         return f;
     }
-
 }

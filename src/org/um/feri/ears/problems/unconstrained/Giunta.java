@@ -17,10 +17,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/154-giunta-s-func
 public class Giunta extends DoubleProblem {
 
     public Giunta() {
-        super(2, 1, 1, 0);
+        super("Giunta", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "Giunta";
 
         decisionSpaceOptima[0] = new double[]{0.4673200277395354, 0.4673200169591304};
         objectiveSpaceOptima[0] = 0.06447042053690566;

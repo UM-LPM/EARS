@@ -16,10 +16,10 @@ http://infinity77.net/global_optimization/test_functions_nd_M.html#go_benchmark.
 public class Mishra7 extends DoubleProblem {
 
     public Mishra7() {
-        super(2, 1, 1, 0);
+        super("Mishra7", 2, 1, 1, 0);
+        // also known as Factorial
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Mishra7"; // also known as Factorial
     }
 
     @Override

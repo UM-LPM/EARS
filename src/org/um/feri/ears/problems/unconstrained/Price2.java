@@ -16,10 +16,10 @@ http://benchmarkfcns.xyz/benchmarkfcns/periodicfcn.html
 public class Price2 extends DoubleProblem {
 
     public Price2() {
-        super(2, 1, 1, 0);
+        super("Price2", 2, 1, 1, 0);
+        // also known as Periodic Function
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Price2"; // also known as Periodic Function
         objectiveSpaceOptima[0] = 0.9;
     }
 

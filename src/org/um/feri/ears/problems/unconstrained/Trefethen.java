@@ -17,10 +17,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/105-trefethen-s-f
 public class Trefethen extends DoubleProblem {
 
     public Trefethen() {
-        super(2, 1, 1, 0);
+        super("Trefethen", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Trefethen";
 
         decisionSpaceOptima[0] = new double[]{-0.02440307923, 0.2106124261};
         objectiveSpaceOptima[0] = -3.3068686474752305;

@@ -15,12 +15,10 @@ http://www.geatbx.com/docu/fcnindex-01.html#P86_3059
 public class RosenbrockD2a extends DoubleProblem {
 
     public RosenbrockD2a() {
-        super(2, 1, 1, 0);
+        super("Rosenbrock d2a", 2, 1, 1, 0);
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-
-        name = "Rosenbrock d2a";
 
         Arrays.fill(decisionSpaceOptima[0], 1);
     }

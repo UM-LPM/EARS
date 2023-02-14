@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
 public class StretchedVSineWave extends DoubleProblem {
 
     public StretchedVSineWave() {
-        super(2, 1, 1, 0);
+        super("StretchedVSineWave", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "StretchedVSineWave";
     }
 
     @Override

@@ -17,10 +17,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/brentfcn.html
 public class Brent extends DoubleProblem {
 
     public Brent() {
-        super(2, 1, 1, 0);
+        super("Brent", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Brent";
 
         decisionSpaceOptima[0] = new double[]{-10.0, -10.0};
     }

@@ -12,12 +12,10 @@ public class F09 extends CEC2005Base {
     private double[] m_z;
 
     public F09(int d) {
-        super(d, 9);
+        super("Shifted Rastrigin's Function", d, 9);
 
-        name = "Shifted Rastrigin's Function";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
 
         // Note: dimension starts from 0
         m_o = new double[d];

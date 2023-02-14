@@ -16,10 +16,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/boothfcn.html
 public class Booth extends DoubleProblem {
 
     public Booth() {
-        super(2, 1, 1, 0);
+        super("Booth", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Booth";
 
         decisionSpaceOptima[0][0] = 1.0;
         decisionSpaceOptima[0][1] = 3.0;

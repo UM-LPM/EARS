@@ -11,13 +11,11 @@ public class F2 extends CEC2010 {
     int[] P;
 
     public F2(int d) {
-        super(d, 2);
+        super("F02 Shifted Rastrigin's Function", d, 2);
 
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
-
-        name = "F02 Shifted Rastrigin's Function";
         OShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {

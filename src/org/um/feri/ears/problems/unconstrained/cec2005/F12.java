@@ -16,12 +16,10 @@ public class F12 extends CEC2005Base {
     private double[] m_B;
 
     public F12(int d) {
-        super(d, 12);
+        super("Schwefel's Problem 2.13", d, 12);
 
-        name = "Schwefel's Problem 2.13";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -Math.PI));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, Math.PI));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -Math.PI));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, Math.PI));
 
         m_o = new double[d];
         m_a = new double[d][d];

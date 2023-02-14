@@ -13,10 +13,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/113-adjiman-s-fun
 public class Adjiman extends DoubleProblem {
 
     public Adjiman() {
-        super(2, 1, 1, 0);
+        super("Adjiman", 2, 1, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        name = "Adjiman";
 
         lowerLimit.set(0, -1.0);
         upperLimit.set(0, 2.0);

@@ -13,12 +13,10 @@ import java.util.Collections;
 public class RosenbrockD2b extends DoubleProblem {
 
     public RosenbrockD2b() {
-        super(2, 1, 1, 0);
+        super("Rosenbrock d2b", 2, 1, 1, 0);
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-
-        name = "Rosenbrock d2b";
 
         Arrays.fill(decisionSpaceOptima[0], 1);
     }

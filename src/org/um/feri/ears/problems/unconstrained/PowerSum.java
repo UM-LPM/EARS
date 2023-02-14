@@ -17,10 +17,9 @@ public class PowerSum extends DoubleProblem {
     public double[] b;
 
     public PowerSum() {
-        super(4, 1, 1, 0);
+        super("PowerSum", 4, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, numberOfDimensions * 1.0));
-        name = "PowerSum";
         b = new double[]{8, 18, 44, 114};
 
         decisionSpaceOptima[0] = new double[]{1.0, 2.0, 2.0, 3.0};

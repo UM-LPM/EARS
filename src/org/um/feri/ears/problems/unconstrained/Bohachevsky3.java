@@ -12,10 +12,9 @@ public class Bohachevsky3 extends DoubleProblem {
 
 
     public Bohachevsky3() {
-        super(2, 1, 1, 0);
+        super("Bohachevsky3", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Bohachevsky3";
     }
 
     @Override

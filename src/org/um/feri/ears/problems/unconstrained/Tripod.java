@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_T.html#go_benchmark.
 public class Tripod extends DoubleProblem {
 
     public Tripod() {
-        super(2, 1, 1, 0);
+        super("Tripod", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Tripod";
 
         decisionSpaceOptima[0] = new double[]{0.0, -50.0};
     }

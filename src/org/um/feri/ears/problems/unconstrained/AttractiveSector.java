@@ -17,10 +17,9 @@ http://mantella.info/optimisation-problems/black-box-optimisation-benchmark/#bbo
 public class AttractiveSector extends DoubleProblem {
 
     public AttractiveSector(int d) {
-        super(d, 1, 1, 0);
+        super("Attractive Sector", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Attractive Sector";
 
         Arrays.fill(decisionSpaceOptima[0], 5);
     }

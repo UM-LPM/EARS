@@ -8,9 +8,7 @@ import org.um.feri.ears.util.Util;
 public class F15 extends CEC2010 {
 
     public F15(int d) {
-        super(d, 15);
-
-        name = "F15 D/m-group Shifted and m-rotated Rastrigin's Function";
+        super("F15 D/m-group Shifted and m-rotated Rastrigin's Function", d, 15);
 
         P = new int[numberOfDimensions];
         P = Util.randomPermutation(numberOfDimensions);

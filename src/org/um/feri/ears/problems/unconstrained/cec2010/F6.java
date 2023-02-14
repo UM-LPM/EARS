@@ -8,9 +8,7 @@ import org.um.feri.ears.util.Util;
 public class F6 extends CEC2010 {
 
     public F6(int d) {
-        super(d, 6);
-
-        name = "F06 Single-group Shifted and m-rotated Ackley's Function";
+        super("F06 Single-group Shifted and m-rotated Ackley's Function", d, 6);
 
         P = new int[numberOfDimensions];
         P = Util.randomPermutation(numberOfDimensions);

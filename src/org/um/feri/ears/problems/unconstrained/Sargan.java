@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/244-sargan-s-func
 public class Sargan extends DoubleProblem {
 
     public Sargan() {
-        super(2, 1, 1, 0);
+        super("Sargan", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Sargan";
     }
 
     @Override

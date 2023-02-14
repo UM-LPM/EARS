@@ -14,10 +14,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/ackleyn3fcn.html
 public class Ackley3 extends DoubleProblem {
 
     public Ackley3() {
-        super(2, 2, 1, 0);
+        super("Ackley3", 2, 2, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.0));
-        name = "Ackley3";
 
         decisionSpaceOptima[0] = new double[]{0.682584587365898, -0.36075325513719};
         decisionSpaceOptima[1] = new double[]{-0.682584587365898, -0.36075325513719};

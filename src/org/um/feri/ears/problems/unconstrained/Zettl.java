@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_Z.html#go_benchmark.
 public class Zettl extends DoubleProblem {
 
     public Zettl() {
-        super(2, 1, 1, 0);
+        super("Zettl", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Zettl";
 
         decisionSpaceOptima[0] = new double[]{-0.02989597760285287, 0};
         objectiveSpaceOptima[0] = -0.003791237220468656;

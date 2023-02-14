@@ -15,7 +15,7 @@ import static java.lang.Math.*;
 public class Eggholder extends DoubleProblem {
 
     public Eggholder() {
-        super(2, 1, 1, 0);
+        super("Eggholder", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -512.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 512.0));
         name = "Eggholder";

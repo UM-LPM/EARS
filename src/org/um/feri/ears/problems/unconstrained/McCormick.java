@@ -17,10 +17,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/mccormickfcn.html
 public class McCormick extends DoubleProblem {
 
     public McCormick() {
-        super(2, 1, 1, 0);
+        super("McCormick", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
-        name = "McCormick";
 
         lowerLimit.set(0, -1.5);
         upperLimit.set(0, 4.0);

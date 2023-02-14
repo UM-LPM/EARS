@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_M.html#go_benchmark.
 public class Mishra6 extends DoubleProblem {
 
     public Mishra6() {
-        super(2, 1, 1, 0);
+        super("Mishra6", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Mishra6";
 
         decisionSpaceOptima[0] = new double[]{2.886307215440481, 1.823260331422321};
         objectiveSpaceOptima[0] = -2.283949838474759;

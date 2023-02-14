@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F16 extends CEC2014 {
 
     public F16(int d) {
-        super(d, 16);
-
-        name = "F16 Expanded Scaffer's function";
+        super("F16 Expanded Scaffer's function", d, 16);
     }
 
     @Override

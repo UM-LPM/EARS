@@ -165,7 +165,7 @@ public class CEC2011_Problem_11_3_ELD_6 extends DoubleProblem {
     }
 
     public CEC2011_Problem_11_3_ELD_6() {
-        super(6, 1, 1, 4);
+        super("RWP_11_3_ELD_6", 6, 1, 1, 4);
 
         g_constrains = new double[numberOfConstraints];
 
@@ -179,7 +179,6 @@ public class CEC2011_Problem_11_3_ELD_6 extends DoubleProblem {
 
         // [100, 500;50, 200;80, 300;50, 150; 50, 200;50, 120;];
 
-        name = "RWP_11_3_ELD_6";
         description = "RWP_11_3_ELD_6 Static Economic Load Dispatch (ELD) Problem ";
     }
 

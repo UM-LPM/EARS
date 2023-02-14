@@ -15,10 +15,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/happycatfcn.html
 public class HappyCat extends DoubleProblem {
 
     public HappyCat() {
-        super(2, 1, 1, 0);
+        super("HappyCat", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0));
-        name = "HappyCat";
 
         Arrays.fill(decisionSpaceOptima[0], -1.0);
     }

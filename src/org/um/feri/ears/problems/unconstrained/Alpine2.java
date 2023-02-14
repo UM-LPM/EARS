@@ -17,10 +17,9 @@ http://infinity77.net/global_optimization/test_functions_nd_A.html#go_benchmark.
 public class Alpine2 extends DoubleProblem {
 
     public Alpine2() {
-        super(2, 1, 1, 0);
+        super("Alpine2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Alpine2";
 
         Arrays.fill(decisionSpaceOptima[0], 7.917);
         objectiveSpaceOptima[0] = Math.pow(2.808, numberOfDimensions);

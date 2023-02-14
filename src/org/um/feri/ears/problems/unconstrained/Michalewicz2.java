@@ -14,10 +14,9 @@ https://www.sfu.ca/~ssurjano/michal.html
 public class Michalewicz2 extends DoubleProblem {
 
     public Michalewicz2() {
-        super(2, 1, 1, 0);
+        super("Michalewicz2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, PI));
-        name = "Michalewicz2";
 
         decisionSpaceOptima[0][0] = 2.20290552;
         decisionSpaceOptima[0][1] = 1.57079633;

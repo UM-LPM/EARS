@@ -16,10 +16,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/bealefcn.html
 public class Beale extends DoubleProblem {
 
     public Beale() {
-        super(2, 1, 1, 0);
+        super("Beale", 2, 1, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -4.5));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 4.5));
-        name = "Beale";
 
         decisionSpaceOptima[0][0] = 3;
         decisionSpaceOptima[0][1] = 0.5;

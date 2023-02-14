@@ -19,10 +19,9 @@ public class Foxholes extends DoubleProblem {
     public double[][] a;
 
     public Foxholes() {
-        super(2, 1, 1, 0);
+        super("Shekel's Foxholes", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -65.536));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 65.536));
-        name = "Shekel's Foxholes";
 
         Arrays.fill(decisionSpaceOptima[0], -31.97833);
         objectiveSpaceOptima[0] = 0.998003838;

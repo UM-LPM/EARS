@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_E.html#go_benchmark.
 public class ElAttarVidyasagarDutta extends DoubleProblem {
 
     public ElAttarVidyasagarDutta() {
-        super(2, 1, 1, 0);
+        super("ElAttarVidyasagarDutta", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "ElAttarVidyasagarDutta";
 
         decisionSpaceOptima[0] = new double[]{3.4091868222, -2.1714330361};
         objectiveSpaceOptima[0] = 1.712780354862198;

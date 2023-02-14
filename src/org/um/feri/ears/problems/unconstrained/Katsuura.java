@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_K.html#go_benchmark.
 public class Katsuura extends DoubleProblem {
 
     public Katsuura() {
-        super(2, 1, 1, 0);
+        super("Katsuura", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Katsuura";
         objectiveSpaceOptima[0] = 1.0;
     }
 

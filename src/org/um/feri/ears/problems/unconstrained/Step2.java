@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
  */
 public class Step2 extends DoubleProblem {
     public Step2(int d) {
-        super(d, 1, 1, 0);
+        super("Step1", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Step1";
     }
 
     @Override

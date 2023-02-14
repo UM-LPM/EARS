@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_T.html#go_benchmark.
 public class Trigonometric1 extends DoubleProblem {
 
     public Trigonometric1() {
-        super(2, 1, 1, 0);
+        super("Trigonometric1", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, PI));
-        name = "Trigonometric1";
     }
 
     @Override

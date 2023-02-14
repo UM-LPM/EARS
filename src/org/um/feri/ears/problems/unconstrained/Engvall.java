@@ -14,10 +14,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/116-engvall-s-fun
 public class Engvall extends DoubleProblem {
 
     public Engvall() {
-        super(2, 1, 1,0);
+        super("Engvall", 2, 1, 1,0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2000.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2000.0));
-        name = "Engvall";
 
         decisionSpaceOptima[0][0] = 1.0;
         decisionSpaceOptima[0][1] = 0.0;

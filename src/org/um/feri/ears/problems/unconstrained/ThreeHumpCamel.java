@@ -17,10 +17,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/67-three-hump-cam
 public class ThreeHumpCamel extends DoubleProblem {
 
     public ThreeHumpCamel() {
-        super(2, 1, 1, 0);
+        super("Three Hump Camel", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Three Hump Camel";
     }
 
     @Override

@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.
 public class PenHolder extends DoubleProblem {
 
     public PenHolder() {
-        super(2, 1, 1, 0);
+        super("Pen Holder", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -11.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 11.0));
-        name = "Pen Holder";
 
         Arrays.fill(decisionSpaceOptima[0], 9.646167671043401);
         objectiveSpaceOptima[0] = -0.9635348327265058;

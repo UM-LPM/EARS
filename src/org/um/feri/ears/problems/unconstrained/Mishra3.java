@@ -16,10 +16,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/138-mishra-s-func
 public class Mishra3 extends DoubleProblem {
 
     public Mishra3() {
-        super(2, 1, 1, 0);
+        super("Mishra3", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Mishra3";
 
         //Arrays.fill(optimum[0], -10.0);
         decisionSpaceOptima[0] = new double[]{-8.466613775046579, -9.998521308999999};

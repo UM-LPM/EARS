@@ -48,10 +48,9 @@ public class ModifiedLangermann10 extends DoubleProblem {
 
 
     public ModifiedLangermann10() {
-        super(10, 1, 1, 0);
+        super("Modified Langermann10", 10, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Modified Langermann10";
     }
 
     @Override

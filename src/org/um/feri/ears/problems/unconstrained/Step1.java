@@ -14,10 +14,9 @@ https://al-roomi.org/benchmarks/unconstrained/n-dimensions/192-step-function-no-
 
 public class Step1 extends DoubleProblem {
     public Step1(int d) {
-        super(d, 1, 1, 0);
+        super("Step1", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Step1";
     }
 
     @Override

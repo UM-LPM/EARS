@@ -22,13 +22,12 @@ public class CEC2011_Problem1 extends DoubleProblem {
 	 * 
 	 */
 	public CEC2011_Problem1() {
-		super(6, 1, 1, 0);
+		super("RWP_1", 6, 1, 1, 0);
 		lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -6.4));
 		upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 6.35));
 				
 		//Arrays.fill(interval, 12.75);
 		//Arrays.fill(intervalL, -6.4);//6.4 + 6.35
-		name = "RWP_1";
 		description = "RWP_1 Parameter Estimation for Frequency-Modulated (FM) Sound Waves";
 	}
 	

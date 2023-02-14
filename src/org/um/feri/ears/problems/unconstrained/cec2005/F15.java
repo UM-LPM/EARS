@@ -39,12 +39,10 @@ public class F15 extends CEC2005Base {
     private double[][] m_zM;
 
     public F15(int d) {
-        super(d, 15);
+        super("Hybrid Composition Function 1", d, 15);
 
-        name = "Hybrid Composition Function 1";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
 
         m_o = new double[NUM_FUNC][d];
         m_M = new double[NUM_FUNC][d][d];

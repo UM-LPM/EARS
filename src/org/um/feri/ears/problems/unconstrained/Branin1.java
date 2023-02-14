@@ -17,10 +17,9 @@ import static java.lang.Math.*;
 public class Branin1 extends DoubleProblem {
 
     public Branin1() {
-        super(2, 3, 1, 0);
+        super("Branin1", 2, 3, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
-        name = "Branin1";
 
         lowerLimit.set(0, -5.0);
         upperLimit.set(0, 10.0);

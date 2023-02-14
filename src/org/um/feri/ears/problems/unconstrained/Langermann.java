@@ -18,10 +18,9 @@ public class Langermann extends DoubleProblem {
     static final double m = 5;
 
     public Langermann() {
-        super(2, 1, 1, 0);
+        super("Langermann", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Langermann";
 
         decisionSpaceOptima[0] = new double[]{2.00299219, 1.006096};
         objectiveSpaceOptima[0] = -5.1621259;

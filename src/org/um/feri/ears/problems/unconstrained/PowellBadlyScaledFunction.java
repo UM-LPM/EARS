@@ -15,16 +15,13 @@ http://al-roomi.org/benchmarks/unconstrained/2-dimensions/65-powell-s-badly-scal
 public class PowellBadlyScaledFunction extends DoubleProblem {
 
     public PowellBadlyScaledFunction() {
-        super(2, 1, 1, 0);
+        super("Powellbadlyscaledfunction", 2, 1, 1, 0);
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -50.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 50.0));
 
-        name = "Powellbadlyscaledfunction";
-
         decisionSpaceOptima[0][0] = 1.09815933e-5;
         decisionSpaceOptima[0][1] = 9.106146738;
-
     }
 
     @Override

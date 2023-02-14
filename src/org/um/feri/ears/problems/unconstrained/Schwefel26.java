@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
 public class Schwefel26 extends DoubleProblem {
 
     public Schwefel26() {
-        super(2, 1, 1, 0);
+        super("Schwefel26", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Schwefel26";
 
         decisionSpaceOptima[0] = new double[]{1.0, 3.0};
     }

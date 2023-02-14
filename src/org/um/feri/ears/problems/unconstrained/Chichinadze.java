@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_C.html#go_benchmark.
 public class Chichinadze extends DoubleProblem {
 
     public Chichinadze() {
-        super(2, 1, 1, 0);
+        super("Chichinadze", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -30.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 30.0));
-        name = "Chichinadze";
 
         decisionSpaceOptima[0] = new double[]{6.189866586965680, 0.5};
         objectiveSpaceOptima[0] = -42.94438701899098;

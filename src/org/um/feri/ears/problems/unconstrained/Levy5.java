@@ -16,10 +16,9 @@ infinity77.net/global_optimization/test_functions_nd_L.html#go_benchmark.Levy05
 public class Levy5 extends DoubleProblem {
 
     public Levy5() {
-        super(2, 1, 1, 0);
+        super("Levy5", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Levy5";
 
         decisionSpaceOptima[0][0] = -1.3068;
         decisionSpaceOptima[0][1] = -1.4248;

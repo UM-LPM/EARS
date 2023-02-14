@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_H.html#go_benchmark.
 public class Hosaki extends DoubleProblem {
 
     public Hosaki() {
-        super(2, 1, 1, 0);
+        super("Hosaki", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Hosaki";
 
         decisionSpaceOptima[0] = new double[]{4.0, 2.0};
         objectiveSpaceOptima[0] = -2.345811576101292;

@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
  */
 public class Schaffer2 extends DoubleProblem {
     public Schaffer2() {
-        super(2, 1, 1, 0);
+        super("Schaffer2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Schaffer2";
     }
 
     @Override

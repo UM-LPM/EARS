@@ -8,9 +8,8 @@ import org.um.feri.ears.util.Util;
 public class F20 extends CEC2010 {
 
     public F20(int d) {
-        super(d, 20);
+        super("F20 Shifted Rosenbrock's Function", d, 20);
 
-        name = "F20 Shifted Rosenbrock's Function";
         OShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {

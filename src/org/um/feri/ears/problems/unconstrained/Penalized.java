@@ -15,10 +15,10 @@ http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.
 public class Penalized extends DoubleProblem {
 
     public Penalized(int d) {
-        super(d, 1, 1, 0);
+        super("Penalized", d, 1, 1, 0);
+        // also known as Penalty1
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -50.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 50.0));
-        name = "Penalized"; // also known as Penalty1
 
         Arrays.fill(decisionSpaceOptima[0], -1);
     }

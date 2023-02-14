@@ -7,8 +7,8 @@ import org.um.feri.ears.util.Util;
 
 public abstract class DTLZ extends DoubleProblem {
 
-	public DTLZ(int numberOfDimensions, int numberOfConstraints, int numberOfObjectives) {
-		super(numberOfDimensions, 1, numberOfConstraints, numberOfObjectives);
+	public DTLZ(String name, int numberOfDimensions, int numberOfConstraints, int numberOfObjectives) {
+		super(name, numberOfDimensions, 1, numberOfConstraints, numberOfObjectives);
 		benchmarkName = "DTLZ";
 	}
 

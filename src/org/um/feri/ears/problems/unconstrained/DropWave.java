@@ -15,7 +15,7 @@ http://benchmarkfcns.xyz/benchmarkfcns/dropwavefcn.html
 public class DropWave extends DoubleProblem {
 
     public DropWave() {
-        super(2, 1, 1, 0);
+        super("DropWave", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.12));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.12));
         name = "DropWave";

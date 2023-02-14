@@ -36,10 +36,9 @@ public class Golinski extends DoubleProblem {
 
     public Golinski() {
 
-        super(7, 1, 11, 2);
+        super("Golinski", 7, 1, 11, 2);
 
         referenceSetFileName = "Golinski";
-        name = "Golinski";
 
         upperLimit = new ArrayList<>(numberOfDimensions);
         lowerLimit = new ArrayList<>(numberOfDimensions);

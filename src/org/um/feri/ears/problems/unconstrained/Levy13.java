@@ -17,10 +17,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/levin13fcn.html
 public class Levy13 extends DoubleProblem {
 
     public Levy13() {
-        super(2, 1, 1, 0);
+        super("Levy13", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Levy13";
 
         Arrays.fill(decisionSpaceOptima[0], 1);
     }

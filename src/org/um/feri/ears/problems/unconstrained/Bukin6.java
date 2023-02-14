@@ -18,10 +18,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/bukinn6fcn.html
 public class Bukin6 extends DoubleProblem {
 
     public Bukin6() {
-        super(2, 1, 1, 0);
+        super("Bukin6", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
-        name = "Bukin6";
 
         lowerLimit.set(0, -15.0);
         upperLimit.set(0, -5.0);

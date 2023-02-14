@@ -65,8 +65,8 @@ public abstract class WFG extends DoubleProblem {
      * @param l distance-related parameters
      * @param M Number of objectives
      */
-    public WFG(Integer k, Integer l, Integer M) {
-        super(k + l, 1, M, 0);
+    public WFG(String name, int k, int l, int M) {
+        super(name, k + l, 1, M, 0);
 
         benchmarkName = "WFG";
 
@@ -82,7 +82,6 @@ public abstract class WFG extends DoubleProblem {
             lowerLimit.add(0.0);
             upperLimit.add(2.0 * (i + 1));
         }
-
     }
 
     public void evaluate(NumberSolution<Double> solution) {

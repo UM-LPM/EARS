@@ -19,10 +19,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/crossintrayfcn.html
 public class CrossInTray extends DoubleProblem {
 
     public CrossInTray() {
-        super(2, 1, 1, 0);
+        super("CrossInTray", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -15.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 15.0));
-        name = "CrossInTray";
 
         Arrays.fill(decisionSpaceOptima[0], 1.349406608602084);
         objectiveSpaceOptima[0] = -2.062611870822739;

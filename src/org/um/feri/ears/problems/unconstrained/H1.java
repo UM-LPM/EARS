@@ -14,10 +14,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/155-h1-filter
 public class H1 extends DoubleProblem {
 
     public H1() {
-        super(2, 1, 1, 0);
+        super("H1", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -25.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 25.0));
-        name = "H1";
 
         minimize = false;
         decisionSpaceOptima[0] = new double[]{PI * (36.0 / 13.0), PI * (28.0 / 13.0)};

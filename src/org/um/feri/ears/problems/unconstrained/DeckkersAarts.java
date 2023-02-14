@@ -15,10 +15,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/deckkersaartsfcn.html
 public class DeckkersAarts extends DoubleProblem {
 
     public DeckkersAarts() {
-        super(2, 1, 1, 0);
+        super("DeckkersAarts", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -20.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 20.0));
-        name = "DeckkersAarts";
 
         decisionSpaceOptima[0] = new double[]{0.0, 15.0};
         objectiveSpaceOptima[0] = -24777.0;

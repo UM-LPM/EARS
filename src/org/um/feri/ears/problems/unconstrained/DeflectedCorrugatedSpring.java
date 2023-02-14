@@ -18,10 +18,9 @@ public class DeflectedCorrugatedSpring extends DoubleProblem {
     double k = 5.0, alpha = 5.0;
 
     public DeflectedCorrugatedSpring() {
-        super(2, 1, 1, 0);
+        super("DeflectedCorrugatedSpring", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0 * alpha));
-        name = "DeflectedCorrugatedSpring";
 
         Arrays.fill(decisionSpaceOptima[0], alpha);
         objectiveSpaceOptima[0] = -0.2;

@@ -14,10 +14,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/schaffern3fcn.html
  */
 public class Schaffer3 extends DoubleProblem {
     public Schaffer3() {
-        super(2, 1, 1, 0);
+        super("Schaffer3", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Schaffer3";
 
         decisionSpaceOptima[0] = new double[]{0, 1.253115};
         objectiveSpaceOptima[0] = 0.0012301324758943188;

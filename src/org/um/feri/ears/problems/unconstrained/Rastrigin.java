@@ -16,10 +16,9 @@ import static java.lang.Math.*;
 public class Rastrigin extends DoubleProblem {
 
     public Rastrigin(int d) {
-        super(d, 1, 1, 0);
+        super("Rastrigin", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.12));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.12));
-        name = "Rastrigin";
     }
 
     @Override

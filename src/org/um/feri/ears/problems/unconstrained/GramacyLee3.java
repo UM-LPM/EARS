@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/260-gramacy-lee-s
 public class GramacyLee3 extends DoubleProblem {
 
     public GramacyLee3() {
-        super(2, 1, 1, 0);
+        super("GramacyLee3", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.5));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.5));
-        name = "GramacyLee3";
 
         Arrays.fill(decisionSpaceOptima[0], -1.041);
         objectiveSpaceOptima[0] = -1.126871604339345;

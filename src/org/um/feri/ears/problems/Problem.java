@@ -26,7 +26,8 @@ public abstract class Problem<S extends Solution> {
     public static final int CONSTRAINED_TYPE_NORMALIZATION = 3;
     public static int constrained_type = CONSTRAINED_TYPE_SUM;
 
-    public Problem(int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
+    public Problem(String name, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
+        this.name = name;
         this.numberOfGlobalOptima = numberOfGlobalOptima;
         this.numberOfObjectives = numberOfObjectives;
         this.numberOfConstraints = numberOfConstraints;

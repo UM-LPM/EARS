@@ -18,10 +18,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/zakharov.html
 public class Zakharov extends DoubleProblem {
 
     public Zakharov(int d) {
-        super(d, 1, 1, 0);
+        super("Zakharov", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Zakharov";
     }
 
     @Override

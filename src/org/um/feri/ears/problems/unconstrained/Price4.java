@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/159-price-s-funct
 public class Price4 extends DoubleProblem {
 
     public Price4() {
-        super(2, 3, 1, 0);
+        super("Price4", 2, 3, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -50.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 50.0));
-        name = "Price4";
 
         decisionSpaceOptima[0] = new double[]{0.0, 0.0};
         decisionSpaceOptima[1] = new double[]{2.0, 4.0};

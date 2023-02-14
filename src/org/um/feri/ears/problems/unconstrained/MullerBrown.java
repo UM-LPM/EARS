@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/62-muller-browns-
 public class MullerBrown extends DoubleProblem {
 
     public MullerBrown() {
-        super(2, 1, 1, 0);
+        super("MullerBrown", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "MullerBrown";
 
         lowerLimit.set(0, -1.5);
         upperLimit.set(0, 1.0);

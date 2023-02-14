@@ -16,10 +16,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/quarticfcn.html
 public class Quadratic extends DoubleProblem {
 
     public Quadratic() {
-        super(2, 1, 1, 0);
+        super("Quadratic", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Quadratic";
 
         decisionSpaceOptima[0] = new double[]{0.193880169366971, 0.485133920218833};
         objectiveSpaceOptima[0] = -3873.724182186271819;

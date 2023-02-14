@@ -16,10 +16,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/96-modified-schaf
  */
 public class Schaffer1 extends DoubleProblem {
     public Schaffer1() {
-        super(2, 1, 1, 0);
+        super("Schaffer1", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Schaffer1";
     }
 
     @Override

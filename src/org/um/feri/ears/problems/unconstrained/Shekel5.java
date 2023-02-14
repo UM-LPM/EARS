@@ -18,10 +18,9 @@ public class Shekel5 extends DoubleProblem {
     public double[] c;
 
     public Shekel5() {
-        super(4, 1, 1, 0);
+        super("Shekel5", 4, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Shekel5";
 
         Arrays.fill(decisionSpaceOptima[0], 4);
         objectiveSpaceOptima[0] = -10.1532;

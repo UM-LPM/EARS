@@ -14,10 +14,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/253-f26-function
 public class F26 extends DoubleProblem {
 
     public F26() {
-        super(2, 1, 1, 0);
+        super("F26", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "F26";
 
         decisionSpaceOptima[0] = new double[]{1.046680526600663, 0};
         objectiveSpaceOptima[0] = -0.35238607380003634;

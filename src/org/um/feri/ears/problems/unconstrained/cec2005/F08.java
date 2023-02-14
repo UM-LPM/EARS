@@ -17,12 +17,12 @@ public class F08 extends CEC2005Base {
     private double[] m_zM;
 
     public F08(int d) {
-        super(d, 8);
+        super("Shifted Rotated Ackley's Function with Global Optimum on Bounds", d, 8);
 
         name = "Shifted Rotated Ackley's Function with Global Optimum on Bounds";
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -32.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 32.0));
 
         m_o = new double[d];
         m_matrix = new double[d][d];

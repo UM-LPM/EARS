@@ -14,10 +14,10 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
  */
 public class Shubert1 extends DoubleProblem {
     public Shubert1(int d) {
-        super(d, 18, 1, 0);
+        super("Shubert1", d, 18, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Shubert1";
+
         decisionSpaceOptima[0] = new double[]{-7.0835, 4.8580};
         decisionSpaceOptima[1] = new double[]{-7.0835, -7.7083};
         decisionSpaceOptima[2] = new double[]{-1.4251, -7.0835};

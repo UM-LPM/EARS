@@ -16,10 +16,9 @@ public class FletcherPowell2 extends DoubleProblem {
 
 
     public FletcherPowell2() {
-        super(2, 1, 1, 0);
+        super("FletcherPowell2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -PI));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, PI));
-        name = "FletcherPowell2";
         a = new double[][]{
                 {-79, 56, -62, -9, 92, 48, -22, -34, -39, -40, -95, -69, -20, -66, -98, -66, -67, 37, -83, -45},
                 {91, -9, -18, -59, 99, -45, 88, -14, -29, 26, 71, -65, 19, 45, 88, 18, -11, -81, -10, 42},

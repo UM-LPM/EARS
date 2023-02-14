@@ -16,7 +16,7 @@ public class Storn extends DoubleProblem {
     int m = 3; // 1, 2 or 3
 
     public Storn() {
-        super(2, 2, 1, 0);
+        super("Storn", 2, 2, 1, 0);
 
         double lower, upper;
         switch (m) {
@@ -48,8 +48,6 @@ public class Storn extends DoubleProblem {
         }
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, lower));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, upper));
-
-        name = "Storn";
     }
 
     @Override

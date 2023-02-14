@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F11 extends CEC2014 {
 
     public F11(int d) {
-        super(d, 11);
-
-        name = "F11 Schwefel function";
+        super("F11 Schwefel function", d, 11);
     }
 
     @Override

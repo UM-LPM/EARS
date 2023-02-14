@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F14 extends CEC2014 {
 
     public F14(int d) {
-        super(d, 14);
-
-        name = "F14 HGBat function";
+        super("F14 HGBat function", d, 14);
     }
 
     @Override

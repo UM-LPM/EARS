@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_T.html#test-function
 public class TestTubeHolder extends DoubleProblem {
 
     public TestTubeHolder() {
-        super(2, 1, 1, 0);
+        super("Test Tube Holder", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Test Tube Holder";
 
         decisionSpaceOptima[0] = new double[]{-PI / 2.0, 0.0};
         objectiveSpaceOptima[0] = -10.872299901558;

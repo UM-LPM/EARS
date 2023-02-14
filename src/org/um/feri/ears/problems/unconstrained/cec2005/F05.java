@@ -15,12 +15,12 @@ public class F05 extends CEC2005Base {
     private double[] m_z;
 
     public F05(int d) {
-        super(d, 5);
+        super("Schwefel's Problem 2.6 with Global Optimum on Bounds", d, 5);
 
         name = "Schwefel's Problem 2.6 with Global Optimum on Bounds";
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
         m_o = new double[d];
         m_A = new double[d][d];

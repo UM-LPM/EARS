@@ -32,10 +32,9 @@ public class Ozyczka2 extends DoubleProblem {
 
     public Ozyczka2() {
 
-        super(6, 1, 6, 2);
+        super("Osyczka2", 6, 1, 6, 2);
 
         referenceSetFileName = "Osyczka2";
-        name = "Osyczka2";
 
         upperLimit = new ArrayList<>(numberOfDimensions);
         lowerLimit = new ArrayList<>(numberOfDimensions);

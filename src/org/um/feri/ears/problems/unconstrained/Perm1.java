@@ -16,10 +16,9 @@ public class Perm1 extends DoubleProblem {
     double beta = 0.5;
 
     public Perm1(int d) {
-        super(d, 1, 1, 0);
+        super("Perm1", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -numberOfDimensions * 1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, numberOfDimensions * 1.0 + 1));
-        name = "Perm1";
 
         for (int i = 0; i < numberOfDimensions; i++) {
             decisionSpaceOptima[0][i] = i + 1;

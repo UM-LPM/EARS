@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F3 extends CEC2014 {
 	
 	public F3(int d) {
-		super(d,3);
-
-		name = "F03 Discus Function";
+		super("F03 Discus Function", d,3);
 	}
 
 	@Override

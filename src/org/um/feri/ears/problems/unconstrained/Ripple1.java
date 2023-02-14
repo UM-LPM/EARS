@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.
 public class Ripple1 extends DoubleProblem {
 
     public Ripple1() {
-        super(2, 1, 1, 0);
+        super("Ripple1", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "Ripple1";
 
         Arrays.fill(decisionSpaceOptima[0], 0.1);
         objectiveSpaceOptima[0] = -2.2;

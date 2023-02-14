@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F11 extends CEC2015 {
 
     public F11(int d) {
-        super(d, 11);
-
-        name = "F11 Hybrid Function 2";
+        super("F11 Hybrid Function 2", d, 11);
     }
 
     @Override

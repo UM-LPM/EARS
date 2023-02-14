@@ -15,11 +15,10 @@ public class UnconstrainedProblem1 extends CEC2009 {
 	 
 	public UnconstrainedProblem1(Integer numberOfVariables) {
 		
-		super(numberOfVariables, 0, 2);
+		super("UF1", numberOfVariables, 0, 2);
 
 		referenceSetFileName = "UF1";
-		name = "UF1";
-		
+
 		upperLimit = new ArrayList<>(numberOfDimensions);
 		lowerLimit = new ArrayList<>(numberOfDimensions);
 

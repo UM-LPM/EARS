@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_Z.html#go_benchmark.
 public class Zimmerman extends DoubleProblem {
 
     public Zimmerman() {
-        super(2, 1, 1, 0);
+        super("Zimmerman", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Zimmerman";
 
         //optimum[0] = new double[]{7.0, 2.0};
     }

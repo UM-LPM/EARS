@@ -18,10 +18,9 @@ public class DeJong5 extends DoubleProblem {
     double[][] a;
 
     public DeJong5() {
-        super(2, 1, 1, 0);
+        super("DeJong5", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -65.536));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 65.536));
-        name = "DeJong5";
 
         Arrays.fill(decisionSpaceOptima[0], 1);
 

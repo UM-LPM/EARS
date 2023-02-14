@@ -52,10 +52,9 @@ public class WFG8 extends WFG {
      * @param m Number of objective functions
      */
     public WFG8(int k, int l, int m) {
-        super(k, l, m);
+        super("WFG8", k, l, m);
 
         referenceSetFileName = "WFG8." + m + "D";
-        name = "WFG8";
 
         s = new int[m];
         for (int i = 0; i < m; i++) {

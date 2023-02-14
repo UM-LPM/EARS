@@ -16,10 +16,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/119-cube-function
 public class Cube extends DoubleProblem {
 
     public Cube() {
-        super(2, 1, 1, 0);
+        super("Cube", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Cube";
 
         Arrays.fill(decisionSpaceOptima[0], 1.0);
     }

@@ -17,12 +17,8 @@ public abstract class NumberProblem<Type extends Number> extends Problem<NumberS
 
     protected double[][] decisionSpaceOptima;
 
-    public NumberProblem(int numberOfDimensions) {
-        this(numberOfDimensions,1,1,0);
-    }
-
-    public NumberProblem(int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
-        super(numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
+    public NumberProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
+        super(name, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
 
         this.numberOfDimensions = numberOfDimensions;
 

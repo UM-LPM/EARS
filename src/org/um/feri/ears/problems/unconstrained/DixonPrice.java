@@ -14,10 +14,9 @@ https://www.sfu.ca/~ssurjano/dixonpr.html
 
 public class DixonPrice extends DoubleProblem {
     public DixonPrice(int d) {
-        super(d, 1, 1, 0);
+        super("Dixon_Price", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Dixon_Price";
 
         for (int i = 0; i < numberOfDimensions; i++) {
             double minX = pow(2, -(pow(2, i + 1) - 2) / pow(2, i + 1));

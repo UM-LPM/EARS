@@ -14,10 +14,10 @@ http://benchmarkfcns.xyz/benchmarkfcns/shubert3fcn.html
  */
 public class Shubert3 extends DoubleProblem {
     public Shubert3(int d) {
-        super(d, 1, 1, 0);
+        super("Shubert3", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Shubert3";
+
         //multiple global optima
         objectiveSpaceOptima[0] = -29.6733337;
     }

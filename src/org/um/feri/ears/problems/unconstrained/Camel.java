@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/31-camel-function
 public class Camel extends DoubleProblem {
 
     public Camel() {
-        super(2, 2, 1, 0);
+        super("Camel", 2, 2, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0));
-        name = "Camel";
 
         decisionSpaceOptima[0][0] = 1.5;
         decisionSpaceOptima[0][1] = 0.0;

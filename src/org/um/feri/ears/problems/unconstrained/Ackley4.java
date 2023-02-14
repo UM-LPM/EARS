@@ -14,7 +14,7 @@ http://benchmarkfcns.xyz/benchmarkfcns/ackleyn4fcn.html
 public class Ackley4 extends DoubleProblem {
 
     public Ackley4() {
-        super(2, 2, 1, 0);
+        super("Ackley4", 2, 2, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -35.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 35.0));
         name = "Ackley4"; // also known as Modified Ackley Function

@@ -8,8 +8,7 @@ public class SymbolicRegressionProblem extends ProgramProblem<Double>{
     private List<Target> evalData;
 
     public SymbolicRegressionProblem() {
-        super();
-        name = "SymbolicRegression";
+        super("SymbolicRegression");
     }
 
     public List<?> getEvalData() {

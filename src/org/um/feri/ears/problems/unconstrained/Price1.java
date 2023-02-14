@@ -16,10 +16,10 @@ http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.
 public class Price1 extends DoubleProblem {
 
     public Price1() {
-        super(2, 4, 1, 0);
+        super("Price1", 2, 4, 1, 0);
+        // also known as Becker-Lago's Function
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -500.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 500.0));
-        name = "Price1"; // also known as Becker-Lago's Function
 
         decisionSpaceOptima[0] = new double[]{5.0, 5.0};
         decisionSpaceOptima[1] = new double[]{5.0, -5.0};

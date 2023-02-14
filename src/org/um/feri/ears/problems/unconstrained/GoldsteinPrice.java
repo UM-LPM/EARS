@@ -15,10 +15,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/goldsteinpricefcn.html
 
 public class GoldsteinPrice extends DoubleProblem {
     public GoldsteinPrice() {
-        super(2, 1, 1, 0);
+        super("GoldsteinPrice", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0));
-        name = "GoldsteinPrice";
 
         decisionSpaceOptima[0][0] = 0;
         decisionSpaceOptima[0][1] = -1;

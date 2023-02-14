@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/128-rump-function
 public class Rump extends DoubleProblem {
 
     public Rump() {
-        super(2, 1, 1, 0);
+        super("Rump", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
-        name = "Rump";
     }
 
     @Override

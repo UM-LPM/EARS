@@ -20,9 +20,8 @@ public class UnconstrainedProblem7 extends CEC2009 {
 	 * @param numberOfVariables Number of variables.
 	 */
 	public UnconstrainedProblem7(Integer numberOfVariables) {
-		super(numberOfVariables,0, 2);
+		super("UF7", numberOfVariables,0, 2);
 
-		name = "UF7";
 		referenceSetFileName = "UF7";
 		
 		upperLimit = new ArrayList<>(numberOfDimensions);

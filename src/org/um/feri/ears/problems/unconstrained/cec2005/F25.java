@@ -40,12 +40,10 @@ public class F25 extends CEC2005Base {
     private double[][] m_zM;
 
     public F25(int d) {
-        super(d, 25);
+        super("Rotated Hybrid Composition Function 4 without bounds", d, 25);
 
-        name = "Rotated Hybrid Composition Function 4 without bounds";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
 
         m_o = new double[NUM_FUNC][d];
         m_M = new double[NUM_FUNC][d][d];

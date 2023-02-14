@@ -20,8 +20,7 @@ import org.um.feri.ears.problems.DoubleProblem;
  */
 public class RealWorldCompressionSpringDesign extends DoubleProblem {
     public RealWorldCompressionSpringDesign() {
-        super(3, 1, 1, 4);
-        name = "CompressionSpringDesign";
+        super("CompressionSpringDesign",3, 1, 1, 4);
         maxConstraints = new double[numberOfConstraints];
         minConstraints = new double[numberOfConstraints];
         countConstraints = new double[numberOfConstraints];

@@ -62,7 +62,7 @@ public class SoilModelProblem extends DoubleProblem {
     }
 
     private SoilModelProblem(int numberOfDimensions, int numberOfConstraints) {
-        super(numberOfDimensions, 1, 1, numberOfConstraints);
+        super("Soil Model", numberOfDimensions, 1, 1, numberOfConstraints);
 
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
@@ -78,8 +78,6 @@ public class SoilModelProblem extends DoubleProblem {
                 upperLimit.set(i, 40.0);
             }
         }
-
-        name = "Soil Model";
     }
 
     @Override

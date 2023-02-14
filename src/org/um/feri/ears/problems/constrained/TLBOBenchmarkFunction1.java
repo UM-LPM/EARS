@@ -52,7 +52,7 @@ public class TLBOBenchmarkFunction1 extends DoubleProblem {
     // http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page506.htm
 
     public TLBOBenchmarkFunction1() {
-        super(13, 1, 1, 9);
+        super("TLBOBenchmarkFunction1 (TP7) cec-g01", 13, 1, 1, 9);
         minimize = true;
         maxConstraints = new double[numberOfConstraints];
         minConstraints = new double[numberOfConstraints];
@@ -73,8 +73,6 @@ public class TLBOBenchmarkFunction1 extends DoubleProblem {
         lowerLimit.set(12, 0.0);
         upperLimit.set(12, 1.0);
 
-
-        name = "TLBOBenchmarkFunction1 (TP7) cec-g01";
         // System.out.println(Arrays.toString(interval)+"\n"+Arrays.toString(intervalL));
 
         decisionSpaceOptima[0] = new double[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 1};

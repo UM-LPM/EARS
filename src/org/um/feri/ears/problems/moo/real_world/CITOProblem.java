@@ -34,7 +34,7 @@ public class CITOProblem extends IntegerProblem {
 	}
 
 	public CITOProblem(CITOReader problemReader) {
-		super(problemReader.getNumberOfUnits(), 1, 2, 0);
+		super("CITO_"+problemReader.getSoftwareName(), problemReader.getNumberOfUnits(), 1, 2, 0);
 		this.numberOfUnits = problemReader.getNumberOfUnits();
 		this.aspects = problemReader.getAspects();
 		this.constraintMatrix = problemReader.getConstraintMatrix();
@@ -46,8 +46,7 @@ public class CITOProblem extends IntegerProblem {
 		this.methodReturnTypeMatrix = problemReader.getMethodReturnTypeMatrix();
 
 		referenceSetFileName = "CITO_"+problemReader.getSoftwareName();
-		name = "CITO_"+problemReader.getSoftwareName();
-		
+
 		upperLimit = new ArrayList<>(numberOfDimensions);
 		lowerLimit = new ArrayList<>(numberOfDimensions);
 

@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_X.html#go_benchmark.
 public class XinSheYang3 extends DoubleProblem {
 
     public XinSheYang3() {
-        super(2, 1, 1, 0);
+        super("XinSheYang3", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -20.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 20.0));
-        name = "XinSheYang3";
         objectiveSpaceOptima[0] = -1.0;
     }
 

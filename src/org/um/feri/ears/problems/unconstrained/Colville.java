@@ -15,10 +15,9 @@ https://www.sfu.ca/~ssurjano/colville.html
 public class Colville extends DoubleProblem {
 
     public Colville() {
-        super(4, 1, 1, 0);
+        super("Colville", 4, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Colville";
 
         Arrays.fill(decisionSpaceOptima[0], 1);
     }

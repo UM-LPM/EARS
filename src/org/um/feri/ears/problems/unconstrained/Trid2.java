@@ -15,10 +15,9 @@ https://www.sfu.ca/~ssurjano/trid.html
 public class Trid2 extends DoubleProblem {
 
     public Trid2() {
-        super(2, 1, 1, 0);
+        super("Trid2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -pow(numberOfDimensions, 2)));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, pow(numberOfDimensions, 2)));
-        name = "Trid2";
 
         for (int i = 0; i < numberOfDimensions; i++) {
             decisionSpaceOptima[0][i] = (i + 1) * (numberOfDimensions + 1 - (i + 1));

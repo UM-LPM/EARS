@@ -15,10 +15,9 @@ https://www.sfu.ca/~ssurjano/michal.html
 public class Michalewicz10 extends DoubleProblem {
 
     public Michalewicz10() {
-        super(10, 1, 1, 0);
+        super("Michalewicz10", 10, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, PI));
-        name = "Michalewicz10";
         objectiveSpaceOptima[0] = -9.66015171;
     }
 

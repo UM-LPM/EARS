@@ -15,10 +15,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/holdertablefcn.html
 
 public class HolderTable extends DoubleProblem {
     public HolderTable() {
-        super(2, 4, 1, 0);
+        super("Holder Table", 2, 4, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Holder Table";
 
         decisionSpaceOptima[0] = new double[]{8.05502, 9.66459};
         decisionSpaceOptima[1] = new double[]{8.05502, -9.66459};

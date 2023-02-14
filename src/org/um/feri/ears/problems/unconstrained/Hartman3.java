@@ -17,10 +17,9 @@ public class Hartman3 extends DoubleProblem {
     private double[] c;
 
     public Hartman3() {
-        super(3, 1, 1, 0);
+        super("Hartman3", 3, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "Hartman3";
 
         decisionSpaceOptima[0] = new double[]{0.1, 0.55592003, 0.85218259};
         objectiveSpaceOptima[0] = -3.86278214782076;

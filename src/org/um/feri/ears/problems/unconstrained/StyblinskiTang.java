@@ -18,10 +18,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/styblinskitankfcn.html
 public class StyblinskiTang extends DoubleProblem {
 
     public StyblinskiTang(int d) {
-        super(d, 1, 1, 0);
+        super("Styblinski Tang", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Styblinski Tang";
 
         Arrays.fill(decisionSpaceOptima[0], -2.90353401818596);
         objectiveSpaceOptima[0] = -39.16616570377142 * numberOfDimensions;

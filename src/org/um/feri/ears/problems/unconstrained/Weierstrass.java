@@ -14,10 +14,9 @@ http://infinity77.net/global_optimization/test_functions_nd_W.html#go_benchmark.
 public class Weierstrass extends DoubleProblem {
 
     public Weierstrass() {
-        super(2, 1, 1, 0);
+        super("Weierstrass", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -0.5));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.5));
-        name = "Weierstrass";
         objectiveSpaceOptima[0] = 4.0;
     }
 

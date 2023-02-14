@@ -13,10 +13,10 @@ http://infinity77.net/global_optimization/test_functions_nd_A.html#go_benchmark.
 public class Mishra11 extends DoubleProblem {
 
     public Mishra11() {
-        super(2, 1, 1, 0);
+        super("Mishra11", 2, 1, 1, 0);
+        // also known as AMGM - Arithmetic Mean-Geometric Mean
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Mishra11"; // also known as AMGM - Arithmetic Mean-Geometric Mean
 
         // optimum is at x1 = x2 = ... =xn where all x are non-negative
     }

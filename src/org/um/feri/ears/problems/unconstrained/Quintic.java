@@ -16,10 +16,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/240-quintic-funct
 public class Quintic extends DoubleProblem {
 
     public Quintic() {
-        super(2, 1, 1, 0);
+        super("Quintic", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Quintic";
 
         decisionSpaceOptima[0] = new double[]{-1.0, 2.0};
     }

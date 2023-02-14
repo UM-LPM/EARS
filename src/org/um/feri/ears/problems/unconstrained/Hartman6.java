@@ -17,7 +17,7 @@ public class Hartman6 extends DoubleProblem {
 
 
     public Hartman6() {
-        super(6, 1, 1, 0);
+        super("Hartman6", 6, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
         name = "Hartman6";

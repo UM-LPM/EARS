@@ -14,10 +14,9 @@ http://infinity77.net/global_optimization/test_functions_nd_Y.html#go_benchmark.
 public class YaoLiu9 extends DoubleProblem {
 
     public YaoLiu9() {
-        super(2, 1, 1, 0);
+        super("YaoLiu9", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.12));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.12));
-        name = "YaoLiu9";
     }
 
     @Override

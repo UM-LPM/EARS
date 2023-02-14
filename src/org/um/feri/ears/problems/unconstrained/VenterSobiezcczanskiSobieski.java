@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_V.html#go_benchmark.
 public class VenterSobiezcczanskiSobieski extends DoubleProblem {
 
     public VenterSobiezcczanskiSobieski() {
-        super(2, 1, 1, 0);
+        super("VenterSobiezcczanskiSobieski", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -50.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 50.0));
-        name = "VenterSobiezcczanskiSobieski";
         objectiveSpaceOptima[0] = -400.0;
     }
 

@@ -169,7 +169,7 @@ public class CEC2011_Problem_11_7_ELD_140 extends DoubleProblem {
     private static int Down_Ramp_data2_col = 2;
 
     public CEC2011_Problem_11_7_ELD_140() {
-        super(140, 1, 1, 4);
+        super("RWP_11_7_ELD_140", 140, 1, 1, 4);
 
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
@@ -177,7 +177,6 @@ public class CEC2011_Problem_11_7_ELD_140 extends DoubleProblem {
             lowerLimit.set(z, Data1[z][0]);
             upperLimit.set(z, Data1[z][1]);
         }
-        name = "RWP_11_7_ELD_140";
         description = "RWP_11_7_ELD_140 Static Economic Load Dispatch (ELD) Problem ";
     }
 

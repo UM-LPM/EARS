@@ -16,10 +16,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/himmelblaufcn.html
 public class HimmelBlau extends DoubleProblem {
 
     public HimmelBlau() {
-        super(2, 4, 1, 0);
+        super("HimmelBlau", 2, 4, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -6.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 6.0));
-        name = "HimmelBlau";
 
         decisionSpaceOptima[0] = new double[]{3.0, 2.0};
         decisionSpaceOptima[1] = new double[]{3.584428340330, -1.848126526964};

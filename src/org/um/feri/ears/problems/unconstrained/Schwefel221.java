@@ -17,10 +17,10 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
 public class Schwefel221 extends DoubleProblem {
 
     public Schwefel221() {
-        super(2, 1, 1, 0);
+        super("Schwefel221", 2, 1, 1, 0);
+        // also known as MaxMod
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Schwefel221"; // also known as MaxMod
     }
 
     @Override

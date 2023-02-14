@@ -15,13 +15,11 @@ http://infinity77.net/global_optimization/test_functions_nd_F.html#go_benchmark.
 public class FreudensteinRoth extends DoubleProblem {
 
     public FreudensteinRoth() {
-        super(2, 1, 1, 0);
+        super("FreudensteinRoth", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "FreudensteinRoth";
 
         decisionSpaceOptima[0] = new double[]{5.0, 4.0};
-
     }
 
     @Override

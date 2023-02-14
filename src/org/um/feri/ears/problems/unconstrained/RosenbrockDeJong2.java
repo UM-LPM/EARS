@@ -15,12 +15,11 @@ import static java.lang.Math.pow;
  */
 public class RosenbrockDeJong2 extends DoubleProblem {
     public RosenbrockDeJong2(int d) {
-        super(d, 1, 1, 0);
+        super("Rosenbrock - De Jong's function 2", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         //lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -2.048));
         //upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 2.048));
-        name = "Rosenbrock - De Jong's function 2";
 
         Arrays.fill(decisionSpaceOptima[0], 1);
     }

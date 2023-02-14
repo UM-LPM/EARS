@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/277-wayburn-seade
 public class WayburnSeader1 extends DoubleProblem {
 
     public WayburnSeader1() {
-        super(2, 2, 1, 0);
+        super("WayburnSeader1", 2, 2, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "WayburnSeader1";
 
         decisionSpaceOptima[0] = new double[]{1.0, 2.0};
         decisionSpaceOptima[1] = new double[]{1.596804153876933, 0.806391692246134};

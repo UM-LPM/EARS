@@ -18,12 +18,10 @@ http://mantella.info/optimisation-problems/black-box-optimisation-benchmark/#bbo
 public class SharpRidge extends DoubleProblem {
 
     public SharpRidge(int d) {
-        super(d, 1, 1, 0);
+        super("SharpRidge", d, 1, 1, 0);
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-
-        name = "SharpRidge";
     }
 
     @Override

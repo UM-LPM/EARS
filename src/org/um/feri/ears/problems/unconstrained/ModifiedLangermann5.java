@@ -48,10 +48,9 @@ public class ModifiedLangermann5 extends DoubleProblem {
 
 
     public ModifiedLangermann5() {
-        super(5, 1, 1, 0);
+        super("ModifiedLangermann5", 5, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "ModifiedLangermann5";
         objectiveSpaceOptima[0] = -1.4;
     }
 

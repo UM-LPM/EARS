@@ -15,10 +15,9 @@ https://al-roomi.org/benchmarks/unconstrained/2-dimensions/252-parsopoulos-funct
 public class Parsopoulos extends DoubleProblem {
 
     public Parsopoulos() {
-        super(2, 1, 1, 0);
+        super("Parsopoulos", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Parsopoulos";
     }
 
     @Override

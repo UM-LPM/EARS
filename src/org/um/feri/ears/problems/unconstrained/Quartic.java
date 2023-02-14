@@ -20,11 +20,10 @@ public class Quartic extends DoubleProblem {
 
 
     public Quartic(int d, boolean noise) {
-        super(d, 1, 1, 0);
+        super("Quartic / Modified De Jong" + (noise ? " with noise" : ""), d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.28));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.28));
         this.noise = noise;
-        name = "Quartic / Modified De Jong" + (noise ? " with noise" : "");
     }
 
     @Override

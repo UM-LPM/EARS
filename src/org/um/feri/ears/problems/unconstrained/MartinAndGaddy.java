@@ -11,10 +11,9 @@ import static java.lang.Math.pow;
 
 public class MartinAndGaddy extends DoubleProblem {
     public MartinAndGaddy() {
-        super(2, 1, 1, 0);
+        super("MartinAndGaddy", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "MartinAndGaddy";
 
         Arrays.fill(decisionSpaceOptima[0], 5.0);
     }

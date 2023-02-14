@@ -15,10 +15,9 @@ Efficient and Robust Gradient Enhanced Kriging Emulators
 public class HerbieSmoothed extends DoubleProblem {
 
     public HerbieSmoothed() {
-        super(2, 1, 1, 0);
+        super("HerbieSmoothed", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0));
-        name = "HerbieSmoothed";
 
         decisionSpaceOptima[0] = new double[]{2.0, 2.0};
         objectiveSpaceOptima[0] = 0.13588514776692626;

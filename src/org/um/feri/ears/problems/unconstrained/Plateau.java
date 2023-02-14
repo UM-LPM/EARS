@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.
 public class Plateau extends DoubleProblem {
 
     public Plateau() {
-        super(2, 1, 1, 0);
+        super("Plateau", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.12));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.12));
-        name = "Plateau";
         objectiveSpaceOptima[0] = 30.0;
     }
 

@@ -15,10 +15,10 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/160-price-s-funct
 public class Price3 extends DoubleProblem {
 
     public Price3() {
-        super(2, 2, 1, 0);
+        super("Price3", 2, 2, 1, 0);
+        // also known as Modified Rosenbrock's or Price-Rosenbrock's Function
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -50.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 50.0));
-        name = "Price3"; // also known as Modified Rosenbrock's or Price-Rosenbrock's Function
 
         decisionSpaceOptima[0] = new double[]{1.0, 1.0};
         decisionSpaceOptima[1] = new double[]{0.341307503353524, 0.116490811845416};

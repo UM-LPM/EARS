@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F6 extends CEC2014 {
 
     public F6(int d) {
-        super(d, 6);
-
-        name = "F06 Weierstrass Function";
+        super("F06 Weierstrass Function", d, 6);
     }
 
     @Override

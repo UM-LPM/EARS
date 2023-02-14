@@ -14,10 +14,9 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
 public class SineEnvelope extends DoubleProblem {
 
     public SineEnvelope() {
-        super(2, 1, 1, 0);
+        super("SineEnvelope", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "SineEnvelope";
     }
 
     @Override

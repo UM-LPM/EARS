@@ -19,12 +19,10 @@ public class F03 extends CEC2005Base {
     private double constant;
 
     public F03(int d) {
-        super(d, 3);
+        super("Shifted Rotated High Conditioned Elliptic Function", d, 3);
 
-        name = "Shifted Rotated High Conditioned Elliptic Function";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
         m_o = new double[d];
         m_matrix = new double[d][d];

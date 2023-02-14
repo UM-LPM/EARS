@@ -52,7 +52,7 @@ import org.um.feri.ears.problems.DoubleProblem;
 public class TLBOBenchmarkFunction3  extends DoubleProblem {
 	//http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page898.htm
 	public TLBOBenchmarkFunction3() {
-		super(7, 1, 1, 4);
+		super("TLBOBenchmarkFunction3 cec-g09", 7, 1, 1, 4);
 		minimize = true;
 		
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
@@ -66,7 +66,6 @@ public class TLBOBenchmarkFunction3  extends DoubleProblem {
 		sumConstraints = new double[numberOfConstraints];
 		normalizationConstraintsFactor = new double[numberOfConstraints];
 		//System.out.println(Arrays.toString(interval)+"\n"+Arrays.toString(intervalL));
-		name = "TLBOBenchmarkFunction3 cec-g09";
 		decisionSpaceOptima[0] = new double[]{2.330499, 1.951372, -0.4775414, 4.365726,-0.6244870, 1.038131, 1.594227};
 		objectiveSpaceOptima[0] = 680.6300573;
 	}

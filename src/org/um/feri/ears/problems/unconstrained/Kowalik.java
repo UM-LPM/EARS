@@ -17,10 +17,9 @@ public class Kowalik extends DoubleProblem {
     public double[] b;
 
     public Kowalik() {
-        super(4, 1, 1, 0);
+        super("Kowalik", 4, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Kowalik";
 
         decisionSpaceOptima[0][0] = 0.192833;
         decisionSpaceOptima[0][1] = 0.190836;

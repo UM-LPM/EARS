@@ -7,12 +7,8 @@ import java.util.List;
 
 public abstract class IntegerProblem extends NumberProblem<Integer> {
 
-    public IntegerProblem(int numberOfDimensions) {
-        super(numberOfDimensions);
-    }
-
-    public IntegerProblem(int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
-        super(numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
+    public IntegerProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
+        super(name, numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
     }
 
     @Override

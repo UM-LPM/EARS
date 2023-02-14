@@ -17,10 +17,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/griewankfcn.html
 public class Griewank extends DoubleProblem {
 
     public Griewank(int d) {
-        super(d, 1, 1, 0);
+        super("Griewank", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -600.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 600.0));
-        name = "Griewank";
     }
 
     @Override

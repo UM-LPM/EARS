@@ -14,10 +14,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/195-stepint-funct
  */
 public class Stepint extends DoubleProblem {
     public Stepint(int d) {
-        super(d, 1, 1, 0);
+        super("Stepint", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.12));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.12));
-        name = "Stepint";
 
         //infinite number of global optima
         // -5.12 <= x < -5.0

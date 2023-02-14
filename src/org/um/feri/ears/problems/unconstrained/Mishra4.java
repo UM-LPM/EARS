@@ -16,10 +16,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/149-mishra-s-func
 public class Mishra4 extends DoubleProblem {
 
     public Mishra4() {
-        super(2, 1, 1, 0);
+        super("Mishra4", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Mishra4";
 
         decisionSpaceOptima[0] = new double[]{-9.941127263635860, -9.999571661999983};
         objectiveSpaceOptima[0] = -0.199406970088833;

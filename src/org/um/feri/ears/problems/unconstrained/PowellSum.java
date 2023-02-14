@@ -18,10 +18,10 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
 public class PowellSum extends DoubleProblem {
 
     public PowellSum(int d) {
-        super(d, 1, 1, 0);
+        super("Powell Sum", d, 1, 1, 0);
+        // also known as Sum Of Different Powers
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "Powell Sum"; // also known as Sum Of Different Powers
     }
 
     @Override

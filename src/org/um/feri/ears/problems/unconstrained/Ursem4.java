@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/131-ursem-functio
 public class Ursem4 extends DoubleProblem {
 
     public Ursem4() {
-        super(2, 1, 1, 0);
+        super("Ursem4", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0));
-        name = "Ursem4";
         objectiveSpaceOptima[0] = -1.5;
     }
 

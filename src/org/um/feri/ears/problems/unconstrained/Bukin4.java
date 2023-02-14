@@ -17,10 +17,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/51-bukin-s-functi
 public class Bukin4 extends DoubleProblem {
 
     public Bukin4() {
-        super(2, 1,1, 0);
+        super("Bukin4", 2, 1,1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
-        name = "Bukin4";
 
         lowerLimit.set(0, -15.0);
         upperLimit.set(0, -5.0);

@@ -32,10 +32,9 @@ public class ZDT1 extends ZDT {
 
     public ZDT1(Integer numberOfVariables) {
 
-        super(numberOfVariables, 0, 2);
+        super("ZDT1", numberOfVariables, 0, 2);
 
         referenceSetFileName = "ZDT1";
-        name = "ZDT1";
 
         upperLimit = new ArrayList<>(numberOfDimensions);
         lowerLimit = new ArrayList<>(numberOfDimensions);
@@ -45,7 +44,6 @@ public class ZDT1 extends ZDT {
             lowerLimit.add(0.0);
             upperLimit.add(1.0);
         }
-
 
         addObjective(new ZDT1_F1());
         addObjective(new ZDT1_F2());

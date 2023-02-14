@@ -11,18 +11,16 @@ public class F1 extends CEC2010 {
     int[] P;
 
     public F1(int d) {
-        super(d, 1);
+        super("F01 Shifted Elliptic Function", d, 1);
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
-        name = "F01 Shifted Elliptic Function";
         OShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {
             OShift[i] = Util.nextDouble(lowerLimit.get(i), upperLimit.get(i));
         }
-
     }
 
     public double eval(double[] x) {

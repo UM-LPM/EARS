@@ -14,10 +14,9 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
 public class Schwefel24 extends DoubleProblem {
 
     public Schwefel24() {
-        super(2, 1, 1, 0);
+        super("Schwefel24", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Schwefel24";
     }
 
     @Override

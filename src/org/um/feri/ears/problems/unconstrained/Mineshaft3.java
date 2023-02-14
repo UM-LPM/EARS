@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/115-mineshaft-fun
 public class Mineshaft3 extends DoubleProblem {
 
     public Mineshaft3() {
-        super(2, 1, 1, 0);
+        super("Mineshaft3", 2, 1, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -2.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 2.0));
-        name = "Mineshaft3";
 
         decisionSpaceOptima[0] = new double[]{0.8, 1.3};
         objectiveSpaceOptima[0] = -7.0;

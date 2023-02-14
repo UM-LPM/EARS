@@ -32,11 +32,10 @@ public class ConstrEx extends DoubleProblem {
 
 	public ConstrEx() {
 	     
-		super(2, 1, 2,2);
+		super("Constr_Ex", 2, 1, 2,2);
 
 		referenceSetFileName = "ConstrEx";
-		name = "Constr_Ex";
-	    
+
 	    upperLimit = new ArrayList<>(numberOfDimensions);
 		lowerLimit = new ArrayList<>(numberOfDimensions);
 

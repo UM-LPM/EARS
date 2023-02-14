@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/47-davis-function
 public class Davis extends DoubleProblem {
 
     public Davis() {
-        super(2, 1, 1, 0);
+        super("Davis", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Davis";
     }
 
     @Override

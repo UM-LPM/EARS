@@ -31,10 +31,9 @@ public class DTLZ7 extends DTLZ {
 
     public DTLZ7(int numberOfVariables, int numberOfObjectives) {
 
-        super(numberOfVariables, 0, numberOfObjectives);
+        super("DTLZ7", numberOfVariables, 0, numberOfObjectives);
 
         referenceSetFileName = "DTLZ7." + numberOfObjectives + "D";
-        name = "DTLZ7";
 
         upperLimit = new ArrayList<>(numberOfDimensions);
         lowerLimit = new ArrayList<>(numberOfDimensions);

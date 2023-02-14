@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_W.html#go_benchmark.
 public class Whitley extends DoubleProblem {
 
     public Whitley() {
-        super(2, 1, 1, 0);
+        super("Whitley", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.24));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.24));
-        name = "Whitley";
 
         Arrays.fill(decisionSpaceOptima[0], 1.0);
     }

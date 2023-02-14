@@ -23,8 +23,8 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
     protected boolean useAllBaseFunctions;
     protected boolean useAllBaseTerminals;
 
-    public ProgramProblem() {
-        super(1, 1, 0);
+    public ProgramProblem(String name) {
+        super(name, 1, 1, 0);
         this.baseFunctions = new ArrayList<>();
         this.baseTerminals = new ArrayList<>();
     }

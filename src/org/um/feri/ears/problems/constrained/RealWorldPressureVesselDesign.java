@@ -20,8 +20,7 @@ import org.um.feri.ears.problems.DoubleProblem;
 public class RealWorldPressureVesselDesign extends DoubleProblem {
 
     public RealWorldPressureVesselDesign() {
-        super(4, 1, 1, 4);
-        name = "PressureVesselDesign";
+        super("PressureVesselDesign", 4, 1, 1, 4);
         maxConstraints = new double[numberOfConstraints];
         minConstraints = new double[numberOfConstraints];
         countConstraints = new double[numberOfConstraints];

@@ -32,13 +32,12 @@ public class DTLZ2 extends DTLZ {
 
     public DTLZ2(int numberOfVariables, int numberOfObjectives) {
 
-        super(numberOfVariables, 0, numberOfObjectives);
+        super("DTLZ2", numberOfVariables, 0, numberOfObjectives);
 
         referenceSetFileName = "DTLZ2." + numberOfObjectives + "D";
-        name = "DTLZ2";
 
-        upperLimit = new ArrayList<Double>(numberOfDimensions);
-        lowerLimit = new ArrayList<Double>(numberOfDimensions);
+        upperLimit = new ArrayList<>(numberOfDimensions);
+        lowerLimit = new ArrayList<>(numberOfDimensions);
 
 
         for (int i = 0; i < numberOfDimensions; i++) {

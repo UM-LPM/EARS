@@ -17,10 +17,9 @@ public class ChensBird extends DoubleProblem {
     double b = 0.001;
 
     public ChensBird() {
-        super(2, 1, 1, 0);
+        super("ChensBird", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
-        name = "ChensBird";
 
         minimize = false;
         Arrays.fill(decisionSpaceOptima[0], 0.5);

@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/63-peaks-function
 public class Peaks extends DoubleProblem {
 
     public Peaks() {
-        super(2, 1, 1, 0);
+        super("Peaks", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -4.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 4.0));
-        name = "Peaks";
 
         decisionSpaceOptima[0] = new double[]{0.228279999979237, -1.625531071954464};
         objectiveSpaceOptima[0] = -6.551133332622496;

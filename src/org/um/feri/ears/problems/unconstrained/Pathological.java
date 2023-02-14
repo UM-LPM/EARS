@@ -14,10 +14,9 @@ http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.
 public class Pathological extends DoubleProblem {
 
     public Pathological() {
-        super(2, 1, 1, 0);
+        super("Pathological", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Pathological";
     }
 
     @Override

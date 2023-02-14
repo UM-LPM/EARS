@@ -16,10 +16,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/matyasfcn.html
 public class Matyas extends DoubleProblem {
 
     public Matyas() {
-        super(2, 1, 1, 0);
+        super("Matyas", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Matyas";
     }
 
     @Override

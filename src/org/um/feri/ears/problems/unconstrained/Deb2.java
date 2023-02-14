@@ -14,10 +14,9 @@ http://infinity77.net/global_optimization/test_functions_nd_D.html#go_benchmark.
 public class Deb2 extends DoubleProblem {
 
     public Deb2() {
-        super(2, 1, 1, 0);
+        super("Deb2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "Deb2";
     }
 
     @Override

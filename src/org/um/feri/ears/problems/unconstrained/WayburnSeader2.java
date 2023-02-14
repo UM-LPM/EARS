@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_W.html#go_benchmark.
 public class WayburnSeader2 extends DoubleProblem {
 
     public WayburnSeader2() {
-        super(2, 2, 1, 0);
+        super("WayburnSeader2", 2, 2, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
-        name = "WayburnSeader2";
 
         decisionSpaceOptima[0] = new double[]{0.200138974728779, 1};
         decisionSpaceOptima[1] = new double[]{0.424861025271221, 1};

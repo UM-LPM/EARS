@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_U.html#go_benchmark.
 public class Ursem1 extends DoubleProblem {
 
     public Ursem1() {
-        super(2, 1, 1, 0);
+        super("Ursem1", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
-        name = "Ursem1";
 
         lowerLimit.set(0, -2.5);
         upperLimit.set(0, 3.0);

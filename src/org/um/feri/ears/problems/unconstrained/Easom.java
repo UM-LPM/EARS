@@ -19,10 +19,9 @@ Different equation at: http://infinity77.net/global_optimization/test_functions_
 public class Easom extends DoubleProblem {
 
     public Easom() {
-        super(2, 1, 1, 0);
+        super("Easom", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Easom";
 
         Arrays.fill(decisionSpaceOptima[0], PI);
         objectiveSpaceOptima[0] = -1.0;

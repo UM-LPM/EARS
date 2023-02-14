@@ -22,9 +22,7 @@ public class F11 extends CEC2005Base {
     private double[] m_zM;
 
     public F11(int d) {
-        super(d, 11);
-
-        name = "Shifted Rotated Weierstrass Function";
+        super("Shifted Rotated Weierstrass Function", d, 11);
 
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -0.5));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.5));

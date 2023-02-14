@@ -46,14 +46,12 @@ public class F17 extends CEC2005Base {
     private double[][] m_zM;
 
     public F17(int d) {
-        super(d, 17);
+        super("Rotated Hybrid Composition Function 1 with Noise in Fitness", d, 17);
 
         noise = Math.abs(Util.rnd.nextGaussian());
 
-        name = "Rotated Hybrid Composition Function 1 with Noise in Fitness";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
 
         m_o = new double[NUM_FUNC][d];
         m_M = new double[NUM_FUNC][d][d];

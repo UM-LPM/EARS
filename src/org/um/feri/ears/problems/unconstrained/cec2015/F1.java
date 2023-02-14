@@ -6,9 +6,7 @@ public class F1 extends CEC2015 {
 
 
     public F1(int d) {
-        super(d, 1);
-
-        name = "F01 Bent Cigar";
+        super("F01 Bent Cigar", d, 1);
     }
 
     @Override

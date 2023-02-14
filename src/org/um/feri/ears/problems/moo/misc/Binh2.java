@@ -53,10 +53,9 @@ public class Binh2 extends DoubleProblem {
 
     public Binh2() {
 
-        super(2, 1, 2, 2);
+        super("Binh2", 2, 1, 2, 2);
 
         referenceSetFileName = "Binh2";
-        name = "Binh2";
 
         upperLimit = new ArrayList<>(numberOfDimensions);
         lowerLimit = new ArrayList<>(numberOfDimensions);
@@ -65,7 +64,6 @@ public class Binh2 extends DoubleProblem {
         upperLimit.add(5.0);
         lowerLimit.add(0.0);
         upperLimit.add(3.0);
-
 
         addObjective(new Binh2_F1());
         addObjective(new Binh2_F2());

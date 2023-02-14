@@ -23,8 +23,8 @@ public abstract class CEC2015 extends DoubleProblem {
      * @param d        number of dimensions
      * @param funcNum Function number 1-15
      */
-    public CEC2015(int d, int funcNum) {
-        super(d, 1, 1, 0);
+    public CEC2015(String name, int d, int funcNum) {
+        super(name, d, 1, 1, 0);
 
         this.funcNum = funcNum;
         if ((funcNum < 1) || (funcNum > 15)) {

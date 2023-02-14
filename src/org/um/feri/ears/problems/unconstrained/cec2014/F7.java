@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F7 extends CEC2014 {
 
     public F7(int d) {
-        super(d, 7);
-
-        name = "F07 Griewank Function";
+        super("F07 Griewank Function", d, 7);
     }
 
     @Override

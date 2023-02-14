@@ -17,10 +17,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/70-treccani-s-fun
 public class Treccani extends DoubleProblem {
 
     public Treccani() {
-        super(2, 2, 1, 0);
+        super("Treccani", 2, 2, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Treccani";
 
         decisionSpaceOptima[0] = new double[]{-2.0, 0.0};
         decisionSpaceOptima[1] = new double[]{0.0, 0.0};

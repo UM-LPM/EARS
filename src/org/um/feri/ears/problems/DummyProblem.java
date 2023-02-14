@@ -10,8 +10,7 @@ public class DummyProblem extends DoubleProblem {
 	}
 
 	public DummyProblem (String name, boolean minimize){
-		super(0, 1, 1, 0);
-		this.name = name;
+		super(name, 0, 1, 1, 0);
 		this.minimize = minimize;
 	}
 

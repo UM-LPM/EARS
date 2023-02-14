@@ -17,10 +17,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/leonfcn.html
 public class Leon extends DoubleProblem {
 
     public Leon() {
-        super(2, 1, 1, 0);
+        super("Leon", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.2));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.2));
-        name = "Leon";
 
         Arrays.fill(decisionSpaceOptima[0], 1);
     }

@@ -14,10 +14,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/114-downhill-step
 public class DownhillStep extends DoubleProblem {
 
     public DownhillStep() {
-        super(2, 1, 1, 0);
+        super("DownhillStep", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "DownhillStep";
         objectiveSpaceOptima[0] = 9.0;
     }
 

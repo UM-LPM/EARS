@@ -15,10 +15,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/sumsquaresfcn.html
 
 public class SumSquares extends DoubleProblem {
     public SumSquares(int d) {
-        super(d, 1, 1, 0);
+        super("SumSquares", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "SumSquares";
     }
 
     public double eval(double[] x) {

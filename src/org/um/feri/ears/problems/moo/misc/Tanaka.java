@@ -32,10 +32,9 @@ public class Tanaka extends DoubleProblem {
 
     public Tanaka() {
 
-        super(2, 1, 2, 2);
+        super("Tanaka", 2, 1, 2, 2);
 
         referenceSetFileName = "Tanaka";
-        name = "Tanaka";
 
         upperLimit = new ArrayList<>(numberOfDimensions);
         lowerLimit = new ArrayList<>(numberOfDimensions);

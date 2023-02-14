@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F9 extends CEC2014 {
 
     public F9(int d) {
-        super(d, 9);
-
-        name = "F09 Rastrigin Function";
+        super("F09 Rastrigin Function", d, 9);
     }
 
     @Override

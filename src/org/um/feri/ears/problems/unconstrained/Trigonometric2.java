@@ -17,10 +17,9 @@ http://infinity77.net/global_optimization/test_functions_nd_T.html#go_benchmark.
 public class Trigonometric2 extends DoubleProblem {
 
     public Trigonometric2() {
-        super(2, 1, 1, 0);
+        super("Trigonometric2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
-        name = "Trigonometric2";
         Arrays.fill(decisionSpaceOptima[0], 0.9);
         objectiveSpaceOptima[0] = 1.0;
     }

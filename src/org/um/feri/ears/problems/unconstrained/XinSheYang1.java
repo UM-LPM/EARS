@@ -17,10 +17,10 @@ http://benchmarkfcns.xyz/benchmarkfcns/xinsheyangn1fcn.html
 public class XinSheYang1 extends DoubleProblem {
 
     public XinSheYang1() {
-        super(2, 1, 1, 0);
+        super("XinSheYang1", 2, 1, 1, 0);
+        // also known as Stochastic Function
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "XinSheYang1"; // also known as Stochastic Function
 
         for (int i = 0; i < numberOfDimensions; i++) {
             decisionSpaceOptima[0][i] = 1.0 / (i + 1);

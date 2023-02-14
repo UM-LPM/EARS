@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
 */
 public class Sphere extends DoubleProblem {
     public Sphere(int d) {
-        super(d, 1, 1, 0);
+        super("Sphere", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Sphere";
     }
 
     @Override

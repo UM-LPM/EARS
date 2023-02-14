@@ -18,8 +18,8 @@ public abstract class CEC2014 extends DoubleProblem {
     int[] SS;
     int funcNum;
 
-    public CEC2014(int d, int funcNum) {
-        super(d, 1, 1, 0);
+    public CEC2014(String name, int d, int funcNum) {
+        super(name, d, 1, 1, 0);
 
         if ((funcNum < 1) || (funcNum > 30)) {
             System.err.println("Function number must be between 1 and 30!");

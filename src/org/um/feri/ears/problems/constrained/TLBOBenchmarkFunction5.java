@@ -52,7 +52,7 @@ public class TLBOBenchmarkFunction5 extends DoubleProblem {
     //http://www.sciencedirect.com/science/article/pii/S0305054811000955
 
     public TLBOBenchmarkFunction5() {
-        super(3, 1, 1, 0);
+        super("TLBOBenchmarkFunction5 (TP11)", 3, 1, 1, 0);
         minimize = false;
 
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
@@ -61,7 +61,6 @@ public class TLBOBenchmarkFunction5 extends DoubleProblem {
         Collections.fill(upperLimit, 10.0);
 
         //System.out.println(Arrays.toString(interval)+"\n"+Arrays.toString(intervalL));
-        name = "TLBOBenchmarkFunction5 (TP11)";
         decisionSpaceOptima[0] = new double[]{5, 5, 5};
         objectiveSpaceOptima[0] = 1.0;
     }

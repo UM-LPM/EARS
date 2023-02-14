@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.
 public class Powell extends DoubleProblem {
 
     public Powell(int d) {
-        super(d, 1, 1, 0);
+        super("Powell", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -4.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Powell";
     }
 
     @Override

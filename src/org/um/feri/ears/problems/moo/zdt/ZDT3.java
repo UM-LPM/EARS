@@ -31,10 +31,9 @@ public class ZDT3 extends ZDT{
 	}
 	public ZDT3(Integer numberOfVariables) {
 	     
-		super(numberOfVariables,0,2);
+		super("ZDT3", numberOfVariables,0,2);
 
 		referenceSetFileName = "ZDT3";
-		name = "ZDT3";
 
 		upperLimit = new ArrayList<>(numberOfDimensions);
 		lowerLimit = new ArrayList<>(numberOfDimensions);

@@ -17,10 +17,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/eggcratefcn.html
 public class EggCrate extends DoubleProblem {
 
     public EggCrate() {
-        super(2, 1, 1, 0);
+        super("EggCrate", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "EggCrate";
     }
 
     @Override

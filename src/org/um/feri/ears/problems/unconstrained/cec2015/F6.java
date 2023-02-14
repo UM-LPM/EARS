@@ -6,9 +6,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F6 extends CEC2015 {
 
     public F6(int d) {
-        super(d, 6);
-
-        name = "F06 HappyCat Function";
+        super("F06 HappyCat Function", d, 6);
     }
 
     @Override

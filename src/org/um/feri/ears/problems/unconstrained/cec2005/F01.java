@@ -6,7 +6,6 @@ import java.util.Collections;
 public class F01 extends CEC2005Base {
 
 	// Fixed (class) parameters
-	static final public String FUNCTION_NAME = "Shifted Sphere Function";
 	static final public String DEFAULT_FILE_DATA = "sphere_func_data.txt";
 
 	// In order to avoid excessive memory allocation,
@@ -15,12 +14,10 @@ public class F01 extends CEC2005Base {
 
 	
 	public F01(int d) {
-		super(d,1);
+		super("Shifted Sphere Function", d,1);
 
-		name = "Shifted Sphere Function";
-		
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+		lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+		upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
 		m_o = new double[d];
 		m_z = new double[d];

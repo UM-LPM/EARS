@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_J.html#go_benchmark.
 public class JennrichSampson extends DoubleProblem {
 
     public JennrichSampson() {
-        super(2, 1, 1, 0);
+        super("JennrichSampson", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "JennrichSampson";
 
         decisionSpaceOptima[0] = new double[]{0.25782521321500883, 0.25782521381356827};
         objectiveSpaceOptima[0] = 124.36218235561473896;

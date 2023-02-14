@@ -14,10 +14,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/103-stenger-s-fun
 public class Stenger extends DoubleProblem {
 
     public Stenger() {
-        super(2, 2, 1, 0);
+        super("Stenger", 2, 2, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 4.0));
-        name = "Stenger";
 
         decisionSpaceOptima[0] = new double[]{0.0, 0.0};
         decisionSpaceOptima[1] = new double[]{1.695415196279268, 0.718608171943623};

@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/118-s3-function
 public class S3 extends DoubleProblem {
 
     public S3() {
-        super(2, 1, 1, 0);
+        super("S3", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "S3";
 
         decisionSpaceOptima[0] = new double[]{10.0, 0.7};
         objectiveSpaceOptima[0] = 0.528872325696265;

@@ -16,10 +16,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/32-carrom-table-f
 public class CarromTable extends DoubleProblem {
 
     public CarromTable() {
-        super(2, 1, 1, 0);
+        super("CarromTable", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "CarromTable";
 
         Arrays.fill(decisionSpaceOptima[0], 9.646157266348881);
         objectiveSpaceOptima[0] = -24.15681551650653;

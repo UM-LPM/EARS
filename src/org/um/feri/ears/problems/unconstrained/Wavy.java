@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_W.html#go_benchmark.
 public class Wavy extends DoubleProblem {
 
     public Wavy() {
-        super(2, 1, 1, 0);
+        super("Wavy", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -PI));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, PI));
-        name = "Wavy";
     }
 
     @Override

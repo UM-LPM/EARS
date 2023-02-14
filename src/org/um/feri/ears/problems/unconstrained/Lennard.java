@@ -38,7 +38,7 @@ public class Lennard extends DoubleProblem {
     }
 
     public Lennard(int d, double lower, double upper) {
-        super(d*3 , 1, 1, 0); // d = number of atoms, translation to 3D euclidean space
+        super("LennardJones", d*3 , 1, 1, 0); // d = number of atoms, translation to 3D euclidean space
         assert (d <= 150 && d > 2);
 
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("LennardJonesOptima.json");
@@ -60,7 +60,6 @@ public class Lennard extends DoubleProblem {
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, lower));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, upper));
-        name = "LennardJones";
         objectiveSpaceOptima[0] = globalOptimum;
     }
 

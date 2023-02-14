@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.
 public class Rana extends DoubleProblem {
 
     public Rana() {
-        super(2, 1, 1, 0);
+        super("Rana", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.000001));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.000001));
-        name = "Rana";
 
         Arrays.fill(decisionSpaceOptima[0], -500.0);
         objectiveSpaceOptima[0] = -928.5478554047827;

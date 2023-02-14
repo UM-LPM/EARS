@@ -16,10 +16,9 @@ public class Perm2 extends DoubleProblem {
     double beta = 0.5;
 
     public Perm2(int d) {
-        super(d, 1, 1, 0);
+        super("Perm2", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -numberOfDimensions * 1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, numberOfDimensions * 1.0 + 1));
-        name = "Perm2";
 
         /*for (int i = 0; i < numberOfDimensions; i++) {
             optimum[0][i] = 1.0 / (i+1);

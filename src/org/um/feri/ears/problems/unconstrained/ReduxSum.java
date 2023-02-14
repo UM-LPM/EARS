@@ -11,10 +11,9 @@ https://sites.google.com/site/gotestfunctions/multimodal-function-list/onelastra
 public class ReduxSum extends DoubleProblem {
 
     public ReduxSum() {
-        super(2, 2, 1, 0);
+        super("ReduxSum", 2, 2, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "ReduxSum";
 
         decisionSpaceOptima[0] = new double[]{-1.0, 8.743006318923108E-16};
         decisionSpaceOptima[1] = new double[]{8.743006318923108E-16, -1.0};

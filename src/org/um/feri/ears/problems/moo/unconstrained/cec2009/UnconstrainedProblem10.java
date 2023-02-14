@@ -22,9 +22,8 @@ public class UnconstrainedProblem10 extends CEC2009 {
 	  */
 	public UnconstrainedProblem10(Integer numberOfVariables) {
 		
-		super(numberOfVariables,0, 3);
+		super("UF10", numberOfVariables,0, 3);
 
-		name = "UF10";
 		referenceSetFileName = "UF10";
 
 		upperLimit = new ArrayList<>(numberOfDimensions);

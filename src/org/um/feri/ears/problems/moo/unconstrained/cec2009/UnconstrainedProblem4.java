@@ -19,10 +19,8 @@ public class UnconstrainedProblem4 extends CEC2009 {
 	 * @param numberOfVariables Number of variables.
 	 */
 	public UnconstrainedProblem4(Integer numberOfVariables) {
+		super("UF4", numberOfVariables,0, 2);
 
-		super(numberOfVariables,0, 2);
-
-		name = "UF4";
 		referenceSetFileName = "UF4";
 
 		upperLimit = new ArrayList<>(numberOfDimensions);

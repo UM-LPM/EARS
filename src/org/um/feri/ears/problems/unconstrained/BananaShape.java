@@ -14,10 +14,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/48-banana-shape-f
 public class BananaShape extends DoubleProblem {
 
     public BananaShape() {
-        super(2, 1, 1, 0);
+        super("BananaShape", 2, 1, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        name = "BananaShape";
 
         lowerLimit.set(0, -1.5);
         upperLimit.set(0, 1.5);

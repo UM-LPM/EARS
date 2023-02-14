@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_V.html#go_benchmark.
 public class Vincent extends DoubleProblem {
 
     public Vincent() {
-        super(2, 1, 1, 0);
+        super("Vincent", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.25));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Vincent";
 
         Arrays.fill(decisionSpaceOptima[0], 7.70628098);
         objectiveSpaceOptima[0] = -numberOfDimensions;

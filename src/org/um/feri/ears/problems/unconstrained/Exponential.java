@@ -16,10 +16,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/exponentialfcn.html
 public class Exponential extends DoubleProblem {
 
     public Exponential() {
-        super(2, 1, 1, 0);
+        super("Exponential", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "Exponential";
         objectiveSpaceOptima[0] = -1.0;
     }
 

@@ -17,12 +17,10 @@ http://mantella.info/optimisation-problems/black-box-optimisation-benchmark/#bbo
 public class DifferentPowers extends DoubleProblem {
 
     public DifferentPowers(int d) {
-        super(d, 1, 1, 0);
+        super("Different Powers", d, 1, 1, 0);
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-
-        name = "Different Powers";
     }
 
     @Override

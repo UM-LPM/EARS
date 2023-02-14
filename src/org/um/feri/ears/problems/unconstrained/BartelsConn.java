@@ -14,10 +14,9 @@ http://infinity77.net/global_optimization/test_functions_nd_B.html#test-function
 public class BartelsConn extends DoubleProblem {
 
     public BartelsConn() {
-        super(2, 1, 1, 0);
+        super("BartelsConn", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
-        name = "BartelsConn";
         objectiveSpaceOptima[0] = 1.0;
     }
 

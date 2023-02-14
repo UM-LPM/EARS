@@ -17,15 +17,13 @@ https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/185-qing-s-functi
 public class Qing extends DoubleProblem {
 
     public Qing() {
-        super(2, 1, 1, 0);
+        super("Qing", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
-        name = "Qing";
 
         for (int i = 0; i < numberOfDimensions; i++) {
             decisionSpaceOptima[0][i] = sqrt(i + 1);
         }
-
     }
 
     @Override

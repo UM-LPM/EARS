@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/59-kearfott-s-fun
 public class Kearfott extends DoubleProblem {
 
     public Kearfott() {
-        super(2, 4, 1, 0);
+        super("Kearfott", 2, 4, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -3.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 4.0));
-        name = "Kearfott";
 
         decisionSpaceOptima[0] = new double[]{sqrt(1.5), sqrt(0.5)};
         decisionSpaceOptima[1] = new double[]{-sqrt(1.5), sqrt(0.5)};

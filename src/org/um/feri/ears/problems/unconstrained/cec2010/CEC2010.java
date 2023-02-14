@@ -15,8 +15,8 @@ public abstract class CEC2010 extends DoubleProblem {
     int[] P;
     int m = 50;
 
-    public CEC2010(int d, int funcNum) {
-        super(d, 1, 1, 0);
+    public CEC2010(String name, int d, int funcNum) {
+        super(name, d, 1, 1, 0);
 
         this.funcNum = funcNum;
         shortName = "F" + funcNum;

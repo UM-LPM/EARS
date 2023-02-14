@@ -8,9 +8,7 @@ import org.um.feri.ears.util.Util;
 public class F8 extends CEC2010 {
 
     public F8(int d) {
-        super(d, 8);
-
-        name = "F08 Single-group Shifted m-dimensional Rosenbrock's Function";
+        super("F08 Single-group Shifted m-dimensional Rosenbrock's Function", d, 8);
 
         P = new int[numberOfDimensions];
         P = Util.randomPermutation(numberOfDimensions);

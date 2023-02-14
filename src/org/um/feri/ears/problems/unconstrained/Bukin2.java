@@ -16,10 +16,9 @@ wrong optimum given at link
 public class Bukin2 extends DoubleProblem {
 
     public Bukin2() {
-        super(2, 1, 1, 0);
+        super("Bukin2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
-        name = "Bukin2";
 
         lowerLimit.set(0, -15.0);
         upperLimit.set(0, -5.0);

@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/157-three-cylinde
 public class ThreeCylinders extends DoubleProblem {
 
     public ThreeCylinders() {
-        super(2, 1, 1, 0);
+        super("ThreeCylinders", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "ThreeCylinders";
         objectiveSpaceOptima[0] = 1.05;
     }
 

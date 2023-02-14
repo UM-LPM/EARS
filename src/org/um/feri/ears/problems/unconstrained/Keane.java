@@ -16,10 +16,9 @@ http://infinity77.net/global_optimization/test_functions_nd_K.html#go_benchmark.
 public class Keane extends DoubleProblem {
 
     public Keane() {
-        super(2, 2, 1, 0);
+        super("Keane", 2, 2, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Keane";
 
         decisionSpaceOptima[0] = new double[]{1.393249070031784, 0};
         decisionSpaceOptima[1] = new double[]{0, 1.393249070031784};

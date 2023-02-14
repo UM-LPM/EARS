@@ -10,10 +10,9 @@ import static java.lang.Math.*;
 
 public class SplitDropWave2 extends DoubleProblem {
     public SplitDropWave2() {
-        super(2, 1, 1, 0);
+        super("SplitDropWave2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "SplitDropWave2";
     }
 
     @Override

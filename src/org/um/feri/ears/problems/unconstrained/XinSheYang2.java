@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_X.html#go_benchmark.
 public class XinSheYang2 extends DoubleProblem {
 
     public XinSheYang2() {
-        super(2, 1, 1, 0);
+        super("XinSheYang2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2.0 * PI));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0 * PI));
-        name = "XinSheYang2";
     }
 
     @Override

@@ -12,12 +12,10 @@ public class SchwefelRidge extends DoubleProblem {
     // Rosenbrock
     //http://www.geatbx.com/docu/fcnindex-01.html#P86_3059
     public SchwefelRidge(int d) {
-        super(d, 1, 1, 0);
+        super("SchwefelRigle(" + d + ")", d , 1, 1, 0);
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -64.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 64.0));
-
-        name = "SchwefelRigle(" + d + ")";
     }
 
     @Override

@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_C.html#go_benchmark.
 public class CrownedCross extends DoubleProblem {
 
     public CrownedCross() {
-        super(2, 1, 1, 0);
+        super("CrownedCross", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "CrownedCross";
         objectiveSpaceOptima[0] = 0.0001;
     }
 

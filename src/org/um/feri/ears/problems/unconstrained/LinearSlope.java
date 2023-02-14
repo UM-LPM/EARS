@@ -18,14 +18,12 @@ http://mantella.info/optimisation-problems/black-box-optimisation-benchmark/#bbo
 public class LinearSlope extends DoubleProblem {
 
     public LinearSlope(int d) {
-        super(d, 1, 1, 0);
+        super("Linear Slope", d, 1, 1, 0);
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
 
         Arrays.fill(decisionSpaceOptima[0], 5);
-
-        name = "Linear Slope";
     }
 
     @Override

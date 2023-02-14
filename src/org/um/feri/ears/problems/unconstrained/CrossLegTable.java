@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/45-cross-leg-tabl
 public class CrossLegTable extends DoubleProblem {
 
     public CrossLegTable() {
-        super(2, 1, 1, 0);
+        super("CrossLegTable", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "CrossLegTable";
         objectiveSpaceOptima[0] = -1.0;
     }
 

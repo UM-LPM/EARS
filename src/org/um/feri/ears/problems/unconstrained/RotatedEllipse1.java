@@ -16,10 +16,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/126-rotated-ellip
 public class RotatedEllipse1 extends DoubleProblem {
 
     public RotatedEllipse1() {
-        super(2, 1, 1, 0);
+        super("RotatedEllipse1", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
-        name = "RotatedEllipse1";
     }
 
     @Override

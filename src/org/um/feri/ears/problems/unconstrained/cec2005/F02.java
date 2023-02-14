@@ -12,12 +12,10 @@ public class F02 extends CEC2005Base {
     private double[] m_z;
 
     public F02(int d) {
-        super(d, 2);
+        super("Shifted Schwefel's Problem 1.2", d, 2);
 
-        name = "Shifted Schwefel's Problem 1.2";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
         m_o = new double[d];
         m_z = new double[d];

@@ -19,10 +19,9 @@ public class Shekel10 extends DoubleProblem {
 
 
     public Shekel10() {
-        super(4, 1, 1, 0);
+        super("Shekel10", 4, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Shekel10";
 
         Arrays.fill(decisionSpaceOptima[0], 4);
         objectiveSpaceOptima[0] = -10.53628372;
@@ -40,7 +39,6 @@ public class Shekel10 extends DoubleProblem {
                 {7, 3.6, 7, 3.6},
         };
         c = new double[]{0.1, 0.2, 0.2, 0.4, 0.4, 0.6, 0.3, 0.7, 0.5, 0.5};
-
     }
 
     @Override

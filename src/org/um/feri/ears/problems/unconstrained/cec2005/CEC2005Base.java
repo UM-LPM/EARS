@@ -36,8 +36,8 @@ public abstract class CEC2005Base extends DoubleProblem {
     // Instance variables
     protected double[] m_biases;
 
-    public CEC2005Base(int d, int funcNum) {
-        super(d,1,1,0);
+    public CEC2005Base(String name, int d, int funcNum) {
+        super(name, d,1,1,0);
 
         this.funcNum = funcNum;
 

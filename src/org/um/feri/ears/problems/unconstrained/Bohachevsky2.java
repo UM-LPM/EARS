@@ -16,10 +16,9 @@ http://benchmarkfcns.xyz/benchmarkfcns/bohachevskyn2fcn.html
 public class Bohachevsky2 extends DoubleProblem {
 
     public Bohachevsky2() {
-        super(2, 1, 1, 0);
+        super("Bohachevsky2", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Bohachevsky2";
     }
 
     @Override

@@ -23,9 +23,8 @@ public class UnconstrainedProblem6 extends CEC2009 {
 	 */
 	public UnconstrainedProblem6(Integer numberOfVariables, int N,
 			double epsilon) {
-		super(numberOfVariables,0, 2);
+		super("UF6", numberOfVariables,0, 2);
 
-		name = "UF6";
 		referenceSetFileName = "UF6";
 
 		this.N = N;

@@ -15,12 +15,11 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/23-six-hump-camel
 
 public class SixHumpCamelBack extends DoubleProblem {
     public SixHumpCamelBack() {
-        super(2, 2, 1, 0);
+        super("SixHumpCamelBack", 2, 2, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
         // -3 <= x1 <= 3
         // -2 <= x1 <= 2
-        name = "SixHumpCamelBack";
 
         decisionSpaceOptima[0][0] = -0.08984201368301331;
         decisionSpaceOptima[0][1] = 0.7126564032704135;

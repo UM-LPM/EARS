@@ -15,10 +15,9 @@ https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/190-schwefel-s-fu
  */
 public class Schwefel222 extends DoubleProblem {
     public Schwefel222(int d) {
-        super(d, 1, 1, 0);
+        super("Schwefel222", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Schwefel222";
     }
 
     @Override

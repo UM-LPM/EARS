@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_U.html#go_benchmark.
 public class UrsemWaves extends DoubleProblem {
 
     public UrsemWaves() {
-        super(2, 1, 1, 0);
+        super("UrsemWaves", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0));
-        name = "UrsemWaves";
 
         lowerLimit.set(0, -0.9);
         upperLimit.set(0, 1.2);

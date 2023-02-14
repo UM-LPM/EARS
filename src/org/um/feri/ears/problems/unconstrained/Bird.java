@@ -15,10 +15,9 @@ http://infinity77.net/global_optimization/test_functions_nd_B.html#go_benchmark.
 public class Bird extends DoubleProblem {
 
     public Bird() {
-        super(2, 2, 1, 0);
+        super("Bird", 2, 2, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2.0 * Math.PI));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0 * Math.PI));
-        name = "Bird";
 
         decisionSpaceOptima[0] = new double[]{4.701055751981055, 3.152946019601391};
         decisionSpaceOptima[1] = new double[]{-1.582142172055011, -3.130246799635430};
