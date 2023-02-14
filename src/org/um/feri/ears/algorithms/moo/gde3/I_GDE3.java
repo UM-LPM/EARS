@@ -3,10 +3,10 @@ package org.um.feri.ears.algorithms.moo.gde3;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.problems.IntegerMOTask;
-import org.um.feri.ears.problems.IntegerProblem;
+import org.um.feri.ears.problems.CombinatorialProblem;
 import org.um.feri.ears.problems.NumberSolution;
 
-public class I_GDE3 extends GDE3<Integer, IntegerProblem, IntegerMOTask> {
+public class I_GDE3 extends GDE3<Integer, CombinatorialProblem, IntegerMOTask> {
 	
 	public I_GDE3() {
 		this(new PMXCrossover(), 100);

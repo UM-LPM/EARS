@@ -5,9 +5,9 @@ import org.um.feri.ears.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class IntegerProblem extends NumberProblem<Integer> {
+public abstract class CombinatorialProblem extends NumberProblem<Integer> {
 
-    public IntegerProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
+    public CombinatorialProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
         super(name, numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
     }
 
@@ -15,19 +15,12 @@ public abstract class IntegerProblem extends NumberProblem<Integer> {
     public NumberSolution<Integer> getRandomSolution() {
 
         List<Integer> var = new ArrayList<Integer>(numberOfDimensions);
-        //Integer[] var = new Integer[numberOfDimensions];
-        List<Integer> randomSequence = new ArrayList<>(numberOfDimensions);
 
         for (int j = 0; j < numberOfDimensions; j++) {
-            randomSequence.add(j);
+            var.add(j);
         }
 
-        Util.shuffle(randomSequence);
-
-        for (int i = 0; i < numberOfDimensions; i++) {
-            //var[i]= randomSequence.get(i);
-            var.add(randomSequence.get(i));
-        }
+        Util.shuffle(var);
 
         NumberSolution<Integer> sol = new NumberSolution<>(numberOfObjectives, var);
         evaluate(sol);
@@ -42,11 +35,13 @@ public abstract class IntegerProblem extends NumberProblem<Integer> {
 
     @Override
     public boolean isFeasible(NumberSolution<Integer> solution) {
+        //TODO check if each number appears once
         return false;
     }
 
     @Override
     public boolean isFirstBetter(NumberSolution<Integer> solution1, NumberSolution<Integer> solution2) {
+        //TODO replace with comparator
         return false;
     }
 }

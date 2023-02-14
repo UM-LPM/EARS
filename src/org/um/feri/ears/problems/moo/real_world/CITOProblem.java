@@ -3,10 +3,10 @@ package org.um.feri.ears.problems.moo.real_world;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.um.feri.ears.problems.IntegerProblem;
+import org.um.feri.ears.problems.CombinatorialProblem;
 import org.um.feri.ears.problems.NumberSolution;
 
-public class CITOProblem extends IntegerProblem {
+public class CITOProblem extends CombinatorialProblem {
 
 	private int numberOfUnits;
 	private ArrayList<Integer> aspects;

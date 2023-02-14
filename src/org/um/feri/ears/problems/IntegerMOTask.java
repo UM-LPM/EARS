@@ -1,14 +1,12 @@
 package org.um.feri.ears.problems;
 
-import org.um.feri.ears.problems.moo.ParetoSolution;
-
 public class IntegerMOTask extends MOTask<Integer> {
 
-    public IntegerMOTask(IntegerProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon) {
+    public IntegerMOTask(CombinatorialProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon) {
         super(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, epsilon);
     }
 
-    public IntegerMOTask(IntegerProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
+    public IntegerMOTask(CombinatorialProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
         super(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, 0);
     }
 

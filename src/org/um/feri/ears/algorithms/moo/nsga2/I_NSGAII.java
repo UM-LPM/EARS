@@ -5,9 +5,9 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
 import org.um.feri.ears.problems.IntegerMOTask;
-import org.um.feri.ears.problems.IntegerProblem;
+import org.um.feri.ears.problems.CombinatorialProblem;
 
-public class I_NSGAII extends NSGAII<Integer, IntegerProblem, IntegerMOTask> {
+public class I_NSGAII extends NSGAII<Integer, CombinatorialProblem, IntegerMOTask> {
 	
 	public I_NSGAII() {
 		//this(new PMXCrossover(1.0), new PermutationSwapMutation(0.86), 108);
