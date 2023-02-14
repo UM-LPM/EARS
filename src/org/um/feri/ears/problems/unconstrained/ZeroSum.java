@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,12 +12,12 @@ import static java.lang.Math.pow;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_Z.html#go_benchmark.ZeroSum
  */
-public class ZeroSum extends Problem {
+public class ZeroSum extends DoubleProblem {
 
     public ZeroSum() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         name = "ZeroSum";
     }
 

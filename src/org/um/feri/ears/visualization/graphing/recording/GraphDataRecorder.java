@@ -3,10 +3,10 @@ package org.um.feri.ears.visualization.graphing.recording;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.visualization.graphing.data.RecordedCombination;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
-import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
@@ -38,7 +38,7 @@ public class GraphDataRecorder
 	
 	
 	
-	public static void SetContext(AlgorithmBase alg, TaskBase task)
+	public static void SetContext(Algorithm alg, TaskBase task)
 	{
 		// Safety switch:
 		if (!enabled)
@@ -51,7 +51,7 @@ public class GraphDataRecorder
 	}
 	
 
-	public static void AddRecord(SolutionBase sol, String problemName)
+	public static void AddRecord(Solution sol, String problemName)
 	{
 		if (!enabled)
 			return;

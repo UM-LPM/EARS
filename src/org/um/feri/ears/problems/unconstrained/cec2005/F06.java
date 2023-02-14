@@ -31,7 +31,7 @@ public class F06 extends CEC2005Base {
         for (int i = 0; i < d; i++) {
             m_o[i] -= 1.0;
         }
-        optimum[0] = m_o;
+        decisionSpaceOptima[0] = m_o;
     }
 
     @Override

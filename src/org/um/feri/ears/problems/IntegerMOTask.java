@@ -1,15 +1,14 @@
 package org.um.feri.ears.problems;
 
-import org.um.feri.ears.problems.moo.IntegerMOProblem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
+public class IntegerMOTask extends MOTask<Integer> {
 
-    public IntegerMOTask(IntegerMOProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon) {
+    public IntegerMOTask(IntegerProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon) {
         super(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, epsilon);
     }
 
-    public IntegerMOTask(IntegerMOProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
+    public IntegerMOTask(IntegerProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
         super(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, 0);
     }
 
@@ -46,11 +45,6 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
         return null;
     }
 
-    public boolean areDimensionsInFeasibleInterval(ParetoSolution<Integer> solution) {
-        return problem.areDimensionsInFeasibleInterval(solution);
-    }
-
-
     public Integer[] getLowerLimit() {
         Integer[] arr = new Integer[problem.lowerLimit.size()];
         arr = problem.lowerLimit.toArray(arr);
@@ -64,7 +58,7 @@ public class IntegerMOTask extends MOTask<Integer, IntegerMOProblem> {
     }
 
     @Override
-    public MOTask<Integer, IntegerMOProblem> clone() {
+    public MOTask<Integer> clone() {
         return new IntegerMOTask(this);
     }
 }

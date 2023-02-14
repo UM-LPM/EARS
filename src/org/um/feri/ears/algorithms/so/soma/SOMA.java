@@ -1,8 +1,9 @@
 package org.um.feri.ears.algorithms.so.soma;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -11,7 +12,7 @@ import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
-public class SOMA extends Algorithm {
+public class SOMA extends NumberAlgorithm {
 
     public enum Strategy {ALL_TO_ALL, ALL_TO_ALL_ADAPTIVE, ALL_TO_ONE, ALL_TO_ONE_RANDOM}
 
@@ -38,7 +39,7 @@ public class SOMA extends Algorithm {
 
     private NumberSolution<Double> best;
     private int leaderId; //index of the best solution
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
     private NumberSolution<Double>[] population;
 
     public SOMA() {
@@ -81,8 +82,8 @@ public class SOMA extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+        this.task = task;
         initPopulation();
 
         while (!task.isStopCriterion()) {
@@ -167,7 +168,7 @@ public class SOMA extends Algorithm {
 
     private void updateBestSolution() {
         for (int i = 0; i < popSize; i++) {
-            if (task.isFirstBetter(population[i], best)) {
+            if (task.problem.isFirstBetter(population[i], best)) {
                 best = new NumberSolution<>(population[i]);
                 leaderId = i;
             }
@@ -183,7 +184,7 @@ public class SOMA extends Algorithm {
             if (task.isStopCriterion())
                 break;
             population[i] = task.getRandomEvaluatedSolution();
-            if (task.isFirstBetter(population[i], best)) {
+            if (task.problem.isFirstBetter(population[i], best)) {
                 best = new NumberSolution<>(population[i]);
                 leaderId = i;
             }
@@ -195,7 +196,7 @@ public class SOMA extends Algorithm {
         for (int i = 1; i < solutions.size(); i++) {
             if (solutions.get(i) == null)
                 continue;
-            if (task.isFirstBetter(solutions.get(i), bestSolution)) {
+            if (task.problem.isFirstBetter(solutions.get(i), bestSolution)) {
                 bestSolution = solutions.get(i);
             }
         }
@@ -215,26 +216,30 @@ public class SOMA extends Algorithm {
     }
 
     private NumberSolution<Double> getSolutionOnStep(NumberSolution<Double> jumpingSolution, NumberSolution<Double> towardsSolution, double jump) throws StopCriterionException {
-        double[] newSolution = new double[task.getNumberOfDimensions()];
+        double[] newSolution = new double[task.problem.getNumberOfDimensions()];
         boolean[] prtVector = createPrtVector();
-        for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+        for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
             if (prtVector[i]) {
                 newSolution[i] = jumpingSolution.getValue(i) + (towardsSolution.getValue(i) - jumpingSolution.getValue(i)) * jump;
-                while (newSolution[i] < task.getLowerLimit(i)) {
-                    newSolution[i] += task.getUpperLimit(i) - task.getLowerLimit(i);
+                while (newSolution[i] < task.problem.getLowerLimit(i)) {
+                    newSolution[i] += task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i);
                 }
-                while (newSolution[i] > task.getUpperLimit(i)) {
-                    newSolution[i] -= task.getUpperLimit(i) - task.getLowerLimit(i);
+                while (newSolution[i] > task.problem.getUpperLimit(i)) {
+                    newSolution[i] -= task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i);
                 }
             } else {
                 newSolution[i] = jumpingSolution.getValue(i);
             }
         }
-        return task.eval(newSolution);
+
+        NumberSolution<Double> solution = new NumberSolution<>(Util.toDoubleArrayList(newSolution));
+        task.eval(solution);
+
+        return solution;
     }
 
     private boolean[] createPrtVector() {
-        boolean[] prtVector = new boolean[task.getNumberOfDimensions()];
+        boolean[] prtVector = new boolean[task.problem.getNumberOfDimensions()];
         boolean ok = false;
         do {
             for (int i = 0; i < prtVector.length; i++) {

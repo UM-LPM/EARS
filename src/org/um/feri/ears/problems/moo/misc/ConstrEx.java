@@ -22,31 +22,31 @@ package org.um.feri.ears.problems.moo.misc;
 
 import java.util.ArrayList;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.functions.ConstrEx_F1;
 import org.um.feri.ears.problems.moo.functions.ConstrEx_F2;
 import org.um.feri.ears.util.Util;
 
-public class ConstrEx extends DoubleMOProblem{
+public class ConstrEx extends DoubleProblem {
 
 	public ConstrEx() {
 	     
-		super(2,2,2);
+		super(2, 1, 2,2);
 
-		fileName = "ConstrEx";
+		referenceSetFileName = "ConstrEx";
 		name = "Constr_Ex";
 	    
-	    upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+	    upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 
 		lowerLimit.add(0.1);
 		upperLimit.add(1.0);
 		lowerLimit.add(0.0);
 		upperLimit.add(5.0);
 
-		this.addObjective(new ConstrEx_F1());
-		this.addObjective(new ConstrEx_F2());
+		addObjective(new ConstrEx_F1());
+		addObjective(new ConstrEx_F2());
 	}
 
 	@Override
@@ -55,12 +55,11 @@ public class ConstrEx extends DoubleMOProblem{
 		double[] x = Util.toDoubleArray(solution.getVariables());
 
 
-		double[] obj = new double[functions.size()];
+		double[] obj = new double[objectives.size()];
 		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
+			obj[i] = objectives.get(i).eval(x);
 		}
 		solution.setObjectives(obj);
-		
 	}
 
 	@Override
@@ -87,15 +86,14 @@ public class ConstrEx extends DoubleMOProblem{
 		
 	}
 
-	@Override
 	public double[] evaluate(Double[] ds) {
 		double[] x = new double[numberOfDimensions];
 		for (int i = 0; i < numberOfDimensions; i++)
 			x[i] = ds[i];
 
-		double obj[] = new double[functions.size()];
+		double[] obj = new double[objectives.size()];
 		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
+			obj[i] = objectives.get(i).eval(x);
 		}
 
 		return obj;

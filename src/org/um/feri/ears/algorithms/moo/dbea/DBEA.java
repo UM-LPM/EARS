@@ -32,9 +32,7 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
@@ -71,7 +69,7 @@ import org.um.feri.ears.util.Util;
  *       Matlab-DBEA.rar</a>
  * </ol>
  */
-public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
 
     int populationSize;
 
@@ -120,35 +118,35 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     MutationOperator<Type, T, NumberSolution<Type>> mut;
 
 
-    public DBEA(CrossoverOperator crossover, MutationOperator mutation, MOTask problem) {
+    public DBEA(CrossoverOperator crossover, MutationOperator mutation, MOTask task) {
 
         this.cross = crossover;
         this.mut = mutation;
         int divisionsOuter = 4;
         int divisionsInner = 0;
 
-        if (problem.getNumberOfObjectives() == 1) {
+        if (task.problem.getNumberOfObjectives() == 1) {
             divisionsOuter = 100;
-        } else if (problem.getNumberOfObjectives() == 2) {
+        } else if (task.problem.getNumberOfObjectives() == 2) {
             divisionsOuter = 20;
-        } else if (problem.getNumberOfObjectives() == 3) {
+        } else if (task.problem.getNumberOfObjectives() == 3) {
             divisionsOuter = 12;
-        } else if (problem.getNumberOfObjectives() == 4) {
+        } else if (task.problem.getNumberOfObjectives() == 4) {
             divisionsOuter = 8;
-        } else if (problem.getNumberOfObjectives() == 5) {
+        } else if (task.problem.getNumberOfObjectives() == 5) {
             divisionsOuter = 6;
-        } else if (problem.getNumberOfObjectives() == 6) {
+        } else if (task.problem.getNumberOfObjectives() == 6) {
             divisionsOuter = 5;
-        } else if (problem.getNumberOfObjectives() == 7) {
+        } else if (task.problem.getNumberOfObjectives() == 7) {
             divisionsOuter = 3;
             divisionsInner = 2;
-        } else if (problem.getNumberOfObjectives() == 8) {
+        } else if (task.problem.getNumberOfObjectives() == 8) {
             divisionsOuter = 3;
             divisionsInner = 2;
-        } else if (problem.getNumberOfObjectives() == 9) {
+        } else if (task.problem.getNumberOfObjectives() == 9) {
             divisionsOuter = 3;
             divisionsInner = 2;
-        } else if (problem.getNumberOfObjectives() == 10) {
+        } else if (task.problem.getNumberOfObjectives() == 10) {
             divisionsOuter = 3;
             divisionsInner = 2;
         } else {
@@ -157,8 +155,8 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         }
 
         // compute number of reference points
-        int populationSize = (int) (CombinatoricsUtils.binomialCoefficient(problem.getNumberOfObjectives() + divisionsOuter - 1, divisionsOuter)
-                + (divisionsInner == 0 ? 0 : CombinatoricsUtils.binomialCoefficient(problem.getNumberOfObjectives() + divisionsInner - 1, divisionsInner)));
+        int populationSize = (int) (CombinatoricsUtils.binomialCoefficient(task.problem.getNumberOfObjectives() + divisionsOuter - 1, divisionsOuter)
+                + (divisionsInner == 0 ? 0 : CombinatoricsUtils.binomialCoefficient(task.problem.getNumberOfObjectives() + divisionsInner - 1, divisionsInner)));
 
         this.populationSize = populationSize;
 

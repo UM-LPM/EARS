@@ -5,8 +5,9 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
 import org.um.feri.ears.problems.IntegerMOTask;
+import org.um.feri.ears.problems.IntegerProblem;
 
-public class I_PESAII extends PESAII<IntegerMOTask, Integer> {
+public class I_PESAII extends PESAII<Integer, IntegerProblem, IntegerMOTask> {
 	
 	public I_PESAII() {
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), 100, 100);

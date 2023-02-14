@@ -21,10 +21,8 @@ package org.um.feri.ears.problems.moo.misc;
 
 import java.util.ArrayList;
 
-import javax.management.JMException;
-
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.functions.Binh2_F1;
 import org.um.feri.ears.problems.moo.functions.Binh2_F2;
 import org.um.feri.ears.util.Util;
@@ -45,85 +43,79 @@ import org.um.feri.ears.util.Util;
  *       Strategy for Constrained Optimization Problems."  Proceedings of the
  *       Third International Conference on Genetic Algorithms (Mendel 97),
  *       pp. 176-182.
- *   <li>Van Veldhuizen, D. A (1999).  "Multiobjective Evolutionary Algorithms: 
+ *   <li>Van Veldhuizen, D. A (1999).  "Multiobjective Evolutionary Algorithms:
  *       Classifications, Analyses, and New Innovations."  Air Force Institute
  *       of Technology, Ph.D. Thesis, Appendix B.
  * </ol>
  */
-public class Binh2 extends DoubleMOProblem{
-	
+public class Binh2 extends DoubleProblem {
 
-	public Binh2() {
-     
-		super(2,2,2);
 
-		fileName = "Binh2";
-		name = "Binh2";
-	  
-	    upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+    public Binh2() {
 
-		lowerLimit.add(0.0);
-		upperLimit.add(5.0);
-		lowerLimit.add(0.0);
-		upperLimit.add(3.0);
-	    
+        super(2, 1, 2, 2);
 
-		this.addObjective(new Binh2_F1());
-		this.addObjective(new Binh2_F2());
-	}
-	    
-	  /** 
-	   * Evaluates a solution.
-	   * @param solution The solution to evaluate.
-	   * @throws JMException 
-	   */
-	public void evaluate(NumberSolution<Double> solution) {
+        referenceSetFileName = "Binh2";
+        name = "Binh2";
 
-		double[] x = Util.toDoubleArray(solution.getVariables());
+        upperLimit = new ArrayList<>(numberOfDimensions);
+        lowerLimit = new ArrayList<>(numberOfDimensions);
 
-		double obj[] = new double[functions.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
-		}
-		solution.setObjectives(obj);
-	}
-	
-	public void evaluateConstraints(NumberSolution<Double> solution) {
-		double[] constraints = new double[numberOfConstraints];
-		
-		double[] dv = Util.toDoubleArray(solution.getVariables());
+        lowerLimit.add(0.0);
+        upperLimit.add(5.0);
+        lowerLimit.add(0.0);
+        upperLimit.add(3.0);
 
-		constraints[0] = -Math.pow(dv[0] - 5.0, 2.0) - Math.pow(dv[1], 2.0) + 25.0;
-		constraints[1] = Math.pow(dv[0] - 8.0, 2.0) + Math.pow(dv[1] + 3.0, 2.0) - 7.7;
 
-		solution.setConstraints(constraints);
-		
-	    double total = 0.0;
-	    int number = 0;
-		for (int i = 0; i < constraints.length; i++) {
-			if (constraints[i]<0.0){
-		        total+=constraints[i];
-		        number++;
-			}
-		}
-	    solution.setOverallConstraintViolation(total);    
-	    solution.setNumberOfViolatedConstraint(number); 
-	}
+        addObjective(new Binh2_F1());
+        addObjective(new Binh2_F2());
+    }
 
-	@Override
-	public double[] evaluate(Double[] ds) {
+    /**
+     * Evaluates a solution.
+     *
+     * @param solution The solution to evaluate.
+     */
+    public void evaluate(NumberSolution<Double> solution) {
 
-		double[] x = new double[numberOfDimensions];
-		for (int i = 0; i < numberOfDimensions; i++)
-			x[i] = ds[i];
+        double[] x = Util.toDoubleArray(solution.getVariables());
 
-		double obj[] = new double[functions.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
-		}
+        double[] obj = new double[objectives.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = objectives.get(i).eval(x);
+        }
+        solution.setObjectives(obj);
+    }
 
-		return obj;
-	}
+    public void evaluateConstraints(NumberSolution<Double> solution) {
+        double[] constraints = new double[numberOfConstraints];
 
+        double[] dv = Util.toDoubleArray(solution.getVariables());
+
+        constraints[0] = -Math.pow(dv[0] - 5.0, 2.0) - Math.pow(dv[1], 2.0) + 25.0;
+        constraints[1] = Math.pow(dv[0] - 8.0, 2.0) + Math.pow(dv[1] + 3.0, 2.0) - 7.7;
+
+        solution.setConstraints(constraints);
+
+        double total = 0.0;
+        int number = 0;
+        for (int i = 0; i < constraints.length; i++) {
+            if (constraints[i] < 0.0) {
+                total += constraints[i];
+                number++;
+            }
+        }
+        solution.setOverallConstraintViolation(total);
+        solution.setNumberOfViolatedConstraint(number);
+    }
+
+    public double[] evaluate(double[] x) {
+
+        double[] obj = new double[objectives.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = objectives.get(i).eval(x);
+        }
+
+        return obj;
+    }
 }

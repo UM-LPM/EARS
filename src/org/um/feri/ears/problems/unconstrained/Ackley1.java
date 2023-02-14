@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,10 +15,10 @@ import static java.lang.Math.*;
  * http://infinity77.net/global_optimization/test_functions_nd_A.html#go_benchmark.Ackley
  */
 
-public class Ackley1 extends Problem {
+public class Ackley1 extends DoubleProblem {
 
     public Ackley1(int d) {
-        super(d, 0);
+        super(d, 1, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.768));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.768));
         name = "Ackley1";

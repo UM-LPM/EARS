@@ -1,7 +1,7 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.TaskBase;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Hashtable;
 /**
  * Class for storing benchmark results in different data structures/formats
  */
-public class BenchmarkResults<T extends TaskBase<?>, S extends SolutionBase, A extends AlgorithmBase<T, S>> {
+public class BenchmarkResults<T extends TaskBase<?>, S extends Solution, A extends Algorithm<T, S>> {
 
     ArrayList<HashMap<T, ArrayList<AlgorithmRunResult<S, A, T>>>> runTaskAlgorithm; //run - task - results from all algorithms for the task
     Hashtable<A, Hashtable<T, ArrayList<AlgorithmRunResult<S, A, T>>>> algorithmTaskRun; // algorithm - task - task results for all runs
@@ -65,7 +65,7 @@ public class BenchmarkResults<T extends TaskBase<?>, S extends SolutionBase, A e
         algorithmTaskRun.clear();
     }
 
-    public void removeAlgorithm(AlgorithmBase<T, S> algorithm) {
+    public void removeAlgorithm(Algorithm<T, S> algorithm) {
         //TODO
         /*for (HashMap<T, ArrayList<AlgorithmRunResult<S, A, T>>> run : runTaskAlgorithm) {
             for(ArrayList<AlgorithmRunResult<S, A, T>> results : run.values()) {

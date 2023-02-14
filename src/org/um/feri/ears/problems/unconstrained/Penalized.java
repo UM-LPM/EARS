@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,15 +12,15 @@ import static java.lang.Math.*;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.Penalty01
  */
-public class Penalized extends Problem {
+public class Penalized extends DoubleProblem {
 
     public Penalized(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -50.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 50.0));
+        super(d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -50.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 50.0));
         name = "Penalized"; // also known as Penalty1
 
-        Arrays.fill(optimum[0], -1);
+        Arrays.fill(decisionSpaceOptima[0], -1);
     }
 
     @Override

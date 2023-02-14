@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
@@ -292,7 +292,7 @@ public class SolutionListUtils {
 	    return result ;
 	  }
 
-	  public static <T extends SolutionBase> List<T> selectNRandomDifferentSolutions(int numberOfSolutionsToBeReturned, List<T> source) {
+	  public static <T extends Solution> List<T> selectNRandomDifferentSolutions(int numberOfSolutionsToBeReturned, List<T> source) {
 
 		  List<T> resultList = new ArrayList<>(numberOfSolutionsToBeReturned);
 

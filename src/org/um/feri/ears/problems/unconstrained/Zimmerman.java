@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
@@ -12,12 +13,12 @@ import static java.lang.Math.signum;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_Z.html#go_benchmark.Zimmerman
  */
-public class Zimmerman extends Problem {
+public class Zimmerman extends DoubleProblem {
 
     public Zimmerman() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
         name = "Zimmerman";
 
         //optimum[0] = new double[]{7.0, 2.0};

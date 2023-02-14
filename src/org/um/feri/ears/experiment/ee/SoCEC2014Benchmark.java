@@ -1,6 +1,12 @@
 package org.um.feri.ears.experiment.ee;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.hc.HillClimbing;
+import org.um.feri.ears.algorithms.so.jDElscop.jDElscop;
+import org.um.feri.ears.algorithms.so.jade.JADE;
+import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
+import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.cec2014.*;
 import org.um.feri.ears.util.Util;
@@ -10,7 +16,7 @@ public class SoCEC2014Benchmark {
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis());
         
-        Problem[] problems = new Problem[16];
+        DoubleProblem[] problems = new DoubleProblem[16];
         int dimm;
         try
         {
@@ -20,12 +26,12 @@ public class SoCEC2014Benchmark {
         	dimm = 2;
         }
         
-        RandomWalkAlgorithmLogging randomLog = new RandomWalkAlgorithmLogging();
-        HillClimbingLogging hillClimb = new HillClimbingLogging(0.001);
-        JADELogging jadeLogging = new JADELogging();
-        DEAlgorithmLogging deLogging = new DEAlgorithmLogging(DEAlgorithmLogging.DE_best_1_bin);
-        jDElscopLogging jDElscopLog = new jDElscopLogging();
-        TLBOAlgorithmLogging TLBOLog = new TLBOAlgorithmLogging();
+        RandomWalkAlgorithm randomLog = new RandomWalkAlgorithm();
+        HillClimbing hillClimb = new HillClimbing(HillClimbing.HillClimbingStrategy.STEEPEST_ASCENT,0.001);
+        JADE jadeLogging = new JADE();
+        DEAlgorithm deLogging = new DEAlgorithm(DEAlgorithm.Strategy.DE_BEST_1_BIN);
+        jDElscop jDElscopLog = new jDElscop();
+        TLBOAlgorithm TLBOLog = new TLBOAlgorithm();
         
         System.out.println(randomLog.getId()+ " "+ hillClimb.getId()+" "+jadeLogging.getId()+" "+
         		          deLogging.getId()+" "+ jDElscopLog.getId() +" "+TLBOLog.getId());

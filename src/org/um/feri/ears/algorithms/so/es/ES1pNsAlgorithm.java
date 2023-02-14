@@ -1,6 +1,7 @@
 package org.um.feri.ears.algorithms.so.es;
 
 import org.um.feri.ears.algorithms.*;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -9,13 +10,13 @@ import org.um.feri.ears.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ES1pNsAlgorithm extends Algorithm {
+public class ES1pNsAlgorithm extends NumberAlgorithm {
     private NumberSolution<Double> one;
     private double varianceOne;
     private int k, mem_k, n; // every k aVariance is calculated again
     private double c, mem_c;
 
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     // source http://natcomp.liacs.nl/EA/slides/es_basic_algorithm.pdf
     public ES1pNsAlgorithm() {
@@ -48,18 +49,18 @@ public class ES1pNsAlgorithm extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         resetToDefaultsBeforeNewRun(); // usually no need for this call
-        task = taskProblem;
+        this.task = task;
         NumberSolution<Double> ii;
-        one = taskProblem.getRandomEvaluatedSolution();
+        one = task.getRandomEvaluatedSolution();
         NumberSolution<Double> oneTmp;
         int everyK = 0; // recalculate variance
         double succ = 0;
         double[] oneplus;
         if (debug)
-            System.out.println(taskProblem.getNumberOfEvaluations() + " start " + one);
-        while (!taskProblem.isStopCriterion()) {
+            System.out.println(task.getNumberOfEvaluations() + " start " + one);
+        while (!task.isStopCriterion()) {
             everyK++;
             everyK = everyK % k;
             if (everyK == 0) { // 1/5 rule
@@ -73,12 +74,15 @@ public class ES1pNsAlgorithm extends Algorithm {
             for (int i = 0; i < n; i++) {
                 oneplus = Util.toDoubleArray(oneTmp.getVariables());
                 mutate(oneplus, varianceOne);
-                ii = taskProblem.eval(oneplus);
-                if (taskProblem.isFirstBetter(ii, one)) {
+
+                ii = new NumberSolution<>(Util.toDoubleArrayList(oneplus));
+                task.eval(ii);
+
+                if (task.problem.isFirstBetter(ii, one)) {
                     succ++; // for 1/5 rule
                     one = ii;
                     if (debug)
-                        System.out.println(taskProblem.getNumberOfEvaluations() + " " + one);
+                        System.out.println(task.getNumberOfEvaluations() + " " + one);
                 }
                 if (task.isStopCriterion()) break;
             }
@@ -89,14 +93,14 @@ public class ES1pNsAlgorithm extends Algorithm {
 
     private void mutate(double[] oneplus, double varianceOne) {
         for (int i = 0; i < oneplus.length; i++) {
-            oneplus[i] = task.setFeasible(oneplus[i] + getGaussian(0, varianceOne), i);
+            oneplus[i] = task.problem.setFeasible(oneplus[i] + getGaussian(0, varianceOne), i);
         }
 
     }
 
     @Override
-    public List<AlgorithmBase> getAlgorithmParameterTest(int dimension, int maxCombinations) {
-        List<AlgorithmBase> alternative = new ArrayList<AlgorithmBase>();
+    public List<Algorithm> getAlgorithmParameterTest(int dimension, int maxCombinations) {
+        List<Algorithm> alternative = new ArrayList<Algorithm>();
         if (maxCombinations == 1) {
             alternative.add(this);
         } else {

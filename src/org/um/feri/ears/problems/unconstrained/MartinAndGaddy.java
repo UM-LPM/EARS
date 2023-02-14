@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,14 +9,14 @@ import java.util.Collections;
 
 import static java.lang.Math.pow;
 
-public class MartinAndGaddy extends Problem {
+public class MartinAndGaddy extends DoubleProblem {
     public MartinAndGaddy() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         name = "MartinAndGaddy";
 
-        Arrays.fill(optimum[0], 5.0);
+        Arrays.fill(decisionSpaceOptima[0], 5.0);
     }
 
     @Override

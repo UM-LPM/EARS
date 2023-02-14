@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,12 +11,12 @@ A Literature Survey of Benchmark Functions For GlobalOptimization Problems
 http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.Pathological
  */
 
-public class Pathological extends Problem {
+public class Pathological extends DoubleProblem {
 
     public Pathological() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
         name = "Pathological";
     }
 

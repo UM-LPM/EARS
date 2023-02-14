@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class SolutionBase {
+public abstract class Solution {
 
     int numberOfObjectives;
 
@@ -23,7 +23,7 @@ public abstract class SolutionBase {
     protected int generationNumber;
     protected long evaluationNumber;
 
-    public List<SolutionBase> parents;
+    public List<Solution> parents;
 
     /* Multi-objective variables */
     protected double paretoFitness;
@@ -32,17 +32,17 @@ public abstract class SolutionBase {
     protected double crowdingDistance;
     protected Map<Object, Object> attributes = new HashMap<>();
 
-    public SolutionBase() {
+    public Solution() {
         ID = currentID++;
     }
 
-    public SolutionBase(int numberOfObjectives) {
+    public Solution(int numberOfObjectives) {
         this();
         this.numberOfObjectives = numberOfObjectives;
         objectives = new double[numberOfObjectives];
     }
 
-    public SolutionBase(SolutionBase s) {
+    public Solution(Solution s) {
 
         numberOfObjectives = s.numberOfObjectives;
         objectives = new double[s.numberOfObjectives];
@@ -58,6 +58,8 @@ public abstract class SolutionBase {
         numberOfViolatedConstraints = s.getNumberOfViolatedConstraint();
         ID = s.ID;
     }
+
+    public abstract Solution copy();
 
     public double getParetoFitness() {
         return paretoFitness;
@@ -160,7 +162,7 @@ public abstract class SolutionBase {
         }
     }
 
-    public boolean isEqual(SolutionBase b, double drawLimit) { //TODO this method shouldn't exists -> move to task
+    public boolean isEqual(Solution b, double drawLimit) { //TODO this method shouldn't exists -> move to task (dominance comparator set epsilon)
 		return Math.abs(this.getEval() - b.getEval()) < drawLimit;
 	}
 
@@ -274,4 +276,5 @@ public abstract class SolutionBase {
     public static void resetLoggingID() {
         currentID = 1;
     }
+
 }

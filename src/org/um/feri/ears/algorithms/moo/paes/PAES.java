@@ -16,10 +16,11 @@ import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
-public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class PAES<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
 
     AdaptiveGridArchive<Type> archive;
     int archiveSize = 100;

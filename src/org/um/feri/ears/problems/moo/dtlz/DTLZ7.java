@@ -20,70 +20,59 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.problems.moo.dtlz;
 
-import org.um.feri.ears.problems.NumberSolution;
-
 import java.util.ArrayList;
 
 
-public class DTLZ7 extends DTLZ{
-	
-	public DTLZ7(int numberOfObjectives) {
-		this(numberOfObjectives + 19, numberOfObjectives);
-	}
-	
-	public DTLZ7(int numberOfVariables, int numberOfObjectives) {
-	     
-		super(numberOfVariables,0,numberOfObjectives);
+public class DTLZ7 extends DTLZ {
 
-		fileName = "DTLZ7."+numberOfObjectives+"D";
-		name = "DTLZ7";
+    public DTLZ7(int numberOfObjectives) {
+        this(numberOfObjectives + 19, numberOfObjectives);
+    }
 
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+    public DTLZ7(int numberOfVariables, int numberOfObjectives) {
+
+        super(numberOfVariables, 0, numberOfObjectives);
+
+        referenceSetFileName = "DTLZ7." + numberOfObjectives + "D";
+        name = "DTLZ7";
+
+        upperLimit = new ArrayList<>(numberOfDimensions);
+        lowerLimit = new ArrayList<>(numberOfDimensions);
 
 
-		for (int i = 0; i < numberOfDimensions; i++) {
-			lowerLimit.add(0.0);
-			upperLimit.add(1.0);
-		}
+        for (int i = 0; i < numberOfDimensions; i++) {
+            lowerLimit.add(0.0);
+            upperLimit.add(1.0);
+        }
 
-	}
+    }
 
-	@Override
-	public void evaluateConstraints(NumberSolution<Double> solution) {
-	}
-	
-	@Override
-	public double[] evaluate(Double ds[]) {
+    @Override
+    public double[] evaluate(double[] x) {
 
-		double[] f = new double[numberOfObjectives];
-	    double[] x = new double[numberOfDimensions] ;
+        double[] f = new double[numberOfObjectives];
 
-	    int k = numberOfDimensions - numberOfObjectives + 1;
+        int k = numberOfDimensions - numberOfObjectives + 1;
 
-	    for (int i = 0; i < numberOfDimensions; i++) {
-	      x[i] = ds[i] ;
-	    }
+        double g = 0.0;
+        for (int i = numberOfDimensions - k; i < numberOfDimensions; i++) {
+            g += x[i];
+        }
 
-	    double g = 0.0;
-	    for (int i = numberOfDimensions - k; i < numberOfDimensions; i++) {
-	      g += x[i];
-	    }
+        g = 1 + (9.0 * g) / k;
 
-	    g = 1 + (9.0 * g) / k;
+        System.arraycopy(x, 0, f, 0, numberOfObjectives - 1);
 
-	    System.arraycopy(x, 0, f, 0, numberOfObjectives - 1);
+        double h = 0.0;
+        for (int i = 0; i < numberOfObjectives - 1; i++) {
+            h += (f[i] / (1.0 + g)) * (1 + Math.sin(3.0 * Math.PI * f[i]));
+        }
 
-	    double h = 0.0;
-	    for (int i = 0; i < numberOfObjectives - 1; i++) {
-	      h += (f[i] / (1.0 + g)) * (1 + Math.sin(3.0 * Math.PI * f[i]));
-	    }
+        h = numberOfObjectives - h;
 
-	    h = numberOfObjectives - h;
+        f[numberOfObjectives - 1] = (1 + g) * h;
 
-	    f[numberOfObjectives - 1] = (1 + g) * h;
-
-		return f;
-	}
+        return f;
+    }
 
 }

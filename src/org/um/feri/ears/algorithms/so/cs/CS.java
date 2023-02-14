@@ -3,17 +3,18 @@ package org.um.feri.ears.algorithms.so.cs;
 import java.util.ArrayList;
 
 import org.apache.commons.math3.special.Gamma;
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
-public class CS extends Algorithm {
+public class CS extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -21,7 +22,7 @@ public class CS extends Algorithm {
 	private double pa = 0.25; //Discovery rate of alien eggs/solutions
 
     private NumberSolution<Double> best;
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
     private ArrayList<NumberSolution<Double>> nest;
 
     public CS() {
@@ -45,22 +46,22 @@ public class CS extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
         initPopulation();
 
-        while (!this.task.isStopCriterion()) {
+        while (!task.isStopCriterion()) {
 
             //Generate new solutions (but keep the current best)
             getCuckoos();
             //System.out.println(best.getEval());
 
-            this.task.incrementNumberOfIterations();
+            task.incrementNumberOfIterations();
 
             //Discovery and randomization
             emptyNests();
 
-            this.task.incrementNumberOfIterations();
+            task.incrementNumberOfIterations();
         }
         return best;
     }
@@ -71,11 +72,11 @@ public class CS extends Algorithm {
             if (i >= offspringPopulation.size())
                 return;
 
-            if (task.isFirstBetter(offspringPopulation.get(i), nest.get(i))) {
+            if (task.problem.isFirstBetter(offspringPopulation.get(i), nest.get(i))) {
                 nest.set(i, offspringPopulation.get(i));
             }
 
-            if (task.isFirstBetter(offspringPopulation.get(i), best)) {
+            if (task.problem.isFirstBetter(offspringPopulation.get(i), best)) {
                 best = new NumberSolution<>(offspringPopulation.get(i));
             }
         }
@@ -96,15 +97,18 @@ public class CS extends Algorithm {
         for (int i = 0; i < popSize; i++) {
 
             if (Util.nextDouble() > pa) {
-                double[] newSolution = new double[task.getNumberOfDimensions()];
-                for (int j = 0; j < task.getNumberOfDimensions(); j++) {
+                double[] newSolution = new double[task.problem.getNumberOfDimensions()];
+                for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                     stepsize = Util.nextDouble() * (nest.get(per1[i]).getValue(j) - (nest.get(per2[i]).getValue(j)));
                     newSolution[j] = nest.get(i).getValue(j) + stepsize;
                 }
-                newSolution = task.setFeasible(newSolution);
+                task.problem.setFeasible(newSolution);
                 if (task.isStopCriterion())
                     break;
-                NumberSolution<Double> newC = task.eval(newSolution);
+
+
+                NumberSolution<Double> newC = new NumberSolution<>(Util.toDoubleArrayList(newSolution));
+                task.eval(newC);
                 offspringPopulation.add(newC);
             } else {
                 offspringPopulation.add(nest.get(i));
@@ -132,8 +136,8 @@ public class CS extends Algorithm {
 
             NumberSolution<Double> s = nest.get(i);
             double u, v, step, stepsize;
-            double[] newSolution = new double[task.getNumberOfDimensions()];
-            for (int j = 0; j < task.getNumberOfDimensions(); j++) {
+            double[] newSolution = new double[task.problem.getNumberOfDimensions()];
+            for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                 u = Util.nextDouble() * sigma;
                 v = Util.nextDouble();
 
@@ -143,10 +147,13 @@ public class CS extends Algorithm {
                 newSolution[j] = s.getValue(j) + stepsize * Util.nextDouble();
             }
 
-            newSolution = task.setFeasible(newSolution);
+            task.problem.setFeasible(newSolution);
             if (task.isStopCriterion())
                 break;
-            NumberSolution<Double> newC = task.eval(newSolution);
+
+
+            NumberSolution<Double> newC = new NumberSolution<>(Util.toDoubleArrayList(newSolution));
+            task.eval(newC);
             offspringPopulation.add(newC);
         }
         setBest(offspringPopulation);
@@ -160,7 +167,7 @@ public class CS extends Algorithm {
             if (task.isStopCriterion())
                 break;
         }
-        nest.sort(new TaskComparator(task));
+        nest.sort(new ProblemComparator<>(task.problem));
         best = nest.get(0);
     }
 

@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,11 +13,11 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
 http://benchmarkfcns.xyz/benchmarkfcns/schwefel222fcn.html
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/190-schwefel-s-function-2-22
  */
-public class Schwefel222 extends Problem {
+public class Schwefel222 extends DoubleProblem {
     public Schwefel222(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        super(d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
         name = "Schwefel222";
     }
 

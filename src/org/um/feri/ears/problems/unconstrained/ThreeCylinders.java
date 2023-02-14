@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,13 +12,14 @@ import static java.lang.Math.sqrt;
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/157-three-cylinders-function
  */
-public class ThreeCylinders extends Problem {
+public class ThreeCylinders extends DoubleProblem {
 
     public ThreeCylinders() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
         name = "ThreeCylinders";
+        objectiveSpaceOptima[0] = 1.05;
     }
 
     @Override
@@ -35,10 +37,5 @@ public class ThreeCylinders extends Problem {
         else
             fitness = 0;
         return fitness;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return 1.05;
     }
 }

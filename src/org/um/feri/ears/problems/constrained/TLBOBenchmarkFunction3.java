@@ -3,8 +3,7 @@ package org.um.feri.ears.problems.constrained;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
 
 
 /**
@@ -50,11 +49,10 @@ import org.um.feri.ears.problems.Problem;
 *          POSSIBILITY OF SUCH DAMAGE.
 * 
 */
-public class TLBOBenchmarkFunction3  extends Problem{
+public class TLBOBenchmarkFunction3  extends DoubleProblem {
 	//http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page898.htm
-	public final static double best_x[]={2.330499, 1.951372, -0.4775414, 4.365726,-0.6244870, 1.038131, 1.594227};
 	public TLBOBenchmarkFunction3() {
-		super(7,4);
+		super(7, 1, 1, 4);
 		minimize = true;
 		
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
@@ -62,16 +60,18 @@ public class TLBOBenchmarkFunction3  extends Problem{
 		Collections.fill(lowerLimit, -10.0);
 		Collections.fill(upperLimit, 20.0);
 		
-		max_constraints = new Double[numberOfConstraints];
-		min_constraints = new Double[numberOfConstraints];
-		count_constraints  = new Double[numberOfConstraints];
-		sum_constraints  = new Double[numberOfConstraints];
-		normalization_constraints_factor = new Double[numberOfConstraints];
+		maxConstraints = new double[numberOfConstraints];
+		minConstraints = new double[numberOfConstraints];
+		countConstraints = new double[numberOfConstraints];
+		sumConstraints = new double[numberOfConstraints];
+		normalizationConstraintsFactor = new double[numberOfConstraints];
 		//System.out.println(Arrays.toString(interval)+"\n"+Arrays.toString(intervalL));
 		name = "TLBOBenchmarkFunction3 cec-g09";
+		decisionSpaceOptima[0] = new double[]{2.330499, 1.951372, -0.4775414, 4.365726,-0.6244870, 1.038131, 1.594227};
+		objectiveSpaceOptima[0] = 680.6300573;
 	}
 	
-	public double[] evaluateConstrains(double x[]) {
+	public double[] evaluateConstrains(double[] x) {
 
 		 double[] g = new double[4];
 
@@ -89,7 +89,7 @@ public class TLBOBenchmarkFunction3  extends Problem{
 		return g;
 	}
 	
-	public double[] calc_constrainsActive(double x[]) {
+	public double[] calc_constrainsActive(double[] x) {
 
 		 double[] g = new double[4];
 
@@ -100,11 +100,10 @@ public class TLBOBenchmarkFunction3  extends Problem{
 	        g[1] = 4.0 * x[0] * x[0] + x[1] * x[1] - 3.0 * x[0] * x[1] +
 	               2.0 * x[2] * x[2] + 5.0 * x[5] - 11.0 * x[6];
 
-
 		return g;
 	}	
 
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 //		y = (x(1)-10)^2+5*(x(2)-12)^2+x(3)^4+3*(x(4)-11)^2+...
 		//		    10*x(5)^6+7*x(6)^2+x(7)^4-4*x(6)*x(7)-10*x(6)-8*x(7);
 		double a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,v=0;
@@ -120,8 +119,5 @@ public class TLBOBenchmarkFunction3  extends Problem{
 		a10=8*x[6];
 		v=a1+a2+a3+a4+a5+a6+a7-a8-a9-a10;
 		return v;
-	}
-	public double getGlobalOptimum() {
-		return 680.6300573;
 	}
 }

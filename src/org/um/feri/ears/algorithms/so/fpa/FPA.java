@@ -4,20 +4,21 @@
 package org.um.feri.ears.algorithms.so.fpa;
 
 import org.apache.commons.math3.special.Gamma;
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 
 import java.util.ArrayList;
 
-public class FPA extends Algorithm {
+public class FPA extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -29,7 +30,7 @@ public class FPA extends Algorithm {
     private static final double meanND = 0.0;
     private static final double stdDevND = 1.0;
 
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
     private NumberSolution<Double> best;
     private ArrayList<NumberSolution<Double>> population;
 
@@ -56,25 +57,25 @@ public class FPA extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
         initPopulation();
 
         double[] candidate;
-        double[] levy = new double[this.task.getNumberOfDimensions()];
+        double[] levy;
 
         int rand1, rand2;
         double epsilon;
-        while (!this.task.isStopCriterion()) {
+        while (!task.isStopCriterion()) {
 
             for (int i = 0; i < popSize; i++) {
 
-                candidate = new double[this.task.getNumberOfDimensions()];
+                candidate = new double[task.problem.getNumberOfDimensions()];
                 if (Util.nextDouble() > switchProbability) {
                     /* Global Pollination */
                     levy = levy();
 
-                    for (int j = 0; j < this.task.getNumberOfDimensions(); j++) {
+                    for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                         candidate[j] = population.get(i).getValue(j) + levy[j] * (best.getValue(j) - population.get(i).getValue(j));
                     }
                 } else {
@@ -88,31 +89,33 @@ public class FPA extends Algorithm {
                         rand2 = Util.nextInt(popSize);
                     } while (rand2 == rand1);
 
-                    for (int j = 0; j < this.task.getNumberOfDimensions(); j++)
+                    for (int j = 0; j < task.problem.getNumberOfDimensions(); j++)
                         candidate[j] += epsilon * (population.get(rand1).getValue(j) - population.get(rand2).getValue(j));
                 }
 
                 // Check bounds
-                candidate = this.task.setFeasible(candidate);
+                task.problem.setFeasible(candidate);
 
                 // Evaluate new solution
-                if (this.task.isStopCriterion())
+                if (task.isStopCriterion())
                     break;
-                NumberSolution<Double> newSolution = this.task.eval(candidate);
 
+
+                NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(candidate));
+                task.eval(newSolution);
                 // If the new solution is better: Replace
-                if (this.task.isFirstBetter(newSolution, population.get(i))) {
+                if (task.problem.isFirstBetter(newSolution, population.get(i))) {
                     population.set(i, newSolution);
                 }
 
                 // Update best solution
-                if (this.task.isFirstBetter(newSolution, best)) {
+                if (task.problem.isFirstBetter(newSolution, best)) {
                     best = new NumberSolution<>(newSolution);
                 }
 
             }
 
-            this.task.incrementNumberOfIterations();
+            task.incrementNumberOfIterations();
         }
 
         return best;
@@ -122,12 +125,12 @@ public class FPA extends Algorithm {
      * creates Levy flight samples
      */
     private double[] levy() {
-        double[] step = new double[task.getNumberOfDimensions()];
+        double[] step = new double[task.problem.getNumberOfDimensions()];
 
         double sigma = Math.pow(Gamma.gamma(1 + lambda) * Math.sin(Math.PI * lambda / 2)
                 / (Gamma.gamma((1 + lambda) / 2) * lambda * Math.pow(2, (lambda - 1) / 2)), (1 / lambda));
 
-        for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+        for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
 
             double u = Distribution.normal(Util.rnd, meanND, stdDevND) * sigma;
             double v = Distribution.normal(Util.rnd, meanND, stdDevND);
@@ -147,7 +150,7 @@ public class FPA extends Algorithm {
             population.add(newSolution);
         }
 
-        population.sort(new TaskComparator(task));
+        population.sort(new ProblemComparator<>(task.problem));
         best = new NumberSolution<>(population.get(0));
     }
 

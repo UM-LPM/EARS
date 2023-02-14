@@ -1,9 +1,11 @@
 package org.um.feri.ears.memory;
 
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 
 abstract public class DuplicationRemovalStrategy {
-    Task t;
+    Task<NumberSolution<Double>, DoubleProblem> t;
 
     abstract public void changeSolution(double[] x);
 
@@ -13,7 +15,7 @@ abstract public class DuplicationRemovalStrategy {
         return false;
     }
 
-    public void setTask(Task t) {
+    public void setTask(Task<NumberSolution<Double>, DoubleProblem> t) {
         this.t = t;
     }
 }

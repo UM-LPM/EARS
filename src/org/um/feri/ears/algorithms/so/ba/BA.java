@@ -1,17 +1,18 @@
 package org.um.feri.ears.algorithms.so.ba;
 
-import java.util.ArrayList;
-
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
-public class BA extends Algorithm{
+import java.util.ArrayList;
+
+public class BA extends NumberAlgorithm {
 
 	@AlgorithmParameter(name = "population size")
 	private int popSize; //typically 10 to 40
@@ -22,7 +23,7 @@ public class BA extends Algorithm{
 	private double Qmin, Qmax; //min and max frequency
 	private double alpha, gamma; // 0 < alpha < 1, gamma > 0
 
-	private Task task;
+	private Task<NumberSolution<Double>, DoubleProblem> task;
 	private BatSolution best;
 	private ArrayList<BatSolution> population;
 	
@@ -55,12 +56,12 @@ public class BA extends Algorithm{
 	}
 
 	@Override
-	public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
+	public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
 		
-		task = taskProblem;
+		this.task = task;
 		initPopulation();
 		
-		double[] S = new double[task.getNumberOfDimensions()];
+		double[] S = new double[task.problem.getNumberOfDimensions()];
 
 		while (!task.isStopCriterion()) {
 
@@ -68,7 +69,7 @@ public class BA extends Algorithm{
 				//Generate new solutions by adjusting frequency, and updating velocities and locations/solutions [Eq.(2) to(4)]
 				population.get(i).Q = Util.nextDouble(Qmin, Qmax);
 				
-				for(int j = 0 ; j < task.getNumberOfDimensions() ; j++){
+				for(int j = 0; j < task.problem.getNumberOfDimensions() ; j++){
 					population.get(i).v[j] += (population.get(i).getValue(j) - best.getValue(j)) * population.get(i).Q;
 					S[j] =  population.get(i).getValue(j) + population.get(i).v[j];
 				}
@@ -77,24 +78,28 @@ public class BA extends Algorithm{
 				{
 					//Select a solution among the best solutions and generate a local solution around the best solution
 					//TODO how to select from best solutions?
-					for(int j = 0 ; j < task.getNumberOfDimensions() ; j++){
+					for(int j = 0; j < task.problem.getNumberOfDimensions() ; j++){
 						S[j] = best.getValue(j) + 0.001 * (2 * Util.nextDouble() - 1);
 						//S[j] = best.getValue(j) + 0.001 * population.get(i).A * (2 * Util.nextDouble() - 1);
 						//S[j] = population.get(i).getValue(j) + Util.nextDouble() * avgA;
 					}
 				}
 				
-				S = task.setFeasible(S);
+				task.problem.setFeasible(S);
 				if(task.isStopCriterion())
 					break;
-				BatSolution newBat = new BatSolution(task.eval(S));
+
+				NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(S));
+				task.eval(newSolution);
+
+				BatSolution newBat = new BatSolution(newSolution);
 				newBat.v = population.get(i).v;
 				newBat.Q = population.get(i).Q;
 				newBat.A = population.get(i).A;
 				newBat.r = population.get(i).r;
 				
 				
-				if(task.isFirstBetter(newBat, population.get(i)) && Util.nextDouble() < A)
+				if(task.problem.isFirstBetter(newBat, population.get(i)) && Util.nextDouble() < A)
 				{
 					//Update loudness and pulse rate
 					newBat.A = alpha * newBat.A;
@@ -103,7 +108,7 @@ public class BA extends Algorithm{
 					population.set(i, newBat);
 				}
 				
-				if(task.isFirstBetter(newBat, best))
+				if(task.problem.isFirstBetter(newBat, best))
 				{
 					//System.out.println(best.getEval());
 					best = new BatSolution(newBat);
@@ -117,15 +122,15 @@ public class BA extends Algorithm{
 		
 		population = new ArrayList<BatSolution>();
 		best = new BatSolution(task.getRandomEvaluatedSolution());
-		best.v = new double[task.getNumberOfDimensions()];
+		best.v = new double[task.problem.getNumberOfDimensions()];
 		population.add(best);
 		for (int i = 1; i < popSize; i++) {
 			
 			BatSolution newSolution = new BatSolution(task.getRandomEvaluatedSolution());
-			newSolution.v = new double[task.getNumberOfDimensions()];
+			newSolution.v = new double[task.problem.getNumberOfDimensions()];
 			newSolution.A = Util.nextDouble(1,2);
 			newSolution.r = Util.nextDouble();
-			if(task.isFirstBetter(newSolution, best))
+			if(task.problem.isFirstBetter(newSolution, best))
 				best = new BatSolution(newSolution);
 			
 			population.add(newSolution);

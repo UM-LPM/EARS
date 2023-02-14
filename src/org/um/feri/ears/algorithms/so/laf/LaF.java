@@ -1,31 +1,33 @@
 package org.um.feri.ears.algorithms.so.laf;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class LaF extends Algorithm {
+public class LaF extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
     private boolean debug = true;
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     private ArrayList<NumberSolution<Double>> leaders;
     private ArrayList<NumberSolution<Double>> followers;
 
 
-    private double[] ub;
-    private double[] lb;
+    private List<Double> ub;
+    private List<Double> lb;
     private int dimension;
 
     public LaF() {
@@ -51,19 +53,19 @@ public class LaF extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task task) throws StopCriterionException { //EARS main evaluation loop
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException { //EARS main evaluation loop
         this.task = task;
         NumberSolution<Double> best = null;
-        dimension = this.task.getNumberOfDimensions();
-        ub = this.task.getUpperLimit();
-        lb = this.task.getLowerLimit();
+        dimension = task.problem.getNumberOfDimensions();
+        ub = task.problem.getUpperLimit();
+        lb = task.problem.getLowerLimit();
 
         initPopulation();
         int leaderIndex;
         int followerIndex;
-        while (!this.task.isStopCriterion()) {
+        while (!task.isStopCriterion()) {
             for (int i = 0; i < popSize; i++) {
-                if (this.task.isStopCriterion())
+                if (task.isStopCriterion())
                     break;
                 leaderIndex = Util.nextInt(popSize);
                 NumberSolution<Double> leader = leaders.get(leaderIndex);
@@ -71,14 +73,14 @@ public class LaF extends Algorithm {
                 NumberSolution<Double> follower = followers.get(followerIndex);
                 NumberSolution<Double> trial = trial(leader, follower); //one fit eval here
                 //System.out.println(trailCost);
-                if (this.task.isFirstBetter(trial, followers.get(followerIndex))) //eval done earlier
+                if (task.problem.isFirstBetter(trial, followers.get(followerIndex))) //eval done earlier
                     followers.set(followerIndex, trial);
             }
-            if (this.task.isFirstBetter(findMedianSolution(followers), findMedianSolution(leaders))) {
+            if (task.problem.isFirstBetter(findMedianSolution(followers), findMedianSolution(leaders))) {
                 leaders = merge(followers, leaders);
             }
             best = new NumberSolution<>(leaders.get(findMinIndex(leaders)));
-            this.task.incrementNumberOfIterations();
+            task.incrementNumberOfIterations();
         }
         return best;
     }
@@ -114,22 +116,26 @@ public class LaF extends Algorithm {
         for (int i = 0; i < dimension; i++) {
             gap[i] = leader.getValue(i) - follower.getValue(i);
             farthest[i] = follower.getValue(i) + maxStep * gap[i];
-            if (farthest[i] < lb[i]) {
-                maxSteps[i] = (lb[i] - follower.getValue(i)) / (ub[i] - lb[i]);
+            if (farthest[i] < lb.get(i)) {
+                maxSteps[i] = (lb.get(i) - follower.getValue(i)) / (ub.get(i) - lb.get(i));
             }
-            if (farthest[i] > ub[i]) {
-                maxSteps[i] = (ub[i] - follower.getValue(i)) / (ub[i] - lb[i]);
+            if (farthest[i] > ub.get(i)) {
+                maxSteps[i] = (ub.get(i) - follower.getValue(i)) / (ub.get(i) - lb.get(i));
             }
             double rand = Util.nextDouble();
             result[i] = follower.getValue(i) + maxSteps[i] * rand * gap[i];
         }
 
-        result = task.setFeasible(result); //fixes upper and lower bound
-        return task.eval(result);
+        task.problem.setFeasible(result); //fixes upper and lower bound
+
+        NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(result));
+        task.eval(newSolution);
+
+        return newSolution;
     }
 
     private NumberSolution<Double> findMedianSolution(ArrayList<NumberSolution<Double>> mArrayList) {
-        mArrayList.sort(new TaskComparator(task));
+        mArrayList.sort(new ProblemComparator<NumberSolution<Double>>(task.problem));
         return mArrayList.get(popSize / 2);
     }
 
@@ -160,7 +166,7 @@ public class LaF extends Algorithm {
         int i = 0;
         int minIndex = i;
         for (i = 1; i < newLeaders.size(); i++) {
-            if (task.isFirstBetter(newLeaders.get(i), newLeaders.get(minIndex))) {
+            if (task.problem.isFirstBetter(newLeaders.get(i), newLeaders.get(minIndex))) {
                 minIndex = i;
             }
         }
@@ -188,7 +194,7 @@ public class LaF extends Algorithm {
 	private int compete(ArrayList<NumberSolution<Double>> newLeaders, int[] pick2) {
         int r1 = pick2[0];
         int r2 = pick2[1];
-        if (task.isFirstBetter(newLeaders.get(r1), newLeaders.get(r2)))
+        if (task.problem.isFirstBetter(newLeaders.get(r1), newLeaders.get(r2)))
             return r1;
         return r2;
     }

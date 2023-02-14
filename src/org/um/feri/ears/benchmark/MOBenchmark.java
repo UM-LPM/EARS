@@ -1,9 +1,10 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.moo.MOProblemBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.quality_indicator.IndicatorFactory;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P extends MOProblemBase<T>> extends BenchmarkBase<Task, ParetoSolution<T>, MOAlgorithm<Task, T>> {
+public abstract class MOBenchmark<T extends Number, Task extends MOTask<T>, P extends Problem<NumberSolution<T>>> extends BenchmarkBase<Task, ParetoSolution<T>, MOAlgorithm<P, Task, T>> {
 
     protected List<IndicatorName> indicators;
     private double[] indicatorWeights;
@@ -71,11 +72,11 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
     @Override
     protected void performTournament(int evaluationNumber) {
 
-        for (HashMap<Task, ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
-            for (ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>> results : problemMap.values()) {
+        for (HashMap<Task, ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<P, Task, T>, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
+            for (ArrayList<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<P, Task, T>, Task>> results : problemMap.values()) {
                 Task t = results.get(0).task;
-                AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task> first;
-                AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task> second;
+                AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<P, Task, T>, Task> first;
+                AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<P, Task, T>, Task> second;
                 QualityIndicator<T> qi;
 
                 if (randomIndicator) {
@@ -85,7 +86,7 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
                         for (int j = i + 1; j < results.size(); j++) {
                             second = results.get(j);
                             indicatorName = getRandomIndicator();
-                            qi = IndicatorFactory.createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
+                            qi = IndicatorFactory.createIndicator(indicatorName, t.problem.getNumberOfObjectives(), t.problem.getReferenceSetFileName());
 
                             try {
                                 if (qi.getIndicatorType() == IndicatorType.UNARY) {
@@ -107,7 +108,7 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T, P>, P
                 } else {
                     for (IndicatorName indicatorName : indicators) {
                         QualityIndicatorComparator<T, Task, P> qic;
-                        qi = IndicatorFactory.<T>createIndicator(indicatorName, t.getNumberOfObjectives(), t.getProblemFileName());
+                        qi = IndicatorFactory.<T>createIndicator(indicatorName, t.problem.getNumberOfObjectives(), t.problem.getReferenceSetFileName());
                         qic = new QualityIndicatorComparator<T, Task, P>(t, qi);
                         results.sort(qic); //best first
                         for (int i = 0; i < results.size() - 1; i++) {

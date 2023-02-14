@@ -1,5 +1,6 @@
 package org.um.feri.ears.algorithms.so.bfo;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -9,7 +10,7 @@ public class Bacteria extends NumberSolution<Double> implements Comparable<Bacte
 	double health;
 	double c;
 	
-	public Bacteria(Task t, double c) throws StopCriterionException {
+	public Bacteria(Task<NumberSolution<Double>, DoubleProblem> t, double c) throws StopCriterionException {
 		super(t.getRandomEvaluatedSolution());
 		prev = this;
 		health = 0;

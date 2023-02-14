@@ -49,7 +49,7 @@ dependencies {
 `class MySolution extends DoubleSolution`.
 * Code examples can be found in the package `org.um.feri.ears.examples`.
 * All information of the given problem (dimensions, constraints, bounds, etc...) can be obtained from the Task object: `public Individual run(Task task)`.
-* Before every evaluation check if the stopping criterion is reached by calling `taskProblem.isStopCriterion()`. If evaluate is called after the stopping criterion is reached, a `StopCriterionException` will be thrown.
+* Before every evaluation check if the stopping criterion is reached by calling `task.isStopCriterion()`. If evaluate is called after the stopping criterion is reached, a `StopCriterionException` will be thrown.
 
 ## Examples
 
@@ -57,7 +57,7 @@ Implementing a custom algorithm by extending the `Algorithm` class:
 ```java
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.problems.DoubleSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -96,7 +96,7 @@ public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorith
 Executing a single Task:
 
 ```java
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.Sphere;
@@ -125,7 +125,7 @@ public class SOSingleRun {
 To perform a tournament you need more than one algorithm (player) and more than one task (problem) in the benchmark:
 
 ```java
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.abc.ABC;
 import org.um.feri.ears.algorithms.so.gwo.GWO;
 import org.um.feri.ears.algorithms.so.jade.JADE;

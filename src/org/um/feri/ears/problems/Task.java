@@ -1,28 +1,23 @@
 package org.um.feri.ears.problems;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 
-import javax.annotation.CheckReturnValue;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class Task extends TaskBase<Problem> {
+public class Task<S extends Solution, P extends Problem<S>> extends TaskBase<P> {
 
-    protected NumberSolution bestSolution; //Keeps track of the best solution found.
+    protected S bestSolution; //Keeps track of the best solution found.
 
     /**
-     * @param problem the problem to be solved
-     * @param stopCriterion the stopping criterion
-     * @param maxEvaluations the maximum number of evaluations allowed
-     * @param allowedTime the maximum CPU time allowed in milliseconds
-     * @param maxIterations the maximum number of iterations
+     * @param problem          the problem to be solved
+     * @param stopCriterion    the stopping criterion
+     * @param maxEvaluations   the maximum number of evaluations allowed
+     * @param allowedTime      the maximum CPU time allowed in milliseconds
+     * @param maxIterations    the maximum number of iterations
      * @param epsilonForGlobal the epsilon value used to check closeness to the global optimum
      */
-    public Task(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilonForGlobal) {
+    public Task(P problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilonForGlobal) {
 
         this.epsilonForGlobal = epsilonForGlobal;
         precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
@@ -33,148 +28,34 @@ public class Task extends TaskBase<Problem> {
         isStop = false;
         isGlobal = false;
         this.problem = problem;
-        this.allowedCPUTime = TimeUnit.MILLISECONDS.toNanos(allowedTime);
+        this.allowedCPUTimeNs = TimeUnit.MILLISECONDS.toNanos(allowedTime);
     }
+
     /**
-     * @param problem the problem to be solved
-     * @param stopCriterion the stopping criterion
+     * @param problem        the problem to be solved
+     * @param stopCriterion  the stopping criterion
      * @param maxEvaluations the maximum number of evaluations allowed
-     * @param allowedTime the maximum CPU time allowed in milliseconds
-     * @param maxIterations the maximum number of iterations
+     * @param allowedTime    the maximum CPU time allowed in milliseconds
+     * @param maxIterations  the maximum number of iterations
      */
-    public Task(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
-        this(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations,0);
+    public Task(P problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
+        this(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, 0);
     }
 
     public Task(Task task) {
         super(task);
     }
 
-    public double[] getInterval() {
-        double[] interval = new double[problem.upperLimit.size()];
-        for (int i = 0; i < interval.length; i++) {
-            interval[i] = problem.upperLimit.get(i) - problem.lowerLimit.get(i);
-        }
-        return interval;
+    private void checkIfGlobalReached(S solution) {
+        if (problem.numberOfObjectives == 1) //TODO what to do in case of multi-objective optimization? (maybe always check all objectives)
+            isGlobal = isEqualToGlobalOptimum(solution);
     }
 
-    /**
-     * Checks if the given value is inside the lower and upper bounds of the given dimension. If the value is outside the
-     * lower bound or upper bound then the lower or upper bound is returned. If the value is inside the bounds then the
-     * unchanged value is returned.
-     *
-     * @param value to be set feasible
-     * @param d dimension index
-     * @return feasible value
-     */
-    public double setFeasible(double value, int d) {
-        return problem.setFeasible(value, d);
+    public boolean isEqualToGlobalOptimum(S solution) {
+        return Math.abs(solution.getEval() - problem.getGlobalOptima()[0]) <= epsilonForGlobal;
     }
 
-    /**
-     * Checks if all the values in the array are inside the lower and upper bounds. If any value is outside the
-     * lower bound or upper bound then it is set to lower or upper bound.
-     *
-     * @param x array to be set feasible
-     * @return array with feasible values
-     */
-    @CheckReturnValue
-    public double[] setFeasible(double[] x) {
-        return problem.setFeasible(x);
-    }
-
-    /**
-     * Checks if all the values in the solution are inside the lower and upper bounds. If any value is outside the
-     * lower bound or upper bound then it is set to lower or upper bound.
-     *
-     * @param solution to be set feasible
-     */
-    public void setFeasible(NumberSolution solution) {
-        solution.variables = problem.setFeasible(solution.variables);
-    }
-
-    /**
-     * Checks if the provided value is inside the upper and lower bounds
-     *
-     * @param x value to be checked
-     * @return true if the value is inside the upper and lower bounds, false otherwise
-     */
-    public boolean isFeasible(double x, int d) {
-        return problem.isFeasible(x, d);
-    }
-
-    /**
-     * Checks if the provided solution is inside the interval given by the upper and lower bounds
-     *
-     * @param solution to be checked
-     * @return true if all the values in the solution are inside upper and lower bounds, false otherwise
-     */
-    public boolean isFeasible(NumberSolution solution) {
-        return problem.isFeasible(solution.getVariables());
-    }
-
-    /**
-     * Checks if the provided array is inside the interval given by the upper and lower bounds
-     *
-     * @param x array to be checked
-     * @return true if all the values in the array are inside upper and lower bounds, false otherwise
-     */
-    public boolean isFeasible(double[] x) {
-        return problem.isFeasible(x);
-    }
-
-    /**
-     * Checks if the provided vector is inside the interval given by the upper and lower bounds
-     *
-     * @param x vector to be checked
-     * @return true if all the values in the vector are inside upper and lower bounds, false otherwise
-     */
-    public boolean isFeasible(List<Double> x) {
-        return problem.isFeasible(x);
-    }
-
-    public boolean isFirstBetter(NumberSolution first, NumberSolution second) {
-        return problem.isFirstBetter(first.getVariables(), first.getEval(), second.getVariables(), second.getEval());
-    }
-
-    public boolean isFirstBetter(double a, double b) {
-        return problem.isFirstBetter(a, b);
-    }
-
-    public double[] getLowerLimit() {
-
-        double[] target = new double[problem.lowerLimit.size()];
-        for (int i = 0; i < target.length; i++) {
-            target[i] = problem.lowerLimit.get(i);
-        }
-        return target;
-    }
-
-    public double[] getUpperLimit() {
-        double[] target = new double[problem.upperLimit.size()];
-        for (int i = 0; i < target.length; i++) {
-            target[i] = problem.upperLimit.get(i);
-        }
-        return target;
-    }
-
-    public double getLowerLimit(int i) {
-        return problem.lowerLimit.get(i);
-    }
-
-    public double getUpperLimit(int i) {
-        return problem.upperLimit.get(i);
-    }
-
-    private void checkIfGlobalReached(double d) {
-        isGlobal = isEqualToGlobalOptimum(d);
-    }
-
-    public boolean isEqualToGlobalOptimum(double d) {
-        return Math.abs(d - problem.getGlobalOptimum()) <= epsilonForGlobal;
-    }
-
-    public void addAncestors(SolutionBase solution, List<SolutionBase> parents) {
+    public void addAncestors(S solution, List<Solution> parents) {
         if (isAncestorLoggingEnabled) {
             solution.parents = parents;
             solution.timeStamp = System.currentTimeMillis();
@@ -185,140 +66,106 @@ public class Task extends TaskBase<Problem> {
     }
 
     /**
-     * Better use method eval returns Individual with calculated fitness and constrains
-     *
-     * @param ds real vector to be evaluated (just calc constraints)
-     * @return evaluated constrains
-     * @deprecated
-     */
-    public double[] evaluateConstrains(List<Double> ds) {
-        return problem.evaluateConstrains(ds);
-    }
-
-    public double[] getRandomVariables() {
-        return problem.getRandomVariables();
-    }
-
-    /**
-     * Generates a random unevaluated solution.
-     *
-     * @return randomly generated unevaluated solution
-     */
-    public NumberSolution getRandomSolution() {
-        return problem.getRandomSolution();
-    }
-
-    /**
      * Generates a random evaluated solution.
+     *
      * @return a random evaluated solution.
      * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
-     * To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
+     *                                To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
      */
-    public NumberSolution getRandomEvaluatedSolution() throws StopCriterionException {
+    public S getRandomEvaluatedSolution() throws StopCriterionException {
 
-        NumberSolution tmpSolution = getRandomSolution();
+        S tmpSolution = problem.getRandomSolution();
         eval(tmpSolution);
         return tmpSolution;
     }
 
     /**
-     *  Evaluates the given solution
+     * Evaluates the given solution
+     *
      * @param solution to be evaluated
      * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
-     * To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
+     *                                To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
      */
-    public void eval(NumberSolution solution) throws StopCriterionException {
-        NumberSolution evaluatedSolution = eval(Util.toDoubleArray(solution.getVariables()));
-        if(evaluatedSolution.getConstraints() != null)
-            solution.setConstraints(evaluatedSolution.getConstraints());
-        solution.setObjective(0, evaluatedSolution.getEval()); //TODO won't be needed in new version
-    }
+    public void eval(S solution) throws StopCriterionException {
 
-    public NumberSolution eval(double[] x, List<SolutionBase> parents) throws StopCriterionException {
-
-        NumberSolution tmpSolution = eval(x);
+        switch (stopCriterion) {
+            case EVALUATIONS:
+                performEvaluation(solution);
+                break;
+            case ITERATIONS:
+                if (isStop)
+                    throw new StopCriterionException("Max iterations");
+                performEvaluation(solution);
+                break;
+            case GLOBAL_OPTIMUM_OR_EVALUATIONS:
+                if (isGlobal)
+                    throw new StopCriterionException("Global optimum already found");
+                performEvaluation(solution);
+                break;
+            case CPU_TIME:
+                if (!isStop) {
+                    hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
+                    performEvaluation(solution);
+                } else {
+                    throw new StopCriterionException("CPU Time");
+                }
+                break;
+            case STAGNATION:
+                if (isStop)
+                    throw new StopCriterionException("Solution stagnation");
+                performEvaluation(solution);
+                break;
+        }
 
         if (isAncestorLoggingEnabled) {
-            tmpSolution.parents = parents;
-            tmpSolution.timeStamp = System.currentTimeMillis();
-            tmpSolution.generationNumber = this.getNumberOfIterations();
-            tmpSolution.evaluationNumber = this.getNumberOfEvaluations();
-            ancestors.add(tmpSolution);
-        }
-
-        return tmpSolution;
-    }
-
-    public NumberSolution eval(double[] x) throws StopCriterionException {
-
-        //Double[] ds = ArrayUtils.toObject(x);
-        //List<Double> ds = Arrays.asList(ArrayUtils.toObject(x));
-        NumberSolution tmpSolution = null;
-        if (stopCriterion == StopCriterion.EVALUATIONS) {
-            tmpSolution = performEvaluation(x);
-        } else if (stopCriterion == StopCriterion.ITERATIONS) {
-            if (isStop)
-                throw new StopCriterionException("Max iterations");
-            tmpSolution = performEvaluation(x);
-        } else if (stopCriterion == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
-            if (isGlobal)
-                throw new StopCriterionException("Global optimum already found");
-            tmpSolution = performEvaluation(x);
-        } else if (stopCriterion == StopCriterion.CPU_TIME) {
-            if (!isStop) {
-                hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
-                tmpSolution = performEvaluation(x);
-            } else {
-                throw new StopCriterionException("CPU Time");
-            }
-        } else if (stopCriterion == StopCriterion.STAGNATION) {
-            if (isStop)
-                throw new StopCriterionException("Solution stagnation");
-            tmpSolution = performEvaluation(x);
-        }
-
-        if (tmpSolution != null) {
-            if (isAncestorLoggingEnabled) {
-                tmpSolution.timeStamp = System.currentTimeMillis();
-                tmpSolution.generationNumber = getNumberOfIterations();
-                tmpSolution.evaluationNumber = getNumberOfEvaluations();
-                ancestors.add(tmpSolution);
-            }
-            return tmpSolution;
-        } else {
-            // Execution should never reach this point!
-            throw new StopCriterionException("Not evaluated");
+            solution.timeStamp = System.currentTimeMillis();
+            solution.generationNumber = getNumberOfIterations();
+            solution.evaluationNumber = getNumberOfEvaluations();
+            ancestors.add(solution);
         }
     }
 
-    private NumberSolution performEvaluation(double[] x) throws StopCriterionException {
+    public void eval(S solution, List<Solution> parents) throws StopCriterionException {
+
+        eval(solution);
+
+        if (isAncestorLoggingEnabled) {
+            solution.parents = parents;
+            solution.timeStamp = System.currentTimeMillis();
+            solution.generationNumber = this.getNumberOfIterations();
+            solution.evaluationNumber = this.getNumberOfEvaluations();
+            ancestors.add(solution);
+        }
+    }
+
+    private void performEvaluation(S solution) throws StopCriterionException {
         incrementNumberOfEvaluations();
         long start = System.nanoTime();
-        NumberSolution<Double> tmpSolution = new NumberSolution<>(Arrays.stream(x).boxed().collect(Collectors.toList()), problem.eval(x), problem.evaluateConstrains(x));
-        checkImprovement(tmpSolution);
+        problem.evaluate(solution);
+        problem.evaluateConstraints(solution);
+        checkImprovement(solution);
         evaluationTime += System.nanoTime() - start;
-        checkIfGlobalReached(tmpSolution.getEval());
-        GraphDataRecorder.AddRecord(tmpSolution, this.getProblemName());
-        if(bestSolution != null && isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
+        checkIfGlobalReached(solution);
+        GraphDataRecorder.AddRecord(solution, this.getProblemName());
+        if (bestSolution != null && isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
             evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTime, bestSolution.getEval()));
-        return tmpSolution;
     }
 
     /**
      * Checks if the current {@code solution} is better than the current best solution. If there is no improvement after
      * a certain amount of tries the stopping criterion is met. If there is an improvement the stagnation trial counter is reset.
+     *
      * @param solution current evaluation
      */
-    private void checkImprovement(NumberSolution solution) {
+    private void checkImprovement(S solution) {
 
-        if(bestSolution == null)
-            bestSolution = new NumberSolution(solution);
+        if (bestSolution == null)
+            bestSolution = (S) solution.copy();
 
-        if(isFirstBetter(solution, bestSolution)){
-            bestSolution = new NumberSolution(solution);
+        if (problem.isFirstBetter(solution, bestSolution)) {
+            bestSolution = (S) solution.copy();
             stagnationTrialCounter = 0;
-        }
-        else {
+        } else {
             stagnationTrialCounter++;
         }
 
@@ -328,11 +175,11 @@ public class Task extends TaskBase<Problem> {
     }
 
     public static void resetLoggingID() {
-        SolutionBase.resetLoggingID();
+        Solution.resetLoggingID();
     }
 
     @Override
-    public Task clone() {
-        return new Task(this);
+    public Task<S, P> clone() {
+        return new Task<>(this);
     }
 }

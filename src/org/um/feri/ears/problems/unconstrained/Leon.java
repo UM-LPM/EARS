@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,15 +14,15 @@ https://al-roomi.org/benchmarks/unconstrained/2-dimensions/125-leon-s-function
 http://benchmarkfcns.xyz/benchmarkfcns/leonfcn.html
  */
 
-public class Leon extends Problem {
+public class Leon extends DoubleProblem {
 
     public Leon() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -1.2));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.2));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.2));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.2));
         name = "Leon";
 
-        Arrays.fill(optimum[0], 1);
+        Arrays.fill(decisionSpaceOptima[0], 1);
     }
 
     @Override

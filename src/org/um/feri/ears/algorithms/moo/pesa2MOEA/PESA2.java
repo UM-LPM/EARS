@@ -33,6 +33,7 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
@@ -53,7 +54,7 @@ import org.um.feri.ears.util.Util;
  */
 
 // VERY SLOW
-public class PESA2<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class PESA2<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
 
     int populationSize = 100;
     int archiveSize = 100;

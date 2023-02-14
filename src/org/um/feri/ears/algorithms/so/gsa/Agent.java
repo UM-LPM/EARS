@@ -1,5 +1,6 @@
 package org.um.feri.ears.algorithms.so.gsa;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -14,35 +15,25 @@ public class Agent extends NumberSolution<Double> {
     private double[] velocities;
     private double[] forces;
 
-    int solutionSize;
-
-    public Agent(Task t, int id) throws StopCriterionException {
+    public Agent(Task<NumberSolution<Double>, DoubleProblem> t, int id) throws StopCriterionException {
         super(t.getRandomEvaluatedSolution());
-        velocities = new double[t.getNumberOfDimensions()];
-        forces = new double[t.getNumberOfDimensions()];
-        solutionSize = t.getNumberOfDimensions();
-
+        velocities = new double[t.problem.getNumberOfDimensions()];
+        forces = new double[t.problem.getNumberOfDimensions()];
     }
 
-    public Agent(NumberSolution<Double> ds, Task t) {
+    public Agent(NumberSolution<Double> ds) {
         super(ds);
-        velocities = new double[t.getNumberOfDimensions()];
+        velocities = new double[ds.numberOfVariables()];
         //Arrayscopy
-        forces = new double[t.getNumberOfDimensions()];
-        solutionSize = t.getNumberOfDimensions();
+        forces = new double[ds.numberOfVariables()];
         //mass
     }
 
-    public Agent(Agent a, Task t) {
+    public Agent(Agent a) {
         super(a);
         velocities = Arrays.copyOf(a.getVelocities(), a.getVelocities().length);
         forces = Arrays.copyOf(a.getForces(), a.getForces().length);
-        solutionSize = t.getNumberOfDimensions();
         mass = a.getMass();
-    }
-
-    public int getSolutionSize() {
-        return solutionSize;
     }
 
     public void setMass(double mass) {

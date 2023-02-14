@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -16,15 +16,15 @@ import org.um.feri.ears.util.Util;
  * @version 1
  * 
  **/	
-public class CEC2011_Problem1 extends Problem {
+public class CEC2011_Problem1 extends DoubleProblem {
 	/*
 	 * fun_num=1   Parameter Estimation for Frequency-Modulated (FM) Sound Waves,initialization range=[0,6.35], bound=[-6.4,6.35] , length of x=6. 
 	 * 
 	 */
 	public CEC2011_Problem1() {
-		super(6,0);
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -6.4));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 6.35));
+		super(6, 1, 1, 0);
+		lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -6.4));
+		upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 6.35));
 				
 		//Arrays.fill(interval, 12.75);
 		//Arrays.fill(intervalL, -6.4);//6.4 + 6.35
@@ -32,7 +32,7 @@ public class CEC2011_Problem1 extends Problem {
 		description = "RWP_1 Parameter Estimation for Frequency-Modulated (FM) Sound Waves";
 	}
 	
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 	      double theta=2.*Math.PI/100;
 	      double f=0;
 	      double y_t, y_0_t;
@@ -44,11 +44,6 @@ public class CEC2011_Problem1 extends Problem {
 		return f;
 	}
 
-	public double getGlobalOptimum() {
-		return 0; //OK
-	}
-	
-	
 	@Override
 	public double[] getRandomVariables() {
 		//initialization range=[0,6.35]
@@ -58,8 +53,6 @@ public class CEC2011_Problem1 extends Problem {
 		}
 		return var;
 	}
-
-	
 	
 	@Override
 	public NumberSolution getRandomEvaluatedSolution() {

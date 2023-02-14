@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,13 +13,14 @@ import static java.lang.Math.pow;
 http://infinity77.net/global_optimization/test_functions_nd_E.html#go_benchmark.Exponential
 http://benchmarkfcns.xyz/benchmarkfcns/exponentialfcn.html
  */
-public class Exponential extends Problem {
+public class Exponential extends DoubleProblem {
 
     public Exponential() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -1.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
         name = "Exponential";
+        objectiveSpaceOptima[0] = -1.0;
     }
 
     @Override
@@ -28,10 +30,5 @@ public class Exponential extends Problem {
             fitness += pow(x[i], 2);
         }
         return -exp(-0.5 * fitness);
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -1.0;
     }
 }

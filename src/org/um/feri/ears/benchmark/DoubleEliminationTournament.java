@@ -18,6 +18,7 @@ import java.util.concurrent.Future;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.DoubleMOTask;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.quality_indicator.IndicatorFactory;
@@ -32,9 +33,9 @@ public class DoubleEliminationTournament {
 	DoubleMOTask task;
 	int playerCount;
 	HashMap<String, Double> averageRanks;
-	ArrayList<MOAlgorithm> players;
+	ArrayList<MOAlgorithm<DoubleProblem, DoubleMOTask, Double>> players;
 	
-	public void run(int tournamentSize, ArrayList<IndicatorName> indicators, ArrayList<MOAlgorithm> players, DoubleMOTask task, int rep){
+	public void run(int tournamentSize, ArrayList<IndicatorName> indicators, ArrayList<MOAlgorithm<DoubleProblem, DoubleMOTask, Double>> players, DoubleMOTask task, int rep){
 		this.task = task; 
 		playerCount = players.size();
 		this.players = players;
@@ -50,11 +51,11 @@ public class DoubleEliminationTournament {
 	}
 
 
-	private void fillPlayers(ArrayList<MOAlgorithm> players) {
+	private void fillPlayers(ArrayList<MOAlgorithm<DoubleProblem, DoubleMOTask, Double>> players) {
 		
 		averageRanks = new HashMap<>();
 		
-		for (MOAlgorithm moAlgorithm : players) {
+		for (MOAlgorithm<DoubleProblem, DoubleMOTask, Double> moAlgorithm : players) {
 			averageRanks.put(moAlgorithm.getId(), 0.0);
 		}
 		
@@ -271,7 +272,7 @@ public class DoubleEliminationTournament {
 
 	}
 
-	private ArrayList<MOAlgorithmEvalResult> getParticipants(int tournamentSize, ArrayList<MOAlgorithm> players, boolean preliminaries) {
+	private ArrayList<MOAlgorithmEvalResult> getParticipants(int tournamentSize, ArrayList<MOAlgorithm<DoubleProblem, DoubleMOTask, Double>> players, boolean preliminaries) {
 		
 		
 		ArrayList<MOAlgorithmEvalResult> participants = new ArrayList<MOAlgorithmEvalResult>();
@@ -287,15 +288,15 @@ public class DoubleEliminationTournament {
 				
 		    	task.resetCounter();
 		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
-		        Set<Future<AlgorithmRunResult>> set = new HashSet<Future<AlgorithmRunResult>>();
-		        for (MOAlgorithm<DoubleMOTask, Double> al: players) {
+		        Set<Future<AlgorithmRunResult>> set = new HashSet<>();
+		        for (MOAlgorithm<DoubleProblem, DoubleMOTask, Double> al: players) {
 		          Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, (DoubleMOTask) task.clone()));
 		          set.add(future);
 		        }
 
 		        for (Future<AlgorithmRunResult> future : set) {
 		        	try {
-						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>,DoubleMOTask> res = future.get();
+						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, DoubleMOTask, Double>,DoubleMOTask> res = future.get();
 
 		        		results.add(new MOAlgorithmEvalResult(res.solution, res.algorithm, res.task));
 
@@ -340,15 +341,15 @@ public class DoubleEliminationTournament {
 				//System.out.println("Run: "+i);
 		    	task.resetCounter();
 		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
-		        Set<Future<AlgorithmRunResult>> set = new HashSet<Future<AlgorithmRunResult>>();
-		        for (MOAlgorithm<DoubleMOTask, Double> al: players) {
+		        Set<Future<AlgorithmRunResult>> set = new HashSet<>();
+		        for (MOAlgorithm<DoubleProblem, DoubleMOTask, Double> al: players) {
 		          Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, (DoubleMOTask) task.clone()));
 		          set.add(future);
 		        }
 
 		        for (Future<AlgorithmRunResult> future : set) {
 		        	try {
-						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleMOTask, Double>,DoubleMOTask> res = future.get();
+						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, DoubleMOTask, Double>,DoubleMOTask> res = future.get();
 
 		        		participants.add(new MOAlgorithmEvalResult(res.solution, res.algorithm, res.task));
 
@@ -412,10 +413,10 @@ public class DoubleEliminationTournament {
 
 
 	private void fillEnsemble(ArrayList<IndicatorName> indicators) {
-		ensemble = new ArrayList<QualityIndicator>();
+		ensemble = new ArrayList<>();
 		
 		for (IndicatorName name : indicators) {
-			ensemble.add(IndicatorFactory.createIndicator(name, task.getNumberOfObjectives(),task.getProblemFileName()));
+			ensemble.add(IndicatorFactory.createIndicator(name, task.problem.getNumberOfObjectives(),task.problem.getReferenceSetFileName()));
 		}
 	}
 	

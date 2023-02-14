@@ -4,22 +4,22 @@
 package org.um.feri.ears.algorithms.so.ica;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
-public class ICA extends Algorithm {
+public class ICA extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -51,7 +51,7 @@ public class ICA extends Algorithm {
     private NumberSolution<Double>[] initialCountries;
     //ArrayList<DoubleSolution> offspringPopulation;
 
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     public ICA() {
         this(50, 6, 0.1, 2, 0.5, 0.02, 0.99, false, 0.02);
@@ -84,14 +84,14 @@ public class ICA extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
 
-        searchSpaceSize = new double[this.task.getNumberOfDimensions()];
+        searchSpaceSize = new double[task.problem.getNumberOfDimensions()];
 
         // Compute the problem search space, between the min and max bounds
-        for (int i = 0; i < this.task.getNumberOfDimensions(); i++) {
-            searchSpaceSize[i] = this.task.getUpperLimit(i) - this.task.getLowerLimit(i);
+        for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
+            searchSpaceSize[i] = task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i);
         }
 
         initPopulation();
@@ -99,7 +99,7 @@ public class ICA extends Algorithm {
         // Create the initial empires
         createInitialEmpires();
 
-        while (!this.task.isStopCriterion()) {
+        while (!task.isStopCriterion()) {
 
             // Update the revolution rate
             revolutionRate = dampRatio * revolutionRate;
@@ -129,7 +129,7 @@ public class ICA extends Algorithm {
                 break;
             }
 
-            this.task.incrementNumberOfIterations();
+            task.incrementNumberOfIterations();
         }
         return best;
     }
@@ -259,8 +259,8 @@ public class ICA extends Algorithm {
         for (int i = 0; i < (numOfEmpires - 1); i++) {
             for (int j = i + 1; j < numOfEmpires; j++) {
                 // Compute the distance between the two empires i and j
-                double[] distanceVector = new double[task.getNumberOfDimensions()];
-                for (int k = 0; k < task.getNumberOfDimensions(); k++) {
+                double[] distanceVector = new double[task.problem.getNumberOfDimensions()];
+                for (int k = 0; k < task.problem.getNumberOfDimensions(); k++) {
                     distanceVector[k] = empiresList[i].imperialist.getValue(k) - empiresList[j].imperialist.getValue(k);
                 }
                 double distance = utils.getNorm(distanceVector);
@@ -270,7 +270,7 @@ public class ICA extends Algorithm {
                     // Get the best and worst empires of the two
                     int betterEmpireInd;
                     int worseEmpireInd;
-                    if (task.isFirstBetter(empiresList[i].imperialist, empiresList[j].imperialist)) {
+                    if (task.problem.isFirstBetter(empiresList[i].imperialist, empiresList[j].imperialist)) {
                         betterEmpireInd = i;
                         worseEmpireInd = j;
                     } else {
@@ -335,7 +335,7 @@ public class ICA extends Algorithm {
                 task.eval(empire.colonies[R[i]]);
             }
 
-            if (task.isFirstBetter(empire.colonies[R[i]], best)) {
+            if (task.problem.isFirstBetter(empire.colonies[R[i]], best)) {
                 best = new NumberSolution(empire.colonies[R[i]]);
             }
 
@@ -353,7 +353,7 @@ public class ICA extends Algorithm {
         int bestColonyId = utils.getMinIndex(empire.colonies);
 
         // If this cost is lower than the one of the imperialist
-        if (task.isFirstBetter(empire.colonies[bestColonyId], empire.imperialist)) {
+        if (task.problem.isFirstBetter(empire.colonies[bestColonyId], empire.imperialist)) {
             NumberSolution<Double> temp = empire.imperialist;
             empire.imperialist = empire.colonies[bestColonyId];
             empire.colonies[bestColonyId] = temp;
@@ -372,11 +372,11 @@ public class ICA extends Algorithm {
 
 
         for (int i = 0; i < numOfColonies; i++) {
-            List<Double> newColony = new ArrayList<Double>();
-            for (int j = 0; j < task.getNumberOfDimensions(); j++) {
+            ArrayList<Double> newColony = new ArrayList<>();
+            for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                 //TODO 2 * beta -> matlab samo beta = 1.5
                 newColony.add(empire.colonies[i].getValue(j) + 2 * assimilationCoefficient * Util.nextDouble() * (empire.imperialist.getValue(j) - empire.colonies[i].getValue(j)));
-                newColony.set(j, task.setFeasible(newColony.get(j), j));
+                newColony.set(j, task.problem.setFeasible(newColony.get(j), j));
             }
             empire.colonies[i].setVariables(newColony);
         }
@@ -463,7 +463,7 @@ public class ICA extends Algorithm {
             NumberSolution<Double> newSolution = task.getRandomEvaluatedSolution();
             initialCountries[i] = newSolution;
         }
-        Arrays.sort(initialCountries, new TaskComparator(task));
+        Arrays.sort(initialCountries, new ProblemComparator<>(task.problem));
         //initialCountries.sort(new TaskComparator(task));
         best = new NumberSolution<>(initialCountries[0]);
     }

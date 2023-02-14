@@ -28,6 +28,7 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionSelection;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
@@ -40,7 +41,7 @@ import java.util.Comparator;
 /**
  * This class implements the GDE3 algorithm.
  */
-public class GDE3<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class GDE3<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
 
     ParetoSolution<Type> population;
     ParetoSolution<Type> offspringPopulation;

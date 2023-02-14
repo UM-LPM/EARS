@@ -15,10 +15,11 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PESA2Selection;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public class PESAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class PESAII<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
 
     int populationSize = 100;
     int archiveSize = 100;

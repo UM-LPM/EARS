@@ -1,18 +1,18 @@
 package org.um.feri.ears.problems.gp;
 
-import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.Solution;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProgramSolution<T> extends SolutionBase {
+public class ProgramSolution<T> extends Solution {
     protected TreeNode<T> program; //Solution
     protected double eval; //SolutionFitness
 
     public List<ProgramSolution<T>> parents;
 
-    public ProgramSolution() {
-
+    public ProgramSolution(int numberOfObjectives) {
+        super(numberOfObjectives);
     }
 
     public ProgramSolution(ProgramSolution<T> s) {
@@ -23,6 +23,10 @@ public class ProgramSolution<T> extends SolutionBase {
         parents = new ArrayList<>();
     }
 
+    @Override
+    public ProgramSolution<T> copy() {
+        return new ProgramSolution<>(this);
+    }
 
     public void setProgram(TreeNode<T> program) {
         this.program = program;

@@ -93,7 +93,7 @@ public class F15 extends CEC2005Base {
         }
         hcData.fmax = m_fmax;
 
-        optimum = m_o;
+        decisionSpaceOptima = m_o;
     }
 
     private class LocalHCData extends HybridCompositionData {

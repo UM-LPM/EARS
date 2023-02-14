@@ -76,7 +76,7 @@ public class MemoryBankDoubleSolutionFast {
 
 
     public NumberSolution<Double> getRandomSolution(TaskWithMemory task) throws StopCriterionException {
-        double[] d = task.getRandomVariables();
+        double[] d = task.problem.getRandomVariables();
         return eval(task, d);
     }
     /*
@@ -98,7 +98,7 @@ public class MemoryBankDoubleSolutionFast {
             }
             if (convergenceGraphDataCollect) {
                 ds = hashMapMemory.get(key);
-                // eval+1 one plus becuse we fake that we need additional evaluation
+                // eval+1 one plus because we fake that we need additional evaluation
                 ReportBank.addPairValue(CONVERGENCE_DUPLICATE, new Pair(task.getNumberOfEvaluations() + 1, best4ConvergenceGraph.getEval()));
                 ReportBank.addPairValue(CONVERGENCE_DUPLICATE_VALUE, new Pair(task.getNumberOfEvaluations() + 1, ds.getEval()));
             }
@@ -110,7 +110,7 @@ public class MemoryBankDoubleSolutionFast {
                 if (convergenceGraphDataCollect) {
                     if (best4ConvergenceGraph == null)
                         best4ConvergenceGraph = ds;
-                    else if (task.isFirstBetter(ds, best4ConvergenceGraph))
+                    else if (task.problem.isFirstBetter(ds, best4ConvergenceGraph))
                         best4ConvergenceGraph = ds;
                 }
 
@@ -122,7 +122,7 @@ public class MemoryBankDoubleSolutionFast {
             if (convergenceGraphDataCollect) {
                 if (best4ConvergenceGraph == null)
                     best4ConvergenceGraph = ds;
-                else if (task.isFirstBetter(ds, best4ConvergenceGraph))
+                else if (task.problem.isFirstBetter(ds, best4ConvergenceGraph))
                     best4ConvergenceGraph = ds;
                 ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConvergenceGraph.getEval()));
                 ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));
@@ -137,7 +137,7 @@ public class MemoryBankDoubleSolutionFast {
         if (convergenceGraphDataCollect) {
             if (best4ConvergenceGraph == null)
                 best4ConvergenceGraph = ds;
-            else if (task.isFirstBetter(ds, best4ConvergenceGraph))
+            else if (task.problem.isFirstBetter(ds, best4ConvergenceGraph))
                 best4ConvergenceGraph = ds;
             ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConvergenceGraph.getEval()));
             ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));

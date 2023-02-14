@@ -1,10 +1,11 @@
 package org.um.feri.ears.operators;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class PolynomialMutationSO implements MutationOperator<Double, Task, NumberSolution<Double>>{
+public class PolynomialMutationSO implements MutationOperator<Double, Task<NumberSolution<Double>, DoubleProblem>, NumberSolution<Double>>{
 
 	
 	private static final double ETA_M_DEFAULT_ = 20.0;
@@ -20,20 +21,20 @@ public class PolynomialMutationSO implements MutationOperator<Double, Task, Numb
 	}
 	
 	@Override
-	public NumberSolution<Double> execute(NumberSolution<Double> source, Task tb) {
+	public NumberSolution<Double> execute(NumberSolution<Double> source, Task<NumberSolution<Double>, DoubleProblem> tb) {
 		
 		doMutation(mutationProbability, source, tb);
 		return source;
 	}
 
-	private void doMutation(Double probability, NumberSolution<Double> solution, Task task) {
+	private void doMutation(Double probability, NumberSolution<Double> solution, Task<NumberSolution<Double>, DoubleProblem> task) {
 		double rnd, delta1, delta2, mut_pow, deltaq;
 		double y, yl, yu, val, xy;
-		for (int var = 0; var < task.getNumberOfDimensions(); var++) {
+		for (int var = 0; var < task.problem.getNumberOfDimensions(); var++) {
 			if (Util.rnd.nextDouble() <= probability) {
 				y = solution.getValue(var);
-				yl = task.getLowerLimit(var);
-				yu = task.getUpperLimit(var);
+				yl = task.problem.getLowerLimit(var);
+				yu = task.problem.getUpperLimit(var);
 				delta1 = (y - yl) / (yu - yl);
 				delta2 = (yu - y) / (yu - yl);
 				rnd = Util.rnd.nextDouble();

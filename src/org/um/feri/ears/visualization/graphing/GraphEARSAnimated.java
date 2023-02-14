@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
@@ -625,7 +625,7 @@ public class GraphEARSAnimated extends GraphEARS
 	@Deprecated
 	protected long GetPopSize(RecordedData[] data)
 	{
-		AlgorithmBase alg = data[0].algorithm;
+		Algorithm alg = data[0].algorithm;
 		String pop_size_string = null;
 		popSize = GraphEARSStatic.DEFAULT_EVALUATIONS_PER_STEP;
 		

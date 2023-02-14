@@ -31,16 +31,14 @@ import org.um.feri.ears.algorithms.moo.spea2.Spea2fitness;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.DifferentialEvolutionSelection;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
-public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class DEMO<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
 
     ParetoSolution<Type> population;
     ParetoSolution<Type> offspringPopulation;

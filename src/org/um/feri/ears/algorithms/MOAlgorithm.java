@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.ParetoSolutionCache;
@@ -16,7 +14,7 @@ import org.um.feri.ears.util.ParetoWithEval;
 import org.um.feri.ears.util.Ranking;
 import org.um.feri.ears.util.Util;
 
-public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends AlgorithmBase<T, ParetoSolution<Type>> {
+public abstract class MOAlgorithm<P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>, Type extends Number> extends Algorithm<T, ParetoSolution<Type>> {
 
     protected T task;
     protected static boolean optimalParam;
@@ -114,10 +112,10 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
     }
 
     @Override
-    public ParetoSolution<Type> execute(T taskProblem) throws StopCriterionException {
-        task = taskProblem;
-        numVar = task.getNumberOfDimensions();
-        numObj = task.getNumberOfObjectives();
+    public ParetoSolution<Type> execute(T task) throws StopCriterionException {
+        this.task = task;
+        numVar = task.problem.getNumberOfDimensions();
+        numObj = task.problem.getNumberOfObjectives();
 
         //ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
         long initTime = System.currentTimeMillis();
@@ -147,13 +145,13 @@ public abstract class MOAlgorithm<T extends MOTask, Type extends Number> extends
             best.printObjectivesToCSVFile("FUN_" + algName);
         }
         if (displayData) {
-            best.displayAllUnaryQualityIndicators(task.getNumberOfObjectives(), task.getProblemFileName());
+            best.displayAllUnaryQualityIndicators(task.problem.getNumberOfObjectives(), task.problem.getReferenceSetFileName());
             best.displayData(this.getAlgorithmInfo().getAcronym(), task.getProblemName());
         }
 
         if (caching == Cache.SAVE) {
             try {
-                best.evaluateWithAllUnaryQI(numObj, taskProblem.getProblemFileName());
+                best.evaluateWithAllUnaryQI(numObj, task.problem.getReferenceSetFileName());
             } catch (Exception e) {
                 e.printStackTrace();
             }

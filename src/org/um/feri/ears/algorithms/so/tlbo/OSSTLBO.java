@@ -1,12 +1,13 @@
 package org.um.feri.ears.algorithms.so.tlbo;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
@@ -14,13 +15,13 @@ import java.util.Arrays;
 
 import static java.util.Arrays.stream;
 
-public class OSSTLBO extends Algorithm {
+public class OSSTLBO extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
     private NumberSolution<Double> best;
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
     private NumberSolution<Double>[] population;
 
     private int m = 0;
@@ -43,8 +44,8 @@ public class OSSTLBO extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+        this.task = task;
 
         initPopulation();
 
@@ -68,7 +69,7 @@ public class OSSTLBO extends Algorithm {
             if (task.isStopCriterion())
                 break;
             population[i] = task.getRandomEvaluatedSolution();
-            if (task.isFirstBetter(population[i], best)) {
+            if (task.problem.isFirstBetter(population[i], best)) {
                 best = new NumberSolution<>(population[i]);
             }
         }
@@ -77,24 +78,25 @@ public class OSSTLBO extends Algorithm {
 
     private void dynamicOppositeLearning() throws StopCriterionException {
         for (int i = 0; i < popSize; i++) {
-            double[] newX = new double[task.getNumberOfDimensions()];
-            for (int n = 0; n < task.getNumberOfDimensions(); n++) {
+            double[] newX = new double[task.problem.getNumberOfDimensions()];
+            for (int n = 0; n < task.problem.getNumberOfDimensions(); n++) {
                 double X = population[i].getValue(n);
-                double XO = (task.getLowerLimit(n) + task.getUpperLimit(n) - X);
+                double XO = (task.problem.getLowerLimit(n) + task.problem.getUpperLimit(n) - X);
                 double XOD = X + Util.nextDouble() * (Util.nextDouble() * XO - X);
-                if (XOD < task.getLowerLimit(n) || XOD > task.getUpperLimit(n)) {
-                    XOD = Util.nextInt((int) (task.getUpperLimit(n) - task.getLowerLimit(n)));
+                if (XOD < task.problem.getLowerLimit(n) || XOD > task.problem.getUpperLimit(n)) {
+                    XOD = Util.nextInt((int) (task.problem.getUpperLimit(n) - task.problem.getLowerLimit(n)));
                 }
                 newX[n] = XOD;
             }
             if (task.isStopCriterion())
                 return;
 
-            NumberSolution<Double> newSolution = task.eval(newX);
+            NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(newX));
+            task.eval(newSolution);
 
-            if (task.isFirstBetter(newSolution, population[i])) {
+            if (task.problem.isFirstBetter(newSolution, population[i])) {
                 population[i] = newSolution;
-                if (task.isFirstBetter(newSolution, best)) {
+                if (task.problem.isFirstBetter(newSolution, best)) {
                     best = new NumberSolution<>(newSolution);
                 }
             }
@@ -104,16 +106,16 @@ public class OSSTLBO extends Algorithm {
     private void teacherPhase() throws StopCriterionException {
 
         for (int i = 0; i < popSize; i++) {
-            double[] newX = new double[task.getNumberOfDimensions()];
+            double[] newX = new double[task.problem.getNumberOfDimensions()];
             double[] means = calculateXMean();
-            for (int j = 0; j < task.getNumberOfDimensions(); j++) {
+            for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                 double Tf = Util.nextInt(1, 3);
                 double differenceMean = Util.nextDouble() * (best.getValue(j) - Tf * means[j]);
                 double differenceTeacherStudent = Util.nextDouble() * (best.getValue(j) - population[i].getValue(j));
                 double x = population[i].getValue(j) + differenceMean + differenceTeacherStudent;
 
-                if (!task.isFeasible(x, j)) {
-                    x = Util.nextDouble(task.getLowerLimit(j), task.getUpperLimit(j));
+                if (!task.problem.isFeasible(x, j)) {
+                    x = Util.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
                 }
                 newX[j] = x;
             }
@@ -121,12 +123,13 @@ public class OSSTLBO extends Algorithm {
             if (task.isStopCriterion())
                 return;
 
-            NumberSolution<Double> newSolution = task.eval(newX);
+            NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(newX));
+            task.eval(newSolution);
 
-            if (task.isFirstBetter(newSolution, population[i])) {
+            if (task.problem.isFirstBetter(newSolution, population[i])) {
                 population[i] = newSolution;
 
-                if (task.isFirstBetter(newSolution, best)) {
+                if (task.problem.isFirstBetter(newSolution, best)) {
                     best = new NumberSolution<>(newSolution);
                 }
             }
@@ -141,21 +144,21 @@ public class OSSTLBO extends Algorithm {
             while (randomSolution == solution)
                 randomSolution = population[Util.nextInt(popSize)];
 
-            double[] newX = new double[task.getNumberOfDimensions()];
+            double[] newX = new double[task.problem.getNumberOfDimensions()];
 
-            if (task.isFirstBetter(randomSolution, solution)) {
-                for (int j = 0; j < task.getNumberOfDimensions(); j++) {
+            if (task.problem.isFirstBetter(randomSolution, solution)) {
+                for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                     double x = solution.getValue(j) + Util.nextDouble() * (randomSolution.getValue(j) - (solution.getValue(j)));
-                    if (!task.isFeasible(x, j)) {
-                        x = Util.nextDouble(task.getLowerLimit(j), task.getUpperLimit(j));
+                    if (!task.problem.isFeasible(x, j)) {
+                        x = Util.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
                     }
                     newX[j] = x;
                 }
             } else {
-                for (int j = 0; j < task.getNumberOfDimensions(); j++) {
+                for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                     double x = solution.getValue(j) + Util.nextDouble() * (solution.getValue(j) - (randomSolution.getValue(j)));
-                    if (!task.isFeasible(x, j)) {
-                        x = Util.nextDouble(task.getLowerLimit(j), task.getUpperLimit(j));
+                    if (!task.problem.isFeasible(x, j)) {
+                        x = Util.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
                     }
                     newX[j] = x;
                 }
@@ -164,12 +167,13 @@ public class OSSTLBO extends Algorithm {
             if (task.isStopCriterion())
                 return;
 
-            NumberSolution<Double> newSolution = task.eval(newX);
+            NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(newX));
+            task.eval(newSolution);
 
-            if (task.isFirstBetter(newSolution, population[i])) {
+            if (task.problem.isFirstBetter(newSolution, population[i])) {
                 population[i] = newSolution;
 
-                if (task.isFirstBetter(newSolution, best)) {
+                if (task.problem.isFirstBetter(newSolution, best)) {
                     best = new NumberSolution<>(newSolution);
                 }
             }
@@ -177,7 +181,7 @@ public class OSSTLBO extends Algorithm {
     }
 
     private void updatePopulation() throws StopCriterionException {
-        Arrays.sort(population, new TaskComparator(task));
+        Arrays.sort(population, new ProblemComparator<>(task.problem));
         m = m + 1;
 
         if (m == 20) {
@@ -187,10 +191,10 @@ public class OSSTLBO extends Algorithm {
     }
 
     private double[] calculateXMean() {
-        double[] means = new double[task.getNumberOfDimensions()];
+        double[] means = new double[task.problem.getNumberOfDimensions()];
 
         for (NumberSolution<Double> solution : population) {
-            for (int j = 0; j < task.getNumberOfDimensions(); j++) {
+            for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                 means[j] += solution.getValue(j);
             }
         }

@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,15 +12,16 @@ import static java.lang.Math.*;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.Ripple25
  */
-public class Ripple25 extends Problem {
+public class Ripple25 extends DoubleProblem {
 
     public Ripple25() {
-        super(2, 0);
+        super(2, 1, 1, 0);
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.0));
         name = "Ripple25";
 
-        Arrays.fill(optimum[0], 0.1);
+        Arrays.fill(decisionSpaceOptima[0], 0.1);
+        objectiveSpaceOptima[0] = -2.0;
     }
 
     @Override
@@ -33,10 +35,5 @@ public class Ripple25 extends Problem {
             fitness += -exp(u) * v;
         }
         return fitness;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -2.0;
     }
 }

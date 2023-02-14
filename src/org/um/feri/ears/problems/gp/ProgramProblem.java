@@ -1,13 +1,12 @@
 package org.um.feri.ears.problems.gp;
 
-import org.um.feri.ears.problems.ProblemBase;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public abstract class ProgramProblem<T> extends ProblemBase<T> {
+public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
     /**
      * List of base functions which can be used during when generating tree individuals
@@ -24,13 +23,8 @@ public abstract class ProgramProblem<T> extends ProblemBase<T> {
     protected boolean useAllBaseFunctions;
     protected boolean useAllBaseTerminals;
 
-    /**
-     * Implements the problem's fitness function.
-     */
-    public abstract void eval(ProgramSolution<T> solution);
-
     public ProgramProblem() {
-        super(1, 0); //TODO move number of dimensions out of ProblemBase
+        super(1, 1, 0);
         this.baseFunctions = new ArrayList<>();
         this.baseTerminals = new ArrayList<>();
     }
@@ -90,25 +84,26 @@ public abstract class ProgramProblem<T> extends ProblemBase<T> {
     public void setUseAllBaseTerminals(boolean useAllBaseTerminals) {
         this.useAllBaseTerminals = useAllBaseTerminals;
     }
-
+    @Override
     public boolean isFeasible(ProgramSolution<T> solution){
         //TODO
         return true;
     }
 
-    public ProgramSolution<T> setFeasible(ProgramSolution<T> solution){
+    @Override
+    public void makeFeasible(ProgramSolution<T> solution){
         //TODO
-        return solution;
     }
-
+    @Override
     public ProgramSolution<T> getRandomEvaluatedSolution() {
         ProgramSolution<T> solution = getRandomSolution();
-        eval(solution);
+        evaluate(solution);
         return solution;
     }
 
+    @Override
     public ProgramSolution<T> getRandomSolution() {
-        ProgramSolution<T> newSolution = new ProgramSolution<>();
+        ProgramSolution<T> newSolution = new ProgramSolution<>(numberOfObjectives);
         //Generate random valid solution
         /*Postopek generiranja drevesa...
             Generiram en node (prvi more bit funckija, ker drugace se bo tukaj koncalo)

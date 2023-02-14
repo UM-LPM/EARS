@@ -1,14 +1,13 @@
 package org.um.feri.ears.tuning;
 
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.*;
 
 import java.util.Vector;
 
-public class TuningBenchmark extends Benchmark {
+public class TuningBenchmark extends Benchmark<NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>, NumberAlgorithm> {
 
     protected int evaluationsOnDimension = 10000;
     protected int dimension = 10;
@@ -36,11 +35,11 @@ public class TuningBenchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
-        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
+    protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, time, maxIterations));
         String[] optimum = new String[2];
         optimum[0] = problem.getName();
-        optimum[1] = problem.getGlobalOptimum() + "";
+        optimum[1] = problem.getGlobalOptima() + "";
         optimums.add(optimum);
     }
 

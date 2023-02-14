@@ -22,84 +22,80 @@ package org.um.feri.ears.problems.moo.misc;
 
 import java.util.ArrayList;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.functions.Tanaka_F1;
 import org.um.feri.ears.problems.moo.functions.Tanaka_F2;
 import org.um.feri.ears.util.Util;
 
-public class Tanaka extends DoubleMOProblem{
-	
-	public Tanaka() {
-	     
-		super(2,2,2);
+public class Tanaka extends DoubleProblem {
 
-		fileName = "Tanaka";
-		name = "Tanaka";
+    public Tanaka() {
 
-	    upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+        super(2, 1, 2, 2);
 
-		for (int var = 0; var < numberOfDimensions; var++){
-			lowerLimit.add(10e-5);
-			upperLimit.add(Math.PI);
-		}
+        referenceSetFileName = "Tanaka";
+        name = "Tanaka";
 
-		this.addObjective(new Tanaka_F1());
-		this.addObjective(new Tanaka_F2());
-	}
+        upperLimit = new ArrayList<>(numberOfDimensions);
+        lowerLimit = new ArrayList<>(numberOfDimensions);
 
-	@Override
-	public void evaluate(NumberSolution<Double> solution) {
-		
-		double[] x = Util.toDoubleArray(solution.getVariables());
+        for (int var = 0; var < numberOfDimensions; var++) {
+            lowerLimit.add(10e-5);
+            upperLimit.add(Math.PI);
+        }
 
-		double[] obj = new double[functions.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
-		}
-		solution.setObjectives(obj);
-		
-	}
+        addObjective(new Tanaka_F1());
+        addObjective(new Tanaka_F2());
+    }
 
-	@Override
-	public void evaluateConstraints(NumberSolution<Double> solution) {
-		double[] constraints = new double[numberOfConstraints];
-		
-		double[] dv = Util.toDoubleArray(solution.getVariables());
-	    
-		double x1 = dv[0];
-	    double x2 = dv[1];
-	        
-	    constraints[0] = (x1*x1 + x2*x2 - 1.0 - 0.1*Math.cos(16.0*Math.atan(x1/x2)));
-	    constraints[1] = - 2.0 * ( (x1-0.5)*(x1-0.5) + (x2-0.5)*(x2-0.5) - 0.5);
+    @Override
+    public void evaluate(NumberSolution<Double> solution) {
 
-		solution.setConstraints(constraints);
+        double[] x = Util.toDoubleArray(solution.getVariables());
 
-	    double total = 0.0;
-	    int number = 0;
-		for (int i = 0; i < constraints.length; i++) {
-			if (constraints[i]<0.0){
-		        total+=constraints[i];
-		        number++;
-			}
-		}
-	    solution.setOverallConstraintViolation(total);    
-	    solution.setNumberOfViolatedConstraint(number); 
-		
-	}
+        double[] obj = new double[objectives.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = objectives.get(i).eval(x);
+        }
+        solution.setObjectives(obj);
 
-	@Override
-	public double[] evaluate(Double[] ds) {
-		double[] x = new double[numberOfDimensions];
-		for (int i = 0; i < numberOfDimensions; i++)
-			x[i] = ds[i];
+    }
 
-		double obj[] = new double[functions.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
-		}
+    @Override
+    public void evaluateConstraints(NumberSolution<Double> solution) {
+        double[] constraints = new double[numberOfConstraints];
 
-		return obj;
-	}
+        double[] dv = Util.toDoubleArray(solution.getVariables());
+
+        double x1 = dv[0];
+        double x2 = dv[1];
+
+        constraints[0] = (x1 * x1 + x2 * x2 - 1.0 - 0.1 * Math.cos(16.0 * Math.atan(x1 / x2)));
+        constraints[1] = -2.0 * ((x1 - 0.5) * (x1 - 0.5) + (x2 - 0.5) * (x2 - 0.5) - 0.5);
+
+        solution.setConstraints(constraints);
+
+        double total = 0.0;
+        int number = 0;
+        for (int i = 0; i < constraints.length; i++) {
+            if (constraints[i] < 0.0) {
+                total += constraints[i];
+                number++;
+            }
+        }
+        solution.setOverallConstraintViolation(total);
+        solution.setNumberOfViolatedConstraint(number);
+
+    }
+
+    public double[] evaluate(double[] x) {
+
+        double[] obj = new double[objectives.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = objectives.get(i).eval(x);
+        }
+
+        return obj;
+    }
 }

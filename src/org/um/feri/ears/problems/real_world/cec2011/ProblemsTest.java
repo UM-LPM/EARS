@@ -4,7 +4,7 @@ public class ProblemsTest {
 
 	public static void main(String[] args) {
 		CEC2011_Problem1 p = new CEC2011_Problem1();
-		double x[] = { 1, 1, 1, 1, 1, 1 };
+		double[] x = { 1, 1, 1, 1, 1, 1 };
 		System.out.println("93.1153==" + p.eval(x));
 		for (int i = 0; i < 6; i++) {
 			System.out.print(CEC2011_Problem_11_3_ELD_6.Up_Ramp_Limit(i) + " , ");

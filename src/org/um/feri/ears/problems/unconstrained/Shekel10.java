@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,19 +12,20 @@ import static java.lang.Math.pow;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Shekel10
  */
-public class Shekel10 extends Problem {
+public class Shekel10 extends DoubleProblem {
 
     public double[][] a;
     public double[] c;
 
 
     public Shekel10() {
-        super(4, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+        super(4, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         name = "Shekel10";
 
-        Arrays.fill(optimum[0], 4);
+        Arrays.fill(decisionSpaceOptima[0], 4);
+        objectiveSpaceOptima[0] = -10.53628372;
 
         a = new double[][]{
                 {4, 4, 4, 4},
@@ -53,10 +55,5 @@ public class Shekel10 extends Problem {
             fitness += pow(c[i] + sum, -1);
         }
         return -fitness;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -10.53628372;
     }
 }

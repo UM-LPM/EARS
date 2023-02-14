@@ -1,13 +1,13 @@
 package org.um.feri.ears.problems;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.util.Util;
 
 public class EvaluationStorage {
 
     public EvaluationStorage(){}
 
-    public EvaluationStorage(String randomGenerator, long seed, Algorithm algorithm, Problem problem, int resolution, int numberOfRuns, int evaluationsPerRun) {
+    public EvaluationStorage(String randomGenerator, long seed, NumberAlgorithm algorithm, DoubleProblem problem, int resolution, int numberOfRuns, int evaluationsPerRun) {
         this.randomGenerator = randomGenerator;
         this.seed = seed;
         algorithmName = algorithm.getAlgorithmInfo().getAcronym();

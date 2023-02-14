@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.quality_indicator.IndicatorFactory;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
@@ -30,7 +30,7 @@ import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.Style;
 import com.panayotis.gnuplot.terminal.PostscriptTerminal;
 
-public class ParetoSolution<Type extends Number> extends SolutionBase implements Iterable<NumberSolution<Type>> {
+public class ParetoSolution<Type extends Number> extends Solution implements Iterable<NumberSolution<Type>> {
 
     public List<NumberSolution<Type>> solutions;
     private double pareto_eval;
@@ -84,6 +84,11 @@ public class ParetoSolution<Type extends Number> extends SolutionBase implements
     public ParetoSolution(List<NumberSolution<Type>> pop) {
         solutions = pop;
         capacity = pop.size();
+    }
+
+    @Override
+    public ParetoSolution<Type> copy() {
+        return new ParetoSolution<>(this);
     }
 
     /**

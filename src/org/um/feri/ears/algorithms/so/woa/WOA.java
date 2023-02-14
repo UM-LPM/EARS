@@ -1,25 +1,22 @@
 package org.um.feri.ears.algorithms.so.woa;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.problems.*;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
-public class WOA extends Algorithm {
+public class WOA extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
     private NumberSolution<Double> bestSolution;
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     // Parameters
     private double A;
@@ -62,8 +59,8 @@ public class WOA extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+        this.task = task;
 
         initPopulation();
 
@@ -77,7 +74,7 @@ public class WOA extends Algorithm {
         }
 
         if (task.getStopCriterion() == StopCriterion.EVALUATIONS) {
-            maxIt = task.getMaxEvaluations() / popSize;
+            maxIt = (task.getMaxEvaluations() - popSize) / popSize;
         }
 
         if (debug)
@@ -89,7 +86,7 @@ public class WOA extends Algorithm {
             // For each search agent
             for (int index = 0; index < popSize; index++) {
                 NumberSolution<Double> currentAgent = population.get(index);
-                double[] newPosition = new double[task.getNumberOfDimensions()];
+                double[] newPosition = new double[task.problem.getNumberOfDimensions()];
 
                 // Randoms for A and C
                 r1 = Util.nextDouble();
@@ -106,7 +103,7 @@ public class WOA extends Algorithm {
                 p = Util.nextDouble();
 
                 // For each dimension
-                for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+                for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
                     if (p < 0.5) {
                         // Shrinking encircling mechanism
                         if (Math.abs(A) >= 1) {
@@ -130,12 +127,14 @@ public class WOA extends Algorithm {
                     }
                 }
 
-                newPosition = task.setFeasible(newPosition);
+                task.problem.setFeasible(newPosition);
 
                 if (task.isStopCriterion())
                     break;
 
-                NumberSolution<Double> newWhale = task.eval(newPosition);
+                NumberSolution<Double> newWhale = new NumberSolution<>(Util.toDoubleArrayList(newPosition));
+                task.eval(newWhale);
+
                 population.set(index, newWhale);
 
                 // Check if the changed is better ?
@@ -160,8 +159,8 @@ public class WOA extends Algorithm {
 
     private void updateBest() {
         ArrayList<NumberSolution<Double>> popCopy = new ArrayList<>(population);
-        popCopy.sort(new TaskComparator(task));
-        if (bestSolution == null || task.isFirstBetter(popCopy.get(0), bestSolution))
+        popCopy.sort(new ProblemComparator<>(task.problem));
+        if (bestSolution == null || task.problem.isFirstBetter(popCopy.get(0), bestSolution))
             bestSolution = new NumberSolution<>(popCopy.get(0));
     }
 

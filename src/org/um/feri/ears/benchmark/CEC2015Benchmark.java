@@ -1,15 +1,14 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.cec2015.*;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 
-public class CEC2015Benchmark extends Benchmark {
+public class CEC2015Benchmark extends Benchmark<NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>, NumberAlgorithm> {
     protected boolean calculateTime = false;
     protected int warmupIterations = 10000;
     private double optimumEpsilon = 0.000001;
@@ -30,8 +29,8 @@ public class CEC2015Benchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
-        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
+    protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
     @Override
@@ -43,7 +42,7 @@ public class CEC2015Benchmark extends Benchmark {
     @Override
     public void initAllProblems() {
 
-        ArrayList<Problem> problems = new ArrayList<Problem>();
+        ArrayList<DoubleProblem> problems = new ArrayList<>();
 
         problems.add(new F1(dimension));
         problems.add(new F2(dimension));
@@ -61,7 +60,7 @@ public class CEC2015Benchmark extends Benchmark {
         problems.add(new F14(dimension));
         problems.add(new F15(dimension));
 
-        for (Problem p : problems) {
+        for (DoubleProblem p : problems) {
     		/*if(stopCriterion == EnumStopCriterion.CPU_TIME && calculateTime)
     		{
     			System.out.println("Calculating time for problem: "+p.getName());
@@ -78,7 +77,7 @@ public class CEC2015Benchmark extends Benchmark {
         }
     }
 
-    private long calculateTime(Problem p) {
+    private long calculateTime(DoubleProblem p) {
 
         long start = System.nanoTime();
         long duration;

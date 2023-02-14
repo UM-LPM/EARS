@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,16 +11,16 @@ import static java.lang.Math.pow;
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/103-stenger-s-function
  */
-public class Stenger extends Problem {
+public class Stenger extends DoubleProblem {
 
     public Stenger() {
-        super(2, 0, 2);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -1.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 4.0));
+        super(2, 2, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 4.0));
         name = "Stenger";
 
-        optimum[0] = new double[]{0.0, 0.0};
-        optimum[1] = new double[]{1.695415196279268, 0.718608171943623};
+        decisionSpaceOptima[0] = new double[]{0.0, 0.0};
+        decisionSpaceOptima[1] = new double[]{1.695415196279268, 0.718608171943623};
     }
 
     @Override

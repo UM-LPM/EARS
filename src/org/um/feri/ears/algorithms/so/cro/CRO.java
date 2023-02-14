@@ -3,20 +3,21 @@ package org.um.feri.ears.algorithms.so.cro;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.operators.PolynomialMutationSO;
 import org.um.feri.ears.operators.SBXCrossoverSO;
 import org.um.feri.ears.operators.TournamentSelection;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
-public class CRO extends Algorithm {
+public class CRO extends NumberAlgorithm {
 
 	@AlgorithmParameter(name = "population size")
 	private int popSize;
@@ -39,8 +40,8 @@ public class CRO extends Algorithm {
 	@AlgorithmParameter(name = "attempts to settle")
 	private int attemptsToSettle;
 
-	private Task task;
-	private TaskComparator comparator;
+	private Task<NumberSolution<Double>, DoubleProblem> task;
+	private ProblemComparator<NumberSolution<Double>> comparator;
 	private TournamentSelection selectionOperator;
 	private SBXCrossoverSO crossoverOperator = new SBXCrossoverSO(0.9, 20.0);
 	private PolynomialMutationSO mutationOperator = new PolynomialMutationSO(1.0 / 10, 20.0);
@@ -93,15 +94,15 @@ public class CRO extends Algorithm {
 	}
 
 	@Override
-	public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
-		task = taskProblem;
+	public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+		this.task = task;
 
 		List<NumberSolution<Double>> broadcastSpawners;
 		List<NumberSolution<Double>> brooders;
 		List<NumberSolution<Double>> larvae;
 		List<NumberSolution<Double>> budders;
 
-		comparator = new TaskComparator(task);
+		comparator = new ProblemComparator<>(task.problem);
 		selectionOperator = new TournamentSelection(2, comparator);
 
 		createInitialPopulation();
@@ -264,7 +265,7 @@ public class CRO extends Algorithm {
 				}
 				
 				// Replace the existing coral with the larva if it is better
-				if (task.isFirstBetter(larva, coral)) {
+				if (task.problem.isFirstBetter(larva, coral)) {
 					CoralSolution newSolution = new CoralSolution(larva);
 					newSolution.setCoralPosition(C);
 					population.add(newSolution);

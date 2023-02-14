@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,14 +13,12 @@ import static java.lang.Math.*;
  http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.Rastrigin
  http://benchmarkfcns.xyz/benchmarkfcns/rastriginfcn.html
  */
-public class Rastrigin extends Problem {
-
-    public double[][] a;
+public class Rastrigin extends DoubleProblem {
 
     public Rastrigin(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.12));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.12));
+        super(d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.12));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.12));
         name = "Rastrigin";
     }
 

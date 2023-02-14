@@ -1,15 +1,14 @@
 package org.um.feri.ears.problems;
 
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
+public class DoubleMOTask extends MOTask<Double> {
 
-    public DoubleMOTask(DoubleMOProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon) {
+    public DoubleMOTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilon) {
         super(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, epsilon);
     }
 
-    public DoubleMOTask(DoubleMOProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
+    public DoubleMOTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations) {
         super(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations, 0);
     }
 
@@ -47,19 +46,6 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
         return null;
     }
 
-    /**
-     * with no evaluations just checks
-     * if algorithm result is in interval.
-     * This is not checking constrains, just basic intervals!
-     * Delegated from Problem!
-     *
-     * @param solution vector of possible solution
-     * @return
-     */
-    public boolean areDimensionsInFeasibleInterval(ParetoSolution<Double> solution) {
-        return problem.areDimensionsInFeasibleInterval(solution);
-    }
-
     public Double[] getLowerLimit() {
         Double[] arr = new Double[problem.lowerLimit.size()];
         arr = problem.lowerLimit.toArray(arr);
@@ -81,7 +67,7 @@ public class DoubleMOTask extends MOTask<Double, DoubleMOProblem> {
     }
 
     @Override
-    public MOTask<Double, DoubleMOProblem> clone() {
+    public MOTask<Double> clone() {
         return new DoubleMOTask(this);
     }
 }

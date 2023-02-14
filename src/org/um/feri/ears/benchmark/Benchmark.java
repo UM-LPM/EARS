@@ -1,10 +1,7 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.statistic.rating_system.GameInfo;
 import org.um.feri.ears.statistic.rating_system.GameResult;
 import org.um.feri.ears.statistic.rating_system.Player;
@@ -15,9 +12,9 @@ import org.um.feri.ears.util.Util;
 
 import java.util.*;
 
-public abstract class Benchmark extends BenchmarkBase<Task, NumberSolution, Algorithm> {
+public abstract class Benchmark<S extends Solution, P extends Problem<S>, T extends TaskBase<P>, A extends Algorithm<T,S>> extends BenchmarkBase<T, S, A> {
 
-    protected abstract void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations);
+    protected abstract void addTask(P problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations);
 
     @Override
     protected void performTournament(int evaluationNumber) {
@@ -38,8 +35,8 @@ public abstract class Benchmark extends BenchmarkBase<Task, NumberSolution, Algo
             freeForAllTeams.put(player.getId(),team);
         }
 
-        AlgorithmRunResult<NumberSolution, Algorithm, Task> result1;
-        AlgorithmRunResult<NumberSolution, Algorithm, Task> result2;
+        AlgorithmRunResult<S, A, T> result1;
+        AlgorithmRunResult<S, A, T> result2;
         Team team1, team2;
         String algorithm1Id, algorithm2Id;
 
@@ -55,9 +52,9 @@ public abstract class Benchmark extends BenchmarkBase<Task, NumberSolution, Algo
             if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM)
                 evaluationNumber = n * evaluationsPerTick;
 
-            for (HashMap<Task, ArrayList<AlgorithmRunResult<NumberSolution, Algorithm, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
-                for (ArrayList<AlgorithmRunResult<NumberSolution, Algorithm, Task>> results : problemMap.values()) {
-                    Task t = results.get(0).task;
+            for (HashMap<T, ArrayList<AlgorithmRunResult<S, A, T>>> problemMap : benchmarkResults.getResultsByRun()) {
+                for (ArrayList<AlgorithmRunResult<S, A, T>> results : problemMap.values()) {
+                    T t = results.get(0).task;
 
                     AlgorithmResultComparator rc = new AlgorithmResultComparator(t, evaluationNumber);
                     results.sort(rc); // best first
@@ -145,7 +142,7 @@ public abstract class Benchmark extends BenchmarkBase<Task, NumberSolution, Algo
         tournamentResults.calculateRatings();
     }
 
-    public boolean resultEqual(AlgorithmRunResult<NumberSolution, Algorithm, Task> a, AlgorithmRunResult<NumberSolution, Algorithm, Task> b) {
+    public boolean resultEqual(AlgorithmRunResult<S, A, T> a, AlgorithmRunResult<S, A, T> b) {
         if ((a == null) && (b == null))
             return true;
         if (a == null)

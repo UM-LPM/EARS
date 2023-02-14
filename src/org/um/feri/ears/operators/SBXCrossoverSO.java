@@ -1,10 +1,11 @@
 package org.um.feri.ears.operators;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class SBXCrossoverSO implements CrossoverOperator<Double, Task, NumberSolution<Double>>{
+public class SBXCrossoverSO implements CrossoverOperator<Double, Task<NumberSolution<Double>, DoubleProblem>, NumberSolution<Double>>{
 
 
 	/**
@@ -23,7 +24,7 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task, NumberSol
 	}
 	/** 
 	 * Constructor
-	 * Create a new SBX crossover operator whit a default
+	 * Create a new SBX crossover operator with a default
 	 * index given by <code>DEFAULT_INDEX_CROSSOVER</code>
 	 */
 	public SBXCrossoverSO(Double crossoverProbability, double distributionIndex) {
@@ -33,7 +34,7 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task, NumberSol
 	}
 
 	@Override
-	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, Task task) {
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, Task<NumberSolution<Double>, DoubleProblem> task) {
 		if (parents.length != 2) {
 			return null;
 		}
@@ -44,7 +45,7 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task, NumberSol
 	}
 
 	private NumberSolution<Double>[] doCrossover(Double probability, NumberSolution<Double> parent1,
-												 NumberSolution<Double> parent2, Task task) {
+												 NumberSolution<Double> parent2, Task<NumberSolution<Double>, DoubleProblem> task) {
 		NumberSolution<Double>[] offSpring = new NumberSolution[2];
 
 		offSpring[0] = new NumberSolution<>(parent1);
@@ -74,8 +75,8 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task, NumberSol
 							y2 = valueX1;
 						}
 
-						yL = task.getLowerLimit(i);
-						yu = task.getUpperLimit(i);
+						yL = task.problem.getLowerLimit(i);
+						yu = task.problem.getUpperLimit(i);
 						rand = Util.rnd.nextDouble();
 						beta = 1.0 + (2.0 * (y1 - yL) / (y2 - y1));
 						alpha = 2.0 - java.lang.Math.pow(beta, -(distributionIndex + 1.0));

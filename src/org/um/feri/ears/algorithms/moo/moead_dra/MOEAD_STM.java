@@ -22,12 +22,12 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
-
-public class MOEAD_STM<T extends MOTask, Type extends Number> extends MOEAD_DRA<T, Type> {
+public class MOEAD_STM<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOEAD_DRA<Type, P, T> {
 
     // nadir point
     protected double[] nadirPoint;

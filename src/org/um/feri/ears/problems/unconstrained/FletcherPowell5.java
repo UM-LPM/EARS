@@ -1,22 +1,23 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.*;
 
-public class FletcherPowell5 extends Problem {
+public class FletcherPowell5 extends DoubleProblem {
 
     public double[][] a;
     public double[][] b;
     public double[] alpha;
 
     public FletcherPowell5() {
-        super(5, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -PI));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, PI));
+        super(5, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -PI));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, PI));
         name = "FletcherPowell5";
         a = new double[][]{
                 {-79, 56, -62, -9, 92, 48, -22, -34, -39, -40, -95, -69, -20, -66, -98, -66, -67, 37, -83, -45},

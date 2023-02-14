@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,11 +13,11 @@ https://www.sfu.ca/~ssurjano/sumsqu.html
 http://benchmarkfcns.xyz/benchmarkfcns/sumsquaresfcn.html
  */
 
-public class SumSquares extends Problem {
+public class SumSquares extends DoubleProblem {
     public SumSquares(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+        super(d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         name = "SumSquares";
     }
 

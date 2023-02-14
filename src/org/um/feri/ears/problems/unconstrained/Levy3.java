@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,15 +13,15 @@ import static java.lang.Math.*;
 http://infinity77.net/global_optimization/test_functions_nd_L.html#go_benchmark.Levy03
  */
 
-public class Levy3 extends Problem {
+public class Levy3 extends DoubleProblem {
 
     public Levy3() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         name = "Levy3";
 
-        Arrays.fill(optimum[0], 1);
+        Arrays.fill(decisionSpaceOptima[0], 1);
     }
 
     @Override

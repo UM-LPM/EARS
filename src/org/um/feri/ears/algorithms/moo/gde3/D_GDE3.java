@@ -7,9 +7,10 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.DoubleMOTask;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.StopCriterionException;
 
-public class D_GDE3 extends GDE3<DoubleMOTask, Double> {
+public class D_GDE3 extends GDE3<Double, DoubleProblem, DoubleMOTask> {
 	
 	public D_GDE3() {
 		this(new DifferentialEvolutionCrossover(), 100);

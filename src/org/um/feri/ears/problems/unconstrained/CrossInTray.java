@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,15 +16,16 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/44-cross-in-tray-
 http://benchmarkfcns.xyz/benchmarkfcns/crossintrayfcn.html
  */
 
-public class CrossInTray extends Problem {
+public class CrossInTray extends DoubleProblem {
 
     public CrossInTray() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -15.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 15.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -15.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 15.0));
         name = "CrossInTray";
 
-        Arrays.fill(optimum[0], 1.349406608602084);
+        Arrays.fill(decisionSpaceOptima[0], 1.349406608602084);
+        objectiveSpaceOptima[0] = -2.062611870822739;
     }
 
     @Override
@@ -32,10 +34,5 @@ public class CrossInTray extends Problem {
         fact1 = sin(x[0]) * sin(x[1]);
         fact2 = exp(abs(100 - sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI));
         return -0.0001 * pow((abs(fact1 * fact2) + 1), 0.1);
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -2.062611870822739;
     }
 }

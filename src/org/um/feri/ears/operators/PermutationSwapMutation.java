@@ -31,7 +31,7 @@ public class PermutationSwapMutation implements MutationOperator<Integer, Intege
      */
     public void doMutation(NumberSolution<Integer> solution, IntegerMOTask tb) {
         int permutationLength;
-        permutationLength = tb.getNumberOfDimensions();
+        permutationLength = tb.problem.getNumberOfDimensions();
 
         if ((permutationLength != 0) && (permutationLength != 1)) {
             if (Util.rnd.nextDouble() < mutationProbability) {

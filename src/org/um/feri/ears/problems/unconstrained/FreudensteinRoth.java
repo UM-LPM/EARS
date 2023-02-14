@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,15 +12,15 @@ import static java.lang.Math.pow;
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/55-freudenstein-roth-s-function
 http://infinity77.net/global_optimization/test_functions_nd_F.html#go_benchmark.FreudensteinRoth
  */
-public class FreudensteinRoth extends Problem {
+public class FreudensteinRoth extends DoubleProblem {
 
     public FreudensteinRoth() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         name = "FreudensteinRoth";
 
-        optimum[0] = new double[]{5.0, 4.0};
+        decisionSpaceOptima[0] = new double[]{5.0, 4.0};
 
     }
 

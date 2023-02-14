@@ -59,7 +59,7 @@ public class F05 extends CEC2005Base {
         else
             Ax(m_B, m_A, m_o);
 
-        optimum[0] = m_o;
+        decisionSpaceOptima[0] = m_o;
     }
 
     @Override

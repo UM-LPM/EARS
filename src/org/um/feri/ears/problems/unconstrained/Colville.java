@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,15 +12,15 @@ import static java.lang.Math.pow;
 https://www.sfu.ca/~ssurjano/colville.html
  */
 
-public class Colville extends Problem {
+public class Colville extends DoubleProblem {
 
     public Colville() {
-        super(4, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+        super(4, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         name = "Colville";
 
-        Arrays.fill(optimum[0], 1);
+        Arrays.fill(decisionSpaceOptima[0], 1);
     }
 
     @Override

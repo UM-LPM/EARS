@@ -1,262 +1,184 @@
 package org.um.feri.ears.problems;
 
-import java.util.Arrays;
-import java.util.List;
+public abstract class Problem<S extends Solution> {
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.util.Util;
+    protected int numberOfObjectives;
+    protected int numberOfGlobalOptima;
+    protected boolean minimize = true;
 
-import javax.annotation.CheckReturnValue;
+    protected double[] objectiveSpaceOptima;
 
-public abstract class Problem extends ProblemBase<Double> {
+    public int numberOfConstraints;
+    protected double[] maxConstraints;
+    protected double[] minConstraints;
+    protected double[] countConstraints;
+    protected double[] sumConstraints;
+    protected double[] normalizationConstraintsFactor; // used for normalization
+    protected String name;
+    protected String shortName;
+    protected String referenceSetFileName;
+    protected String benchmarkName;
+    protected String description;
 
-    protected double[][] optimum;
-    protected int numberOfGlobalOptima = 1;
+    protected String version = "1.0";
+    public static final int CONSTRAINED_TYPE_COUNT = 1;
+    public static final int CONSTRAINED_TYPE_SUM = 2;
+    public static final int CONSTRAINED_TYPE_NORMALIZATION = 3;
+    public static int constrained_type = CONSTRAINED_TYPE_SUM;
 
-    public Problem(int numberOfDimensions, int numberOfConstraints, int numberOfGlobalOptima) {
-        super(numberOfDimensions, numberOfConstraints);
-
+    public Problem(int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
         this.numberOfGlobalOptima = numberOfGlobalOptima;
+        this.numberOfObjectives = numberOfObjectives;
+        this.numberOfConstraints = numberOfConstraints;
 
-        optimum = new double[numberOfGlobalOptima][numberOfDimensions];
-        Arrays.fill(optimum[0], 0); // default global optimum is at [0, 0, ...., 0, 0]
+        objectiveSpaceOptima = new double[numberOfGlobalOptima];
     }
 
-    public Problem(int numberOfDimensions, int numberOfConstraints) {
-        this(numberOfDimensions, numberOfConstraints, 1);
+    public abstract void evaluate(S solution);
+
+    /**
+     * Makes the provided solution feasible.
+     *
+     * @param solution to be made feasible
+     */
+    public abstract void makeFeasible(S solution);
+
+    /**
+     * Checks if the provided solution is feasible
+     *
+     * @param solution to be checked
+     * @return true if the solution is feasible, false otherwise
+     */
+    public abstract boolean isFeasible(S solution);
+
+    public abstract boolean isFirstBetter(S solution1, S solution2);
+
+    public abstract S getRandomSolution();
+
+    /**
+     * Generates a random evaluated solution.
+     *
+     * @return a random evaluated solution.
+     */
+    public S getRandomEvaluatedSolution() {
+        S solution = getRandomSolution();
+        evaluate(solution);
+        return solution;
+    }
+
+    public void evaluateConstraints(S solution) {
+        if (numberOfConstraints > 0)
+            System.out.println("evaluateConstraints not overriden in subclass");
+        //TODO check if problem has constraints
     }
 
     /**
-     * Checks if the {@code value} is inside upper and lower limit for the {@code dimension}.
-     * If the {@code value} is greater than upper limit it is set to upper limit.
-     * If the {@code value} is smaller than lower limit it is set to lower limit.
-     * If the {@code value} is inside the interval, the original value is returned.
+     * Returns an array containing the global optima (minimum or maximum).
      *
-     * @param value     to be set feasible
-     * @param dimension of the interval
-     * @return feasible value
+     * @return value of global optimum.
      */
-    @CheckReturnValue
-    public double setFeasible(double value, int dimension) {
-        if (value < lowerLimit.get(dimension))
-            return lowerLimit.get(dimension);
-        if (value > upperLimit.get(dimension))
-            return upperLimit.get(dimension);
-        return value;
+    public double[] getGlobalOptima() {
+        return objectiveSpaceOptima;
+    }
+
+    public int getNumberOfObjectives() {
+        return numberOfObjectives;
     }
 
     /**
-     * Sets every variable in {@code double[] x} feasible.
+     * Allows to set different name. That can be used in report generating process.
      *
-     * @param x vector to be set to feasible
-     * @return vector containing feasible variables
+     * @param name of the problem
      */
-    public double[] setFeasible(double[] x) {
-        for (int i = 0; i < x.length; i++) {
-            x[i] = setFeasible(x[i], i);
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isMinimize() {
+        return minimize;
+    }
+
+    public String getShortName() {
+        if (shortName == null) return name;
+        return shortName;
+    }
+
+    /**
+     * Returns a filename safe string which contains the problem name, dimension, and version
+     *
+     * @return filename safe string which contains the problem name, dimension, and version
+     */
+    public String getFileNameString() {
+        String fileName = name.trim().replaceAll("[\\s_]", "-"); // replace all spaces and underscores with hyphen/dash
+        fileName = fileName.replaceAll("[\\\\/:*?\"<>'%&@,.|{}+]", ""); // remove invalid characters
+        fileName += "D-" + version;
+        return fileName;
+    }
+
+    /**
+     * @return The file name of reference set
+     */
+    public String getReferenceSetFileName() {
+        return referenceSetFileName;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+    public int getNumberOfConstraints() {
+        return numberOfConstraints;
+    }
+
+    public void setNumberOfConstraints(int numberOfConstraints) {
+        this.numberOfConstraints = numberOfConstraints;
+    }
+
+    public int countConstraintViolation(double[] constraints) {
+        int c = 0;
+        for (int i = 0; i < numberOfConstraints; i++) {
+            if (constraints[i] > 0) {
+                c++;
+            }
         }
-        return x;
+        return c;
+    }
+
+    public String getProblemInfoCSV() {
+        return "problem name:" + name + ", problem number of constraints:" + numberOfConstraints + ",problem version:" + version + ",";
+    }
+
+    public boolean isEqualToGlobalOptimum(double objectiveValue) {
+        return Math.abs(objectiveValue - getGlobalOptima()[0]) <= 0; //TODO check for each objective
     }
 
     /**
-     * Sets every variable in {@code double[] x} feasible.
+     * Important! Do not use this function for constrained problems,
+     * if fitness is not reflecting feasibility of the solution.
      *
-     * @param x vector to be set to feasible
-     * @return vector containing feasible variables
+     * @param first  first fitness
+     * @param second second fitness
+     * @return true if the first fitness value is better than the second one
      */
-    public List<Double> setFeasible(List<Double> x) {
-        for (int i = 0; i < x.size(); i++) {
-            x.set(i, setFeasible(x.get(i), i));
-        }
-        return x;
-    }
-
-    /**
-     * Checks if the {@code value} is inside upper and lower limit for the {@code dimension}.
-     *
-     * @param value     to be checked if feasible
-     * @param dimension of the interval
-     * @return true if value feasible, false otherwise
-     */
-    public boolean isFeasible(double value, int dimension) {
-        return (value >= lowerLimit.get(dimension) && value <= upperLimit.get(dimension));
-    }
-
-    /**
-     * Checks if the provided array is inside the interval given by the upper and lower limits
-     *
-     * @param x array to be checked
-     * @return true if the array is inside interval, false otherwise
-     */
-    public boolean isFeasible(double[] x) {
-        for (int i = 0; i < numberOfDimensions; i++) {
-            if (x[i] < lowerLimit.get(i) || x[i] > upperLimit.get(i))
-                return false;
-        }
-        return true;
-    }
-
-    /**
-     * Checks if the provided vector is inside the interval given by the upper and lower limits
-     *
-     * @param x vector to be checked
-     * @return true if the vector is inside interval, false otherwise
-     */
-    public boolean isFeasible(List<Double> x) {
-        return isFeasible(x.stream().mapToDouble(i -> i).toArray());
-    }
-
-    @Override
-    public String toString() {
-        return "Problem: " + name + " version: " + version + " dimensions: " + numberOfDimensions + " constraints: " + numberOfConstraints;
-    }
-
-    /**
-     * Returns a 2 dimensional vector containing all the global optima.
-     *
-     * @return 2 dimensional vector containing the global optima
-     */
-    public final double[][] getOptimalVector() {
-        return optimum;
-    }
-
-    /**
-     * Returns the number of global optima.
-     *
-     * @return number of global optima
-     */
-    public final int getNumberOfGlobalOptima() {
-        return numberOfGlobalOptima;
-    }
-
-    /**
-     * Implements the problem's fitness function.
-     *
-     * @param x variables to evaluate
-     * @return fitness value
-     */
-    public abstract double eval(double[] x);
-
-    public final double eval(List<Double> x) {
-        return eval(x.stream().mapToDouble(i -> i).toArray());
-    }
-
-    public final double eval(Double[] x) {
-        return eval(ArrayUtils.toPrimitive(x));
-    }
-
     public boolean isFirstBetter(double first, double second) {
         if (minimize)
             return first < second;
         return first > second;
     }
 
-    /**
-     * Compares fitness values and constraints
-     *
-     * @param first
-     * @param firstEval
-     * @param second
-     * @param secondEval
-     * @return
-     */
-    public boolean isFirstBetter(List<Double> first, double firstEval, List<Double> second, double secondEval) {
-        double firstCons = evaluateConstraintsViolation(first);
-        double secondCons = evaluateConstraintsViolation(second);
-        if (firstCons == 0) {
-            if (secondCons == 0) {
-                if (minimize)
-                    return firstEval < secondEval;
-                return firstEval > secondEval;
-            }
-            return true; // second is not feasible
-        }
-        if (secondCons == 0) {
-            return false;
-        }
-        return firstCons < secondCons; // less constraints is better
+    public String getName() {
+        return name;
     }
 
-    /**
-     * Returns the global minimum or maximum.
-     *
-     * @return value of global optimum.
-     */
-    public double getGlobalOptimum() {
-        return 0;
+    public String getBenchmarkName() {
+        return benchmarkName;
     }
 
-    /**
-     * Override this method if the problem has constraints.
-     *
-     * @param x variables for which the constraints will be evaluated
-     * @return computed constraints
-     */
-    public double[] evaluateConstrains(double[] x) {
-        return new double[0];
-    }
-
-    public final double[] evaluateConstrains(List<Double> x) {
-        return evaluateConstrains(x.stream().mapToDouble(i -> i).toArray());
-    }
-
-    public final double[] evaluateConstrains(Double[] x) {
-        return evaluateConstrains(ArrayUtils.toPrimitive(x));
-    }
-
-    /**
-     * Evaluates the constraints violation based on the constrain type
-     * @param x - solution
-     * @return
-     */
-    public double evaluateConstraintsViolation(List<Double> x) {
-        if (numberOfConstraints == 0)
-            return 0;
-        //TODO constraints are reevaluated each time
-        double[] g = evaluateConstrains(x); //calculate for every constrain (problem depended)
-        double d = 0;
-        for (int j = 0; j < numberOfConstraints; j++) {
-            if (g[j] > 0) {
-                if (constrained_type == CONSTRAINED_TYPE_COUNT) d++;
-                if (constrained_type == CONSTRAINED_TYPE_SUM) d += g[j];
-                if (constrained_type == CONSTRAINED_TYPE_NORMALIZATION)
-                    d += g[j] * normalization_constraints_factor[j];// *(count_constrains[j]+1);
-            }
-        }
-        return d;
-    }
-
-    /**
-     * Generates random feasible variables
-     *
-     * @return random variables
-     */
-    public double[] getRandomVariables() {
-        double[] var = new double[numberOfDimensions];
-        for (int j = 0; j < numberOfDimensions; j++) {
-            var[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
-        }
-        return var;
-    }
-
-    /**
-     * Generates a random evaluated solution.
-     *
-     * @return evaluated random solution
-     */
-    public NumberSolution getRandomEvaluatedSolution() {
-        List<Double> var = Arrays.asList(ArrayUtils.toObject(getRandomVariables()));
-        return new NumberSolution(var, eval(var), evaluateConstrains(var));
-    }
-
-    /**
-     * Generates a random unevaluated solution.
-     *
-     * @return randomly generated unevaluated solution
-     */
-    public NumberSolution getRandomSolution() {
-        List<Double> var = Arrays.asList(ArrayUtils.toObject(getRandomVariables()));
-        NumberSolution newSolution = new NumberSolution(numberOfObjectives, var);
-        return newSolution;
+    public void setBenchmarkName(String benchmarkName) {
+        this.benchmarkName = benchmarkName;
     }
 }

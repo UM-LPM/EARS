@@ -3,40 +3,40 @@ package org.um.feri.ears.problems;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public abstract class TaskBase<T extends ProblemBase<?>> {
+public abstract class TaskBase<P extends Problem<?>> {
 
     protected StopCriterion stopCriterion;
     protected int maxEvaluations; // for Stop criterion
     protected int numberOfEvaluations = 0; // for Stop criterion
 	protected int maxIterations;
 	protected int numberOfIterations = 0;
-	protected long allowedCPUTime; // nanoseconds
+	protected long allowedCPUTimeNs;
 	protected long evaluationTime = 0;
 	protected long timerStart;
 	protected double epsilonForGlobal = 0; // epsilon representing the error margin difference when comparing a solution to the global optimum
 	protected boolean isStop;
 	protected boolean isGlobal;
 	protected int precisionOfRealNumbersInDecimalPlaces; //used only for discreet problem presentation (bit presentation in GA)
-	protected T problem;
+	public P problem;
 	private int resetCount;
     protected int maxTrialsBeforeStagnation = 10000;
     protected int stagnationTrialCounter = 0;
 
     //protected StringBuilder ancestorSB;
-    protected ArrayList<SolutionBase> ancestors;
+    protected ArrayList<Solution> ancestors;
     protected boolean isAncestorLoggingEnabled = false;
     protected ArrayList<EvaluationStorage.Evaluation> evaluationHistory;
     protected boolean isEvaluationHistoryEnabled = false;
     protected int storeEveryNthEvaluation = 10000;
 
-    public TaskBase (TaskBase<T> task) {
+    public TaskBase (TaskBase<P> task) {
 
         stopCriterion = task.stopCriterion;
         maxEvaluations = task.maxEvaluations;
         numberOfEvaluations = task.numberOfEvaluations;
         maxIterations = task.maxIterations;
         numberOfIterations = task.numberOfIterations;
-        allowedCPUTime = task.allowedCPUTime;
+        allowedCPUTimeNs = task.allowedCPUTimeNs;
         evaluationTime = task.evaluationTime;
         timerStart = task.timerStart;
         epsilonForGlobal = task.epsilonForGlobal;
@@ -55,7 +55,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
      *
      * @return deep copy of the task object
      */
-    abstract public TaskBase<T> clone();
+    abstract public TaskBase<P> clone();
 
     /**
      * Has the global optimum been reached.
@@ -130,14 +130,6 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
         return epsilonForGlobal;
     }
 
-    public int getNumberOfDimensions() {
-        return problem.getNumberOfDimensions();
-    }
-
-    public int getNumberOfConstrains() {
-        return problem.numberOfConstraints;
-    }
-
     public void enableAncestorLogging() {
         isAncestorLoggingEnabled = true;
         if (ancestors == null)
@@ -174,7 +166,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
         this.storeEveryNthEvaluation = storeEveryNthEvaluation;
     }
 
-    public ArrayList<SolutionBase> getAncestors() {
+    public ArrayList<Solution> getAncestors() {
         return ancestors;
     }
 
@@ -195,8 +187,8 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
         return maxIterations;
     }
 
-    public long getAllowedCPUTime() {
-        return allowedCPUTime;
+    public long getAllowedCPUTimeNs() {
+        return allowedCPUTimeNs;
     }
 
     public int getNumberOfEvaluations() {
@@ -208,7 +200,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
     }
 
     public long getAvailableCPUTime() {
-        return allowedCPUTime - System.nanoTime();
+        return allowedCPUTimeNs - System.nanoTime();
     }
 
     public int getMaxTrialsBeforeStagnation() {
@@ -237,7 +229,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
             startTimer();
         }
 
-        if (System.nanoTime() - timerStart > allowedCPUTime) {
+        if (System.nanoTime() - timerStart > allowedCPUTimeNs) {
             isStop = true;
             return true;
         }
@@ -294,7 +286,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
             return "Max iterations = " + getMaxIterations();
         }
         if (stopCriterion == StopCriterion.CPU_TIME) {
-            return "CPU time = " + TimeUnit.NANOSECONDS.toMillis(getAllowedCPUTime()) + " ms";
+            return "CPU time = " + TimeUnit.NANOSECONDS.toMillis(getAllowedCPUTimeNs()) + " ms";
         }
         if (stopCriterion == StopCriterion.STAGNATION) {
             return "Stagnation trials = " + stagnationTrialCounter;
@@ -329,7 +321,7 @@ public abstract class TaskBase<T extends ProblemBase<?>> {
                     + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                     + precisionOfRealNumbersInDecimalPlaces;
         } else if (stopCriterion == StopCriterion.CPU_TIME) {
-            return "Task = " + problem + " stopCriterion=" + stopCriterion + ", allowedCPUTime=" + allowedCPUTime + ", epsilon="
+            return "Task = " + problem + " stopCriterion=" + stopCriterion + ", allowedCPUTime=" + allowedCPUTimeNs + ", epsilon="
                     + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
                     + precisionOfRealNumbersInDecimalPlaces;
         } else

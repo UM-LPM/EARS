@@ -15,6 +15,7 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
@@ -31,7 +32,7 @@ import org.um.feri.ears.util.Ranking;
  * "A Study of Convergence Speed in Multi-Objective Metaheuristics."
  * To be presented in: PPSN'08. Dortmund. September 2008.
  */
-public class NSGAII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class NSGAII<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
 
     int populationSize = 100;
 

@@ -12,15 +12,15 @@ import java.util.List;
 
 //import javax.imageio.ImageIO; OLD
 
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.data.AlgorithmStatistics;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.MOSolutionComparatorForGraphing;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
-import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.Solution;
 
 import com.panayotis.gnuplot.JavaPlot;
 import com.panayotis.gnuplot.plot.DataSetPlot;
@@ -134,7 +134,7 @@ public class GraphEARSStatic extends GraphEARS
 			{
 				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
 			}
-			else if (data[0].algorithm instanceof Algorithm)
+			else if (data[0].algorithm instanceof NumberAlgorithm)
 			{
 				//tmp = data[0].algorithm.getID()+" solving "+data[0].problem.name+" it"+data[0].iteration+".png";
 				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".png";
@@ -146,7 +146,7 @@ public class GraphEARSStatic extends GraphEARS
 	public void setData(RecordedData[] data)
 	{
 		this.data = data;
-		if (data[0].algorithm instanceof Algorithm)
+		if (data[0].algorithm instanceof NumberAlgorithm)
 		{
 			this.statistics = new AlgorithmStatistics(data, evalsPerStep);
 			double opt = 0;
@@ -220,7 +220,7 @@ public class GraphEARSStatic extends GraphEARS
 			{
 				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
 			}
-			else if (data[0].algorithm instanceof Algorithm)
+			else if (data[0].algorithm instanceof NumberAlgorithm)
 			{
 				//tmp = data[0].algorithm.getID()+" solving "+data[0].problem.name+" it"+data[0].iteration+".png";
 				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".png";
@@ -1116,7 +1116,7 @@ public class GraphEARSStatic extends GraphEARS
 		double tab2[][];
 	    tab2 = new double[data[0].paretoFront.length][2];
 	    int j2 = 0;
-	    for (SolutionBase sol : data[0].paretoFront)
+	    for (Solution sol : data[0].paretoFront)
 	    {
 	    	tab2[j2][0] = ((NumberSolution)sol).getObjective(axisX);
 	        tab2[j2][1] = ((NumberSolution)sol).getObjective(axisY);
@@ -1182,7 +1182,7 @@ public class GraphEARSStatic extends GraphEARS
 	        }*/
 	        double[] prev = new double[]{-Math.pow(10,300), Math.pow(10,300)};							// this.minX, this.maxY can't be handled by JavaPlot / gnuPlot
 	        ArrayList<double[]> tab = new ArrayList<double[]>();
-	        for (SolutionBase sol : pf)
+	        for (Solution sol : pf)
 	        {
 	        	tab.add(new double[]{((NumberSolution)sol).getObjective(axisX), prev[1]});
 	        	prev = new double[]{((NumberSolution)sol).getObjective(axisX), ((NumberSolution)sol).getObjective(axisY)};
@@ -1207,7 +1207,7 @@ public class GraphEARSStatic extends GraphEARS
 	@SuppressWarnings("rawtypes")
 	protected long GetPopSize(RecordedData[] data)
 	{
-		AlgorithmBase alg = data[0].algorithm;
+		Algorithm alg = data[0].algorithm;
 		String pop_size_string = null;
 		popSize = GraphEARSStatic.DEFAULT_EVALUATIONS_PER_STEP;
 		

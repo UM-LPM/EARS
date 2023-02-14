@@ -1,11 +1,16 @@
 package org.um.feri.ears.problems.gp;
 
+import org.um.feri.ears.algorithms.NumberAlgorithm;
+import org.um.feri.ears.algorithms.so.abc.ABC;
+import org.um.feri.ears.algorithms.so.jade.JADE;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
+import org.um.feri.ears.benchmark.RPUOed30Benchmark;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -34,17 +39,30 @@ public class Main {
         //Algorithm execution
         //ps.setEval(Double.MAX_VALUE);
 
-        //Task<Double> symbolicRegression = new Task(sgp, StopCriterion.EVALUATIONS, 5000, 0, 0);
+        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp, StopCriterion.EVALUATIONS, 5000, 0, 0);
 
-        GPAlgorithm alg = new DefaultGPAlgorithm();
-
-        /*try {
+        //GPAlgorithm alg = new DefaultGPAlgorithm();
+        //RandomWalkGPAlgorithm alg = new RandomWalkGPAlgorithm();
+                /*try {
             ProgramSolution<Double> sol = alg.execute(symbolicRegression);
             System.out.println("Best fitness: " + sol.getEval());
             sol.getProgram().displayTree("TestBTree");
         } catch (StopCriterionException e) {
             e.printStackTrace();
         }*/
+
+        ArrayList<GPAlgorithm> algorithms = new ArrayList<>();
+        algorithms.add(new RandomWalkGPAlgorithm("1"));
+        algorithms.add(new RandomWalkGPAlgorithm("2"));
+
+        SymbolicRegressionBenchmark benchmark = new SymbolicRegressionBenchmark();
+
+        benchmark.addAlgorithms(algorithms);  // register the algorithms in the benchmark
+
+        benchmark.run(5); //start the tournament with 10 runs/repetitions
+
+
+
 
         /*final Op<Double> myop = MathOp.ADD;
 

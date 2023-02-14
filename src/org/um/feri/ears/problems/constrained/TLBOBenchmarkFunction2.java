@@ -3,8 +3,7 @@ package org.um.feri.ears.problems.constrained;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
 
 
 /**
@@ -50,14 +49,11 @@ import org.um.feri.ears.problems.Problem;
 *          POSSIBILITY OF SUCH DAMAGE.
 * 
 */
-public class TLBOBenchmarkFunction2 extends Problem {
+public class TLBOBenchmarkFunction2 extends DoubleProblem {
 	// http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page2613.htm
-	public final static double best_x[] = {0.31622776601683794, 0.31622776601683794,0.31622776601683794,
-		0.31622776601683794, 0.31622776601683794, 0.31622776601683794, 0.31622776601683794,0.31622776601683794, 0.31622776601683794,
-		0.31622776601683794 };
 
 	public TLBOBenchmarkFunction2() {
-		super(10,1);
+		super(10, 1, 1, 1);
 		minimize = false;
 		
 		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
@@ -65,27 +61,27 @@ public class TLBOBenchmarkFunction2 extends Problem {
 		Collections.fill(lowerLimit, 0.0);
 		Collections.fill(upperLimit, 1.0);
 		
-		max_constraints = new Double[numberOfConstraints];
-		min_constraints = new Double[numberOfConstraints];
-		count_constraints  = new Double[numberOfConstraints];
-		sum_constraints  = new Double[numberOfConstraints];
-		normalization_constraints_factor = new Double[numberOfConstraints];
+		maxConstraints = new double[numberOfConstraints];
+		minConstraints = new double[numberOfConstraints];
+		countConstraints = new double[numberOfConstraints];
+		sumConstraints = new double[numberOfConstraints];
+		normalizationConstraintsFactor = new double[numberOfConstraints];
 		// System.out.println(Arrays.toString(interval)+"\n"+Arrays.toString(intervalL));
 		name = "TLBOBenchmarkFunction2 cec-g03";
-	
+		decisionSpaceOptima[0] = new double[]{0.31622776601683794, 0.31622776601683794,0.31622776601683794,
+				0.31622776601683794, 0.31622776601683794, 0.31622776601683794, 0.31622776601683794,0.31622776601683794, 0.31622776601683794,
+				0.31622776601683794};
+		objectiveSpaceOptima[0] = 1.0;
 	}
 
-
-
-	public double eval(double x[]) {
+	public double eval(double[] x) {
 		double t1 = 1;
 		for (int i = 0; i < numberOfDimensions; i++)
 			t1 *= x[i];
-		double v = Math.pow(Math.sqrt(numberOfDimensions), numberOfDimensions) * t1;
-		return v;
+		return Math.pow(Math.sqrt(numberOfDimensions), numberOfDimensions) * t1;
 	}
 	
-	public double[] evaluateConstrains(double x[]) {
+	public double[] evaluateConstrains(double[] x) {
 		double[] g = new double[numberOfConstraints];
 		double d = -1;
 		for (int i = 0; i < numberOfDimensions; i++) {
@@ -104,7 +100,7 @@ public class TLBOBenchmarkFunction2 extends Problem {
 	 * i<dim; i++) { d+=x[i]*x[i]; } if (Math.abs(d)>0.001) return Math.abs(d);
 	 * return 0; }
 	 */
-	public String constrainsOKtoString(double x[]) {
+	public String constrainsOKtoString(double[] x) {
 		// h1
 		double d = -1.;
 		for (int i = 0; i < numberOfDimensions; i++) {
@@ -113,9 +109,5 @@ public class TLBOBenchmarkFunction2 extends Problem {
 		if (Math.abs(d) >= 0.000001)
 			return "1 " + d;
 		return "0 OK";
-	}
-
-	public double getGlobalOptimum() {
-		return 1;
 	}
 }

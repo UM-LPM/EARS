@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.data.GraphDataSet;
@@ -132,7 +132,7 @@ public class MOGraphSet
 		this.graphs = new ArrayList<GraphEARS>();
 		for (int i=0; i<allData.length; i++)
 		{
-			if (allData[i][0].algorithm instanceof Algorithm)
+			if (allData[i][0].algorithm instanceof NumberAlgorithm)
 			{
 				if (type == 0 || type == 1)
 					graphs.add(new GraphEARSStatic(allData[i]));

@@ -2,12 +2,9 @@ package org.um.feri.ears.util;
 
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -393,5 +390,10 @@ public class Util {
 
     public static int[] toIntArray(List<Integer> list) {
         return list.stream().mapToInt(i -> i).toArray();
+    }
+
+    public static ArrayList<Double> toDoubleArrayList(double[] newColony) {
+
+        return Arrays.stream(newColony).boxed().collect(Collectors.toCollection(ArrayList::new));
     }
 }

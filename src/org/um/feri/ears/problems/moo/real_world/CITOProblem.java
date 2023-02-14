@@ -3,10 +3,10 @@ package org.um.feri.ears.problems.moo.real_world;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.um.feri.ears.problems.IntegerProblem;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.moo.IntegerMOProblem;
 
-public class CITOProblem extends IntegerMOProblem{
+public class CITOProblem extends IntegerProblem {
 
 	private int numberOfUnits;
 	private ArrayList<Integer> aspects;
@@ -28,14 +28,13 @@ public class CITOProblem extends IntegerMOProblem{
 		OO_J_HOT_DRAW,
 		OO_MY_BATIS;
 	}
-
 	
 	public CITOProblem(String softwareName) {
 		this(new CITOReader(softwareName));
 	}
 
 	public CITOProblem(CITOReader problemReader) {
-		super(problemReader.getNumberOfUnits(), 0, 2);
+		super(problemReader.getNumberOfUnits(), 1, 2, 0);
 		this.numberOfUnits = problemReader.getNumberOfUnits();
 		this.aspects = problemReader.getAspects();
 		this.constraintMatrix = problemReader.getConstraintMatrix();
@@ -46,11 +45,11 @@ public class CITOProblem extends IntegerMOProblem{
 		this.methodParamTypeMatrix = problemReader.getMethodParamTypeMatrix();
 		this.methodReturnTypeMatrix = problemReader.getMethodReturnTypeMatrix();
 
-		fileName = "CITO_"+problemReader.getSoftwareName();
+		referenceSetFileName = "CITO_"+problemReader.getSoftwareName();
 		name = "CITO_"+problemReader.getSoftwareName();
 		
-		upperLimit = new ArrayList<Integer>(numberOfDimensions);
-		lowerLimit = new ArrayList<Integer>(numberOfDimensions);
+		upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 
 		for (int i = 0; i < numberOfDimensions; i++) {
 			lowerLimit.add(0);
@@ -59,8 +58,13 @@ public class CITOProblem extends IntegerMOProblem{
 	}
 
 	@Override
-	public double[] evaluate(Integer ds[]){
-		this.treatConstraintsAndRepairSolution(ds, constraintMatrix);
+	public void evaluate(NumberSolution<Integer> solution) {
+		double[] obj = evaluate(solution.getVariables());
+		solution.setObjectives(obj);
+	}
+
+	public double[] evaluate(Integer[] ds){
+		treatConstraintsAndRepairSolution(ds, constraintMatrix);
 
 		double fitness0 = 0.0;
 		double fitness1 = 0.0;
@@ -95,7 +99,7 @@ public class CITOProblem extends IntegerMOProblem{
 				}
 			}
 		}
-		double obj[] = new double[numberOfObjectives];
+		double[] obj = new double[numberOfObjectives];
 		obj[0] = fitness0;
 		obj[1] = fitness1;
 		
@@ -111,7 +115,7 @@ public class CITOProblem extends IntegerMOProblem{
 		return numberOfUnits;
 	}
 
-	public Integer[] treatConstraintsAndRepairSolution(Integer[] ds, int constraints[][]) {
+	public Integer[] treatConstraintsAndRepairSolution(Integer[] ds, int[][] constraints) {
 		int[] array = new int[ds.length];
 		int size = array.length;
 
@@ -120,7 +124,7 @@ public class CITOProblem extends IntegerMOProblem{
 			array[i] = variable;
 		}
 
-		ArrayList subVector = new ArrayList();
+		ArrayList<Integer> subVector = new ArrayList<>();
 
 		for (int indexSolution = 0; indexSolution < size; indexSolution++) {
 			//takes the class id to find the restrictions
@@ -153,7 +157,7 @@ public class CITOProblem extends IntegerMOProblem{
 		return ds;
 	}
 
-	public int[] putEnd(int haystack[], int index) {
+	public int[] putEnd(int[] haystack, int index) {
 		int temp = haystack[index];
 
 		for (int i = index; i < haystack.length - 1; i++) {
@@ -163,11 +167,6 @@ public class CITOProblem extends IntegerMOProblem{
 		haystack[haystack.length - 1] = temp;
 
 		return haystack;
-	}
-
-	@Override
-	public void evaluateConstraints(NumberSolution<Integer> solution) {
-
 	}
 
 }

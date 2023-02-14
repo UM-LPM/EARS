@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
@@ -13,16 +14,16 @@ http://infinity77.net/global_optimization/test_functions_nd_X.html#go_benchmark.
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Stochastic
 http://benchmarkfcns.xyz/benchmarkfcns/xinsheyangn1fcn.html
  */
-public class XinSheYang1 extends Problem {
+public class XinSheYang1 extends DoubleProblem {
 
     public XinSheYang1() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
         name = "XinSheYang1"; // also known as Stochastic Function
 
         for (int i = 0; i < numberOfDimensions; i++) {
-            optimum[0][i] = 1.0 / (i + 1);
+            decisionSpaceOptima[0][i] = 1.0 / (i + 1);
         }
     }
 

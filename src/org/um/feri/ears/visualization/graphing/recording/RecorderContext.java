@@ -2,9 +2,9 @@ package org.um.feri.ears.visualization.graphing.recording;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.visualization.graphing.data.*;
-import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
@@ -14,7 +14,7 @@ public class RecorderContext
 {
 	//public ArrayList<RecordedData> records;
 	public ArrayList<RecordedCombination> combinations;
-	public AlgorithmBase algorithm;
+	public Algorithm algorithm;
 	public TaskBase task;
 	public String problemName;
 	public long iteration;
@@ -32,7 +32,7 @@ public class RecorderContext
 	
 	
 	// Set current context:
-	public void SetCurrentContext(AlgorithmBase alg, TaskBase task)
+	public void SetCurrentContext(Algorithm alg, TaskBase task)
 	{
 		// Basic data:
 		this.algorithm = alg;
@@ -74,7 +74,7 @@ public class RecorderContext
 	}
 	
 	
-	public void AddRecord(SolutionBase sol, String problemName)
+	public void AddRecord(Solution sol, String problemName)
 	{
 		currentCombination.AddRecord(sol, problemName);
 	}

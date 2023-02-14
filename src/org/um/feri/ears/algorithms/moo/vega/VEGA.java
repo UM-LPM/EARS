@@ -25,6 +25,7 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.VEGASelection;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
@@ -51,7 +52,7 @@ import org.um.feri.ears.util.Util;
  *       Conference on Genetic Algorithms, pp. 93-100.
  * </ol>
  */
-public class VEGA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class VEGA<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
 
     int populationSize;
     ParetoSolution<Type> population;

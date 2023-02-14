@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,12 +10,12 @@ import java.util.Collections;
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/182-mishra-s-function-no-11-or-amgm-function
 http://infinity77.net/global_optimization/test_functions_nd_A.html#go_benchmark.AMGM
  */
-public class Mishra11 extends Problem {
+public class Mishra11 extends DoubleProblem {
 
     public Mishra11() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         name = "Mishra11"; // also known as AMGM - Arithmetic Mean-Geometric Mean
 
         // optimum is at x1 = x2 = ... =xn where all x are non-negative

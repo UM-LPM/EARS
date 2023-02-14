@@ -2,7 +2,7 @@ package org.um.feri.ears.examples;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.woa.WOA;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.NumberSolution;
@@ -20,12 +20,12 @@ public class EvaluateConstrainedProblemsExample {
 		System.out.println("Done");
 	}
 	
-	public static ArrayList<NumberSolution<Double>> TestWOAWithProblem(Problem prob, int repetitions) {
+	public static ArrayList<NumberSolution<Double>> TestWOAWithProblem(DoubleProblem prob, int repetitions) {
 		ArrayList<NumberSolution<Double>> listOfBests = new ArrayList<>();
 		for(int i = 0; i < repetitions; i++) {
 			Task problem = new Task(prob, StopCriterion.EVALUATIONS, 10000, 0, 0);
 			int populationSize = 30;
-			Algorithm woa = new WOA(populationSize, false);
+			NumberAlgorithm woa = new WOA(populationSize, false);
 			try {
 				NumberSolution<Double> best = woa.execute(problem);
 				listOfBests.add(best);

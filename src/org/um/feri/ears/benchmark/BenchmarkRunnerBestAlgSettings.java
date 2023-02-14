@@ -1,7 +1,7 @@
 package org.um.feri.ears.benchmark;
 
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.statistic.rating_system.Player;
@@ -12,7 +12,7 @@ import java.util.List;
 public class BenchmarkRunnerBestAlgSettings extends BenchmarkRunner {
     public static final int NUMBER_OF_RUNS = 3;
     public static final int MAX_PARAM_TEST = 8;
-    private ArrayList<Algorithm> algorithmsWithBestSettings;
+    private ArrayList<NumberAlgorithm> algorithmsWithBestSettings;
 
     public BenchmarkRunnerBestAlgSettings(boolean printDebug, boolean printSingleRunDuration, Benchmark banchmark) {
         super(printDebug, printSingleRunDuration, banchmark);
@@ -29,7 +29,7 @@ public class BenchmarkRunnerBestAlgSettings extends BenchmarkRunner {
     }
 
     @Override
-    public void addAlgorithm(Algorithm algorithm) {
+    public void addAlgorithm(NumberAlgorithm algorithm) {
 
         GraphDataRecorder.enabled = false;
 
@@ -37,19 +37,19 @@ public class BenchmarkRunnerBestAlgSettings extends BenchmarkRunner {
         long t = System.currentTimeMillis();
         BenchmarkRunner findBestSettings = new BenchmarkRunner(false, false, benchmark);
         //System.out.println("Add:"+algorithm.getID());
-        List<AlgorithmBase> allSettings = algorithm.getAlgorithmParameterTest(benchmark.dimension, 8);
+        List<Algorithm> allSettings = algorithm.getAlgorithmParameterTest(benchmark.dimension, 8);
         //allSettings.add(algorithm);
         if (allSettings.size() == 0) {
             algorithmsWithBestSettings.add(algorithm);
             return;
         }
         if (allSettings.size() == 1) {
-            algorithmsWithBestSettings.add((Algorithm) allSettings.get(0));
+            algorithmsWithBestSettings.add((NumberAlgorithm) allSettings.get(0));
             return;
         }
-        Algorithm bestAlgorithm;
+        NumberAlgorithm bestAlgorithm;
         for (int k = 0; k < allSettings.size(); k++) {
-            bestAlgorithm = (Algorithm) allSettings.get(k);
+            bestAlgorithm = (NumberAlgorithm) allSettings.get(k);
             bestAlgorithm.setTempAlgorithmInfo(new AlgorithmInfo(bestAlgorithm.getId()+ " " + k,"" + k, ""));
             findBestSettings.addAlgorithm(bestAlgorithm);
         }

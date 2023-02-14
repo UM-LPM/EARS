@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class NumberSolution<Type extends Number> extends SolutionBase {
+public class NumberSolution<Type extends Number> extends Solution {
 
-    protected List<Type> variables;
+    protected ArrayList<Type> variables;
 
     /*
         Constructor for single-objective optimization
@@ -29,6 +29,14 @@ public class NumberSolution<Type extends Number> extends SolutionBase {
         variables = new ArrayList<>(x);
     }
 
+    /*
+        Constructor for single-objective optimization
+    */
+    public NumberSolution(List<Type> x) {
+        super(1);
+        variables = new ArrayList<>(x);
+    }
+
     public NumberSolution(List<Type> x, double[] objectives) {
         super(objectives.length);
         System.arraycopy(objectives, 0, this.objectives, 0, objectives.length);
@@ -44,16 +52,18 @@ public class NumberSolution<Type extends Number> extends SolutionBase {
     public NumberSolution(int numberOfObjectives) {
         super(numberOfObjectives);
     }
+
     public NumberSolution(NumberSolution<Type> s) {
         super(s);
         variables = new ArrayList<>(s.variables);
     }
 
+    @Override
     public NumberSolution<Type> copy() {
         return new NumberSolution<>(this);
     }
 
-    public List<Type> getVariables() {
+    public ArrayList<Type> getVariables() {
         return variables;
     }
 
@@ -65,7 +75,7 @@ public class NumberSolution<Type extends Number> extends SolutionBase {
         variables.set(i, c);
     }
 
-    public void setVariables(List<Type> var) {
+    public void setVariables(ArrayList<Type> var) {
         this.variables = var;
     }
 

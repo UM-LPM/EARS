@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,15 +13,15 @@ import static java.lang.Math.pow;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_W.html#go_benchmark.Whitley
  */
-public class Whitley extends Problem {
+public class Whitley extends DoubleProblem {
 
     public Whitley() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.24));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.24));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.24));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.24));
         name = "Whitley";
 
-        Arrays.fill(optimum[0], 1.0);
+        Arrays.fill(decisionSpaceOptima[0], 1.0);
     }
 
     @Override

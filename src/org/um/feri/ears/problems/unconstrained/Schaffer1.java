@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,11 +14,11 @@ http://benchmarkfcns.xyz/benchmarkfcns/schaffern1fcn.html
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Schaffer01
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/96-modified-schaffer-s-function-no-1
  */
-public class Schaffer1 extends Problem {
+public class Schaffer1 extends DoubleProblem {
     public Schaffer1() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
         name = "Schaffer1";
     }
 

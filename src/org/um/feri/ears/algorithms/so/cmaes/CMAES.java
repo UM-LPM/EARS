@@ -19,19 +19,20 @@ package org.um.feri.ears.algorithms.so.cmaes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 
-public class CMAES extends Algorithm {
+public class CMAES extends NumberAlgorithm {
 
 	private int popSize;
-	private Task task;
+	private Task<NumberSolution<Double>, DoubleProblem> task;
 	private int N;
 
 	private NumberSolution<Double> best;
@@ -179,12 +180,12 @@ public class CMAES extends Algorithm {
 				xmean = new double[N];
 				for (i = 0; i < N; ++i) { /* TODO: reconsider this algorithm to set X0 */
 					double offset = sigma*diagD[i];
-					double range = (task.getUpperLimit(i) - task.getLowerLimit(i) - 2*sigma*diagD[i]);
-					if (offset > 0.4 * (task.getUpperLimit(i) - task.getLowerLimit(i))) {
-						offset = 0.4 * (task.getUpperLimit(i) - task.getLowerLimit(i));
-						range = 0.2 * (task.getUpperLimit(i) - task.getLowerLimit(i));
+					double range = (task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i) - 2*sigma*diagD[i]);
+					if (offset > 0.4 * (task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i))) {
+						offset = 0.4 * (task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i));
+						range = 0.2 * (task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i));
 					}
-					xmean[i] = task.getLowerLimit(i) + offset + Util.nextDouble() * range;
+					xmean[i] = task.problem.getLowerLimit(i) + offset + Util.nextDouble() * range;
 				}
 			} 
 			/*else {
@@ -236,10 +237,10 @@ public class CMAES extends Algorithm {
 		/* Some consistency check */
 		for (i = 0; i < N; ++i) {
 			if (typicalX != null) {
-				if (task.getLowerLimit(i) > typicalX[i])
-					System.out.println("lower bound '" + task.getLowerLimit(i) + "'is greater than typicalX" + typicalX[i]);
-				if (task.getUpperLimit(i) < typicalX[i])
-					System.out.println("upper bound '" + task.getUpperLimit(i) + "' is smaller than typicalX " + typicalX[i]);
+				if (task.problem.getLowerLimit(i) > typicalX[i])
+					System.out.println("lower bound '" + task.problem.getLowerLimit(i) + "'is greater than typicalX" + typicalX[i]);
+				if (task.problem.getUpperLimit(i) < typicalX[i])
+					System.out.println("upper bound '" + task.problem.getUpperLimit(i) + "' is smaller than typicalX " + typicalX[i]);
 			}
 		}
 		test();
@@ -251,17 +252,16 @@ public class CMAES extends Algorithm {
 
 		state = 0;
 	}
-
 	@Override
-	public NumberSolution execute(Task taskProblem) throws StopCriterionException {
+	public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
 		
-		task = taskProblem;
+		this.task = task;
 		timings = new Timing();
 		options = new CMAOptions();
 		sp = new CMAParameters();
 
 		sp.setPopulationSize(popSize);
-		N = task.getNumberOfDimensions();
+		N = task.problem.getNumberOfDimensions();
 		xmean = new double[]{0.05}; //setInitialX in each dimension, also setTypicalX can be used
 		startsigma = new double[]{0.2}; // also a mandatory setting 
 		setInitialX(new double[]{0.5});
@@ -283,7 +283,7 @@ public class CMAES extends Algorithm {
 				// a simple way to handle constraints that define a convex feasible domain  
 				// (like box constraints, i.e. variable boundaries) via "blind re-sampling" 
 				// assumes that the feasible domain is convex, the optimum is  
-				while (!task.isFeasible(arx[i]))     //   not located on (or very close to) the domain boundary,  
+				while (!task.problem.isFeasible(arx[i]))     //   not located on (or very close to) the domain boundary,
 					resampleSingle(i);    //   initialX is feasible and initialStandardDeviations are  
 				//   sufficiently small to prevent quasi-infinite looping here
 				// compute fitness/objective value
@@ -341,15 +341,15 @@ public class CMAES extends Algorithm {
 		double psxps;
 
 		/* sort function values */
-		TaskComparator s = new TaskComparator(task);
+		ProblemComparator<NumberSolution<Double>> s = new ProblemComparator<>(task.problem);
 		Arrays.sort(arx, s);
 
 		/* save/update bestever-value */
 		if(best == null)
-			best = new NumberSolution<Double>(arx[0]);
+			best = new NumberSolution<>(arx[0]);
 		
-		if(task.isFirstBetter(arx[0], best))
-			best = new NumberSolution<Double>(arx[0]);
+		if(task.problem.isFirstBetter(arx[0], best))
+			best = new NumberSolution<>(arx[0]);
 
 
 		/* re-calculate diagonal flag */

@@ -2,16 +2,17 @@ package org.um.feri.ears.algorithms.so.abc;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
-public class ABC extends Algorithm {
+public class ABC extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize; // The colony size (employed bees + onlooker bees)
@@ -19,7 +20,7 @@ public class ABC extends Algorithm {
     @AlgorithmParameter(description = "maximum cycle number")
     private int limit;
 
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
     private ABCSolution best;
     protected ArrayList<ABCSolution> population;
 
@@ -46,9 +47,9 @@ public class ABC extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
-        limit = (popSize * task.getNumberOfDimensions()) / 2;
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+        this.task = task;
+        limit = (popSize * task.problem.getNumberOfDimensions()) / 2;
         initPopulation();
 
         while (!task.isStopCriterion()) {
@@ -80,7 +81,7 @@ public class ABC extends Algorithm {
     private void memorizeBestSource() {
 
         for (ABCSolution bee : population) {
-            if (task.isFirstBetter(bee, best)) {
+            if (task.problem.isFirstBetter(bee, best)) {
                 best = new ABCSolution(bee);
             }
         }
@@ -103,12 +104,12 @@ public class ABC extends Algorithm {
                     neighbour = Util.nextInt(foodNumber);
 
                 //The parameter to be changed is determined randomly
-                param2change = Util.nextInt(task.getNumberOfDimensions());
+                param2change = Util.nextInt(task.problem.getNumberOfDimensions());
 
                 phi = Util.nextDouble(-1, 1);
 
                 newValue = population.get(i).getValue(param2change) + (population.get(i).getValue(param2change) - population.get(neighbour).getValue(param2change)) * (phi - 0.5) * 2;
-                newValue = task.setFeasible(newValue, param2change);
+                newValue = task.problem.setFeasible(newValue, param2change);
 
                 ABCSolution newBee = new ABCSolution(population.get(i));
                 newBee.setValue(param2change, newValue);
@@ -116,7 +117,7 @@ public class ABC extends Algorithm {
                 if (task.isStopCriterion())
                     return;
 
-                task.setFeasible(newBee);
+                task.problem.makeFeasible(newBee);
                 task.eval(newBee);
 
                 if (newBee.getABCEval() > population.get(i).getABCEval()) {
@@ -162,13 +163,13 @@ public class ABC extends Algorithm {
                 neighbour = Util.nextInt(foodNumber);
 
             //The parameter to be changed is determined randomly
-            param2change = Util.nextInt(task.getNumberOfDimensions());
+            param2change = Util.nextInt(task.problem.getNumberOfDimensions());
 
             phi = Util.nextDouble(-1, 1);
 
             //TODO pomno�i samo z phi
             newValue = population.get(i).getValue(param2change) + (population.get(i).getValue(param2change) - population.get(neighbour).getValue(param2change)) * (phi - 0.5) * 2;
-            newValue = task.setFeasible(newValue, param2change);
+            newValue = task.problem.setFeasible(newValue, param2change);
 
             ABCSolution newBee = new ABCSolution(population.get(i));
             newBee.setValue(param2change, newValue);
@@ -195,7 +196,7 @@ public class ABC extends Algorithm {
         for (int i = 0; i < foodNumber - 1; i++) {
             ABCSolution newBee = new ABCSolution(task.getRandomEvaluatedSolution());
             population.add(newBee);
-            if (task.isFirstBetter(newBee, best))
+            if (task.problem.isFirstBetter(newBee, best))
                 best = new ABCSolution(newBee);
             if (task.isStopCriterion())
                 break;

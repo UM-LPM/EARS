@@ -11,7 +11,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     private int popSize;
 
     @Override
-    public ProgramSolution execute(Task task) throws StopCriterionException {
+    public ProgramSolution<Double> execute(Task<ProgramSolution<Double>, ProgramProblem<Double>> task) throws StopCriterionException {
         return null;
     }
 

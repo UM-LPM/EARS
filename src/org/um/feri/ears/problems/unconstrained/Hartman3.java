@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,19 +10,20 @@ import static java.lang.Math.exp;
 import static java.lang.Math.pow;
 
 
-public class Hartman3 extends Problem {
+public class Hartman3 extends DoubleProblem {
 
     private double[][] a;
     private double[][] p;
     private double[] c;
 
     public Hartman3() {
-        super(3, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.0));
+        super(3, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
         name = "Hartman3";
 
-        optimum[0] = new double[]{0.1, 0.55592003, 0.85218259};
+        decisionSpaceOptima[0] = new double[]{0.1, 0.55592003, 0.85218259};
+        objectiveSpaceOptima[0] = -3.86278214782076;
 
         a = new double[][]{
                 {3, 10, 30},
@@ -50,10 +52,5 @@ public class Hartman3 extends Problem {
             fitness += c[i] * exp(sum * (-1));
         }
         return fitness * -1;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -3.86278214782076;
     }
 }

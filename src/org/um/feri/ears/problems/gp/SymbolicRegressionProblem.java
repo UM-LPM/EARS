@@ -21,7 +21,7 @@ public class SymbolicRegressionProblem extends ProgramProblem<Double>{
     }
 
     @Override
-    public void eval(ProgramSolution<Double> solution) {
+    public void evaluate(ProgramSolution<Double> solution) {
         double eval = 0;
         //Za vse vrednosti iz evalData pridobim vrednost
         for(Target t: this.evalData) {
@@ -60,6 +60,11 @@ public class SymbolicRegressionProblem extends ProgramProblem<Double>{
         else  {
             return node.getOperation().apply(new Double[]{node.getCoefficient()});
         }
+    }
+
+    @Override
+    public boolean isFirstBetter(ProgramSolution<Double> solution1, ProgramSolution<Double> solution2) {
+        return Double.compare(solution1.eval, solution2.eval) < 0; //TODO replace with comparator
     }
 
     @Override

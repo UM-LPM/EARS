@@ -2,7 +2,7 @@ package org.um.feri.ears.problems;
 
 import java.util.List;
 
-public class DummyProblem extends Problem {
+public class DummyProblem extends DoubleProblem {
 
 
 	public DummyProblem (String name){
@@ -10,7 +10,7 @@ public class DummyProblem extends Problem {
 	}
 
 	public DummyProblem (String name, boolean minimize){
-		super(0,0);
+		super(0, 1, 1, 0);
 		this.name = name;
 		this.minimize = minimize;
 	}

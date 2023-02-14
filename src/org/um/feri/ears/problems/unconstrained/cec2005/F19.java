@@ -87,7 +87,7 @@ public class F19 extends CEC2005Base {
             m_fmax[i] = Math.abs(hcData.basicFunc(i, m_testPointM));
         }
         hcData.fmax = m_fmax;
-        optimum = m_o;
+        decisionSpaceOptima = m_o;
     }
 
     private class LocalHCData extends HybridCompositionData {

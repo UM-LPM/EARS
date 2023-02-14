@@ -1,9 +1,5 @@
 package org.um.feri.ears.util.annotation;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.problems.TaskBase;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;

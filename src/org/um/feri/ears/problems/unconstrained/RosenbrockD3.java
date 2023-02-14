@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,16 +10,16 @@ import java.util.Collections;
 /*
 http://www.geatbx.com/docu/fcnindex-01.html#P86_3059
  */
-public class RosenbrockD3 extends Problem {
+public class RosenbrockD3 extends DoubleProblem {
 
     public RosenbrockD3() {
-        super(3, 0);
+        super(3, 1, 1, 0);
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -1.2));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.2));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.2));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.2));
         name = "Rosenbrock d3";
 
-        Arrays.fill(optimum[0], 1);
+        Arrays.fill(decisionSpaceOptima[0], 1);
     }
 
     @Override

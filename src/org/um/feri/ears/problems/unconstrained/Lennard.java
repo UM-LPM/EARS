@@ -2,25 +2,19 @@
 package org.um.feri.ears.problems.unconstrained;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.um.feri.ears.problems.EvaluationStorage;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.misc.SoilModelProblem;
+import org.um.feri.ears.problems.DoubleProblem;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 /*
 Global minima of Lennard-Jones clusters where D less than 150
 http://doye.chem.ox.ac.uk/jon/structures/LJ/tables.150.html
 */
 
-public class Lennard extends Problem {
+public class Lennard extends DoubleProblem {
 
     static class LennardJonesSolution {
 
@@ -44,7 +38,7 @@ public class Lennard extends Problem {
     }
 
     public Lennard(int d, double lower, double upper) {
-        super(d*3 , 0); // d = number of atoms, translation to 3D euclidean space
+        super(d*3 , 1, 1, 0); // d = number of atoms, translation to 3D euclidean space
         assert (d <= 150 && d > 2);
 
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("LennardJonesOptima.json");
@@ -56,8 +50,7 @@ public class Lennard extends Problem {
             HashMap<Integer, LennardJonesSolution> optima = mapper.readValue(inputStream, typeRef);
 
             LennardJonesSolution solution = optima.get(d);
-            optimum[0] = new double[d];
-            optimum[0] = solution.points;
+            decisionSpaceOptima[0] = solution.points;
             globalOptimum = solution.energy;
 
         } catch (IOException e) {
@@ -68,6 +61,7 @@ public class Lennard extends Problem {
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, lower));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, upper));
         name = "LennardJones";
+        objectiveSpaceOptima[0] = globalOptimum;
     }
 
     @Override
@@ -93,10 +87,5 @@ public class Lennard extends Problem {
 
         energy *= 4;
         return energy;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return globalOptimum;
     }
 }

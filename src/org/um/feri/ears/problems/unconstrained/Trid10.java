@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,17 +12,18 @@ import static java.lang.Math.pow;
 https://www.sfu.ca/~ssurjano/trid.html
  */
 
-public class Trid10 extends Problem {
+public class Trid10 extends DoubleProblem {
 
     public Trid10() {
-        super(10, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -pow(numberOfDimensions, 2)));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, pow(numberOfDimensions, 2)));
+        super(10, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -pow(numberOfDimensions, 2)));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, pow(numberOfDimensions, 2)));
         name = "Trid10";
 
         for (int i = 0; i < numberOfDimensions; i++) {
-            optimum[0][i] = (i + 1) * (numberOfDimensions + 1 - (i + 1));
+            decisionSpaceOptima[0][i] = (i + 1) * (numberOfDimensions + 1 - (i + 1));
         }
+        objectiveSpaceOptima[0] = -(numberOfDimensions * (numberOfDimensions + 4.0) * (numberOfDimensions - 1.0)) / 6.0;
     }
 
     @Override
@@ -34,10 +36,5 @@ public class Trid10 extends Problem {
             sum2 += x[i] * x[i - 1];
         }
         return sum1 - sum2;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -(numberOfDimensions * (numberOfDimensions + 4.0) * (numberOfDimensions - 1.0)) / 6.0;
     }
 }

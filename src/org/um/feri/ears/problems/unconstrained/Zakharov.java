@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,12 +15,12 @@ https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/196-zakharov-s-fu
 http://benchmarkfcns.xyz/benchmarkfcns/zakharov.html
  */
 
-public class Zakharov extends Problem {
+public class Zakharov extends DoubleProblem {
 
     public Zakharov(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
+        super(d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
         name = "Zakharov";
     }
 

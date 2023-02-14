@@ -1,12 +1,12 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.statistic.rating_system.glicko2.Glicko2Rating;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
@@ -14,7 +14,7 @@ import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
 import java.util.*;
 import java.util.concurrent.*;
 
-public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBase, A extends AlgorithmBase<T, S>> {
+public abstract class BenchmarkBase<T extends TaskBase<?>, S extends Solution, A extends Algorithm<T, S>> {
 
     public enum RatingCalculation {NORMAL, RATING_CONVERGENCE_GRAPH, RATING_CONVERGENCE_SUM}
 
@@ -97,7 +97,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
      *
      * @param algorithm to be removed from the benchmark
      */
-    public void removeAlgorithm(AlgorithmBase<T, S> algorithm) {
+    public void removeAlgorithm(Algorithm<T, S> algorithm) {
         algorithms.remove(algorithm);
         benchmarkResults.removeAlgorithm(algorithm);
     }
@@ -266,7 +266,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends SolutionBas
     protected abstract void performTournament(int evaluationNumber);
 
     public void allPlayed() {
-        for (AlgorithmBase al : algorithms) {
+        for (Algorithm al : algorithms) {
             al.setPlayed(true);
         }
     }

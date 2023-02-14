@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,17 +12,17 @@ import static java.lang.Math.pow;
 http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.Price04
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/159-price-s-function-no-4
  */
-public class Price4 extends Problem {
+public class Price4 extends DoubleProblem {
 
     public Price4() {
-        super(2, 0, 3);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -50.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 50.0));
+        super(2, 3, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -50.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 50.0));
         name = "Price4";
 
-        optimum[0] = new double[]{0.0, 0.0};
-        optimum[1] = new double[]{2.0, 4.0};
-        optimum[2] = new double[]{1.464352119663698, -2.506012760781662};
+        decisionSpaceOptima[0] = new double[]{0.0, 0.0};
+        decisionSpaceOptima[1] = new double[]{2.0, 4.0};
+        decisionSpaceOptima[2] = new double[]{1.464352119663698, -2.506012760781662};
     }
 
     @Override

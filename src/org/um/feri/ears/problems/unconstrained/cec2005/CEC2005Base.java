@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained.cec2005;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 import org.um.feri.ears.util.Util;
 
 import java.io.BufferedReader;
@@ -8,7 +9,7 @@ import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.StringTokenizer;
 
-public abstract class CEC2005Base extends Problem {
+public abstract class CEC2005Base extends DoubleProblem {
 
     protected int funcNum;
 
@@ -36,7 +37,7 @@ public abstract class CEC2005Base extends Problem {
     protected double[] m_biases;
 
     public CEC2005Base(int d, int funcNum) {
-        super(d, 0);
+        super(d,1,1,0);
 
         this.funcNum = funcNum;
 
@@ -60,11 +61,7 @@ public abstract class CEC2005Base extends Problem {
             m_iSqrt[i] = Math.sqrt(((double) i) + 1.0);
         }
 
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return m_biases[funcNum - 1];
+        objectiveSpaceOptima[0] = m_biases[funcNum - 1];
     }
 
     //

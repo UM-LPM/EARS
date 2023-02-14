@@ -20,9 +20,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.problems.moo.wfg;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.NumberSolution;
-
 /**
  * This class implements the WFG2 problem
  * Reference: Simon Huband, Luigi Barone, Lyndon While, Phil Hingston
@@ -32,159 +29,132 @@ import org.um.feri.ears.problems.NumberSolution;
  * Proceedings, volume 3410 of Lecture Notes in Computer Science
  */
 public class WFG2 extends WFG {
-	/**
-	 * Constructor
-	 * Creates a default WFG1 instance with
-	 * 2 position-related parameters
-	 * 4 distance-related parameters
-	 * and 2 objectives
-	 */
-	public WFG2() {
-		this(2, 4, 2);
-	}
-	
-	public WFG2(int obj) {
-		this(obj==2? 4 : (obj-1)*2, 20, obj);
-	}
+    /**
+     * Constructor
+     * Creates a default WFG1 instance with
+     * 2 position-related parameters
+     * 4 distance-related parameters
+     * and 2 objectives
+     */
+    public WFG2() {
+        this(2, 4, 2);
+    }
 
-	/**
-	 * Creates a WFG1 problem instance
-	 *
-	 * @param k            Number of position parameters
-	 * @param l            Number of distance parameters
-	 * @param m            Number of objective functions
-	 */
-	public WFG2(int k, int l, int m) {
-		super(k, l, m);
-		
-		fileName = "WFG2."+m+"D";
-		name = "WFG2";
-		
-		s = new int[m];
-	    for (int i = 0; i < m; i++) {
-	      s[i] = 2 * (i + 1);
-	    }
+    public WFG2(int obj) {
+        this(obj == 2 ? 4 : (obj - 1) * 2, 20, obj);
+    }
 
-	    a = new int[m - 1];
-	    for (int i = 0; i < m - 1; i++) {
-	      a[i] = 1;
-	    }
-	}
+    /**
+     * Creates a WFG1 problem instance
+     *
+     * @param k Number of position parameters
+     * @param l Number of distance parameters
+     * @param m Number of objective functions
+     */
+    public WFG2(int k, int l, int m) {
+        super(k, l, m);
 
-	/** Evaluate */
-	public double[] evaluateVar(double[] z) {
-		double[] y;
+        referenceSetFileName = "WFG2." + m + "D";
+        name = "WFG2";
 
-	    y = normalise(z);
-	    y = t1(y, k);
-	    y = t2(y, k);
-	    y = t3(y, k, m);
+        s = new int[m];
+        for (int i = 0; i < m; i++) {
+            s[i] = 2 * (i + 1);
+        }
 
-	    double[] result = new double[m];
-	    double[] x = calculateX(y);
-	    for (int m = 1; m <= this.m - 1; m++) {
-	      result[m - 1] = d * x[this.m - 1] + s[m - 1] * (new Shapes()).convex(x, m);
-	    }
-	    result[m - 1] =
-	      d * x[m - 1] + s[m - 1] * (new Shapes()).disc(x, 5, (double) 1.0, (double) 1.0);
+        a = new int[m - 1];
+        for (int i = 0; i < m - 1; i++) {
+            a[i] = 1;
+        }
+    }
 
-	    return result;
-	}
+    /**
+     * Evaluate
+     */
+    public double[] evaluate(double[] z) {
+        double[] y;
 
-	/**
-	   * WFG2 t1 transformation
-	   */
-	  public double[] t1(double[] z, int k) {
-	    double[] result = new double[z.length];
+        y = normalise(z);
+        y = t1(y, k);
+        y = t2(y, k);
+        y = t3(y, k, m);
 
-	    System.arraycopy(z, 0, result, 0, k);
+        double[] result = new double[m];
+        double[] x = calculateX(y);
+        for (int m = 1; m <= this.m - 1; m++) {
+            result[m - 1] = d * x[this.m - 1] + s[m - 1] * (new Shapes()).convex(x, m);
+        }
+        result[m - 1] =
+                d * x[m - 1] + s[m - 1] * (new Shapes()).disc(x, 5, (double) 1.0, (double) 1.0);
 
-	    for (int i = k; i < z.length; i++) {
-	      result[i] = (new Transformations()).sLinear(z[i], (double) 0.35);
-	    }
+        return result;
+    }
 
-	    return result;
-	  }
+    /**
+     * WFG2 t1 transformation
+     */
+    public double[] t1(double[] z, int k) {
+        double[] result = new double[z.length];
 
-	  /**
-	   * WFG2 t2 transformation
-	   */
-	  public double[] t2(double[] z, int k) {
-	    double[] result = new double[z.length];
+        System.arraycopy(z, 0, result, 0, k);
 
-	    System.arraycopy(z, 0, result, 0, k);
+        for (int i = k; i < z.length; i++) {
+            result[i] = (new Transformations()).sLinear(z[i], (double) 0.35);
+        }
 
-	    int l = z.length - k;
+        return result;
+    }
 
-	    for (int i = k + 1; i <= k + l / 2; i++) {
-	      int head = k + 2 * (i - k) - 1;
-	      int tail = k + 2 * (i - k);
-	      double[] subZ = subVector(z, head - 1, tail - 1);
+    /**
+     * WFG2 t2 transformation
+     */
+    public double[] t2(double[] z, int k) {
+        double[] result = new double[z.length];
 
-	      result[i - 1] = (new Transformations()).rNonsep(subZ, 2);
-	    }
+        System.arraycopy(z, 0, result, 0, k);
 
-	    return result;
-	  }
+        int l = z.length - k;
 
-	  /**
-	   * WFG2 t3 transformation
-	   */
-	  public double[] t3(double[] z, int k, int M) {
-	    double[] result = new double[M];
-	    double[] w = new double[z.length];
+        for (int i = k + 1; i <= k + l / 2; i++) {
+            int head = k + 2 * (i - k) - 1;
+            int tail = k + 2 * (i - k);
+            double[] subZ = subVector(z, head - 1, tail - 1);
+
+            result[i - 1] = (new Transformations()).rNonsep(subZ, 2);
+        }
+
+        return result;
+    }
+
+    /**
+     * WFG2 t3 transformation
+     */
+    public double[] t3(double[] z, int k, int M) {
+        double[] result = new double[M];
+        double[] w = new double[z.length];
 
 
-	    for (int i = 0; i < z.length; i++) {
-	      w[i] = (double) 1.0;
-	    }
+        for (int i = 0; i < z.length; i++) {
+            w[i] = 1.0;
+        }
 
-	    for (int i = 1; i <= M - 1; i++) {
-	      int head = (i - 1) * k / (M - 1) + 1;
-	      int tail = i * k / (M - 1);
-	      double[] subZ = subVector(z, head - 1, tail - 1);
-	      double[] subW = subVector(w, head - 1, tail - 1);
+        for (int i = 1; i <= M - 1; i++) {
+            int head = (i - 1) * k / (M - 1) + 1;
+            int tail = i * k / (M - 1);
+            double[] subZ = subVector(z, head - 1, tail - 1);
+            double[] subW = subVector(w, head - 1, tail - 1);
 
-	      result[i - 1] = (new Transformations()).rSum(subZ, subW);
-	    }
+            result[i - 1] = (new Transformations()).rSum(subZ, subW);
+        }
 
-	    int l = z.length - k;
-	    int head = k + 1;
-	    int tail = k + l / 2;
+        int l = z.length - k;
+        int head = k + 1;
+        int tail = k + l / 2;
 
-	    double[] subZ = subVector(z, head - 1, tail - 1);
-	    double[] subW = subVector(w, head - 1, tail - 1);
-	    result[M - 1] = (new Transformations()).rSum(subZ, subW);
+        double[] subZ = subVector(z, head - 1, tail - 1);
+        double[] subW = subVector(w, head - 1, tail - 1);
+        result[M - 1] = (new Transformations()).rSum(subZ, subW);
 
-	    return result;
-	  }
-	  
-	  @Override
-	  public double[] evaluate(Double[] ds) {
-		  double[] d = ArrayUtils.toPrimitive(ds);
-		  return evaluate(d);
-	  }
-
-	/**
-	 * Evaluates a solution
-	 *
-	 * @param solution The solution to evaluate
-	 */
-	public double[] evaluate(double[] ds) {
-
-		double[] x = new double[numberOfDimensions];
-
-		for (int i = 0; i < numberOfDimensions; i++) {
-			x[i] = ds[i];
-		}
-
-		double[] f = evaluateVar(x);
-
-		return f;
-	}
-
-	@Override
-	public void evaluateConstraints(NumberSolution<Double> solution) {
-		
-	}
+        return result;
+    }
 }

@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,11 +11,11 @@ import static java.lang.Math.*;
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/100-schaffer-s-function-no-6
  */
-public class Schaffer6 extends Problem {
+public class Schaffer6 extends DoubleProblem {
     public Schaffer6() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
         name = "Schaffer6";
     }
 

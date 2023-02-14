@@ -1,6 +1,6 @@
 package org.um.feri.ears.problems.misc;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
@@ -11,7 +11,7 @@ public class TestSoilModelProblem {
     public static void main(String[] args) throws StopCriterionException {
         Util.rnd.setSeed(System.currentTimeMillis());
 
-        Algorithm algorithm = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN, 50);
+        NumberAlgorithm algorithm = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN, 50);
 
         String[] data = {"TE1", "TE2", "TE3"};
         int run_num = 10;

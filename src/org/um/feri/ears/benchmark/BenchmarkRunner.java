@@ -1,6 +1,7 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.statistic.rating_system.Player;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 public class BenchmarkRunner {
     private ArrayList<Player> players;
     private boolean printDebug;
-    private HashMap<String, Algorithm> algorithms;
+    private HashMap<String, NumberAlgorithm> algorithms;
     protected Benchmark benchmark;
     private long duration;
 
@@ -21,7 +22,7 @@ public class BenchmarkRunner {
         return players;
     }
 
-    public Algorithm getAlgorithm(String id) {
+    public NumberAlgorithm getAlgorithm(String id) {
         return algorithms.get(id);
     }
 
@@ -45,7 +46,7 @@ public class BenchmarkRunner {
         this.benchmark = benchmark;
     }
 
-    public void addAlgorithm(Algorithm algorithm) {
+    public void addAlgorithm(NumberAlgorithm algorithm) {
 
         algorithms.put(algorithm.getId(), algorithm);
         players.add(new Player(algorithm.getId()));
@@ -77,7 +78,7 @@ public class BenchmarkRunner {
         return sb.toString();
     }
 
-    public BenchmarkResults<Task, NumberSolution, Algorithm> getBenchmarkResults() {
+    public BenchmarkResults<Task<NumberSolution<Double>, DoubleProblem>, NumberSolution<Double>, NumberAlgorithm> getBenchmarkResults() {
         return benchmark.getBenchmarkResults();
     }
 }

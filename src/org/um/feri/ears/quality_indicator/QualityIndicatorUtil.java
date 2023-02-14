@@ -1,7 +1,7 @@
 package org.um.feri.ears.quality_indicator;
 
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.moo.MOProblemBase;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.EuclideanDistance;
 import org.um.feri.ears.util.ManhattanDistance;
@@ -263,10 +263,10 @@ public final class QualityIndicatorUtil<T> {
         }
     }
 
-    public static <T extends Number, P extends MOProblemBase<T>> double[][] getNormalizedFront(double[][] front, P problem) {
+    public static <T extends Number, P extends Problem<NumberSolution<T>>> double[][] getNormalizedFront(double[][] front, P problem) {
 
         ParetoSolution<T> referenceSet = new ParetoSolution<T>(0);
-        String fileName = problem.getFileName();
+        String fileName = problem.getReferenceSetFileName();
         double[][] normalizedFront = new double[front.length][];
 
         double[] maximumValue = new double[problem.getNumberOfObjectives()];

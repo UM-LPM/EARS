@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,12 +12,12 @@ import static java.lang.Math.pow;
 http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.RotatedEllipse02
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/127-rotated-ellipse-function-no-2
  */
-public class RotatedEllipse2 extends Problem {
+public class RotatedEllipse2 extends DoubleProblem {
 
     public RotatedEllipse2() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -500.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 500.0));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
         name = "RotatedEllipse2";
     }
 

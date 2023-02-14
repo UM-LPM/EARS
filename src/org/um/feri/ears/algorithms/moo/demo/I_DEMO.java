@@ -3,8 +3,9 @@ package org.um.feri.ears.algorithms.moo.demo;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.problems.IntegerMOTask;
+import org.um.feri.ears.problems.IntegerProblem;
 
-public class I_DEMO extends DEMO<IntegerMOTask, Integer> {
+public class I_DEMO extends DEMO<Integer, IntegerProblem, IntegerMOTask> {
 	
 	public I_DEMO() {
 		this(new PMXCrossover(), 100, 1);

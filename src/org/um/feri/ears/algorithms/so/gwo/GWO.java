@@ -1,26 +1,23 @@
 package org.um.feri.ears.algorithms.so.gwo;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 
-public class GWO extends Algorithm {
+public class GWO extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
     private ArrayList<NumberSolution<Double>> population;
     private NumberSolution<Double> alpha, beta, delta;
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
 
     public GWO() {
         this(30);
@@ -44,7 +41,7 @@ public class GWO extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
         initPopulation();
         int maxIt = 10000;
@@ -53,7 +50,7 @@ public class GWO extends Algorithm {
         }
 
         if (task.getStopCriterion() == StopCriterion.EVALUATIONS) {
-            maxIt = task.getMaxEvaluations() / popSize;
+            maxIt = (task.getMaxEvaluations() - popSize) / popSize;
         }
 
 
@@ -62,8 +59,8 @@ public class GWO extends Algorithm {
 
             for (int index = 0; index < popSize; index++) {
                 NumberSolution<Double> wolf = population.get(index);
-                double[] newPosition = new double[task.getNumberOfDimensions()];
-                for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+                double[] newPosition = new double[task.problem.getNumberOfDimensions()];
+                for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
 
                     double r1 = Util.nextDouble();
                     double r2 = Util.nextDouble();
@@ -96,12 +93,14 @@ public class GWO extends Algorithm {
 
                     newPosition[i] = (x1 + x2 + x3) / 3; // Equation (3.7)
                 }
-                newPosition = task.setFeasible(newPosition);
+                task.problem.setFeasible(newPosition);
 
                 if (task.isStopCriterion())
                     break;
-                NumberSolution<Double> newWolf = task.eval(newPosition);
-                if (task.isFirstBetter(newWolf, population.get(index)))
+                NumberSolution<Double> newWolf = new NumberSolution<>(Util.toDoubleArrayList(newPosition));
+                task.eval(newWolf);
+
+                if (task.problem.isFirstBetter(newWolf, population.get(index)))
                     population.set(index, newWolf);
             }
             updateABD();
@@ -126,7 +125,7 @@ public class GWO extends Algorithm {
      */
     private void updateABD() {
 
-        population.sort(new TaskComparator(task));
+        population.sort(new ProblemComparator<>(task.problem));
         alpha = population.get(0);
         beta = population.get(1);
         delta = population.get(2);

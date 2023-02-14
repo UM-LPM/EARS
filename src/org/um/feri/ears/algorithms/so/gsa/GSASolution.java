@@ -1,5 +1,6 @@
 package org.um.feri.ears.algorithms.so.gsa;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -41,11 +42,11 @@ public class GSASolution extends NumberSolution<Double> {
         return v;
     }
 
-    public GSASolution(Task t) throws StopCriterionException {
+    public GSASolution(Task<NumberSolution<Double>, DoubleProblem> t) throws StopCriterionException {
         super(t.getRandomEvaluatedSolution());
-        v = new double[t.getNumberOfDimensions()]; //init V=zeros(N,dim);
-        a = new double[t.getNumberOfDimensions()]; //init
-        E = new double[t.getNumberOfDimensions()]; //init
+        v = new double[t.problem.getNumberOfDimensions()]; //init V=zeros(N,dim);
+        a = new double[t.problem.getNumberOfDimensions()]; //init
+        E = new double[t.problem.getNumberOfDimensions()]; //init
         mass = 0;
     }
 
@@ -67,7 +68,7 @@ public class GSASolution extends NumberSolution<Double> {
         return super.toString() + " v:" + (Arrays.toString(v) + " a:" + (Arrays.toString(a)));
     }
 
-    public GSASolution move(Task t) throws StopCriterionException {
+    public GSASolution move(Task<NumberSolution<Double>, DoubleProblem> t) throws StopCriterionException {
 		/*
 		[N,dim]=size(X);
 		V=rand(N,dim).*V+a; %eq. 11.
@@ -78,19 +79,23 @@ public class GSASolution extends NumberSolution<Double> {
         boolean feasable = true;
         for (int i = 0; i < x.length; i++) {
             v[i] = Util.rnd.nextDouble() * v[i] + a[i];
-            if (!t.isFeasible(x[i] + v[i], i)) { //not moved on edge
+            if (!t.problem.isFeasible(x[i] + v[i], i)) { //not moved on edge
                 feasable = false;
                 break;
             }
-            x[i] = t.setFeasible(x[i] + v[i], i); //if not feasable generate random?
+            x[i] = t.problem.setFeasible(x[i] + v[i], i); //if not feasable generate random?
             //%     %%Agents that go out of the search space, are reinitialized randomly .
             //Tp=X(i,:)>up;Tm=X(i,:)<low;X(i,:)=(X(i,:).*(~(Tp+Tm)))+((rand(1,dim).*(up-low)+low).*(Tp+Tm));
         }
         if (!feasable) { //if not feasable generate random
-            x = t.getRandomVariables();
+            x = t.problem.getRandomVariables();
         }
-        GSASolution tmp = new GSASolution(t.eval(x));
-        for (int d = 0; d < t.getNumberOfDimensions(); d++) {
+
+        NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(x));
+        t.eval(newSolution);
+
+        GSASolution tmp = new GSASolution(newSolution);
+        for (int d = 0; d < t.problem.getNumberOfDimensions(); d++) {
             tmp.a[d] = a[d];
             tmp.E[d] = E[d];
             tmp.v[d] = v[d];

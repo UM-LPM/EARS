@@ -3,23 +3,24 @@ package org.um.feri.ears.util.comparator;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
 import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.moo.MOProblemBase;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
 
 import java.util.Comparator;
 
-public class QualityIndicatorComparator<T extends Number, Task extends MOTask<T, P>, P extends MOProblemBase<T>> implements Comparator<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task>> {
-    MOTask<T, P> t;
+public class QualityIndicatorComparator<T extends Number, Task extends MOTask<T>, P extends Problem<NumberSolution<T>>> implements Comparator<AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<P, Task, T>, Task>> {
+    MOTask<T> t;
     QualityIndicator<T> qi;
 
-    public QualityIndicatorComparator(MOTask<T, P> t, QualityIndicator<T> qi) {
+    public QualityIndicatorComparator(MOTask<T> t, QualityIndicator<T> qi) {
         this.t = t;
         this.qi = qi;
     }
 
     @Override
-    public int compare(AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task> r1, AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<Task, T>, Task> r2) {
+    public int compare(AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<P, Task, T>, Task> r1, AlgorithmRunResult<ParetoSolution<T>, MOAlgorithm<P, Task, T>, Task> r2) {
         if (r1.solution != null) {
             if (r2.solution != null) {
                 // if (resultEqual(r1.getBest(), r2.getBest())) return 0; Normal sor later!

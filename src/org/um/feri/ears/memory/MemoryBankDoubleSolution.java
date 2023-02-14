@@ -100,7 +100,7 @@ public class MemoryBankDoubleSolution {
     }
 
     public NumberSolution<Double> getRandomSolution(TaskWithMemory task) throws StopCriterionException {
-        double[] d = task.getRandomVariables();
+        double[] d = task.problem.getRandomVariables();
         return eval(task, d);
     }
     /*
@@ -183,7 +183,7 @@ public class MemoryBankDoubleSolution {
             ds = task.evalOrg(x);
             if (best4ConvergenceGraph == null)
                 best4ConvergenceGraph = ds;
-            else if (task.isFirstBetter(ds, best4ConvergenceGraph))
+            else if (task.problem.isFirstBetter(ds, best4ConvergenceGraph))
                 best4ConvergenceGraph = ds;
             if (convergenceGraphDataCollect) {
                 ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConvergenceGraph.getEval()));

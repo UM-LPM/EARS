@@ -20,67 +20,56 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.problems.moo.dtlz;
 
-import org.um.feri.ears.problems.NumberSolution;
-
 import java.util.ArrayList;
 
 
-public class DTLZ4 extends DTLZ{
-	
-	public DTLZ4(int numberOfObjectives) {
-		this(numberOfObjectives + 9, numberOfObjectives);
-	}
-	
-	public DTLZ4(int numberOfVariables, int numberOfObjectives) {
-	     
-		super(numberOfVariables,0,numberOfObjectives);
+public class DTLZ4 extends DTLZ {
 
-		fileName = "DTLZ4."+numberOfObjectives+"D";
-		name = "DTLZ4";
+    public DTLZ4(int numberOfObjectives) {
+        this(numberOfObjectives + 9, numberOfObjectives);
+    }
 
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+    public DTLZ4(int numberOfVariables, int numberOfObjectives) {
+
+        super(numberOfVariables, 0, numberOfObjectives);
+
+        referenceSetFileName = "DTLZ4." + numberOfObjectives + "D";
+        name = "DTLZ4";
+
+        upperLimit = new ArrayList<>(numberOfDimensions);
+        lowerLimit = new ArrayList<>(numberOfDimensions);
 
 
-		for (int i = 0; i < numberOfDimensions; i++) {
-			lowerLimit.add(0.0);
-			upperLimit.add(1.0);
-		}
+        for (int i = 0; i < numberOfDimensions; i++) {
+            lowerLimit.add(0.0);
+            upperLimit.add(1.0);
+        }
+    }
 
-	}
+    @Override
+    public double[] evaluate(double[] x) {
 
-	@Override
-	public void evaluateConstraints(NumberSolution<Double> solution) {
-	}
-	
-	@Override
-	public double[] evaluate(Double ds[]) {
+        double[] f = new double[numberOfObjectives];
+        double alpha = 100.0;
+        int k = numberOfDimensions - numberOfObjectives + 1;
 
-		double [] x = new double[numberOfDimensions];
-	    double [] f = new double[numberOfObjectives];
-	    double alpha = 100.0;
-	    int k = numberOfDimensions - numberOfObjectives + 1;
-	  
-	    for (int i = 0; i < numberOfDimensions; i++)
-	      x[i] = ds[i];
+        double g = 0.0;
+        for (int i = numberOfDimensions - k; i < numberOfDimensions; i++)
+            g += (x[i] - 0.5) * (x[i] - 0.5);
 
-	    double g = 0.0;
-	    for (int i = numberOfDimensions - k; i < numberOfDimensions; i++)
-	      g += (x[i] - 0.5)*(x[i] - 0.5);                
-	        
-	    for (int i = 0; i < numberOfObjectives; i++)
-	      f[i] = 1.0 + g;
-	        
-	    for (int i = 0; i < numberOfObjectives; i++) {
-	      for (int j = 0; j < numberOfObjectives - (i + 1); j++)            
-	        f[i] *= java.lang.Math.cos(java.lang.Math.pow(x[j],alpha)*(java.lang.Math.PI/2.0));                
-	        if (i != 0){
-	          int aux = numberOfObjectives - (i + 1);
-	          f[i] *= java.lang.Math.sin(java.lang.Math.pow(x[aux],alpha)*(java.lang.Math.PI/2.0));
-	        }
-	    }
-		
-		return f;
-	}
+        for (int i = 0; i < numberOfObjectives; i++)
+            f[i] = 1.0 + g;
+
+        for (int i = 0; i < numberOfObjectives; i++) {
+            for (int j = 0; j < numberOfObjectives - (i + 1); j++)
+                f[i] *= java.lang.Math.cos(java.lang.Math.pow(x[j], alpha) * (java.lang.Math.PI / 2.0));
+            if (i != 0) {
+                int aux = numberOfObjectives - (i + 1);
+                f[i] *= java.lang.Math.sin(java.lang.Math.pow(x[aux], alpha) * (java.lang.Math.PI / 2.0));
+            }
+        }
+
+        return f;
+    }
 
 }

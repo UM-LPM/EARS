@@ -1,25 +1,22 @@
 package org.um.feri.ears.algorithms.so.mfo;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.problems.*;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 
-public class MFO extends Algorithm {
+public class MFO extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
     private NumberSolution<Double> bestFlame;
     private double flameNum;
-    private Task task;
+    private Task<NumberSolution<Double>, DoubleProblem> task;
     private ArrayList<NumberSolution<Double>> population;
 
     public MFO() {
@@ -54,11 +51,11 @@ public class MFO extends Algorithm {
     }
 
     @Override
-    public NumberSolution<Double> execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
         initPopulation();
 
-        population.sort(new TaskComparator(task));
+        population.sort(new ProblemComparator<>(task.problem));
 
         bestFlame = new NumberSolution<>(population.get(0));
 
@@ -68,12 +65,12 @@ public class MFO extends Algorithm {
         }
 
         if (task.getStopCriterion() == StopCriterion.EVALUATIONS) {
-            maxIt = task.getMaxEvaluations() / popSize;
+            maxIt = (task.getMaxEvaluations() - popSize) / popSize;
         }
 
         while (!task.isStopCriterion()) {
             flameNum = Math.round(popSize - task.getNumberOfIterations() * ((popSize - 1) / maxIt));
-
+            //TODO implement
             task.incrementNumberOfIterations();
         }
 

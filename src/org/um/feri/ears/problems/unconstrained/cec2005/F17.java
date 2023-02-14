@@ -92,7 +92,8 @@ public class F17 extends CEC2005Base {
             m_fmax[i] = Math.abs(hcData.basicFunc(i, m_testPointM));
         }
         hcData.fmax = m_fmax;
-        optimum = m_o;
+        decisionSpaceOptima = m_o;
+        objectiveSpaceOptima[0] = m_biases[funcNum - 1] * (1.0 + 0.2 * noise);
     }
 
     private class LocalHCData extends HybridCompositionData {
@@ -125,11 +126,6 @@ public class F17 extends CEC2005Base {
             }
             return result;
         }
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return m_biases[funcNum - 1] * (1.0 + 0.2 * noise);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,17 +14,18 @@ https://al-roomi.org/benchmarks/unconstrained/2-dimensions/7-shekel-s-foxholes-f
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/7-shekel-s-foxholes-function
 */
 
-public class Foxholes extends Problem {
+public class Foxholes extends DoubleProblem {
 
     public double[][] a;
 
     public Foxholes() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -65.536));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 65.536));
+        super(2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -65.536));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 65.536));
         name = "Shekel's Foxholes";
 
-        Arrays.fill(optimum[0], -31.97833);
+        Arrays.fill(decisionSpaceOptima[0], -31.97833);
+        objectiveSpaceOptima[0] = 0.998003838;
 
         a = new double[][]{{-32, -32},
                 {-16, -32},
@@ -67,10 +69,5 @@ public class Foxholes extends Problem {
         }
         fitness += 1.0 / 500.0;
         return pow(fitness, -1);
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return 0.998003838;
     }
 }

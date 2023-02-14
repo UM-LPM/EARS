@@ -20,8 +20,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.problems.moo.dtlz;
 
-import org.um.feri.ears.problems.NumberSolution;
-
 import java.util.ArrayList;
 
 
@@ -36,12 +34,12 @@ public class DTLZ1 extends DTLZ{
 	     
 		super(numberOfVariables,0,numberOfObjectives);
 
-		fileName = "DTLZ1."+numberOfObjectives+"D";
+		referenceSetFileName = "DTLZ1."+numberOfObjectives+"D";
 		name = "DTLZ1";
 		
 
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+		upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 
 
 		for (int i = 0; i < numberOfDimensions; i++) {
@@ -52,20 +50,11 @@ public class DTLZ1 extends DTLZ{
 	}
 
 	@Override
-	public void evaluateConstraints(NumberSolution<Double> solution) {
-	}
-	
-	@Override
-	public double[] evaluate(Double[] ds) {
+	public double[] evaluate(double[] x) {
 		
 		double[] f = new double[numberOfObjectives];
-		double[] x = new double[numberOfDimensions] ;
 
 		int k = numberOfDimensions - numberOfObjectives + 1;
-
-		for (int i = 0; i < numberOfDimensions; i++) {
-			x[i] = ds[i];
-		}
 
 		double g = 0.0;
 		for (int i = numberOfDimensions - k; i < numberOfDimensions; i++) {

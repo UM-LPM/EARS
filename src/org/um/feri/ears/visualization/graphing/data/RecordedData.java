@@ -1,16 +1,16 @@
 package org.um.feri.ears.visualization.graphing.data;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.SolutionBase;
+import org.um.feri.ears.problems.Solution;
 
 @SuppressWarnings("rawtypes")
 public class RecordedData //implements Comparable<RecordedData>
 {
-	public SolutionBase solution;
+	public Solution solution;
 	//public ProblemBase problem;
 	public String problemName;
-	public AlgorithmBase algorithm;
+	public Algorithm algorithm;
 	public long iteration;
 	//public boolean isMemberOfParetoSolution = false;
 	public NumberSolution[] paretoFront = null;
@@ -28,18 +28,18 @@ public class RecordedData //implements Comparable<RecordedData>
 		this.solution = debug;
 		
 	}
-	public RecordedData(SolutionBase solution, String problemName)
+	public RecordedData(Solution solution, String problemName)
 	{
 		this.solution = solution;
 		this.problemName = problemName;
 	}
-	public RecordedData(SolutionBase solution, String problemName, AlgorithmBase algorithm)
+	public RecordedData(Solution solution, String problemName, Algorithm algorithm)
 	{
 		this.solution = solution;
 		this.problemName = problemName;
 		this.algorithm = algorithm;
 	}
-	public RecordedData(SolutionBase sol, String problemName, AlgorithmBase algorithm, long iteration)
+	public RecordedData(Solution sol, String problemName, Algorithm algorithm, long iteration)
 	{
 		this.solution = sol;
 		this.problemName = problemName;

@@ -2,7 +2,6 @@ package org.um.feri.ears.problems.moo.unconstrained.cec2009;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.functions.UP7_1;
 import org.um.feri.ears.problems.moo.functions.UP7_2;
 
@@ -24,10 +23,10 @@ public class UnconstrainedProblem7 extends CEC2009 {
 		super(numberOfVariables,0, 2);
 
 		name = "UF7";
-		fileName = "UF7";
+		referenceSetFileName = "UF7";
 		
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+		upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 		
 		lowerLimit.add(0.0);
 		upperLimit.add(1.0);
@@ -37,13 +36,7 @@ public class UnconstrainedProblem7 extends CEC2009 {
 			upperLimit.add(1.0);
 		}
 
-		this.addObjective(new UP7_1(numberOfDimensions));
-		this.addObjective(new UP7_2(numberOfDimensions));
-
-	}
-
-	@Override
-	public void evaluateConstraints(NumberSolution<Double> solution) {
-		
+		addObjective(new UP7_1(numberOfDimensions));
+		addObjective(new UP7_2(numberOfDimensions));
 	}
 }

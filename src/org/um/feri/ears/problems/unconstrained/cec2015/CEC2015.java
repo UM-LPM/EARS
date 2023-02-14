@@ -1,11 +1,12 @@
 package org.um.feri.ears.problems.unconstrained.cec2015;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 import org.um.feri.ears.problems.unconstrained.cec2015.input_data.DataReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public abstract class CEC2015 extends Problem {
+public abstract class CEC2015 extends DoubleProblem {
 
     protected double[] OShift;
     protected double[] M;
@@ -23,7 +24,7 @@ public abstract class CEC2015 extends Problem {
      * @param funcNum Function number 1-15
      */
     public CEC2015(int d, int funcNum) {
-        super(d, 0);
+        super(d, 1, 1, 0);
 
         this.funcNum = funcNum;
         if ((funcNum < 1) || (funcNum > 15)) {
@@ -61,11 +62,7 @@ public abstract class CEC2015 extends Problem {
 
         /* Load Shuffle_data****************************************** */
         SS = DataReader.readShuffleData(funcNum, d);
-        optimum[0] = OShift;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return funcNum * 100;
+        decisionSpaceOptima[0] = OShift;
+        objectiveSpaceOptima[0] = funcNum * 100;
     }
 }

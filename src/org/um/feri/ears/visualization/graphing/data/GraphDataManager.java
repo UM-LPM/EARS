@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
@@ -43,7 +43,7 @@ public class GraphDataManager
 				if(prob == null || all[i].problemName == prob)
 				{
 					// SO:
-					if (all[i].algorithm instanceof Algorithm)
+					if (all[i].algorithm instanceof NumberAlgorithm)
 					{
 						if (!allSOdata.contains(all[i].algorithm.hashCode()+"_"+all[i].problemHashCode))
 						{
@@ -97,7 +97,7 @@ public class GraphDataManager
 				if(prob == null || all[i].problemName == prob)
 				{
 					// SO:
-					if (all[i].algorithm instanceof Algorithm)
+					if (all[i].algorithm instanceof NumberAlgorithm)
 					{
 						if (!allSOdata.contains(all[i].algorithm.hashCode()+"_"+all[i].problemHashCode))
 						{

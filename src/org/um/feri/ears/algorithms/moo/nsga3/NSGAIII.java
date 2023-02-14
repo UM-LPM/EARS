@@ -20,6 +20,7 @@ import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Ranking;
@@ -38,7 +39,7 @@ import org.um.feri.ears.util.Ranking;
  * Solving problems with box constraints.
  * Evolutionary Computation, IEEE Transactions on, 18(4), 577-601.
  */
-public class NSGAIII<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class NSGAIII<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
 
     int populationSize = 100;
 

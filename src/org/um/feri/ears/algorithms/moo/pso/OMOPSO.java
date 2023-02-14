@@ -27,9 +27,7 @@ import java.util.Comparator;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
@@ -51,7 +49,9 @@ import org.um.feri.ears.util.Util;
  *       Optimization, pp. 495-509.
  * </ol>
  */
-public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
+
+
+public class OMOPSO extends MOAlgorithm<DoubleProblem, DoubleMOTask, Double> {
 
     private int swarmSize;
     private int archiveSize;
@@ -156,7 +156,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
             NumberSolution<Double> particle = swarm.get(i);
             for (int var = 0; var < numVar; var++) {
                 particle.setValue(var, particle.getValue(var) + speed[i][var]);
-                if (particle.getValue(var) < task.getLowerLimit(var)) {
+                if (particle.getValue(var) < task.problem.getLowerLimit(var)) {
                     particle.setValue(var, task.getLowerLimit(var));
                     speed[i][var] = speed[i][var] * -1.0;
                 }

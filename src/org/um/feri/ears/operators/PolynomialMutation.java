@@ -30,7 +30,7 @@ public class PolynomialMutation implements MutationOperator<Double, DoubleMOTask
 	public void doMutation(double probability, NumberSolution<Double> solution, DoubleMOTask task) {
 		double rnd, delta1, delta2, mut_pow, deltaq;
 		double y, yl, yu, val, xy;
-		for (int var = 0; var < task.getNumberOfDimensions(); var++) {
+		for (int var = 0; var < task.problem.getNumberOfDimensions(); var++) {
 			if (Util.rnd.nextDouble() <= probability) {
 				y = solution.getValue(var);
 				yl = task.getLowerLimit(var);

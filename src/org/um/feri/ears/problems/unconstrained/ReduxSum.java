@@ -1,22 +1,24 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 /*
 https://sites.google.com/site/gotestfunctions/multimodal-function-list/onelastrally
  */
-public class ReduxSum extends Problem {
+public class ReduxSum extends DoubleProblem {
 
     public ReduxSum() {
-        super(2, 0,2);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -1.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.0));
+        super(2, 2, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
         name = "ReduxSum";
 
-        optimum[0] = new double[]{-1.0, 8.743006318923108E-16};
-        optimum[1] = new double[]{8.743006318923108E-16, -1.0};
+        decisionSpaceOptima[0] = new double[]{-1.0, 8.743006318923108E-16};
+        decisionSpaceOptima[1] = new double[]{8.743006318923108E-16, -1.0};
+        objectiveSpaceOptima[0] = -1.143771333935362E15;
     }
 
     @Override
@@ -34,11 +36,6 @@ public class ReduxSum extends Problem {
             return Double.MAX_VALUE;
 
         return fitness;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -1.143771333935362E15;
     }
 }
 

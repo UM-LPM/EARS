@@ -3,6 +3,7 @@ package org.um.feri.ears.engine;
 import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.so.ff.FireflyAlgorithm;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -57,12 +58,12 @@ public class BenchmarkRunner {
 		logger.log(Level.INFO, "submission author "+"author");
 		logger.log(Level.INFO, "submission id "+"id");
 
-		ArrayList<Task> tasks = benchmark.getAllTasks();
+		ArrayList<Task<NumberSolution<Double>, DoubleProblem>> tasks = benchmark.getAllTasks();
 		int numberOfRuns = benchmark.getNumberOfRuns();
 		logger.log(Level.INFO, "number of runs "+numberOfRuns);
 		long totalDuration = System.nanoTime();
 		
-		for (Task t: tasks) {
+		for (Task<NumberSolution<Double>, DoubleProblem> t: tasks) {
 			logger.log(Level.INFO, "starting task "+t.getProblemName());
 			StringBuilder sb = new StringBuilder();
 			sb.append(algorithm.getAlgorithmInfoCSV()+";"+t.getTaskInfoCSV());

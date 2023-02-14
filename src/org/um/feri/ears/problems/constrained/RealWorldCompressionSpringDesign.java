@@ -2,10 +2,8 @@ package org.um.feri.ears.problems.constrained;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
 
 /**
  * Real-World Problem:
@@ -20,15 +18,15 @@ import org.um.feri.ears.problems.Problem;
  * Variables: Wire diameter (x1), mean coil diameter (x2), number of active coils (x3)
  * </p>
  */
-public class RealWorldCompressionSpringDesign extends Problem {
+public class RealWorldCompressionSpringDesign extends DoubleProblem {
     public RealWorldCompressionSpringDesign() {
-        super(3, 4);
+        super(3, 1, 1, 4);
         name = "CompressionSpringDesign";
-        max_constraints = new Double[numberOfConstraints];
-        min_constraints = new Double[numberOfConstraints];
-        count_constraints = new Double[numberOfConstraints];
-        sum_constraints = new Double[numberOfConstraints];
-        normalization_constraints_factor = new Double[numberOfConstraints];
+        maxConstraints = new double[numberOfConstraints];
+        minConstraints = new double[numberOfConstraints];
+        countConstraints = new double[numberOfConstraints];
+        sumConstraints = new double[numberOfConstraints];
+        normalizationConstraintsFactor = new double[numberOfConstraints];
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
         // diameter of the wire
