@@ -69,8 +69,17 @@ public class Ozyczka2 extends DoubleProblem {
         solution.setObjectives(obj);
     }
 
+    public double[] evaluate(double[] x) {
+
+        double[] obj = new double[objectives.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = objectives.get(i).eval(x);
+        }
+
+        return obj;
+    }
     @Override
-    public void evaluateConstraints(NumberSolution<Double> solution) {
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
         double[] constraints = new double[numberOfConstraints];
 
         double[] dv = Util.toDoubleArray(solution.getVariables());
@@ -90,28 +99,6 @@ public class Ozyczka2 extends DoubleProblem {
         constraints[4] = (4.0 - (x3 - 3.0) * (x3 - 3.0) - x4) / 4.0;
         constraints[5] = ((x5 - 3.0) * (x5 - 3.0) + x6 - 4.0) / 4.0;
 
-        solution.setConstraints(constraints);
-
-        double total = 0.0;
-        int number = 0;
-        for (int i = 0; i < constraints.length; i++) {
-            if (constraints[i] < 0.0) {
-                total += constraints[i];
-                number++;
-            }
-        }
-        solution.setOverallConstraintViolation(total);
-        solution.setNumberOfViolatedConstraint(number);
+        return constraints;
     }
-
-    public double[] evaluate(double[] x) {
-
-        double[] obj = new double[objectives.size()];
-        for (int i = 0; i < obj.length; i++) {
-            obj[i] = objectives.get(i).eval(x);
-        }
-
-        return obj;
-    }
-
 }

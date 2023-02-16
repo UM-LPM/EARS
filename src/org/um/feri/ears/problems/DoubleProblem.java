@@ -114,25 +114,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
         return true;
     }
 
-    //TODO throw error if number of constraints bigger than 0, make generic?
-    /**
-     * Override this method if the problem has constraints.
-     *
-     * @param x variables for which the constraints will be evaluated
-     * @return computed constraints
-     */
-    public double[] evaluateConstrains(double[] x) {
-        return new double[0];
-    }
-
-    public final double[] evaluateConstrains(List<Double> x) {
-        return evaluateConstrains(x.stream().mapToDouble(i -> i).toArray());
-    }
-
-
     //TODO replace with accessor pattern
-
-
     @Override
     public void evaluate(NumberSolution<Double> solution) {
         solution.setObjective(0, eval(solution.getVariables()));

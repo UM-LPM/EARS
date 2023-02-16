@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.util.Util;
 
 /**
  * Problem function!
@@ -11,9 +13,8 @@ import org.um.feri.ears.problems.DoubleProblem;
  * @author Matej Črepinšek
  * @version 1
  **/
-public class CEC2011_Problem_11_3_ELD_6 extends DoubleProblem {
-    private double g_constrains[]; // internal
-    /*
+public class ELD_6 extends DoubleProblem {
+        /*
      * 6 unit limits (in format [LB1, UB1; LB2, UB2; ....]): [100, 500;50, 200;80,
      * 300;50, 150; 50, 200;50, 120;];
      *
@@ -138,13 +139,13 @@ public class CEC2011_Problem_11_3_ELD_6 extends DoubleProblem {
      * 210 90 150 80 90 75 240 110 170 90 110 85 350 140 210 110 140 100 380 160 240
      * 120 150 105
      */
-    public static double Prohibited_Operating_Zones_POZ(int i, int j) {
+    public static double prohibitedOperatingZonesPOZ(int i, int j) {
         // System.out.println(i+","+j+"->"+(D-4+j)+","+i);
         // return Data2[j][D-(4-1)+i];
         return Data2[j][3 + i];
     }
 
-    public static int No_of_POZ_Limits() {
+    public static int noOfPOZLimits() {
         return Data2[0].length - 4 + 1;
     }
 
@@ -153,7 +154,7 @@ public class CEC2011_Problem_11_3_ELD_6 extends DoubleProblem {
      * 210 90 150 80 90 75 350 140 210 110 140 100
      */
     public static double POZ_Lower_Limits(int i, int j) {
-        return Prohibited_Operating_Zones_POZ(i * 2, j);
+        return prohibitedOperatingZonesPOZ(i * 2, j);
     }
 
     /*
@@ -161,16 +162,14 @@ public class CEC2011_Problem_11_3_ELD_6 extends DoubleProblem {
      * 240 110 170 90 110 85 380 160 240 120 150 105
      */
     public static double POZ_Upper_Limits(int i, int j) {
-        return Prohibited_Operating_Zones_POZ(i * 2 + 1, j);
+        return prohibitedOperatingZonesPOZ(i * 2 + 1, j);
     }
 
-    public CEC2011_Problem_11_3_ELD_6() {
+    public ELD_6() {
         super("RWP_11_3_ELD_6", 6, 1, 1, 4);
 
-        g_constrains = new double[numberOfConstraints];
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
 
         for (int z = 0; z < numberOfDimensions; z++) {
             lowerLimit.set(z, Data1[z][0]);
@@ -210,33 +209,36 @@ public class CEC2011_Problem_11_3_ELD_6 extends DoubleProblem {
         return tt;
     }
 
-    public double[] evaluateConstrains(double[] x) {
-        g_constrains = new double[numberOfConstraints];
-        double Power_Loss = product(product2(x, B1), x) + product(B2, x) + B3;
-        Power_Loss = Math.round(Power_Loss * 10000) / 10000;
-        double Power_Balance_Penalty = Math.abs(Power_Demand + Power_Loss - sum(x));
-        double Capacity_Limits_Penalty = 0;
-        for (int i = 0; i < numberOfDimensions; i++) { // Capacity_Limits_Penalty = sum(abs(x-Pmin)-(x-Pmin)) +
+    @Override
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
+
+        double[] x = Util.toDoubleArray(solution.getVariables());
+        double[] g_constrains = new double[numberOfConstraints];
+        double powerLoss = product(product2(x, B1), x) + product(B2, x) + B3;
+        powerLoss = Math.round(powerLoss * 10000) / 10000;
+        double powerBalancePenalty = Math.abs(Power_Demand + powerLoss - sum(x));
+        double capacityLimitsPenalty = 0;
+        for (int i = 0; i < numberOfDimensions; i++) { // capacityLimitsPenalty = sum(abs(x-Pmin)-(x-Pmin)) +
             // sum(abs(Pmax-x)-(Pmax-x));
-            Capacity_Limits_Penalty += Math.abs(x[i] - Data1[i][Pmin_data1_col]) - (x[i] - Data1[i][Pmin_data1_col]); // sum(abs(x-Pmin)-(x-Pmin))
-            Capacity_Limits_Penalty += Math.abs(Data1[i][Pmax_data1_col] - x[i]) - (Data1[i][Pmax_data1_col] - x[i]); // sum(abs(Pmax-x)-(Pmax-x))
+            capacityLimitsPenalty += Math.abs(x[i] - Data1[i][Pmin_data1_col]) - (x[i] - Data1[i][Pmin_data1_col]); // sum(abs(x-Pmin)-(x-Pmin))
+            capacityLimitsPenalty += Math.abs(Data1[i][Pmax_data1_col] - x[i]) - (Data1[i][Pmax_data1_col] - x[i]); // sum(abs(Pmax-x)-(Pmax-x))
         }
-        // System.out.println("Capacity_Limits_Penalty ="+Capacity_Limits_Penalty);
+        // System.out.println("capacityLimitsPenalty ="+capacityLimitsPenalty);
 
         // %%% Ramp Rate Limits Penalty Calculation
 
-        double Ramp_Limits_Penalty = 0;
-        for (int i = 0; i < numberOfDimensions; i++) { // Ramp_Limits_Penalty = sum(abs(x-Down_Ramp_Limit)-(x-Down_Ramp_Limit)) +
+        double rampLimitsPenalty = 0;
+        for (int i = 0; i < numberOfDimensions; i++) { // rampLimitsPenalty = sum(abs(x-Down_Ramp_Limit)-(x-Down_Ramp_Limit)) +
             // sum(abs(Up_Ramp_Limit-x)-(Up_Ramp_Limit-x));
-            Ramp_Limits_Penalty += Math.abs(x[i] - Down_Ramp_Limit(i)) - (x[i] - Down_Ramp_Limit(i)); // sum(abs(x-Down_Ramp_Limit)-(x-Down_Ramp_Limit))
-            Ramp_Limits_Penalty += Math.abs(Up_Ramp_Limit(i) - x[i]) - (Up_Ramp_Limit(i) - x[i]); // sum(abs(Up_Ramp_Limit-x)-(Up_Ramp_Limit-x));
+            rampLimitsPenalty += Math.abs(x[i] - Down_Ramp_Limit(i)) - (x[i] - Down_Ramp_Limit(i)); // sum(abs(x-Down_Ramp_Limit)-(x-Down_Ramp_Limit))
+            rampLimitsPenalty += Math.abs(Up_Ramp_Limit(i) - x[i]) - (Up_Ramp_Limit(i) - x[i]); // sum(abs(Up_Ramp_Limit-x)-(Up_Ramp_Limit-x));
         }
-        // System.out.println("Ramp_Limits_Penalty="+Ramp_Limits_Penalty);
+        // System.out.println("rampLimitsPenalty="+rampLimitsPenalty);
         double POZ_Penalty = 0;
         // temp_x = repmat(x,No_of_POZ_Limits/2,1);
         // POZ_Penalty = sum(sum((POZ_Lower_Limits<temp_x &
         // temp_x<POZ_Upper_Limits).*min(temp_x-POZ_Lower_Limits,POZ_Upper_Limits-temp_x)));
-        for (int j = 0; j < No_of_POZ_Limits() / 2; j++) {
+        for (int j = 0; j < noOfPOZLimits() / 2; j++) {
             for (int i = 0; i < numberOfDimensions; i++) {
                 if ((POZ_Lower_Limits(j, i) < x[i]) && (x[i] < POZ_Upper_Limits(j, i))) {
                     POZ_Penalty += Math.min(x[i] - POZ_Lower_Limits(j, i), POZ_Upper_Limits(j, i) - x[i]);
@@ -244,13 +246,13 @@ public class CEC2011_Problem_11_3_ELD_6 extends DoubleProblem {
             }
         }
         // System.out.println("POZ_Penalty 14="+POZ_Penalty);
-        double Total_Penalty = 1e3 * Power_Balance_Penalty + 1e3 * Capacity_Limits_Penalty + 1e5 * Ramp_Limits_Penalty + 1e5 * POZ_Penalty;
-        g_constrains[0] = 1e3 * Power_Balance_Penalty;
-        g_constrains[1] = 1e3 * Capacity_Limits_Penalty;
-        g_constrains[2] = 1e5 * Ramp_Limits_Penalty;
+        double Total_Penalty = 1e3 * powerBalancePenalty + 1e3 * capacityLimitsPenalty + 1e5 * rampLimitsPenalty + 1e5 * POZ_Penalty;
+        g_constrains[0] = 1e3 * powerBalancePenalty;
+        g_constrains[1] = 1e3 * capacityLimitsPenalty;
+        g_constrains[2] = 1e5 * rampLimitsPenalty;
         g_constrains[3] = 1e5 * POZ_Penalty;
 
-        return g_constrains; // do I need deep copy?
+        return g_constrains;
     }
 
     public double eval(double[] x) {

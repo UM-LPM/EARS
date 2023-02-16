@@ -85,35 +85,25 @@ public class Binh2 extends DoubleProblem {
         solution.setObjectives(obj);
     }
 
-    public void evaluateConstraints(NumberSolution<Double> solution) {
-        double[] constraints = new double[numberOfConstraints];
-
-        double[] dv = Util.toDoubleArray(solution.getVariables());
-
-        constraints[0] = -Math.pow(dv[0] - 5.0, 2.0) - Math.pow(dv[1], 2.0) + 25.0;
-        constraints[1] = Math.pow(dv[0] - 8.0, 2.0) + Math.pow(dv[1] + 3.0, 2.0) - 7.7;
-
-        solution.setConstraints(constraints);
-
-        double total = 0.0;
-        int number = 0;
-        for (int i = 0; i < constraints.length; i++) {
-            if (constraints[i] < 0.0) {
-                total += constraints[i];
-                number++;
-            }
-        }
-        solution.setOverallConstraintViolation(total);
-        solution.setNumberOfViolatedConstraint(number);
-    }
-
     public double[] evaluate(double[] x) {
 
         double[] obj = new double[objectives.size()];
         for (int i = 0; i < obj.length; i++) {
             obj[i] = objectives.get(i).eval(x);
         }
-
         return obj;
+    }
+
+    @Override
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
+
+        double[] constraints = new double[numberOfConstraints];
+
+        double[] x = Util.toDoubleArray(solution.getVariables());
+
+        constraints[0] = -Math.pow(x[0] - 5.0, 2.0) - Math.pow(x[1], 2.0) + 25.0;
+        constraints[1] = Math.pow(x[0] - 8.0, 2.0) + Math.pow(x[1] + 3.0, 2.0) - 7.7;
+
+        return constraints;
     }
 }

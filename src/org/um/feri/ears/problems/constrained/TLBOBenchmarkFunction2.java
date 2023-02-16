@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.util.Util;
 
 
 /**
@@ -80,8 +82,11 @@ public class TLBOBenchmarkFunction2 extends DoubleProblem {
 			t1 *= x[i];
 		return Math.pow(Math.sqrt(numberOfDimensions), numberOfDimensions) * t1;
 	}
-	
-	public double[] evaluateConstrains(double[] x) {
+
+	@Override
+	public double[] calculateConstrains(NumberSolution<Double> solution) {
+
+		double[] x = Util.toDoubleArray(solution.getVariables());
 		double[] g = new double[numberOfConstraints];
 		double d = -1;
 		for (int i = 0; i < numberOfDimensions; i++) {

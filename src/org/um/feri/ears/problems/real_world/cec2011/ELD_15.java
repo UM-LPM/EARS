@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.util.Util;
 
 /**
  * Problem function!
@@ -11,7 +13,7 @@ import org.um.feri.ears.problems.DoubleProblem;
  * @author Matej Črepinšek
  * @version 1
  **/
-public class CEC2011_Problem_11_5_ELD_15 extends DoubleProblem {
+public class ELD_15 extends DoubleProblem {
     private double g_constrains[]; // internal
 
     private static double Power_Demand = 2630; // in MW
@@ -77,7 +79,7 @@ public class CEC2011_Problem_11_5_ELD_15 extends DoubleProblem {
         return Prohibited_Operating_Zones_POZ(i * 2 + 1, j);
     }
 
-    public CEC2011_Problem_11_5_ELD_15() {
+    public ELD_15() {
         super("RWP_11_5_ELD_15", 15, 1, 1, 4);
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
@@ -119,7 +121,10 @@ public class CEC2011_Problem_11_5_ELD_15 extends DoubleProblem {
         return tt;
     }
 
-    public double[] evaluateConstrains(double[] x) {
+    @Override
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
+
+        double[] x = Util.toDoubleArray(solution.getVariables());
         g_constrains = new double[numberOfConstraints];
         double Power_Loss = product(product2(x, B1), x) + product(B2, x) + B3;
         Power_Loss = Math.round(Power_Loss * 10000) / 10000;

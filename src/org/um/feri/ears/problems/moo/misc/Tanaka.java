@@ -62,7 +62,7 @@ public class Tanaka extends DoubleProblem {
     }
 
     @Override
-    public void evaluateConstraints(NumberSolution<Double> solution) {
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
         double[] constraints = new double[numberOfConstraints];
 
         double[] dv = Util.toDoubleArray(solution.getVariables());
@@ -73,19 +73,7 @@ public class Tanaka extends DoubleProblem {
         constraints[0] = (x1 * x1 + x2 * x2 - 1.0 - 0.1 * Math.cos(16.0 * Math.atan(x1 / x2)));
         constraints[1] = -2.0 * ((x1 - 0.5) * (x1 - 0.5) + (x2 - 0.5) * (x2 - 0.5) - 0.5);
 
-        solution.setConstraints(constraints);
-
-        double total = 0.0;
-        int number = 0;
-        for (int i = 0; i < constraints.length; i++) {
-            if (constraints[i] < 0.0) {
-                total += constraints[i];
-                number++;
-            }
-        }
-        solution.setOverallConstraintViolation(total);
-        solution.setNumberOfViolatedConstraint(number);
-
+        return constraints;
     }
 
     public double[] evaluate(double[] x) {
@@ -94,7 +82,6 @@ public class Tanaka extends DoubleProblem {
         for (int i = 0; i < obj.length; i++) {
             obj[i] = objectives.get(i).eval(x);
         }
-
         return obj;
     }
 }

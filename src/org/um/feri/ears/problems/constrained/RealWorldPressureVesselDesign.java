@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.util.Util;
 
 /**
  * Real-World Problem:
@@ -53,7 +55,10 @@ public class RealWorldPressureVesselDesign extends DoubleProblem {
     }
 
     @Override
-    public double[] evaluateConstrains(double[] x) {
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
+
+        double[] x = Util.toDoubleArray(solution.getVariables());
+
         double[] g = new double[numberOfConstraints];
         g[0] = (-1.0 * x[0]) + (0.0193 * x[2]);
         g[1] = (-1.0 * x[1]) + (0.00954 * x[2]);

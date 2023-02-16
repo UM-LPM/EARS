@@ -30,71 +30,59 @@ import org.um.feri.ears.util.Util;
 
 public class ConstrEx extends DoubleProblem {
 
-	public ConstrEx() {
-	     
-		super("Constr_Ex", 2, 1, 2,2);
+    public ConstrEx() {
 
-		referenceSetFileName = "ConstrEx";
+        super("Constr_Ex", 2, 1, 2, 2);
 
-	    upperLimit = new ArrayList<>(numberOfDimensions);
-		lowerLimit = new ArrayList<>(numberOfDimensions);
+        referenceSetFileName = "ConstrEx";
 
-		lowerLimit.add(0.1);
-		upperLimit.add(1.0);
-		lowerLimit.add(0.0);
-		upperLimit.add(5.0);
+        upperLimit = new ArrayList<>(numberOfDimensions);
+        lowerLimit = new ArrayList<>(numberOfDimensions);
 
-		addObjective(new ConstrEx_F1());
-		addObjective(new ConstrEx_F2());
-	}
+        lowerLimit.add(0.1);
+        upperLimit.add(1.0);
+        lowerLimit.add(0.0);
+        upperLimit.add(5.0);
 
-	@Override
-	public void evaluate(NumberSolution<Double> solution) {
-		
-		double[] x = Util.toDoubleArray(solution.getVariables());
+        addObjective(new ConstrEx_F1());
+        addObjective(new ConstrEx_F2());
+    }
+
+    @Override
+    public void evaluate(NumberSolution<Double> solution) {
+
+        double[] x = Util.toDoubleArray(solution.getVariables());
 
 
-		double[] obj = new double[objectives.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = objectives.get(i).eval(x);
-		}
-		solution.setObjectives(obj);
-	}
+        double[] obj = new double[objectives.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = objectives.get(i).eval(x);
+        }
+        solution.setObjectives(obj);
+    }
 
-	@Override
-	public void evaluateConstraints(NumberSolution<Double> solution) {
-		double[] constraints = new double[numberOfConstraints];
-		
-		double[] dv = Util.toDoubleArray(solution.getVariables());
-		
-	    constraints[0] =  (dv[1] + 9*dv[0]-6.0) ;
-	    constraints[1] =  (-dv[1] + 9*dv[0] -1.0);
+    public double[] evaluate(Double[] ds) {
+        double[] x = new double[numberOfDimensions];
+        for (int i = 0; i < numberOfDimensions; i++)
+            x[i] = ds[i];
 
-		solution.setConstraints(constraints);
+        double[] obj = new double[objectives.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = objectives.get(i).eval(x);
+        }
 
-	    double total = 0.0;
-	    int number = 0;
-		for (int i = 0; i < constraints.length; i++) {
-			if (constraints[i]<0.0){
-		        total+=constraints[i];
-		        number++;
-			}
-		}
-	    solution.setOverallConstraintViolation(total);    
-	    solution.setNumberOfViolatedConstraint(number); 
-		
-	}
+        return obj;
+    }
 
-	public double[] evaluate(Double[] ds) {
-		double[] x = new double[numberOfDimensions];
-		for (int i = 0; i < numberOfDimensions; i++)
-			x[i] = ds[i];
+    @Override
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
+        double[] constraints = new double[numberOfConstraints];
 
-		double[] obj = new double[objectives.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = objectives.get(i).eval(x);
-		}
+        double[] x = Util.toDoubleArray(solution.getVariables());
 
-		return obj;
-	}
+        constraints[0] = (x[1] + 9 * x[0] - 6.0);
+        constraints[1] = (-x[1] + 9 * x[0] - 1.0);
+
+        return constraints;
+    }
 }

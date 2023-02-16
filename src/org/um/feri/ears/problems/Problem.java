@@ -92,10 +92,35 @@ public abstract class Problem<S extends Solution> {
         return solution;
     }
 
-    public void evaluateConstraints(S solution) {
-        if (numberOfConstraints > 0)
+    public final void evaluateConstraints(S solution) {
+
+        double[] constraints = calculateConstrains(solution);
+
+        solution.setConstraints(constraints);
+
+        double total = 0.0;
+        int number = 0;
+        for (int i = 0; i < constraints.length; i++) {
+            if (constraints[i] < 0.0) {
+                total += constraints[i];
+                number++;
+            }
+        }
+        solution.setOverallConstraintViolation(total);
+        solution.setNumberOfViolatedConstraint(number);
+    }
+
+    /**
+     * Override this method if the problem has constraints.
+     *
+     * @param solution for which the constraints will be evaluated
+     * @return computed constraints
+     */
+    public double[] calculateConstrains(S solution) {
+        if (numberOfConstraints > 0) {
             System.out.println("evaluateConstraints not overriden in subclass");
-        //TODO check if problem has constraints
+        }
+        return new double[0];
     }
 
     /**

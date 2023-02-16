@@ -2,10 +2,9 @@ package org.um.feri.ears.problems.real_world.cec2011;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -14,7 +13,7 @@ import org.um.feri.ears.util.Util;
  * @author Matej Črepinšek
  * @version 1
  **/
-public class CEC2011_Problem_11_7_ELD_140 extends DoubleProblem {
+public class ELD_140 extends DoubleProblem {
     private double g_constrains[]; // internal
     /*
      */
@@ -168,7 +167,7 @@ public class CEC2011_Problem_11_7_ELD_140 extends DoubleProblem {
     private static int Up_Ramp_data2_col = 1;
     private static int Down_Ramp_data2_col = 2;
 
-    public CEC2011_Problem_11_7_ELD_140() {
+    public ELD_140() {
         super("RWP_11_7_ELD_140", 140, 1, 1, 4);
 
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
@@ -219,7 +218,10 @@ public class CEC2011_Problem_11_7_ELD_140 extends DoubleProblem {
         return Prohibited_Operating_Zones_POZ(i * 2 + 1, j);
     }
 
-    public double[] evaluateConstrains(double[] x) {
+    @Override
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
+
+        double[] x = Util.toDoubleArray(solution.getVariables());
         g_constrains = new double[numberOfConstraints];
         double Power_Loss = 0;
         double Power_Balance_Penalty = Math.abs(Power_Demand + Power_Loss - sum(x));

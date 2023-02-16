@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.util.Util;
 
 
 /**
@@ -53,7 +55,6 @@ public class TLBOBenchmarkFunction1 extends DoubleProblem {
 
     public TLBOBenchmarkFunction1() {
         super("TLBOBenchmarkFunction1 (TP7) cec-g01", 13, 1, 1, 9);
-        minimize = true;
         maxConstraints = new double[numberOfConstraints];
         minConstraints = new double[numberOfConstraints];
         countConstraints = new double[numberOfConstraints];
@@ -91,7 +92,10 @@ public class TLBOBenchmarkFunction1 extends DoubleProblem {
     }
 
 
-    public double[] evaluateConstrains(double[] x) {
+    @Override
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
+
+        double[] x = Util.toDoubleArray(solution.getVariables());
 
         double[] g = new double[numberOfConstraints];
         g[0] = 2.0 * x[0] + 2.0 * x[1] + x[9] + x[10] - 10.;

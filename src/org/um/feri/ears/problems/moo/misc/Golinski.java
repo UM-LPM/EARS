@@ -66,7 +66,7 @@ public class Golinski extends DoubleProblem {
     }
 
     @Override
-    public void evaluateConstraints(NumberSolution<Double> solution) {
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
         double[] constraints = new double[numberOfConstraints];
 
         double[] dv = Util.toDoubleArray(solution.getVariables());
@@ -98,18 +98,7 @@ public class Golinski extends DoubleProblem {
         double b = 1.575e8;
         constraints[10] = -(java.lang.Math.sqrt(a * a + b) / (0.1 * x7 * x7 * x7) - 1100.0);
 
-        solution.setConstraints(constraints);
-
-        double total = 0.0;
-        int number = 0;
-        for (int i = 0; i < constraints.length; i++) {
-            if (constraints[i] < 0.0) {
-                total += constraints[i];
-                number++;
-            }
-        }
-        solution.setOverallConstraintViolation(total);
-        solution.setNumberOfViolatedConstraint(number);
+        return constraints;
     }
 
     public double[] evaluate(double[] x) {
