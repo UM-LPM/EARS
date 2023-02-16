@@ -14,7 +14,7 @@
 package org.um.feri.ears.algorithms.moo.pso;
 
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.DoubleMOTask;
+import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
@@ -24,7 +24,7 @@ import org.um.feri.ears.util.Util;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  * @author Juan J. Durillo
  */
-public class UniformMutation implements MutationOperator<Double, DoubleMOTask, NumberSolution<Double>> {
+public class UniformMutation implements MutationOperator<Double, MOTask<Double>, NumberSolution<Double>> {
     private Double perturbation;
     private Double mutationProbability = null;
 
@@ -48,7 +48,7 @@ public class UniformMutation implements MutationOperator<Double, DoubleMOTask, N
      * @param probability Mutation setProbability
      * @param solution    The solution to mutate
      */
-    public void doMutation(double probability, NumberSolution<Double> solution, DoubleMOTask task) {
+    public void doMutation(double probability, NumberSolution<Double> solution, MOTask<Double> task) {
         for (int i = 0; i < solution.numberOfVariables(); i++) {
             if (Util.nextDouble() < probability) {
                 double rand = Util.nextDouble();
@@ -68,7 +68,7 @@ public class UniformMutation implements MutationOperator<Double, DoubleMOTask, N
     }
 
     @Override
-    public NumberSolution<Double> execute(NumberSolution<Double> solution, DoubleMOTask tb) {
+    public NumberSolution<Double> execute(NumberSolution<Double> solution, MOTask<Double> tb) {
 
         doMutation(mutationProbability, solution, tb);
         return solution;

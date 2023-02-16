@@ -36,8 +36,6 @@ import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
-import java.util.Comparator;
-
 /**
  * This class implements the GDE3 algorithm.
  */
@@ -87,7 +85,7 @@ public class GDE3<Type extends Number, P extends Problem<NumberSolution<Type>>, 
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new NumberSolution<Type>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }

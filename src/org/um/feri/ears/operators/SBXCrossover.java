@@ -21,7 +21,7 @@
 
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.DoubleMOTask;
+import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
@@ -29,7 +29,7 @@ import org.um.feri.ears.util.Util;
 /**
  * This class allows to apply a SBX crossover operator using two parent solutions.
  */
-public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, NumberSolution<Double>>{
+public class SBXCrossover implements CrossoverOperator<Double, MOTask<Double>, NumberSolution<Double>>{
   /**
    * EPS defines the minimum difference allowed between real values
    */
@@ -62,7 +62,7 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, Num
    * @param parent2 The second parent
    * @return An array containing the two offsprings
    */
-	public NumberSolution<Double>[] doCrossover(double probability, NumberSolution<Double> parent1, NumberSolution<Double> parent2, DoubleMOTask task) {
+	public NumberSolution<Double>[] doCrossover(double probability, NumberSolution<Double> parent1, NumberSolution<Double> parent2, MOTask<Double> task) {
 
 		NumberSolution<Double>[] offSpring = new NumberSolution[2];
 
@@ -150,7 +150,7 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, Num
 		return offSpring;
 	}
 
-	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, DoubleMOTask task) {
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, MOTask<Double> task) {
 
 		if (parents.length != 2) {
 			return null;

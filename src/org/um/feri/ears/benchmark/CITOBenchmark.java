@@ -1,15 +1,15 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.problems.CombinatorialProblem;
+import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, CombinatorialProblem> {
+public class CITOBenchmark extends MOBenchmark<Integer, MOTask<Integer>, CombinatorialProblem> {
 
     public CITOBenchmark() {
         this(null, 0.0000001, true);
@@ -28,7 +28,7 @@ public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, Combinato
 
     @Override
     protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, CombinatorialProblem problem) {
-        tasks.add(new IntegerMOTask(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
+        tasks.add(new MOTask<>(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 
     @Override

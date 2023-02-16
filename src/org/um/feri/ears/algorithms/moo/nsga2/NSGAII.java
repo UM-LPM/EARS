@@ -57,7 +57,6 @@ public class NSGAII<Type extends Number, P extends Problem<NumberSolution<Type>>
         );
     }
 
-
     @Override
     protected void start() throws StopCriterionException {
         Distance<Type> distance = new Distance<Type>();
@@ -68,7 +67,7 @@ public class NSGAII<Type extends Number, P extends Problem<NumberSolution<Type>>
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = task.getRandomMOSolution();
+            newSolution = task.getRandomEvaluatedSolution();
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }

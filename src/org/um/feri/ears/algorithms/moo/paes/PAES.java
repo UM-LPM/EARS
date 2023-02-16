@@ -7,8 +7,6 @@
 
 package org.um.feri.ears.algorithms.moo.paes;
 
-import java.util.Comparator;
-
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
@@ -56,7 +54,7 @@ public class PAES<Type extends Number, P extends Problem<NumberSolution<Type>>, 
 
         if (task.isStopCriterion())
             return;
-        NumberSolution<Type> solution = new NumberSolution<Type>(task.getRandomMOSolution());
+        NumberSolution<Type> solution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
         // problem.evaluateConstraints(solution);
 
         archive.add(new NumberSolution<Type>(solution));

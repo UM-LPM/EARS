@@ -31,7 +31,7 @@ public class DTLZ7 extends DTLZ {
 
     public DTLZ7(int numberOfVariables, int numberOfObjectives) {
 
-        super("DTLZ7", numberOfVariables, 0, numberOfObjectives);
+        super("DTLZ7", numberOfVariables, numberOfObjectives, 0);
 
         referenceSetFileName = "DTLZ7." + numberOfObjectives + "D";
 
@@ -43,7 +43,6 @@ public class DTLZ7 extends DTLZ {
             lowerLimit.add(0.0);
             upperLimit.add(1.0);
         }
-
     }
 
     @Override

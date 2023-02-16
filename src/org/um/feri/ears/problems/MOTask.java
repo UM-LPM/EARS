@@ -6,7 +6,7 @@ import org.um.feri.ears.quality_indicator.QualityIndicator;
 
 import java.util.concurrent.TimeUnit;
 
-public abstract class MOTask<Type extends Number> extends TaskBase<NumberProblem<Type>> {
+public class MOTask<Type extends Number> extends TaskBase<NumberProblem<Type>> {
 
     /**
      * @param problem the problem to be solved
@@ -62,10 +62,17 @@ public abstract class MOTask<Type extends Number> extends TaskBase<NumberProblem
         return problem.getNumberOfConstraints();
     }
 
-    abstract public NumberSolution<Type> getRandomMOSolution() throws StopCriterionException;
+    //abstract public NumberSolution<Type> getRandomMOSolution() throws StopCriterionException;
 
     public boolean isFirstBetter(ParetoSolution<Type> x, ParetoSolution<Type> y, QualityIndicator<Type> qi) {
         return problem.isFirstBetter(x, y, qi);
+    }
+
+    public NumberSolution<Type> getRandomEvaluatedSolution() throws StopCriterionException {
+
+        NumberSolution<Type> tmpSolution = problem.getRandomSolution();
+        eval(tmpSolution);
+        return tmpSolution;
     }
 
 	/**
@@ -89,5 +96,18 @@ public abstract class MOTask<Type extends Number> extends TaskBase<NumberProblem
                 throw new StopCriterionException("CPU Time");
             }
         }
+    }
+
+    public Type getLowerLimit(int i) {
+        return problem.lowerLimit.get(i);
+    }
+
+    public Type getUpperLimit(int i) {
+        return problem.upperLimit.get(i);
+    }
+
+    @Override
+    public MOTask<Type> clone() {
+        return new MOTask<>(this);
     }
 }

@@ -22,7 +22,7 @@ public class UnconstrainedProblem10 extends CEC2009 {
 	  */
 	public UnconstrainedProblem10(Integer numberOfVariables) {
 		
-		super("UF10", numberOfVariables,0, 3);
+		super("UF10", numberOfVariables,3, 0);
 
 		referenceSetFileName = "UF10";
 

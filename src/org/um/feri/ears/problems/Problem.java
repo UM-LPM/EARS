@@ -63,7 +63,6 @@ public abstract class Problem<S extends Solution> {
     public abstract S getRandomSolution();
 
     public boolean isFirstBetter(S solution1, S solution2)  {
-        //TODO dominance comparator with information about minimization of each objective - objectiveMaximizationFlags
         return Comparator.LESS == dominanceComparator.compare(solution1,solution2);
     }
 

@@ -31,7 +31,7 @@ public class ZDT4 extends ZDT{
 	}
 	public ZDT4(Integer numberOfVariables) {
 	     
-		super("ZDT4", numberOfVariables,0,2);
+		super("ZDT4", numberOfVariables,2,0);
 
 		referenceSetFileName = "ZDT4";
 

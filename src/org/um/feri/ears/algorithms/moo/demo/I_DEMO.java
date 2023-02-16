@@ -2,10 +2,10 @@ package org.um.feri.ears.algorithms.moo.demo;
 
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.PMXCrossover;
-import org.um.feri.ears.problems.IntegerMOTask;
 import org.um.feri.ears.problems.CombinatorialProblem;
+import org.um.feri.ears.problems.MOTask;
 
-public class I_DEMO extends DEMO<Integer, CombinatorialProblem, IntegerMOTask> {
+public class I_DEMO extends DEMO<Integer, CombinatorialProblem, MOTask<Integer>> {
 	
 	public I_DEMO() {
 		this(new PMXCrossover(), 100, 1);

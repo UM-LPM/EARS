@@ -1,8 +1,8 @@
 package org.um.feri.ears.examples;
 
 import org.um.feri.ears.algorithms.moo.nsga2.D_NSGAII;
-import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -18,10 +18,10 @@ public class QualityIndicatorExample {
 
 		D_NSGAII nsga2 = new D_NSGAII();
 		DoubleProblem problem = new UnconstrainedProblem1();
-		DoubleMOTask t = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 0, 0);
-		
+		MOTask<Double> t = new MOTask<>(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 0, 0);
+
 		QualityIndicator qi = IndicatorFactory.createIndicator(IndicatorName.NATIVE_HV, t.problem.getNumberOfObjectives(), t.problem.getReferenceSetFileName());
-		
+
 		try {
 			ParetoSolution<Double> result = nsga2.execute(t);
 			double value = qi.evaluate(result);

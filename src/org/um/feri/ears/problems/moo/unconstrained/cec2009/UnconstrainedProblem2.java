@@ -21,7 +21,7 @@ public class UnconstrainedProblem2 extends CEC2009 {
 	 * @param numberOfVariables Number of variables.
 	 */
 	public UnconstrainedProblem2(Integer numberOfVariables) {
-		super("UF2", numberOfVariables,0, 2);
+		super("UF2", numberOfVariables,2, 0);
 
 		referenceSetFileName = "UF2";
 		

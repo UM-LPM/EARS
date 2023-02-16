@@ -166,7 +166,7 @@ public class UnconstrainedProblem11 extends CEC2009 {
 
     public UnconstrainedProblem11(Integer numberOfVariables, int numberOfObjectives) {
 
-        super("UF11", numberOfVariables, 0, numberOfObjectives);
+        super("UF11", numberOfVariables, numberOfObjectives, 0);
 
         if ((numberOfVariables != 10) && (numberOfVariables != 30)) {
             throw new IllegalArgumentException(

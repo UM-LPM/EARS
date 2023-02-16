@@ -96,7 +96,7 @@ public class SPEA2<Type extends Number, P extends Problem<NumberSolution<Type>>,
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            NumberSolution<Type> newSolution = new NumberSolution<Type>(task.getRandomMOSolution());
+            NumberSolution<Type> newSolution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);;
             population.add(newSolution);
         }

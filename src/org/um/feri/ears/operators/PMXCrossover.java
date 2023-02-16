@@ -1,10 +1,10 @@
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.IntegerMOTask;
+import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
-public class PMXCrossover implements CrossoverOperator<Integer, IntegerMOTask, NumberSolution<Integer>> {
+public class PMXCrossover implements CrossoverOperator<Integer, MOTask<Integer>, NumberSolution<Integer>> {
 
 	private double crossoverProbability = 1.0;
 
@@ -22,7 +22,7 @@ public class PMXCrossover implements CrossoverOperator<Integer, IntegerMOTask, N
 	}
 	
 	@Override
-	public NumberSolution<Integer>[] execute(NumberSolution<Integer>[] source, IntegerMOTask tb) {
+	public NumberSolution<Integer>[] execute(NumberSolution<Integer>[] source, MOTask<Integer> tb) {
 		if (source.length < 2) {
 			return null;
 		}

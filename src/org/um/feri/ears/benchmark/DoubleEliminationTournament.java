@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -30,12 +29,12 @@ import org.um.feri.ears.util.Util;
 public class DoubleEliminationTournament {
 	
 	ArrayList<QualityIndicator> ensemble;
-	DoubleMOTask task;
+	MOTask<Double> task;
 	int playerCount;
 	HashMap<String, Double> averageRanks;
-	ArrayList<MOAlgorithm<DoubleProblem, DoubleMOTask, Double>> players;
+	ArrayList<MOAlgorithm<DoubleProblem, MOTask<Double>, Double>> players;
 	
-	public void run(int tournamentSize, ArrayList<IndicatorName> indicators, ArrayList<MOAlgorithm<DoubleProblem, DoubleMOTask, Double>> players, DoubleMOTask task, int rep){
+	public void run(int tournamentSize, ArrayList<IndicatorName> indicators, ArrayList<MOAlgorithm<DoubleProblem, MOTask<Double>, Double>> players, MOTask<Double> task, int rep){
 		this.task = task; 
 		playerCount = players.size();
 		this.players = players;
@@ -51,11 +50,11 @@ public class DoubleEliminationTournament {
 	}
 
 
-	private void fillPlayers(ArrayList<MOAlgorithm<DoubleProblem, DoubleMOTask, Double>> players) {
+	private void fillPlayers(ArrayList<MOAlgorithm<DoubleProblem, MOTask<Double>, Double>> players) {
 		
 		averageRanks = new HashMap<>();
 		
-		for (MOAlgorithm<DoubleProblem, DoubleMOTask, Double> moAlgorithm : players) {
+		for (MOAlgorithm<DoubleProblem, MOTask<Double>, Double> moAlgorithm : players) {
 			averageRanks.put(moAlgorithm.getId(), 0.0);
 		}
 		
@@ -272,7 +271,7 @@ public class DoubleEliminationTournament {
 
 	}
 
-	private ArrayList<MOAlgorithmEvalResult> getParticipants(int tournamentSize, ArrayList<MOAlgorithm<DoubleProblem, DoubleMOTask, Double>> players, boolean preliminaries) {
+	private ArrayList<MOAlgorithmEvalResult> getParticipants(int tournamentSize, ArrayList<MOAlgorithm<DoubleProblem, MOTask<Double>, Double>> players, boolean preliminaries) {
 		
 		
 		ArrayList<MOAlgorithmEvalResult> participants = new ArrayList<MOAlgorithmEvalResult>();
@@ -289,14 +288,14 @@ public class DoubleEliminationTournament {
 		    	task.resetCounter();
 		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
 		        Set<Future<AlgorithmRunResult>> set = new HashSet<>();
-		        for (MOAlgorithm<DoubleProblem, DoubleMOTask, Double> al: players) {
-		          Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, (DoubleMOTask) task.clone()));
+		        for (MOAlgorithm<DoubleProblem, MOTask<Double>, Double> al: players) {
+		          Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, task.clone()));
 		          set.add(future);
 		        }
 
 		        for (Future<AlgorithmRunResult> future : set) {
 		        	try {
-						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, DoubleMOTask, Double>,DoubleMOTask> res = future.get();
+						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, MOTask<Double>, Double>,MOTask<Double>> res = future.get();
 
 		        		results.add(new MOAlgorithmEvalResult(res.solution, res.algorithm, res.task));
 
@@ -342,14 +341,14 @@ public class DoubleEliminationTournament {
 		    	task.resetCounter();
 		    	ExecutorService pool = Executors.newFixedThreadPool(players.size());
 		        Set<Future<AlgorithmRunResult>> set = new HashSet<>();
-		        for (MOAlgorithm<DoubleProblem, DoubleMOTask, Double> al: players) {
-		          Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, (DoubleMOTask) task.clone()));
+		        for (MOAlgorithm<DoubleProblem, MOTask<Double>, Double> al: players) {
+		          Future<AlgorithmRunResult> future = pool.submit(al.createRunnable(al, task.clone()));
 		          set.add(future);
 		        }
 
 		        for (Future<AlgorithmRunResult> future : set) {
 		        	try {
-						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, DoubleMOTask, Double>,DoubleMOTask> res = future.get();
+						AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, MOTask<Double>, Double>,MOTask<Double>> res = future.get();
 
 		        		participants.add(new MOAlgorithmEvalResult(res.solution, res.algorithm, res.task));
 

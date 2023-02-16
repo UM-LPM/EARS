@@ -22,7 +22,7 @@ public class UnconstrainedProblem9 extends CEC2009 {
 	 * @param numberOfVariables Number of variables.
 	 */
 	public UnconstrainedProblem9(Integer numberOfVariables, double epsilon) {
-		super("UF9", numberOfVariables,0, 3);
+		super("UF9", numberOfVariables,3, 0);
 
 		referenceSetFileName = "UF9";
 

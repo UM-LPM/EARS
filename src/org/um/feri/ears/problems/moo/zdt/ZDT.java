@@ -6,8 +6,8 @@ import org.um.feri.ears.util.Util;
 
 public abstract class ZDT extends DoubleProblem {
 
-	public ZDT(String name, int numberOfDimensions, int numberOfConstraints, int numberOfObjectives) {
-		super(name, numberOfDimensions, 1, numberOfConstraints, numberOfObjectives);
+	public ZDT(String name, int numberOfDimensions, int numberOfObjectives, int numberOfConstraints) {
+		super(name, numberOfDimensions, 1, numberOfObjectives, numberOfConstraints);
 		benchmarkName = "ZDT";
 	}
 

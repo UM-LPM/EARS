@@ -120,6 +120,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
         solution.setObjective(0, eval(solution.getVariables()));
     }
 
+    //TODO make abstract and protected
     /**
      * Implements the problem's fitness function.
      *

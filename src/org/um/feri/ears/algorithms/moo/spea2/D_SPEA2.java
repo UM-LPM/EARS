@@ -4,11 +4,11 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
-import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterionException;
 
-public class D_SPEA2 extends SPEA2<Double, DoubleProblem, DoubleMOTask> {
+public class D_SPEA2 extends SPEA2<Double, DoubleProblem, MOTask<Double>> {
 
 	public D_SPEA2() {
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0), 100, 100);

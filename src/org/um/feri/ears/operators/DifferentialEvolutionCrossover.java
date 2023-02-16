@@ -21,7 +21,7 @@
 
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.DoubleMOTask;
+import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
@@ -42,7 +42,7 @@ import org.um.feri.ears.util.Util;
  *   - current-to-rand/1/bin (current-to-best/1/bin)
  *   - current-to-rand/1/exp (current-to-best/1/exp)
  */
-public class DifferentialEvolutionCrossover implements CrossoverOperator<Double, DoubleMOTask, NumberSolution<Double>> {
+public class DifferentialEvolutionCrossover implements CrossoverOperator<Double, MOTask<Double>, NumberSolution<Double>> {
 	/**
 	 * DEFAULT_CR defines a default CR (crossover operation control) value
 	 */
@@ -108,7 +108,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 
 
 	@Override
-	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parent, DoubleMOTask task) {
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parent, MOTask<Double> task) {
 
 		NumberSolution<Double> child;
 		int jrand;

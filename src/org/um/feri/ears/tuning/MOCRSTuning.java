@@ -21,7 +21,6 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
 import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
-import org.um.feri.ears.problems.DoubleMOTask;
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -419,7 +418,7 @@ public class MOCRSTuning {
 
                     for (Future<AlgorithmRunResult> future : set) {
 
-                        AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, DoubleMOTask, Double>, DoubleMOTask> res = future.get();
+                        AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, MOTask<Double>, Double>, MOTask<Double>> res = future.get();
                         sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.solution, defaultObject, res.task));
                     }
 
@@ -453,7 +452,7 @@ public class MOCRSTuning {
 
                 //Order results by tasks
                 for (MOTask task : tasks) {
-                    for (AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, DoubleMOTask, Double>, DoubleMOTask> res : futureResults) {
+                    for (AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, MOTask<Double>, Double>, MOTask<Double>> res : futureResults) {
                         if (task.getProblemName().equals(res.task.getProblemName())) {
                             sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.solution, defaultObject, res.task));
                             break;

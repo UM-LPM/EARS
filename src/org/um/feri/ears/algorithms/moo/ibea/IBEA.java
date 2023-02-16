@@ -92,7 +92,7 @@ public class IBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new NumberSolution<Type>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }

@@ -2,7 +2,7 @@ package org.um.feri.ears.problems.moo;
 
 import org.um.feri.ears.algorithms.moo.ibea.D_IBEA;
 import org.um.feri.ears.algorithms.moo.moead.D_MOEAD;
-import org.um.feri.ears.problems.DoubleMOTask;
+import org.um.feri.ears.problems.MOTask;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
@@ -22,8 +22,8 @@ public class TestMOProblem {
 
     	
 
-    	DoubleMOTask t1 = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
-    	DoubleMOTask t2 = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
+    	MOTask<Double> t1 = new MOTask<>(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
+    	MOTask<Double> t2 = new MOTask<>(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
 
 
 

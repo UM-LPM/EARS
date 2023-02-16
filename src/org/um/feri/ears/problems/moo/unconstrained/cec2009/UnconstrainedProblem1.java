@@ -10,12 +10,12 @@ public class UnconstrainedProblem1 extends CEC2009 {
     
 
 	public UnconstrainedProblem1() {
-		this(30); // 30 variables by default
+		this(30);
 	}
 	 
 	public UnconstrainedProblem1(Integer numberOfVariables) {
 		
-		super("UF1", numberOfVariables, 0, 2);
+		super("UF1", numberOfVariables, 2, 0);
 
 		referenceSetFileName = "UF1";
 

@@ -31,7 +31,7 @@ public class DTLZ4 extends DTLZ {
 
     public DTLZ4(int numberOfVariables, int numberOfObjectives) {
 
-        super("DTLZ4", numberOfVariables, 0, numberOfObjectives);
+        super("DTLZ4", numberOfVariables, numberOfObjectives, 0);
 
         referenceSetFileName = "DTLZ4." + numberOfObjectives + "D";
 

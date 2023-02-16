@@ -51,7 +51,7 @@ import org.um.feri.ears.util.Util;
  */
 
 
-public class OMOPSO extends MOAlgorithm<DoubleProblem, DoubleMOTask, Double> {
+public class OMOPSO extends MOAlgorithm<DoubleProblem, MOTask<Double>, Double> {
 
     private int swarmSize;
     private int archiveSize;
@@ -266,7 +266,7 @@ public class OMOPSO extends MOAlgorithm<DoubleProblem, DoubleMOTask, Double> {
         for (int i = 0; i < swarmSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new NumberSolution<>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             swarm.add(newSolution);
         }

@@ -20,7 +20,7 @@ public class UnconstrainedProblem3 extends CEC2009 {
 	 * @param numberOfVariables Number of variables.
 	 */
 	public UnconstrainedProblem3(Integer numberOfVariables) {
-		super("UF3", numberOfVariables,0, 2);
+		super("UF3", numberOfVariables,2, 0);
 
 		referenceSetFileName = "UF3";
 
