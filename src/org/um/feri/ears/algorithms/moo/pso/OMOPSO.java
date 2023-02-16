@@ -244,7 +244,7 @@ public class OMOPSO extends MOAlgorithm<DoubleProblem, DoubleMOTask, Double> {
         }
 
         currentIteration = 1;
-        swarm = new ParetoSolution<Double>(swarmSize);
+        swarm = new ParetoSolution<>(swarmSize);
         this.maxIterations = task.getMaxEvaluations() / swarmSize;
 
         double mutationProbability = 1.0 / numVar;
@@ -252,11 +252,11 @@ public class OMOPSO extends MOAlgorithm<DoubleProblem, DoubleMOTask, Double> {
         this.nonUniformMutation = new NonUniformMutation(mutationProbability, 0.5, maxIterations);
 
         localBest = new NumberSolution[swarmSize];
-        leaderArchive = new CrowdingDistanceArchive<Double>(this.archiveSize);
+        leaderArchive = new CrowdingDistanceArchive<>(this.archiveSize);
         epsilonArchive = new NondominatedPopulation<>(new DominanceComparator(eta));
 
         dominanceComparator = new DominanceComparator();
-        crowdingDistanceComparator = new CrowdingDistanceComparator<Double>();
+        crowdingDistanceComparator = new CrowdingDistanceComparator<>();
 
         speed = new double[swarmSize][numVar];
 
@@ -266,7 +266,7 @@ public class OMOPSO extends MOAlgorithm<DoubleProblem, DoubleMOTask, Double> {
         for (int i = 0; i < swarmSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new NumberSolution<Double>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<>(task.getRandomMOSolution());
             // problem.evaluateConstraints(newSolution);
             swarm.add(newSolution);
         }

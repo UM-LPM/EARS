@@ -24,7 +24,7 @@ public abstract class Problem<S extends Solution> {
     protected String referenceSetFileName;
     protected String benchmarkName;
     protected String description;
-    DominanceComparator dominanceComparator = new DominanceComparator();
+    DominanceComparator dominanceComparator;
 
     protected String version = "1.0";
     public static final int CONSTRAINED_TYPE_COUNT = 1;
@@ -37,9 +37,10 @@ public abstract class Problem<S extends Solution> {
         this.numberOfGlobalOptima = numberOfGlobalOptima;
         this.numberOfObjectives = numberOfObjectives;
         this.numberOfConstraints = numberOfConstraints;
-        objectiveMaximizationFlags = new boolean[numberOfObjectives];
-
         objectiveSpaceOptima = new double[numberOfGlobalOptima];
+        objectiveMaximizationFlags = new boolean[numberOfObjectives];
+        dominanceComparator = new DominanceComparator();
+        dominanceComparator.setObjectiveMaximizationFlags(objectiveMaximizationFlags);
     }
 
     public abstract void evaluate(S solution);

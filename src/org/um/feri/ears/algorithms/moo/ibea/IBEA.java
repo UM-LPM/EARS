@@ -85,7 +85,7 @@ public class IBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
 
         ParetoSolution<Type> offSpringSolutionSet;
 
-        BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
+        BinaryTournament2<Type> bt2 = new BinaryTournament2<>();
 
         // Create the initial solutionSet
         NumberSolution<Type> newSolution;

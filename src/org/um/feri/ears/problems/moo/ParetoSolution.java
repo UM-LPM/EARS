@@ -57,13 +57,13 @@ public class ParetoSolution<Type extends Number> extends Solution implements Ite
         }
     }
     public ParetoSolution() {
-        solutions = new ArrayList<NumberSolution<Type>>();
+        solutions = new ArrayList<>();
         capacity = 1000;
     }
 
     public ParetoSolution(int maximumSize) {
 
-        solutions = new ArrayList<NumberSolution<Type>>();
+        solutions = new ArrayList<>();
         capacity = maximumSize;
     }
 

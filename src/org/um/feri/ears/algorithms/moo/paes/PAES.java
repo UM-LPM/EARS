@@ -47,7 +47,7 @@ public class PAES<Type extends Number, P extends Problem<NumberSolution<Type>>, 
 
     @Override
     protected void init() {
-        archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, numObj);
+        archive = new AdaptiveGridArchive<>(archiveSize, bisections, numObj);
     }
 
     public void start() throws StopCriterionException {

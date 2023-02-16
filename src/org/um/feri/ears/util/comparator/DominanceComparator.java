@@ -34,8 +34,8 @@ import java.util.Comparator;
 public class DominanceComparator implements Comparator<Solution> {
 
     private final double epsilon;
+    protected boolean[] objectiveMaximizationFlags;
     OverallConstraintViolationComparator violationConstraintComparator;
-
     public DominanceComparator() {
         this(0.0);
     }
@@ -43,6 +43,10 @@ public class DominanceComparator implements Comparator<Solution> {
     public DominanceComparator(double epsilon) {
         violationConstraintComparator = new OverallConstraintViolationComparator();
         this.epsilon = epsilon;
+    }
+
+    public void setObjectiveMaximizationFlags(boolean[] objectiveMaximizationFlags) {
+        this.objectiveMaximizationFlags = objectiveMaximizationFlags;
     }
 
     /**
@@ -60,13 +64,8 @@ public class DominanceComparator implements Comparator<Solution> {
         else if (solution2 == null)
             return -1;
 
-        int dominate1; // dominate1 indicates if some objective of solution1
-        // dominates the same objective in solution2. dominate2
-        int dominate2; // is complementary to dominate1.
-
-        dominate1 = 0;
-        dominate2 = 0;
-
+        int dominate1 = 0; // dominate1 indicates if some objective of solution1 dominates the same objective in solution2.
+        int dominate2 = 0; // dominate2 is complementary to dominate1.
         int flag; // stores the result of the comparison
 
 
@@ -79,27 +78,37 @@ public class DominanceComparator implements Comparator<Solution> {
         for (int i = 0; i < solution1.getNumberOfObjectives(); i++) {
             value1 = solution1.getObjective(i);
             value2 = solution2.getObjective(i);
-            if (value1 / (1 + epsilon) < value2) {
-                flag = -1;
-            } else if (value2 / (1 + epsilon) < value1) {
-                flag = 1;
-            } else {
-                flag = 0;
+
+            // if objectiveMaximizationFlags is not set use minimization as default
+            if (objectiveMaximizationFlags != null && objectiveMaximizationFlags[i]) {
+                if (value1 / (1 + epsilon) > value2) {
+                    flag = -1;
+                } else if (value2 / (1 + epsilon) > value1) {
+                    flag = 1;
+                } else {
+                    flag = 0;
+                }
+            }
+            else {
+                if (value1 / (1 + epsilon) < value2) {
+                    flag = -1;
+                } else if (value2 / (1 + epsilon) < value1) {
+                    flag = 1;
+                } else {
+                    flag = 0;
+                }
             }
 
             if (flag == -1) {
                 dominate1 = 1;
-            }
-
-            if (flag == 1) {
+            }else if (flag == 1) {
                 dominate2 = 1;
             }
         }
 
         if (dominate1 == dominate2) {
             return 0; // No one dominate the other
-        }
-        if (dominate1 == 1) {
+        } else if (dominate1 == 1) {
             return -1; // solution1 dominates solution2
         }
         return 1; // solution2 dominates solution1

@@ -82,7 +82,7 @@ public class DEMO<Type extends Number, P extends Problem<NumberSolution<Type>>, 
     @Override
     protected void start() throws StopCriterionException {
 
-        distance = new Distance<Type>();
+        distance = new Distance<>();
         dominance = new DominanceComparator();
         DifferentialEvolutionCrossover dec = new DifferentialEvolutionCrossover();
         DifferentialEvolutionSelection<Type> des = new DifferentialEvolutionSelection<Type>();

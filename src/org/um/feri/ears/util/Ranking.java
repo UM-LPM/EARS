@@ -20,12 +20,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package org.um.feri.ears.util;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
@@ -53,7 +51,7 @@ public class Ranking<Type extends Number> {
 	/**
 	 * stores a <code>Comparator</code> for dominance checking
 	 */
-	private static final DominanceComparator dominance_ = new DominanceComparator();
+	private static DominanceComparator dominance;
 
   /**
    * stores a <code>Comparator</code> for Overal Constraint Violation Comparator
@@ -67,6 +65,7 @@ public class Ranking<Type extends Number> {
      */       
 	public Ranking(ParetoSolution solutionSet) {
 		solutions = solutionSet;
+		dominance = new DominanceComparator();
 
 		// dominateMe[i] contains the number of solutions dominating i
 		int[] dominateMe = new int[solutions.size()];
@@ -99,7 +98,7 @@ public class Ranking<Type extends Number> {
 				// =constraint_.compare(solutionSet.get(p),solutionSet.get(q));
 				flagDominate = 0;
 				if (flagDominate == 0) {
-					flagDominate = dominance_.compare(solutionSet.get(p),solutionSet.get(q));
+					flagDominate = dominance.compare(solutionSet.get(p),solutionSet.get(q));
 				}
 				if (flagDominate == -1) {
 					iDominate[p].add(q);
