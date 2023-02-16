@@ -51,7 +51,7 @@ public class NR<T extends Number> extends QualityIndicator<T> {
         ndp.addAll(front1);
         ndp.addAll(front2);
 
-        DominanceComparator<T> sc = new DominanceComparator<T>();
+        DominanceComparator sc = new DominanceComparator();
 
         for (NumberSolution<T> s1 : front1) {
             for (NumberSolution<T> ndSolution : ndp) {

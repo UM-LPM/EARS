@@ -20,12 +20,12 @@ public class AdaptiveGridArchive<Type extends Number> extends ParetoSolution<Typ
 
     private int maxSize;
 
-    private Comparator<NumberSolution<Type>> dominance;
+    private DominanceComparator dominance;
 
     public AdaptiveGridArchive(int maxSize, int bisections, int objectives) {
         super(maxSize);
         this.maxSize = maxSize;
-        dominance = new DominanceComparator<>();
+        dominance = new DominanceComparator();
         grid = new AdaptiveGrid<>(bisections, objectives);
     }
 

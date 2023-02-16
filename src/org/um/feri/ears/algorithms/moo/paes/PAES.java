@@ -52,8 +52,7 @@ public class PAES<Type extends Number, P extends Problem<NumberSolution<Type>>, 
 
     public void start() throws StopCriterionException {
 
-        Comparator<NumberSolution<Type>> dominance;
-        dominance = new DominanceComparator();
+        DominanceComparator dominance = new DominanceComparator();
 
         if (task.isStopCriterion())
             return;

@@ -53,7 +53,7 @@ public class Ranking<Type extends Number> {
 	/**
 	 * stores a <code>Comparator</code> for dominance checking
 	 */
-	private static final Comparator<NumberSolution> dominance_ = new DominanceComparator();
+	private static final DominanceComparator dominance_ = new DominanceComparator();
 
   /**
    * stores a <code>Comparator</code> for Overal Constraint Violation Comparator

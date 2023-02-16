@@ -84,7 +84,7 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	 */
 	public AdaptiveGridArchive(int capacity, int numObj,
 			int numberOfDivisions) {
-		super(new DominanceComparator<Type>());
+		super(new DominanceComparator());
 		this.capacity = capacity;
 		this.numberOfDivisions = numberOfDivisions;
 		this.num_obj = numObj;

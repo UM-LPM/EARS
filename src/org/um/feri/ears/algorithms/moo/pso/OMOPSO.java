@@ -65,7 +65,7 @@ public class OMOPSO extends MOAlgorithm<DoubleProblem, DoubleMOTask, Double> {
 
     private double[][] speed;
 
-    private Comparator<NumberSolution<Double>> dominanceComparator;
+    private DominanceComparator dominanceComparator;
     private Comparator<NumberSolution<Double>> crowdingDistanceComparator;
 
     private UniformMutation uniformMutation;
@@ -255,7 +255,7 @@ public class OMOPSO extends MOAlgorithm<DoubleProblem, DoubleMOTask, Double> {
         leaderArchive = new CrowdingDistanceArchive<Double>(this.archiveSize);
         epsilonArchive = new NondominatedPopulation<>(new DominanceComparator(eta));
 
-        dominanceComparator = new DominanceComparator<Double>();
+        dominanceComparator = new DominanceComparator();
         crowdingDistanceComparator = new CrowdingDistanceComparator<Double>();
 
         speed = new double[swarmSize][numVar];

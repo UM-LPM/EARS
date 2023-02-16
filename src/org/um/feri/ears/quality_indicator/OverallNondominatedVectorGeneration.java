@@ -30,7 +30,7 @@ public class OverallNondominatedVectorGeneration<T extends Number> extends Quali
     /**
      * stores a <code>Comparator</code> for dominance checking
      */
-    private static final Comparator<NumberSolution> dominance_ = new DominanceComparator();
+    private static final DominanceComparator dominance_ = new DominanceComparator();
 
     @Override
     public double evaluate(ParetoSolution<T> paretoFrontApproximation) {

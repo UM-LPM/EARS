@@ -1,10 +1,15 @@
 package org.um.feri.ears.problems;
 
+import com.ctc.wstx.shaded.msv_core.datatype.xsd.Comparator;
+import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.comparator.DominanceComparator;
+
 public abstract class Problem<S extends Solution> {
 
     protected int numberOfObjectives;
     protected int numberOfGlobalOptima;
     protected boolean minimize = true;
+    protected boolean[] objectiveMaximizationFlags;
 
     protected double[] objectiveSpaceOptima;
 
@@ -19,6 +24,7 @@ public abstract class Problem<S extends Solution> {
     protected String referenceSetFileName;
     protected String benchmarkName;
     protected String description;
+    DominanceComparator dominanceComparator = new DominanceComparator();
 
     protected String version = "1.0";
     public static final int CONSTRAINED_TYPE_COUNT = 1;
@@ -52,9 +58,27 @@ public abstract class Problem<S extends Solution> {
      */
     public abstract boolean isFeasible(S solution);
 
-    public abstract boolean isFirstBetter(S solution1, S solution2);
-
     public abstract S getRandomSolution();
+
+    public boolean isFirstBetter(S solution1, S solution2)  {
+        //TODO dominance comparator with information about minimization of each objective - objectiveMaximizationFlags
+        return Comparator.LESS == dominanceComparator.compare(solution1,solution2);
+    }
+
+    /**
+     * Checks if the first objective value is better than the second. The function check if the objective has to be minimized or maximized.
+     * It is important to note that the function considers only the objective value and doesn't check if the value is feasible.
+     *
+     * @param first objective value of the first solution
+     * @param second objective value of the second solution
+     * @param objective the index of the objective
+     * @return true if the first fitness value is better than the second one
+     */
+    public boolean isFirstBetter(double first, double second, int objective) {
+        if (objectiveMaximizationFlags[objective])
+            return first > second;
+        return first < second;
+    }
 
     /**
      * Generates a random evaluated solution.
@@ -74,7 +98,7 @@ public abstract class Problem<S extends Solution> {
     }
 
     /**
-     * Returns an array containing the global optima (minimum or maximum).
+     * Returns an array containing the global optima of each objective (minimum or maximum).
      *
      * @return value of global optimum.
      */

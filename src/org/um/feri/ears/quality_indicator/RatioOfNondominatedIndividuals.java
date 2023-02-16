@@ -29,7 +29,7 @@ public class RatioOfNondominatedIndividuals<T extends Number> extends QualityInd
     /**
      * stores a <code>Comparator</code> for dominance checking
      */
-    private static final Comparator<NumberSolution> dominance_ = new DominanceComparator();
+    private static final DominanceComparator dominance_ = new DominanceComparator();
 
     @Override
     public double evaluate(ParetoSolution<T> paretoFrontApproximation) {

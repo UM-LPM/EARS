@@ -11,7 +11,7 @@ public class DummyProblem extends DoubleProblem {
 
 	public DummyProblem (String name, boolean minimize){
 		super(name, 0, 1, 1, 0);
-		this.minimize = minimize;
+		objectiveMaximizationFlags[0] = minimize;
 	}
 
 	@Override

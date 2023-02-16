@@ -74,10 +74,9 @@ public class GDE3<Type extends Number, P extends Problem<NumberSolution<Type>>, 
     protected void start() throws StopCriterionException {
 
         Distance<Type> distance;
-        Comparator<NumberSolution<Type>> dominance;
 
         distance = new Distance<>();
-        dominance = new DominanceComparator<>();
+        DominanceComparator dominance = new DominanceComparator();
 
         NumberSolution<Type>[] parent;
 

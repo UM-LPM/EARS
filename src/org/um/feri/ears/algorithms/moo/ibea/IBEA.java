@@ -239,7 +239,7 @@ public class IBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
                 B = new ParetoSolution<Type>(1);
                 B.add(solutionSet.get(i));
 
-                int flag = (new DominanceComparator<Type>()).compare(A.get(0), B.get(0));
+                int flag = (new DominanceComparator()).compare(A.get(0), B.get(0));
 
                 double value = 0.0;
                 if (flag == -1) {

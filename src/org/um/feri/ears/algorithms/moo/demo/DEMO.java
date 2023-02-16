@@ -54,7 +54,7 @@ public class DEMO<Type extends Number, P extends Problem<NumberSolution<Type>>, 
     double rho = 2.0;
 
     Distance<Type> distance;
-    DominanceComparator<Type> dominance;
+    DominanceComparator dominance;
 
     NumberSolution<Type>[] parents;
 
@@ -83,7 +83,7 @@ public class DEMO<Type extends Number, P extends Problem<NumberSolution<Type>>, 
     protected void start() throws StopCriterionException {
 
         distance = new Distance<Type>();
-        dominance = new DominanceComparator<Type>();
+        dominance = new DominanceComparator();
         DifferentialEvolutionCrossover dec = new DifferentialEvolutionCrossover();
         DifferentialEvolutionSelection<Type> des = new DifferentialEvolutionSelection<Type>();
 

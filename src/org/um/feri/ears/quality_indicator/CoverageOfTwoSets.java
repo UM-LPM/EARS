@@ -33,7 +33,7 @@ public class CoverageOfTwoSets<Type extends Number> extends QualityIndicator<Typ
     /**
      * stores a <code>Comparator</code> for dominance checking
      */
-    private final Comparator<NumberSolution<Type>> dominance = new DominanceComparator<>();
+    private final DominanceComparator dominance = new DominanceComparator();
 
     @Override
     public double evaluate(ParetoSolution<Type> paretoFrontApproximation) {

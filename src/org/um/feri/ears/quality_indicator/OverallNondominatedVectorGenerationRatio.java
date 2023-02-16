@@ -25,7 +25,7 @@ public class OverallNondominatedVectorGenerationRatio<T extends Number> extends 
     /**
      * stores a <code>Comparator</code> for dominance checking
      */
-    private final Comparator<NumberSolution<T>> dominance = new DominanceComparator<>();
+    private final DominanceComparator dominance = new DominanceComparator();
 
     @Override
     public double evaluate(ParetoSolution<T> paretoFrontApproximation) {

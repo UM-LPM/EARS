@@ -10,8 +10,6 @@ import java.util.List;
 
 public abstract class DoubleProblem extends NumberProblem<Double> {
 
-    DominanceComparator<Double> dominanceComparator = new DominanceComparator<>();
-
     public DoubleProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints) {
         super(name, numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
     }
@@ -25,12 +23,6 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
     @Override
     public boolean isFeasible(NumberSolution<Double> solution) {
         return isFeasible(solution.getVariables());
-    }
-
-    @Override
-    public boolean isFirstBetter(NumberSolution<Double> solution1, NumberSolution<Double> solution2) {
-        //dominance comparator with information about minimization of each objective
-        return -1 == dominanceComparator.compare(solution1,solution2);
     }
 
     @Override
@@ -69,7 +61,6 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
      * Sets every variable in {@code double[] x} feasible.
      *
      * @param x vector to be set to feasible
-     * @return vector containing feasible variables
      */
     public void setFeasible(List<Double> x) {
         for (int i = 0; i < x.size(); i++) {

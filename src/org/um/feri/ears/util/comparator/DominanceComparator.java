@@ -23,6 +23,7 @@ package org.um.feri.ears.util.comparator;
 
 
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Solution;
 
 import java.util.Comparator;
 
@@ -30,20 +31,19 @@ import java.util.Comparator;
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on a constraint violation test + dominance checking, as in NSGA-II.
  */
-public class DominanceComparator<Type extends Number> implements Comparator<NumberSolution<Type>> {
+public class DominanceComparator implements Comparator<Solution> {
 
-    private double epsilon;
-    OverallConstraintViolationComparator<Type> violationConstraintComparator;
+    private final double epsilon;
+    OverallConstraintViolationComparator violationConstraintComparator;
 
     public DominanceComparator() {
         this(0.0);
     }
 
     public DominanceComparator(double epsilon) {
-        violationConstraintComparator = new OverallConstraintViolationComparator<>();
+        violationConstraintComparator = new OverallConstraintViolationComparator();
         this.epsilon = epsilon;
     }
-
 
     /**
      * Compares the dominance relation of two solutions.
@@ -53,7 +53,8 @@ public class DominanceComparator<Type extends Number> implements Comparator<Numb
      * @return -1, or 0, or 1 if solution1 dominates solution2, both are
      * non-dominated, or solution1  is dominated by solution2, respectively.
      */
-    public int compare(NumberSolution<Type> solution1, NumberSolution<Type> solution2) {
+    @Override
+    public int compare(Solution solution1, Solution solution2) {
         if (solution1 == null)
             return 1;
         else if (solution2 == null)
@@ -61,7 +62,7 @@ public class DominanceComparator<Type extends Number> implements Comparator<Numb
 
         int dominate1; // dominate1 indicates if some objective of solution1
         // dominates the same objective in solution2. dominate2
-        int dominate2; // is the complementary of dominate1.
+        int dominate2; // is complementary to dominate1.
 
         dominate1 = 0;
         dominate2 = 0;
