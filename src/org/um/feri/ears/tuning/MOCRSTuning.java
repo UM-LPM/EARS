@@ -80,7 +80,7 @@ public class MOCRSTuning {
 
     ArrayList<MOTask> tasks;
 
-    double draw_limit = 1e-7;
+    double drawLimit = 1e-7;
 
     List<IndicatorName> indicators;
 
@@ -556,7 +556,6 @@ public class MOCRSTuning {
                         }
                     }
                 }
-
                 index++;
             }
         }
@@ -588,9 +587,9 @@ public class MOCRSTuning {
         if (a == null) return false;
         if (b == null) return false;
         if (qi.getIndicatorType() == IndicatorType.UNARY)
-            return a.isEqual(b, draw_limit);
+            return qi.isEqual(a, b, drawLimit);
         else if (qi.getIndicatorType() == IndicatorType.BINARY) {
-            if (qi.compare(a, b, draw_limit) == 0) {
+            if (qi.compare(a, b, drawLimit) == 0) {
                 return true;
             }
         }

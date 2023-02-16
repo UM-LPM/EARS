@@ -10,7 +10,6 @@ import java.util.*;
 
 public class SoilModelProblem extends DoubleProblem {
 
-    //TODO check if correct implementation
     //https://www.csee.umbc.edu/~tsimo1/CMSC483/cs220/code/trap/Trap.java
     //https://introcs.cs.princeton.edu/java/93integration/TrapezoidalRule.java.html
     //https://www.geeksforgeeks.org/trapezoidal-rule-for-approximate-value-of-definite-integral/

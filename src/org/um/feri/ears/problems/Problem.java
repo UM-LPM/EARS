@@ -37,6 +37,7 @@ public abstract class Problem<S extends Solution> {
         this.numberOfGlobalOptima = numberOfGlobalOptima;
         this.numberOfObjectives = numberOfObjectives;
         this.numberOfConstraints = numberOfConstraints;
+        objectiveMaximizationFlags = new boolean[numberOfObjectives];
 
         objectiveSpaceOptima = new double[numberOfGlobalOptima];
     }
@@ -177,22 +178,8 @@ public abstract class Problem<S extends Solution> {
         return "problem name:" + name + ", problem number of constraints:" + numberOfConstraints + ",problem version:" + version + ",";
     }
 
-    public boolean isEqualToGlobalOptimum(double objectiveValue) {
-        return Math.abs(objectiveValue - getGlobalOptima()[0]) <= 0; //TODO check for each objective
-    }
-
-    /**
-     * Important! Do not use this function for constrained problems,
-     * if fitness is not reflecting feasibility of the solution.
-     *
-     * @param first  first fitness
-     * @param second second fitness
-     * @return true if the first fitness value is better than the second one
-     */
-    public boolean isFirstBetter(double first, double second) {
-        if (minimize)
-            return first < second;
-        return first > second;
+    public boolean isEqualToGlobalOptimum(double objectiveValue, int objective) {
+        return Math.abs(objectiveValue - getGlobalOptima()[objective]) <= 0;
     }
 
     public String getName() {

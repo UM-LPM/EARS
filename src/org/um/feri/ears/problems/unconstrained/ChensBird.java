@@ -21,7 +21,8 @@ public class ChensBird extends DoubleProblem {
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -500.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
 
-        minimize = false;
+        objectiveMaximizationFlags[0] = true;
+
         Arrays.fill(decisionSpaceOptima[0], 0.5);
         objectiveSpaceOptima[0] = 2000.0039999840003;
     }
@@ -31,10 +32,5 @@ public class ChensBird extends DoubleProblem {
         return (b / (pow(b, 2) + pow(pow(x[0], 2) + pow(x[1], 2) - 1, 2)))
                 + (b / (pow(b, 2) + pow(pow(x[0], 2) + pow(x[1], 2) - 0.5, 2)))
                 + (b / (pow(b, 2) + pow(x[0] - x[1], 2)));
-    }
-
-    @Override
-    public boolean isMinimize() {
-        return false;
     }
 }

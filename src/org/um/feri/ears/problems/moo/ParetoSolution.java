@@ -33,7 +33,6 @@ import com.panayotis.gnuplot.terminal.PostscriptTerminal;
 public class ParetoSolution<Type extends Number> extends Solution implements Iterable<NumberSolution<Type>> {
 
     public List<NumberSolution<Type>> solutions;
-    private double pareto_eval;
     private HashMap<String, Double> qiEval = new HashMap<String, Double>();
 
     /**
@@ -44,7 +43,6 @@ public class ParetoSolution<Type extends Number> extends Solution implements Ite
     public ParetoSolution(ParetoSolution<Type> ps) {
 
         this.capacity = ps.capacity;
-        this.pareto_eval = ps.pareto_eval;
         this.constraintsMet = ps.constraintsMet;
         if (ps.constraints != null) {
             constraints = new double[ps.constraints.length];
@@ -98,6 +96,13 @@ public class ParetoSolution<Type extends Number> extends Solution implements Ite
      */
     public HashMap<String, Double> getAllQiEval() {
         return qiEval;
+    }
+    public double getQiEval(String name) {
+
+        if (qiEval.containsKey(name)) {
+            return qiEval.get(name);
+        }
+        return Double.MAX_VALUE;
     }
 
     public void setEvalForAllUnaryQIs(HashMap<String, Double> qiEval) {
@@ -176,37 +181,26 @@ public class ParetoSolution<Type extends Number> extends Solution implements Ite
         this.capacity = capacity;
     }
 
-    public double getEval() {
-
-        return pareto_eval;
-    }
-
     public void evaluate(QualityIndicator<Type> qi) throws Exception {
         this.evaluate(qi, false);
     }
 
     /**
-     * Evaluates the Pareto approximation with the given quality indicator. If {@code usecache} is set to true
+     * Evaluates the Pareto approximation with the given quality indicator. If {@code useCache} is set to true
      * and the Pareto approximation is already evaluated with the given {@code qi}, that value is used.
      *
      * @param qi       the quality indicator used for evaluation
-     * @param usecache set to true to read from cache
+     * @param useCache set to true to read from cache
      * @throws Exception if {@code qi} is null or an incorrect type
      */
-    public void evaluate(QualityIndicator<Type> qi, boolean usecache) throws Exception {
-        if (usecache) {
-            if (qiEval.containsKey(qi.getName())) {
-                pareto_eval = qiEval.get(qi.getName());
-                return;
-            }
+    public void evaluate(QualityIndicator<Type> qi, boolean useCache) throws Exception {
+        if (!useCache) {
+            if (qi == null || qi.getIndicatorType() != IndicatorType.UNARY)
+                throw new Exception("Indicator is null or incorrect indicator type!");
+            double paretoEval = qi.evaluate(this);
+
+            qiEval.put(qi.getName(), paretoEval);
         }
-
-        // throw error if the indicator is null or not unary
-        if (qi == null || qi.getIndicatorType() != IndicatorType.UNARY)
-            throw new Exception("Indicator is null or incorrect indicator type!");
-        pareto_eval = qi.evaluate(this);
-
-        qiEval.put(qi.getName(), pareto_eval); //replace value
     }
 
     public void evaluateWithAllUnaryQI(int numObj, String fileName) throws Exception {
@@ -217,7 +211,6 @@ public class ParetoSolution<Type extends Number> extends Solution implements Ite
             }
         }
     }
-
 
     public boolean isFirstBetter(ParetoSolution<Type> second, QualityIndicator<Type> qi) {
         if (qi == null) {
@@ -238,12 +231,6 @@ public class ParetoSolution<Type extends Number> extends Solution implements Ite
         }
         return false;
     }
-
-    /*@Override
-    public List<Type> getVariables() {
-        List<Type> x = null; //TODO check
-        return x;
-    }*/
 
     public int getMaxSize() {
         return capacity;

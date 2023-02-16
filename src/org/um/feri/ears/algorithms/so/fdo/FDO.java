@@ -55,7 +55,7 @@ public class FDO extends NumberAlgorithm {
                 double fitnessWeight = 0.0;
                 if (population[i].getEval() != 0) {
                     //generate fitness weight fW
-                    if (task.problem.isFirstBetter(best.getEval(), (0.05 * population[i].getEval()))) {
+                    if (task.problem.isFirstBetter(best.getEval(), (0.05 * population[i].getEval()), 0)) {
                         fitnessWeight = 0.2;
                     } else {
                         double weightFactor = 0.0;

@@ -392,8 +392,8 @@ public class Util {
         return list.stream().mapToInt(i -> i).toArray();
     }
 
-    public static ArrayList<Double> toDoubleArrayList(double[] newColony) {
+    public static ArrayList<Double> toDoubleArrayList(double[] array) {
 
-        return Arrays.stream(newColony).boxed().collect(Collectors.toCollection(ArrayList::new));
+        return Arrays.stream(array).boxed().collect(Collectors.toCollection(ArrayList::new));
     }
 }

@@ -43,7 +43,7 @@ public abstract class TaskBase<P extends Problem<?>> {
         isStop = task.isStop;
         isGlobal = task.isGlobal;
         precisionOfRealNumbersInDecimalPlaces = task.precisionOfRealNumbersInDecimalPlaces;
-        problem = task.problem;  //TODO deep copy?
+        problem = task.problem;
         resetCount = task.resetCount;
         maxTrialsBeforeStagnation = task.maxTrialsBeforeStagnation;
         stagnationTrialCounter = task.stagnationTrialCounter;
@@ -214,7 +214,7 @@ public abstract class TaskBase<P extends Problem<?>> {
     public boolean isStopCriterion() {
 
         if (stopCriterion == StopCriterion.CPU_TIME) {
-            hasTheCpuTimeBeenExceeded();
+            hasCpuTimeExceeded();
         }
 
         //stop only if stop criteria set to global optimum
@@ -224,7 +224,7 @@ public abstract class TaskBase<P extends Problem<?>> {
         return isStop;
     }
 
-    public boolean hasTheCpuTimeBeenExceeded() {
+    public boolean hasCpuTimeExceeded() {
         if (numberOfEvaluations == 0) { //set start time if 0 evaluations
             startTimer();
         }

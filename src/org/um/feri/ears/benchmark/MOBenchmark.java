@@ -49,7 +49,7 @@ public abstract class MOBenchmark<T extends Number, Task extends MOTask<T>, P ex
         if (a == null) return false;
         if (b == null) return false;
         if (qi.getIndicatorType() == IndicatorType.UNARY)
-            return a.isEqual(b, drawLimit); //TODO Quality indicator get eps instead of draw limit
+            return qi.isEqual(a, b, drawLimit);
         else if (qi.getIndicatorType() == IndicatorType.BINARY) {
             return qi.compare(a, b, drawLimit) == 0;
         }

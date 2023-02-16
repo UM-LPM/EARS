@@ -51,22 +51,8 @@ public abstract class MOTask<Type extends Number> extends TaskBase<NumberProblem
         isGlobal = task.isGlobal;
         maxIterations = task.maxIterations;
         allowedCPUTimeNs = task.allowedCPUTimeNs;
-        super.problem = task.problem;  //TODO deep copy?
+        super.problem = task.problem;
     }
-
-    /**
-     * @return The number of objectives
-     */
-    /*public int getNumberOfObjectives() {
-        return problem.getNumberOfObjectives();
-    }*/
-
-    /**
-     * @return The file name of the problem
-     */
-    /*public String getProblemFileName() {
-        return problem.getFileName();
-    }*/
 
     public String getBenchmarkName() {
         return problem.getBenchmarkName();
@@ -90,26 +76,16 @@ public abstract class MOTask<Type extends Number> extends TaskBase<NumberProblem
 	 */
     public void eval(NumberSolution<Type> solution) throws StopCriterionException {
 
-        if (stopCriterion == StopCriterion.EVALUATIONS) {
-            incrementNumberOfEvaluations();
-            problem.evaluate(solution);
+        incrementNumberOfEvaluations();
+        problem.evaluate(solution);
+        if(problem.numberOfConstraints > 0)
             problem.evaluateConstraints(solution);
-            GraphDataRecorder.AddRecord(solution, getProblemName());
-        } else if (stopCriterion == StopCriterion.ITERATIONS) {
-            if (isStop)
-                throw new StopCriterionException("Max iterations");
-            incrementNumberOfEvaluations();
-            problem.evaluate(solution);
-            problem.evaluateConstraints(solution);
-            GraphDataRecorder.AddRecord(solution, getProblemName());
+        GraphDataRecorder.AddRecord(solution, getProblemName());
+
+        if (stopCriterion == StopCriterion.ITERATIONS && isStop) {
+            throw new StopCriterionException("Max iterations");
         } else if (stopCriterion == StopCriterion.CPU_TIME) {
-            if (!isStop) {
-                hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
-                incrementNumberOfEvaluations();
-                problem.evaluate(solution);
-                problem.evaluateConstraints(solution);
-                GraphDataRecorder.AddRecord(solution, getProblemName());
-            } else {
+            if (hasCpuTimeExceeded()) {
                 throw new StopCriterionException("CPU Time");
             }
         }

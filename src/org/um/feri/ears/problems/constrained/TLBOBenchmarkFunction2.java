@@ -54,10 +54,11 @@ public class TLBOBenchmarkFunction2 extends DoubleProblem {
 
 	public TLBOBenchmarkFunction2() {
 		super("TLBOBenchmarkFunction2 cec-g03", 10, 1, 1, 1);
-		minimize = false;
+
+		objectiveMaximizationFlags[0] = true;
 		
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+		upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+		lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
 		Collections.fill(lowerLimit, 0.0);
 		Collections.fill(upperLimit, 1.0);
 		

@@ -18,7 +18,8 @@ public class H1 extends DoubleProblem {
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -25.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 25.0));
 
-        minimize = false;
+        objectiveMaximizationFlags[0] = true;
+
         decisionSpaceOptima[0] = new double[]{PI * (36.0 / 13.0), PI * (28.0 / 13.0)};
         objectiveSpaceOptima[0] = 2.0;
     }

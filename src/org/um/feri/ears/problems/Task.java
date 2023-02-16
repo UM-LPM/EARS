@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Task<S extends Solution, P extends Problem<S>> extends TaskBase<P> {
 
-    protected S bestSolution; //Keeps track of the best solution found.
+    protected S bestSolution;
 
     /**
      * @param problem          the problem to be solved
@@ -47,7 +47,7 @@ public class Task<S extends Solution, P extends Problem<S>> extends TaskBase<P> 
     }
 
     private void checkIfGlobalReached(S solution) {
-        if (problem.numberOfObjectives == 1) //TODO what to do in case of multi-objective optimization? (maybe always check all objectives)
+        if (problem.numberOfObjectives == 1) //Only for single-objective optimization
             isGlobal = isEqualToGlobalOptimum(solution);
     }
 
@@ -104,7 +104,7 @@ public class Task<S extends Solution, P extends Problem<S>> extends TaskBase<P> 
                 break;
             case CPU_TIME:
                 if (!isStop) {
-                    hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
+                    hasCpuTimeExceeded(); // if CPU time is exceed allow last eval
                     performEvaluation(solution);
                 } else {
                     throw new StopCriterionException("CPU Time");
@@ -142,7 +142,8 @@ public class Task<S extends Solution, P extends Problem<S>> extends TaskBase<P> 
         incrementNumberOfEvaluations();
         long start = System.nanoTime();
         problem.evaluate(solution);
-        problem.evaluateConstraints(solution);
+        if(problem.numberOfConstraints > 0)
+            problem.evaluateConstraints(solution);
         checkImprovement(solution);
         evaluationTime += System.nanoTime() - start;
         checkIfGlobalReached(solution);

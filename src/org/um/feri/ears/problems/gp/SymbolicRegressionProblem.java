@@ -60,16 +60,4 @@ public class SymbolicRegressionProblem extends ProgramProblem<Double>{
             return node.getOperation().apply(new Double[]{node.getCoefficient()});
         }
     }
-
-    @Override
-    public boolean isFirstBetter(ProgramSolution<Double> solution1, ProgramSolution<Double> solution2) {
-        return Double.compare(solution1.eval, solution2.eval) < 0; //TODO replace with comparator
-    }
-
-    @Override
-    public boolean isFirstBetter(double first, double second) {
-        if (minimize)
-            return first < second;
-        return first > second;
-    }
 }

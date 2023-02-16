@@ -21,7 +21,8 @@ public class ChensVfunction extends DoubleProblem {
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 500.0));
         name = "ChensVfunction";
 
-        minimize = false;
+        objectiveMaximizationFlags[0] = true;
+
         decisionSpaceOptima[0] = new double[]{0.388888888888889, 0.722222222222222};
         objectiveSpaceOptima[0] = 2000.0;
     }

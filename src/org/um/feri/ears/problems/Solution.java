@@ -162,10 +162,6 @@ public abstract class Solution {
         }
     }
 
-    public boolean isEqual(Solution b, double drawLimit) { //TODO this method shouldn't exists -> move to task (dominance comparator set epsilon)
-		return Math.abs(this.getEval() - b.getEval()) < drawLimit;
-	}
-
     /**
      * Sets all constraints of this solution.
      *
@@ -196,7 +192,7 @@ public abstract class Solution {
      */
     public void setOverallConstraintViolation(double value) {
         this.overallConstraintViolation = value;
-    } // setOverallConstraintViolation
+    }
 
     /**
      * Gets the overall constraint violated by the solution.

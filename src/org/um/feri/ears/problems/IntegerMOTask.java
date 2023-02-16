@@ -32,7 +32,7 @@ public class IntegerMOTask extends MOTask<Integer> {
         } else if (stopCriterion == StopCriterion.CPU_TIME) {
             // check if the CPU time is not exceeded yet
             if (!isStop) {
-                hasTheCpuTimeBeenExceeded(); // if CPU time is exceed allow last eval
+                hasCpuTimeExceeded(); // if CPU time is exceed allow last eval
                 incrementNumberOfEvaluations();
                 NumberSolution<Integer> newSolution = problem.getRandomSolution();
                 return newSolution;

@@ -1,6 +1,7 @@
 package org.um.feri.ears.quality_indicator;
 
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public abstract class QualityIndicator<Type extends Number> {
@@ -248,5 +249,9 @@ public abstract class QualityIndicator<Type extends Number> {
      * equal, or front2 is better than front1, respectively.
      */
     public abstract int compare(ParetoSolution<Type> front1, ParetoSolution<Type> front2, Double epsilon);
+
+    public boolean isEqual(ParetoSolution<Type> front1, ParetoSolution<Type> front2, double drawLimit) {
+        return Math.abs(front1.getQiEval(getName()) - front2.getQiEval(getName())) < drawLimit;
+    }
 
 }

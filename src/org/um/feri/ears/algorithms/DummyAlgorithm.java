@@ -198,7 +198,7 @@ public class DummyAlgorithm extends NumberAlgorithm {
                                     double best = evaluationsPerRun[index++].fitness;
                                     for (; index < evaluationsPerRun.length; index++) {
 
-                                        if (task.problem.isFirstBetter(evaluationsPerRun[index].fitness, best)) {
+                                        if (task.problem.isFirstBetter(evaluationsPerRun[index].fitness, best, 0)) {
                                             best = evaluationsPerRun[index].fitness;
                                             stagnationTrialCounter = 0;
                                         } else {
@@ -216,7 +216,7 @@ public class DummyAlgorithm extends NumberAlgorithm {
                                 case GLOBAL_OPTIMUM_OR_EVALUATIONS: {
                                     int index;
                                     for (index = 0; index < evaluationsPerRun.length; index++) {
-                                        if (task.problem.isEqualToGlobalOptimum(evaluationsPerRun[index].fitness))
+                                        if (task.problem.isEqualToGlobalOptimum(evaluationsPerRun[index].fitness, 0))
                                             break;
                                     }
                                     index = Math.min(index, evaluationsPerRun.length - 1);
