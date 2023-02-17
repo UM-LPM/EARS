@@ -17,8 +17,8 @@ public class BiggsExp2 extends DoubleProblem {
 
     public BiggsExp2() {
         super("BiggsExp2", 2, 1, 1, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 20.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 20.0));
         name = "BiggsExp2";
 
         decisionSpaceOptima[0] = new double[]{1, 10.0};

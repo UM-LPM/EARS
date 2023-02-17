@@ -15,7 +15,11 @@ https://www.sfu.ca/~ssurjano/dejong5.html
 
 public class DeJong5 extends DoubleProblem {
 
-    double[][] a;
+    private static final double[][] a = {
+            {-32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32},
+            {-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 32, 32, 32, 32, 32}
+    };
+
 
     public DeJong5() {
         super("DeJong5", 2, 1, 1, 0);
@@ -23,11 +27,6 @@ public class DeJong5 extends DoubleProblem {
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 65.536));
 
         Arrays.fill(decisionSpaceOptima[0], 1);
-
-        a = new double[2][];
-        a[0] = new double[]{-32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32};
-        a[1] = new double[]{-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 32, 32, 32, 32, 32};
-
     }
 
     @Override

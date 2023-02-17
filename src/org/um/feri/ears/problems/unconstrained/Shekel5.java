@@ -14,8 +14,19 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
  */
 public class Shekel5 extends DoubleProblem {
 
-    public double[][] a;
-    public double[] c;
+    private static final double[][] a = {
+            {4, 4, 4, 4},
+            {1, 1, 1, 1},
+            {8, 8, 8, 8},
+            {6, 6, 6, 6},
+            {3, 7, 3, 7},
+            {2, 9, 2, 9},
+            {5, 5, 3, 3},
+            {8, 1, 8, 1},
+            {6, 2, 6, 2},
+            {7, 3.6, 7, 3.6},
+    };
+    private static final double[] c = {0.1, 0.2, 0.2, 0.4, 0.4, 0.6, 0.3, 0.7, 0.5, 0.5};
 
     public Shekel5() {
         super("Shekel5", 4, 1, 1, 0);
@@ -24,20 +35,6 @@ public class Shekel5 extends DoubleProblem {
 
         Arrays.fill(decisionSpaceOptima[0], 4);
         objectiveSpaceOptima[0] = -10.1532;
-
-        a = new double[][]{
-                {4, 4, 4, 4},
-                {1, 1, 1, 1},
-                {8, 8, 8, 8},
-                {6, 6, 6, 6},
-                {3, 7, 3, 7},
-                {2, 9, 2, 9},
-                {5, 5, 3, 3},
-                {8, 1, 8, 1},
-                {6, 2, 6, 2},
-                {7, 3.6, 7, 3.6},
-        };
-        c = new double[]{0.1, 0.2, 0.2, 0.4, 0.4, 0.6, 0.3, 0.7, 0.5, 0.5};
     }
 
     @Override

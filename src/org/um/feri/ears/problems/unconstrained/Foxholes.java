@@ -16,7 +16,32 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/7-shekel-s-foxhol
 
 public class Foxholes extends DoubleProblem {
 
-    public double[][] a;
+    private static final double[][] a = {{-32, -32},
+            {-16, -32},
+            {0, -32},
+            {16, -32},
+            {32, -32},
+            {-32, -16},
+            {-16, -16},
+            {0, -16},
+            {16, -16},
+            {32, -16},
+            {-32, 0},
+            {-16, 0},
+            {0, 0},
+            {16, 0},
+            {32, 0},
+            {-32, 16},
+            {-16, 16},
+            {0, 16},
+            {16, 16},
+            {32, 16},
+            {-32, 32},
+            {-16, 32},
+            {0, 32},
+            {16, 32},
+            {32, 32}
+    };
 
     public Foxholes() {
         super("Shekel's Foxholes", 2, 1, 1, 0);
@@ -25,33 +50,6 @@ public class Foxholes extends DoubleProblem {
 
         Arrays.fill(decisionSpaceOptima[0], -31.97833);
         objectiveSpaceOptima[0] = 0.998003838;
-
-        a = new double[][]{{-32, -32},
-                {-16, -32},
-                {0, -32},
-                {16, -32},
-                {32, -32},
-                {-32, -16},
-                {-16, -16},
-                {0, -16},
-                {16, -16},
-                {32, -16},
-                {-32, 0},
-                {-16, 0},
-                {0, 0},
-                {16, 0},
-                {32, 0},
-                {-32, 16},
-                {-16, 16},
-                {0, 16},
-                {16, 16},
-                {32, 16},
-                {-32, 32},
-                {-16, 32},
-                {0, 32},
-                {16, 32},
-                {32, 32}
-        };
     }
 
     @Override

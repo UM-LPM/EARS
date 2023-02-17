@@ -20,7 +20,6 @@ public class Task<S extends Solution, P extends Problem<S>> extends TaskBase<P> 
     public Task(P problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilonForGlobal) {
 
         this.epsilonForGlobal = epsilonForGlobal;
-        precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
         this.stopCriterion = stopCriterion;
         this.maxEvaluations = maxEvaluations;
         numberOfEvaluations = 0;

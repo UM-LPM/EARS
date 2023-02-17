@@ -16,7 +16,7 @@ public abstract class TaskBase<P extends Problem<?>> {
 	protected double epsilonForGlobal = 0; // epsilon representing the error margin difference when comparing a solution to the global optimum
 	protected boolean isStop;
 	protected boolean isGlobal;
-	protected int precisionOfRealNumbersInDecimalPlaces; //used only for discreet problem presentation (bit presentation in GA)
+
 	public P problem;
 	private int resetCount;
     protected int maxTrialsBeforeStagnation = 10000;
@@ -42,7 +42,6 @@ public abstract class TaskBase<P extends Problem<?>> {
         epsilonForGlobal = task.epsilonForGlobal;
         isStop = task.isStop;
         isGlobal = task.isGlobal;
-        precisionOfRealNumbersInDecimalPlaces = task.precisionOfRealNumbersInDecimalPlaces;
         problem = task.problem;
         resetCount = task.resetCount;
         maxTrialsBeforeStagnation = task.maxTrialsBeforeStagnation;
@@ -170,15 +169,6 @@ public abstract class TaskBase<P extends Problem<?>> {
         return ancestors;
     }
 
-    /**
-     * Used only for discreet problem presentation (bit presentation in GA)
-     *
-     * @return the precision of real numbers in decimal places
-     */
-    public int getPrecisionMinDecimal() {
-        return precisionOfRealNumbersInDecimalPlaces;
-    }
-
     public int getMaxEvaluations() {
         return maxEvaluations;
     }
@@ -297,8 +287,7 @@ public abstract class TaskBase<P extends Problem<?>> {
     @Override
     public String toString() {
         return "Task [stopCriterion= [" + getStopCriterionString() + "], epsilon="
-                + epsilonForGlobal + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", precisionOfRealNumbersInDecimalPlaces="
-                + precisionOfRealNumbersInDecimalPlaces + ", p=" + problem + "]";
+                + epsilonForGlobal + ", isStop=" + isStop + ", isGlobal=" + isGlobal + ", p=" + problem + "]";
     }
 
     public String getTaskInfoCSV() {
@@ -314,16 +303,13 @@ public abstract class TaskBase<P extends Problem<?>> {
 
         if (stopCriterion == StopCriterion.EVALUATIONS) {
             return "Task = " + problem + " stopCriterion=" + stopCriterion + ", maxEvaluations=" + maxEvaluations + ", epsilon="
-                    + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
-                    + precisionOfRealNumbersInDecimalPlaces;
+                    + epsilonForGlobal;
         } else if (stopCriterion == StopCriterion.ITERATIONS) {
             return "Task = " + problem + " stopCriterion=" + stopCriterion + ", maxIterations=" + maxIterations + ", epsilon="
-                    + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
-                    + precisionOfRealNumbersInDecimalPlaces;
+                    + epsilonForGlobal;
         } else if (stopCriterion == StopCriterion.CPU_TIME) {
             return "Task = " + problem + " stopCriterion=" + stopCriterion + ", allowedCPUTime=" + allowedCPUTimeNs + ", epsilon="
-                    + epsilonForGlobal + ", precisionOfRealNumbersInDecimalPlaces="
-                    + precisionOfRealNumbersInDecimalPlaces;
+                    + epsilonForGlobal;
         } else
             return "";
     }

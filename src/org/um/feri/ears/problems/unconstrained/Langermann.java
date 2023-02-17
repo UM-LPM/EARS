@@ -13,8 +13,8 @@ http://infinity77.net/global_optimization/test_functions_nd_L.html#go_benchmark.
  */
 public class Langermann extends DoubleProblem {
 
-    static final double[][] a = new double[][]{{3.0, 5.0, 2.0, 1.0, 7.0}, {5.0, 2.0, 1.0, 4.0, 9.0}};
-    static final double[] c = new double[]{1.0, 2.0, 5.0, 2.0, 3.0};
+    static final double[][] a = {{3.0, 5.0, 2.0, 1.0, 7.0}, {5.0, 2.0, 1.0, 4.0, 9.0}};
+    static final double[] c = {1.0, 2.0, 5.0, 2.0, 3.0};
     static final double m = 5;
 
     public Langermann() {

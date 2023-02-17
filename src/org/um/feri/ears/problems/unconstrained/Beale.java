@@ -17,8 +17,8 @@ public class Beale extends DoubleProblem {
 
     public Beale() {
         super("Beale", 2, 1, 1, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -4.5));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 4.5));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -4.5));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 4.5));
 
         decisionSpaceOptima[0][0] = 3;
         decisionSpaceOptima[0][1] = 0.5;

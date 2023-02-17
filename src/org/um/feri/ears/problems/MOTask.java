@@ -18,7 +18,6 @@ public class MOTask<Type extends Number> extends TaskBase<NumberProblem<Type>> {
      */
     public MOTask(NumberProblem<Type> problem, StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, double epsilonForGlobal) {
 
-        precisionOfRealNumbersInDecimalPlaces = (int) Math.log10((1. / epsilonForGlobal) + 1);
         this.stopCriterion = stopCriterion;
         this.maxEvaluations = maxEvaluations;
         numberOfEvaluations = 0;
@@ -42,7 +41,6 @@ public class MOTask<Type extends Number> extends TaskBase<NumberProblem<Type>> {
     }
 
     public MOTask(MOTask<Type> task) {
-        precisionOfRealNumbersInDecimalPlaces = task.precisionOfRealNumbersInDecimalPlaces;
         stopCriterion = task.stopCriterion;
         maxEvaluations = task.maxEvaluations;
         numberOfEvaluations = task.numberOfEvaluations;
@@ -57,12 +55,6 @@ public class MOTask<Type extends Number> extends TaskBase<NumberProblem<Type>> {
     public String getBenchmarkName() {
         return problem.getBenchmarkName();
     }
-
-    public int getNumberOfConstrains() {
-        return problem.getNumberOfConstraints();
-    }
-
-    //abstract public NumberSolution<Type> getRandomMOSolution() throws StopCriterionException;
 
     public boolean isFirstBetter(ParetoSolution<Type> x, ParetoSolution<Type> y, QualityIndicator<Type> qi) {
         return problem.isFirstBetter(x, y, qi);
