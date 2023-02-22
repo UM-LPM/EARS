@@ -6,11 +6,9 @@ import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
-import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 
-public class D_GDE3 extends GDE3<Double, DoubleProblem, MOTask<Double>> {
+public class D_GDE3 extends GDE3<Double, DoubleProblem, Task<NumberSolution<Double>,DoubleProblem>> {
 	
 	public D_GDE3() {
 		this(new DifferentialEvolutionCrossover(), 100);

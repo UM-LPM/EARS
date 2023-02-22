@@ -11,7 +11,7 @@ public abstract class Solution {
 
     protected double[] objectives;
 
-    protected double[] constraints; //TODO refactor 2 types of individual for constrained optimization
+    protected double[] constraints;
     protected boolean constraintsMet = true; //checks if constrains are met
     protected double overallConstraintViolation;
     protected int numberOfViolatedConstraints;

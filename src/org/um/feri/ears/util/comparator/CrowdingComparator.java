@@ -30,9 +30,9 @@ import java.util.Comparator;
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on the crowding distance, as in NSGA-II.
  */
-public class CrowdingComparator<Type extends Number> implements Comparator<NumberSolution<Type>> {
+public class CrowdingComparator<N extends Number> implements Comparator<NumberSolution<N>> {
 
-	public class RankComparator<Type extends Number> implements Comparator<NumberSolution<Type>>{
+	public class RankComparator<N extends Number> implements Comparator<NumberSolution<N>>{
 		/**
 		 * Compares two solutions.
 		 * @param solution1 Object representing the first <code>Solution</code>.
@@ -40,7 +40,7 @@ public class CrowdingComparator<Type extends Number> implements Comparator<Numbe
 		 * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
 		 * respectively.
 		 */
-		public int compare(NumberSolution<Type> solution1, NumberSolution<Type> solution2) {
+		public int compare(NumberSolution<N> solution1, NumberSolution<N> solution2) {
 
 			if (solution1 == null)
 				return 1;
@@ -54,7 +54,7 @@ public class CrowdingComparator<Type extends Number> implements Comparator<Numbe
 	/**
 	 * stores a comparator for check the rank of solutions
 	 */
-	private final Comparator<NumberSolution<Type>> rankComparator = new RankComparator<>();
+	private final Comparator<NumberSolution<N>> rankComparator = new RankComparator<>();
 
 	/**
 	 * Compare two solutions.
@@ -63,7 +63,7 @@ public class CrowdingComparator<Type extends Number> implements Comparator<Numbe
 	 * @param solution2 Object representing the second <code>Solution</code>.
 	 * @return -1, or 0, or 1 if solution1 is less than, equal, or greater than solution2, respectively.
 	 */
-	public int compare(NumberSolution<Type> solution1, NumberSolution<Type> solution2) {
+	public int compare(NumberSolution<N> solution1, NumberSolution<N> solution2) {
 		if (solution1 == null)
 			return 1;
 		else if (solution2 == null)

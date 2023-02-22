@@ -13,10 +13,7 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
@@ -32,19 +29,19 @@ import org.um.feri.ears.util.Ranking;
  * "A Study of Convergence Speed in Multi-Objective Metaheuristics."
  * To be presented in: PPSN'08. Dortmund. September 2008.
  */
-public class NSGAII<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class NSGAII<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
     int populationSize = 100;
 
-    ParetoSolution<Type> population;
-    ParetoSolution<Type> offspringPopulation;
-    ParetoSolution<Type> union;
+    ParetoSolution<N> population;
+    ParetoSolution<N> offspringPopulation;
+    ParetoSolution<N> union;
 
 
-    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
-    MutationOperator<Type, T, NumberSolution<Type>> mut;
+    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
-    public NSGAII(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int populationSize) {
+    public NSGAII(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int populationSize) {
 
         this.cross = crossover;
         this.mut = mutation;
@@ -59,11 +56,11 @@ public class NSGAII<Type extends Number, P extends Problem<NumberSolution<Type>>
 
     @Override
     protected void start() throws StopCriterionException {
-        Distance<Type> distance = new Distance<Type>();
-        BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
+        Distance<N> distance = new Distance<N>();
+        BinaryTournament2<N> bt2 = new BinaryTournament2<N>();
 
         // Create the initial population
-        NumberSolution<Type> newSolution;
+        NumberSolution<N> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
@@ -76,17 +73,17 @@ public class NSGAII<Type extends Number, P extends Problem<NumberSolution<Type>>
         while (!task.isStopCriterion()) {
             // Create the offSpring solutionSet
             offspringPopulation = new ParetoSolution(populationSize);
-            NumberSolution<Type>[] parents = new NumberSolution[2];
+            NumberSolution<N>[] parents = new NumberSolution[2];
 
             for (int i = 0; i < (populationSize / 2); i++) {
                 if (!task.isStopCriterion()) {
                     // obtain parents
                     parents[0] = bt2.execute(population);
                     parents[1] = bt2.execute(population);
-                    NumberSolution<Type>[] offSpring = cross.execute(parents, task);
+                    NumberSolution<N>[] offSpring = cross.execute(parents, task.problem);
 
-                    mut.execute(offSpring[0], task);
-                    mut.execute(offSpring[1], task);
+                    mut.execute(offSpring[0], task.problem);
+                    mut.execute(offSpring[1], task.problem);
                     if (task.isStopCriterion())
                         break;
                     task.eval(offSpring[0]);
@@ -104,11 +101,11 @@ public class NSGAII<Type extends Number, P extends Problem<NumberSolution<Type>>
             union = population.union(offspringPopulation);
 
             // Ranking the union
-            Ranking<Type> ranking = new Ranking<Type>(union);
+            Ranking<N> ranking = new Ranking<N>(union);
 
             int remain = populationSize;
             int index = 0;
-            ParetoSolution<Type> front = null;
+            ParetoSolution<N> front = null;
             population.clear();
 
             // Obtain the next front
@@ -144,7 +141,7 @@ public class NSGAII<Type extends Number, P extends Problem<NumberSolution<Type>>
             task.incrementNumberOfIterations();
         }
 
-        Ranking<Type> ranking = new Ranking<Type>(population);
+        Ranking<N> ranking = new Ranking<N>(population);
         best = ranking.getSubfront(0);
     }
 
@@ -172,7 +169,7 @@ public class NSGAII<Type extends Number, P extends Problem<NumberSolution<Type>>
             }
         }
 
-        population = new ParetoSolution<Type>(populationSize);
+        population = new ParetoSolution<N>(populationSize);
     }
 
     @Override

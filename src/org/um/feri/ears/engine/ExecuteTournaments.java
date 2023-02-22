@@ -605,7 +605,7 @@ public class ExecuteTournaments {
         for (String name : problems) {
             dr.addDummyTask(name);
         }
-        //TODO check if all algorithm has all problem files (get of list all problems from benchmark object)
+        //TODO check if all algorithms have all problem files (get of list all problems from benchmark object)
         //add problems to benchmark
         for (String name : algorithms) {
             players.add(new DummyAlgorithm(name, benchmarkResultsDir));

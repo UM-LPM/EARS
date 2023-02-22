@@ -14,42 +14,41 @@ import org.um.feri.ears.util.ParetoWithEval;
 import org.um.feri.ears.util.Ranking;
 import org.um.feri.ears.util.Util;
 
-public abstract class MOAlgorithm<P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>, Type extends Number> extends Algorithm<T, ParetoSolution<Type>> {
+public abstract class MOAlgorithm<T extends TaskBase, N extends Number> extends Algorithm<T, ParetoSolution<N>> {
 
     protected T task;
     protected static boolean optimalParam;
 
-    protected ParetoSolution<Type> result;
+    protected ParetoSolution<N> result;
 
     private HashMap<String, Integer> positions = new HashMap<String, Integer>();  //stores the position of the current solution
-    private HashMap<String, List<ParetoSolution<Type>>> all_solutions = new HashMap<String, List<ParetoSolution<Type>>>();
+    private HashMap<String, List<ParetoSolution<N>>> all_solutions = new HashMap<>();
     private HashMap<String, Integer[]> permutations = new HashMap<String, Integer[]>();
     private ParetoSolutionCache cache;
     private String benchmarkInCache;
-    protected ParetoSolution<Type> best;
-    protected int numVar;
+    protected ParetoSolution<N> best;
     protected int numObj;
 
-    public ParetoSolution<Type> getLastResult() {
+    public ParetoSolution<N> getLastResult() {
         return result;
     }
 
-    protected ParetoSolution<Type> returnNext(MOTask task) {
+    protected ParetoSolution<N> returnNext(T task) {
         // load cache if empty or if different benchmark in cache
-        if (cache == null || !benchmarkInCache.equals(task.getBenchmarkName())) {
-            cache = Util.readParetoListFromJSON(ai.getAcronym(), task.getBenchmarkName());
+        if (cache == null || !benchmarkInCache.equals(task.problem.getBenchmarkName())) {
+            cache = Util.readParetoListFromJSON(ai.getAcronym(), task.problem.getBenchmarkName());
             if (cache != null) {
                 for (Entry<String, List<ParetoWithEval>> s : cache.data.entrySet()) {
-                    List<ParetoSolution<Type>> solutions = new ArrayList<ParetoSolution<Type>>();
+                    List<ParetoSolution<N>> solutions = new ArrayList<>();
                     //List<List<double[]>> ps = cache.data.get(listID);
 
                     List<ParetoWithEval> ps = s.getValue();
 
                     for (ParetoWithEval pareto : ps) {
-                        ParetoSolution<Type> solution = new ParetoSolution<Type>(pareto.pareto.size());
+                        ParetoSolution<N> solution = new ParetoSolution<>(pareto.pareto.size());
 
                         for (double[] obj : pareto.pareto) {
-                            NumberSolution<Type> sol = new NumberSolution<Type>(obj.length);
+                            NumberSolution<N> sol = new NumberSolution<>(obj.length);
                             sol.setObjectives(obj);
                             solution.add(sol);
                         }
@@ -62,7 +61,7 @@ public abstract class MOAlgorithm<P extends Problem<NumberSolution<Type>>, T ext
                     Integer[] per = ArrayUtils.toObject(Util.randomPermutation(all_solutions.get(s.getKey()).size()));
                     permutations.put(s.getKey(), per);
                 }
-                benchmarkInCache = task.getBenchmarkName();
+                benchmarkInCache = task.problem.getBenchmarkName();
             } else {
                 System.out.println("Cache does not exists!");
                 return null;
@@ -73,11 +72,11 @@ public abstract class MOAlgorithm<P extends Problem<NumberSolution<Type>>, T ext
 
         if (all_solutions.containsKey(key)) {
             if (caching == Cache.RANDOM) {
-                List<ParetoSolution<Type>> pareto = all_solutions.get(key);
+                List<ParetoSolution<N>> pareto = all_solutions.get(key);
                 return pareto.get(Util.nextInt(pareto.size()));
             }
             if (caching == Cache.ROUND_ROBIN) {
-                List<ParetoSolution<Type>> pareto = all_solutions.get(key);
+                List<ParetoSolution<N>> pareto = all_solutions.get(key);
                 int index = positions.get(key);
                 if (index >= pareto.size()) {
                     index = 0;
@@ -88,7 +87,7 @@ public abstract class MOAlgorithm<P extends Problem<NumberSolution<Type>>, T ext
                 return pareto.get(index);
             }
             if (caching == Cache.RANDOM_PERMUTATION) {
-                List<ParetoSolution<Type>> pareto = all_solutions.get(key);
+                List<ParetoSolution<N>> pareto = all_solutions.get(key);
                 int index = positions.get(key);
                 if (index >= pareto.size()) {
                     index = 0;
@@ -112,9 +111,8 @@ public abstract class MOAlgorithm<P extends Problem<NumberSolution<Type>>, T ext
     }
 
     @Override
-    public ParetoSolution<Type> execute(T task) throws StopCriterionException {
+    public ParetoSolution<N> execute(T task) throws StopCriterionException {
         this.task = task;
-        numVar = task.problem.getNumberOfDimensions();
         numObj = task.problem.getNumberOfObjectives();
 
         //ai.addParameter(EnumAlgorithmParameters.POP_SIZE, populationSize+"");
@@ -123,7 +121,7 @@ public abstract class MOAlgorithm<P extends Problem<NumberSolution<Type>>, T ext
 
         // check cache after initialization when all parameters are set
         if (caching != Cache.NONE && caching != Cache.SAVE) {
-            ParetoSolution<Type> next = returnNext(task);
+            ParetoSolution<N> next = returnNext(task);
             if (next != null)
                 return next;
             else
@@ -134,7 +132,7 @@ public abstract class MOAlgorithm<P extends Problem<NumberSolution<Type>>, T ext
         long estimatedTime = System.currentTimeMillis() - initTime;
         //System.out.println("Total execution time: "+estimatedTime + "ms");
 
-        Ranking<Type> ranking = new Ranking<>(best);
+        Ranking<N> ranking = new Ranking<>(best);
         best = ranking.getSubfront(0);
 
         if (saveData) {
@@ -155,7 +153,7 @@ public abstract class MOAlgorithm<P extends Problem<NumberSolution<Type>>, T ext
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Util.addParetoToJSON(getCacheKey(task.getTaskInfo()), task.getBenchmarkName(), ai.getAcronym(), best);
+            Util.addParetoToJSON(getCacheKey(task.getTaskInfo()), task.problem.getBenchmarkName(), ai.getAcronym(), best);
         }
 
         return best;

@@ -3,9 +3,10 @@ package org.um.feri.ears.algorithms.moo.demo;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 
-public class D_DEMO extends DEMO<Double, DoubleProblem, MOTask<Double>> {
+public class D_DEMO extends DEMO<Double, DoubleProblem, Task<NumberSolution<Double>,DoubleProblem>> {
 	
 	public D_DEMO() {
 		this(new DifferentialEvolutionCrossover(), 100, 1);

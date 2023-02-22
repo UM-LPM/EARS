@@ -284,7 +284,7 @@ public class DummyAlgorithm extends NumberAlgorithm {
                 task.incrementNumberOfIterations();
 
             task.startTimer();
-            task.setEvaluationTime(evaluation.time);
+            task.setEvaluationTimeNs(evaluation.time);
 
         } catch (StopCriterionException e) {
             e.printStackTrace();

@@ -1,10 +1,10 @@
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.CombinatorialProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
-public class PermutationSwapMutation implements MutationOperator<Integer, MOTask<Integer>, NumberSolution<Integer>> {
+public class PermutationSwapMutation implements MutationOperator<CombinatorialProblem, NumberSolution<Integer>> {
 
     private double mutationProbability;
 
@@ -19,19 +19,19 @@ public class PermutationSwapMutation implements MutationOperator<Integer, MOTask
     }
 
     @Override
-    public NumberSolution<Integer> execute(NumberSolution<Integer> solution, MOTask<Integer> tb) {
-        doMutation(solution, tb);
+    public NumberSolution<Integer> execute(NumberSolution<Integer> solution, CombinatorialProblem problem) {
+        doMutation(solution, problem);
         return solution;
     }
 
     /**
      * Performs the operation
      *
-     * @param tb
+     * @param problem
      */
-    public void doMutation(NumberSolution<Integer> solution, MOTask<Integer> tb) {
+    public void doMutation(NumberSolution<Integer> solution, CombinatorialProblem problem) {
         int permutationLength;
-        permutationLength = tb.problem.getNumberOfDimensions();
+        permutationLength = problem.getNumberOfDimensions();
 
         if ((permutationLength != 0) && (permutationLength != 1)) {
             if (Util.rnd.nextDouble() < mutationProbability) {

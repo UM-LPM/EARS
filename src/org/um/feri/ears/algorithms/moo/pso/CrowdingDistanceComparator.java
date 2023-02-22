@@ -25,8 +25,8 @@ import java.util.Comparator;
  *
  * @author Antonio J. Nebro
  */
-public class CrowdingDistanceComparator<Type extends Number> implements Comparator<NumberSolution<Type>> {
-    private final CrowdingDistance<Type> crowdingDistance = new CrowdingDistance<Type>();
+public class CrowdingDistanceComparator<N extends Number> implements Comparator<NumberSolution<N>> {
+    private final CrowdingDistance<N> crowdingDistance = new CrowdingDistance<N>();
 
     /**
      * Compare two solutions.
@@ -37,7 +37,7 @@ public class CrowdingDistanceComparator<Type extends Number> implements Comparat
      * respectively.
      */
     @Override
-    public int compare(NumberSolution<Type> solution1, NumberSolution<Type> solution2) {
+    public int compare(NumberSolution<N> solution1, NumberSolution<N> solution2) {
         int result;
         if (solution1 == null) {
             if (solution2 == null) {

@@ -26,7 +26,7 @@ import java.util.Comparator;
  *
  * @author Antonio J. Nebro
  */
-public class PointComparator<Type extends Number> implements Comparator<NumberSolution<Type>> {
+public class PointComparator<N extends Number> implements Comparator<NumberSolution<N>> {
 	private boolean maximizing;
 
 	public PointComparator() {
@@ -48,7 +48,7 @@ public class PointComparator<Type extends Number> implements Comparator<NumberSo
 	 * @return -1 if o1 < o1, 1 if o1 > o2 or 0 in other case.
 	 */
 	@Override
-	public int compare(NumberSolution<Type> pointOne, NumberSolution<Type> pointTwo) {
+	public int compare(NumberSolution<N> pointOne, NumberSolution<N> pointTwo) {
 
 		for (int i = pointOne.getNumberOfObjectives()-1; i >= 0; i--) {
 			if (isBetter(pointOne.getObjective(i), pointTwo.getObjective(i))) {

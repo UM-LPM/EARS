@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class SBXCrossoverSO implements CrossoverOperator<Double, Task<NumberSolution<Double>, DoubleProblem>, NumberSolution<Double>>{
+public class SBXCrossoverSO implements CrossoverOperator<Double, DoubleProblem, NumberSolution<Double>>{
 
 
 	/**
@@ -34,18 +34,18 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task<NumberSolu
 	}
 
 	@Override
-	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, Task<NumberSolution<Double>, DoubleProblem> task) {
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, DoubleProblem problem) {
 		if (parents.length != 2) {
 			return null;
 		}
 
 		NumberSolution<Double>[] offSpring;
-		offSpring = doCrossover(crossoverProbability, parents[0], parents[1], task);
+		offSpring = doCrossover(crossoverProbability, parents[0], parents[1], problem);
 		return offSpring;
 	}
 
 	private NumberSolution<Double>[] doCrossover(Double probability, NumberSolution<Double> parent1,
-												 NumberSolution<Double> parent2, Task<NumberSolution<Double>, DoubleProblem> task) {
+												 NumberSolution<Double> parent2, DoubleProblem problem) {
 		NumberSolution<Double>[] offSpring = new NumberSolution[2];
 
 		offSpring[0] = new NumberSolution<>(parent1);
@@ -75,8 +75,8 @@ public class SBXCrossoverSO implements CrossoverOperator<Double, Task<NumberSolu
 							y2 = valueX1;
 						}
 
-						yL = task.problem.getLowerLimit(i);
-						yu = task.problem.getUpperLimit(i);
+						yL = problem.getLowerLimit(i);
+						yu = problem.getUpperLimit(i);
 						rand = Util.rnd.nextDouble();
 						beta = 1.0 + (2.0 * (y1 - yL) / (y2 - y1));
 						alpha = 2.0 - java.lang.Math.pow(beta, -(distributionIndex + 1.0));

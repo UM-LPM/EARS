@@ -41,7 +41,7 @@ import org.um.feri.ears.util.NondominatedPopulation;
  * vol. 7, no. 2, pp. 100-116, 2003.
  * </ol>
  */
-public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopulation<Type> {
+public class AdaptiveGridArchive<N extends Number> extends NondominatedPopulation<N> {
 
 	/**
 	 * The maximum capacity of this archive.
@@ -116,13 +116,13 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	}
 
 
-	public boolean add(NumberSolution<Type> solution) {
+	public boolean add(NumberSolution<N> solution) {
 		// check if the candidate dominates or is dominated by any member in
 		// the archive
-		Iterator<NumberSolution<Type>> iterator = iterator();
+		Iterator<NumberSolution<N>> iterator = iterator();
 
 		while (iterator.hasNext()) {
-			NumberSolution<Type> oldSolution = iterator.next();
+			NumberSolution<N> oldSolution = iterator.next();
 			int flag = comparator.compare(solution, oldSolution);
 
 			if (flag < 0) {
@@ -181,7 +181,7 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	}
 	
 	@Override
-	public boolean remove(NumberSolution<Type> solution) {
+	public boolean remove(NumberSolution<N> solution) {
 		boolean removed = super.remove(solution);
 
 		if (removed) {
@@ -232,8 +232,8 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	 * 
 	 * @return a solution residing in the densest grid cell
 	 */
-	protected NumberSolution<Type> pickSolutionFromDensestCell() {
-		NumberSolution<Type> solution = null;
+	protected NumberSolution<N> pickSolutionFromDensestCell() {
+		NumberSolution<N> solution = null;
 		int value = -1;
 
 		for (int i = 0; i < size(); i++) {
@@ -257,14 +257,14 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 		Arrays.fill(maximum, Double.NEGATIVE_INFINITY);
 		Arrays.fill(density, 0);
 
-		for (NumberSolution<Type> solution : this) {
+		for (NumberSolution<N> solution : this) {
 			for (int i = 0; i < num_obj; i++) {
 				minimum[i] = Math.min(minimum[i], solution.getObjective(i));
 				maximum[i] = Math.max(maximum[i], solution.getObjective(i));
 			}
 		}
 
-		for (NumberSolution<Type> solution : this) {
+		for (NumberSolution<N> solution : this) {
 			density[findIndex(solution)]++;
 		}
 	}
@@ -279,7 +279,7 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	 *         archive, or {@code -1} if the solution is not within the current
 	 *         lower and upper bounds
 	 */
-	public int findIndex(NumberSolution<Type> solution) {
+	public int findIndex(NumberSolution<N> solution) {
 		int index = 0;
 
 		for (int i = 0; i < num_obj; i++) {

@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import java.util.Arrays;
 
 
-public class Point<Type extends Number> {
+public class Point<N extends Number> {
 
     private double[] point;
 
@@ -41,7 +41,7 @@ public class Point<Type extends Number> {
      *
      * @param solution
      */
-    public Point(NumberSolution<Type> solution) {
+    public Point(NumberSolution<N> solution) {
 
         int dimensions = solution.getNumberOfObjectives();
         point = new double[dimensions];

@@ -11,10 +11,10 @@ public class CEC2010Benchmark extends Benchmark<NumberSolution<Double>, DoublePr
         this(1e-7);
     }
 
-    public CEC2010Benchmark(double draw_limit) {
+    public CEC2010Benchmark(double drawLimit) {
         super();
         String name = "Benchmark CEC 2010";
-        this.drawLimit = draw_limit;
+        this.drawLimit = drawLimit;
         stopCriterion = StopCriterion.EVALUATIONS;
         maxEvaluations = 10000; //(int) (1 * 1e6);
         maxIterations = 0;

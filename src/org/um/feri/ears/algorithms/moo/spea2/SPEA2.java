@@ -13,23 +13,20 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Ranking;
 
 
-public class SPEA2<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class SPEA2<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
     int populationSize;
     int archiveSize = 100;
-    ParetoSolution<Type> population;
-    ParetoSolution<Type> archive;
+    ParetoSolution<N> population;
+    ParetoSolution<N> archive;
 
-    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
-    MutationOperator<Type, T, NumberSolution<Type>> mut;
+    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
     public int tournamentRounds = 1;
 
@@ -81,34 +78,34 @@ public class SPEA2<Type extends Number, P extends Problem<NumberSolution<Type>>,
 
         //archiveSize = populationSize;
 
-        population = new ParetoSolution<Type>(populationSize);
-        archive = new ParetoSolution<Type>(archiveSize);
+        population = new ParetoSolution<N>(populationSize);
+        archive = new ParetoSolution<N>(archiveSize);
     }
 
     @Override
     protected void start() throws StopCriterionException {
 
-        ParetoSolution<Type> offspringPopulation;
+        ParetoSolution<N> offspringPopulation;
 
-        BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
+        BinaryTournament2<N> bt2 = new BinaryTournament2<N>();
 
         // -> Create the initial solutionSet
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            NumberSolution<Type> newSolution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
+            NumberSolution<N> newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);;
             population.add(newSolution);
         }
 
         while (!task.isStopCriterion()) {
-            ParetoSolution<Type> union = ((ParetoSolution<Type>) population).union(archive);
+            ParetoSolution<N> union = ((ParetoSolution<N>) population).union(archive);
             Spea2fitness spea = new Spea2fitness(union);
             spea.fitnessAssign();
             archive = spea.environmentalSelection(archiveSize);
             // Create a new offspringPopulation
-            offspringPopulation = new ParetoSolution<Type>(populationSize);
-            NumberSolution<Type>[] parents = new NumberSolution[2];
+            offspringPopulation = new ParetoSolution<N>(populationSize);
+            NumberSolution<N>[] parents = new NumberSolution[2];
             while (offspringPopulation.size() < populationSize) {
                 int j = 0;
                 do {
@@ -122,8 +119,8 @@ public class SPEA2<Type extends Number, P extends Problem<NumberSolution<Type>>,
                 } while (k < tournamentRounds);
 
                 // make the crossover
-                NumberSolution<Type>[] offSpring = cross.execute(parents, task);
-                mut.execute(offSpring[0], task);
+                NumberSolution<N>[] offSpring = cross.execute(parents, task.problem);
+                mut.execute(offSpring[0], task.problem);
                 if (task.isStopCriterion())
                     break;
                 task.eval(offSpring[0]);
@@ -135,7 +132,7 @@ public class SPEA2<Type extends Number, P extends Problem<NumberSolution<Type>>,
             task.incrementNumberOfIterations();
         }
 
-        Ranking<Type> ranking = new Ranking<Type>(archive);
+        Ranking<N> ranking = new Ranking<N>(archive);
         best = ranking.getSubfront(0);
     }
 }

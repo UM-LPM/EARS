@@ -24,29 +24,29 @@ import org.um.feri.ears.util.SolutionListUtils;
  * Created by Antonio J. Nebro on 24/09/14.
  * Modified by Juanjo on 07/04/2015
  */
-public class CrowdingDistanceArchive<Type extends Number> {
-    private Comparator<NumberSolution<Type>> crowdingDistanceComparator;
-    private CrowdingDistance<Type> crowdingDistance;
-    protected NondominatedPopulation<Type> archive;
+public class CrowdingDistanceArchive<N extends Number> {
+    private Comparator<NumberSolution<N>> crowdingDistanceComparator;
+    private CrowdingDistance<N> crowdingDistance;
+    protected NondominatedPopulation<N> archive;
     protected int maxSize;
 
     public CrowdingDistanceArchive(int maxSize) {
         this.maxSize = maxSize;
-        this.archive = new NondominatedPopulation<Type>();
-        crowdingDistanceComparator = new CrowdingDistanceComparator<Type>();
-        crowdingDistance = new CrowdingDistance<Type>();
+        this.archive = new NondominatedPopulation<N>();
+        crowdingDistanceComparator = new CrowdingDistanceComparator<N>();
+        crowdingDistance = new CrowdingDistance<N>();
     }
 
 
     public void prune() {
         if (getSolutionList().size() > getMaxSize()) {
             computeDensityEstimator();
-            NumberSolution<Type> worst = new SolutionListUtils().findWorstSolution(getSolutionList(), crowdingDistanceComparator);
+            NumberSolution<N> worst = new SolutionListUtils().findWorstSolution(getSolutionList(), crowdingDistanceComparator);
             getSolutionList().remove(worst);
         }
     }
 
-    public Comparator<NumberSolution<Type>> getComparator() {
+    public Comparator<NumberSolution<N>> getComparator() {
         return crowdingDistanceComparator;
     }
 
@@ -55,7 +55,7 @@ public class CrowdingDistanceArchive<Type extends Number> {
     }
 
 
-    public boolean add(NumberSolution<Type> solution) {
+    public boolean add(NumberSolution<N> solution) {
         boolean success = archive.add(solution);
         if (success) {
             prune();
@@ -64,11 +64,11 @@ public class CrowdingDistanceArchive<Type extends Number> {
         return success;
     }
 
-    public NumberSolution<Type> get(int index) {
+    public NumberSolution<N> get(int index) {
         return getSolutionList().get(index);
     }
 
-    public ParetoSolution<Type> getSolutionList() {
+    public ParetoSolution<N> getSolutionList() {
         return archive;
     }
 

@@ -2,8 +2,8 @@ package org.um.feri.ears.operators;
 
 import org.um.feri.ears.problems.*;
 
-public interface CrossoverOperator<Type extends Number, Task extends TaskBase, Sol extends Solution> extends Operator<Sol[], Sol[], Task> {
+public interface CrossoverOperator<N extends Number, P extends Problem<S>, S extends Solution> extends Operator<S[], S[], P> {
 	
-	public abstract void setCurrentSolution(NumberSolution<Type> current);
+	void setCurrentSolution(NumberSolution<N> current);
 
 }

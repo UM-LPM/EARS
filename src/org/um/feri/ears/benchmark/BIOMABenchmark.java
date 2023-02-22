@@ -1,15 +1,13 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriterion;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.*;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BIOMABenchmark extends MOBenchmark<Double, MOTask<Double>, DoubleProblem> {
+public class BIOMABenchmark extends MOBenchmark<Double, NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>> {
 
     public BIOMABenchmark() {
         this(null, 0.0000001, true);
@@ -31,7 +29,7 @@ public class BIOMABenchmark extends MOBenchmark<Double, MOTask<Double>, DoublePr
 
     @Override
     protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, DoubleProblem problem) {
-        tasks.add(new MOTask<>(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 
     @Override

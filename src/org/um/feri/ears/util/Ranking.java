@@ -36,17 +36,17 @@ import org.um.feri.ears.util.comparator.DominanceComparator;
  * solutions, subset 1 contains the non-dominated solutions after removing those
  * belonging to subset 0, and so on.
  */
-public class Ranking<Type extends Number> {
+public class Ranking<N extends Number> {
   
 	/**
 	 * The <code>SolutionSet</code> to rank
 	 */
-	private ParetoSolution<Type> solutions;
+	private ParetoSolution<N> solutions;
 
 	/**
 	 * An array containing all the fronts found during the search
 	 */
-	private ParetoSolution<Type>[] ranking;
+	private ParetoSolution<N>[] ranking;
 
 	/**
 	 * stores a <code>Comparator</code> for dominance checking
@@ -154,7 +154,7 @@ public class Ranking<Type extends Number> {
      * @param rank The rank
      * @return Object representing the <code>SolutionSet</code>.
      */
-	public ParetoSolution<Type> getSubfront(int rank) {
+	public ParetoSolution<N> getSubfront(int rank) {
 		return ranking[rank];
 	}
 

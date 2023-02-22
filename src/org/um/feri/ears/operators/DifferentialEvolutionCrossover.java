@@ -21,8 +21,9 @@
 
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 
@@ -42,7 +43,7 @@ import org.um.feri.ears.util.Util;
  *   - current-to-rand/1/bin (current-to-best/1/bin)
  *   - current-to-rand/1/exp (current-to-best/1/exp)
  */
-public class DifferentialEvolutionCrossover implements CrossoverOperator<Double, MOTask<Double>, NumberSolution<Double>> {
+public class DifferentialEvolutionCrossover implements CrossoverOperator<Double, DoubleProblem, NumberSolution<Double>> {
 	/**
 	 * DEFAULT_CR defines a default CR (crossover operation control) value
 	 */
@@ -108,7 +109,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 
 
 	@Override
-	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parent, MOTask<Double> task) {
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parent, DoubleProblem problem) {
 
 		NumberSolution<Double> child;
 		int jrand;
@@ -131,10 +132,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xParent2.getValue(j) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit(j))
-						value = task.getLowerLimit(j);
-					if (value > task.getUpperLimit(j))
-						value = task.getUpperLimit(j);
+					if (value < problem.getLowerLimit(j))
+						value = problem.getLowerLimit(j);
+					if (value > problem.getUpperLimit(j))
+						value = problem.getUpperLimit(j);
 					/*
 					 * if (value < xChild.getLowerBound(j)) { double rnd =
 					 * PseudoRandom.randDouble(0, 1) ; value =
@@ -159,10 +160,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xParent2.getValue(j) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit(j))
-						value = task.getLowerLimit(j);
-					if (value > task.getUpperLimit(j))
-						value = task.getUpperLimit(j);
+					if (value < problem.getLowerLimit(j))
+						value = problem.getLowerLimit(j);
+					if (value > problem.getUpperLimit(j))
+						value = problem.getUpperLimit(j);
 
 					xChild.setValue(j, value);
 				} else {
@@ -177,10 +178,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 				double value;
 				value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-				if (value < task.getLowerLimit(j))
-					value = task.getLowerLimit(j);
-				if (value > task.getUpperLimit(j))
-					value = task.getUpperLimit(j);
+				if (value < problem.getLowerLimit(j))
+					value = problem.getLowerLimit(j);
+				if (value > problem.getUpperLimit(j))
+					value = problem.getUpperLimit(j);
 
 				xChild.setValue(j, value);
 			}
@@ -191,10 +192,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit(j))
-						value = task.getLowerLimit(j);
-					if (value > task.getUpperLimit(j))
-						value = task.getUpperLimit(j);
+					if (value < problem.getLowerLimit(j))
+						value = problem.getLowerLimit(j);
+					if (value > problem.getUpperLimit(j))
+						value = problem.getUpperLimit(j);
 
 					xChild.setValue(j, value);
 				} else {
@@ -210,10 +211,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit(j))
-						value = task.getLowerLimit(j);
-					if (value > task.getUpperLimit(j))
-						value = task.getUpperLimit(j);
+					if (value < problem.getLowerLimit(j))
+						value = problem.getLowerLimit(j);
+					if (value > problem.getUpperLimit(j))
+						value = problem.getUpperLimit(j);
 
 					xChild.setValue(j, value);
 				} else {

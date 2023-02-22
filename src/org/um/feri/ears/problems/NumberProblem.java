@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class NumberProblem<Type extends Number> extends Problem<NumberSolution<Type>> {
+public abstract class NumberProblem<N extends Number> extends Problem<NumberSolution<N>> {
 
-    public List<Type> upperLimit;
-    public List<Type> lowerLimit;
+    public List<N> upperLimit;
+    public List<N> lowerLimit;
 
     protected int numberOfDimensions;
 
@@ -35,19 +35,19 @@ public abstract class NumberProblem<Type extends Number> extends Problem<NumberS
         return decisionSpaceOptima;
     }
 
-    public Type getLowerLimit(int i) {
+    public N getLowerLimit(int i) {
         return lowerLimit.get(i);
     }
 
-    public Type getUpperLimit(int i) {
+    public N getUpperLimit(int i) {
         return upperLimit.get(i);
     }
 
-    public List<Type> getUpperLimit() {
+    public List<N> getUpperLimit() {
         return upperLimit;
     }
 
-    public List<Type> getLowerLimit() {
+    public List<N> getLowerLimit() {
         return lowerLimit;
     }
 
@@ -81,7 +81,8 @@ public abstract class NumberProblem<Type extends Number> extends Problem<NumberS
         objectives.add(o);
     }
 
-    public boolean isFirstBetter(ParetoSolution<Type> x, ParetoSolution<Type> y, QualityIndicator<Type> qi) {
+    //TODO can be moved to upper class when ParetoSolution is made more generic
+    public boolean isFirstBetter(ParetoSolution<N> x, ParetoSolution<N> y, QualityIndicator<N> qi) {
         return x.isFirstBetter(y, qi);
     }
 }

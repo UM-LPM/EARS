@@ -7,16 +7,15 @@
 
 package org.um.feri.ears.algorithms.moo.pesa2;
 
-import java.util.Comparator;
 import java.util.Iterator;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
-public class AdaptiveGridArchive<Type extends Number> extends ParetoSolution<Type> {
+public class AdaptiveGridArchive<N extends Number> extends ParetoSolution<N> {
 
-    private AdaptiveGrid<Type> grid;
+    private AdaptiveGrid<N> grid;
 
     private int maxSize;
 
@@ -41,12 +40,12 @@ public class AdaptiveGridArchive<Type extends Number> extends ParetoSolution<Typ
      * @return true if the <code>Solution</code> has been inserted, false
      * otherwise.
      */
-    public boolean add(NumberSolution<Type> solution) {
+    public boolean add(NumberSolution<N> solution) {
         // Iterator of individuals over the list
-        Iterator<NumberSolution<Type>> iterator = solutions.iterator();
+        Iterator<NumberSolution<N>> iterator = solutions.iterator();
 
         while (iterator.hasNext()) {
-            NumberSolution<Type> element = iterator.next();
+            NumberSolution<N> element = iterator.next();
             int flag = dominance.compare(solution, element);
             if (flag == -1) { // The Individual to insert dominates other individuals in the archive
                 iterator.remove(); // Delete it from the archive
@@ -88,7 +87,7 @@ public class AdaptiveGridArchive<Type extends Number> extends ParetoSolution<Typ
             boolean removed = false;
             while (iterator.hasNext()) {
                 if (!removed) {
-                    NumberSolution<Type> element = iterator.next();
+                    NumberSolution<N> element = iterator.next();
                     int location2 = grid.location(element);
                     if (location2 == grid.getMostPopulated()) {
                         iterator.remove();

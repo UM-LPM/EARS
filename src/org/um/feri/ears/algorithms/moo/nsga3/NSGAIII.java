@@ -18,10 +18,7 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Ranking;
 
@@ -39,25 +36,25 @@ import org.um.feri.ears.util.Ranking;
  * Solving problems with box constraints.
  * Evolutionary Computation, IEEE Transactions on, 18(4), 577-601.
  */
-public class NSGAIII<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class NSGAIII<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
     int populationSize = 100;
 
     double[][] lambda_; // reference points
 
-    ParetoSolution<Type> population;
-    ParetoSolution<Type> offspringPopulation;
-    ParetoSolution<Type> union;
+    ParetoSolution<N> population;
+    ParetoSolution<N> offspringPopulation;
+    ParetoSolution<N> union;
 
     protected Vector<Integer> numberOfDivisions;
-    protected List<ReferencePoint<Type>> referencePoints;
+    protected List<ReferencePoint<N>> referencePoints;
 
-    BinaryTournament2<Type> bt2;
+    BinaryTournament2<N> bt2;
     SBXCrossover sbx;
     PolynomialMutation plm;
 
-    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
-    MutationOperator<Type, T, NumberSolution<Type>> mut;
+    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
 
     public NSGAIII(CrossoverOperator crossover, MutationOperator mutation) {
@@ -76,17 +73,17 @@ public class NSGAIII<Type extends Number, P extends Problem<NumberSolution<Type>
     @Override
     protected void start() throws StopCriterionException {
         // Create the initial population
-        NumberSolution<Type> newSolution;
+        NumberSolution<N> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
+            newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }
 
-        ParetoSolution<Type> offspringPopulation;
-        ParetoSolution<Type> matingPopulation;
+        ParetoSolution<N> offspringPopulation;
+        ParetoSolution<N> matingPopulation;
 
         while (!task.isStopCriterion()) {
             matingPopulation = selection(population);
@@ -96,31 +93,31 @@ public class NSGAIII<Type extends Number, P extends Problem<NumberSolution<Type>
         }
 
         // Return the first non-dominated front
-        Ranking<Type> ranking = new Ranking<Type>(population);
+        Ranking<N> ranking = new Ranking<N>(population);
         best = ranking.getSubfront(0);
     }
 
-    private ParetoSolution<Type> selection(ParetoSolution<Type> population) {
+    private ParetoSolution<N> selection(ParetoSolution<N> population) {
 
-        ParetoSolution<Type> matingPopulation = new ParetoSolution(population.size());
+        ParetoSolution<N> matingPopulation = new ParetoSolution(population.size());
         for (int i = 0; i < population.size(); i++) {
-            NumberSolution<Type> solution = bt2.execute(population);
+            NumberSolution<N> solution = bt2.execute(population);
             matingPopulation.add(solution);
         }
         return matingPopulation;
     }
 
-    protected ParetoSolution<Type> reproduction(ParetoSolution<Type> population) throws StopCriterionException {
-        ParetoSolution<Type> offspringPopulation = new ParetoSolution(population.size());
+    protected ParetoSolution<N> reproduction(ParetoSolution<N> population) throws StopCriterionException {
+        ParetoSolution<N> offspringPopulation = new ParetoSolution(population.size());
         for (int i = 0; i < population.size(); i += 2) {
-            NumberSolution<Type>[] parents = new NumberSolution[2];
+            NumberSolution<N>[] parents = new NumberSolution[2];
             parents[0] = population.get(i);
             parents[1] = (population.get(Math.min(i + 1, population.size() - 1)));
 
-            NumberSolution<Type>[] offspring = cross.execute(parents, task);
+            NumberSolution<N>[] offspring = cross.execute(parents, task.problem);
 
-            mut.execute(offspring[0], task);
-            mut.execute(offspring[1], task);
+            mut.execute(offspring[0], task.problem);
+            mut.execute(offspring[1], task.problem);
 
             if (task.isStopCriterion())
                 break;
@@ -135,17 +132,17 @@ public class NSGAIII<Type extends Number, P extends Problem<NumberSolution<Type>
         return offspringPopulation;
     }
 
-    protected ParetoSolution<Type> replacement(ParetoSolution<Type> population, ParetoSolution<Type> offspringPopulation) {
+    protected ParetoSolution<N> replacement(ParetoSolution<N> population, ParetoSolution<N> offspringPopulation) {
 
-        ParetoSolution<Type> jointPopulation = new ParetoSolution(population.getCapacity() + offspringPopulation.getCapacity());
+        ParetoSolution<N> jointPopulation = new ParetoSolution(population.getCapacity() + offspringPopulation.getCapacity());
         jointPopulation.addAll(population);
         jointPopulation.addAll(offspringPopulation);
 
-        Ranking<Type> ranking = new Ranking<Type>(jointPopulation);
+        Ranking<N> ranking = new Ranking<N>(jointPopulation);
 
 
-        List<NumberSolution<Type>> pop = new ArrayList<>();
-        List<List<NumberSolution<Type>>> fronts = new ArrayList<>();
+        List<NumberSolution<N>> pop = new ArrayList<>();
+        List<List<NumberSolution<N>>> fronts = new ArrayList<>();
         int rankingIndex = 0;
         int candidateSolutions = 0;
         while (candidateSolutions < populationSize) {
@@ -157,15 +154,15 @@ public class NSGAIII<Type extends Number, P extends Problem<NumberSolution<Type>
         }
 
         // A copy of the reference list should be used as parameter of the environmental selection
-        EnvironmentalSelection<Type> selection = new EnvironmentalSelection(fronts, populationSize, getReferencePointsCopy(), numObj);
+        EnvironmentalSelection<N> selection = new EnvironmentalSelection(fronts, populationSize, getReferencePointsCopy(), numObj);
 
         pop = selection.execute(pop);
 
         return new ParetoSolution(pop);
     }
 
-    private void addRankedSolutionsToPopulation(Ranking<Type> ranking, int rank, List<NumberSolution<Type>> population) {
-        List<NumberSolution<Type>> front;
+    private void addRankedSolutionsToPopulation(Ranking<N> ranking, int rank, List<NumberSolution<N>> population) {
+        List<NumberSolution<N>> front;
 
         front = ranking.getSubfront(rank).solutions;
 
@@ -174,9 +171,9 @@ public class NSGAIII<Type extends Number, P extends Problem<NumberSolution<Type>
         }
     }
 
-    private List<ReferencePoint<Type>> getReferencePointsCopy() {
-        List<ReferencePoint<Type>> copy = new ArrayList<>();
-        for (ReferencePoint<Type> r : this.referencePoints) {
+    private List<ReferencePoint<N>> getReferencePointsCopy() {
+        List<ReferencePoint<N>> copy = new ArrayList<>();
+        for (ReferencePoint<N> r : this.referencePoints) {
             copy.add(new ReferencePoint(r));
         }
         return copy;
@@ -204,9 +201,9 @@ public class NSGAIII<Type extends Number, P extends Problem<NumberSolution<Type>
             }
         }
 
-        bt2 = new BinaryTournament2<Type>();
+        bt2 = new BinaryTournament2<N>();
         sbx = new SBXCrossover(0.9, 20.0);
-        plm = new PolynomialMutation(1.0 / numVar, 20.0);
+        plm = new PolynomialMutation(1.0 / task.problem.getNumberOfDimensions(), 20.0);
         referencePoints.clear();
         switch (numObj) {
             case 2:

@@ -20,23 +20,20 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.moo.moead.Utils;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
-public class MOEAD_STM<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOEAD_DRA<Type, P, T> {
+public class MOEAD_STM<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOEAD_DRA<N, P, T> {
 
     // nadir point
     protected double[] nadirPoint;
 
-    ParetoSolution<Type> offspringPopulation;
-    ParetoSolution<Type> jointPopulation;
+    ParetoSolution<N> offspringPopulation;
+    ParetoSolution<N> jointPopulation;
 
 
-    public MOEAD_STM(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int pop_size) {
+    public MOEAD_STM(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
         super(crossover, mutation, pop_size);
 
         au = new Author("miha", "miha.ravber at gamil.com");
@@ -50,8 +47,8 @@ public class MOEAD_STM<Type extends Number, P extends Problem<NumberSolution<Typ
     protected void init() throws StopCriterionException {
         super.init();
 
-        offspringPopulation = new ParetoSolution<Type>(populationSize);
-        jointPopulation = new ParetoSolution<Type>(2 * populationSize);
+        offspringPopulation = new ParetoSolution<N>(populationSize);
+        jointPopulation = new ParetoSolution<N>(2 * populationSize);
         nadirPoint = new double[numObj];
         initializeNadirPoint();
     }
@@ -86,8 +83,8 @@ public class MOEAD_STM<Type extends Number, P extends Problem<NumberSolution<Typ
                 matingSelection(p, n, 2, type);
 
                 // STEP 2.2. Reproduction
-                NumberSolution<Type> child;
-                NumberSolution<Type>[] parents = new NumberSolution[3];
+                NumberSolution<N> child;
+                NumberSolution<N>[] parents = new NumberSolution[3];
 
                 parents[0] = population.get(p.get(0));
                 parents[1] = population.get(p.get(1));
@@ -95,10 +92,10 @@ public class MOEAD_STM<Type extends Number, P extends Problem<NumberSolution<Typ
 
                 // Apply DE crossover
                 cross.setCurrentSolution(population.get(n));
-                child = cross.execute(parents, task)[0];
+                child = cross.execute(parents, task.problem)[0];
 
                 // Apply mutation
-                mut.execute(child, task);
+                mut.execute(child, task.problem);
 
                 if (task.isStopCriterion()) {
                     best = finalSelection(populationSize);
@@ -147,7 +144,7 @@ public class MOEAD_STM<Type extends Number, P extends Problem<NumberSolution<Typ
     }
 
     // update the current nadir point
-    void updateNadirPoint(NumberSolution<Type> individual) {
+    void updateNadirPoint(NumberSolution<N> individual) {
         for (int i = 0; i < numObj; i++) {
             if (individual.getObjective(i) > nadirPoint[i]) {
                 nadirPoint[i] = individual.getObjective(i);
@@ -287,7 +284,7 @@ public class MOEAD_STM<Type extends Number, P extends Problem<NumberSolution<Typ
      * Calculate the perpendicular distance between the solution and reference
      * line
      */
-    public double calculateDistance(NumberSolution<Type> individual, double[] lambda) {
+    public double calculateDistance(NumberSolution<N> individual, double[] lambda) {
         double scale;
         double distance;
 

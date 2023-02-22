@@ -21,8 +21,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
 import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
-import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.quality_indicator.IndicatorFactory;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
@@ -33,7 +32,7 @@ import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
 import org.um.feri.ears.util.Util;
 
-public class MOCRSTuning {
+public class MOCRSTuning<N extends Number> {
 
     CRSSolution[] population;
     CRSSolution[] bestInGeneration;
@@ -77,7 +76,7 @@ public class MOCRSTuning {
     String algName;
     ArrayList<ControlParameter> controlParameters;
 
-    ArrayList<MOTask> tasks;
+    ArrayList<Task<NumberSolution<N>, NumberProblem<N>>> tasks;
 
     double drawLimit = 1e-7;
 
@@ -86,7 +85,7 @@ public class MOCRSTuning {
     boolean threadForEachRun = false;
 
 
-    public CRSSolution tune(Class<? extends Algorithm> classAlg, String algName, ArrayList<ControlParameter> controlParameters, ArrayList<MOTask> tasks, List<IndicatorName> indicators, int popSize, int maxGen) {
+    public CRSSolution tune(Class<? extends Algorithm> classAlg, String algName, ArrayList<ControlParameter> controlParameters, ArrayList<Task<NumberSolution<N>, NumberProblem<N>>> tasks, List<IndicatorName> indicators, int popSize, int maxGen) {
 
         this.classAlg = classAlg;
         this.algName = algName;
@@ -257,7 +256,7 @@ public class MOCRSTuning {
         return cp.correctValue(value);
     }
 
-    void assignd(int D, double a[], double b[]) {
+    void assignd(int D, double[] a, double[] b) {
         System.arraycopy(b, 0, a, 0, D);
         // System.arraycopy(src, srcPos, dest, destPos, length)
     }
@@ -400,7 +399,7 @@ public class MOCRSTuning {
         CRSSolution sol = new CRSSolution();
 
         if (threadForEachRun) {
-            for (MOTask task : tasks) {
+            for (Task<NumberSolution<N>, NumberProblem<N>> task : tasks) {
                 //System.out.println("Current task: "+task.getProblemName());
                 try {
                     ExecutorService service = Executors.newFixedThreadPool(threads);
@@ -418,7 +417,7 @@ public class MOCRSTuning {
 
                     for (Future<AlgorithmRunResult> future : set) {
 
-                        AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, MOTask<Double>, Double>, MOTask<Double>> res = future.get();
+                        AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<Task<NumberSolution<N>, NumberProblem<N>>, Double>, Task<NumberSolution<N>, NumberProblem<N>>> res = future.get();
                         sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.solution, defaultObject, res.task));
                     }
 
@@ -436,7 +435,7 @@ public class MOCRSTuning {
                 ExecutorService service = Executors.newFixedThreadPool(threads);
 
                 Set<Future<AlgorithmRunResult>> set = new HashSet<Future<AlgorithmRunResult>>();
-                for (MOTask task : tasks) {
+                for (Task<NumberSolution<N>, NumberProblem<N>> task : tasks) {
                     //create new object for each thread
                     MOAlgorithm object = createObject(name);
                     setParameters(object, params);
@@ -451,8 +450,8 @@ public class MOCRSTuning {
                 }
 
                 //Order results by tasks
-                for (MOTask task : tasks) {
-                    for (AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<DoubleProblem, MOTask<Double>, Double>, MOTask<Double>> res : futureResults) {
+                for (Task<NumberSolution<N>, NumberProblem<N>> task : tasks) {
+                    for (AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<Task<NumberSolution<N>, NumberProblem<N>>, Double>, Task<NumberSolution<N>, NumberProblem<N>>> res : futureResults) {
                         if (task.getProblemName().equals(res.task.getProblemName())) {
                             sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.solution, defaultObject, res.task));
                             break;
@@ -471,7 +470,7 @@ public class MOCRSTuning {
         return sol;
     }
 
-    private HashMap<IndicatorName, Double> evaluateWithQI(MOTask task, ParetoSolution result) {
+    private HashMap<IndicatorName, Double> evaluateWithQI(Task<NumberSolution<N>, NumberProblem<N>> task, ParetoSolution result) {
 
         HashMap<IndicatorName, Double> indicatorValues = new HashMap<IndicatorName, Double>();
 
@@ -508,7 +507,7 @@ public class MOCRSTuning {
         }
 
         int index = 0;
-        for (MOTask task : tasks) {
+        for (Task<NumberSolution<N>, NumberProblem<N>> task : tasks) {
 
             for (int k = 0; k < numOfRuns; k++) {
 
@@ -577,8 +576,6 @@ public class MOCRSTuning {
             System.out.println("Evaluation for one player: " + estimatedTime + "s");
             num_eval++;
         }
-
-
     }
 
     public boolean resultEqual(ParetoSolution a, ParetoSolution b, QualityIndicator qi) {
@@ -596,10 +593,10 @@ public class MOCRSTuning {
     }
 
     class FitnessComparator implements Comparator<MOAlgorithmEvalResult> {
-        MOTask t;
+        Task<NumberSolution<N>, NumberProblem<N>> t;
         QualityIndicator qi;
 
-        public FitnessComparator(MOTask t, QualityIndicator qi) {
+        public FitnessComparator(Task<NumberSolution<N>, NumberProblem<N>> t, QualityIndicator qi) {
             this.t = t;
             this.qi = qi;
         }
@@ -618,7 +615,7 @@ public class MOCRSTuning {
                         }
                     }
                     try {
-                        if (t.isFirstBetter(arg0.getBest(), arg1.getBest(), qi)) return -1;
+                        if (t.problem.isFirstBetter(arg0.getBest(), arg1.getBest(), qi)) return -1;
                         else return 1;
                     } catch (Exception e) {
                         e.printStackTrace();

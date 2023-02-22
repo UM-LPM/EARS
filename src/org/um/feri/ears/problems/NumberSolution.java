@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class NumberSolution<Type extends Number> extends Solution {
+public class NumberSolution<N extends Number> extends Solution {
 
-    protected ArrayList<Type> variables;
+    protected ArrayList<N> variables;
 
     /*
         Constructor for single-objective optimization
      */
-    public NumberSolution(List<Type> x, double eval, double[] constrains) {
+    public NumberSolution(List<N> x, double eval, double[] constrains) {
         this(x, eval);
         checkConstraints(constrains);
     }
@@ -23,7 +23,7 @@ public class NumberSolution<Type extends Number> extends Solution {
     /*
         Constructor for single-objective optimization
     */
-    public NumberSolution(List<Type> x, double eval) {
+    public NumberSolution(List<N> x, double eval) {
         super(1);
         setObjective(0, eval);
         variables = new ArrayList<>(x);
@@ -32,19 +32,19 @@ public class NumberSolution<Type extends Number> extends Solution {
     /*
         Constructor for single-objective optimization
     */
-    public NumberSolution(List<Type> x) {
+    public NumberSolution(List<N> x) {
         super(1);
         variables = new ArrayList<>(x);
     }
 
-    public NumberSolution(List<Type> x, double[] objectives) {
+    public NumberSolution(List<N> x, double[] objectives) {
         super(objectives.length);
         System.arraycopy(objectives, 0, this.objectives, 0, objectives.length);
         variables = new ArrayList<>(x);
         attributes = new HashMap<>();
     }
 
-    public NumberSolution(int numberOfObjectives, List<Type> x) {
+    public NumberSolution(int numberOfObjectives, List<N> x) {
         super(numberOfObjectives);
         variables = new ArrayList<>(x);
     }
@@ -53,17 +53,17 @@ public class NumberSolution<Type extends Number> extends Solution {
         super(numberOfObjectives);
     }
 
-    public NumberSolution(NumberSolution<Type> s) {
+    public NumberSolution(NumberSolution<N> s) {
         super(s);
         variables = new ArrayList<>(s.variables);
     }
 
     @Override
-    public NumberSolution<Type> copy() {
+    public NumberSolution<N> copy() {
         return new NumberSolution<>(this);
     }
 
-    public ArrayList<Type> getVariables() {
+    public ArrayList<N> getVariables() {
         return variables;
     }
 
@@ -71,15 +71,15 @@ public class NumberSolution<Type extends Number> extends Solution {
         return variables.size();
     }
 
-    public void setValue(int i, Type c) {
+    public void setValue(int i, N c) {
         variables.set(i, c);
     }
 
-    public void setVariables(ArrayList<Type> var) {
+    public void setVariables(ArrayList<N> var) {
         this.variables = var;
     }
 
-    public Type getValue(int i) {
+    public N getValue(int i) {
         return variables.get(i);
     }
 

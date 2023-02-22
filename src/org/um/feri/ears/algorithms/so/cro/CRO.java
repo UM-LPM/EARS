@@ -206,8 +206,8 @@ public class CRO extends NumberAlgorithm {
 		List<NumberSolution<Double>> larvae = new ArrayList<>(broadcastSpawners.size() / 2);
 
 		while (broadcastSpawners.size() > 0) {
-			parents[0] = selectionOperator.execute(broadcastSpawners, task);
-			parents[1] = selectionOperator.execute(broadcastSpawners, task);
+			parents[0] = selectionOperator.execute(broadcastSpawners, task.problem);
+			parents[1] = selectionOperator.execute(broadcastSpawners, task.problem);
 
 			broadcastSpawners.remove(parents[0]);
 			// If the parents are not the same
@@ -215,7 +215,7 @@ public class CRO extends NumberAlgorithm {
 				broadcastSpawners.remove(parents[1]);
 			}
 
-			NumberSolution<Double> newSolution = crossoverOperator.execute(parents, task)[0];
+			NumberSolution<Double> newSolution = crossoverOperator.execute(parents, task.problem)[0];
 			if (task.isStopCriterion()) {
 				break;
 			}
@@ -235,7 +235,7 @@ public class CRO extends NumberAlgorithm {
 		List<NumberSolution<Double>> larvae = new ArrayList<>(sz);
 
 		for (int i = 0; i < sz; i++) {
-			NumberSolution<Double> newSolution = mutationOperator.execute(brooders.get(i), task);
+			NumberSolution<Double> newSolution = mutationOperator.execute(brooders.get(i), task.problem);
 			if (task.isStopCriterion()) {
 				break;
 			}

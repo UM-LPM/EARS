@@ -1,6 +1,8 @@
 package org.um.feri.ears.problems;
 
 import com.ctc.wstx.shaded.msv_core.datatype.xsd.Comparator;
+import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 

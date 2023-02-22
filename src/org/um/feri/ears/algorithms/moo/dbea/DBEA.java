@@ -69,7 +69,7 @@ import org.um.feri.ears.util.Util;
  *       Matlab-DBEA.rar</a>
  * </ol>
  */
-public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class DBEA<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
     int populationSize;
 
@@ -97,12 +97,12 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
     /**
      * Stores the population
      */
-    ParetoSolution<Type> population;
+    ParetoSolution<N> population;
 
     /**
      * The solutions that define the corners.
      */
-    ParetoSolution<Type> corner;
+    ParetoSolution<N> corner;
 
     /**
      * The number of outer divisions for generating reference points.
@@ -114,11 +114,11 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      */
     private final int divisionsInner;
 
-    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
-    MutationOperator<Type, T, NumberSolution<Type>> mut;
+    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
 
-    public DBEA(CrossoverOperator crossover, MutationOperator mutation, MOTask task) {
+    public DBEA(CrossoverOperator crossover, MutationOperator mutation, Task<NumberSolution<Double>,DoubleProblem> task) {
 
         this.cross = crossover;
         this.mut = mutation;
@@ -203,12 +203,12 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
             for (int i = 0; i < population.size(); i++) {
                 int n = permutation[i];
 
-                NumberSolution<Type>[] parents = new NumberSolution[2];
+                NumberSolution<N>[] parents = new NumberSolution[2];
                 parents[0] = population.get(i);
                 parents[1] = population.get(n);
 
-                NumberSolution<Type>[] offSpring = cross.execute(parents, task);
-                mut.execute(offSpring[0], task);
+                NumberSolution<N>[] offSpring = cross.execute(parents, task.problem);
+                mut.execute(offSpring[0], task.problem);
 
                 if (task.isStopCriterion()) {
                     best = population;
@@ -238,12 +238,12 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
 
     public void initPopulation() throws StopCriterionException {
 
-        population = new ParetoSolution<Type>(populationSize);
+        population = new ParetoSolution<N>(populationSize);
         for (int i = 0; i < populationSize; i++) {
 
             if (task.isStopCriterion())
                 return;
-            NumberSolution<Type> newSolution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
+            NumberSolution<N> newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
 
             population.add(newSolution);
         }
@@ -255,7 +255,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @param solution the solution
      * @return the constraint violation
      */
-    private double sumOfConstraintViolations(NumberSolution<Type> solution) {
+    private double sumOfConstraintViolations(NumberSolution<N> solution) {
         double result = 0.0;
 
         for (int i = 0; i < solution.getNumberOfConstraints(); i++) {
@@ -271,7 +271,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @param population the population
      * @return the allowed constraint violation
      */
-    double constraintApproach(ParetoSolution<Type> population) {
+    double constraintApproach(ParetoSolution<N> population) {
         double feasible = 1;
         double violation = 0.0;
 
@@ -291,7 +291,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      *
      * @param child the child solution
      */
-    void updatePopulation(NumberSolution<Type> child) {
+    void updatePopulation(NumberSolution<N> child) {
         double eps = 0; // unused in I-DBEA
         double eps_con = constraintApproach(population);
         boolean success = false;
@@ -354,7 +354,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
             intercepts[i] = Double.NEGATIVE_INFINITY;
         }
 
-        ParetoSolution<Type> feasibleSolutions = getFeasibleSolutions(population);
+        ParetoSolution<N> feasibleSolutions = getFeasibleSolutions(population);
 
         if (!feasibleSolutions.isEmpty()) {
             for (int i = 0; i < feasibleSolutions.size(); i++) {
@@ -376,13 +376,13 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @return {@code true} if the solution is dominated; {@code false}
      * otherwise
      */
-    boolean checkDomination(NumberSolution<Type> solution) {
+    boolean checkDomination(NumberSolution<N> solution) {
         if (solution.violatesConstraints()) {
             return false;
         }
 
         // include the corner solutions
-        ParetoSolution<Type> combinedPopulation = new ParetoSolution<Type>();
+        ParetoSolution<N> combinedPopulation = new ParetoSolution<N>();
         combinedPopulation.addAll(population);
 
         if (corner != null) {
@@ -390,7 +390,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
         }
 
         // check for dominance
-        for (NumberSolution<Type> otherSolution : getFeasibleSolutions(combinedPopulation).solutions) {
+        for (NumberSolution<N> otherSolution : getFeasibleSolutions(combinedPopulation).solutions) {
             int count = 0;
 
             for (int i = 0; i < numObj; i++) {
@@ -412,7 +412,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * Preserve the solutions that comprise the corners of the Pareto front.
      */
     void preserveCorner() {
-        ParetoSolution<Type> feasibleSolutions = getFeasibleSolutions(population);
+        ParetoSolution<N> feasibleSolutions = getFeasibleSolutions(population);
 
         if (feasibleSolutions.size() >= 2 * numObj) {
             corner = corner_sort(feasibleSolutions);
@@ -426,9 +426,9 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @param population the population
      * @return the 2*M corner solutions
      */
-    ParetoSolution<Type> corner_sort(ParetoSolution<Type> population) {
-        ParetoSolution<Type> unique = new ParetoSolution<Type>();
-        ParetoSolution<Type> duplicates = new ParetoSolution<Type>();
+    ParetoSolution<N> corner_sort(ParetoSolution<N> population) {
+        ParetoSolution<N> unique = new ParetoSolution<N>();
+        ParetoSolution<N> duplicates = new ParetoSolution<N>();
 
         // remove duplicate solutions
         for (int i = 0; i < population.size(); i++) {
@@ -452,7 +452,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
         }
 
         // sort the solutions
-        List<ParetoSolution<Type>> sortedSets = new ArrayList<ParetoSolution<Type>>();
+        List<ParetoSolution<N>> sortedSets = new ArrayList<ParetoSolution<N>>();
 
         for (int i = 0; i < numObj; i++) {
             sortedSets.add(orderBySmallestObjective(i, unique));
@@ -463,12 +463,12 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
         }
 
         // identify the corners
-        ParetoSolution<Type> result = new ParetoSolution<Type>();
+        ParetoSolution<N> result = new ParetoSolution<N>();
         int current_id = 0;
         int current_f = 0;
 
         while (result.size() < unique.size()) {
-            NumberSolution<Type> r = sortedSets.get(current_f).get(current_id);
+            NumberSolution<N> r = sortedSets.get(current_f).get(current_id);
 
             if (!result.contains(r)) {
                 result.add(r);
@@ -485,7 +485,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
         result.addAll(duplicates);
 
         // reduce the set to 2*M solutions
-        ParetoSolution<Type> prunedSet = new ParetoSolution<Type>();
+        ParetoSolution<N> prunedSet = new ParetoSolution<N>();
 
         for (int i = 0; i < 2 * numObj; i++) {
             prunedSet.add(result.get(i));
@@ -502,9 +502,9 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @param population the population
      * @return a copy of the population ordered by the objective value
      */
-    private ParetoSolution<Type> orderBySmallestObjective(int objective,
-                                                          ParetoSolution<Type> population) {
-        ParetoSolution<Type> result = new ParetoSolution<Type>();
+    private ParetoSolution<N> orderBySmallestObjective(int objective,
+                                                       ParetoSolution<N> population) {
+        ParetoSolution<N> result = new ParetoSolution<N>();
         result.addAll(population);
         result.sort(new ObjectiveComparator(objective));
         return result;
@@ -519,15 +519,15 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @return a copy of the population ordered by the sum-of-squares of all
      * but one objective
      */
-    private ParetoSolution<Type> orderBySmallestSquaredValue(final int objective,
-                                                             ParetoSolution<Type> population) {
-        ParetoSolution<Type> result = new ParetoSolution<Type>();
+    private ParetoSolution<N> orderBySmallestSquaredValue(final int objective,
+                                                          ParetoSolution<N> population) {
+        ParetoSolution<N> result = new ParetoSolution<N>();
         result.addAll(population);
 
-        result.sort(new Comparator<NumberSolution<Type>>() {
+        result.sort(new Comparator<NumberSolution<N>>() {
 
             @Override
-            public int compare(NumberSolution<Type> s1, NumberSolution<Type> s2) {
+            public int compare(NumberSolution<N> s1, NumberSolution<N> s2) {
                 double sum1 = 0.0;
                 double sum2 = 0.0;
 
@@ -552,10 +552,10 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      *                   infeasible solutions
      * @return the feasible solutions in the population
      */
-    private ParetoSolution<Type> getFeasibleSolutions(ParetoSolution<Type> population) {
-        ParetoSolution<Type> feasibleSolutions = new ParetoSolution<Type>();
+    private ParetoSolution<N> getFeasibleSolutions(ParetoSolution<N> population) {
+        ParetoSolution<N> feasibleSolutions = new ParetoSolution<N>();
 
-        for (NumberSolution<Type> solution : population.solutions) {
+        for (NumberSolution<N> solution : population.solutions) {
             if (!solution.violatesConstraints()) {
                 feasibleSolutions.add(solution);
             }
@@ -569,7 +569,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      *
      * @param solution the new solution
      */
-    void updateIdealPointAndIntercepts(NumberSolution<Type> solution) {
+    void updateIdealPointAndIntercepts(NumberSolution<N> solution) {
         if (!solution.violatesConstraints()) {
             // update the ideal point
             for (int j = 0; j < numObj; j++) {
@@ -578,14 +578,14 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
             }
 
             // compute the axis intercepts
-            ParetoSolution<Type> feasibleSolutions = getFeasibleSolutions(population);
+            ParetoSolution<N> feasibleSolutions = getFeasibleSolutions(population);
             feasibleSolutions.add(solution);
 
-            ParetoSolution<Type> nondominatedSolutions = getNondominatedFront(feasibleSolutions);
+            ParetoSolution<N> nondominatedSolutions = getNondominatedFront(feasibleSolutions);
 
             if (!nondominatedSolutions.isEmpty()) {
                 // find the points with the largest value in each objective
-                ParetoSolution<Type> extremePoints = new ParetoSolution<Type>();
+                ParetoSolution<N> extremePoints = new ParetoSolution<N>();
 
                 for (int i = 0; i < numObj; i++) {
                     extremePoints.add(largestObjectiveValue(i, nondominatedSolutions));
@@ -635,8 +635,8 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @param population the entire population
      * @return the solutions that are non-dominated
      */
-    private ParetoSolution<Type> getNondominatedFront(ParetoSolution<Type> population) {
-        NondominatedPopulation<Type> front = new NondominatedPopulation<Type>();
+    private ParetoSolution<N> getNondominatedFront(ParetoSolution<N> population) {
+        NondominatedPopulation<N> front = new NondominatedPopulation<N>();
         front.addAll(population);
         return front;
     }
@@ -649,12 +649,12 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @param population the population of solutions
      * @return the solution with the largest objective value
      */
-    private NumberSolution<Type> largestObjectiveValue(int objective,
-                                                       ParetoSolution<Type> population) {
-        NumberSolution<Type> largest = null;
+    private NumberSolution<N> largestObjectiveValue(int objective,
+                                                    ParetoSolution<N> population) {
+        NumberSolution<N> largest = null;
         double value = Double.NEGATIVE_INFINITY;
 
-        for (NumberSolution<Type> solution : population.solutions) {
+        for (NumberSolution<N> solution : population.solutions) {
             if (solution.getObjective(objective) > value) {
                 largest = solution;
                 value = solution.getObjective(objective);
@@ -672,7 +672,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @param population the population
      * @return the number of unique solutions in the population
      */
-    private int numberOfUniqueSolutions(ParetoSolution<Type> population) {
+    private int numberOfUniqueSolutions(ParetoSolution<N> population) {
         int count = 0;
 
         for (int i = 0; i < population.size(); i++) {
@@ -820,7 +820,7 @@ public class DBEA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @param solution the solution
      * @return the normalized objective values
      */
-    private double[] normalizedObjectives(NumberSolution<Type> solution) {
+    private double[] normalizedObjectives(NumberSolution<N> solution) {
         double[] objectiveValues = new double[numObj];
 
         for (int j = 0; j < numObj; j++) {

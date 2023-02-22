@@ -14,8 +14,9 @@
 package org.um.feri.ears.algorithms.moo.pso;
 
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -24,7 +25,7 @@ import org.um.feri.ears.util.Util;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  * @author Juan J. Durillo
  */
-public class UniformMutation implements MutationOperator<Double, MOTask<Double>, NumberSolution<Double>> {
+public class UniformMutation implements MutationOperator<DoubleProblem, NumberSolution<Double>> {
     private Double perturbation;
     private Double mutationProbability = null;
 
@@ -48,7 +49,7 @@ public class UniformMutation implements MutationOperator<Double, MOTask<Double>,
      * @param probability Mutation setProbability
      * @param solution    The solution to mutate
      */
-    public void doMutation(double probability, NumberSolution<Double> solution, MOTask<Double> task) {
+    public void doMutation(double probability, NumberSolution<Double> solution, DoubleProblem problem) {
         for (int i = 0; i < solution.numberOfVariables(); i++) {
             if (Util.nextDouble() < probability) {
                 double rand = Util.nextDouble();
@@ -56,10 +57,10 @@ public class UniformMutation implements MutationOperator<Double, MOTask<Double>,
 
                 tmp += solution.getValue(i);
 
-                if (tmp < task.getUpperLimit(i)) {
-                    tmp = task.getUpperLimit(i);
-                } else if (tmp > task.getLowerLimit(i)) {
-                    tmp = task.getLowerLimit(i);
+                if (tmp < problem.getUpperLimit(i)) {
+                    tmp = problem.getUpperLimit(i);
+                } else if (tmp > problem.getLowerLimit(i)) {
+                    tmp = problem.getLowerLimit(i);
                 }
 
                 solution.setValue(i, tmp);
@@ -68,9 +69,9 @@ public class UniformMutation implements MutationOperator<Double, MOTask<Double>,
     }
 
     @Override
-    public NumberSolution<Double> execute(NumberSolution<Double> solution, MOTask<Double> tb) {
+    public NumberSolution<Double> execute(NumberSolution<Double> solution, DoubleProblem problem) {
 
-        doMutation(mutationProbability, solution, tb);
+        doMutation(mutationProbability, solution, problem);
         return solution;
     }
 

@@ -21,15 +21,16 @@
 
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 
 /**
  * This class allows to apply a SBX crossover operator using two parent solutions.
  */
-public class SBXCrossover implements CrossoverOperator<Double, MOTask<Double>, NumberSolution<Double>>{
+public class SBXCrossover implements CrossoverOperator<Double, DoubleProblem, NumberSolution<Double>>{
   /**
    * EPS defines the minimum difference allowed between real values
    */
@@ -62,12 +63,12 @@ public class SBXCrossover implements CrossoverOperator<Double, MOTask<Double>, N
    * @param parent2 The second parent
    * @return An array containing the two offsprings
    */
-	public NumberSolution<Double>[] doCrossover(double probability, NumberSolution<Double> parent1, NumberSolution<Double> parent2, MOTask<Double> task) {
+	public NumberSolution<Double>[] doCrossover(double probability, NumberSolution<Double> parent1, NumberSolution<Double> parent2, DoubleProblem problem) {
 
 		NumberSolution<Double>[] offSpring = new NumberSolution[2];
 
-		offSpring[0] = new NumberSolution<Double>(parent1);
-		offSpring[1] = new NumberSolution<Double>(parent2);
+		offSpring[0] = new NumberSolution<>(parent1);
+		offSpring[1] = new NumberSolution<>(parent2);
 
 		int i;
 		double rand;
@@ -93,8 +94,8 @@ public class SBXCrossover implements CrossoverOperator<Double, MOTask<Double>, N
 							y2 = valueX1;
 						}
 
-						yL = task.getLowerLimit(i);
-						yu = task.getUpperLimit(i);
+						yL = problem.getLowerLimit(i);
+						yu = problem.getUpperLimit(i);
 						rand = Util.rnd.nextDouble();
 						beta = 1.0 + (2.0 * (y1 - yL) / (y2 - y1));
 						alpha = 2.0 - java.lang.Math.pow(beta, -(distributionIndex + 1.0));
@@ -150,14 +151,15 @@ public class SBXCrossover implements CrossoverOperator<Double, MOTask<Double>, N
 		return offSpring;
 	}
 
-	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, MOTask<Double> task) {
+	@Override
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, DoubleProblem problem) {
 
 		if (parents.length != 2) {
 			return null;
 		}
 
 		NumberSolution<Double>[] offSpring;
-		offSpring = doCrossover(crossoverProbability, parents[0], parents[1], task);
+		offSpring = doCrossover(crossoverProbability, parents[0], parents[1], problem);
 		return offSpring;
 	}
 	@Override

@@ -13,25 +13,22 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PESA2Selection;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public class PESAII<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class PESAII<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
     int populationSize = 100;
     int archiveSize = 100;
     int bisections = 5;
-    ParetoSolution<Type> population;
-    AdaptiveGridArchive<Type> archive;
+    ParetoSolution<N> population;
+    AdaptiveGridArchive<N> archive;
 
-    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
-    MutationOperator<Type, T, NumberSolution<Type>> mut;
+    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
 
-    public PESAII(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int populationSize, int archiveSize) {
+    public PESAII(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int populationSize, int archiveSize) {
         this.populationSize = populationSize;
         this.archiveSize = archiveSize;
 
@@ -77,20 +74,20 @@ public class PESAII<Type extends Number, P extends Problem<NumberSolution<Type>>
             }
         }
 
-        archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, numObj);
-        population = new ParetoSolution<Type>(populationSize);
+        archive = new AdaptiveGridArchive<N>(archiveSize, bisections, numObj);
+        population = new ParetoSolution<N>(populationSize);
     }
 
     @Override
     protected void start() throws StopCriterionException {
 
-        PESA2Selection<Type> selection = new PESA2Selection<Type>();
+        PESA2Selection<N> selection = new PESA2Selection<N>();
 
         // Create the initial individual and evaluate it and his constraints
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            NumberSolution<Type> solution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
+            NumberSolution<N> solution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(solution);
             population.add(solution);
         }
@@ -104,7 +101,7 @@ public class PESAII<Type extends Number, P extends Problem<NumberSolution<Type>>
         population.clear();
 
         // Iterations....
-        NumberSolution<Type>[] parents = new NumberSolution[2];
+        NumberSolution<N>[] parents = new NumberSolution[2];
 
         do {
             // -> Create the offSpring solutionSet
@@ -112,8 +109,8 @@ public class PESAII<Type extends Number, P extends Problem<NumberSolution<Type>>
                 parents[0] = selection.execute(archive);
                 parents[1] = selection.execute(archive);
 
-                NumberSolution<Type>[] offSpring = cross.execute(parents, task);
-                mut.execute(offSpring[0], task);
+                NumberSolution<N>[] offSpring = cross.execute(parents, task.problem);
+                mut.execute(offSpring[0], task.problem);
                 if (task.isStopCriterion())
                     break;
                 task.eval(offSpring[0]);

@@ -3,12 +3,13 @@ package org.um.feri.ears.operators;
 import java.util.Comparator;
 import java.util.List;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.SolutionListUtils;
 
 
-public class TournamentSelection implements SelectionOperator<NumberSolution<Double>, List<NumberSolution<Double>>, Task> {
+public class TournamentSelection implements SelectionOperator<NumberSolution<Double>, List<NumberSolution<Double>>, DoubleProblem> {
 
     private int numberOfTournaments;
     private Comparator<NumberSolution<Double>> comparator;
@@ -21,7 +22,7 @@ public class TournamentSelection implements SelectionOperator<NumberSolution<Dou
     }
 
     @Override
-    public NumberSolution<Double> execute(List<NumberSolution<Double>> source, Task tb) {
+    public NumberSolution<Double> execute(List<NumberSolution<Double>> source, DoubleProblem problem) {
 
         NumberSolution<Double> result;
         if (source.size() == 1) {

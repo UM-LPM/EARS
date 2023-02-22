@@ -6,9 +6,7 @@ import org.um.feri.ears.algorithms.moo.ibea.D_IBEA;
 import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_STM;
 import org.um.feri.ears.algorithms.moo.nsga3.D_NSGAIII;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.zdt.*;
 import org.um.feri.ears.util.Cache;
 
@@ -35,40 +33,40 @@ public class FillCache {
         MOAlgorithm.setRunWithOptimalParameters(true);
 		
         
-        /*MOTask<Double> t1 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1());
-        MOTask<Double> t2 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem2());
-        MOTask<Double> t3 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem3());
-        MOTask<Double> t4 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem4());
-        MOTask<Double> t5 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem5());
-        MOTask<Double> t6 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem6());
-        MOTask<Double> t7 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem7());
-        MOTask<Double> t8 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem8());
-        MOTask<Double> t9 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem9());
-        MOTask<Double> t10 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem10());*/
-        MOTask<Double> t1 = new MOTask<>(new ZDT1(), StopCriterion.EVALUATIONS, 300000, 500, 300);
-        MOTask<Double> t2 = new MOTask<>(new ZDT2(), StopCriterion.EVALUATIONS, 300000, 500, 300);
-        MOTask<Double> t3 = new MOTask<>(new ZDT3(), StopCriterion.EVALUATIONS, 300000, 500, 300);
-        MOTask<Double> t4 = new MOTask<>(new ZDT4(), StopCriterion.EVALUATIONS, 300000, 500, 300);
-        MOTask<Double> t5 = new MOTask<>(new ZDT6(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+        /*Task<NumberSolution<Double>, DoubleProblem> t1 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1());
+        Task<NumberSolution<Double>, DoubleProblem> t2 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem2());
+        Task<NumberSolution<Double>, DoubleProblem> t3 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem3());
+        Task<NumberSolution<Double>, DoubleProblem> t4 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem4());
+        Task<NumberSolution<Double>, DoubleProblem> t5 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem5());
+        Task<NumberSolution<Double>, DoubleProblem> t6 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem6());
+        Task<NumberSolution<Double>, DoubleProblem> t7 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem7());
+        Task<NumberSolution<Double>, DoubleProblem> t8 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem8());
+        Task<NumberSolution<Double>, DoubleProblem> t9 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem9());
+        Task<NumberSolution<Double>, DoubleProblem> t10 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem10());*/
+        Task<NumberSolution<Double>, DoubleProblem> t1 = new Task<>(new ZDT1(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+        Task<NumberSolution<Double>,DoubleProblem> t2 = new Task<>(new ZDT2(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+        Task<NumberSolution<Double>,DoubleProblem> t3 = new Task<>(new ZDT3(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+        Task<NumberSolution<Double>,DoubleProblem> t4 = new Task<>(new ZDT4(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+        Task<NumberSolution<Double>,DoubleProblem> t5 = new Task<>(new ZDT6(), StopCriterion.EVALUATIONS, 300000, 500, 300);
 
-        //MOTask<Double> t1 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG1(2));
-        /*MOTask<Double> t2 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG2(2));
-        MOTask<Double> t3 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG3(2));
-        MOTask<Double> t4 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG4(2));
-        MOTask<Double> t5 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG5(2));
-        MOTask<Double> t6 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG6(2));
-        MOTask<Double> t7 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG7(2));
-        MOTask<Double> t8 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG8(2));
-        MOTask<Double> t9 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG9(2));
-        MOTask<Double> t10 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ1(2));
-        MOTask<Double> t11 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(2));
-        MOTask<Double> t12 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ3(2));
-        MOTask<Double> t13 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ4(2));
-        MOTask<Double> t14 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ5(2));
-        MOTask<Double> t15 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ6(2));
-        MOTask<Double> t16 = new MOTask<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ7(2));*/
+        //Task<NumberSolution<Double>, DoubleProblem> t1 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG1(2));
+        /*Task<NumberSolution<Double>, DoubleProblem> t2 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG2(2));
+        Task<NumberSolution<Double>, DoubleProblem> t3 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG3(2));
+        Task<NumberSolution<Double>, DoubleProblem> t4 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG4(2));
+        Task<NumberSolution<Double>, DoubleProblem> t5 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG5(2));
+        Task<NumberSolution<Double>, DoubleProblem> t6 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG6(2));
+        Task<NumberSolution<Double>, DoubleProblem> t7 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG7(2));
+        Task<NumberSolution<Double>, DoubleProblem> t8 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG8(2));
+        Task<NumberSolution<Double>, DoubleProblem> t9 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new WFG9(2));
+        Task<NumberSolution<Double>, DoubleProblem> t10 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ1(2));
+        Task<NumberSolution<Double>, DoubleProblem> t11 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(2));
+        Task<NumberSolution<Double>, DoubleProblem> t12 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ3(2));
+        Task<NumberSolution<Double>, DoubleProblem> t13 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ4(2));
+        Task<NumberSolution<Double>, DoubleProblem> t14 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ5(2));
+        Task<NumberSolution<Double>, DoubleProblem> t15 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ6(2));
+        Task<NumberSolution<Double>, DoubleProblem> t16 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ7(2));*/
 
-        ArrayList<MOTask<Double>> tasks = new ArrayList<MOTask<Double>>();
+        ArrayList<Task<NumberSolution<Double>,DoubleProblem>> tasks = new ArrayList<>();
         tasks.add(t1);
         tasks.add(t2);
         tasks.add(t3);
@@ -85,7 +83,7 @@ public class FillCache {
             System.out.println("-------------------------------------");
             System.out.println("Run: " + i);
             System.out.println("-------------------------------------");
-            for (MOTask<Double> task : tasks) {
+            for (Task<NumberSolution<Double>,DoubleProblem> task : tasks) {
                 System.out.println(task.getProblemName());
                 for (MOAlgorithm alg : players) {
                     System.out.println("Alg: " + alg.getAlgorithmInfo().getAcronym());

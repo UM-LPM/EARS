@@ -1,10 +1,10 @@
 package org.um.feri.ears.operators;
 
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Solution;
-import org.um.feri.ears.problems.TaskBase;
 
-public interface MutationOperator<Type, Task extends TaskBase, Sol extends Solution> extends Operator<Sol, Sol, Task> {
+public interface MutationOperator<P extends Problem<S>, S extends Solution> extends Operator<S, S, P> {
 	
-	public void setProbability(double mutationProbability);
+	void setProbability(double mutationProbability);
 }
 

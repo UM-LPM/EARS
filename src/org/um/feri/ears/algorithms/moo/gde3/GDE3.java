@@ -26,10 +26,7 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionSelection;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
@@ -39,16 +36,16 @@ import org.um.feri.ears.util.Ranking;
 /**
  * This class implements the GDE3 algorithm.
  */
-public class GDE3<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class GDE3<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
-    ParetoSolution<Type> population;
-    ParetoSolution<Type> offspringPopulation;
+    ParetoSolution<N> population;
+    ParetoSolution<N> offspringPopulation;
 
     int populationSize;
 
-    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
+    CrossoverOperator<N, P, NumberSolution<N>> cross;
 
-    public GDE3(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, int populationSize) {
+    public GDE3(CrossoverOperator<N, P, NumberSolution<N>> crossover, int populationSize) {
         this.populationSize = populationSize;
         this.cross = crossover;
 
@@ -61,7 +58,7 @@ public class GDE3<Type extends Number, P extends Problem<NumberSolution<Type>>, 
 
     @Override
     protected void init() {
-        population = new ParetoSolution<Type>(populationSize);
+        population = new ParetoSolution<N>(populationSize);
     }
 
     @Override
@@ -71,21 +68,21 @@ public class GDE3<Type extends Number, P extends Problem<NumberSolution<Type>>, 
     @Override
     protected void start() throws StopCriterionException {
 
-        Distance<Type> distance;
+        Distance<N> distance;
 
         distance = new Distance<>();
         DominanceComparator dominance = new DominanceComparator();
 
-        NumberSolution<Type>[] parent;
+        NumberSolution<N>[] parent;
 
-        DifferentialEvolutionSelection<Type> des = new DifferentialEvolutionSelection<Type>();
+        DifferentialEvolutionSelection<N> des = new DifferentialEvolutionSelection<>();
 
         // Create the initial solutionSet
-        NumberSolution<Type> newSolution;
+        NumberSolution<N> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
+            newSolution = new NumberSolution<>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }
@@ -99,18 +96,18 @@ public class GDE3<Type extends Number, P extends Problem<NumberSolution<Type>>, 
                 // Obtain parents. Two parameters are required: the population and the index of the current individual
                 try {
                     des.setCurrentIndex(i);
-                    parent = des.execute(population, task);
+                    parent = des.execute(population, task.problem);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println("The population has less than four solutions");
                     break;
                 }
 
-                NumberSolution<Type> child;
+                NumberSolution<N> child;
                 // Crossover. Two parameters are required: the current
                 // individual and the array of parents
                 cross.setCurrentSolution(population.get(i));
-                child = cross.execute(parent, task)[0];
+                child = cross.execute(parent, task.problem)[0];
 
                 if (task.isStopCriterion())
                     break;
@@ -130,11 +127,11 @@ public class GDE3<Type extends Number, P extends Problem<NumberSolution<Type>>, 
             }
 
             // Ranking the offspring population
-            Ranking<Type> ranking = new Ranking<Type>(offspringPopulation);
+            Ranking<N> ranking = new Ranking<N>(offspringPopulation);
 
             int remain = populationSize;
             int index = 0;
-            ParetoSolution<Type> front = null;
+            ParetoSolution<N> front = null;
             population.clear();
 
             // Obtain the next front
@@ -173,7 +170,7 @@ public class GDE3<Type extends Number, P extends Problem<NumberSolution<Type>>, 
         }
 
         // Return the first non-dominated front
-        Ranking<Type> ranking = new Ranking<>(population);
+        Ranking<N> ranking = new Ranking<>(population);
         best = ranking.getSubfront(0);
     }
 }

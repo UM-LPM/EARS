@@ -12,10 +12,7 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.InitWeight;
 import org.um.feri.ears.util.Ranking;
@@ -40,7 +37,7 @@ import static java.util.Arrays.asList;
  * Computation, 2009.
  * </ol>
  */
-public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class MOEAD<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
     List<Integer> twoDimfiles = asList(100, 300, 400, 500, 600, 800, 1000);
     List<Integer> threeDimfiles = asList(500, 600, 800, 1000, 1200);
@@ -50,11 +47,11 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
     /**
      * Stores the population
      */
-    ParetoSolution<Type> population;
+    ParetoSolution<N> population;
     /**
      * Stores the values of the individuals
      */
-    NumberSolution<Type>[] savedValues;
+    NumberSolution<N>[] savedValues;
 
     /**
      * Z vector (ideal point)
@@ -81,16 +78,16 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
      * nr: maximal number of solutions replaced by each child solution
      */
     int nr = 2;
-    NumberSolution<Type>[] indArray;
+    NumberSolution<N>[] indArray;
     String functionType;
     int gen;
 
-    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
-    MutationOperator<Type, T, NumberSolution<Type>> mut;
+    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
     static String dataDirectory = "Weight";
 
-    public MOEAD(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int pop_size) {
+    public MOEAD(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
         this.populationSize = pop_size;
         this.cross = crossover;
         this.mut = mutation;
@@ -126,7 +123,7 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
             }
         }
 
-        population = new ParetoSolution<Type>(populationSize);
+        population = new ParetoSolution<N>(populationSize);
         savedValues = new NumberSolution[populationSize];
 
         indArray = new NumberSolution[numObj];
@@ -178,8 +175,8 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
                 matingSelection(p, n, 2, type);
 
                 // STEP 2.2. Reproduction
-                NumberSolution<Type> child;
-                NumberSolution<Type>[] parents = new NumberSolution[3];
+                NumberSolution<N> child;
+                NumberSolution<N>[] parents = new NumberSolution[3];
 
                 parents[0] = population.get(p.get(0));
                 parents[1] = population.get(p.get(1));
@@ -187,10 +184,10 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
 
                 // Apply DE crossover
                 cross.setCurrentSolution(population.get(n));
-                child = cross.execute(parents, task)[0];
+                child = cross.execute(parents, task.problem)[0];
 
                 // Apply mutation
-                mut.execute(child, task);
+                mut.execute(child, task.problem);
 
                 if (task.isStopCriterion()) {
                     best = population;
@@ -210,7 +207,7 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
             task.incrementNumberOfIterations();
         } while (!task.isStopCriterion());
         //System.out.println(gen);
-        Ranking<Type> ranking = new Ranking<>(population);
+        Ranking<N> ranking = new Ranking<>(population);
         best = ranking.getSubfront(0);
     }
 
@@ -296,10 +293,10 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
 
             if (task.isStopCriterion())
                 return;
-            NumberSolution<Type> newSolution = task.getRandomEvaluatedSolution();
+            NumberSolution<N> newSolution = task.getRandomEvaluatedSolution();
 
             population.add(newSolution);
-            savedValues[i] = new NumberSolution<Type>(newSolution);
+            savedValues[i] = new NumberSolution<N>(newSolution);
         }
     }
 
@@ -349,7 +346,7 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
         }
     }
 
-    void updateReference(NumberSolution<Type> individual) {
+    void updateReference(NumberSolution<N> individual) {
         for (int n = 0; n < numObj; n++) {
             if (individual.getObjective(n) < z[n]) {
                 z[n] = individual.getObjective(n);
@@ -359,7 +356,7 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
         }
     }
 
-    void updateProblem(NumberSolution<Type> indiv, int id, int type) {
+    void updateProblem(NumberSolution<N> indiv, int id, int type) {
         // indiv: child solution
         // id: the id of current subproblem
         // type: update solutions in - neighborhood (1) or whole population (otherwise)
@@ -388,7 +385,7 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
             f2 = fitnessFunction(indiv, lambda[k]);
 
             if (f2 < f1) {
-                population.replace(k, new NumberSolution<Type>(indiv));
+                population.replace(k, new NumberSolution<N>(indiv));
                 // population[k].indiv = indiv;
                 time++;
             }
@@ -399,7 +396,7 @@ public class MOEAD<Type extends Number, P extends Problem<NumberSolution<Type>>,
         }
     }
 
-    double fitnessFunction(NumberSolution<Type> individual, double[] lambda) {
+    double fitnessFunction(NumberSolution<N> individual, double[] lambda) {
 
         double fitness;
         fitness = 0.0;

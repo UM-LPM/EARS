@@ -9,9 +9,9 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public class DummyMOAlgorithm<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class DummyMOAlgorithm<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
-    HashMap<String, ParetoSolution<Type>[]> results;
+    HashMap<String, ParetoSolution<N>[]> results;
     HashMap<String, Integer> positions; //stores the position of the current result of the current problem
 
     public DummyMOAlgorithm(String name) {
@@ -25,20 +25,20 @@ public class DummyMOAlgorithm<Type extends Number, P extends Problem<NumberSolut
     }
 
     @Override
-    public ParetoSolution<Type> execute(T task) throws StopCriterionException {
+    public ParetoSolution<N> execute(T task) throws StopCriterionException {
         String problemName = task.problem.getReferenceSetFileName();
 
         if (results.containsKey(problemName.toLowerCase())) {
-            ParetoSolution<Type> val = getNextValue(problemName.toLowerCase());
+            ParetoSolution<N> val = getNextValue(problemName.toLowerCase());
             return val;
         }
 
-        return new ParetoSolution<Type>();
+        return new ParetoSolution<N>();
     }
 
-    private ParetoSolution<Type> getNextValue(String problemName) {
+    private ParetoSolution<N> getNextValue(String problemName) {
 
-        ParetoSolution<Type>[] problemReults = results.get(problemName);
+        ParetoSolution<N>[] problemReults = results.get(problemName);
         int index = positions.get(problemName);
         positions.put(problemName, positions.get(problemName) + 1);
         return problemReults[index];
@@ -46,7 +46,7 @@ public class DummyMOAlgorithm<Type extends Number, P extends Problem<NumberSolut
 
     private void fillResults(String name) {
 
-        results = new HashMap<String, ParetoSolution<Type>[]>();
+        results = new HashMap<String, ParetoSolution<N>[]>();
         positions = new HashMap<String, Integer>();
 
         File folder = new File("D:/Pareto/");
@@ -70,10 +70,10 @@ public class DummyMOAlgorithm<Type extends Number, P extends Problem<NumberSolut
                             if (line.compareTo("#") == 0) {
                                 line = br.readLine();
                                 if (line != null) {
-                                    ParetoSolution<Type> ps = new ParetoSolution<Type>();
+                                    ParetoSolution<N> ps = new ParetoSolution<N>();
                                     while (line != null && line.compareTo("#") != 0) {
                                         value = line.split(" ");
-                                        NumberSolution<Type> mos = new NumberSolution<Type>(value.length);
+                                        NumberSolution<N> mos = new NumberSolution<N>(value.length);
                                         for (int i = 0; i < value.length; i++) {
                                             mos.setObjective(i, Double.parseDouble(value[i]));
                                         }

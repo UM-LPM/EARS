@@ -5,9 +5,10 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
 import org.um.feri.ears.problems.CombinatorialProblem;
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 
-public class I_SPEA2 extends SPEA2<Integer, CombinatorialProblem, MOTask<Integer>> {
+public class I_SPEA2 extends SPEA2<Integer, CombinatorialProblem, Task<NumberSolution<Integer>, CombinatorialProblem>> {
 	
 	public I_SPEA2() {
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), 100, 100);

@@ -31,7 +31,7 @@ import org.um.feri.ears.util.Util;
  * This class implements an operator for binary selections using the same code
  * in Deb's NSGA-II implementation
  */
-public class BinaryTournament2<Type extends Number> {
+public class BinaryTournament2<N extends Number> {
   
   /**
    * dominance_ store the <code>Comparator</code> for check dominance_
@@ -63,15 +63,15 @@ public class BinaryTournament2<Type extends Number> {
   * @param solution Object representing a SolutionSet
   * @return the selected solution
   */
-	public NumberSolution<Type> execute(ParetoSolution<Type> solution) {
-		ParetoSolution<Type> population = solution;
+	public NumberSolution<N> execute(ParetoSolution<N> solution) {
+		ParetoSolution<N> population = solution;
 
 		if (index == 0) // generate a permutation of indices
 		{
 			a = Util.randomPermutation(population.size());
 		}
 
-		NumberSolution<Type> solution1, solution2;
+		NumberSolution<N> solution1, solution2;
 		solution1 = population.get(a[index]);
 		if(index + 1 == population.size())
 			solution2 = population.get(a[1]);

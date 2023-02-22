@@ -12,19 +12,16 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
-public class PAES<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class PAES<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
-    AdaptiveGridArchive<Type> archive;
+    AdaptiveGridArchive<N> archive;
     int archiveSize = 100;
     int bisections = 5;
 
-    MutationOperator<Type, T, NumberSolution<Type>> mut;
+    MutationOperator<P, NumberSolution<N>> mut;
 
     public PAES(MutationOperator mutation, int populationSize) {
 
@@ -54,15 +51,15 @@ public class PAES<Type extends Number, P extends Problem<NumberSolution<Type>>, 
 
         if (task.isStopCriterion())
             return;
-        NumberSolution<Type> solution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
+        NumberSolution<N> solution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
         // problem.evaluateConstraints(solution);
 
-        archive.add(new NumberSolution<Type>(solution));
+        archive.add(new NumberSolution<N>(solution));
 
         do {
             // Create the mutate one
-            NumberSolution<Type> mutatedIndividual = new NumberSolution<Type>(solution);
-            mut.execute(mutatedIndividual, task);
+            NumberSolution<N> mutatedIndividual = new NumberSolution<N>(solution);
+            mut.execute(mutatedIndividual, task.problem);
 
             if (task.isStopCriterion())
                 break;
@@ -73,7 +70,7 @@ public class PAES<Type extends Number, P extends Problem<NumberSolution<Type>>, 
             int flag = dominance.compare(solution, mutatedIndividual);
 
             if (flag == 1) { // If mutate solution dominate
-                solution = new NumberSolution<Type>(mutatedIndividual);
+                solution = new NumberSolution<N>(mutatedIndividual);
                 archive.add(mutatedIndividual);
             } else if (flag == 0) { // If none dominate the other
                 if (archive.add(mutatedIndividual)) {
@@ -93,26 +90,26 @@ public class PAES<Type extends Number, P extends Problem<NumberSolution<Type>>, 
         best = archive;
     }
 
-    public NumberSolution<Type> test(NumberSolution<Type> solution,
-                                     NumberSolution<Type> mutatedSolution, AdaptiveGridArchive<Type> archive) {
+    public NumberSolution<N> test(NumberSolution<N> solution,
+                                  NumberSolution<N> mutatedSolution, AdaptiveGridArchive<N> archive) {
 
         int originalLocation = archive.getGrid().location(solution);
         int mutatedLocation = archive.getGrid().location(mutatedSolution);
 
         if (originalLocation == -1) {
-            return new NumberSolution<Type>(mutatedSolution);
+            return new NumberSolution<N>(mutatedSolution);
         }
 
         if (mutatedLocation == -1) {
-            return new NumberSolution<Type>(solution);
+            return new NumberSolution<N>(solution);
         }
 
         if (archive.getGrid().getLocationDensity(mutatedLocation) < archive
                 .getGrid().getLocationDensity(originalLocation)) {
-            return new NumberSolution<Type>(mutatedSolution);
+            return new NumberSolution<N>(mutatedSolution);
         }
 
-        return new NumberSolution<Type>(solution);
+        return new NumberSolution<N>(solution);
     }
 
 }

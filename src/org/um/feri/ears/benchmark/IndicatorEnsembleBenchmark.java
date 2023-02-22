@@ -3,9 +3,7 @@ package org.um.feri.ears.benchmark;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriterion;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem10;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem2;
@@ -18,7 +16,7 @@ import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 
-public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, MOTask<Double>, DoubleProblem> {
+public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>> {
 
     public IndicatorEnsembleBenchmark() {
         this(null, 0.0000001);
@@ -44,7 +42,7 @@ public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, MOTask<Doubl
 
     @Override
     protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, DoubleProblem problem) {
-        tasks.add(new MOTask<>(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 
     @Override

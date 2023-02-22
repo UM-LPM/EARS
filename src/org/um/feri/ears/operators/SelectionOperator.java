@@ -1,8 +1,7 @@
 package org.um.feri.ears.operators;
 
 
-import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.TaskBase;
+import org.um.feri.ears.problems.Problem;
 
-public interface SelectionOperator<Source, Result, Task extends TaskBase> extends Operator<Source, Result, Task> {
+public interface SelectionOperator<Source, Result, P extends Problem> extends Operator<Source, Result, P> {
 }

@@ -4,10 +4,9 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
-import org.um.feri.ears.problems.CombinatorialProblem;
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.*;
 
-public class I_MOEAD_DRA extends MOEAD_DRA<Integer, CombinatorialProblem, MOTask<Integer>> {
+public class I_MOEAD_DRA extends MOEAD_DRA<Integer, CombinatorialProblem, Task<NumberSolution<Integer>, CombinatorialProblem>> {
 	
 	public I_MOEAD_DRA() {
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), 100);

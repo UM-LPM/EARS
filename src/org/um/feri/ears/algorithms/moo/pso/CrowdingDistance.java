@@ -27,14 +27,14 @@ import org.um.feri.ears.util.comparator.ObjectiveComparator;
  *
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
-public class CrowdingDistance<Type extends Number> {
+public class CrowdingDistance<N extends Number> {
 
     /**
      * Assigns crowding distances to all solutions in a <code>SolutionSet</code>.
      *
      * @param solutionList The <code>SolutionSet</code>.
      */
-    public void computeDensityEstimator(ParetoSolution<Type> solutionList) {
+    public void computeDensityEstimator(ParetoSolution<N> solutionList) {
         int size = solutionList.size();
 
         if (size == 0) {
@@ -54,8 +54,8 @@ public class CrowdingDistance<Type extends Number> {
         }
 
         //Use a new SolutionSet to avoid altering the original solutionSet
-        List<NumberSolution<Type>> front = new ArrayList<>(size);
-        for (NumberSolution<Type> solution : solutionList) {
+        List<NumberSolution<N>> front = new ArrayList<>(size);
+        for (NumberSolution<N> solution : solutionList) {
             front.add(solution);
         }
 
@@ -71,7 +71,7 @@ public class CrowdingDistance<Type extends Number> {
 
         for (int i = 0; i < numberOfObjectives; i++) {
             // Sort the population by Obj n
-            Collections.sort(front, new ObjectiveComparator<Type>(i));
+            Collections.sort(front, new ObjectiveComparator<N>(i));
             objetiveMinn = front.get(0).getObjective(i);
             objetiveMaxn = front.get(front.size() - 1).getObjective(i);
 
@@ -89,12 +89,12 @@ public class CrowdingDistance<Type extends Number> {
     }
 
 
-    public Object getAttribute(NumberSolution<Type> solution) {
+    public Object getAttribute(NumberSolution<N> solution) {
         return solution.getAttribute(getAttributeID());
     }
 
 
-    public void setAttribute(NumberSolution<Type> solution, Object value) {
+    public void setAttribute(NumberSolution<N> solution, Object value) {
         solution.setAttribute(getAttributeID(), value);
     }
 

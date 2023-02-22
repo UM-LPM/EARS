@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 public abstract class TaskBase<P extends Problem<?>> {
 
     protected StopCriterion stopCriterion;
-    protected int maxEvaluations; // for Stop criterion
-    protected int numberOfEvaluations = 0; // for Stop criterion
+    protected int maxEvaluations;
+    protected int numberOfEvaluations = 0;
 	protected int maxIterations;
 	protected int numberOfIterations = 0;
 	protected long allowedCPUTimeNs;
@@ -85,8 +85,8 @@ public abstract class TaskBase<P extends Problem<?>> {
         timerStart = System.nanoTime();
     }
 
-    public void setEvaluationTime(long evaluationTime) {
-        this.evaluationTime = evaluationTime;
+    public void setEvaluationTimeNs(long evaluationTimeNs) {
+        this.evaluationTime = evaluationTimeNs;
     }
 
     /**

@@ -15,10 +15,10 @@ import org.um.feri.ears.util.Util;
  * This implementation is based on the code of Tsung-Che Chiang
  * http://web.ntnu.edu.tw/~tcchiang/publications/nsga3cpp/nsga3cpp.htm
  */
-public class ReferencePoint<Type extends Number> {
+public class ReferencePoint<N extends Number> {
     public List<Double> position;
     private int memberSize;
-    private List<Pair<NumberSolution<Type>, Double>> potentialMembers;
+    private List<Pair<NumberSolution<N>, Double>> potentialMembers;
 
     public ReferencePoint() {
     }
@@ -34,7 +34,7 @@ public class ReferencePoint<Type extends Number> {
         potentialMembers = new ArrayList<>();
     }
 
-    public ReferencePoint(ReferencePoint<Type> point) {
+    public ReferencePoint(ReferencePoint<N> point) {
         position = new ArrayList<>(point.position.size());
         for (Double d : point.position) {
             position.add(d);
@@ -92,14 +92,14 @@ public class ReferencePoint<Type extends Number> {
         this.memberSize++;
     }
 
-    public void AddPotentialMember(NumberSolution<Type> member_ind, double distance) {
-        this.potentialMembers.add(new ImmutablePair<NumberSolution<Type>, Double>(member_ind, distance));
+    public void AddPotentialMember(NumberSolution<N> member_ind, double distance) {
+        this.potentialMembers.add(new ImmutablePair<NumberSolution<N>, Double>(member_ind, distance));
     }
 
-    public NumberSolution<Type> FindClosestMember() {
+    public NumberSolution<N> FindClosestMember() {
         double minDistance = Double.MAX_VALUE;
-        NumberSolution<Type> closetMember = null;
-        for (Pair<NumberSolution<Type>, Double> p : this.potentialMembers) {
+        NumberSolution<N> closetMember = null;
+        for (Pair<NumberSolution<N>, Double> p : this.potentialMembers) {
             if (p.getRight() < minDistance) {
                 minDistance = p.getRight();
                 closetMember = p.getLeft();
@@ -109,13 +109,13 @@ public class ReferencePoint<Type extends Number> {
         return closetMember;
     }
 
-    public NumberSolution<Type> RandomMember() {
+    public NumberSolution<N> RandomMember() {
         int index = this.potentialMembers.size() > 1 ? Util.rnd.nextInt(this.potentialMembers.size()) : 0;
         return this.potentialMembers.get(index).getLeft();
     }
 
-    public void RemovePotentialMember(NumberSolution<Type> solution) {
-        Iterator<Pair<NumberSolution<Type>, Double>> it = this.potentialMembers.iterator();
+    public void RemovePotentialMember(NumberSolution<N> solution) {
+        Iterator<Pair<NumberSolution<N>, Double>> it = this.potentialMembers.iterator();
         while (it.hasNext()) {
             if (it.next().getLeft() == solution) {
                 it.remove();

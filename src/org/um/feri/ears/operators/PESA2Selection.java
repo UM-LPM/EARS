@@ -13,7 +13,7 @@ import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
-public class PESA2Selection<Type extends Number> {
+public class PESA2Selection<N extends Number> {
 
 	  /**
 	  * Performs the operation
@@ -22,9 +22,9 @@ public class PESA2Selection<Type extends Number> {
 	  * @return the selected solution
 	   * @throws JMException 
 	  */
-	public NumberSolution<Type> execute(Object object) {
+	public NumberSolution<N> execute(Object object) {
 		try {
-			AdaptiveGridArchive<Type> archive = (AdaptiveGridArchive<Type>) object;
+			AdaptiveGridArchive<N> archive = (AdaptiveGridArchive<N>) object;
 			int selected;
 			int hypercube1 = archive.getGrid().randomOccupiedHypercube();
 			int hypercube2 = archive.getGrid().randomOccupiedHypercube();
@@ -48,7 +48,7 @@ public class PESA2Selection<Type extends Number> {
 			int base = Util.rnd.nextInt(archive.size());
 			int cnt = 0;
 			while (cnt < archive.size()) {
-				NumberSolution<Type> individual = archive.get((base + cnt) % archive.size());
+				NumberSolution<N> individual = archive.get((base + cnt) % archive.size());
 				if (archive.getGrid().location(individual) != selected) {
 					cnt++;
 				} else {

@@ -23,10 +23,7 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.VEGASelection;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
@@ -52,13 +49,13 @@ import org.um.feri.ears.util.Util;
  *       Conference on Genetic Algorithms, pp. 93-100.
  * </ol>
  */
-public class VEGA<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class VEGA<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
     int populationSize;
-    ParetoSolution<Type> population;
+    ParetoSolution<N> population;
 
-    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
-    MutationOperator<Type, T, NumberSolution<Type>> mut;
+    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
     public VEGA(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
         this.populationSize = pop_size;
@@ -77,18 +74,18 @@ public class VEGA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
     protected void start() throws StopCriterionException {
 
         // Create the initial solutionSet
-        NumberSolution<Type> newSolution;
+        NumberSolution<N> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
+            newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }
 
         do {
             // select the parents from the M different subgroups
-            NumberSolution<Type>[] parents = performSelection(populationSize, population);
+            NumberSolution<N>[] parents = performSelection(populationSize, population);
 
             // shuffle the parents
             Util.shuffle(parents);
@@ -101,9 +98,9 @@ public class VEGA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
 
             while (!filled) {
 
-                NumberSolution<Type>[] offSpring = cross.execute(select(parents, index, 2), task);
-                mut.execute(offSpring[0], task);
-                mut.execute(offSpring[1], task);
+                NumberSolution<N>[] offSpring = cross.execute(select(parents, index, 2), task.problem);
+                mut.execute(offSpring[0], task.problem);
+                mut.execute(offSpring[1], task.problem);
 
                 for (int i = 0; i < offSpring.length; i++) {
                     population.add(offSpring[i]);
@@ -118,7 +115,7 @@ public class VEGA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
             }
 
             // evaluate the offspring
-            for (NumberSolution<Type> ind : population.solutions) {
+            for (NumberSolution<N> ind : population.solutions) {
                 if (task.isStopCriterion())
                     return;
                 task.eval(ind);
@@ -132,7 +129,7 @@ public class VEGA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
 
     @Override
     protected void init() {
-        population = new ParetoSolution<Type>(populationSize);
+        population = new ParetoSolution<N>(populationSize);
     }
 
     @Override
@@ -147,8 +144,8 @@ public class VEGA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * @param size    the size of the subset
      * @return the subset of parents
      */
-    private NumberSolution<Type>[] select(NumberSolution<Type>[] parents, int index, int size) {
-        NumberSolution<Type>[] result = new NumberSolution[size];
+    private NumberSolution<N>[] select(NumberSolution<N>[] parents, int index, int size) {
+        NumberSolution<N>[] result = new NumberSolution[size];
 
         for (int i = 0; i < size; i++) {
             result[i] = parents[(index + i) % parents.length];
@@ -162,18 +159,18 @@ public class VEGA<Type extends Number, P extends Problem<NumberSolution<Type>>, 
      * objectives.
      */
 
-    private NumberSolution<Type>[] performSelection(int pop_size, ParetoSolution<Type> population) {
-        VEGASelection<Type>[] selectors = new VEGASelection[numObj];
+    private NumberSolution<N>[] performSelection(int pop_size, ParetoSolution<N> population) {
+        VEGASelection<N>[] selectors = new VEGASelection[numObj];
         for (int i = 0; i < numObj; i++) {
-            selectors[i] = new VEGASelection<Type>(
+            selectors[i] = new VEGASelection<N>(
                     new ObjectiveComparator(i));
         }
 
-        NumberSolution<Type>[] result = new NumberSolution[pop_size];
+        NumberSolution<N>[] result = new NumberSolution[pop_size];
 
         for (int i = 0; i < pop_size; i++) {
-            VEGASelection<Type> selector = selectors[i % numObj];
-            result[i] = new NumberSolution<Type>(selector.execute(population));
+            VEGASelection<N> selector = selectors[i % numObj];
+            result[i] = new NumberSolution<N>(selector.execute(population));
         }
 
         return result;

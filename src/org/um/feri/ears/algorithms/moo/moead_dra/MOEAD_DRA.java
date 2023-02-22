@@ -20,10 +20,7 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.moead.Utils;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.InitWeight;
@@ -34,7 +31,7 @@ import org.um.feri.ears.util.Util;
  * MOEA/D on CEC09 Unconstrained MOP Test Instances, Working Report CES-491,
  * School of CS & EE, University of Essex, 02/2009
  */
-public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Type>>, T extends MOTask<Type>> extends MOAlgorithm<P, T, Type> {
+public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
 
     List<Integer> twoDimfiles = asList(100, 300, 400, 500, 600, 800, 1000);
     List<Integer> threeDimfiles = asList(500, 600, 800, 1000, 1200);
@@ -44,11 +41,11 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
     /**
      * Stores the population
      */
-    ParetoSolution<Type> population;
+    ParetoSolution<N> population;
     /**
      * Stores the values of the individuals
      */
-    NumberSolution<Type>[] savedValues;
+    NumberSolution<N>[] savedValues;
 
     double[] utility;
     int[] frequency;
@@ -78,16 +75,16 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
      * nr: maximal number of solutions replaced by each child solution
      */
     int nr = 2;
-    NumberSolution<Type>[] indArray;
+    NumberSolution<N>[] indArray;
     String functionType;
     int gen;
 
     static String dataDirectory = "Weight";
 
-    CrossoverOperator<Type, T, NumberSolution<Type>> cross;
-    MutationOperator<Type, T, NumberSolution<Type>> mut;
+    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
-    public MOEAD_DRA(CrossoverOperator<Type, T, NumberSolution<Type>> crossover, MutationOperator<Type, T, NumberSolution<Type>> mutation, int pop_size) {
+    public MOEAD_DRA(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
         this.populationSize = pop_size;
 
         this.cross = crossover;
@@ -124,7 +121,7 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
             }
         }
 
-        population = new ParetoSolution<Type>(populationSize);
+        population = new ParetoSolution<N>(populationSize);
         savedValues = new NumberSolution[populationSize];
         utility = new double[populationSize];
         frequency = new int[populationSize];
@@ -189,8 +186,8 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
                 matingSelection(p, n, 2, type);
 
                 // STEP 2.2. Reproduction
-                NumberSolution<Type> child;
-                NumberSolution<Type>[] parents = new NumberSolution[3];
+                NumberSolution<N> child;
+                NumberSolution<N>[] parents = new NumberSolution[3];
 
                 parents[0] = population.get(p.get(0));
                 parents[1] = population.get(p.get(1));
@@ -198,10 +195,10 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
 
                 // Apply DE crossover
                 cross.setCurrentSolution(population.get(n));
-                child = cross.execute(parents, task)[0];
+                child = cross.execute(parents, task.problem)[0];
 
                 // Apply mutation
-                mut.execute(child, task);
+                mut.execute(child, task.problem);
 
                 if (task.isStopCriterion()) {
                     best = finalSelection(populationSize);
@@ -296,7 +293,7 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
                 uti = (0.95 + (0.05 * delta / 0.001)) * utility[n];
                 utility[n] = uti < 1.0 ? uti : 1.0;
             }
-            savedValues[n] = new NumberSolution<Type>(population.get(n));
+            savedValues[n] = new NumberSolution<N>(population.get(n));
         }
     }
 
@@ -327,10 +324,10 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
 
             if (task.isStopCriterion())
                 return;
-            NumberSolution<Type> newSolution = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
+            NumberSolution<N> newSolution = new NumberSolution<N>(task.problem.getRandomEvaluatedSolution());
 
             population.add(newSolution);
-            savedValues[i] = new NumberSolution<Type>(newSolution);
+            savedValues[i] = new NumberSolution<N>(newSolution);
         }
     }
 
@@ -339,7 +336,7 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
             z[i] = 1.0e+30;
             if (task.isStopCriterion())
                 return;
-            indArray[i] = new NumberSolution<Type>(task.getRandomEvaluatedSolution());
+            indArray[i] = new NumberSolution<N>(task.problem.getRandomEvaluatedSolution());
         }
 
         for (int i = 0; i < populationSize; i++) {
@@ -418,7 +415,7 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
         return selected;
     }
 
-    void updateReference(NumberSolution<Type> individual) {
+    void updateReference(NumberSolution<N> individual) {
         for (int n = 0; n < numObj; n++) {
             if (individual.getObjective(n) < z[n]) {
                 z[n] = individual.getObjective(n);
@@ -428,7 +425,7 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
         }
     }
 
-    void updateProblem(NumberSolution<Type> indiv, int id, int type) {
+    void updateProblem(NumberSolution<N> indiv, int id, int type) {
         // indiv: child solution
         // id: the id of current subproblem
         // type: update solutions in - neighborhood (1) or whole population (otherwise)
@@ -459,7 +456,7 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
             f2 = fitnessFunction(indiv, lambda[k]);
 
             if (f2 < f1) {
-                population.replace(k, new NumberSolution<Type>(indiv));
+                population.replace(k, new NumberSolution<N>(indiv));
                 // population[k].indiv = indiv;
                 time++;
             }
@@ -470,7 +467,7 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
         }
     }
 
-    double fitnessFunction(NumberSolution<Type> individual, double[] lambda) {
+    double fitnessFunction(NumberSolution<N> individual, double[] lambda) {
 
         double fitness;
         fitness = 0.0;
@@ -516,8 +513,8 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
      * which have maximum distance to it (whithout considering the
      * already included)
      */
-    ParetoSolution<Type> finalSelection(int n) {
-        ParetoSolution<Type> res = new ParetoSolution<Type>(n);
+    ParetoSolution<N> finalSelection(int n) {
+        ParetoSolution<N> res = new ParetoSolution<N>(n);
         if (numObj == 2) { // subcase 1
             double[][] intern_lambda = new double[n][2];
             for (int i = 0; i < n; i++) {
@@ -528,7 +525,7 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
 
             // we have now the weights, now select the best solution for each of them
             for (int i = 0; i < n; i++) {
-                NumberSolution<Type> current_best = population.get(0);
+                NumberSolution<N> current_best = population.get(0);
 
                 double value = fitnessFunction(current_best, intern_lambda[i]);
                 for (int j = 1; j < n; j++) {
@@ -539,16 +536,16 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
                         current_best = population.get(j);
                     }
                 }
-                res.add(new NumberSolution<Type>(current_best));
+                res.add(new NumberSolution<N>(current_best));
             }
 
         } else { // general case (more than two objectives)
 
-            Distance<Type> distance_utility = new Distance<Type>();
+            Distance<N> distance_utility = new Distance<N>();
             int random_index = Util.rnd.nextInt(population.size());
 
             // create a list containing all the solutions but the selected one (only references to them)
-            List<NumberSolution<Type>> candidate = new LinkedList<NumberSolution<Type>>();
+            List<NumberSolution<N>> candidate = new LinkedList<NumberSolution<N>>();
             candidate.add(population.get(random_index));
 
             for (int i = 0; i < population.size(); i++) {
@@ -558,12 +555,12 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
 
             while (res.size() < n) {
                 int index = 0;
-                NumberSolution<Type> selected = candidate.get(0); // it should be a next! (n <= population size!)
+                NumberSolution<N> selected = candidate.get(0); // it should be a next! (n <= population size!)
                 double distance_value = distance_utility
                         .distanceToSolutionSetInObjectiveSpace(selected, res);
                 int i = 1;
                 while (i < candidate.size()) {
-                    NumberSolution<Type> next_candidate = candidate.get(i);
+                    NumberSolution<N> next_candidate = candidate.get(i);
                     double aux = distance_value = distance_utility.distanceToSolutionSetInObjectiveSpace(next_candidate, res);
                     if (aux > distance_value) {
                         distance_value = aux;
@@ -573,7 +570,7 @@ public class MOEAD_DRA<Type extends Number, P extends Problem<NumberSolution<Typ
                 }
 
                 // add the selected to res and remove from candidate list
-                res.add(new NumberSolution<Type>(candidate.remove(index)));
+                res.add(new NumberSolution<N>(candidate.remove(index)));
             }
         }
         return res;
