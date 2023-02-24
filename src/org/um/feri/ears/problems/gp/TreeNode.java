@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
@@ -90,9 +91,11 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
     }
 
 
-    public void parent(final TreeNode<T> parent) {
+    public void setParent(final TreeNode<T> parent) {
         this.parent = parent;
     }
+
+
 
     @Override
     public TreeNode<T> childAt(int index) {
@@ -106,13 +109,35 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
     }
 
     @Override
+    public TreeAncestor ancestorAt(int index) {
+        List<TreeAncestor> nodesToCheck = new ArrayList<>();
+        nodesToCheck.add(new TreeAncestor(1, this));
+        int currentInd = 0;
+        while(!nodesToCheck.isEmpty()){
+            TreeAncestor treeAncestor = nodesToCheck.get(0);
+            TreeNode<T> current = treeAncestor.getTreeNode();
+            for (Iterator<TreeNode<T>> it = current.getChildren().iterator(); it.hasNext();) {
+                TreeNode<T> next = it.next();
+                currentInd++;
+                if(currentInd == index){
+                    return new TreeAncestor<>(treeAncestor.getTreeHeightPosition(), next);
+                }
+                nodesToCheck.add(new TreeAncestor<>(treeAncestor.getTreeHeightPosition() + 1, next));
+            }
+            nodesToCheck.remove(0);
+        }
+
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
     public int childCount() {
         return children != null ? children.size() : 0;
     }
 
     @Override
     public TreeNode<T> copy() {
-        return null;
+        return ofTree(this);
     }
 
     @Override
@@ -130,7 +155,7 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
             child.parent.remove(child);
         }
 
-        child.parent(this);
+        child.setParent(this);
         createChildrenIfMissing();
         children.add(index, child);
 
@@ -152,8 +177,8 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
         assert oldChild != null;
         assert oldChild.parent == this;
 
-        oldChild.parent(null);
-        child.parent(this);
+        oldChild.setParent(null);
+        child.setParent(this);
 
         return this;
     }
@@ -167,7 +192,7 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
 
         final TreeNode<T> child = children.remove(index);
         assert child.parent == this;
-        child.parent(null);
+        child.setParent(null);
 
         if (children.isEmpty()) {
             children = null;
@@ -309,4 +334,101 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
         }
     }
 
+    // Tree copy
+    public static <T, B> TreeNode<B> ofTree(
+            final Tree<? extends T, ?> tree,
+            final Function<? super T, ? extends B> mapper
+    ) {
+        final TreeNode<B> target = of();
+        target.operation = (Op<B>) tree.operation();
+        target.coefficient = (B) tree.coeficient();
+        copy(tree, target, mapper);
+        return target;
+    }
+
+    private static <T, B> void copy(
+            final Tree<? extends T, ?> source,
+            final TreeNode<B> target,
+            final Function<? super T, ? extends B> mapper
+    ) {
+        for (int i = 0; i < source.childCount(); ++i) {
+            final Tree<? extends T, ?> child = source.childAt(i);
+            final TreeNode<B> targetChild = of();
+            targetChild.operation = (Op<B>) child.operation();
+            targetChild.coefficient = (B) child.coeficient();
+            target.attach(targetChild);
+            copy(child, targetChild, mapper);
+        }
+    }
+
+    public static <T> TreeNode<T> ofTree(final Tree<? extends T, ?> tree) {
+        return ofTree(tree, Function.identity());
+    }
+
+    public static <T> TreeNode<T> of() {
+        return TreeNode.of(null);
+    }
+
+    public static <T> TreeNode<T> of(final T value) {
+        return new TreeNode<>(value);
+    }
+
+    public TreeNode<T> attach(final TreeNode<T> child) {
+        requireNonNull(child);
+
+        if (child.parent == this) {
+            insert(childCount() - 1, child);
+        } else {
+            insert(childCount(), child);
+        }
+
+        return this;
+    }
+
+    @SafeVarargs
+    public final TreeNode<T> attach(final T... children) {
+        for (T child : children) {
+            attach(TreeNode.of(child));
+        }
+
+        return this;
+    }
+
+    /**
+     * Attaches the given {@code child} to {@code this} node.
+     *
+     * @param child the child to attach to {@code this} node
+     * @return {@code this} tree-node, for method chaining
+     */
+    public TreeNode<T> attach(final T child) {
+        return attach(TreeNode.of(child));
+    }
+
+    @Override
+    public Op<T> operation() {
+        return operation;
+    }
+
+    @Override
+    public T coeficient() {
+        return coefficient;
+    }
+    //Tree copy END
+
+    @Override
+    public int treeHeight(){
+        int numOfAncestors = this.ancestors().ancestors.size();
+        int maxHeight = 0;
+
+        for(int i = 1; i < numOfAncestors;i++){
+            int treeHeight = ancestorAt(i).getTreeHeightPosition();
+            //System.out.println("Tree height: " + treeHeight);
+            if(maxHeight < treeHeight){
+                maxHeight = treeHeight;
+            }
+        }
+
+        return maxHeight;
+    }
 }
+

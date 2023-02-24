@@ -43,7 +43,7 @@ import org.um.feri.ears.util.Util;
  *   - current-to-rand/1/bin (current-to-best/1/bin)
  *   - current-to-rand/1/exp (current-to-best/1/exp)
  */
-public class DifferentialEvolutionCrossover implements CrossoverOperator<Double, DoubleProblem, NumberSolution<Double>> {
+public class DifferentialEvolutionCrossover implements CrossoverOperator<DoubleProblem, NumberSolution<Double>> {
 	/**
 	 * DEFAULT_CR defines a default CR (crossover operation control) value
 	 */

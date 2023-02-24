@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class PMXCrossover implements CrossoverOperator<Integer, CombinatorialProblem, NumberSolution<Integer>> {
+public class PMXCrossover implements CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> {
 
 	private double crossoverProbability = 1.0;
 

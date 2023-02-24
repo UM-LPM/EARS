@@ -25,7 +25,7 @@ public class I_PESAII extends PESAII<Integer, CombinatorialProblem, Task<NumberS
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), populationSize, archiveSize);
 	}
 
-	public I_PESAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+	public I_PESAII(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize, int archiveSize) {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 	

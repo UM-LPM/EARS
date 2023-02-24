@@ -16,7 +16,7 @@ public class I_MOEAD_DRA extends MOEAD_DRA<Integer, CombinatorialProblem, Task<N
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), populationSize);
 	}
 
-	public I_MOEAD_DRA(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
+	public I_MOEAD_DRA(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 	

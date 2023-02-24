@@ -43,7 +43,7 @@ public class IBEA<N extends Number, P extends Problem<NumberSolution<N>>, T exte
     ParetoSolution<N> population;
     ParetoSolution<N> archive;
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
     MutationOperator<P, NumberSolution<N>> mut;
 
     /**
@@ -62,7 +62,7 @@ public class IBEA<N extends Number, P extends Problem<NumberSolution<N>>, T exte
      */
     private double maxIndicatorValue_;
 
-    public IBEA(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int populationSize, int archiveSize) {
+    public IBEA(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int populationSize, int archiveSize) {
 
         this.cross = crossover;
         this.mut = mutation;

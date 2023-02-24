@@ -53,11 +53,11 @@ public class NSGAIII<N extends Number, P extends NumberProblem<N>, T extends Tas
     SBXCrossover sbx;
     PolynomialMutation plm;
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
     MutationOperator<P, NumberSolution<N>> mut;
 
 
-    public NSGAIII(CrossoverOperator crossover, MutationOperator mutation) {
+    public NSGAIII(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P,NumberSolution<N>> mutation) {
 
         this.cross = crossover;
         this.mut = mutation;

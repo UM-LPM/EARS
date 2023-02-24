@@ -21,7 +21,7 @@ public class I_MOEAD extends MOEAD<Integer, CombinatorialProblem, Task<NumberSol
 	}
 
 
-	public I_MOEAD(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
+	public I_MOEAD(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 	

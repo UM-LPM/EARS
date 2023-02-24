@@ -21,7 +21,6 @@
 
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
@@ -35,9 +34,6 @@ public class DifferentialEvolutionSelection<N extends Number> implements Selecti
 
 	private int currentIndex;
 
-	/**
-	 * Constructor
-	 */
 	public DifferentialEvolutionSelection() {
 	}
 

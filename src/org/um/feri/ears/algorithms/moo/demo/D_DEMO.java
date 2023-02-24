@@ -16,7 +16,7 @@ public class D_DEMO extends DEMO<Double, DoubleProblem, Task<NumberSolution<Doub
 		this(new DifferentialEvolutionCrossover(), populationSize, selectionProcedure);
 	}
 
-	public D_DEMO(CrossoverOperator crossover, int populationSize, int selectionProcedure) {
+	public D_DEMO(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, int populationSize, int selectionProcedure) {
 		super(crossover, populationSize, selectionProcedure);
 	}
 

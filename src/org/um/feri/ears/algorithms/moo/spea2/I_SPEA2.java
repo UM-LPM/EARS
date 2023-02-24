@@ -26,7 +26,7 @@ public class I_SPEA2 extends SPEA2<Integer, CombinatorialProblem, Task<NumberSol
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), populationSize, archiveSize);
 	}
 
-	public I_SPEA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+	public I_SPEA2(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize, int archiveSize) {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 	

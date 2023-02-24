@@ -16,7 +16,7 @@ public class D_MOEAD extends MOEAD<Double, DoubleProblem, Task<NumberSolution<Do
 		this(new DifferentialEvolutionCrossover(), new PolynomialMutation(1.0 / 10, 20.0), populationSize);
 	}
 
-	public D_MOEAD(CrossoverOperator<Double, DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize) {
+	public D_MOEAD(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 

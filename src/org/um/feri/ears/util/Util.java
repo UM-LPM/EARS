@@ -384,6 +384,14 @@ public class Util {
         return maxValue;
     }
 
+    public static <T> List<T> list(T... items) {
+        List<T> list = new LinkedList<T>();
+        for (T item : items) {
+            list.add(item);
+        }
+        return list;
+    }
+
     public static double[] toDoubleArray(List<Double> list) {
         return list.stream().mapToDouble(d -> d).toArray();
     }

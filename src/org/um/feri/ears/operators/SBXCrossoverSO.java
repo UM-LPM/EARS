@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class SBXCrossoverSO implements CrossoverOperator<Double, DoubleProblem, NumberSolution<Double>>{
+public class SBXCrossoverSO implements CrossoverOperator<DoubleProblem, NumberSolution<Double>>{
 
 
 	/**

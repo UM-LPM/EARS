@@ -14,7 +14,7 @@ public class D_PAES extends PAES<Double, DoubleProblem, Task<NumberSolution<Doub
 		this(new PolynomialMutation(1.0 / 10, 20.0), populationSize);
 	}
 
-	public D_PAES(MutationOperator mutation, int populationSize) {
+	public D_PAES(MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize) {
 		super(mutation, populationSize);
 	}
 

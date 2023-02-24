@@ -16,7 +16,7 @@ public class I_DEMO extends DEMO<Integer, CombinatorialProblem, Task<NumberSolut
 		this(new PMXCrossover(), populationSize, selectionProcedure);
 	}
 
-	public I_DEMO(CrossoverOperator crossover, int populationSize, int selectionProcedure) {
+	public I_DEMO(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, int populationSize, int selectionProcedure) {
 		super(crossover, populationSize, selectionProcedure);
 	}
 	

@@ -54,10 +54,10 @@ public class VEGA<N extends Number, P extends Problem<NumberSolution<N>>, T exte
     int populationSize;
     ParetoSolution<N> population;
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
     MutationOperator<P, NumberSolution<N>> mut;
 
-    public VEGA(CrossoverOperator crossover, MutationOperator mutation, int pop_size) {
+    public VEGA(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
         this.populationSize = pop_size;
 
         this.cross = crossover;

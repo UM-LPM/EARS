@@ -41,7 +41,7 @@ public class CRO extends NumberAlgorithm {
 	private int attemptsToSettle;
 
 	private ProblemComparator<NumberSolution<Double>> comparator;
-	private TournamentSelection selectionOperator;
+	private TournamentSelection<NumberSolution<Double>, DoubleProblem> selectionOperator;
 	private SBXCrossoverSO crossoverOperator = new SBXCrossoverSO(0.9, 20.0);
 	private PolynomialMutationSO mutationOperator = new PolynomialMutationSO(1.0 / 10, 20.0);
 
@@ -87,7 +87,7 @@ public class CRO extends NumberAlgorithm {
 		ai = new AlgorithmInfo("CRO", "Coral Reefs Optimization",
 				"@article{salcedo2014coral,"
 				+ "title={The coral reefs optimization algorithm: a novel metaheuristic for efficiently solving optimization problems}, "
-				+ "author={Salcedo-Sanz, S and Del Ser, J and Landa-Torres, I and Gil-L{\'o}pez, S and Portilla-Figueras, JA}, "
+				+ "author={Salcedo-Sanz, S and Del Ser, J and Landa-Torres, I and Gil-L{'o}pez, S and Portilla-Figueras, JA}, "
 				+ "journal={The Scientific World Journal}, volume={2014},year={2014},publisher={Hindawi Publishing Corporation}}"
 		);
 	}

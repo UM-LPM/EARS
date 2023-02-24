@@ -3,39 +3,35 @@ package org.um.feri.ears.operators;
 import java.util.Comparator;
 import java.util.List;
 
-import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.SolutionListUtils;
 
+public class TournamentSelection<Source extends Solution, P extends Problem> implements SelectionOperator<Source, List<Source>, P> {
 
-public class TournamentSelection implements SelectionOperator<NumberSolution<Double>, List<NumberSolution<Double>>, DoubleProblem> {
-
-    private int numberOfTournaments;
-    private Comparator<NumberSolution<Double>> comparator;
+    private final int numberOfTournaments;
+    private final Comparator<Source> comparator;
 
 
-    public TournamentSelection(int numberOfTournaments, Comparator<NumberSolution<Double>> comparator) {
+    public TournamentSelection(int numberOfTournaments, Comparator<Source> comparator) {
         super();
         this.numberOfTournaments = numberOfTournaments;
         this.comparator = comparator;
     }
 
     @Override
-    public NumberSolution<Double> execute(List<NumberSolution<Double>> source, DoubleProblem problem) {
+    public Source execute(List<Source> source, P problem) {
 
-        NumberSolution<Double> result;
+        Source result;
         if (source.size() == 1) {
             result = source.get(0);
         } else {
             result = SolutionListUtils.selectNRandomDifferentSolutions(1, source).get(0);
             int count = 1; // at least 2 solutions are compared
             do {
-                NumberSolution<Double> candidate = SolutionListUtils.selectNRandomDifferentSolutions(1, source).get(0);
+                Source candidate = SolutionListUtils.selectNRandomDifferentSolutions(1, source).get(0);
                 result = SolutionListUtils.getBestSolution(result, candidate, comparator);
             } while (++count < this.numberOfTournaments);
         }
-
         return result;
     }
 }

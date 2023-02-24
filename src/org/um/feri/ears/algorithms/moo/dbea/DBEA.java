@@ -114,11 +114,11 @@ public class DBEA<N extends Number, P extends Problem<NumberSolution<N>>, T exte
      */
     private final int divisionsInner;
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
     MutationOperator<P, NumberSolution<N>> mut;
 
 
-    public DBEA(CrossoverOperator crossover, MutationOperator mutation, Task<NumberSolution<Double>,DoubleProblem> task) {
+    public DBEA(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, Task<NumberSolution<Double>,DoubleProblem> task) {
 
         this.cross = crossover;
         this.mut = mutation;

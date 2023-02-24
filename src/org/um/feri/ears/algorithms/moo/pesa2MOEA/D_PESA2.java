@@ -16,7 +16,7 @@ public class D_PESA2 extends PESA2<Double, DoubleProblem, Task<NumberSolution<Do
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0), populationSize);
 	}
 
-	public D_PESA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
+	public D_PESA2(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 

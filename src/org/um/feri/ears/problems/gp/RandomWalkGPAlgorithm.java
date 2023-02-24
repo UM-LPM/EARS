@@ -8,8 +8,8 @@ import org.um.feri.ears.problems.Task;
 public class RandomWalkGPAlgorithm extends GPAlgorithm {
     private ProgramSolution<Double> best;
 
-    public RandomWalkGPAlgorithm(String name) {
-        ai = new AlgorithmInfo("RW" + name, "Random Walk", "");
+    public RandomWalkGPAlgorithm() {
+        ai = new AlgorithmInfo("RW", "Random Walk", "");
         au = new Author("Marko", "marko.smid2@um.si");
     }
 

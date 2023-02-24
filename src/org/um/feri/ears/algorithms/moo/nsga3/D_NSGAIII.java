@@ -12,7 +12,7 @@ public class D_NSGAIII extends NSGAIII<Double, DoubleProblem, Task<NumberSolutio
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0));
 	}
 	
-	public D_NSGAIII(CrossoverOperator crossover, MutationOperator mutation) {
+	public D_NSGAIII(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation) {
 		super(crossover, mutation);
 	}
 

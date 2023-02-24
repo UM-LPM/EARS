@@ -25,14 +25,23 @@ import static java.util.Objects.requireNonNull;
 
 public interface Tree<V, T extends Tree<V, T>> extends Self<T>, Iterable<T> {
 
+    Op<V> operation();
+    V coeficient();
+
     /*Return the parent node of this tree node*/
     Optional<T> parent();
 
     /*Return the child node with the given index*/
     T childAt(final int index);
 
-    /*Return the number of children this tree consists of*/
+    /*Returns the ancestor node with the given index*/
+    TreeAncestor<T> ancestorAt(final int index);
+
+    /*Returns the number of children this tree consists of*/
     int childCount();
+
+    /*Returns the depth of the tree*/
+    int treeHeight();
 
     default boolean isAncestor(final Tree<?, ?> node) {
         requireNonNull(node);

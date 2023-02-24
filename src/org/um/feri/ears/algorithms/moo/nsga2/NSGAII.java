@@ -38,10 +38,10 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>, T extends Task
     ParetoSolution<N> union;
 
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
     MutationOperator<P, NumberSolution<N>> mut;
 
-    public NSGAII(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int populationSize) {
+    public NSGAII(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int populationSize) {
 
         this.cross = crossover;
         this.mut = mutation;

@@ -14,7 +14,7 @@ public class I_NSGAIII extends NSGAIII<Integer, CombinatorialProblem, Task<Numbe
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2));
 	}
 
-	public I_NSGAIII(CrossoverOperator crossover, MutationOperator mutation) {
+	public I_NSGAIII(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation) {
 		super(crossover, mutation);
 	}
 	

@@ -18,7 +18,7 @@ public class I_PESA2 extends PESA2<Integer, CombinatorialProblem, Task<NumberSol
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), populationSize);
 	}
 
-	public I_PESA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
+	public I_PESA2(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 	

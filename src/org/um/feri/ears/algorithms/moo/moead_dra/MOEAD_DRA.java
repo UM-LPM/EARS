@@ -81,10 +81,10 @@ public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>, T extends T
 
     static String dataDirectory = "Weight";
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
     MutationOperator<P, NumberSolution<N>> mut;
 
-    public MOEAD_DRA(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
+    public MOEAD_DRA(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
         this.populationSize = pop_size;
 
         this.cross = crossover;

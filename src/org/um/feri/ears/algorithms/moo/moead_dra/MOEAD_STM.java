@@ -33,7 +33,7 @@ public class MOEAD_STM<N extends Number, P extends NumberProblem<N>, T extends T
     ParetoSolution<N> jointPopulation;
 
 
-    public MOEAD_STM(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
+    public MOEAD_STM(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
         super(crossover, mutation, pop_size);
 
         au = new Author("miha", "miha.ravber at gamil.com");

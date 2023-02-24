@@ -20,7 +20,7 @@ public class D_IBEA extends IBEA<Double, DoubleProblem, Task<NumberSolution<Doub
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0), populationSize, archiveSize);
 	}
 
-	public D_IBEA(CrossoverOperator<Double, DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize, int archiveSize) {
+	public D_IBEA(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize, int archiveSize) {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 

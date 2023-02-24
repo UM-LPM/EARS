@@ -25,7 +25,7 @@ public class I_IBEA extends IBEA<Integer, CombinatorialProblem, Task<NumberSolut
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), populationSize, archiveSize);
 	}
 
-	public I_IBEA(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+	public I_IBEA(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize, int archiveSize) {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 	

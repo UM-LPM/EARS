@@ -16,7 +16,7 @@ public class I_GDE3 extends GDE3<Integer, CombinatorialProblem, Task<NumberSolut
 		this(new PMXCrossover(), populationSize);
 	}
 
-	public I_GDE3(CrossoverOperator<Integer, CombinatorialProblem, NumberSolution<Integer>> crossover, int populationSize) {
+	public I_GDE3(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, int populationSize) {
 		super(crossover, populationSize);
 	}
 	

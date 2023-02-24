@@ -16,7 +16,7 @@ public class D_NSGAII extends NSGAII<Double, DoubleProblem, Task<NumberSolution<
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0), populationSize);
 	}
 
-	public D_NSGAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
+	public D_NSGAII(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 

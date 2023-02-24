@@ -65,10 +65,10 @@ public class PESA2<N extends Number, P extends NumberProblem<N>, T extends Task<
      */
     protected Map<Integer, List<NumberSolution<N>>> gridMap;
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
     MutationOperator<P, NumberSolution<N>> mut;
 
-    public PESA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
+    public PESA2(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int populationSize) {
         this.populationSize = populationSize;
 
         this.cross = crossover;

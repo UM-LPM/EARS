@@ -19,7 +19,7 @@ public class I_NSGAII extends NSGAII<Integer, CombinatorialProblem, Task<NumberS
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), populationSize);
 	}
 
-	public I_NSGAII(CrossoverOperator crossover, MutationOperator mutation, int populationSize) {
+	public I_NSGAII(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 	

@@ -16,7 +16,7 @@ public class I_PAES extends PAES<Integer, CombinatorialProblem, Task<NumberSolut
 		this(new PermutationSwapMutation(0.2), populationSize);
 	}
 
-	public I_PAES(MutationOperator mutation, int populationSize) {
+	public I_PAES(MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize) {
 		super(mutation, populationSize);
 	}
 	

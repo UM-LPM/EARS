@@ -101,25 +101,35 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
         return solution;
     }
 
-    @Override
     public ProgramSolution<T> getRandomSolution() {
-        ProgramSolution<T> newSolution = new ProgramSolution<>(numberOfObjectives);
-        //Generate random valid solution
-        /*Postopek generiranja drevesa...
-            Generiram en node (prvi more bit funckija, ker drugace se bo tukaj koncalo)
-            Nato pa gradim drevo po en node naprej, dokler ne pridem do samih takšnih voz., ki so terminali
-        */
+        return getRandomSolution(true, 0);
+    }
 
-        //In first we select one from baseFunctions, otherwise the tree would stop here (we also exclude functions that are actually constants)
-        List<Op<T>> filteredOperations = this.baseFunctions.stream().filter(x -> (!x.isVariable() && !x.isTerminal() && !x.isConstant())).toList();
+    public ProgramSolution<T> getRandomSolution(boolean isRoot, int currentDepth) {
+        //System.out.println("Current depth: " + currentDepth);
+        ProgramSolution<T> newSolution = new ProgramSolution<>(numberOfObjectives);
+
+        // First we select one from baseFunctions, otherwise the tree would stop here (we also exclude functions that are actually constants)
+        List<Op<T>> filteredOperations = this.baseFunctions.stream().filter(x -> (!x.isVariable() && !x.isTerminal() && !x.isConstant() || !isRoot)).toList();
         Op<T> op = filteredOperations.get(Util.rnd.nextInt(filteredOperations.size()));
         TreeNode<T> rootNode = new TreeNode<>(op);
 
-        for(int i = 0; i < rootNode.getOperation().arity(); i++){
-            generateSubTree(rootNode, i, 0);
+        if(currentDepth < this.maxTreeHeight - 1) { //Function
+            if (op.isConstant()) {
+                rootNode = new TreeNode<>(op.apply(null));
+                TreeNode<T> finalRootNode = rootNode;
+                rootNode.setOperation(Op.define(rootNode.getCoefficient().toString(), OperationType.TERMINAL, 0, v -> finalRootNode.getCoefficient()));
+            } else {
+                for (int i = 0; i < rootNode.getOperation().arity(); i++) {
+                    generateSubTree(rootNode, i, currentDepth);
+                }
+            }
+        }else { //Terminal
+            Op<T> t = this.baseTerminals.get(Util.rnd.nextInt(this.baseTerminals.size()));
+            rootNode = new TreeNode<>(t);
         }
 
-        newSolution.program = rootNode;
+        newSolution.setProgram(rootNode);
         return newSolution;
     }
 
@@ -140,16 +150,12 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
                 for(int i = 0; i < childNode.getOperation().arity(); i++){
                     generateSubTree(childNode, i, currentDepth + 1);
                 }
-
             }
-
         }
         else { //Terminal
             Op<T> t = this.baseTerminals.get(Util.rnd.nextInt(this.baseTerminals.size()));
             TreeNode<T> child = new TreeNode<T>(t);
             node.insert(index, child);
         }
-
     }
-
 }

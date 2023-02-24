@@ -45,7 +45,7 @@ public abstract class Benchmark<S extends Solution, P extends Problem<S>, T exte
         if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM)
             numberOfTicks = maxEvaluations / evaluationsPerTick;
         else
-            numberOfTicks = 2; // the for loop will run only once
+            numberOfTicks = 1; // the for loop will run only once
 
 
         for (int n = 1; n <= numberOfTicks; n++) {

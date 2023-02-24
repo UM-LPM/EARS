@@ -58,10 +58,10 @@ public class DEMO<N extends Number, P extends NumberProblem<N>, T extends Task<N
 
     NumberSolution<N>[] parents;
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
 
 
-    public DEMO(CrossoverOperator crossover, int populationSize, int selectionProcedure) {
+    public DEMO(CrossoverOperator<P, NumberSolution<N>> crossover, int populationSize, int selectionProcedure) {
 
         this.cross = crossover;
         this.populationSize = populationSize;

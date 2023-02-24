@@ -43,9 +43,9 @@ public class GDE3<N extends Number, P extends Problem<NumberSolution<N>>, T exte
 
     int populationSize;
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
 
-    public GDE3(CrossoverOperator<N, P, NumberSolution<N>> crossover, int populationSize) {
+    public GDE3(CrossoverOperator<P, NumberSolution<N>> crossover, int populationSize) {
         this.populationSize = populationSize;
         this.cross = crossover;
 

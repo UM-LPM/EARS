@@ -30,7 +30,7 @@ import org.um.feri.ears.util.Util;
 /**
  * This class allows to apply a SBX crossover operator using two parent solutions.
  */
-public class SBXCrossover implements CrossoverOperator<Double, DoubleProblem, NumberSolution<Double>>{
+public class SBXCrossover implements CrossoverOperator<DoubleProblem, NumberSolution<Double>>{
   /**
    * EPS defines the minimum difference allowed between real values
    */
@@ -47,7 +47,7 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleProblem, Nu
 	}
   /** 
    * Constructor
-   * Create a new SBX crossover operator whit a default
+   * Create a new SBX crossover operator with a default
    * index given by <code>DEFAULT_INDEX_CROSSOVER</code>
    */
 	public SBXCrossover(Double crossoverProbability, double distributionIndex) {

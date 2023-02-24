@@ -20,7 +20,7 @@ public class D_SPEA2 extends SPEA2<Double, DoubleProblem, Task<NumberSolution<Do
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0), populationSize, populationSize);
 	}
 
-	public D_SPEA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+	public D_SPEA2(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize, int archiveSize) {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 

@@ -18,7 +18,7 @@ public class D_GDE3 extends GDE3<Double, DoubleProblem, Task<NumberSolution<Doub
 		this(new DifferentialEvolutionCrossover(), populationSize);
 	}
 
-	public D_GDE3(CrossoverOperator crossover, int populationSize) {
+	public D_GDE3(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, int populationSize) {
 		super(crossover, populationSize);
 	}
 	

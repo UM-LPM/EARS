@@ -82,12 +82,12 @@ public class MOEAD<N extends Number, P extends Problem<NumberSolution<N>>, T ext
     String functionType;
     int gen;
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
     MutationOperator<P, NumberSolution<N>> mut;
 
     static String dataDirectory = "Weight";
 
-    public MOEAD(CrossoverOperator<N, P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
+    public MOEAD(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int pop_size) {
         this.populationSize = pop_size;
         this.cross = crossover;
         this.mut = mutation;

@@ -23,17 +23,17 @@ public class SymbolicRegressionProblem extends ProgramProblem<Double>{
     public void evaluate(ProgramSolution<Double> solution) {
         double eval = 0;
         //Za vse vrednosti iz evalData pridobim vrednost
-        for(Target t: this.evalData) {
+        for(Target t: evalData) {
             //System.out.println(t.getContextState().get(this.baseTerminals.get(0)));
             double val = evaluateSubTree(solution.program, t.getContextState());
             eval += Math.pow(t.getTargetValue() - val, 2);
             //System.out.println("TargetValue: " + t.getTargetValue() + ", " + "ActualValue: " + val);
         }
 
-        eval = Math.sqrt((eval / this.evalData.size()));
+        eval = Math.sqrt((eval / evalData.size()));
 
         solution.setEval(eval);
-        System.out.println("Current Fitness: " + eval);
+        //System.out.println("Current Fitness: " + eval);
     }
 
     private double evaluateSubTree(TreeNode<Double> node, Map<String, Double> contextState) {

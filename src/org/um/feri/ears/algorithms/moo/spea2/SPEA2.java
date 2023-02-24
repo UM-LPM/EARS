@@ -25,12 +25,12 @@ public class SPEA2<N extends Number, P extends NumberProblem<N>, T extends Task<
     ParetoSolution<N> population;
     ParetoSolution<N> archive;
 
-    CrossoverOperator<N, P, NumberSolution<N>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
     MutationOperator<P, NumberSolution<N>> mut;
 
     public int tournamentRounds = 1;
 
-    public SPEA2(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+    public SPEA2(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int populationSize, int archiveSize) {
         this.populationSize = populationSize;
         this.archiveSize = archiveSize;
 

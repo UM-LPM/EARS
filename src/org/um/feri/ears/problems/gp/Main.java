@@ -8,6 +8,7 @@ import org.um.feri.ears.benchmark.RPUOed30Benchmark;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,9 +18,9 @@ public class Main {
 
         //Test TreeNode individual generator
         SymbolicRegressionProblem sgp = new SymbolicRegressionProblem();
-        sgp.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST, MathOp.PI));
-        sgp.setBaseTerminals(Utils.list(Op.define("x", OperationType.VARIABLE)));
-        sgp.setEvalData(Utils.list( new Target().when("x", 0).targetIs(0),
+        sgp.setBaseFunctions(Util.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST));
+        sgp.setBaseTerminals(Util.list(Op.define("x", OperationType.VARIABLE)));
+        sgp.setEvalData(Util.list( new Target().when("x", 0).targetIs(0),
                 new Target().when("x", 1).targetIs(11),
                 new Target().when("x", 2).targetIs(24),
                 new Target().when("x", 3).targetIs(39),
@@ -27,33 +28,29 @@ public class Main {
                 new Target().when("x", 5).targetIs(75),
                 new Target().when("x", 6).targetIs(96)));
 
-        sgp.setMaxTreeHeight(4);
-        sgp.setMaxNodeChildrenNum(2); //TODO se vec ne uporablja
+        sgp.setMaxTreeHeight(6);
+        sgp.setMaxNodeChildrenNum(2); // TODO not in use
 
-        /*ProgramSolution<Double> ps = sgp.getRandomSolution();
-        sgp.eval(ps);
-        System.out.println("Fitness: " + ps.getEval());
-        System.out.println("AncestorCount: " + ps.getSolution().ancestors().getAncestorCount());
-        ps.getSolution().displayTree("TestBTree");*/
+        //GP algorithm execution example
+        /*Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp, StopCriterion.EVALUATIONS, 1000, 0, 0);
 
-        //Algorithm execution
-        //ps.setEval(Double.MAX_VALUE);
 
-        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp, StopCriterion.EVALUATIONS, 5000, 0, 0);
+        GPAlgorithm alg = new DefaultGPAlgorithm();
 
-        //GPAlgorithm alg = new DefaultGPAlgorithm();
-        //RandomWalkGPAlgorithm alg = new RandomWalkGPAlgorithm();
-                /*try {
+        try {
             ProgramSolution<Double> sol = alg.execute(symbolicRegression);
             System.out.println("Best fitness: " + sol.getEval());
+            System.out.println("AncestorCount: " + sol.getProgram().ancestors().getAncestorCount());
+            System.out.println("Tree Depth: " + sol.getProgram().treeHeight());
             sol.getProgram().displayTree("TestBTree");
         } catch (StopCriterionException e) {
             e.printStackTrace();
         }*/
 
+
         ArrayList<GPAlgorithm> algorithms = new ArrayList<>();
-        algorithms.add(new RandomWalkGPAlgorithm("1"));
-        algorithms.add(new RandomWalkGPAlgorithm("2"));
+        algorithms.add(new RandomWalkGPAlgorithm());
+        algorithms.add(new DefaultGPAlgorithm());
 
         SymbolicRegressionBenchmark benchmark = new SymbolicRegressionBenchmark();
 
@@ -61,15 +58,44 @@ public class Main {
 
         benchmark.run(5); //start the tournament with 10 runs/repetitions
 
+        /*ProgramSolution<Double> ps = sgp.getRandomSolution();
+        sgp.eval(ps);
+        System.out.println("Fitness: " + ps.getEval());
+        System.out.println("AncestorCount: " + ps.getProgram().ancestors().getAncestorCount());
+        System.out.println("TestNode: " + ps.getProgram().ancestorAt(5).getOperation().name());
+        ps.getProgram().displayTree("TestBTree");*/
 
 
+        /*
+        // SinglePointCrossover example
+        Task<Double> symbolicRegression = new Task<>(sgp, StopCriterion.EVALUATIONS, 100, 0, 0);
 
-        /*final Op<Double> myop = MathOp.ADD;
+        ProgramSolution<Double> ps1 = sgp.getRandomSolution();
+        ProgramSolution<Double> ps2 = sgp.getRandomSolution();
 
-        System.out.println(myop.apply(new Double[]{5.0, 6.0}));
-        System.out.println(myop.type());*/
+        ps1.getProgram().displayTree("TestBTree");
+        ps2.getProgram().displayTree("TestBTree");
 
-        /*TreeNode<Double> root = new TreeNode<>();
+        SinglePointCrossover<Double> spc = new SinglePointCrossover<>();
+        ProgramSolution[] sol = spc.execute(new ProgramSolution[]{ ps1, ps2}, symbolicRegression);
+
+        sol[0].getProgram().displayTree("TestBTree");
+        sol[1].getProgram().displayTree("TestBTree");*/
+
+        //SingleTreeNodeMutation example
+        /*Task<Double> symbolicRegression = new Task<>(sgp, StopCriterion.EVALUATIONS, 100, 0, 0);
+
+        ProgramSolution<Double> ps1 = sgp.getRandomSolution();
+        ps1.getProgram().displayTree("TestBTree");
+
+        SingleTreeNodeMutation<Double> stnm = new SingleTreeNodeMutation<>(0.4);
+        stnm.execute(ps1, symbolicRegression);
+
+        ps1.getProgram().displayTree("TestBTree");*/
+
+        /*
+        // Tree generation example
+        TreeNode<Double> root = new TreeNode<>();
         root.operation = MathOp.ADD;
 
         TreeNode<Double> left = new TreeNode<>();
@@ -90,5 +116,17 @@ public class Main {
         System.out.println("Fitness: " + sgp.eval(ps));
 
         ps.getSolution().displayTree("TestBTree");*/
+
+        /*
+        // Tree copy example
+        ProgramSolution<Double> sol1 = sgp.getRandomSolution();
+        ProgramSolution<Double> sol2 = new ProgramSolution<>(sol1);
+
+        TreeNode<Double> childNode = new TreeNode<>(MathOp.PI.apply(null));
+        sol2.getProgram().childAt(0).setOperation(Op.define(childNode.getCoefficient().toString(), OperationType.TERMINAL, 0, v -> childNode.getCoefficient()));
+
+        sol1.getProgram().displayTree("TestBtTree");
+        sol2.getProgram().displayTree("TestBtTree");*/
+
     }
 }

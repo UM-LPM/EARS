@@ -43,7 +43,7 @@ public class SymbolicRegressionBenchmark extends Benchmark<ProgramSolution<Doubl
                 new Target().when("x", 5).targetIs(75),
                 new Target().when("x", 6).targetIs(96)));
 
-        sgp.setMaxTreeHeight(4);
+        sgp.setMaxTreeHeight(6);
         sgp.setMaxNodeChildrenNum(2);
 
 
