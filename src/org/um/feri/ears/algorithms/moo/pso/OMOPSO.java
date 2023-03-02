@@ -50,7 +50,7 @@ import org.um.feri.ears.util.Util;
  * </ol>
  */
 
-//Task<DoubleSolution,DoubleProblem>
+//Task<NumberSolution<Double>,DoubleProblem>
 public class OMOPSO extends MOAlgorithm<Task<NumberSolution<Double>,DoubleProblem>, Double> {
 
     private int swarmSize;

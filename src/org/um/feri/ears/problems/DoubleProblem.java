@@ -17,7 +17,6 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
     @Override
     public void makeFeasible(NumberSolution<Double> solution) {
         setFeasible(solution.getVariables());
-
     }
 
     @Override

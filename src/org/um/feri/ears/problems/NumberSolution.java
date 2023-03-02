@@ -37,6 +37,10 @@ public class NumberSolution<N extends Number> extends Solution {
         variables = new ArrayList<>(x);
     }
 
+    public NumberSolution(N[] x) {
+        this(new ArrayList<>(Arrays.asList(x)));
+    }
+
     public NumberSolution(List<N> x, double[] objectives) {
         super(objectives.length);
         System.arraycopy(objectives, 0, this.objectives, 0, objectives.length);

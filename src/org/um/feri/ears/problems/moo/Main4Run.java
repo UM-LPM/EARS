@@ -102,9 +102,9 @@ public class Main4Run {
             	//best.printFeasibleFUN("D:\\Benchmark results\\IBEA_UF1.csv");
             	//moead.run(new Task<>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new CITOProblem("OO_MyBatis")));
             	
-            	/*best.evaluate(new InvertedGenerationalDistance<Double>(task.getNumberOfObjectives(), task.getProblemFileName()));
+            	/*best.evaluate(new InvertedGenerationalDistance<Double>(task.getNumberOfObjectives(), task.problem.getReferenceSetFileName()));
             	System.out.println(best.getEval());
-            	best.evaluate(new GenerationalDistance<Double>(task.getNumberOfObjectives(), task.getProblemFileName()));
+            	best.evaluate(new GenerationalDistance<Double>(task.getNumberOfObjectives(), task.problem.getReferenceSetFileName()));
             	System.out.println(best.getEval());*/
             	
                 //ParetoSolution best2 = moeadtsm.run(new Task(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(3)));

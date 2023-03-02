@@ -83,7 +83,7 @@ public class RMO extends NumberAlgorithm {
             for (int i = 0; i < popSize; ++i) {
                 for (int j = 0; j < V[i].length; ++j) {
                     //Velocity vector
-                    V[i][j] = Util.nextDouble(-1, 1) * ((task.problem.getUpperLimit(j) - task.problem.getLowerLimit(j)) / k);//Util.nextDouble(task.getLowerLimit()[j], task.getUpperLimit()[j]) / 100.0;
+                    V[i][j] = Util.nextDouble(-1, 1) * ((task.problem.getUpperLimit(j) - task.problem.getLowerLimit(j)) / k);//Util.nextDouble(task.getLowerLimit()[j], task.problem.getUpperLimit()[j]) / 100.0;
 
                     //Move particle and check constrains
                     X[i][j] = task.problem.setFeasible(V[i][j] * W + cp[j], j);

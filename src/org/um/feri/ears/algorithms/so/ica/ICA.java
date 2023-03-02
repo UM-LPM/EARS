@@ -46,7 +46,7 @@ public class ICA extends NumberAlgorithm {
     private NumberSolution<Double> best;
     private EmpireSolution[] empiresList;
     private NumberSolution<Double>[] initialCountries;
-    //ArrayList<DoubleSolution> offspringPopulation;
+    //ArrayList<NumberSolution<Double>> offspringPopulation;
 
     public ICA() {
         this(50, 6, 0.1, 2, 0.5, 0.02, 0.99, false, 0.02);
@@ -459,7 +459,7 @@ public class ICA extends NumberAlgorithm {
             initialCountries[i] = newSolution;
         }
         Arrays.sort(initialCountries, new ProblemComparator<>(task.problem));
-        //initialCountries.sort(new TaskComparator(task));
+        //initialCountries.sort(new ProblemComparator(task.problem));
         best = new NumberSolution<>(initialCountries[0]);
     }
 

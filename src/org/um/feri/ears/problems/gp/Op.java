@@ -89,5 +89,4 @@ public interface Op<T> extends Function<T[], T>, Supplier<Op<T>> {
         requireNonNull(function);
         return define(name, OperationType.FUNCTION,2, v -> function.apply(v[0], v[1]));
     }
-
 }

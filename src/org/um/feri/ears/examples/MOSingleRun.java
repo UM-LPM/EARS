@@ -46,7 +46,7 @@ public class MOSingleRun {
 			ParetoSolution best = moead.execute(task);
 			best.printObjectivesToCSVFile("test");
 
-			//best.evaluate(new InvertedGenerationalDistance(p.getNumberOfObjectives(), p.getFileName()));
+			//best.evaluate(new InvertedGenerationalDistance(p.getNumberOfObjectives(), p.getReferenceSetFileName()));
 
 			System.out.println(best.getEval());
 

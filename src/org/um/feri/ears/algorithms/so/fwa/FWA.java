@@ -140,7 +140,7 @@ public class FWA extends NumberAlgorithm {
             //get all sparks' position
             int k;
             for (k = 0; k < numSparks[i]; k++) {
-                //sparks[i][k] = new DoubleSolution();
+                //sparks[i][k] = new NumberSolution<Double>();
                 //select z directions
 
                 boolean[] randflag = new boolean[task.problem.getNumberOfDimensions()];
@@ -194,7 +194,7 @@ public class FWA extends NumberAlgorithm {
         gaussianSparks = new NumberSolution[numGaussianSparks];
         int k;
         for (k = 0; k < numGaussianSparks; k++) {
-            //gaussiansparks[k] = new DoubleSolution();
+            //gaussiansparks[k] = new NumberSolution<Double>();
             //randomly select a firework
             i = Math.abs(Util.nextInt()) % popSize;
             fireworkPos = Util.toDoubleArray(fireworks[i].getVariables());

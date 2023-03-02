@@ -113,7 +113,7 @@ public class GOA extends NumberAlgorithm {
             for (NumberSolution<Double> s : population) {
                 if (task.problem.isFirstBetter(s, best)) {
                     //System.out.println(s.getEval());
-                    //best = new DoubleSolution(s);
+                    //best = new NumberSolution<Double>(s);
                     best = s;
                 }
             }
