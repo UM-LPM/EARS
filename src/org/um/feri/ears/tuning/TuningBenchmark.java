@@ -7,7 +7,7 @@ import org.um.feri.ears.problems.unconstrained.*;
 
 import java.util.Vector;
 
-public class TuningBenchmark extends Benchmark<NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>, NumberAlgorithm> {
+public class TuningBenchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
 
     protected int evaluationsOnDimension = 10000;
     protected int dimension = 10;

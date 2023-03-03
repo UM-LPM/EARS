@@ -49,7 +49,7 @@ import org.um.feri.ears.util.Util;
  *       Conference on Genetic Algorithms, pp. 93-100.
  * </ol>
  */
-public class VEGA<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class VEGA<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     int populationSize;
     ParetoSolution<N> population;

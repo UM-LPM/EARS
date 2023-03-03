@@ -14,9 +14,8 @@ import org.um.feri.ears.util.ParetoWithEval;
 import org.um.feri.ears.util.Ranking;
 import org.um.feri.ears.util.Util;
 
-public abstract class MOAlgorithm<T extends TaskBase, N extends Number> extends Algorithm<T, ParetoSolution<N>> {
+public abstract class MOAlgorithm<N extends Number, S extends Solution, P extends Problem<S>> extends Algorithm<ParetoSolution<N>, S, P> {
 
-    protected T task;
     protected static boolean optimalParam;
 
     protected ParetoSolution<N> result;
@@ -33,7 +32,7 @@ public abstract class MOAlgorithm<T extends TaskBase, N extends Number> extends 
         return result;
     }
 
-    protected ParetoSolution<N> returnNext(T task) {
+    protected ParetoSolution<N> returnNext(Task task) {
         // load cache if empty or if different benchmark in cache
         if (cache == null || !benchmarkInCache.equals(task.problem.getBenchmarkName())) {
             cache = Util.readParetoListFromJSON(ai.getAcronym(), task.problem.getBenchmarkName());
@@ -111,7 +110,7 @@ public abstract class MOAlgorithm<T extends TaskBase, N extends Number> extends 
     }
 
     @Override
-    public ParetoSolution<N> execute(T task) throws StopCriterionException {
+    public ParetoSolution<N> execute(Task task) throws StopCriterionException {
         this.task = task;
         numObj = task.problem.getNumberOfObjectives();
 

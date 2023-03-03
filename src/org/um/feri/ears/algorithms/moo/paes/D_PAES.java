@@ -4,7 +4,7 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.problems.*;
 
-public class D_PAES extends PAES<Double, DoubleProblem, Task<NumberSolution<Double>,DoubleProblem>> {
+public class D_PAES extends PAES<Double, NumberProblem<Double>> {
 	
 	public D_PAES() {
 		this(new PolynomialMutation(1.0 / 10, 20.0), 100);
@@ -14,7 +14,7 @@ public class D_PAES extends PAES<Double, DoubleProblem, Task<NumberSolution<Doub
 		this(new PolynomialMutation(1.0 / 10, 20.0), populationSize);
 	}
 
-	public D_PAES(MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize) {
+	public D_PAES(MutationOperator<NumberProblem<Double>, NumberSolution<Double>> mutation, int populationSize) {
 		super(mutation, populationSize);
 	}
 

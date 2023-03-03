@@ -9,7 +9,7 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public class DummyMOAlgorithm<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class DummyMOAlgorithm<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     HashMap<String, ParetoSolution<N>[]> results;
     HashMap<String, Integer> positions; //stores the position of the current result of the current problem
@@ -25,7 +25,7 @@ public class DummyMOAlgorithm<N extends Number, P extends Problem<NumberSolution
     }
 
     @Override
-    public ParetoSolution<N> execute(T task) throws StopCriterionException {
+    public ParetoSolution<N> execute(Task task) throws StopCriterionException {
         String problemName = task.problem.getReferenceSetFileName();
 
         if (results.containsKey(problemName.toLowerCase())) {

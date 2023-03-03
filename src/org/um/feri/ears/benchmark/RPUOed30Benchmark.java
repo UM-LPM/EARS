@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.*;
 
-public class RPUOed30Benchmark extends Benchmark<NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>, NumberAlgorithm> {
+public class RPUOed30Benchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
 
     public RPUOed30Benchmark() {
         super();

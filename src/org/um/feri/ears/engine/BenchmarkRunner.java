@@ -58,7 +58,7 @@ public class BenchmarkRunner {
 		logger.log(Level.INFO, "submission author "+"author");
 		logger.log(Level.INFO, "submission id "+"id");
 
-		ArrayList<Task<NumberSolution<Double>, DoubleProblem>> tasks = benchmark.getAllTasks();
+		ArrayList<Task> tasks = benchmark.getAllTasks();
 		int numberOfRuns = benchmark.getNumberOfRuns();
 		logger.log(Level.INFO, "number of runs "+numberOfRuns);
 		long totalDuration = System.nanoTime();

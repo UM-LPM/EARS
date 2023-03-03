@@ -36,7 +36,7 @@ import org.um.feri.ears.util.Ranking;
 /**
  * This class implements the GDE3 algorithm.
  */
-public class GDE3<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class GDE3<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     ParetoSolution<N> population;
     ParetoSolution<N> offspringPopulation;

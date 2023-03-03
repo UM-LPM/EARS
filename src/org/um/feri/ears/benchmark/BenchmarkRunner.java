@@ -78,7 +78,7 @@ public class BenchmarkRunner {
         return sb.toString();
     }
 
-    public BenchmarkResults<Task<NumberSolution<Double>, DoubleProblem>, NumberSolution<Double>, NumberAlgorithm> getBenchmarkResults() {
+    public BenchmarkResults<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> getBenchmarkResults() {
         return benchmark.getBenchmarkResults();
     }
 }

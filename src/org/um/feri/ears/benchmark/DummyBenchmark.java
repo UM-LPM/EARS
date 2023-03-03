@@ -3,7 +3,7 @@ package org.um.feri.ears.benchmark;
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.problems.*;
 
-public class DummyBenchmark extends Benchmark<NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>, NumberAlgorithm> {
+public class DummyBenchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     protected int dimension;
 
     public DummyBenchmark() {

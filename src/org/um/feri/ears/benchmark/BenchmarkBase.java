@@ -1,25 +1,23 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.statistic.rating_system.glicko2.Glicko2Rating;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Solution;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
 
 import java.util.*;
 import java.util.concurrent.*;
 
-public abstract class BenchmarkBase<T extends TaskBase<?>, S extends Solution, A extends Algorithm<T, S>> {
+
+public abstract class BenchmarkBase<R extends Solution, S extends Solution, P extends Problem<S>, A extends Algorithm<R, S, P>> {
 
     public enum RatingCalculation {NORMAL, RATING_CONVERGENCE_GRAPH, RATING_CONVERGENCE_SUM}
 
     public static boolean printInfo = false;
-    protected ArrayList<T> tasks;
+    protected ArrayList<Task> tasks;
     protected ArrayList<A> algorithms;
     protected String name;
     protected String shortName;
@@ -40,7 +38,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends Solution, A
     int evaluationsPerTick = 100;
 
     TournamentResults tournamentResults = new TournamentResults();
-    BenchmarkResults<T, S, A> benchmarkResults = new BenchmarkResults();
+    BenchmarkResults<R, S, P, A> benchmarkResults = new BenchmarkResults();
 
     public BenchmarkBase() {
         tasks = new ArrayList<>();
@@ -68,20 +66,20 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends Solution, A
         benchmarkResults.clear();
     }
 
-    public BenchmarkResults<T, S, A> getBenchmarkResults() {
+    public BenchmarkResults<R, S, P, A> getBenchmarkResults() {
         return benchmarkResults;
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (T tw : tasks) {
+        for (Task tw : tasks) {
             sb.append(tw.toString());
         }
         return sb.toString();
     }
 
-    public ArrayList<T> getAllTasks() {
-        return new ArrayList<T>(tasks);
+    public ArrayList<Task> getAllTasks() {
+        return new ArrayList<Task>(tasks);
     }
 
     public int getNumberOfRuns() {
@@ -97,7 +95,7 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends Solution, A
      *
      * @param algorithm to be removed from the benchmark
      */
-    public void removeAlgorithm(Algorithm<T, S> algorithm) {
+    public void removeAlgorithm(Algorithm<R, S, P> algorithm) {
         algorithms.remove(algorithm);
         benchmarkResults.removeAlgorithm(algorithm);
     }
@@ -143,9 +141,9 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends Solution, A
         long start = System.nanoTime();
         for (int i = 0; i < numberOfRuns; i++) {
             if (printInfo) System.out.println("Current run: " + (i + 1));
-            for (T task : tasks) {
+            for (Task task : tasks) {
                 if (printInfo) System.out.println("Current problem: " + task.getProblemName());
-                ArrayList<AlgorithmRunResult<S, A, T>> runResults = runOneTask(task);
+                ArrayList<AlgorithmRunResult<R, S, P, A>> runResults = runOneTask(task);
                 benchmarkResults.addResults(i, task, runResults);
             }
         }
@@ -153,19 +151,19 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends Solution, A
         performStatistics();
     }
 
-    protected ArrayList<AlgorithmRunResult<S, A, T>> runOneTask(T task) {
+    protected ArrayList<AlgorithmRunResult<R, S, P, A>> runOneTask(Task task) {
 
         if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_GRAPH || ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM) {
             task.enableEvaluationHistory();
             task.setStoreEveryNthEvaluation(evaluationsPerTick);
         }
 
-        ArrayList<AlgorithmRunResult<S, A, T>> runResults = new ArrayList<>();
+        ArrayList<AlgorithmRunResult<R, S, P, A>> runResults = new ArrayList<>();
         if (runInParallel) {
             ExecutorService pool = Executors.newFixedThreadPool(algorithms.size());
             Set<Future<AlgorithmRunResult>> set = new HashSet<>();
             for (A algorithm : algorithms) {
-                Future<AlgorithmRunResult> future = pool.submit(algorithm.createRunnable(algorithm, (T) task.clone()));
+                Future<AlgorithmRunResult> future = pool.submit(algorithm.createRunnable(algorithm, (Task) task.clone()));
                 set.add(future);
             }
 
@@ -189,9 +187,9 @@ public abstract class BenchmarkBase<T extends TaskBase<?>, S extends Solution, A
             for (A algorithm : algorithms) {
                 try {
                     GraphDataRecorder.SetContext(algorithm, task);
-                    T taskCopy = (T) task.clone();
+                    Task taskCopy = (Task) task.clone();
                     start = System.nanoTime();
-                    S result = algorithm.execute(taskCopy);
+                    R result = (R) algorithm.execute(taskCopy);
                     duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
                     algorithm.addRunDuration(duration, duration - taskCopy.getEvaluationTimeMs());
 

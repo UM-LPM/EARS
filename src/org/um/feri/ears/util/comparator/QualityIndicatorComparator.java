@@ -8,8 +8,8 @@ import org.um.feri.ears.quality_indicator.QualityIndicator;
 
 import java.util.Comparator;
 
-public class QualityIndicatorComparator<N extends Number, T extends TaskBase<P>, S extends Solution, P extends NumberProblem<N>> implements Comparator<AlgorithmRunResult<ParetoSolution<N>, MOAlgorithm<T, N>, T>> {
-    P problem;
+public class QualityIndicatorComparator<N extends Number, P extends NumberProblem<N>> implements Comparator<AlgorithmRunResult<ParetoSolution<N>, NumberSolution<N>, P, MOAlgorithm<N, NumberSolution<N>, P>>> {
+    NumberProblem<N> problem;
     QualityIndicator<N> qi;
 
     public QualityIndicatorComparator(P problem, QualityIndicator<N> qi) {
@@ -18,7 +18,7 @@ public class QualityIndicatorComparator<N extends Number, T extends TaskBase<P>,
     }
 
     @Override
-    public int compare(AlgorithmRunResult<ParetoSolution<N>, MOAlgorithm<T, N>, T> r1, AlgorithmRunResult<ParetoSolution<N>, MOAlgorithm<T, N>, T> r2) {
+    public int compare(AlgorithmRunResult<ParetoSolution<N>, NumberSolution<N>, P, MOAlgorithm<N, NumberSolution<N>, P>> r1, AlgorithmRunResult<ParetoSolution<N>, NumberSolution<N>, P, MOAlgorithm<N, NumberSolution<N>, P>> r2) {
         if (r1.solution != null) {
             if (r2.solution != null) {
                 // if (resultEqual(r1.getBest(), r2.getBest())) return 0; Normal sor later!

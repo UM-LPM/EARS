@@ -31,7 +31,7 @@ import org.um.feri.ears.util.Util;
  * MOEA/D on CEC09 Unconstrained MOP Test Instances, Working Report CES-491,
  * School of CS & EE, University of Essex, 02/2009
  */
-public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     List<Integer> twoDimfiles = asList(100, 300, 400, 500, 600, 800, 1000);
     List<Integer> threeDimfiles = asList(500, 600, 800, 1000, 1200);

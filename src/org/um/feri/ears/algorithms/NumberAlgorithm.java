@@ -4,6 +4,6 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 
-public abstract class NumberAlgorithm extends Algorithm<Task<NumberSolution<Double>,DoubleProblem>, NumberSolution<Double>> {
+public abstract class NumberAlgorithm extends Algorithm<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem> {
     
 }

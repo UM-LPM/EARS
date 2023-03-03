@@ -38,7 +38,7 @@ import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
-public class DEMO<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class DEMO<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     ParetoSolution<N> population;
     ParetoSolution<N> offspringPopulation;

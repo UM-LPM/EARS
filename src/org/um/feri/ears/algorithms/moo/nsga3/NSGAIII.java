@@ -36,7 +36,7 @@ import org.um.feri.ears.util.Ranking;
  * Solving problems with box constraints.
  * Evolutionary Computation, IEEE Transactions on, 18(4), 577-601.
  */
-public class NSGAIII<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class NSGAIII<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     int populationSize = 100;
 

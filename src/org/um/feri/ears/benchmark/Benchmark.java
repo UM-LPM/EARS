@@ -12,7 +12,8 @@ import org.um.feri.ears.util.Util;
 
 import java.util.*;
 
-public abstract class Benchmark<S extends Solution, P extends Problem<S>, T extends TaskBase<P>, A extends Algorithm<T,S>> extends BenchmarkBase<T, S, A> {
+
+public abstract class Benchmark<R extends Solution, S extends Solution, P extends Problem<S>, A extends Algorithm<R, S, P>> extends BenchmarkBase<R, S, P, A> {
 
     protected abstract void addTask(P problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations);
 
@@ -35,8 +36,8 @@ public abstract class Benchmark<S extends Solution, P extends Problem<S>, T exte
             freeForAllTeams.put(player.getId(),team);
         }
 
-        AlgorithmRunResult<S, A, T> result1;
-        AlgorithmRunResult<S, A, T> result2;
+        AlgorithmRunResult<R, S, P, A> result1;
+        AlgorithmRunResult<R, S, P, A> result2;
         Team team1, team2;
         String algorithm1Id, algorithm2Id;
 
@@ -52,9 +53,9 @@ public abstract class Benchmark<S extends Solution, P extends Problem<S>, T exte
             if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM)
                 evaluationNumber = n * evaluationsPerTick;
 
-            for (HashMap<T, ArrayList<AlgorithmRunResult<S, A, T>>> problemMap : benchmarkResults.getResultsByRun()) {
-                for (ArrayList<AlgorithmRunResult<S, A, T>> results : problemMap.values()) {
-                    T t = results.get(0).task;
+            for (HashMap<Task, ArrayList<AlgorithmRunResult<R, S, P, A>>> problemMap : benchmarkResults.getResultsByRun()) {
+                for (ArrayList<AlgorithmRunResult<R, S, P, A>> results : problemMap.values()) {
+                    Task t = results.get(0).task;
 
                     AlgorithmResultComparator rc = new AlgorithmResultComparator(t, evaluationNumber);
                     results.sort(rc); // best first
@@ -142,7 +143,7 @@ public abstract class Benchmark<S extends Solution, P extends Problem<S>, T exte
         tournamentResults.calculateRatings();
     }
 
-    public boolean resultEqual(AlgorithmRunResult<S, A, T> a, AlgorithmRunResult<S, A, T> b) {
+    public boolean resultEqual(AlgorithmRunResult<R, S, P, A> a, AlgorithmRunResult<R, S, P, A> b) {
         if ((a == null) && (b == null))
             return true;
         if (a == null)

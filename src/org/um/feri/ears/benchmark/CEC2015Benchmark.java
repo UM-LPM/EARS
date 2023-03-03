@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 
-public class CEC2015Benchmark extends Benchmark<NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>, NumberAlgorithm> {
+public class CEC2015Benchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     protected boolean calculateTime = false;
     protected int warmupIterations = 10000;
     private double optimumEpsilon = 0.000001;

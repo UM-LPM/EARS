@@ -7,7 +7,7 @@ import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BIOMABenchmark extends MOBenchmark<Double, NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>> {
+public class BIOMABenchmark extends MOBenchmark<Double> {
 
     public BIOMABenchmark() {
         this(null, 0.0000001, true);
@@ -28,7 +28,7 @@ public class BIOMABenchmark extends MOBenchmark<Double, NumberSolution<Double>, 
     }
 
     @Override
-    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, DoubleProblem problem) {
+    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, NumberProblem<Double> problem) {
         tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 

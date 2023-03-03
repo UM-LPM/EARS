@@ -6,7 +6,7 @@ import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.*;
 
-public class D_PESAII extends PESAII<Double, DoubleProblem, Task<NumberSolution<Double>,DoubleProblem>> {
+public class D_PESAII extends PESAII<Double, NumberProblem<Double>> {
 	
 	public D_PESAII() {
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0), 100, 100);
@@ -20,7 +20,7 @@ public class D_PESAII extends PESAII<Double, DoubleProblem, Task<NumberSolution<
 		this(new SBXCrossover(0.9, 20.0), new PolynomialMutation(1.0 / 10, 20.0), populationSize, archiveSize);
 	}
 
-	public D_PESAII(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize, int archiveSize) {
+	public D_PESAII(CrossoverOperator<NumberProblem<Double>, NumberSolution<Double>> crossover, MutationOperator<NumberProblem<Double>, NumberSolution<Double>> mutation, int populationSize, int archiveSize) {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 

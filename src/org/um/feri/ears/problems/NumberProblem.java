@@ -22,7 +22,7 @@ public abstract class NumberProblem<N extends Number> extends Problem<NumberSolu
 
         this.numberOfDimensions = numberOfDimensions;
 
-                decisionSpaceOptima = new double[numberOfGlobalOptima][numberOfDimensions];
+        decisionSpaceOptima = new double[numberOfGlobalOptima][numberOfDimensions];
         Arrays.fill(decisionSpaceOptima[0], 0); // default global optimum is at [0, 0, ...., 0, 0]
     }
 

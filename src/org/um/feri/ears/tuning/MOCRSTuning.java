@@ -417,7 +417,7 @@ public class MOCRSTuning<N extends Number> {
 
                     for (Future<AlgorithmRunResult> future : set) {
 
-                        AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<Task<NumberSolution<N>, NumberProblem<N>>, Double>, Task<NumberSolution<N>, NumberProblem<N>>> res = future.get();
+                        AlgorithmRunResult<ParetoSolution<Double>, NumberSolution<Double>, NumberProblem<Double>, MOAlgorithm<Double, NumberSolution<Double>, NumberProblem<Double>>> res = future.get();
                         sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.solution, defaultObject, res.task));
                     }
 
@@ -451,7 +451,7 @@ public class MOCRSTuning<N extends Number> {
 
                 //Order results by tasks
                 for (Task<NumberSolution<N>, NumberProblem<N>> task : tasks) {
-                    for (AlgorithmRunResult<ParetoSolution<Double>, MOAlgorithm<Task<NumberSolution<N>, NumberProblem<N>>, Double>, Task<NumberSolution<N>, NumberProblem<N>>> res : futureResults) {
+                    for (AlgorithmRunResult<ParetoSolution<Double>, NumberSolution<Double>, NumberProblem<Double>, MOAlgorithm<Double, NumberSolution<Double>, NumberProblem<Double>>> res : futureResults) {
                         if (task.getProblemName().equals(res.task.getProblemName())) {
                             sol.allGamesPlayed.add(new MOAlgorithmEvalResult(res.solution, defaultObject, res.task));
                             break;

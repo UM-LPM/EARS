@@ -24,7 +24,7 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
-public class MOEAD_STM<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOEAD_DRA<N, P, T> {
+public class MOEAD_STM<N extends Number, P extends NumberProblem<N>> extends MOEAD_DRA<N, P> {
 
     // nadir point
     protected double[] nadirPoint;

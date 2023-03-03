@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class MOBenchmark<N extends Number, S extends Solution, P extends NumberProblem<N>, T extends TaskBase<P>> extends BenchmarkBase<T, ParetoSolution<N>, MOAlgorithm<T, N>> {
+public abstract class MOBenchmark<N extends Number> extends BenchmarkBase<ParetoSolution<N>, NumberSolution<N>, NumberProblem<N>, MOAlgorithm<N, NumberSolution<N>, NumberProblem<N>>> {
 
     protected List<IndicatorName> indicators;
     private double[] indicatorWeights;
@@ -52,7 +52,7 @@ public abstract class MOBenchmark<N extends Number, S extends Solution, P extend
         return false;
     }
 
-    protected abstract void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, P problem);
+    protected abstract void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, NumberProblem<N> problem);
 
     protected IndicatorName getRandomIndicator() {
         if (indicatorWeights != null) {
@@ -68,11 +68,11 @@ public abstract class MOBenchmark<N extends Number, S extends Solution, P extend
     @Override
     protected void performTournament(int evaluationNumber) {
 
-        for (HashMap<T, ArrayList<AlgorithmRunResult<ParetoSolution<N>, MOAlgorithm<T, N>, T>>> problemMap : benchmarkResults.getResultsByRun()) {
-            for (ArrayList<AlgorithmRunResult<ParetoSolution<N>, MOAlgorithm<T, N>, T>> results : problemMap.values()) {
-                T t = results.get(0).task;
-                AlgorithmRunResult<ParetoSolution<N>, MOAlgorithm<T, N>, T> first;
-                AlgorithmRunResult<ParetoSolution<N>, MOAlgorithm<T, N>, T> second;
+        for (HashMap<Task, ArrayList<AlgorithmRunResult<ParetoSolution<N>, NumberSolution<N>, NumberProblem<N>, MOAlgorithm<N, NumberSolution<N>, NumberProblem<N>>>>> problemMap : benchmarkResults.getResultsByRun()) {
+            for (ArrayList<AlgorithmRunResult<ParetoSolution<N>, NumberSolution<N>, NumberProblem<N>, MOAlgorithm<N, NumberSolution<N>, NumberProblem<N>>>> results : problemMap.values()) {
+                Task<NumberSolution<N>, NumberProblem<N>> t = results.get(0).task;
+                AlgorithmRunResult<ParetoSolution<N>, NumberSolution<N>, NumberProblem<N>, MOAlgorithm<N, NumberSolution<N>, NumberProblem<N>>> first;
+                AlgorithmRunResult<ParetoSolution<N>, NumberSolution<N>, NumberProblem<N>, MOAlgorithm<N, NumberSolution<N>, NumberProblem<N>>> second;
                 QualityIndicator<N> qi;
 
                 if (randomIndicator) {
@@ -103,8 +103,8 @@ public abstract class MOBenchmark<N extends Number, S extends Solution, P extend
                     }
                 } else {
                     for (IndicatorName indicatorName : indicators) {
-                        QualityIndicatorComparator<N, T, S, P> qic;
-                        qi = IndicatorFactory.<N>createIndicator(indicatorName, t.problem.getNumberOfObjectives(), t.problem.getReferenceSetFileName());
+                        QualityIndicatorComparator<N, NumberProblem<N>> qic;
+                        qi = IndicatorFactory.createIndicator(indicatorName, t.problem.getNumberOfObjectives(), t.problem.getReferenceSetFileName());
                         qic = new QualityIndicatorComparator<>(t.problem, qi);
                         results.sort(qic); //best first
                         for (int i = 0; i < results.size() - 1; i++) {

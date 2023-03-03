@@ -16,7 +16,7 @@ import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem8
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem9;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 
-public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>> {
+public class IndicatorEnsembleBenchmark extends MOBenchmark<Double> {
 
     public IndicatorEnsembleBenchmark() {
         this(null, 0.0000001);
@@ -41,7 +41,7 @@ public class IndicatorEnsembleBenchmark extends MOBenchmark<Double, NumberSoluti
     }
 
     @Override
-    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, DoubleProblem problem) {
+    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, NumberProblem<Double> problem) {
         tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 

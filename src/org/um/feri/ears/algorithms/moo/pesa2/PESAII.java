@@ -16,7 +16,7 @@ import org.um.feri.ears.operators.PESA2Selection;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public class PESAII<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class PESAII<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     int populationSize = 100;
     int archiveSize = 100;

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.visualization.graphing.data.RecordedCombination;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
 import org.um.feri.ears.problems.Solution;
-import org.um.feri.ears.problems.TaskBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 
@@ -27,7 +27,7 @@ public class GraphDataRecorder {
         dataByThread = new Hashtable<Long, RecorderContext>();
     }
 
-    public static void SetContext(Algorithm alg, TaskBase task) {
+    public static void SetContext(Algorithm alg, Task task) {
         // Safety switch:
         if (!enabled)
             return;

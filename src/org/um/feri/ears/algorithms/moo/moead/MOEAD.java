@@ -37,7 +37,7 @@ import static java.util.Arrays.asList;
  * Computation, 2009.
  * </ol>
  */
-public class MOEAD<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     List<Integer> twoDimfiles = asList(100, 300, 400, 500, 600, 800, 1000);
     List<Integer> threeDimfiles = asList(500, 600, 800, 1000, 1200);

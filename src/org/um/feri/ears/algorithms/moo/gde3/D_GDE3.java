@@ -8,7 +8,7 @@ import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.operators.SBXCrossover;
 import org.um.feri.ears.problems.*;
 
-public class D_GDE3 extends GDE3<Double, DoubleProblem, Task<NumberSolution<Double>,DoubleProblem>> {
+public class D_GDE3 extends GDE3<Double, NumberProblem<Double>> {
 	
 	public D_GDE3() {
 		this(new DifferentialEvolutionCrossover(), 100);
@@ -18,7 +18,7 @@ public class D_GDE3 extends GDE3<Double, DoubleProblem, Task<NumberSolution<Doub
 		this(new DifferentialEvolutionCrossover(), populationSize);
 	}
 
-	public D_GDE3(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, int populationSize) {
+	public D_GDE3(CrossoverOperator<NumberProblem<Double>, NumberSolution<Double>> crossover, int populationSize) {
 		super(crossover, populationSize);
 	}
 	

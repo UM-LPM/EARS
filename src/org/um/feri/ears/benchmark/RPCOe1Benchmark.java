@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.constrained.*;
 
-public class RPCOe1Benchmark extends Benchmark<NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>, NumberAlgorithm> {
+public class RPCOe1Benchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     public RPCOe1Benchmark() {
         super();
         name = "Solving Real parameter Constrained Optimization with maximum evaluation condition";

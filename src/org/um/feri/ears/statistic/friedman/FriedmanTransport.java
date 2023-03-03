@@ -1,12 +1,14 @@
 package org.um.feri.ears.statistic.friedman;
 
+import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.TaskBase;
+import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.MeanStDev;
 
 import java.util.ArrayList;
@@ -33,17 +35,17 @@ public class FriedmanTransport {
     }
 
     //allSingleProblemRunResults.add(task, result, algorithm);
-    //Hashtable<AlgorithmBase, Hashtable<TaskBase, ArrayList<Double>>> all
-    public static FriedmanTransport calc4Friedman(Hashtable<NumberAlgorithm, Hashtable<TaskBase, ArrayList<AlgorithmRunResult<NumberSolution<Double>, NumberAlgorithm, Task<NumberSolution<Double>, DoubleProblem>>>>> all) {
+    //Hashtable<AlgorithmBase, Hashtable<Task, ArrayList<Double>>> all
+    public static FriedmanTransport calc4Friedman(Hashtable<NumberAlgorithm, Hashtable<Task, ArrayList<AlgorithmRunResult<ParetoSolution<Double>, NumberSolution<Double>, NumberProblem<Double>, MOAlgorithm<Double, NumberSolution<Double>, NumberProblem<Double>>>>>> all) {
         //FriedmanTransport
         double[][] mean;
         Vector<String> algorithms = new Vector<String>();
         Vector<String> datasets = new Vector<String>();
         StringBuffer sb = new StringBuffer();
         ArrayList<Algorithm> tmp = new ArrayList<>(all.keySet());
-        ArrayList<TaskBase> tmpProblem; // = new ArrayList(all.keySet());
-        Hashtable<TaskBase, ArrayList<AlgorithmRunResult<NumberSolution<Double>, NumberAlgorithm, Task<NumberSolution<Double>, DoubleProblem>>>> algorithmHm;
-        ArrayList<AlgorithmRunResult<NumberSolution<Double>, NumberAlgorithm, Task<NumberSolution<Double>, DoubleProblem>>> algorithmRunResults;
+        ArrayList<Task> tmpProblem; // = new ArrayList(all.keySet());
+        Hashtable<Task, ArrayList<AlgorithmRunResult<ParetoSolution<Double>, NumberSolution<Double>, NumberProblem<Double>, MOAlgorithm<Double, NumberSolution<Double>, NumberProblem<Double>>>>> algorithmHm;
+        ArrayList<AlgorithmRunResult<ParetoSolution<Double>, NumberSolution<Double>, NumberProblem<Double>, MOAlgorithm<Double, NumberSolution<Double>, NumberProblem<Double>>>> algorithmRunResults;
         MeanStDev std;
         mean = null;
 
@@ -56,7 +58,7 @@ public class FriedmanTransport {
             tmpProblem = new ArrayList<>(algorithmHm.keySet());
             //mean[i] = new double[tmpProblem.size()];
             j = -1;
-            for (TaskBase p : tmpProblem) {
+            for (Task p : tmpProblem) {
                 j++;
                 if (i == 0) {
                     if (j == 0) {
@@ -70,7 +72,7 @@ public class FriedmanTransport {
                 }
                 algorithmRunResults = algorithmHm.get(p);
                 ArrayList<Double> results = new ArrayList<>();
-                for(AlgorithmRunResult<NumberSolution<Double>, NumberAlgorithm, Task<NumberSolution<Double>, DoubleProblem>> res: algorithmRunResults)
+                for(AlgorithmRunResult<ParetoSolution<Double>, NumberSolution<Double>, NumberProblem<Double>, MOAlgorithm<Double, NumberSolution<Double>, NumberProblem<Double>>> res: algorithmRunResults)
                     results.add(res.solution.getEval());
                 std = new MeanStDev(results);
                 sb.append(a.getId()).append('\t').append(p.getProblemName());

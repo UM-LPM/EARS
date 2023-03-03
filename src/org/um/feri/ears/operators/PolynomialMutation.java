@@ -8,12 +8,13 @@
 package org.um.feri.ears.operators;
 
 import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 
-public class PolynomialMutation implements MutationOperator<DoubleProblem, NumberSolution<Double>>{
+public class PolynomialMutation implements MutationOperator<NumberProblem<Double>, NumberSolution<Double>>{
 	
 	
 	private static final double ETA_M_DEFAULT_ = 20.0;
@@ -28,7 +29,7 @@ public class PolynomialMutation implements MutationOperator<DoubleProblem, Numbe
 		this.distributionIndex = distributionIndex;
 	}
 
-	public void doMutation(double probability, NumberSolution<Double> solution, DoubleProblem problem) {
+	public void doMutation(double probability, NumberSolution<Double> solution, NumberProblem<Double> problem) {
 		double rnd, delta1, delta2, mut_pow, deltaq;
 		double y, yl, yu, val, xy;
 		for (int var = 0; var < problem.getNumberOfDimensions(); var++) {
@@ -59,7 +60,7 @@ public class PolynomialMutation implements MutationOperator<DoubleProblem, Numbe
 		}
 	}
 
-	public NumberSolution<Double> execute(NumberSolution<Double> object, DoubleProblem problem) {
+	public NumberSolution<Double> execute(NumberSolution<Double> object, NumberProblem<Double> problem) {
 
 		NumberSolution<Double> solution = object;
 		doMutation(mutationProbability, solution, problem);

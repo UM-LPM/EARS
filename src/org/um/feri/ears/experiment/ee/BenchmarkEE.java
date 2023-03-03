@@ -11,7 +11,7 @@ import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 
-public class BenchmarkEE extends Benchmark<NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>, NumberAlgorithm> {
+public class BenchmarkEE extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     int dim;
 
     public BenchmarkEE() {

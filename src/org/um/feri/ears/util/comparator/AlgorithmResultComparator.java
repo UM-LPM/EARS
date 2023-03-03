@@ -7,19 +7,19 @@ import org.um.feri.ears.problems.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class AlgorithmResultComparator<S extends Solution, P extends Problem<S>, T extends TaskBase<P>, A extends Algorithm<T,S>> implements Comparator<AlgorithmRunResult<S, A, T>> {
-    ProblemComparator<S> pc;
-    T task;
+public class AlgorithmResultComparator<R extends Solution, S extends Solution, P extends Problem<S>, A extends Algorithm<R, S, P>> implements Comparator<AlgorithmRunResult<R, S, P, A>> {
+    ProblemComparator<R> pc;
+    Task task;
     int evaluationNumber;
 
-    public AlgorithmResultComparator(T task, int evaluationNumber) {
+    public AlgorithmResultComparator(Task task, int evaluationNumber) {
         this.task = task;
         pc = new ProblemComparator<>(task.problem);
         this.evaluationNumber = evaluationNumber;
     }
 
     @Override
-    public int compare(AlgorithmRunResult<S, A, T> r1, AlgorithmRunResult<S, A, T> r2) {
+    public int compare(AlgorithmRunResult<R, S, P, A> r1, AlgorithmRunResult<R, S, P, A> r2) {
 
         if (evaluationNumber == -1) {
 
@@ -36,9 +36,9 @@ public class AlgorithmResultComparator<S extends Solution, P extends Problem<S>,
 
             for (int i = 0; i < r1EvaluationHistory.size(); i++) {
                 if(r1EvaluationHistory.get(i).evalNum == evaluationNumber) {
-                    S r1Solution = (S) new NumberSolution(1);
+                    R r1Solution = (R) new NumberSolution(1);
                     r1Solution.setObjective(0, r1EvaluationHistory.get(i).fitness);
-                    S r2Solution = (S) new NumberSolution(1);
+                    R r2Solution = (R) new NumberSolution(1);
                     r2Solution.setObjective(0, r2EvaluationHistory.get(i).fitness);
                     return pc.compare(r1Solution, r2Solution);
                 }

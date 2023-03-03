@@ -1,9 +1,10 @@
 package org.um.feri.ears.algorithms;
 
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.TaskBase;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.annotation.AnnotationUtil;
 
@@ -11,9 +12,9 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-public abstract class Algorithm<T extends TaskBase, S extends Solution> {
+public abstract class Algorithm<R extends Solution, S extends Solution, P extends Problem<S>> {
 
-    protected T task;
+    protected Task<S, P> task;
 
     protected boolean debug;
     protected boolean displayData = false;
@@ -38,11 +39,11 @@ public abstract class Algorithm<T extends TaskBase, S extends Solution> {
      * @param task      to be executed
      * @return callable object
      */
-    public Callable<AlgorithmRunResult> createRunnable(final Algorithm<T, S> algorithm, final T task) {
+    public Callable<AlgorithmRunResult> createRunnable(final Algorithm<R, S, P> algorithm, final Task<S, P> task) {
 
         return () -> {
             long duration = System.nanoTime();
-            S res = execute(task);
+            R res = execute(task);
             duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - duration);
             algorithm.addRunDuration(duration, duration - task.getEvaluationTimeMs());
             AlgorithmRunResult future = new AlgorithmRunResult(res, algorithm, task);
@@ -108,7 +109,7 @@ public abstract class Algorithm<T extends TaskBase, S extends Solution> {
      * @return best found solution
      * @throws StopCriterionException if the stopping criterion is violated
      */
-    public abstract S execute(T task) throws StopCriterionException;
+    public abstract R execute(Task<S, P> task) throws StopCriterionException;
 
     /**
      * Returns a filename safe string which contains the algorithm acronym and version
@@ -176,7 +177,7 @@ public abstract class Algorithm<T extends TaskBase, S extends Solution> {
         return ai.getAcronym();
     }
 
-    public Algorithm<T, S> setId(String id) {
+    public Algorithm<R, S, P> setId(String id) {
         ai.setAcronym(id);
         return this;
     }

@@ -7,7 +7,7 @@ import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CITOBenchmark extends MOBenchmark<Integer, NumberSolution<Integer>, CombinatorialProblem, Task<NumberSolution<Integer>, CombinatorialProblem>> {
+public class CITOBenchmark extends MOBenchmark<Integer> {
 
     public CITOBenchmark() {
         this(null, 0.0000001, true);
@@ -25,7 +25,7 @@ public class CITOBenchmark extends MOBenchmark<Integer, NumberSolution<Integer>,
     }
 
     @Override
-    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, CombinatorialProblem problem) {
+    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, NumberProblem<Integer> problem) {
         tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 

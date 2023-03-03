@@ -6,7 +6,7 @@ import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
 import org.um.feri.ears.problems.*;
 
-public class I_MOEAD_DRA extends MOEAD_DRA<Integer, CombinatorialProblem, Task<NumberSolution<Integer>, CombinatorialProblem>> {
+public class I_MOEAD_DRA extends MOEAD_DRA<Integer, NumberProblem<Integer>> {
 	
 	public I_MOEAD_DRA() {
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), 100);
@@ -16,7 +16,7 @@ public class I_MOEAD_DRA extends MOEAD_DRA<Integer, CombinatorialProblem, Task<N
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), populationSize);
 	}
 
-	public I_MOEAD_DRA(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize) {
+	public I_MOEAD_DRA(CrossoverOperator<NumberProblem<Integer>, NumberSolution<Integer>> crossover, MutationOperator<NumberProblem<Integer>, NumberSolution<Integer>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 	

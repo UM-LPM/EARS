@@ -6,7 +6,7 @@ import org.um.feri.ears.memory.TaskWithMemory;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.*;
 
-public class RPUOed30MemoryBenchmark extends Benchmark<NumberSolution<Double>, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>, NumberAlgorithm> {
+public class RPUOed30MemoryBenchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     int precision;
     int maxHits;
 

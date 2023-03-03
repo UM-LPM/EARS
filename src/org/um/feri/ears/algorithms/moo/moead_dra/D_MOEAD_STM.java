@@ -6,7 +6,7 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PolynomialMutation;
 import org.um.feri.ears.problems.*;
 
-public class D_MOEAD_STM extends MOEAD_STM<Double, DoubleProblem, Task<NumberSolution<Double>, DoubleProblem>> {
+public class D_MOEAD_STM extends MOEAD_STM<Double, NumberProblem<Double>> {
 	
 	public D_MOEAD_STM() {
 		this(new DifferentialEvolutionCrossover(), new PolynomialMutation(1.0 / 10, 20.0), 100);
@@ -16,7 +16,7 @@ public class D_MOEAD_STM extends MOEAD_STM<Double, DoubleProblem, Task<NumberSol
 		this(new DifferentialEvolutionCrossover(), new PolynomialMutation(1.0 / 10, 20.0), populationSize);
 	}
 
-	public D_MOEAD_STM(CrossoverOperator<DoubleProblem, NumberSolution<Double>> crossover, MutationOperator<DoubleProblem, NumberSolution<Double>> mutation, int populationSize) {
+	public D_MOEAD_STM(CrossoverOperator<NumberProblem<Double>, NumberSolution<Double>> crossover, MutationOperator<NumberProblem<Double>, NumberSolution<Double>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 

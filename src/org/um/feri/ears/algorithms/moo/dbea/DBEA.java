@@ -69,7 +69,7 @@ import org.um.feri.ears.util.Util;
  *       Matlab-DBEA.rar</a>
  * </ol>
  */
-public class DBEA<N extends Number, P extends Problem<NumberSolution<N>>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class DBEA<N extends Number, P extends Problem<NumberSolution<N>>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     int populationSize;
 

@@ -8,7 +8,7 @@ import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.cec2010.*;
 
-public class SymbolicRegressionBenchmark extends Benchmark<ProgramSolution<Double>, ProgramProblem<Double>, Task<ProgramSolution<Double>, ProgramProblem<Double>>, GPAlgorithm> {
+public class SymbolicRegressionBenchmark extends Benchmark<ProgramSolution<Double>, ProgramSolution<Double>, ProgramProblem<Double>, GPAlgorithm> {
     protected int dimension = 1000; //recommended
 
     public SymbolicRegressionBenchmark() {

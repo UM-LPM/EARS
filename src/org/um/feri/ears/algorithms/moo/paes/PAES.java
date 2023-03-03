@@ -15,7 +15,7 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
-public class PAES<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class PAES<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     AdaptiveGridArchive<N> archive;
     int archiveSize = 100;

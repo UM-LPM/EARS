@@ -5,10 +5,11 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
 import org.um.feri.ears.problems.CombinatorialProblem;
+import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 
-public class I_PESA2 extends PESA2<Integer, CombinatorialProblem, Task<NumberSolution<Integer>, CombinatorialProblem>> {
+public class I_PESA2 extends PESA2<Integer, NumberProblem<Integer>> {
 	
 	public I_PESA2() {
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), 100);
@@ -18,7 +19,7 @@ public class I_PESA2 extends PESA2<Integer, CombinatorialProblem, Task<NumberSol
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), populationSize);
 	}
 
-	public I_PESA2(CrossoverOperator<CombinatorialProblem, NumberSolution<Integer>> crossover, MutationOperator<CombinatorialProblem, NumberSolution<Integer>> mutation, int populationSize) {
+	public I_PESA2(CrossoverOperator<NumberProblem<Integer>, NumberSolution<Integer>> crossover, MutationOperator<NumberProblem<Integer>, NumberSolution<Integer>> mutation, int populationSize) {
 		super(crossover, mutation, populationSize);
 	}
 	

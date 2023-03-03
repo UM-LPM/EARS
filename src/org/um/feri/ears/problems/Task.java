@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Task<S extends Solution, P extends Problem<S>> extends TaskBase<P> {
+public class Task<S extends Solution, P extends Problem<S>> {
 
-    //public P problem;
+    public P problem;
     protected S bestSolution;
     protected StopCriterion stopCriterion;
     protected int maxEvaluations;

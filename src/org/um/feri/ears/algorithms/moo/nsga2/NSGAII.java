@@ -29,7 +29,7 @@ import org.um.feri.ears.util.Ranking;
  * "A Study of Convergence Speed in Multi-Objective Metaheuristics."
  * To be presented in: PPSN'08. Dortmund. September 2008.
  */
-public class NSGAII<N extends Number, P extends NumberProblem<N>, T extends Task<NumberSolution<N>,P>> extends MOAlgorithm<T, N> {
+public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     int populationSize = 100;
 
