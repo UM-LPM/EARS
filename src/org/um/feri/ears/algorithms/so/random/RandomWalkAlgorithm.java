@@ -8,7 +8,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
-public class RandomWalkAlgorithm extends NumberAlgorithm { // needs to extend Algorithm
+public class RandomWalkAlgorithm extends NumberAlgorithm { // needs to extend NumberAlgorithm
     private NumberSolution<Double> best; // used to save global best solution
 
     public RandomWalkAlgorithm() {

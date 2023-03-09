@@ -1,19 +1,15 @@
-package org.um.feri.ears.problems.gp;
+package org.um.feri.ears.examples;
 
-import org.um.feri.ears.algorithms.NumberAlgorithm;
-import org.um.feri.ears.algorithms.so.abc.ABC;
-import org.um.feri.ears.algorithms.so.jade.JADE;
-import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
-import org.um.feri.ears.benchmark.RPUOed30Benchmark;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.algorithms.GPAlgorithm;
+import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
+import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
+import org.um.feri.ears.benchmark.SymbolicRegressionBenchmark;
+import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Util;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Main {
+public class GeneticProgrammingExample {
     public static void main(String[] args) throws IOException {
 
         //Test TreeNode individual generator

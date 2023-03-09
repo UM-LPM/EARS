@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.cec2010.*;
 
-public class CEC2010Benchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
+public class CEC2010Benchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     protected int dimension = 1000; //recommended
 
     public CEC2010Benchmark() {

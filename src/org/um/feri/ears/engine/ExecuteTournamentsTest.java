@@ -7,7 +7,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.DummyBenchmark;
-import org.um.feri.ears.benchmark.BenchmarkBase;
+import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Util;
 
@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -581,7 +580,7 @@ public class ExecuteTournamentsTest {
         try {
             Class<?> clazz = Class.forName(BENCHMARK_PACKAGE + "." + benchmarkName);
             Object benchmark = clazz.newInstance();
-            numberOfRuns = ((BenchmarkBase) benchmark).getNumberOfRuns();
+            numberOfRuns = ((Benchmark) benchmark).getNumberOfRuns();
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Exception creating class from name: " + BENCHMARK_PACKAGE + "." + benchmarkName, e);
@@ -592,8 +591,8 @@ public class ExecuteTournamentsTest {
         ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
         DummyBenchmark dr = new DummyBenchmark(0.000001); //Create benchmark
         dr.setDisplayRatingCharts(false);
-        dr.setRatingCalculation(BenchmarkBase.RatingCalculation.NORMAL);
-        BenchmarkBase.printInfo = false;
+        dr.setRatingCalculation(Benchmark.RatingCalculation.NORMAL);
+        Benchmark.printInfo = false;
 
         //parse algorithm and problem names
         String algorithmName, problemName, fileName;

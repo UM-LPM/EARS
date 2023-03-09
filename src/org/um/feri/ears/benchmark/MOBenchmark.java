@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class MOBenchmark<N extends Number> extends BenchmarkBase<ParetoSolution<N>, NumberSolution<N>, NumberProblem<N>, MOAlgorithm<N, NumberSolution<N>, NumberProblem<N>>> {
+public abstract class MOBenchmark<N extends Number> extends Benchmark<ParetoSolution<N>, NumberSolution<N>, NumberProblem<N>, MOAlgorithm<N, NumberSolution<N>, NumberProblem<N>>> {
 
     protected List<IndicatorName> indicators;
     private double[] indicatorWeights;

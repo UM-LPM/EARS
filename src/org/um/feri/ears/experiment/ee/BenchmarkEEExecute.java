@@ -9,6 +9,7 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class BenchmarkEEExecute {
     	ArrayList<NumberAlgorithm> players = new ArrayList<NumberAlgorithm>();
 
     	players.add(new RandomWalkAlgorithm());  
-    	players.add(new RandomWalkAMAlgorithm())  ;  
+    	players.add(new RandomWalkAMAlgorithm());
     	players.add(new ES1p1sAlgorithm());  
     	players.add(new TLBOAlgorithm());  
     	players.add(new JADE());

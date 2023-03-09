@@ -14,7 +14,7 @@ public class BenchmarkRunnerBestAlgSettings extends BenchmarkRunner {
     public static final int MAX_PARAM_TEST = 8;
     private ArrayList<NumberAlgorithm> algorithmsWithBestSettings;
 
-    public BenchmarkRunnerBestAlgSettings(boolean printDebug, boolean printSingleRunDuration, Benchmark banchmark) {
+    public BenchmarkRunnerBestAlgSettings(boolean printDebug, boolean printSingleRunDuration, SOBenchmark banchmark) {
         super(printDebug, printSingleRunDuration, banchmark);
         algorithmsWithBestSettings = new ArrayList<>();
     }

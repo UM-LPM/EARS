@@ -3,15 +3,12 @@ package org.um.feri.ears.examples;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.gde3.D_GDE3;
 import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_DRA;
-import org.um.feri.ears.algorithms.moo.moead_dra.MOEAD_DRA;
 import org.um.feri.ears.algorithms.moo.nsga2.D_NSGAII;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.CEC2009Benchmark;
-import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Util;
 

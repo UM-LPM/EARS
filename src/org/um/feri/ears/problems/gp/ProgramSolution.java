@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgramSolution<T> extends Solution {
-    protected TreeNode<T> program; //Solution
-    protected double eval; //SolutionFitness
+    protected TreeNode<T> program;
 
     public List<ProgramSolution<T>> parents;
 
@@ -17,8 +16,6 @@ public class ProgramSolution<T> extends Solution {
 
     public ProgramSolution(ProgramSolution<T> s) {
         super(s);
-
-        eval = s.eval;
         program = s.program;
         parents = new ArrayList<>();
     }
@@ -32,16 +29,7 @@ public class ProgramSolution<T> extends Solution {
         this.program = program;
     }
 
-    public void setEval(double eval) {
-        this.eval = eval;
-    }
-
     public TreeNode<T> getProgram() {
         return program;
     }
-
-    public double getEval() {
-        return eval;
-    }
-
 }

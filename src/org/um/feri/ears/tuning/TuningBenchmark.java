@@ -1,13 +1,13 @@
 package org.um.feri.ears.tuning;
 
 import org.um.feri.ears.algorithms.NumberAlgorithm;
-import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.*;
 
 import java.util.Vector;
 
-public class TuningBenchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
+public class TuningBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
 
     protected int evaluationsOnDimension = 10000;
     protected int dimension = 10;

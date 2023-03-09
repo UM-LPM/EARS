@@ -45,42 +45,43 @@ dependencies {
 
 ## Tips
 
-* If you have a special representation for your solution create your own by extending the `DoubleSolution` class in EARS:
-`class MySolution extends DoubleSolution`.
+* If you have a particular representation for your solution, create your own by extending the `Solution` class in EARS:
+`class MySolution extends Solution`.
 * Code examples can be found in the package `org.um.feri.ears.examples`.
-* All information of the given problem (dimensions, constraints, bounds, etc...) can be obtained from the Task object: `public Individual run(Task task)`.
-* Before every evaluation check if the stopping criterion is reached by calling `task.isStopCriterion()`. If evaluate is called after the stopping criterion is reached, a `StopCriterionException` will be thrown.
+* All information about the given problem (dimensions, constraints, bounds, etc...) can be obtained from the `Problem` object which is accessible from the `Task` object (e. g. `task.problem.getLowerLimit()`).
+* Before every evaluation, check if the stopping criterion is reached by calling `task.isStopCriterion()`. If evaluate is called after the stopping criterion is reached, a `StopCriterionException` will be thrown.
 
 ## Examples
 
 Implementing a custom algorithm by extending the `Algorithm` class:
 ```java
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.NumberAlgorithm;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
-public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorithm
-    private DoubleSolution best; // used to save global best solution
+public class RandomWalkAlgorithm extends NumberAlgorithm { // needs to extend NumberAlgorithm
+    private NumberSolution<Double> best; // used to save global best solution
 
     public RandomWalkAlgorithm() {
-        ai = new AlgorithmInfo("RWSi", "Random Walk Simple", ""); // add algorithm name
-        au = new Author("Matej", "matej.crepinsek at um.si"); // add author information
+        ai = new AlgorithmInfo("RW", "Random Walk", "");
+        au = new Author("Matej", "matej.crepinsek@um.si");
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException { // method which executes the algorithm
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException { // method which executes the algorithm
         // the task object holds information about the stopping criterion
         // and information about the problem (number of dimensions, number of constraints, upper and lower bounds...)
-        DoubleSolution newSolution;
+        NumberSolution<Double> newSolution;
         best = task.getRandomEvaluatedSolution();  // generate new random solution (number of evaluations is incremented automatically)
         // to evaluate a custom solution or an array use task.eval(mySolution)
         while (!task.isStopCriterion()) { // run until the stopping criterion is not reached
 
             newSolution = task.getRandomEvaluatedSolution();
-            if (task.isFirstBetter(newSolution, best)) { // use method isFirstBetter to check which solution is better (it checks constraints and considers the type of the problem (minimization or maximization))
+            if (task.problem.isFirstBetter(newSolution, best)) { // use method isFirstBetter to check which solution is better (it checks constraints and considers the type of the problem (minimization or maximization))
                 best = newSolution;
             }
             task.incrementNumberOfIterations(); // increase the number of generations for each iteration of the main loop
@@ -89,7 +90,8 @@ public class RandomWalkAlgorithm extends Algorithm { // needs to extend Algorith
     }
 
     @Override
-    public void resetToDefaultsBeforeNewRun() {}
+    public void resetToDefaultsBeforeNewRun() {
+    }
 }
 ```
 
@@ -105,17 +107,18 @@ import org.um.feri.ears.util.Util;
 public class SOSingleRun {
 
     public static void main(String[] args) {
+
         Util.rnd.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run
 
-        Problem problem = new Sphere(5); // problem Sphere with five dimensions
+        DoubleProblem problem = new Sphere(5); // problem Sphere with five dimensions
 
         Task sphere = new Task(problem, StopCriterion.EVALUATIONS, 10000, 0, 0); // set the stopping criterion to max 10000 evaluations
 
-        Algorithm alg = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN);
-        DoubleSolution best;
+        NumberAlgorithm alg = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN);
+        NumberSolution<Double> best;
         try {
             best = alg.execute(sphere);
-            System.out.println("Best found solution :" + best); // print the best solution found after 10000 evaluations
+            System.out.println("Best solution found = " + best); // print the best solution found after 10000 evaluations
         } catch (StopCriterionException e) {
             e.printStackTrace();
         }
@@ -141,9 +144,10 @@ public class SOBenchmarkExample {
 
     public static void main(String[] args) {
         Util.rnd.setSeed(System.currentTimeMillis()); //set the seed of the random generator
-        Benchmark.printInfo = false; //prints info about the benchmark execution
+        Benchmark.printInfo = false; //prints one on one results
         //add algorithms to a list
-        ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
+
+        ArrayList<NumberAlgorithm> algorithms = new ArrayList<NumberAlgorithm>();
         algorithms.add(new ABC());
         algorithms.add(new GWO());
         algorithms.add(new TLBOAlgorithm());
@@ -154,16 +158,16 @@ public class SOBenchmarkExample {
 
         rpuoed30.addAlgorithms(algorithms);  // register the algorithms in the benchmark
 
-        rpuoed30.run(10); //start the tournament with 10 runs/repetitions
+        rpuoed30.run(5); //start the tournament with 10 runs/repetitions
     }
 }
 ```
 
 
-To use ExpBas, user has to define ExpBas setting (see main method) and modify the implementation of their optimisation algorithm (see runDE method) accordingly:
+To use ExpBas, the user has to define ExpBas setting (see main method) and modify the implementation of their optimization algorithm (see runDE method) accordingly:
 * To check if the algorithm was in the exploration phase or not (then it is in the exploitation phase), pass reference solutions, new solution and setting to method ExpBas.isExploration(...).
-* User has to count exploration phases manually for each newly created solution (exploration is assumed for random solutions)
-* At the end user has to divide number of exploration phases with the number of evaluations to get the expbas measure
+* The user has to count exploration phases manually for each newly created solution (exploration is assumed for random solutions)
+* At the end user has to divide the number of exploration phases with the number of evaluations to get the expbas measure
 
 ```java
 import org.apache.commons.lang3.ArrayUtils;

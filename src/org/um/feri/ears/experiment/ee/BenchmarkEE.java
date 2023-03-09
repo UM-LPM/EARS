@@ -1,7 +1,7 @@
 package org.um.feri.ears.experiment.ee;
 
 import org.um.feri.ears.algorithms.NumberAlgorithm;
-import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.Ackley1;
 import org.um.feri.ears.problems.unconstrained.Griewank;
@@ -11,7 +11,7 @@ import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 
-public class BenchmarkEE extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
+public class BenchmarkEE extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     int dim;
 
     public BenchmarkEE() {

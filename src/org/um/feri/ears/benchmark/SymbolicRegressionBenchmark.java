@@ -1,14 +1,12 @@
-package org.um.feri.ears.problems.gp;
+package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.algorithms.NumberAlgorithm;
-import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.algorithms.GPAlgorithm;
+import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.unconstrained.cec2010.*;
+import org.um.feri.ears.problems.gp.*;
 
-public class SymbolicRegressionBenchmark extends Benchmark<ProgramSolution<Double>, ProgramSolution<Double>, ProgramProblem<Double>, GPAlgorithm> {
+public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution<Double>, ProgramSolution<Double>, ProgramProblem<Double>, GPAlgorithm> {
     protected int dimension = 1000; //recommended
 
     public SymbolicRegressionBenchmark() {

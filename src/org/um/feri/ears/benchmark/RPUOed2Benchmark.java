@@ -4,7 +4,7 @@ import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.*;
 
-public class RPUOed2Benchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
+public class RPUOed2Benchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     public RPUOed2Benchmark() {
         super();
         name="Real Parameter Unconstrained Optimization Problems with maximum evaluation condition";

@@ -6,7 +6,7 @@ import org.um.feri.ears.problems.unconstrained.*;
 
 import java.util.ArrayList;
 
-public class ThirtySixFunctionsBenchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
+public class ThirtySixFunctionsBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
 
     public ThirtySixFunctionsBenchmark() {
         super();

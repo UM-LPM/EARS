@@ -5,6 +5,7 @@ import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_DRA;
 import org.um.feri.ears.algorithms.moo.moead_dra.MOEAD_DRA;
 import org.um.feri.ears.algorithms.moo.nsga2.D_NSGAII;
 import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.benchmark.CEC2009Benchmark;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.GraphSet;

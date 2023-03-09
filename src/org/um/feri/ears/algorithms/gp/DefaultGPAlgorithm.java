@@ -1,13 +1,16 @@
-package org.um.feri.ears.problems.gp;
+package org.um.feri.ears.algorithms.gp;
 
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.operators.SinglePointCrossover;
 import org.um.feri.ears.operators.SingleTreeNodeMutation;
 import org.um.feri.ears.operators.TournamentSelection;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.gp.ProgramProblem;
+import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 
@@ -31,7 +34,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     private ArrayList<ProgramSolution<Double>> population;
 
     private ProblemComparator<ProgramSolution<Double>> comparator;
-    private TournamentSelection<ProgramSolution<Double>,ProgramProblem<Double>> selectionOperator;
+    private TournamentSelection<ProgramSolution<Double>, ProgramProblem<Double>> selectionOperator;
     private SinglePointCrossover<Double> singlePointCrossover;
     private SingleTreeNodeMutation<Double> singleTreeNodeMutation;
 

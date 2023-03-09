@@ -3,6 +3,7 @@ package org.um.feri.ears.tuning;
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.statistic.rating_system.GameInfo;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.comparator.RatingComparator;
@@ -29,7 +30,7 @@ public class CRSTuning {
     private boolean printDebug;
     private boolean printSingleRunDuration;
     private HashMap<String, NumberAlgorithm> algorithms;
-    protected Benchmark benchmark; // suopm = new RatingRPUOed2();
+    protected SOBenchmark benchmark; // suopm = new RatingRPUOed2();
     private long duration;
     private int noRepeats;
 
@@ -64,7 +65,7 @@ public class CRSTuning {
         }
     }
 
-    public CRSTuning(boolean printDebug, boolean printSingleRunDuration, Benchmark benchmark, int max_execs) {
+    public CRSTuning(boolean printDebug, boolean printSingleRunDuration, SOBenchmark benchmark, int max_execs) {
         Util.rnd.setSeed(System.currentTimeMillis());
         algorithms = new HashMap<>();
         this.printDebug = printDebug;

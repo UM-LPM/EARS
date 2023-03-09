@@ -8,6 +8,11 @@ import java.util.concurrent.TimeUnit;
 
 public class Task<S extends Solution, P extends Problem<S>> {
 
+    public static final class Accessor { private Accessor() {} }
+    private static final Accessor ACCESSOR_INSTANCE = new Accessor();
+
+    //add "Task.Accessor accessor" to method call
+
     public P problem;
     protected S bestSolution;
     protected StopCriterion stopCriterion;

@@ -32,7 +32,7 @@ public class SymbolicRegressionProblem extends ProgramProblem<Double>{
 
         eval = Math.sqrt((eval / evalData.size()));
 
-        solution.setEval(eval);
+        solution.setObjective(0, eval);
         //System.out.println("Current Fitness: " + eval);
     }
 

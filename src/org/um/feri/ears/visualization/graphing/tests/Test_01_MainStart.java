@@ -5,6 +5,7 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.benchmark.RPUOed2Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkRunnerBestAlgSettings;
 import org.um.feri.ears.util.Util;

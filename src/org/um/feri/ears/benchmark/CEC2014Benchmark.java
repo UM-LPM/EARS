@@ -5,7 +5,7 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.cec2014.*;
 
 
-public class CEC2014Benchmark extends Benchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
+public class CEC2014Benchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     protected int dimension;
 
     public CEC2014Benchmark() {
