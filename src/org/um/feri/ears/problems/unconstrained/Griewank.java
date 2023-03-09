@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,13 +14,12 @@ https://www.sfu.ca/~ssurjano/griewank.html
 http://benchmarkfcns.xyz/benchmarkfcns/griewankfcn.html
 */
 
-public class Griewank extends Problem {
+public class Griewank extends DoubleProblem {
 
     public Griewank(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -600.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 600.0));
-        name = "Griewank";
+        super("Griewank", d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -600.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 600.0));
     }
 
     @Override

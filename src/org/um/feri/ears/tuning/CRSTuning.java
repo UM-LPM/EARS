@@ -1,8 +1,9 @@
 package org.um.feri.ears.tuning;
 
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.statistic.rating_system.GameInfo;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.comparator.RatingComparator;
@@ -28,8 +29,8 @@ public class CRSTuning {
     private ArrayList<Player> players;
     private boolean printDebug;
     private boolean printSingleRunDuration;
-    private HashMap<String, Algorithm> algorithms;
-    protected Benchmark benchmark; // suopm = new RatingRPUOed2();
+    private HashMap<String, NumberAlgorithm> algorithms;
+    protected SOBenchmark benchmark; // suopm = new RatingRPUOed2();
     private long duration;
     private int noRepeats;
 
@@ -45,7 +46,7 @@ public class CRSTuning {
         sb.append("CRS4EAs output " + run + "\n");
         sb.append("i \t Age \t Algorithm \t Rating \t RD \t RI \t RV" + "\n");
         for (int i = 0; i < players.size(); i++) {
-            Algorithm algorithm = algorithms.get(players.get(i).getId());
+            NumberAlgorithm algorithm = algorithms.get(players.get(i).getId());
             sb.append((i) + " \t " + (algorithm.getAge())
                     + " \t " + (algorithm.getId().replace("\n", "").replace("\r", ""))
                     + " \t " + Math.round(players.get(i).getGlicko2Rating().getRating())
@@ -64,7 +65,7 @@ public class CRSTuning {
         }
     }
 
-    public CRSTuning(boolean printDebug, boolean printSingleRunDuration, Benchmark benchmark, int max_execs) {
+    public CRSTuning(boolean printDebug, boolean printSingleRunDuration, SOBenchmark benchmark, int max_execs) {
         Util.rnd.setSeed(System.currentTimeMillis());
         algorithms = new HashMap<>();
         this.printDebug = printDebug;
@@ -75,7 +76,7 @@ public class CRSTuning {
         this.max_execs = max_execs;
     }
 
-    public void addAlgorithm(Algorithm algorithm) {
+    public void addAlgorithm(NumberAlgorithm algorithm) {
         if (!algorithms.containsKey(algorithm.getId())) {
             algorithms.put(algorithm.getId(), algorithm);
             if (algorithm.getAlgorithmInfo() == null)
@@ -87,7 +88,7 @@ public class CRSTuning {
         }
     }
 
-    public void removeAlgorithm(AlgorithmBase algorithm) {
+    public void removeAlgorithm(Algorithm algorithm) {
         benchmark.removeAlgorithm(algorithm);
         algorithms.remove(algorithm.getId());
         benchmark.getResultArena().removePlayer(algorithm.getId());
@@ -99,7 +100,7 @@ public class CRSTuning {
         }
     }
 
-    public void tune(int repeat, ArrayList<ControlParameter> control_parameters, Class<? extends Algorithm> classAlg, String aName, int decimals) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public void tune(int repeat, ArrayList<ControlParameter> control_parameters, Class<? extends NumberAlgorithm> classAlg, String aName, int decimals) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         noRepeats = repeat;
         String file = "CRS tuning" + "_" + aName + "M" + M + "F" + F_rate + "Cr" + Cr_rate + "_" + System.currentTimeMillis() + ".txt";
         StringBuffer sb = new StringBuffer();
@@ -123,7 +124,7 @@ public class CRSTuning {
                 configuration.add(cp.randomValue());
             }
 
-            Algorithm object = (Algorithm) ctor.newInstance(configuration, aName);
+            NumberAlgorithm object = (NumberAlgorithm) ctor.newInstance(configuration, aName);
             this.addAlgorithm(object);
         }
 
@@ -149,8 +150,8 @@ public class CRSTuning {
             }
             int n_players = algorithms.size();
             int cr1 = 0, cr2 = 0;
-            Algorithm new_alg1 = null;
-            Algorithm new_alg2 = null;
+            NumberAlgorithm new_alg1 = null;
+            NumberAlgorithm new_alg2 = null;
             i = i + (M - algorithms.size());
             // Create new player through crossover and mutation
             if (i < max_execs) {
@@ -174,8 +175,8 @@ public class CRSTuning {
                                     child2.add(algorithms.get(cr1).getControlParameters().get(k));
                                 }
                             }
-                            new_alg1 = (Algorithm) ctor.newInstance(child1, aName);
-                            new_alg2 = (Algorithm) ctor.newInstance(child2, aName);
+                            new_alg1 = (NumberAlgorithm) ctor.newInstance(child1, aName);
+                            new_alg2 = (NumberAlgorithm) ctor.newInstance(child2, aName);
                             if (algorithms.size() < M) this.addAlgorithm(new_alg1);
                             if (algorithms.size() < M) this.addAlgorithm(new_alg2);
                             cr1 = 0;
@@ -194,7 +195,7 @@ public class CRSTuning {
                             }
                         }
                         if (mutated == 1) {
-                            new_alg1 = (Algorithm) ctor.newInstance(child, aName);
+                            new_alg1 = (NumberAlgorithm) ctor.newInstance(child, aName);
                             if (algorithms.size() < M) this.addAlgorithm(new_alg1);
                         }
                     }

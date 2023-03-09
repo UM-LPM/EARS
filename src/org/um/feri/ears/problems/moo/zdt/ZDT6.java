@@ -22,7 +22,6 @@ package org.um.feri.ears.problems.moo.zdt;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.Objective;
 
 public class ZDT6  extends ZDT{
@@ -32,13 +31,12 @@ public class ZDT6  extends ZDT{
 	}
 	public ZDT6(Integer numberOfVariables) {
 	     
-		super(numberOfVariables,0,2);
+		super("ZDT6", numberOfVariables,2,0);
 
-		fileName = "ZDT6";
-		name = "ZDT6";
+		referenceSetFileName = "ZDT6";
 
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+		upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 
 
 		for (int i = 0; i < numberOfDimensions; i++) {
@@ -46,24 +44,17 @@ public class ZDT6  extends ZDT{
 			upperLimit.add(1.0);
 		}
 
-
-		this.addObjective(new ZDT6_F1());
-		this.addObjective(new ZDT6_F2());
+		addObjective(new ZDT6_F1());
+		addObjective(new ZDT6_F2());
 	}
 
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
-	}
-	
 	public class ZDT6_F1 extends Objective{
 
 		@Override
 		public double eval(double[] ds) {
-			
-			double f = 1.0 - Math.exp(-4.0 * ds[0])
+
+			return 1.0 - Math.exp(-4.0 * ds[0])
 					* Math.pow(Math.sin(6.0 * Math.PI * ds[0]), 6.0);
-			
-			return f;
 		}
 	}
 	

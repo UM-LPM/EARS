@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +13,11 @@ import static java.lang.Math.pow;
 https://al-roomi.org/benchmarks/unconstrained/n-dimensions/193-step-function-no-2
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Step
  */
-public class Step2 extends Problem {
+public class Step2 extends DoubleProblem {
     public Step2(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Step1";
+        super("Step1", d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
     }
 
     @Override

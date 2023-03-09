@@ -1,22 +1,21 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import static java.lang.Math.pow;
 
-public class SchwefelRidge extends Problem {
+public class SchwefelRidge extends DoubleProblem {
     // Rosenbrock
     //http://www.geatbx.com/docu/fcnindex-01.html#P86_3059
     public SchwefelRidge(int d) {
-        super(d, 0);
+        super("SchwefelRigle(" + d + ")", d , 1, 1, 0);
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -64.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 64.0));
-
-        name = "SchwefelRigle(" + d + ")";
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -64.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 64.0));
     }
 
     @Override

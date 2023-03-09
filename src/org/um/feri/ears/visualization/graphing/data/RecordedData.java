@@ -1,45 +1,45 @@
 package org.um.feri.ears.visualization.graphing.data;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Solution;
 
 @SuppressWarnings("rawtypes")
 public class RecordedData //implements Comparable<RecordedData>
 {
-	public SolutionBase solution;
+	public Solution solution;
 	//public ProblemBase problem;
 	public String problemName;
-	public AlgorithmBase algorithm;
+	public Algorithm algorithm;
 	public long iteration;
 	//public boolean isMemberOfParetoSolution = false;
-	public MOSolutionBase[] paretoFront = null;
+	public NumberSolution[] paretoFront = null;
 	
 	// Constructors:
-	public RecordedData(MOSolutionBase solution)
+	public RecordedData(NumberSolution solution)
 	{
 		this.solution = solution;
 	}
 	public RecordedData(double[] objectives)
 	{
-		MOSolutionBase debug = new MOSolutionBase(objectives.length);
+		NumberSolution debug = new NumberSolution(objectives.length);
 		for (int i=0; i<objectives.length; i++)
 			debug.setObjective(i, objectives[i]);
 		this.solution = debug;
 		
 	}
-	public RecordedData(SolutionBase solution, String problemName)
+	public RecordedData(Solution solution, String problemName)
 	{
 		this.solution = solution;
 		this.problemName = problemName;
 	}
-	public RecordedData(SolutionBase solution, String problemName, AlgorithmBase algorithm)
+	public RecordedData(Solution solution, String problemName, Algorithm algorithm)
 	{
 		this.solution = solution;
 		this.problemName = problemName;
 		this.algorithm = algorithm;
 	}
-	public RecordedData(SolutionBase sol, String problemName, AlgorithmBase algorithm, long iteration)
+	public RecordedData(Solution sol, String problemName, Algorithm algorithm, long iteration)
 	{
 		this.solution = sol;
 		this.problemName = problemName;

@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,15 +12,14 @@ import static java.lang.Math.pow;
 /*
 http://benchmarkfcns.xyz/benchmarkfcns/happycatfcn.html
  */
-public class HappyCat extends Problem {
+public class HappyCat extends DoubleProblem {
 
     public HappyCat() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -2.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 2.0));
-        name = "HappyCat";
+        super("HappyCat", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -2.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 2.0));
 
-        Arrays.fill(optimum[0], -1.0);
+        Arrays.fill(decisionSpaceOptima[0], -1.0);
     }
 
     @Override

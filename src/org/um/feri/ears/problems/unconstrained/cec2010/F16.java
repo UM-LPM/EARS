@@ -8,9 +8,7 @@ import org.um.feri.ears.util.Util;
 public class F16 extends CEC2010 {
 
     public F16(int d) {
-        super(d, 16);
-
-        name = "F16 D/m-group Shifted and m-rotated Ackley's Function";
+        super("F16 D/m-group Shifted and m-rotated Ackley's Function", d, 16);
 
         P = new int[numberOfDimensions];
         P = Util.randomPermutation(numberOfDimensions);

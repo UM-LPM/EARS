@@ -2,7 +2,7 @@ package org.um.feri.ears.util;
 
 import java.util.Comparator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class SolutionUtils {
@@ -15,8 +15,8 @@ public class SolutionUtils {
      * @param solution2
      * @return The best solution
      */
-    public static <T> MOSolutionBase<T> getBestSolution(MOSolutionBase<T> solution1, MOSolutionBase<T> solution2, Comparator<MOSolutionBase<T>> comparator) {
-        MOSolutionBase<T> result;
+    public static <T extends Number> NumberSolution<T> getBestSolution(NumberSolution<T> solution1, NumberSolution<T> solution2, Comparator<NumberSolution<T>> comparator) {
+        NumberSolution<T> result;
         int flag = comparator.compare(solution1, solution2);
         if (flag == -1) {
             result = solution1;
@@ -40,12 +40,12 @@ public class SolutionUtils {
      * @param secondSolution
      * @return
      */
-    static <T> double distanceBetweenObjectives(MOSolutionBase<T> firstSolution, MOSolutionBase<T> secondSolution) {
+    static <T extends Number> double distanceBetweenObjectives(NumberSolution<T> firstSolution, NumberSolution<T> secondSolution) {
 
         double diff;
         double distance = 0.0;
         //euclidean distance
-        for (int nObj = 0; nObj < firstSolution.numberOfObjectives(); nObj++) {
+        for (int nObj = 0; nObj < firstSolution.getNumberOfObjectives(); nObj++) {
             diff = firstSolution.getObjective(nObj) - secondSolution.getObjective(nObj);
             distance += Math.pow(diff, 2.0);
         }
@@ -61,7 +61,7 @@ public class SolutionUtils {
      * @param solutionList The <code>List<Solution></></code>.
      * @return The minimum distance between solution and the set.
      */
-    public static <T extends Number> double distanceToSolutionListInSolutionSpace(MOSolutionBase<T> solution,
+    public static <T extends Number> double distanceToSolutionListInSolutionSpace(NumberSolution<T> solution,
                                                                                   ParetoSolution<T> solutionList) {
         //At start point the distance is the max
         double distance = Double.MAX_VALUE;
@@ -82,7 +82,7 @@ public class SolutionUtils {
      * @param solutionJ The second <code>Solution</code>.
      * @return the distance between solutions.
      */
-    public static <T extends Number> double distanceBetweenSolutions(MOSolutionBase<T> solutionI, MOSolutionBase<T> solutionJ) {
+    public static <T extends Number> double distanceBetweenSolutions(NumberSolution<T> solutionI, NumberSolution<T> solutionJ) {
         double distance = 0.0;
 
         double diff;

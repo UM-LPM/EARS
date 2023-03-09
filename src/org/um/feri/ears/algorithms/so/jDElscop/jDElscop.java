@@ -1,15 +1,15 @@
 package org.um.feri.ears.algorithms.so.jDElscop;
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
-import org.um.feri.ears.algorithms.so.jDElscop.jDElscopSolution;
 
 
-public class jDElscop extends Algorithm {
+public class jDElscop extends NumberAlgorithm {
     /*
      * Recoded based on cpp code from Janez Brest jDElscop
      * http://sci2s.ugr.es/EAMHCO#Software
@@ -22,20 +22,6 @@ public class jDElscop extends Algorithm {
     private int popSize;
     private jDElscopSolution[] popX; // population
     private jDElscopSolution g; // global best
-    private Task task; // set it in run
-
-    private void initPopulation() throws StopCriterionException {
-        popX = new jDElscopSolution[popSize];
-        for (int i = 0; i < popSize; i++) {
-            popX[i] = jDElscopSolution.setInitState(task.getRandomEvaluatedSolution());
-            if (i == 0)
-                g = popX[0];
-            else if (task.isFirstBetter(popX[i], g))
-                g = popX[i];
-            if (task.isStopCriterion())
-                break;
-        }
-    }
 
     public jDElscop() {
         this(100);
@@ -53,9 +39,20 @@ public class jDElscop extends Algorithm {
         );
         au = new Author("Matej", "matej.crepinsek@um.si");
     }
-
+    private void initPopulation() throws StopCriterionException {
+        popX = new jDElscopSolution[popSize];
+        for (int i = 0; i < popSize; i++) {
+            popX[i] = jDElscopSolution.setInitState(task.getRandomEvaluatedSolution());
+            if (i == 0)
+                g = popX[0];
+            else if (task.problem.isFirstBetter(popX[i], g))
+                g = popX[i];
+            if (task.isStopCriterion())
+                break;
+        }
+    }
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task; // used in functions
         initPopulation();
         // int iteration=0;
@@ -72,7 +69,7 @@ public class jDElscop extends Algorithm {
         double[] tmp;
         double[] tmpPar;
         int offset;
-        int D = task.getNumberOfDimensions();
+        int D = task.problem.getNumberOfDimensions();
         jDElscopSolution[] popTmp = new jDElscopSolution[variablePopSize];
         while (!task.isStopCriterion()) {
             // iteration++;
@@ -85,7 +82,7 @@ public class jDElscop extends Algorithm {
                 else
                     strategy = Strategy.STRATEGY_JDE_EXP;
                 // jDe
-                tmp = popX[i].getDoubleVariables();
+                tmp = Util.toDoubleArray(popX[i].getVariables());
                 tmpPar = popX[i].getNewPara();
                 do {
                     r1 = Util.rnd.nextInt(variablePopSize);
@@ -142,7 +139,7 @@ public class jDElscop extends Algorithm {
                         break;
                     case STRATEGY_JDE_EXP:
                         if (Util.rnd.nextDouble() < 0.75
-                                && task.isFirstBetter(popX[r3], popX[r2]))
+                                && task.problem.isFirstBetter(popX[r3], popX[r2]))
                             F = -F;
 
                         L = 0;
@@ -157,7 +154,7 @@ public class jDElscop extends Algorithm {
                         break;
                     case STRATEGY_JDE_BIN:
                         if (Util.rnd.nextDouble() < 0.75
-                                && task.isFirstBetter(popX[r3], popX[r2]))
+                                && task.problem.isFirstBetter(popX[r3], popX[r2]))
                             F = -F;
 
                         for (L = 0; L < D; L++) /* perform D binomial trials */ {
@@ -171,14 +168,17 @@ public class jDElscop extends Algorithm {
 
                 }
                 for (int j = 0; j < D; j++) {
-                    tmp[j] = task.setFeasible(tmp[j], j); // in bounds
+                    tmp[j] = task.problem.setFeasible(tmp[j], j); // in bounds
                 }
-                DoubleSolution tmpI = task.eval(tmp);
-                if (task.isFirstBetter(popX[i], tmpI)) { // old is better
+
+                NumberSolution<Double> tmpI = new NumberSolution<>(Util.toDoubleArrayList(tmp));
+                task.eval(tmpI);
+
+                if (task.problem.isFirstBetter(popX[i], tmpI)) { // old is better
                     popTmp[i] = popX[i];
                 } else {
                     popTmp[i] = jDElscopSolution.setParamState(tmpI, tmpPar);
-                    if (task.isFirstBetter(popTmp[i], g)) {
+                    if (task.problem.isFirstBetter(popTmp[i], g)) {
                         g = popTmp[i];
                         if (debug) {
                             System.out.println("time:"
@@ -203,7 +203,7 @@ public class jDElscop extends Algorithm {
                  */
                 for (int ii = 0; ii < variablePopSize / 2; ii++) { // take best
                     // half!
-                    if (task.isFirstBetter(popTmp[variablePopSize / 2 + ii],
+                    if (task.problem.isFirstBetter(popTmp[variablePopSize / 2 + ii],
                             popTmp[ii])) {
                         popX[ii] = popTmp[variablePopSize / 2 + ii];
                     } else {

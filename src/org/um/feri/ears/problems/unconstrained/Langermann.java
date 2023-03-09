@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,19 +11,19 @@ import static java.lang.Math.*;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_L.html#go_benchmark.Langermann
  */
-public class Langermann extends Problem {
+public class Langermann extends DoubleProblem {
 
-    static final double[][] a = new double[][]{{3.0, 5.0, 2.0, 1.0, 7.0}, {5.0, 2.0, 1.0, 4.0, 9.0}};
-    static final double[] c = new double[]{1.0, 2.0, 5.0, 2.0, 3.0};
+    static final double[][] a = {{3.0, 5.0, 2.0, 1.0, 7.0}, {5.0, 2.0, 1.0, 4.0, 9.0}};
+    static final double[] c = {1.0, 2.0, 5.0, 2.0, 3.0};
     static final double m = 5;
 
     public Langermann() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Langermann";
+        super("Langermann", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
 
-        optimum[0] = new double[]{2.00299219, 1.006096};
+        decisionSpaceOptima[0] = new double[]{2.00299219, 1.006096};
+        objectiveSpaceOptima[0] = -5.1621259;
     }
 
     @Override
@@ -37,10 +38,5 @@ public class Langermann extends Problem {
             fitness += c[(i - 1)] * exp(-1.0 / PI * sum2) * cos(PI * sum2);
         }
         return fitness;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -5.1621259;
     }
 }

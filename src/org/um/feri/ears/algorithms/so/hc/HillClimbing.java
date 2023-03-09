@@ -1,14 +1,18 @@
 package org.um.feri.ears.algorithms.so.hc;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
-public class HillClimbing extends Algorithm {
+import java.util.ArrayList;
+import java.util.List;
+
+public class HillClimbing extends NumberAlgorithm {
 
     public enum HillClimbingStrategy {ANY_ASCENT, STEEPEST_ASCENT, RANDOM_RESTART}
 
@@ -17,9 +21,7 @@ public class HillClimbing extends Algorithm {
     @AlgorithmParameter
     private double dxPercent;
 
-    private DoubleSolution globalBest, currentBest;
-    private Task task;
-
+    private NumberSolution<Double> globalBest, currentBest;
     public HillClimbing() {
         this(HillClimbingStrategy.RANDOM_RESTART, 0.001);
     }
@@ -39,36 +41,36 @@ public class HillClimbing extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+        this.task = task;
 
-        double[] interval = task.getInterval();
+        double[] interval = task.problem.getInterval();
         globalBest = task.getRandomEvaluatedSolution();
-        currentBest = new DoubleSolution(globalBest);
+        currentBest = new NumberSolution<>(globalBest);
         boolean improvement;
 
         while (!task.isStopCriterion()) {
             improvement = false;
             if (strategy == HillClimbingStrategy.ANY_ASCENT) {
 
-                double[] currentPosition = currentBest.getDoubleVariables();
+                ArrayList<Double> currentPosition = currentBest.getVariables();
 
-                for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-                    double[] newPosition = currentPosition.clone();
-                    newPosition[i] -= interval[i] * dxPercent;
+                for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
+                    ArrayList<Double> newPosition = new ArrayList<>(currentPosition);
+                    newPosition.set(i, newPosition.get(i) - interval[i] * dxPercent);
 
                     if (checkImprovement(newPosition)) {
-                        if (task.isFirstBetter(currentBest, globalBest))
+                        if (task.problem.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
                         break;
                     }
 
-                    newPosition = currentPosition.clone();
-                    newPosition[i] += interval[i] * dxPercent;
+                    newPosition = new ArrayList<>(currentPosition);
+                    newPosition.set(i, newPosition.get(i) + interval[i] * dxPercent);
 
                     if (checkImprovement(newPosition)) {
-                        if (task.isFirstBetter(currentBest, globalBest))
+                        if (task.problem.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
                         break;
@@ -79,23 +81,23 @@ public class HillClimbing extends Algorithm {
                     return globalBest;
             } else if (strategy == HillClimbingStrategy.STEEPEST_ASCENT) {
 
-                double[] currentPosition = currentBest.getDoubleVariables();
+                ArrayList<Double> currentPosition = currentBest.getVariables();
 
-                for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-                    double[] newPosition = currentPosition.clone();
-                    newPosition[i] -= interval[i] * dxPercent;
+                for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
+                    ArrayList<Double> newPosition = new ArrayList<>(currentPosition);
+                    newPosition.set(i, newPosition.get(i) - interval[i] * dxPercent);
 
                     if (checkImprovement(newPosition)) {
-                        if (task.isFirstBetter(currentBest, globalBest))
+                        if (task.problem.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
                     }
 
-                    newPosition = currentPosition.clone();
-                    newPosition[i] += interval[i] * dxPercent;
+                    newPosition = new ArrayList<>(currentPosition);
+                    newPosition.set(i, newPosition.get(i) + interval[i] * dxPercent);
 
                     if (checkImprovement(newPosition)) {
-                        if (task.isFirstBetter(currentBest, globalBest))
+                        if (task.problem.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
                     }
@@ -104,23 +106,23 @@ public class HillClimbing extends Algorithm {
                 if (!improvement)
                     return globalBest;
             } else if (strategy == HillClimbingStrategy.RANDOM_RESTART) {
-                double[] currentPosition = currentBest.getDoubleVariables();
+                ArrayList<Double> currentPosition = currentBest.getVariables();
 
-                for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-                    double[] newPosition = currentPosition.clone();
-                    newPosition[i] -= interval[i] * dxPercent;
+                for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
+                    ArrayList<Double> newPosition = new ArrayList<>(currentPosition);
+                    newPosition.set(i, newPosition.get(i) - interval[i] * dxPercent);
 
                     if (checkImprovement(newPosition)) {
-                        if (task.isFirstBetter(currentBest, globalBest))
+                        if (task.problem.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
                     }
 
-                    newPosition = currentPosition.clone();
-                    newPosition[i] += interval[i] * dxPercent;
+                    newPosition = new ArrayList<>(currentPosition);
+                    newPosition.set(i, newPosition.get(i) + interval[i] * dxPercent);
 
                     if (checkImprovement(newPosition)) {
-                        if (task.isFirstBetter(currentBest, globalBest))
+                        if (task.problem.isFirstBetter(currentBest, globalBest))
                             globalBest = currentBest;
                         improvement = true;
                     }
@@ -135,12 +137,15 @@ public class HillClimbing extends Algorithm {
         return globalBest;
     }
 
-    private boolean checkImprovement(double[] newPosition) throws StopCriterionException {
+    private boolean checkImprovement(List<Double> newPosition) throws StopCriterionException {
 
-        if (task.isFeasible(newPosition)) {
+        if (task.problem.isFeasible(newPosition)) {
             if (!task.isStopCriterion()) {
-                DoubleSolution newSolution = task.eval(newPosition);
-                if (task.isFirstBetter(newSolution, currentBest)) {
+
+                NumberSolution<Double> newSolution = new NumberSolution<>(newPosition);
+                task.eval(newSolution);
+
+                if (task.problem.isFirstBetter(newSolution, currentBest)) {
                     currentBest = newSolution;
                     return true;
                 }

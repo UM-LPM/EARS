@@ -1,8 +1,7 @@
 package org.um.feri.analyse.EE.metrics;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.util.Util;
 
 
@@ -61,9 +60,9 @@ public class ExpBas{
         public NeighbourhoodType nType;
         public NeighbourhoodOrder nOrder;
         public ArrayList<Double> steps;  // Distances between two immediate neighbours (non-diagonal) in a grid.
-        public Problem problem;
+        public DoubleProblem problem;
 
-        public ExpBasSettings(Problem p, double percentage){
+        public ExpBasSettings(DoubleProblem p, double percentage){
             problem = p;
             steps = new ArrayList<>();
             for(int i = 0; i < problem.getNumberOfDimensions(); i++){
@@ -227,9 +226,9 @@ public class ExpBas{
         return Math.abs(f1 - f2) <= (EPSILON * Math.max(Math.abs(f1), Math.abs(f2)));
     }
 
-    public ArrayList<ExpBasSettings> getDefaultSettings(Problem problem){
+    public ArrayList<ExpBasSettings> getDefaultSettings(DoubleProblem problem){
         final double percentage = 0.1;
-        ArrayList<ExpBasSettings> listOfSettings = new ArrayList<ExpBasSettings>();
+        ArrayList<ExpBasSettings> listOfSettings = new ArrayList<>();
         // FSN
         ExpBasSettings es1 = new ExpBasSettings(problem, percentage);
         es1.lsVariant = LocalSearchVariant.DeterministicFirstImprovement;
@@ -290,7 +289,7 @@ public class ExpBas{
     }
 
     // Simple implementation of DE - EXAMPLE
-    public static Object[] runDE(Problem problem, final ExpBas.ExpBasSettings setting){
+    public static Object[] runDE(DoubleProblem problem, final ExpBas.ExpBasSettings setting){
         // SO, TO USE EXPBAS, USER HAS TO DEFINE EXPBAS SETTING AND MODIFY THE IMPLEMENTATION OF THEIR OPTIMIZATION ALGORITHM (like here)
         // 1. USER HAS TO PASS REFERENCE SOLUTIONS, NEW SOLUTION, AND SETTING, TO METHOD ExpBas.isExploration(...).
         //    This method checks if the algorithm was in the exploration phase or not (then it is in the exploitation phase).

@@ -2,7 +2,6 @@ package org.um.feri.ears.problems.moo.unconstrained.cec2009;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.UP10_1;
 import org.um.feri.ears.problems.moo.functions.UP10_2;
 import org.um.feri.ears.problems.moo.functions.UP10_3;
@@ -23,13 +22,12 @@ public class UnconstrainedProblem10 extends CEC2009 {
 	  */
 	public UnconstrainedProblem10(Integer numberOfVariables) {
 		
-		super(numberOfVariables,0, 3);
+		super("UF10", numberOfVariables,3, 0);
 
-		name = "UF10";
-		fileName = "UF10";
+		referenceSetFileName = "UF10";
 
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+		upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 		
 		lowerLimit.add(0.0);
 		upperLimit.add(1.0);
@@ -41,12 +39,8 @@ public class UnconstrainedProblem10 extends CEC2009 {
 			upperLimit.add(2.0);
 		}
 
-		this.addObjective(new UP10_1(numberOfDimensions));
-		this.addObjective(new UP10_2(numberOfDimensions));
-		this.addObjective(new UP10_3(numberOfDimensions));
-	}
-
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {	
+		addObjective(new UP10_1(numberOfDimensions));
+		addObjective(new UP10_2(numberOfDimensions));
+		addObjective(new UP10_3(numberOfDimensions));
 	}
 }

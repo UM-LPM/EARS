@@ -21,9 +21,7 @@
 
 package org.um.feri.ears.operators;
 
-import java.util.Comparator;
-
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.Util;
@@ -33,17 +31,17 @@ import org.um.feri.ears.util.Util;
  * This class implements an operator for binary selections using the same code
  * in Deb's NSGA-II implementation
  */
-public class BinaryTournament2<Type extends Number> {
+public class BinaryTournament2<N extends Number> {
   
   /**
    * dominance_ store the <code>Comparator</code> for check dominance_
    */
-  private Comparator dominance_;
+  private final DominanceComparator dominance = new DominanceComparator();
   
   /**
    * a stores a permutation of the solutions in the solutionSet used
    */
-  private int a[];
+  private int[] a;
   
   /**
    *  index_ stores the actual index for selection
@@ -57,22 +55,23 @@ public class BinaryTournament2<Type extends Number> {
    */
   public BinaryTournament2()
   {
-    dominance_ = new DominanceComparator();              
-  } // BinaryTournament2
+
+  }
     
   /**
   * Performs the operation
-  * @param object Object representing a SolutionSet
+  * @param solution Object representing a SolutionSet
   * @return the selected solution
   */
-	public MOSolutionBase<Type> execute(ParetoSolution<Type> object) {
-		ParetoSolution<Type> population = object;
+	public NumberSolution<N> execute(ParetoSolution<N> solution) {
+		ParetoSolution<N> population = solution;
+
 		if (index == 0) // generate a permutation of indices
 		{
 			a = Util.randomPermutation(population.size());
 		}
 
-		MOSolutionBase<Type> solution1, solution2;
+		NumberSolution<N> solution1, solution2;
 		solution1 = population.get(a[index]);
 		if(index + 1 == population.size())
 			solution2 = population.get(a[1]);
@@ -81,7 +80,7 @@ public class BinaryTournament2<Type extends Number> {
 
 		index = (index + 2) % population.size();
 		
-		int flag = dominance_.compare(solution1, solution2);
+		int flag = dominance.compare(solution1, solution2);
 		if (flag == -1)
 			return solution1;
 		else if (flag == 1)

@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,17 +15,15 @@ http://mantella.info/optimisation-problems/black-box-optimisation-benchmark/#bbo
  */
 
 
-public class LinearSlope extends Problem {
+public class LinearSlope extends DoubleProblem {
 
     public LinearSlope(int d) {
-        super(d, 0);
+        super("Linear Slope", d, 1, 1, 0);
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
 
-        Arrays.fill(optimum[0], 5);
-
-        name = "Linear Slope";
+        Arrays.fill(decisionSpaceOptima[0], 5);
     }
 
     @Override
@@ -36,16 +35,16 @@ public class LinearSlope extends Problem {
 
             base = sqrt(alpha);
             exponent = (double) i / ((double) numberOfDimensions - 1);
-            if (optimum[0][i] > 0.0) {
+            if (decisionSpaceOptima[0][i] > 0.0) {
                 si = pow(base, exponent);
             } else {
                 si = -pow(base, exponent);
             }
             /* boundary handling */
-            if (x[i] * optimum[0][i] < 25.0) {
+            if (x[i] * decisionSpaceOptima[0][i] < 25.0) {
                 fitness += 5.0 * abs(si) - si * x[i];
             } else {
-                fitness += 5.0 * abs(si) - si * optimum[0][i];
+                fitness += 5.0 * abs(si) - si * decisionSpaceOptima[0][i];
             }
         }
         return fitness;

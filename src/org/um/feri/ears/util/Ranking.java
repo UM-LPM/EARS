@@ -20,12 +20,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package org.um.feri.ears.util;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
@@ -38,22 +36,22 @@ import org.um.feri.ears.util.comparator.DominanceComparator;
  * solutions, subset 1 contains the non-dominated solutions after removing those
  * belonging to subset 0, and so on.
  */
-public class Ranking<Type extends Number> {
+public class Ranking<N extends Number> {
   
 	/**
 	 * The <code>SolutionSet</code> to rank
 	 */
-	private ParetoSolution<Type> solutions;
+	private ParetoSolution<N> solutions;
 
 	/**
 	 * An array containing all the fronts found during the search
 	 */
-	private ParetoSolution<Type>[] ranking;
+	private ParetoSolution<N>[] ranking;
 
 	/**
 	 * stores a <code>Comparator</code> for dominance checking
 	 */
-	private static final Comparator<MOSolutionBase> dominance_ = new DominanceComparator();
+	private static DominanceComparator dominance;
 
   /**
    * stores a <code>Comparator</code> for Overal Constraint Violation Comparator
@@ -67,6 +65,7 @@ public class Ranking<Type extends Number> {
      */       
 	public Ranking(ParetoSolution solutionSet) {
 		solutions = solutionSet;
+		dominance = new DominanceComparator();
 
 		// dominateMe[i] contains the number of solutions dominating i
 		int[] dominateMe = new int[solutions.size()];
@@ -99,7 +98,7 @@ public class Ranking<Type extends Number> {
 				// =constraint_.compare(solutionSet.get(p),solutionSet.get(q));
 				flagDominate = 0;
 				if (flagDominate == 0) {
-					flagDominate = dominance_.compare(solutionSet.get(p),solutionSet.get(q));
+					flagDominate = dominance.compare(solutionSet.get(p),solutionSet.get(q));
 				}
 				if (flagDominate == -1) {
 					iDominate[p].add(q);
@@ -155,7 +154,7 @@ public class Ranking<Type extends Number> {
      * @param rank The rank
      * @return Object representing the <code>SolutionSet</code>.
      */
-	public ParetoSolution<Type> getSubfront(int rank) {
+	public ParetoSolution<N> getSubfront(int rank) {
 		return ranking[rank];
 	}
 

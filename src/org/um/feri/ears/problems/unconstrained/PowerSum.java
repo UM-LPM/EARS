@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,18 +12,16 @@ import static java.lang.Math.pow;
 https://www.sfu.ca/~ssurjano/powersum.html
  */
 
-public class PowerSum extends Problem {
+public class PowerSum extends DoubleProblem {
 
-    public double[] b;
+    private static final double[] b = {8, 18, 44, 114};
 
     public PowerSum() {
-        super(4, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, numberOfDimensions * 1.0));
-        name = "PowerSum";
-        b = new double[]{8, 18, 44, 114};
+        super("PowerSum", 4, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, numberOfDimensions * 1.0));
 
-        optimum[0] = new double[]{1.0, 2.0, 2.0, 3.0};
+        decisionSpaceOptima[0] = new double[]{1.0, 2.0, 2.0, 3.0};
     }
 
     @Override

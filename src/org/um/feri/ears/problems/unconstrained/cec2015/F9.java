@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F9 extends CEC2015 {
 
     public F9(int d) {
-        super(d, 9);
-
-        name = "F09 Expanded Scaffer's Function";
+        super("F09 Expanded Scaffer's Function", d, 9);
     }
 
     @Override

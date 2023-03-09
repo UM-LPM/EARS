@@ -1,11 +1,10 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.*;
 
-public class RPUOed2Benchmark extends Benchmark {
+public class RPUOed2Benchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     public RPUOed2Benchmark() {
         super();
         name="Real Parameter Unconstrained Optimization Problems with maximum evaluation condition";
@@ -17,8 +16,8 @@ public class RPUOed2Benchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
-        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
+    protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
     
     @Override

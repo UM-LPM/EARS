@@ -1,10 +1,8 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.benchmark.BenchmarkResults;
-import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
@@ -15,15 +13,15 @@ import java.util.HashMap;
 public class BenchmarkRunner {
     private ArrayList<Player> players;
     private boolean printDebug;
-    private HashMap<String, Algorithm> algorithms;
-    protected Benchmark benchmark;
+    private HashMap<String, NumberAlgorithm> algorithms;
+    protected SOBenchmark benchmark;
     private long duration;
 
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public Algorithm getAlgorithm(String id) {
+    public NumberAlgorithm getAlgorithm(String id) {
         return algorithms.get(id);
     }
 
@@ -31,7 +29,7 @@ public class BenchmarkRunner {
         return printDebug;
     }
 
-    public Benchmark getBenchmark() {
+    public SOBenchmark getBenchmark() {
         return benchmark;
     }
 
@@ -39,7 +37,7 @@ public class BenchmarkRunner {
         return duration;
     }
 
-    public BenchmarkRunner(boolean printDebug, boolean printSingleRunDuration, Benchmark benchmark) {
+    public BenchmarkRunner(boolean printDebug, boolean printSingleRunDuration, SOBenchmark benchmark) {
         Util.rnd.setSeed(System.currentTimeMillis());
         players = new ArrayList<>();
         algorithms = new HashMap<>();
@@ -47,7 +45,7 @@ public class BenchmarkRunner {
         this.benchmark = benchmark;
     }
 
-    public void addAlgorithm(Algorithm algorithm) {
+    public void addAlgorithm(NumberAlgorithm algorithm) {
 
         algorithms.put(algorithm.getId(), algorithm);
         players.add(new Player(algorithm.getId()));
@@ -79,7 +77,7 @@ public class BenchmarkRunner {
         return sb.toString();
     }
 
-    public BenchmarkResults<Task, DoubleSolution, Algorithm> getBenchmarkResults() {
+    public BenchmarkResults<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> getBenchmarkResults() {
         return benchmark.getBenchmarkResults();
     }
 }

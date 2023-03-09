@@ -12,15 +12,15 @@ import java.util.List;
 
 //import javax.imageio.ImageIO; OLD
 
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.algorithms.AlgorithmBase;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.data.AlgorithmStatistics;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.MOSolutionComparatorForGraphing;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
-import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.Solution;
 
 import com.panayotis.gnuplot.JavaPlot;
 import com.panayotis.gnuplot.plot.DataSetPlot;
@@ -134,7 +134,7 @@ public class GraphEARSStatic extends GraphEARS
 			{
 				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
 			}
-			else if (data[0].algorithm instanceof Algorithm)
+			else if (data[0].algorithm instanceof NumberAlgorithm)
 			{
 				//tmp = data[0].algorithm.getID()+" solving "+data[0].problem.name+" it"+data[0].iteration+".png";
 				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".png";
@@ -146,7 +146,7 @@ public class GraphEARSStatic extends GraphEARS
 	public void setData(RecordedData[] data)
 	{
 		this.data = data;
-		if (data[0].algorithm instanceof Algorithm)
+		if (data[0].algorithm instanceof NumberAlgorithm)
 		{
 			this.statistics = new AlgorithmStatistics(data, evalsPerStep);
 			double opt = 0;
@@ -199,8 +199,8 @@ public class GraphEARSStatic extends GraphEARS
 	       	double x,y;
 	       	for (RecordedData rd : data)
 	       	{
-	       		x = ((MOSolutionBase)rd.solution).getObjective(axisX);
-	       		y = ((MOSolutionBase)rd.solution).getObjective(axisY);
+	       		x = ((NumberSolution)rd.solution).getObjective(axisX);
+	       		y = ((NumberSolution)rd.solution).getObjective(axisY);
 	       		minX = Math.min(minX, x);
 	       		maxX = Math.max(maxX, x);
 	       		minY = Math.min(minY, y);
@@ -220,7 +220,7 @@ public class GraphEARSStatic extends GraphEARS
 			{
 				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+" it"+data[0].iteration+" ("+axisX+"x"+axisY+")"+".png";
 			}
-			else if (data[0].algorithm instanceof Algorithm)
+			else if (data[0].algorithm instanceof NumberAlgorithm)
 			{
 				//tmp = data[0].algorithm.getID()+" solving "+data[0].problem.name+" it"+data[0].iteration+".png";
 				tmp = data[0].algorithm.getId()+" solving "+data[0].problemName+".png";
@@ -800,8 +800,8 @@ public class GraphEARSStatic extends GraphEARS
         // Convert:
         for (int i=0; i<data.length; i++)
         {
-        	tab[i][0] = ((MOSolutionBase)data[i].solution).getObjective(axisX);
-            tab[i][1] = ((MOSolutionBase)data[i].solution).getObjective(axisY);
+        	tab[i][0] = ((NumberSolution)data[i].solution).getObjective(axisX);
+            tab[i][1] = ((NumberSolution)data[i].solution).getObjective(axisY);
         }
         DataSetPlot dsp = new DataSetPlot(tab);
         dsp.setTitle("MO Solutions");
@@ -863,8 +863,8 @@ public class GraphEARSStatic extends GraphEARS
 	        // Convert:
 	        for (int i=0; i<data[gi].length; i++)
 	        {
-	        	tab[i][0] = ((MOSolutionBase)data[gi][i].solution).getObjective(axisX);
-	            tab[i][1] = ((MOSolutionBase)data[gi][i].solution).getObjective(axisY);
+	        	tab[i][0] = ((NumberSolution)data[gi][i].solution).getObjective(axisX);
+	            tab[i][1] = ((NumberSolution)data[gi][i].solution).getObjective(axisY);
 	        }
 	        DataSetPlot dsp = new DataSetPlot(tab);
 	        if (gi==gc-1)
@@ -936,8 +936,8 @@ public class GraphEARSStatic extends GraphEARS
         int j2 = 0;
         for (RecordedData rd : pareto)
         {
-        	tab2[j2][0] = ((MOSolutionBase)rd.solution).getObjective(axisX);
-            tab2[j2][1] = ((MOSolutionBase)rd.solution).getObjective(axisY);
+        	tab2[j2][0] = ((NumberSolution)rd.solution).getObjective(axisX);
+            tab2[j2][1] = ((NumberSolution)rd.solution).getObjective(axisY);
             j2++;
             if (j2>=tab2.length)
             	break;
@@ -997,18 +997,18 @@ public class GraphEARSStatic extends GraphEARS
         
         // Convert:
         // Minimization:
-		temp = new double[]{((MOSolutionBase)data[0].solution).getObjective(axisX), this.maxY};
-		prev = ((MOSolutionBase)data[0].solution).getObjective(axisY);
+		temp = new double[]{((NumberSolution)data[0].solution).getObjective(axisX), this.maxY};
+		prev = ((NumberSolution)data[0].solution).getObjective(axisY);
 		tlist.add(temp);
         for (int i=0; i<data.length; i++)
         {
-        	temp = new double[]{((MOSolutionBase)data[i].solution).getObjective(axisX), prev};
+        	temp = new double[]{((NumberSolution)data[i].solution).getObjective(axisX), prev};
         	tlist.add(temp);
-        	temp = new double[]{((MOSolutionBase)data[i].solution).getObjective(axisX), ((MOSolutionBase)data[i].solution).getObjective(axisY)};
-        	prev = ((MOSolutionBase)data[i].solution).getObjective(axisY);
+        	temp = new double[]{((NumberSolution)data[i].solution).getObjective(axisX), ((NumberSolution)data[i].solution).getObjective(axisY)};
+        	prev = ((NumberSolution)data[i].solution).getObjective(axisY);
         	tlist.add(temp);
         }
-        temp = new double[]{this.maxX, ((MOSolutionBase)data[data.length-1].solution).getObjective(axisY)};
+        temp = new double[]{this.maxX, ((NumberSolution)data[data.length-1].solution).getObjective(axisY)};
     	tlist.add(temp);
     	temp = new double[]{this.maxX, this.maxY};
     	tlist.add(temp);
@@ -1068,18 +1068,18 @@ public class GraphEARSStatic extends GraphEARS
         
         // Convert:
         // Minimization:
-		temp = new double[]{((MOSolutionBase)data[0].solution).getObjective(axisX), this.maxY};
-		prev = ((MOSolutionBase)data[0].solution).getObjective(axisY);
+		temp = new double[]{((NumberSolution)data[0].solution).getObjective(axisX), this.maxY};
+		prev = ((NumberSolution)data[0].solution).getObjective(axisY);
 		tlist.add(temp);
         for (int i=0; i<data.length; i++)
         {
-        	temp = new double[]{((MOSolutionBase)data[i].solution).getObjective(axisX), prev};
+        	temp = new double[]{((NumberSolution)data[i].solution).getObjective(axisX), prev};
         	tlist.add(temp);
-        	temp = new double[]{((MOSolutionBase)data[i].solution).getObjective(axisX), ((MOSolutionBase)data[i].solution).getObjective(axisY)};
-        	prev = ((MOSolutionBase)data[i].solution).getObjective(axisY);
+        	temp = new double[]{((NumberSolution)data[i].solution).getObjective(axisX), ((NumberSolution)data[i].solution).getObjective(axisY)};
+        	prev = ((NumberSolution)data[i].solution).getObjective(axisY);
         	tlist.add(temp);
         }
-        temp = new double[]{this.maxX, ((MOSolutionBase)data[data.length-1].solution).getObjective(axisY)};
+        temp = new double[]{this.maxX, ((NumberSolution)data[data.length-1].solution).getObjective(axisY)};
     	tlist.add(temp);
     	temp = new double[]{this.maxX, this.maxY};
     	tlist.add(temp);
@@ -1098,7 +1098,7 @@ public class GraphEARSStatic extends GraphEARS
 	{
 		DataSetPlot[] dsp;
 		// If more than 3 objectives or more, plot without connecting, because it's a mesh.
-		if (((MOSolutionBase)data[0].solution).getObjectives().length>=3)
+		if (((NumberSolution)data[0].solution).getObjectives().length>=3)
 			dsp =  new DataSetPlot[1];
 		// If it's less than 3 objectives, connect the points because it's a line.
 		else
@@ -1116,10 +1116,10 @@ public class GraphEARSStatic extends GraphEARS
 		double tab2[][];
 	    tab2 = new double[data[0].paretoFront.length][2];
 	    int j2 = 0;
-	    for (SolutionBase sol : data[0].paretoFront)
+	    for (Solution sol : data[0].paretoFront)
 	    {
-	    	tab2[j2][0] = ((MOSolutionBase)sol).getObjective(axisX);
-	        tab2[j2][1] = ((MOSolutionBase)sol).getObjective(axisY);
+	    	tab2[j2][0] = ((NumberSolution)sol).getObjective(axisX);
+	        tab2[j2][1] = ((NumberSolution)sol).getObjective(axisY);
 	        j2++;
 	        if (j2>=tab2.length)
 	          	break;
@@ -1142,7 +1142,7 @@ public class GraphEARSStatic extends GraphEARS
 		    myPlotStyle2.setPointSize(1);
 			myPlotStyle2.setStyle(Style.LINES);
 	        
-	        MOSolutionBase[] pf = data[0].paretoFront;
+	        NumberSolution[] pf = data[0].paretoFront;
 	        Arrays.sort(pf, new MOSolutionComparatorForGraphing(axisX, axisY));
 	        //double[] prev = new double[]{pf[0].getObjective(axisX), this.maxY};
 	        /*double[] prev = new double[]{this.maxY, this.minX};
@@ -1182,10 +1182,10 @@ public class GraphEARSStatic extends GraphEARS
 	        }*/
 	        double[] prev = new double[]{-Math.pow(10,300), Math.pow(10,300)};							// this.minX, this.maxY can't be handled by JavaPlot / gnuPlot
 	        ArrayList<double[]> tab = new ArrayList<double[]>();
-	        for (SolutionBase sol : pf)
+	        for (Solution sol : pf)
 	        {
-	        	tab.add(new double[]{((MOSolutionBase)sol).getObjective(axisX), prev[1]});
-	        	prev = new double[]{((MOSolutionBase)sol).getObjective(axisX), ((MOSolutionBase)sol).getObjective(axisY)};
+	        	tab.add(new double[]{((NumberSolution)sol).getObjective(axisX), prev[1]});
+	        	prev = new double[]{((NumberSolution)sol).getObjective(axisX), ((NumberSolution)sol).getObjective(axisY)};
 	        	tab.add(prev);            
 	        } 
 	        tab.add(new double[]{Math.pow(10,300), prev[1]});									// this.maxX can't be handled by JavaPlot / gnuPlot
@@ -1207,7 +1207,7 @@ public class GraphEARSStatic extends GraphEARS
 	@SuppressWarnings("rawtypes")
 	protected long GetPopSize(RecordedData[] data)
 	{
-		AlgorithmBase alg = data[0].algorithm;
+		Algorithm alg = data[0].algorithm;
 		String pop_size_string = null;
 		popSize = GraphEARSStatic.DEFAULT_EVALUATIONS_PER_STEP;
 		

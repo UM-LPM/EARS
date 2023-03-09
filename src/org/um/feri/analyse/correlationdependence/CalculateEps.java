@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.stream.DoubleStream;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.cec2014.F1;
 import org.um.feri.ears.problems.unconstrained.cec2014.F10;
@@ -25,11 +25,11 @@ import org.um.feri.ears.problems.unconstrained.cec2014.F9;
 
 public class CalculateEps {
 	
-	public static Double calculateDistanceBetweenMin(Problem prob)
+	public static Double calculateDistanceBetweenMin(DoubleProblem prob)
 	{
-		Double distanceAvg=0.0;
+		double distanceAvg=0.0;
 		int numOfCand = 10;
-		double distances[] = new double[numOfCand];
+		double[] distances = new double[numOfCand];
 		int dim = prob.getNumberOfDimensions();
 		
 		for(int i = 0; i < numOfCand; ++i)
@@ -39,17 +39,17 @@ public class CalculateEps {
 			
 			if(i ==0 || i == 2 || i == 8)
 			{
-				candidate = prob.getOptimalVector()[0];
+				candidate = prob.getDecisionSpaceOptima()[0];
 			}
 			else
 			{
 				candidate = new Random()
-						.doubles(dim, (double) prob.lowerLimit.get(0), (double) prob.upperLimit.get(0)).toArray();
+						.doubles(dim, prob.lowerLimit.get(0), prob.upperLimit.get(0)).toArray();
 			}
 			for (int curDim = 0; curDim < dim; ++curDim) {
 				Double[] leftX = calculateLeft(prob, candidate, curDim);
 				Double[] rightX = calcucalteRight(prob, candidate, curDim);
-				Double dist = leftX[curDim] - rightX[curDim];
+				double dist = leftX[curDim] - rightX[curDim];
 
 				distancePerDim[curDim] = Math.abs(dist) / 2;
 			}
@@ -60,7 +60,7 @@ public class CalculateEps {
 		return distanceAvg;
 	}
 
-	private static Double[] calcucalteRight(Problem prob, double[] candidate, int dim) {
+	private static Double[] calcucalteRight(DoubleProblem prob, double[] candidate, int dim) {
 
 		boolean doCalc = true;
 		boolean goDown = true;
@@ -100,7 +100,7 @@ public class CalculateEps {
 		return cand;
 	}
 
-	private static Double[] calculateLeft(Problem prob, double[] candidate, int dim) {
+	private static Double[] calculateLeft(DoubleProblem prob, double[] candidate, int dim) {
 		boolean doCalc = true;
 		boolean goDown = true;
 		Double[] cand = ArrayUtils.toObject(candidate);
@@ -145,7 +145,7 @@ public class CalculateEps {
 		int dimm = 2;
 		int part = Integer.parseInt(args[0]);
 		int numOfProblems = 16;
-		Problem problems[] = new Problem[numOfProblems];
+		DoubleProblem[] problems = new DoubleProblem[numOfProblems];
 		Double dist = 0.0;
 
 		
@@ -264,7 +264,7 @@ public class CalculateEps {
 			}
 			default:
 			{
-				Problem problem = new Griewank(dimm);
+				DoubleProblem problem = new Griewank(dimm);
 				dist = calculateDistanceBetweenMin(problem);
 				System.out.println(problem.getName()+" distance is "+dist);
 				break;

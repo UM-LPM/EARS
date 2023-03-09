@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,16 +13,16 @@ http://benchmarkfcns.xyz/benchmarkfcns/kealefcn.html
 https://al-roomi.org/benchmarks/unconstrained/2-dimensions/135-keane-s-function
 http://infinity77.net/global_optimization/test_functions_nd_K.html#go_benchmark.Keane
  */
-public class Keane extends Problem {
+public class Keane extends DoubleProblem {
 
     public Keane() {
-        super(2, 0, 2);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Keane";
+        super("Keane", 2, 2, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
 
-        optimum[0] = new double[]{1.393249070031784, 0};
-        optimum[0] = new double[]{0, 1.393249070031784};
+        decisionSpaceOptima[0] = new double[]{1.393249070031784, 0};
+        decisionSpaceOptima[1] = new double[]{0, 1.393249070031784};
+        objectiveSpaceOptima[0] = 0.673667521146855;
     }
 
     @Override
@@ -31,10 +32,5 @@ public class Keane extends Problem {
         if (denominator == 0)
             denominator = 0.0000001;
         return numerator / denominator;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return 0.673667521146855;
     }
 }

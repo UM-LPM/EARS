@@ -21,29 +21,33 @@
 
 package org.um.feri.ears.util.comparator;
 
+
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Solution;
+
 import java.util.Comparator;
-
-import org.um.feri.ears.problems.moo.MOSolutionBase;
-
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on a constraint violation test + dominance checking, as in NSGA-II.
  */
-public class DominanceComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class DominanceComparator implements Comparator<Solution> {
 
-    private double epsilon;
-    OverallConstraintViolationComparator<Type> violationConstraintComparator;
-
+    private final double epsilon;
+    protected boolean[] objectiveMaximizationFlags;
+    OverallConstraintViolationComparator violationConstraintComparator;
     public DominanceComparator() {
         this(0.0);
     }
 
     public DominanceComparator(double epsilon) {
-        violationConstraintComparator = new OverallConstraintViolationComparator<>();
+        violationConstraintComparator = new OverallConstraintViolationComparator();
         this.epsilon = epsilon;
     }
 
+    public void setObjectiveMaximizationFlags(boolean[] objectiveMaximizationFlags) {
+        this.objectiveMaximizationFlags = objectiveMaximizationFlags;
+    }
 
     /**
      * Compares the dominance relation of two solutions.
@@ -53,19 +57,15 @@ public class DominanceComparator<Type> implements Comparator<MOSolutionBase<Type
      * @return -1, or 0, or 1 if solution1 dominates solution2, both are
      * non-dominated, or solution1  is dominated by solution2, respectively.
      */
-    public int compare(MOSolutionBase<Type> solution1, MOSolutionBase<Type> solution2) {
+    @Override
+    public int compare(Solution solution1, Solution solution2) {
         if (solution1 == null)
             return 1;
         else if (solution2 == null)
             return -1;
 
-        int dominate1; // dominate1 indicates if some objective of solution1
-        // dominates the same objective in solution2. dominate2
-        int dominate2; // is the complementary of dominate1.
-
-        dominate1 = 0;
-        dominate2 = 0;
-
+        int dominate1 = 0; // dominate1 indicates if some objective of solution1 dominates the same objective in solution2.
+        int dominate2 = 0; // dominate2 is complementary to dominate1.
         int flag; // stores the result of the comparison
 
 
@@ -75,30 +75,40 @@ public class DominanceComparator<Type> implements Comparator<MOSolutionBase<Type
 
         // Equal number of violated constraints. Applying a dominance Test then
         double value1, value2;
-        for (int i = 0; i < solution1.numberOfObjectives(); i++) {
+        for (int i = 0; i < solution1.getNumberOfObjectives(); i++) {
             value1 = solution1.getObjective(i);
             value2 = solution2.getObjective(i);
-            if (value1 / (1 + epsilon) < value2) {
-                flag = -1;
-            } else if (value2 / (1 + epsilon) < value1) {
-                flag = 1;
-            } else {
-                flag = 0;
+
+            // if objectiveMaximizationFlags is not set use minimization as default
+            if (objectiveMaximizationFlags != null && objectiveMaximizationFlags[i]) {
+                if (value1 / (1 + epsilon) > value2) {
+                    flag = -1;
+                } else if (value2 / (1 + epsilon) > value1) {
+                    flag = 1;
+                } else {
+                    flag = 0;
+                }
+            }
+            else {
+                if (value1 / (1 + epsilon) < value2) {
+                    flag = -1;
+                } else if (value2 / (1 + epsilon) < value1) {
+                    flag = 1;
+                } else {
+                    flag = 0;
+                }
             }
 
             if (flag == -1) {
                 dominate1 = 1;
-            }
-
-            if (flag == 1) {
+            }else if (flag == 1) {
                 dominate2 = 1;
             }
         }
 
         if (dominate1 == dominate2) {
             return 0; // No one dominate the other
-        }
-        if (dominate1 == 1) {
+        } else if (dominate1 == 1) {
             return -1; // solution1 dominates solution2
         }
         return 1; // solution2 dominates solution1

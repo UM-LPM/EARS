@@ -1,10 +1,12 @@
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.IntegerMOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.CombinatorialProblem;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-public class PMXCrossover implements CrossoverOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> {
+public class PMXCrossover implements CrossoverOperator<NumberProblem<Integer>, NumberSolution<Integer>> {
 
 	private double crossoverProbability = 1.0;
 
@@ -22,7 +24,7 @@ public class PMXCrossover implements CrossoverOperator<Integer, IntegerMOTask, M
 	}
 	
 	@Override
-	public MOSolutionBase<Integer>[] execute(MOSolutionBase<Integer>[] source, IntegerMOTask tb) {
+	public NumberSolution<Integer>[] execute(NumberSolution<Integer>[] source, NumberProblem<Integer> problem) {
 		if (source.length < 2) {
 			return null;
 		}
@@ -36,8 +38,8 @@ public class PMXCrossover implements CrossoverOperator<Integer, IntegerMOTask, M
 	 * @param parents     Parents
 	 * @return An array containing the two offspring
 	 */
-	public MOSolutionBase<Integer>[] doCrossover(double probability, MOSolutionBase<Integer>[] parents) {
-		MOSolutionBase<Integer>[] offspring = new MOSolutionBase[2];
+	public NumberSolution<Integer>[] doCrossover(double probability, NumberSolution<Integer>[] parents) {
+		NumberSolution<Integer>[] offspring = new NumberSolution[2];
 
 		offspring[0] = parents[0].copy();
 		offspring[1] = parents[1].copy();
@@ -107,7 +109,7 @@ public class PMXCrossover implements CrossoverOperator<Integer, IntegerMOTask, M
 
 
 	@Override
-	public void setCurrentSolution(MOSolutionBase<Integer> current) {
+	public void setCurrentSolution(NumberSolution<Integer> current) {
 		
 		
 	}

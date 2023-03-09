@@ -8,9 +8,7 @@ import org.um.feri.ears.util.Util;
 public class F18 extends CEC2010 {
 
     public F18(int d) {
-        super(d, 18);
-
-        name = "F18 D/m-group Shifted and m-dimensional Rosenbrock's Problem 1.2";
+        super("F18 D/m-group Shifted and m-dimensional Rosenbrock's Problem 1.2", d, 18);
 
         P = new int[numberOfDimensions];
         P = Util.randomPermutation(numberOfDimensions);

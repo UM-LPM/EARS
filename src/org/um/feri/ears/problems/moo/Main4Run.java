@@ -12,9 +12,7 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.IntegerMOTask;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
@@ -51,19 +49,19 @@ public class Main4Run {
     	//det.run(50, indicators, players, new ZDT1(),50);
         
 
-        DoubleMOTask t1 = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300);
-       /*DoubleMOTask t2 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem2());
-        DoubleMOTask t3 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem3());
-        DoubleMOTask t4 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem4());
-        DoubleMOTask t5 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem5());
-        DoubleMOTask t6 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem6());
-        DoubleMOTask t7 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem7());
-        DoubleMOTask t8 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem8());
-        DoubleMOTask t9 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem9());
-        DoubleMOTask t10 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem10());
-        DoubleMOTask t11 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(2));*/
-        //DoubleMOTask t12 = new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(3));
-    	ArrayList<DoubleMOTask> tasks = new ArrayList<DoubleMOTask>();
+        Task<NumberSolution<Double>, DoubleProblem> t1 = new Task<>(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300);
+       /*Task<NumberSolution<Double>, DoubleProblem> t2 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem2());
+        Task<NumberSolution<Double>, DoubleProblem> t3 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem3());
+        Task<NumberSolution<Double>, DoubleProblem> t4 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem4());
+        Task<NumberSolution<Double>, DoubleProblem> t5 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem5());
+        Task<NumberSolution<Double>, DoubleProblem> t6 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem6());
+        Task<NumberSolution<Double>, DoubleProblem> t7 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem7());
+        Task<NumberSolution<Double>, DoubleProblem> t8 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem8());
+        Task<NumberSolution<Double>, DoubleProblem> t9 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem9());
+        Task<NumberSolution<Double>, DoubleProblem> t10 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem10());
+        Task<NumberSolution<Double>, DoubleProblem> t11 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(2));*/
+        //Task<NumberSolution<Double>, DoubleProblem> t12 = new Task<Double>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(3));
+    	ArrayList<Task<NumberSolution<Double>, DoubleProblem>> tasks = new ArrayList<>();
     	//tasks.add(t1);
     	//tasks.add(t2);
     	//tasks.add(t3);
@@ -81,13 +79,9 @@ public class Main4Run {
 		//MOAlgorithm.setCaching(Cache.Random);
 		MOAlgorithm.setRunWithOptimalParameters(true);
     	
-    	for (DoubleMOTask task : tasks) {
+    	for (Task<NumberSolution<Double>,DoubleProblem> task : tasks) {
     		
-   	
-    		CrossoverOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> cross = new PMXCrossover();
-    		MutationOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> mut = new PermutationSwapMutation(0.2);
 
-    		
     		I_NSGAII nsga = new I_NSGAII();
     		I_IBEA ibea = new I_IBEA();
     		I_MOEAD moead = new I_MOEAD();
@@ -99,21 +93,21 @@ public class Main4Run {
             	
             	// OA_AJHsqldb OO_BCEL OO_MyBatis
             
-            	ParetoSolution best = nsga.execute(new IntegerMOTask(new CITOProblem("OO_MyBatis"), StopCriterion.EVALUATIONS, 300000, 500, 300));
+            	ParetoSolution best = nsga.execute(new Task<>(new CITOProblem("OO_MyBatis"), StopCriterion.EVALUATIONS, 300000, 500, 300));
             	
-            	//ParetoSolution best = moead.execute(new DoubleMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
+            	//ParetoSolution best = moead.execute(new Task<NumberSolution<Double>, DoubleProblem>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new UnconstrainedProblem1()));
             	
             	//best.printFeasibleFUN("D:\\Benchmark results\\MOEAD.dat");
             	
             	//best.printFeasibleFUN("D:\\Benchmark results\\IBEA_UF1.csv");
-            	//moead.run(new IntegerMOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new CITOProblem("OO_MyBatis")));
+            	//moead.run(new Task<>(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new CITOProblem("OO_MyBatis")));
             	
-            	/*best.evaluate(new InvertedGenerationalDistance<Double>(task.getNumberOfObjectives(), task.getProblemFileName()));
+            	/*best.evaluate(new InvertedGenerationalDistance<Double>(task.getNumberOfObjectives(), task.problem.getReferenceSetFileName()));
             	System.out.println(best.getEval());
-            	best.evaluate(new GenerationalDistance<Double>(task.getNumberOfObjectives(), task.getProblemFileName()));
+            	best.evaluate(new GenerationalDistance<Double>(task.getNumberOfObjectives(), task.problem.getReferenceSetFileName()));
             	System.out.println(best.getEval());*/
             	
-                //ParetoSolution best2 = moeadtsm.run(new MOTask(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(3)));
+                //ParetoSolution best2 = moeadtsm.run(new Task(EnumStopCriterion.EVALUATIONS, 300000, 0.0001, new DTLZ2(3)));
             	
             	/*best1.evaluate(new NativeHV(task.getProblem()));
             	System.out.println(best1.getEval());

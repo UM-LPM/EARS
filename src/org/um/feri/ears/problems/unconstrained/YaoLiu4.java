@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,13 +12,12 @@ import static java.lang.Math.max;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_Y.html#go_benchmark.YaoLiu04
  */
-public class YaoLiu4 extends Problem {
+public class YaoLiu4 extends DoubleProblem {
 
     public YaoLiu4() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "YaoLiu4";
+        super("YaoLiu4", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
     }
 
     @Override

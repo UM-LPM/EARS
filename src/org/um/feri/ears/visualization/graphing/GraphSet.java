@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.visualization.graphing.data.GraphDataSet;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
@@ -93,7 +93,7 @@ public class GraphSet
 		this.graphs = new ArrayList<GraphEARS>();
 		for (int i=0; i<allData.length; i++)
 		{
-			if (allData[i][0].algorithm instanceof Algorithm)
+			if (allData[i][0].algorithm instanceof NumberAlgorithm)
 			{
 				if (type == 0 || type == 1)
 					graphs.add(new GraphEARSStatic(allData[i], evalsPerStep));
@@ -122,7 +122,7 @@ public class GraphSet
 		this.graphs = new ArrayList<GraphEARS>();
 		for (int i=0; i<allData.length; i++)
 		{
-			if (allData[i][0].algorithm instanceof Algorithm)
+			if (allData[i][0].algorithm instanceof NumberAlgorithm)
 			{
 				if (type == 0 || type == 1)
 					graphs.add(new GraphEARSStatic(allData[i]));
@@ -362,7 +362,7 @@ public class GraphSet
 			if (tmp.data==null)
 				continue;
 			// Static image, SO Algorithm
-			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof Algorithm)
+			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof NumberAlgorithm)
 			{
 				if (gt == PlotType.AVERAGE_OF_ITERATIONS
 						|| gt == PlotType.BEST_OF_ITERATIONS
@@ -382,7 +382,7 @@ public class GraphSet
 		{
 			GraphEARS tmp = graphs.get(i);
 			// Static image, SO Algorithm
-			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof Algorithm)
+			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof NumberAlgorithm)
 			{
 				if (gt == PlotType.AVERAGE_OF_ITERATIONS
 						|| gt == PlotType.BEST_OF_ITERATIONS
@@ -402,7 +402,7 @@ public class GraphSet
 		{
 			GraphEARS tmp = graphs.get(i);
 			// Static image, SO Algorithm
-			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof Algorithm)
+			if (tmp instanceof GraphEARSStatic && tmp.data[0].algorithm instanceof NumberAlgorithm)
 			{
 				if (gt == PlotType.AVERAGE_OF_ITERATIONS
 						|| gt == PlotType.BEST_OF_ITERATIONS

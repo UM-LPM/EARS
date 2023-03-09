@@ -1,30 +1,29 @@
 package org.um.feri.ears.algorithms.so.pso;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
-import java.util.Arrays;
-
-public class PsoSolution extends DoubleSolution {
+public class PsoSolution extends NumberSolution<Double> {
     public PsoSolution pBest;
     public double[] velocity;
 
-    public PsoSolution(Task t) throws StopCriterionException {
+    public PsoSolution(Task<NumberSolution<Double>, DoubleProblem> t) throws StopCriterionException {
         super(t.getRandomEvaluatedSolution());
-        velocity = new double[t.getNumberOfDimensions()];
+        velocity = new double[t.problem.getNumberOfDimensions()];
         double l;
         double r;
-        for (int i = 0; i < t.getNumberOfDimensions(); i++) {
-            l = -Math.abs(t.getUpperLimit()[i] - t.getLowerLimit()[i]) / 4;
-            r = Math.abs(t.getUpperLimit()[i] - t.getLowerLimit()[i]) / 4;
+        for (int i = 0; i < t.problem.getNumberOfDimensions(); i++) {
+            l = -Math.abs(t.problem.getUpperLimit(i) - t.problem.getLowerLimit(i)) / 4;
+            r = Math.abs(t.problem.getUpperLimit(i) - t.problem.getLowerLimit(i)) / 4;
             velocity[i] = Util.nextDouble(l, r);
         }
         pBest = new PsoSolution(this);
     }
 
-    public PsoSolution(DoubleSolution solution) {
+    public PsoSolution(NumberSolution<Double> solution) {
         super(solution);
     }
 

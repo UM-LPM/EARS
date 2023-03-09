@@ -2,10 +2,10 @@ package org.um.feri.ears.problems.constrained;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.util.Util;
 
 /**
  * Real-World Problem:
@@ -19,19 +19,18 @@ import org.um.feri.ears.problems.Problem;
  * Variables: Thickness of the shell (x1), thickness of the head (x2), inner radius (x3)
  * </p>
  */
-public class RealWorldPressureVesselDesign extends Problem {
+public class RealWorldPressureVesselDesign extends DoubleProblem {
 
     public RealWorldPressureVesselDesign() {
-        super(4, 4);
-        name = "PressureVesselDesign";
-        max_constraints = new Double[numberOfConstraints];
-        min_constraints = new Double[numberOfConstraints];
-        count_constraints = new Double[numberOfConstraints];
-        sum_constraints = new Double[numberOfConstraints];
-        normalization_constraints_factor = new Double[numberOfConstraints];
+        super("PressureVesselDesign", 4, 1, 1, 4);
+        maxConstraints = new double[numberOfConstraints];
+        minConstraints = new double[numberOfConstraints];
+        countConstraints = new double[numberOfConstraints];
+        sumConstraints = new double[numberOfConstraints];
+        normalizationConstraintsFactor = new double[numberOfConstraints];
 
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
 
         // thickness of the vessel
         lowerLimit.set(0, 0.0);
@@ -56,7 +55,10 @@ public class RealWorldPressureVesselDesign extends Problem {
     }
 
     @Override
-    public double[] evaluateConstrains(double[] x) {
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
+
+        double[] x = Util.toDoubleArray(solution.getVariables());
+
         double[] g = new double[numberOfConstraints];
         g[0] = (-1.0 * x[0]) + (0.0193 * x[2]);
         g[1] = (-1.0 * x[1]) + (0.00954 * x[2]);

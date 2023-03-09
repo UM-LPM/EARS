@@ -30,23 +30,21 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
-public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class IBEA<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     int populationSize;
     int archiveSize;
 
-    ParetoSolution<Type> population;
-    ParetoSolution<Type> archive;
+    ParetoSolution<N> population;
+    ParetoSolution<N> archive;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
     /**
      * Defines the number of tournaments for creating the mating pool
@@ -64,7 +62,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      */
     private double maxIndicatorValue_;
 
-    public IBEA(CrossoverOperator<Type, T, MOSolutionBase<Type>> crossover, MutationOperator<Type, T, MOSolutionBase<Type>> mutation, int populationSize, int archiveSize) {
+    public IBEA(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, int populationSize, int archiveSize) {
 
         this.cross = crossover;
         this.mut = mutation;
@@ -82,22 +80,22 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     @Override
     protected void start() throws StopCriterionException {
 
-        ParetoSolution<Type> offSpringSolutionSet;
+        ParetoSolution<N> offSpringSolutionSet;
 
-        BinaryTournament2<Type> bt2 = new BinaryTournament2<Type>();
+        BinaryTournament2<N> bt2 = new BinaryTournament2<>();
 
         // Create the initial solutionSet
-        MOSolutionBase<Type> newSolution;
+        NumberSolution<N> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }
 
         while (!task.isStopCriterion()) {
-            ParetoSolution<Type> union = population.union(archive);
+            ParetoSolution<N> union = population.union(archive);
             calculateFitness(union);
             archive = union;
 
@@ -106,8 +104,8 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
             }
 
             // Create a new offspringPopulation
-            offSpringSolutionSet = new ParetoSolution<Type>(populationSize);
-            MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+            offSpringSolutionSet = new ParetoSolution<N>(populationSize);
+            NumberSolution<N>[] parents = new NumberSolution[2];
             while (offSpringSolutionSet.size() < populationSize) {
                 int j = 0;
                 do {
@@ -121,8 +119,8 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 } while (k < IBEA.TOURNAMENTS_ROUNDS); // do-while
 
                 //make the crossover
-                MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
-                mut.execute(offSpring[0], task);
+                NumberSolution<N>[] offSpring = cross.execute(parents, task.problem);
+                mut.execute(offSpring[0], task.problem);
                 if (task.isStopCriterion())
                     break;
                 task.eval(offSpring[0]);
@@ -134,7 +132,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         } // while
 
         // Return the first non-dominated front
-        Ranking<Type> ranking = new Ranking<Type>(archive);
+        Ranking<N> ranking = new Ranking<N>(archive);
         best = ranking.getSubfront(0);
 
     }
@@ -166,8 +164,8 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 }
             }
         }
-        population = new ParetoSolution<Type>(populationSize);
-        archive = new ParetoSolution<Type>(archiveSize);
+        population = new ParetoSolution<N>(populationSize);
+        archive = new ParetoSolution<N>(archiveSize);
     }
 
     @Override
@@ -179,8 +177,8 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * calculates the hypervolume of that portion of the objective space that
      * is dominated by individual a but not by individual b
      */
-    double calcHypervolumeIndicator(MOSolutionBase<Type> p_ind_a,
-									MOSolutionBase<Type> p_ind_b,
+    double calcHypervolumeIndicator(NumberSolution<N> p_ind_a,
+									NumberSolution<N> p_ind_b,
 									int d,
 									double[] maximumValues,
 									double[] minimumValues) {
@@ -221,24 +219,24 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     /**
      * This structure store the indicator values of each pair of elements
      */
-    public void computeIndicatorValuesHD(ParetoSolution<Type> solutionSet,
+    public void computeIndicatorValuesHD(ParetoSolution<N> solutionSet,
                                          double[] maximumValues,
                                          double[] minimumValues) {
-        ParetoSolution<Type> A, B;
+        ParetoSolution<N> A, B;
         // Initialize the structures
         indicatorValues_ = new ArrayList<List<Double>>();
         maxIndicatorValue_ = -Double.MAX_VALUE;
 
         for (int j = 0; j < solutionSet.size(); j++) {
-            A = new ParetoSolution<Type>(1);
+            A = new ParetoSolution<N>(1);
             A.add(solutionSet.get(j));
 
             List<Double> aux = new ArrayList<Double>();
             for (int i = 0; i < solutionSet.size(); i++) {
-                B = new ParetoSolution<Type>(1);
+                B = new ParetoSolution<N>(1);
                 B.add(solutionSet.get(i));
 
-                int flag = (new DominanceComparator<Type>()).compare(A.get(0), B.get(0));
+                int flag = (new DominanceComparator()).compare(A.get(0), B.get(0));
 
                 double value = 0.0;
                 if (flag == -1) {
@@ -262,7 +260,7 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     /**
      * Calculate the fitness for the individual at position pos
      */
-    public void fitness(ParetoSolution<Type> solutionSet, int pos) {
+    public void fitness(ParetoSolution<N> solutionSet, int pos) {
         double fitness = 0.0;
         double kappa = 0.05;
 
@@ -271,14 +269,14 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 fitness += Math.exp((-1 * indicatorValues_.get(i).get(pos) / maxIndicatorValue_) / kappa);
             }
         }
-        solutionSet.get(pos).setFitness(fitness);
+        solutionSet.get(pos).setParetoFitness(fitness);
     }
 
 
     /**
      * Calculate the fitness for the entire population.
      **/
-    public void calculateFitness(ParetoSolution<Type> solutionSet) {
+    public void calculateFitness(ParetoSolution<N> solutionSet) {
         // Obtains the lower and upper bounds of the population
         double[] maximumValues = new double[numObj];
         double[] minimumValues = new double[numObj];
@@ -308,16 +306,16 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     /**
      * Update the fitness before removing an individual
      */
-    public void removeWorst(ParetoSolution<Type> solutionSet) {
+    public void removeWorst(ParetoSolution<N> solutionSet) {
 
         // Find the worst;
-        double worst = solutionSet.get(0).getFitness();
+        double worst = solutionSet.get(0).getParetoFitness();
         int worstIndex = 0;
         double kappa = 0.05;
 
         for (int i = 1; i < solutionSet.size(); i++) {
-            if (solutionSet.get(i).getFitness() > worst) {
-                worst = solutionSet.get(i).getFitness();
+            if (solutionSet.get(i).getParetoFitness() > worst) {
+                worst = solutionSet.get(i).getParetoFitness();
                 worstIndex = i;
             }
         }
@@ -331,9 +329,9 @@ public class IBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         // Update the population
         for (int i = 0; i < solutionSet.size(); i++) {
             if (i != worstIndex) {
-                double fitness = solutionSet.get(i).getFitness();
+                double fitness = solutionSet.get(i).getParetoFitness();
                 fitness -= Math.exp((-indicatorValues_.get(worstIndex).get(i) / maxIndicatorValue_) / kappa);
-                solutionSet.get(i).setFitness(fitness);
+                solutionSet.get(i).setParetoFitness(fitness);
             }
         }
 

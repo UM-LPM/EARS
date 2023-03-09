@@ -30,9 +30,6 @@ public class Transformations {
 
 	/**
 	 * bPoly transformation
-	 * @throws Exception 
-	 *
-	 * @throws org.uma.jmetal.util.JMetalException
 	 */
 	public double bPoly(double y, double alpha) throws Exception  {
 		if (!(alpha > 0)) {
@@ -145,8 +142,8 @@ public class Transformations {
 	/**
 	 */
 	double correctTo01(double a) {
-		double min = (double) 0.0;
-		double max = (double) 1.0;
+		double min = 0.0;
+		double max = 1.0;
 		double min_epsilon = min - EPSILON;
 		double max_epsilon = max + EPSILON;
 

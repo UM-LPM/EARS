@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,13 +14,12 @@ http://benchmarkfcns.xyz/benchmarkfcns/threehumpcamelfcn.html
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/67-three-hump-camel-back-function
  */
 
-public class ThreeHumpCamel extends Problem {
+public class ThreeHumpCamel extends DoubleProblem {
 
     public ThreeHumpCamel() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Three Hump Camel";
+        super("Three Hump Camel", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
     }
 
     @Override

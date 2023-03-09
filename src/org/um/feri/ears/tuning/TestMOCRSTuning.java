@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.um.feri.ears.algorithms.moo.moead.I_MOEAD;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.IntegerMOTask;
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Util;
@@ -32,7 +30,7 @@ public class TestMOCRSTuning {
         int problemNumEval = 60000;
         int tuningRuns = 8;
 
-        ArrayList<MOTask> tasks = new ArrayList<MOTask>();
+        ArrayList<Task<NumberSolution<Integer>, NumberProblem<Integer>>> tasks = new ArrayList<>();
         List<IndicatorName> indicators = new ArrayList<IndicatorName>();
     	
     	
@@ -48,14 +46,14 @@ public class TestMOCRSTuning {
 		TollSystems		188				53			24			2496
     	*/
 
-        tasks.add(new IntegerMOTask(new CITOProblem(CITOProblem.Problems.OA_AJ_HOT_DRAW.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
-        tasks.add(new IntegerMOTask(new CITOProblem(CITOProblem.Problems.OA_AJ_HSQLDB.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4));
-        tasks.add(new IntegerMOTask(new CITOProblem(CITOProblem.Problems.OO_MY_BATIS.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4));
-        tasks.add(new IntegerMOTask(new CITOProblem(CITOProblem.Problems.OO_J_HOT_DRAW.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
-        tasks.add(new IntegerMOTask(new CITOProblem(CITOProblem.Problems.OO_J_BOSS.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
-        //tasks.add(new IntegerMOTask(new CITOProblem(CITOProblem.Problems.OA_HEALTH_WATCHER.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
-        tasks.add(new IntegerMOTask(new CITOProblem(CITOProblem.Problems.OO_BCEL.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
-        tasks.add(new IntegerMOTask(new CITOProblem(CITOProblem.Problems.OA_TOLL_SYSTEMS.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
+        tasks.add(new Task<>(new CITOProblem(CITOProblem.Problems.OA_AJ_HOT_DRAW.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
+        tasks.add(new Task<>(new CITOProblem(CITOProblem.Problems.OA_AJ_HSQLDB.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4));
+        tasks.add(new Task<>(new CITOProblem(CITOProblem.Problems.OO_MY_BATIS.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000, 1.0E-4));
+        tasks.add(new Task<>(new CITOProblem(CITOProblem.Problems.OO_J_HOT_DRAW.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
+        tasks.add(new Task<>(new CITOProblem(CITOProblem.Problems.OO_J_BOSS.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
+        //tasks.add(new Task<>(new CITOProblem(CITOProblem.Problems.OA_HEALTH_WATCHER.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
+        tasks.add(new Task<>(new CITOProblem(CITOProblem.Problems.OO_BCEL.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
+        tasks.add(new Task<>(new CITOProblem(CITOProblem.Problems.OA_TOLL_SYSTEMS.name()), StopCriterion.EVALUATIONS, problemNumEval, 5000, 3000));
 
         indicators.add(IndicatorName.IGD_PLUS);
         indicators.add(IndicatorName.NATIVE_HV);
@@ -69,7 +67,7 @@ public class TestMOCRSTuning {
             for (int i = 0; i < tuningRuns; i++) {
                 System.out.println("/////////////////////////////////////////////////////////////////////////////////////////////////////////");
                 System.out.println("RUN: " + (i + 1));
-                MOCRSTuning m = new MOCRSTuning();
+                MOCRSTuning<Integer> m = new MOCRSTuning<Integer>();
                 CRSSolution best = m.tune(I_MOEAD.class, "MOEA/D", control_parameters, tasks, indicators, popSize, maxGen);
                 bestSolutions.add(best);
             }

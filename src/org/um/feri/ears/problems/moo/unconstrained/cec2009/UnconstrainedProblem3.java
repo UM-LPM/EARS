@@ -2,7 +2,6 @@ package org.um.feri.ears.problems.moo.unconstrained.cec2009;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.UP3_1;
 import org.um.feri.ears.problems.moo.functions.UP3_2;
 
@@ -21,26 +20,20 @@ public class UnconstrainedProblem3 extends CEC2009 {
 	 * @param numberOfVariables Number of variables.
 	 */
 	public UnconstrainedProblem3(Integer numberOfVariables) {
-		super(numberOfVariables,0, 2);
+		super("UF3", numberOfVariables,2, 0);
 
-		name = "UF3";
-		fileName = "UF3";
+		referenceSetFileName = "UF3";
 
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+		upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 
 		for (int var = 0; var < numberOfVariables; var++) {
 			lowerLimit.add(0.0);
 			upperLimit.add(1.0);
 		}
 
-		this.addObjective(new UP3_1(numberOfDimensions));
-		this.addObjective(new UP3_2(numberOfDimensions));
+		addObjective(new UP3_1(numberOfDimensions));
+		addObjective(new UP3_2(numberOfDimensions));
 
-	}
-
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
-		
 	}
 }

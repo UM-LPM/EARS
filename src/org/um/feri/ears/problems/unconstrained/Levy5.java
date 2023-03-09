@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,16 +13,16 @@ import static java.lang.Math.pow;
 infinity77.net/global_optimization/test_functions_nd_L.html#go_benchmark.Levy05
  */
 
-public class Levy5 extends Problem {
+public class Levy5 extends DoubleProblem {
 
     public Levy5() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Levy5";
+        super("Levy5", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
 
-        optimum[0][0] = -1.3068;
-        optimum[0][1] = -1.4248;
+        decisionSpaceOptima[0][0] = -1.3068;
+        decisionSpaceOptima[0][1] = -1.4248;
+        objectiveSpaceOptima[0] = -176.13757123796194;
     }
 
     @Override
@@ -33,10 +34,5 @@ public class Levy5 extends Problem {
             sum2 += i * cos((i + 1) * x[1] + i);
         }
         return sum1 * sum2 + pow(x[0] + 1.42513, 2) + pow(x[1] + 0.80032, 2);
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -176.13757123796194;
     }
 }

@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,13 +15,13 @@ http://benchmarkfcns.xyz/benchmarkfcns/powellsumfcn.html
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Sodp
  */
 
-public class PowellSum extends Problem {
+public class PowellSum extends DoubleProblem {
 
     public PowellSum(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -1.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "Powell Sum"; // also known as Sum Of Different Powers
+        super("Powell Sum", d, 1, 1, 0);
+        // also known as Sum Of Different Powers
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
     }
 
     @Override

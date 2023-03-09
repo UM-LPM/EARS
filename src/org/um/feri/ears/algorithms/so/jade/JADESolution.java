@@ -1,8 +1,8 @@
 package org.um.feri.ears.algorithms.so.jade;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
-public class JADESolution extends DoubleSolution {
+public class JADESolution extends NumberSolution<Double> {
     double CR, F;
 
     /*	public JADEIndividual(Individual i) {
@@ -16,7 +16,7 @@ public class JADESolution extends DoubleSolution {
         F = i.F;
     }
 
-    public JADESolution(DoubleSolution eval, double cr2, double f2) {
+    public JADESolution(NumberSolution<Double> eval, double cr2, double f2) {
         super(eval);
         CR = cr2;
         F = f2;

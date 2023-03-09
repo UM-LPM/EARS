@@ -2,14 +2,11 @@ package org.um.feri.ears.util;
 
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
+import java.util.stream.Collectors;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 import com.google.gson.Gson;
@@ -82,7 +79,7 @@ public class Util {
 
             ParetoWithEval paretoList = new ParetoWithEval();
 
-            for (MOSolutionBase<T> s : best.solutions) {
+            for (NumberSolution<T> s : best.solutions) {
                 double[] objectives = s.getObjectives();
                 //check for NaN
                 for (int i = 0; i < objectives.length; i++) {
@@ -113,7 +110,7 @@ public class Util {
 
             ParetoWithEval paretoList = new ParetoWithEval();
 
-            for (MOSolutionBase<T> s : best.solutions) {
+            for (NumberSolution<T> s : best.solutions) {
                 double[] objectives = s.getObjectives();
                 //check for NaN
                 for (int i = 0; i < objectives.length; i++) {
@@ -385,5 +382,26 @@ public class Util {
             maxValue = Math.max(maxValue, arg);
         }
         return maxValue;
+    }
+
+    public static <T> List<T> list(T... items) {
+        List<T> list = new LinkedList<T>();
+        for (T item : items) {
+            list.add(item);
+        }
+        return list;
+    }
+
+    public static double[] toDoubleArray(List<Double> list) {
+        return list.stream().mapToDouble(d -> d).toArray();
+    }
+
+    public static int[] toIntArray(List<Integer> list) {
+        return list.stream().mapToInt(i -> i).toArray();
+    }
+
+    public static ArrayList<Double> toDoubleArrayList(double[] array) {
+
+        return Arrays.stream(array).boxed().collect(Collectors.toCollection(ArrayList::new));
     }
 }

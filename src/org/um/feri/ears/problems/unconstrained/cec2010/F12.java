@@ -8,9 +8,7 @@ import org.um.feri.ears.util.Util;
 public class F12 extends CEC2010 {
 
     public F12(int d) {
-        super(d, 12);
-
-        name = "F12 D/2m-group Shifted m-dimensional Schwefel's Problem 1.2";
+        super("F12 D/2m-group Shifted m-dimensional Schwefel's Problem 1.2", d, 12);
 
         P = new int[numberOfDimensions];
         P = Util.randomPermutation(numberOfDimensions);

@@ -2,17 +2,17 @@ package org.um.feri.ears.benchmark;
 
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.MOTask;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public class MOAlgorithmEvalResult {
 	private ParetoSolution best;
     private MOAlgorithm al;
-    private MOTask task;
+    private Task task;
     private boolean evaluated = false;
     
     
-    public MOAlgorithmEvalResult(ParetoSolution best, MOAlgorithm al, MOTask task) {
+    public MOAlgorithmEvalResult(ParetoSolution best, MOAlgorithm al, Task task) {
         super();
         this.best = best;
         this.al = al;
@@ -34,7 +34,7 @@ public class MOAlgorithmEvalResult {
     public MOAlgorithm getAl() {
         return al;
     }
-    public MOTask getTask() {
+    public Task getTask() {
         return task;
     }
     public void setAl(MOAlgorithm al) {

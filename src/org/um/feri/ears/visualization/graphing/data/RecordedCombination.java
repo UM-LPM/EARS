@@ -2,15 +2,15 @@ package org.um.feri.ears.visualization.graphing.data;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
 @SuppressWarnings("rawtypes")
 public class RecordedCombination
 {
-	public AlgorithmBase algorithm;
+	public Algorithm algorithm;
 	public String problemName;
 	public int problemHashCode;
 	public long iterationCount;
@@ -18,7 +18,7 @@ public class RecordedCombination
 	protected ArrayList<RecordedData> records;
 	protected ParetoSolution paretoSolution = null;
 	
-	public RecordedCombination(AlgorithmBase algorithm, String problemName, int problemHashCode)
+	public RecordedCombination(Algorithm algorithm, String problemName, int problemHashCode)
 	{
 		this.algorithm = algorithm;
 		this.problemName = problemName;
@@ -28,7 +28,7 @@ public class RecordedCombination
 		records = new ArrayList<RecordedData>();
 		allRecords.add(records);
 	}
-	public RecordedCombination(AlgorithmBase algorithm, String problemName, int problemHashCode, int iteration)
+	public RecordedCombination(Algorithm algorithm, String problemName, int problemHashCode, int iteration)
 	{
 		this.algorithm = algorithm;
 		this.problemName = problemName;
@@ -46,7 +46,7 @@ public class RecordedCombination
 		allRecords.add(records);
 	}
 	
-	public void AddRecord(SolutionBase sol, String problemName)
+	public void AddRecord(Solution sol, String problemName)
 	{
 		//prob.getName();
 		RecordedData d = new RecordedData(sol, problemName, algorithm, iterationCount-1);
@@ -74,7 +74,7 @@ public class RecordedCombination
 		}*/
 		
 		// Save actual pareto front:
-		records.get(0).paretoFront = (MOSolutionBase[]) ps.solutions.toArray(new MOSolutionBase[0]);
+		records.get(0).paretoFront = (NumberSolution[]) ps.solutions.toArray(new NumberSolution[0]);
 	}
 	
 	public void Include(RecordedCombination other)

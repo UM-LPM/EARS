@@ -7,14 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
+import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 import com.panayotis.gnuplot.JavaPlot;
-
-
 
 
 public class GraphEARSAnimated extends GraphEARS
@@ -459,7 +457,7 @@ public class GraphEARSAnimated extends GraphEARS
 			popCounter++;
 			
 			// Update min/max:
-			MOSolutionBase tmp = (MOSolutionBase)data[i].solution;
+			NumberSolution tmp = (NumberSolution)data[i].solution;
 			tmpX = tmp.getObjective(axisX);
 			tmpY = tmp.getObjective(axisY);
 			if (tmpX < minX) 
@@ -530,7 +528,7 @@ public class GraphEARSAnimated extends GraphEARS
 		//ArrayList<RecordedData[]> generationAllList = new ArrayList<RecordedData[]>();
 
 		long groupCounter = 0;
-		MOSolutionBase tmp;
+		NumberSolution tmp;
 		double tmpX;
 		double tmpY;
 		for (int i=0; i<data.length; i++)
@@ -539,7 +537,7 @@ public class GraphEARSAnimated extends GraphEARS
 			groupCounter++;
 			
 			// Update min/max:
-			tmp = (MOSolutionBase)data[i].solution;
+			tmp = (NumberSolution)data[i].solution;
 			tmpX = tmp.getObjective(axisX);
 			tmpY = tmp.getObjective(axisY);
 			if (tmpX < minX) 
@@ -627,7 +625,7 @@ public class GraphEARSAnimated extends GraphEARS
 	@Deprecated
 	protected long GetPopSize(RecordedData[] data)
 	{
-		AlgorithmBase alg = data[0].algorithm;
+		Algorithm alg = data[0].algorithm;
 		String pop_size_string = null;
 		popSize = GraphEARSStatic.DEFAULT_EVALUATIONS_PER_STEP;
 		

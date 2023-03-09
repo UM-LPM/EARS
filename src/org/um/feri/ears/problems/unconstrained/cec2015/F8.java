@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F8 extends CEC2015 {
 
     public F8(int d) {
-        super(d, 8);
-
-        name = "F08 Griewank-Rosenbrock Function";
+        super("F08 Griewank-Rosenbrock Function", d, 8);
     }
 
     @Override

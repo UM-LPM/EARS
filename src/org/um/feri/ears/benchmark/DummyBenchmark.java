@@ -1,11 +1,9 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.DummyProblem;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
+import org.um.feri.ears.problems.*;
 
-public class DummyBenchmark extends Benchmark {
+public class DummyBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     protected int dimension;
 
     public DummyBenchmark() {
@@ -22,8 +20,8 @@ public class DummyBenchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
-        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
+    protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
     public void addDummyTask(String name) {

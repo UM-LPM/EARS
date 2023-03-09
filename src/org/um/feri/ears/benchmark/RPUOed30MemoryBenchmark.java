@@ -1,12 +1,12 @@
 package org.um.feri.ears.benchmark;
 
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.memory.DuplicationRemovalStrategyRandom;
 import org.um.feri.ears.memory.TaskWithMemory;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.*;
 
-public class RPUOed30MemoryBenchmark extends Benchmark {
+public class RPUOed30MemoryBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     int precision;
     int maxHits;
 
@@ -25,7 +25,7 @@ public class RPUOed30MemoryBenchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+    protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
         tasks.add(new TaskWithMemory(stopCriterion, maxEvaluations, time, maxIterations,0.00001, problem, precision, new DuplicationRemovalStrategyRandom(maxHits)));
     }
 

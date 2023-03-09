@@ -1,170 +1,311 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.Algorithm;
-import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.statistic.rating_system.GameInfo;
-import org.um.feri.ears.statistic.rating_system.GameResult;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.statistic.rating_system.Player;
-import org.um.feri.ears.statistic.rating_system.Rating;
-import org.um.feri.ears.statistic.rating_system.true_skill.*;
-import org.um.feri.ears.util.comparator.AlgorithmResultComparator;
+import org.um.feri.ears.statistic.rating_system.glicko2.Glicko2Rating;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
+import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
 
 import java.util.*;
+import java.util.concurrent.*;
 
-public abstract class Benchmark extends BenchmarkBase<Task, DoubleSolution, Algorithm> {
+public abstract class Benchmark<R extends Solution, S extends Solution, P extends Problem<S>, A extends Algorithm<R, S, P>> {
 
-    protected abstract void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations);
+    public enum RatingCalculation {NORMAL, RATING_CONVERGENCE_GRAPH, RATING_CONVERGENCE_SUM}
 
-    @Override
-    protected void performTournament(int evaluationNumber) {
+    public static boolean printInfo = false;
+    protected ArrayList<Task> tasks;
+    protected ArrayList<A> algorithms;
+    protected String name;
+    protected String shortName;
+    protected String info;
 
-        GameInfo gameInfo = GameInfo.getDefaultGameInfo();
-        TwoPlayerTrueSkillCalculator calculator = new TwoPlayerTrueSkillCalculator();
-        Map<String, Team> oneOnOneTeams = new HashMap<>();
-        FactorGraphTrueSkillCalculator fgCalculator = new FactorGraphTrueSkillCalculator();
-        Map<String, Team> freeForAllTeams = new HashMap<>();
+    // Default benchmark settings
+    protected StopCriterion stopCriterion = StopCriterion.EVALUATIONS;
+    protected int maxEvaluations = 1500;
+    protected long timeLimit = TimeUnit.MILLISECONDS.toNanos(500); //milliseconds
+    protected int maxIterations = 500;
+    public double drawLimit = 1e-7;
+    protected int dimension = 2;
+    protected int numberOfRuns = 15;
+    protected boolean runInParallel = false;
+    protected boolean displayRatingCharts = true;
+    boolean displayRatingIntervalBand = false;
+    protected RatingCalculation ratingCalculation= RatingCalculation.NORMAL;
+    int evaluationsPerTick = 100;
 
-        int[] ranks;
-        int rank;
-        Team[] teamArray;
+    TournamentResults tournamentResults = new TournamentResults();
+    BenchmarkResults<R, S, P, A> benchmarkResults = new BenchmarkResults();
 
-        for(Player player : tournamentResults.getPlayers()) {
-            Team team = new Team(player, GameInfo.getDefaultTrueSkillRating());
-            oneOnOneTeams.put(player.getId(),team);
-            freeForAllTeams.put(player.getId(),team);
+    public Benchmark() {
+        tasks = new ArrayList<>();
+        algorithms = new ArrayList<>();
+    }
+
+    public boolean isRunInParallel() {
+        return runInParallel;
+    }
+
+    public void setRunInParallel(boolean runInParallel) {
+        this.runInParallel = runInParallel;
+    }
+
+    public TournamentResults getResultArena() {
+        return tournamentResults;
+    }
+
+    public String getParameters(String name) {
+        return ""; //TODO reflection
+    }
+
+    public void clearPlayers() {
+        algorithms.clear();
+        benchmarkResults.clear();
+    }
+
+    public BenchmarkResults<R, S, P, A> getBenchmarkResults() {
+        return benchmarkResults;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Task tw : tasks) {
+            sb.append(tw.toString());
+        }
+        return sb.toString();
+    }
+
+    public ArrayList<Task> getAllTasks() {
+        return new ArrayList<Task>(tasks);
+    }
+
+    public int getNumberOfRuns() {
+        return numberOfRuns;
+    }
+
+    public StopCriterion getStopCriterion() {
+        return stopCriterion;
+    }
+
+    /**
+     * Remove algorithm from benchmark
+     *
+     * @param algorithm to be removed from the benchmark
+     */
+    public void removeAlgorithm(Algorithm<R, S, P> algorithm) {
+        algorithms.remove(algorithm);
+        benchmarkResults.removeAlgorithm(algorithm);
+    }
+
+    public boolean isDisplayRatingCharts() {
+        return displayRatingCharts;
+    }
+
+    public void setDisplayRatingCharts(boolean displayRatingCharts) {
+        this.displayRatingCharts = displayRatingCharts;
+    }
+
+    public abstract void initAllProblems();
+
+    public void addAlgorithm(A al) {
+        algorithms.add(al);
+    }
+
+    public void addAlgorithms(ArrayList<A> algorithms) {
+        this.algorithms.addAll(algorithms);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getShortName() {
+        return shortName.isEmpty() ? name : shortName;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    /**
+     * Run the benchmark
+     *
+     * @param numberOfRuns number of runs/repetitions of the benchmark
+     */
+    public void run(int numberOfRuns) {
+        this.numberOfRuns = numberOfRuns;
+        initAllProblems();
+        long start = System.nanoTime();
+        for (int i = 0; i < numberOfRuns; i++) {
+            if (printInfo) System.out.println("Current run: " + (i + 1));
+            for (Task task : tasks) {
+                if (printInfo) System.out.println("Current problem: " + task.getProblemName());
+                ArrayList<AlgorithmRunResult<R, S, P, A>> runResults = runOneTask(task);
+                benchmarkResults.addResults(i, task, runResults);
+            }
+        }
+        long duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        performStatistics();
+    }
+
+    protected ArrayList<AlgorithmRunResult<R, S, P, A>> runOneTask(Task task) {
+
+        if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_GRAPH || ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM) {
+            task.enableEvaluationHistory();
+            task.setStoreEveryNthEvaluation(evaluationsPerTick);
         }
 
-        AlgorithmRunResult<DoubleSolution, Algorithm, Task> result1;
-        AlgorithmRunResult<DoubleSolution, Algorithm, Task> result2;
-        Team team1, team2;
-        String algorithm1Id, algorithm2Id;
+        ArrayList<AlgorithmRunResult<R, S, P, A>> runResults = new ArrayList<>();
+        if (runInParallel) {
+            ExecutorService pool = Executors.newFixedThreadPool(algorithms.size());
+            Set<Future<AlgorithmRunResult>> set = new HashSet<>();
+            for (A algorithm : algorithms) {
+                Future<AlgorithmRunResult> future = pool.submit(algorithm.createRunnable(algorithm, (Task) task.clone()));
+                set.add(future);
+            }
 
-        int numberOfTicks;
+            for (Future<AlgorithmRunResult> future : set) {
+                try {
+                    AlgorithmRunResult result = future.get();
 
-        if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM)
-            numberOfTicks = maxEvaluations / evaluationsPerTick;
-        else
-            numberOfTicks = 2; // the for loop will run only once
+                    if (printInfo)
+                        System.out.println("Total execution time for " + result.algorithm.getId() + ": " + result.algorithm.getLastRunDuration());
 
+                    //TODO generic feasibility check for result
+                    runResults.add(result);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            pool.shutdown();
+        } else {
+            long start;
+            long duration;
+            for (A algorithm : algorithms) {
+                try {
+                    GraphDataRecorder.SetContext(algorithm, task);
+                    Task taskCopy = (Task) task.clone();
+                    start = System.nanoTime();
+                    R result = (R) algorithm.execute(taskCopy);
+                    duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+                    algorithm.addRunDuration(duration, duration - taskCopy.getEvaluationTimeMs());
 
-        for (int n = 1; n <= numberOfTicks; n++) {
-            if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM)
-                evaluationNumber = n * evaluationsPerTick;
-
-            for (HashMap<Task, ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>>> problemMap : benchmarkResults.getResultsByRun()) {
-                for (ArrayList<AlgorithmRunResult<DoubleSolution, Algorithm, Task>> results : problemMap.values()) {
-                    Task t = results.get(0).task;
-
-                    AlgorithmResultComparator rc = new AlgorithmResultComparator(t, evaluationNumber);
-                    results.sort(rc); // best first
-
-                    ranks = new int[algorithms.size()];
-                    teamArray = new Team[algorithms.size()];
-                    rank = 1;
-                    ranks[0] = rank;
-                    teamArray[0] = freeForAllTeams.get(results.get(0).algorithm.getId());
-
-                    for (int i = 1; i < results.size(); i++) {
-                        result1 = results.get(i - 1);
-                        result2 = results.get(i);
-                        if (!resultEqual(result1, result2))
-                            rank++;
-                        ranks[i] = rank;
-                        teamArray[i] = freeForAllTeams.get(result2.algorithm.getId());
-                    }
-
-                    if(tournamentResults.getPlayers().size() > 1) {
-                        Map<Player, Rating> newTeamRatings = fgCalculator.calculateNewRatings(gameInfo, Arrays.asList(teamArray), ranks);
-                        for (Map.Entry<Player, Rating> entry : newTeamRatings.entrySet()) {
-                            Player player = entry.getKey();
-                            Rating rating = entry.getValue();
-                            freeForAllTeams.put(player.getId(), new Team(player, rating));
-                        }
-                    }
-
-                    for (int i = 0; i < results.size() - 1; i++) {
-                        result1 = results.get(i);
-                        algorithm1Id = result1.algorithm.getId();
-                        team1 = oneOnOneTeams.get(algorithm1Id);
-                        for (int j = i + 1; j < results.size(); j++) {
-                            result2 = results.get(j);
-                            algorithm2Id = result2.algorithm.getId();
-                            team2 = oneOnOneTeams.get(algorithm2Id);
-                            Collection<ITeam> competingTeams = Team.concat(team1, team2);
-                            Map<Player, Rating> newRatings;
-                            if (resultEqual(result1, result2)) {
-                                newRatings = calculator.calculateNewRatings(gameInfo, competingTeams, 1, 1);
-                                if (printInfo)
-                                    System.out.println("draw of " + algorithm1Id + " ("
-                                            + Util.df3.format(result1.solution.getEval()) + ", feasible=" + result1.solution.areConstraintsMet()
-                                            + ") against " + algorithm2Id + " (" + Util.df3.format(result2.solution.getEval())
-                                            + ", feasible=" + result2.solution.areConstraintsMet() + ") for " + t.getProblemName());
-                                tournamentResults.addGameResult(GameResult.DRAW, algorithm1Id,
-                                        algorithm2Id, t.getProblemName());
-                            } else {
-                                newRatings = calculator.calculateNewRatings(gameInfo, competingTeams, 1, 2);
-                                if (result1.solution == null) {
-                                    System.out.println(algorithm1Id + " NULL");
-                                }
-                                if (result2.solution == null) {
-                                    System.out.println(algorithm2Id + " NULL");
-                                }
-                                if (printInfo)
-                                    System.out.println("win of " + algorithm1Id + " ("
-                                            + Util.df3.format(result1.solution.getEval()) + ", feasible=" + result1.solution.areConstraintsMet()
-                                            + ") against " + algorithm2Id + " (" + Util.df3.format(result2.solution.getEval())
-                                            + ", feasible=" + result2.solution.areConstraintsMet() + ") for " + t.getProblemName());
-                                tournamentResults.addGameResult(GameResult.WIN, algorithm1Id,
-                                        algorithm2Id, t.getProblemName());
-                            }
-                            Player player1 = tournamentResults.getPlayer(algorithm1Id);
-                            Player player2 = tournamentResults.getPlayer(algorithm2Id);
-                            Rating player1NewRating = newRatings.get(player1);
-                            Rating player2NewRating = newRatings.get(player2);
-                            oneOnOneTeams.put(algorithm1Id, new Team(player1, player1NewRating));
-                            oneOnOneTeams.put(algorithm2Id, new Team(player2, player2NewRating));
-                        }
-                    }
+                    if (printInfo)
+                        System.out.println(algorithm.getId() + ": " + duration / 1000.0);
+                    runResults.add(new AlgorithmRunResult(result, algorithm, taskCopy));
+                    //TODO generic feasibility check
+                } catch (StopCriterionException e) {
+                    System.err.println(algorithm.getId() + " StopCriterionException for:" + task + "\n" + e);
                 }
             }
         }
-
-        for(Player player : tournamentResults.getPlayers()) {
-            Team team = oneOnOneTeams.get(player.getId());
-            Rating rating = team.get(player);
-            player.setOneOnOneTrueSkill(new TrueSkillRating(rating.getRating(), rating.getRatingDeviation()));
-
-            team = freeForAllTeams.get(player.getId());
-            rating = team.get(player);
-            player.setFreeForAllTrueSkill(new TrueSkillRating(rating.getRating(), rating.getRatingDeviation()));
-        }
-        tournamentResults.calculateRatings();
+        return runResults;
     }
 
-    public boolean resultEqual(AlgorithmRunResult<DoubleSolution, Algorithm, Task> a, AlgorithmRunResult<DoubleSolution, Algorithm, Task> b) {
-        if ((a == null) && (b == null))
-            return true;
-        if (a == null)
-            return false;
-        if (b == null)
-            return false;
-        if (!a.solution.areConstraintsMet() && b.solution.areConstraintsMet())
-            return false;
-        if (a.solution.areConstraintsMet() && !b.solution.areConstraintsMet())
-            return false;
-        if (!a.solution.areConstraintsMet() && !b.solution.areConstraintsMet())
-            return true;
+    private void performStatistics() {
 
-        boolean isDraw = Math.abs(a.solution.getEval() - b.solution.getEval()) < drawLimit;
-        // if the results are equal in case of global optimum stop criterion then compare number of evaluations used
-        if (isDraw && a.task.getStopCriterion() == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS) {
-            isDraw = a.task.getNumberOfEvaluations() == b.task.getNumberOfEvaluations();
+        //TODO check if stopping criterion max evaluations
+        if (ratingCalculation == RatingCalculation.RATING_CONVERGENCE_GRAPH) {
+            int numberOfTicks = maxEvaluations / evaluationsPerTick;
+            HashMap<String, Glicko2Rating[]> ratingLists = new HashMap<>();
+
+
+            for (A algorithm : algorithms) {
+                tournamentResults.addPlayer(algorithm.getId());
+                ratingLists.put(algorithm.getId(), new Glicko2Rating[numberOfTicks]);
+            }
+
+            for (int i = 1; i <= numberOfTicks; i++) {
+                performTournament(i * evaluationsPerTick);
+                for (Player p : tournamentResults.getPlayers()) {
+                    ratingLists.get(p.getId())[i - 1] = p.getGlicko2Rating();
+                }
+
+                tournamentResults = new TournamentResults();
+                for (A algorithm : algorithms) {
+                    tournamentResults.addPlayer(algorithm.getId());
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            for (Map.Entry<String, Glicko2Rating[]> entry : ratingLists.entrySet()) {
+                //System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
+                String algorithm = entry.getKey();
+                Glicko2Rating[] ratings = entry.getValue();
+                sb.setLength(0);
+                sb.append("Evaluations\tRating\tRD\n");
+                for (int i = 0; i < ratings.length; i++) {
+                    double rating = ratings[i].getRating();
+                    double RD = ratings[i].getRatingDeviation();
+                    sb.append((i+1) * evaluationsPerTick).append("\t");
+                    sb.append(Util.df1.format(rating)).append("\t");
+                    sb.append(RD).append("\n");
+                }
+                String output = sb.toString();
+                output = output.replace(",","");
+
+                Util.writeToFile("D:\\"+algorithm + ".txt", output);
+            }
+
+        } else {
+            for (A algorithm : algorithms) {
+                tournamentResults.addPlayer(algorithm.getId());
+            }
+
+            performTournament(-1);
+            tournamentResults.displayResults(displayRatingCharts);
         }
+    }
 
-        return isDraw;
+    protected abstract void performTournament(int evaluationNumber);
+
+    public void allPlayed() {
+        for (Algorithm al : algorithms) {
+            al.setPlayed(true);
+        }
+    }
+
+    public String getStoppingCriterion() {
+        switch (stopCriterion) {
+            case EVALUATIONS:
+                return Integer.toString(maxEvaluations);
+            case ITERATIONS:
+                return Integer.toString(maxIterations);
+            case CPU_TIME:
+                return Long.toString(timeLimit);
+            case STAGNATION:
+                return Integer.toString(tasks.get(0).getMaxTrialsBeforeStagnation()); //TODO stagnation trials
+            case GLOBAL_OPTIMUM_OR_EVALUATIONS:
+                return Integer.toString(maxEvaluations);
+            default:
+                return null;
+        }
+    }
+
+    public String[] getProblems() {
+        String[] problems = new String[tasks.size()];
+        for (int i = 0; i < tasks.size(); i++) {
+            problems[i] = tasks.get(i).getProblemName();
+        }
+        return problems;
+    }
+
+    public void setDisplayRatingIntervalBand(boolean displayRatingIntervalBand) {
+        this.displayRatingIntervalBand = displayRatingIntervalBand;
+    }
+
+    public void setEvaluationsPerTick(int evaluationsPerTick) {
+        this.evaluationsPerTick = evaluationsPerTick;
+    }
+
+    public RatingCalculation getRatingCalculation() {
+        return ratingCalculation;
+    }
+
+    public void setRatingCalculation(RatingCalculation ratingCalculation) {
+        this.ratingCalculation = ratingCalculation;
     }
 }

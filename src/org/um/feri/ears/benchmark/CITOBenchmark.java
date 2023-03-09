@@ -1,15 +1,13 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.IntegerMOTask;
-import org.um.feri.ears.problems.moo.IntegerMOProblem;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, IntegerMOProblem> {
+public class CITOBenchmark extends MOBenchmark<Integer> {
 
     public CITOBenchmark() {
         this(null, 0.0000001, true);
@@ -27,14 +25,14 @@ public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, IntegerMO
     }
 
     @Override
-    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, IntegerMOProblem problem) {
-        tasks.add(new IntegerMOTask(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
+    protected void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, NumberProblem<Integer> problem) {
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, allowedTime, maxIterations));
     }
 
     @Override
     public void initAllProblems() {
 
-        ArrayList<IntegerMOProblem> problems = new ArrayList<IntegerMOProblem>();
+        ArrayList<CombinatorialProblem> problems = new ArrayList<CombinatorialProblem>();
 
 //    	problems.add(new CITOProblem(CITOProblem.Problems.OA_AJHotDraw.name()));
         problems.add(new CITOProblem(CITOProblem.Problems.OA_AJ_HSQLDB.name()));
@@ -45,7 +43,7 @@ public class CITOBenchmark extends MOBenchmark<Integer, IntegerMOTask, IntegerMO
 //    	problems.add(new CITOProblem(CITOProblem.Problems.OO_JHotDraw.name()));
 //		problems.add(new CITOProblem(CITOProblem.Problems.OO_MyBatis.name()));
 
-        for (IntegerMOProblem moProblem : problems) {
+        for (CombinatorialProblem moProblem : problems) {
             addTask(stopCriterion, maxEvaluations, timeLimit, maxIterations, moProblem);
         }
     }

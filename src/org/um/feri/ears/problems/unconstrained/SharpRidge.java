@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,15 +15,13 @@ http://mantella.info/optimisation-problems/black-box-optimisation-benchmark/#bbo
  */
 
 
-public class SharpRidge extends Problem {
+public class SharpRidge extends DoubleProblem {
 
     public SharpRidge(int d) {
-        super(d, 0);
+        super("SharpRidge", d, 1, 1, 0);
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
-
-        name = "SharpRidge";
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
     }
 
     @Override

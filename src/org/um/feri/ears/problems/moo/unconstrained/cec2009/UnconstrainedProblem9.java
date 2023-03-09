@@ -2,7 +2,6 @@ package org.um.feri.ears.problems.moo.unconstrained.cec2009;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.functions.UP9_1;
 import org.um.feri.ears.problems.moo.functions.UP9_2;
 import org.um.feri.ears.problems.moo.functions.UP9_3;
@@ -23,15 +22,14 @@ public class UnconstrainedProblem9 extends CEC2009 {
 	 * @param numberOfVariables Number of variables.
 	 */
 	public UnconstrainedProblem9(Integer numberOfVariables, double epsilon) {
-		super(numberOfVariables,0, 3);
+		super("UF9", numberOfVariables,3, 0);
 
-		name = "UF9";
-		fileName = "UF9";
+		referenceSetFileName = "UF9";
 
 		this.epsilon = epsilon;
 		
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+		upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 		
 		lowerLimit.add(0.0);
 		upperLimit.add(1.0);
@@ -43,12 +41,8 @@ public class UnconstrainedProblem9 extends CEC2009 {
 			upperLimit.add(2.0);
 		}
 
-		this.addObjective(new UP9_1(numberOfDimensions, epsilon));
-		this.addObjective(new UP9_2(numberOfDimensions, epsilon));
-		this.addObjective(new UP9_3(numberOfDimensions, epsilon));
-	}
-
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
+		addObjective(new UP9_1(numberOfDimensions, epsilon));
+		addObjective(new UP9_2(numberOfDimensions, epsilon));
+		addObjective(new UP9_3(numberOfDimensions, epsilon));
 	}
 }

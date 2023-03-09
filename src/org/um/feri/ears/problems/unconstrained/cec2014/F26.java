@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F26 extends CEC2014 {
 
     public F26(int d) {
-        super(d, 26);
-
-        name = "F26 Composition Function 4";
+        super("F26 Composition Function 4", d, 26);
     }
 
     @Override

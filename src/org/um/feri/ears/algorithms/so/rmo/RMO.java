@@ -1,22 +1,23 @@
 package org.um.feri.ears.algorithms.so.rmo;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
-public class RMO extends Algorithm {
+public class RMO extends NumberAlgorithm {
 
 	@AlgorithmParameter(name = "population size")
     private int popSize;
     private double C1, C2, k;
     private double[][] X;
     private double[] cp;
-    private DoubleSolution cpS;
+    private NumberSolution<Double> cpS;
     private double[][] V;
 
     public RMO() {
@@ -34,40 +35,39 @@ public class RMO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
 
         double[] globalBestX = null;
-        DoubleSolution globalBest = null;
+        NumberSolution<Double> globalBest = null;
 
-        X = new double[popSize][task.getNumberOfDimensions()];
-        V = new double[popSize][task.getNumberOfDimensions()];
+        X = new double[popSize][task.problem.getNumberOfDimensions()];
+        V = new double[popSize][task.problem.getNumberOfDimensions()];
 
         for (int i = 0; i < popSize; ++i) {
 
             for (int j = 0; j < X[i].length; ++j) {
-                X[i][j] = Util.nextDouble(task.getLowerLimit()[j], task.getUpperLimit()[j]);
+                X[i][j] = Util.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
             }
 
-            DoubleSolution eval = task.eval(X[i]);
+            NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(X[i]));
+            task.eval(newSolution);
 
             //Pick best starting center
             if (i == 0) {
                 cp = X[i];
-                cpS = new DoubleSolution(eval);
+                cpS = new NumberSolution<>(newSolution);
 
                 //System.out.println(task.getNumberOfEvaluations()+" "+ cp_s);
-            } else if (task.isFirstBetter(eval, cpS)) {
+            } else if (task.problem.isFirstBetter(newSolution, cpS)) {
                 cp = X[i];
-                cpS = new DoubleSolution(eval);
+                cpS = new NumberSolution<>(newSolution);
 
             }
 
             if (task.isStopCriterion()) {
                 return cpS;
             }
-
         }
-
 
         cp = cp.clone();
 
@@ -76,35 +76,35 @@ public class RMO extends Algorithm {
             //Calculate W
             double W = 1.0 - (1.0 / task.getMaxEvaluations()) * task.getNumberOfEvaluations();
             //W = 1;
-            double[] currentBest = new double[task.getNumberOfDimensions()];
-            DoubleSolution currentBestS = null;
+            double[] currentBest = new double[task.problem.getNumberOfDimensions()];
+            NumberSolution<Double> currentBestS = null;
 
             //Calculate velocity vectors and move particles
             for (int i = 0; i < popSize; ++i) {
                 for (int j = 0; j < V[i].length; ++j) {
                     //Velocity vector
-                    V[i][j] = Util.nextDouble(-1, 1) * ((task.getUpperLimit()[j] - task.getLowerLimit()[j]) / k);//Util.nextDouble(task.getLowerLimit()[j], task.getUpperLimit()[j]) / 100.0;
+                    V[i][j] = Util.nextDouble(-1, 1) * ((task.problem.getUpperLimit(j) - task.problem.getLowerLimit(j)) / k);//Util.nextDouble(task.getLowerLimit()[j], task.problem.getUpperLimit()[j]) / 100.0;
 
                     //Move particle and check constrains
-                    X[i][j] = task.setFeasible(V[i][j] * W + cp[j], j);
+                    X[i][j] = task.problem.setFeasible(V[i][j] * W + cp[j], j);
                 }
 
-                DoubleSolution eval;
                 if (task.isStopCriterion()) {
                     if (globalBest != null)
                         return globalBest;
                     else
                         return currentBestS;
                 }
-                eval = task.eval(X[i]);
 
+                NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(X[i]));
+                task.eval(newSolution);
 
                 //Check if particles is better
                 if (i == 0) {
-                    currentBestS = eval;
+                    currentBestS = newSolution;
                     currentBest = X[i];
-                } else if (task.isFirstBetter(eval, currentBestS)) {
-                    currentBestS = eval;
+                } else if (task.problem.isFirstBetter(newSolution, currentBestS)) {
+                    currentBestS = newSolution;
                     currentBest = X[i];
                 }
             }
@@ -116,15 +116,15 @@ public class RMO extends Algorithm {
                 }
 
                 globalBestX = currentBest.clone();
-                globalBest = new DoubleSolution(currentBestS);
+                globalBest = new NumberSolution<>(currentBestS);
             } else {
                 for (int j = 0; j < cp.length; ++j) {
                     cp[j] = cp[j] + C1 * (globalBestX[j] - cp[j]) + C2 * (currentBest[j] - cp[j]);
                 }
 
-                if (task.isFirstBetter(currentBestS, globalBest)) {
+                if (task.problem.isFirstBetter(currentBestS, globalBest)) {
                     globalBestX = currentBest.clone();
-                    globalBest = new DoubleSolution(currentBestS);
+                    globalBest = new NumberSolution<>(currentBestS);
 
                     //System.out.println(task.getNumberOfEvaluations()+" "+ globalBest);
                 }
@@ -139,5 +139,4 @@ public class RMO extends Algorithm {
     public void resetToDefaultsBeforeNewRun() {
 
     }
-
 }

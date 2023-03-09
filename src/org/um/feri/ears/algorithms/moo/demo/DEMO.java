@@ -31,39 +31,37 @@ import org.um.feri.ears.algorithms.moo.spea2.Spea2fitness;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.DifferentialEvolutionCrossover;
 import org.um.feri.ears.operators.DifferentialEvolutionSelection;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
-public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class DEMO<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
-    ParetoSolution<Type> population;
-    ParetoSolution<Type> offspringPopulation;
-    ParetoSolution<Type> union;
+    ParetoSolution<N> population;
+    ParetoSolution<N> offspringPopulation;
+    ParetoSolution<N> union;
 
     int populationSize;
     int selectionProcedure;
-    Ranking<Type> ranking;
+    Ranking<N> ranking;
     int numberOfChildBetter;
     int numberOfParentBetter;
     int numberOfIncomparable;
     double kappa = 0.05;
     double rho = 2.0;
 
-    Distance<Type> distance;
-    DominanceComparator<Type> dominance;
+    Distance<N> distance;
+    DominanceComparator dominance;
 
-    MOSolutionBase<Type>[] parents;
+    NumberSolution<N>[] parents;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
+    CrossoverOperator<P, NumberSolution<N>> cross;
 
 
-    public DEMO(CrossoverOperator crossover, int populationSize, int selectionProcedure) {
+    public DEMO(CrossoverOperator<P, NumberSolution<N>> crossover, int populationSize, int selectionProcedure) {
 
         this.cross = crossover;
         this.populationSize = populationSize;
@@ -78,23 +76,23 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     @Override
     protected void init() {
-        population = new ParetoSolution<Type>(populationSize * 2);
+        population = new ParetoSolution<N>(populationSize * 2);
     }
 
     @Override
     protected void start() throws StopCriterionException {
 
-        distance = new Distance<Type>();
-        dominance = new DominanceComparator<Type>();
+        distance = new Distance<>();
+        dominance = new DominanceComparator();
         DifferentialEvolutionCrossover dec = new DifferentialEvolutionCrossover();
-        DifferentialEvolutionSelection<Type> des = new DifferentialEvolutionSelection<Type>();
+        DifferentialEvolutionSelection<N> des = new DifferentialEvolutionSelection<N>();
 
         // Create the initial solutionSet
-        MOSolutionBase<Type> newSolution;
+        NumberSolution<N> newSolution;
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }
@@ -110,18 +108,18 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 // Obtain parents. Two parameters are required: the population and the index of the current individual
                 try {
                     des.setCurrentIndex(i);
-                    parents = des.execute(population, task);
+                    parents = des.execute(population, task.problem);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println("The population has less than four solutions");
                     break;
                 }
 
-                MOSolutionBase<Type> child;
+                NumberSolution<N> child;
                 // Crossover. Two parameters are required: the current
                 // individual and the array of parents
                 cross.setCurrentSolution(population.get(i));
-                child = cross.execute(parents, task)[0];
+                child = cross.execute(parents, task.problem)[0];
 
                 if (task.isStopCriterion())
                     break;
@@ -159,10 +157,10 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
             if (selectionProcedure == 0) {         //NSGA 2
                 // Ranking the offspring population
-                ranking = new Ranking<Type>(population);
+                ranking = new Ranking<N>(population);
                 int remain = populationSize;
                 int index = 0;
-                ParetoSolution<Type> front = null;
+                ParetoSolution<N> front = null;
                 population = environmentalSelectionNSGAII(ranking, distance, front, remain, index);
             } else if (selectionProcedure == 1) {    //IBEA
                 while (population.size() > populationSize) {        //offspringPopulation
@@ -187,9 +185,9 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         best = ranking.getSubfront(0);
     }
 
-    private boolean areSolutionsTheSame(MOSolutionBase<Type> parent, MOSolutionBase<Type> child) {
+    private boolean areSolutionsTheSame(NumberSolution<N> parent, NumberSolution<N> child) {
 
-        for (int i = 0; i < numVar; i++) {
+        for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
             if (parent.getValue(i) != child.getValue(i))
                 return false;
         }
@@ -198,12 +196,12 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     public void removeWorst(ParetoSolution solutionSet, ArrayList<List<Double>> indicatorValues_, double maxIndicatorValue_) {
         // Find the worst;
-        double worst = solutionSet.get(0).getFitness();
+        double worst = solutionSet.get(0).getParetoFitness();
         int worstIndex = 0;
 
         for (int i = 1; i < solutionSet.size(); i++) {
-            if (solutionSet.get(i).getFitness() > worst) {
-                worst = solutionSet.get(i).getFitness();
+            if (solutionSet.get(i).getParetoFitness() > worst) {
+                worst = solutionSet.get(i).getParetoFitness();
                 worstIndex = i;
             }
         }
@@ -211,9 +209,9 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         // Update the population
         for (int i = 0; i < solutionSet.size(); i++) {
             if (i != worstIndex) {
-                double fitness = solutionSet.get(i).getFitness();
+                double fitness = solutionSet.get(i).getParetoFitness();
                 fitness -= Math.exp((-indicatorValues_.get(worstIndex).get(i) / maxIndicatorValue_) / kappa);
-                solutionSet.get(i).setFitness(fitness);
+                solutionSet.get(i).setParetoFitness(fitness);
             }
         }
 
@@ -261,19 +259,19 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     /**
      * This structure store the indicator values of each pair of elements
      */
-    public Object[] computeIndicatorValuesHD(ParetoSolution<Type> solutionSet, double[] maximumValues, double[] minimumValues) {
-        ParetoSolution<Type> A, B;
+    public Object[] computeIndicatorValuesHD(ParetoSolution<N> solutionSet, double[] maximumValues, double[] minimumValues) {
+        ParetoSolution<N> A, B;
         // Initialize the structures
         ArrayList<List<Double>> indicatorValues_ = new ArrayList<List<Double>>();
         double maxIndicatorValue_ = -Double.MAX_VALUE;
 
         for (int j = 0; j < solutionSet.size(); j++) {
-            A = new ParetoSolution<Type>(1);
+            A = new ParetoSolution<N>(1);
             A.add(solutionSet.get(j));
 
             List<Double> aux = new ArrayList<Double>();
             for (int i = 0; i < solutionSet.size(); i++) {
-                B = new ParetoSolution<Type>(1);
+                B = new ParetoSolution<N>(1);
                 B.add(solutionSet.get(i));
 
                 int flag = (new DominanceComparator()).compare(A.get(0), B.get(0));
@@ -297,7 +295,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         return new Object[]{indicatorValues_, maxIndicatorValue_};
     }
 
-    double calcHypervolumeIndicator(MOSolutionBase<Type> p_ind_a, MOSolutionBase<Type> p_ind_b, int d, double[] maximumValues, double[] minimumValues) {
+    double calcHypervolumeIndicator(NumberSolution<N> p_ind_a, NumberSolution<N> p_ind_b, int d, double[] maximumValues, double[] minimumValues) {
         double a, b, r, max;
         double volume = 0;
 
@@ -332,7 +330,7 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     /**
      * Calculate the fitness for the individual at position pos
      */
-    public void fitness(ParetoSolution<Type> solutionSet, int pos, ArrayList<List<Double>> indicatorValues_, double maxIndicatorValue_) {
+    public void fitness(ParetoSolution<N> solutionSet, int pos, ArrayList<List<Double>> indicatorValues_, double maxIndicatorValue_) {
         double fitness = 0.0;
 
         for (int i = 0; i < solutionSet.size(); i++) {
@@ -340,11 +338,11 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
                 fitness += Math.exp((-1 * indicatorValues_.get(i).get(pos) / maxIndicatorValue_) / kappa);
             }
         }
-        solutionSet.get(pos).setFitness(fitness);
+        solutionSet.get(pos).setParetoFitness(fitness);
     }
 
-    public ParetoSolution<Type> environmentalSelectionSPEA2(ParetoSolution<Type> union, int archiveSize) {
-        ParetoSolution<Type> res;
+    public ParetoSolution<N> environmentalSelectionSPEA2(ParetoSolution<N> union, int archiveSize) {
+        ParetoSolution<N> res;
         /*
          * Racunanje razdalj med osebki. Razdalje so shranjene v spremenljivki distance objekta Spa2Fitness
          */
@@ -368,8 +366,8 @@ public class DEMO<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         return res;
     }
 
-    public ParetoSolution<Type> environmentalSelectionNSGAII(Ranking<Type> ranking, Distance<Type> distance, ParetoSolution<Type> front, int remain, int index) {
-        ParetoSolution<Type> finalPop = new ParetoSolution<Type>(remain);
+    public ParetoSolution<N> environmentalSelectionNSGAII(Ranking<N> ranking, Distance<N> distance, ParetoSolution<N> front, int remain, int index) {
+        ParetoSolution<N> finalPop = new ParetoSolution<N>(remain);
 
         // Obtain the next front
         front = ranking.getSubfront(index);

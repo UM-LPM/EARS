@@ -2,7 +2,7 @@ package org.um.feri.ears.quality_indicator.wfg;
 
 import java.util.Comparator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.quality_indicator.QualityIndicatorUtil;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
@@ -16,11 +16,11 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 	private double offset = 0.0;
 	static final int OPT = 2;
 	ParetoSolution<T>[] fs;
-	private MOSolutionBase<T> referencePoint;
+	private NumberSolution<T> referencePoint;
 	boolean maximizing;
 	private int currentDeep;
 	private int currentDimension;
-	private Comparator<MOSolutionBase<T>> pointComparator;
+	private Comparator<NumberSolution<T>> pointComparator;
 
 	public WfgHypervolume(int num_obj, String file_name) {
 		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
@@ -32,7 +32,7 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 		numberOfObjectives = num_obj;
 		pointComparator = new PointComparator();
 
-		referencePoint = new MOSolutionBase<T>(numberOfObjectives);
+		referencePoint = new NumberSolution<T>(numberOfObjectives);
 		for (int i = 0; i < numberOfObjectives; i++) {
 			referencePoint.setObjective(i, 0.0);
 		}
@@ -59,7 +59,7 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 		if (paretoFrontApproximation.size() == 0) {
 			hv = 0.0;
 		} else {
-			numberOfObjectives = paretoFrontApproximation.get(0).numberOfObjectives();
+			numberOfObjectives = paretoFrontApproximation.get(0).getNumberOfObjectives();
 			updateReferencePoint(copy);
 
 			if (numberOfObjectives == 2) {
@@ -91,7 +91,7 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 			}
 		}
 
-		for (int i = 0; i < referencePoint.numberOfObjectives(); i++) {
+		for (int i = 0; i < referencePoint.getNumberOfObjectives(); i++) {
 			referencePoint.setObjective(i, maxObjectives[i] + offset);
 		}
 	}
@@ -112,7 +112,7 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 		return hv;
 	}
 
-	public double getInclusiveHV(MOSolutionBase<T> point) {
+	public double getInclusiveHV(NumberSolution<T> point) {
 		double volume = 1;
 		for (int i = 0; i < currentDimension; i++) {
 			volume *= Math.abs(point.getObjective(i) - referencePoint.getObjective(i));
@@ -163,16 +163,16 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 
 		for (int i = 0; i < z; i++) {
 			for (int j = 0; j < currentDimension; j++) {
-				MOSolutionBase<T> point1 = front.get(p) ;
-				MOSolutionBase<T> point2 = front.get(p + 1 + i) ;
+				NumberSolution<T> point1 = front.get(p) ;
+				NumberSolution<T> point2 = front.get(p + 1 + i) ;
 				double worseValue = worse(point1.getObjective(j), point2.getObjective(j), false) ;
 				int cd = currentDeep ;
-				MOSolutionBase<T> point3 = fs[currentDeep].get(i) ;
+				NumberSolution<T> point3 = fs[currentDeep].get(i) ;
 				point3.setObjective(j, worseValue);
 			}
 		}
 
-		MOSolutionBase<T> t;
+		NumberSolution<T> t;
 		fs[currentDeep].setCapacity(1);
 
 		for (int i = 1; i < z; i++) {
@@ -211,7 +211,7 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 		double contribution = Double.POSITIVE_INFINITY;
 
 		for (int i = 0; i < solutionList.size(); i++) {
-			double[] v = new double[solutionList.get(i).numberOfObjectives()];
+			double[] v = new double[solutionList.get(i).getNumberOfObjectives()];
 			for (int j = 0; j < v.length; j++) {
 				v[j] = solutionList.get(i).getObjective(j);
 			}
@@ -248,7 +248,7 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 		return result;
 	}
 
-	int dominates2way(MOSolutionBase<T> p, MOSolutionBase<T> q) {
+	int dominates2way(NumberSolution<T> p, NumberSolution<T> q) {
 		// returns -1 if p dominates q, 1 if q dominates p, 2 if p == q, 0 otherwise
 		// ASSUMING MINIMIZATION
 

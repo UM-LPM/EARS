@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F1 extends CEC2014 {
 
     public F1(int d) {
-        super(d, 1);
-
-        name = "F01 Ellips Function";
+        super("F01 Ellips Function", d, 1);
     }
 
     @Override

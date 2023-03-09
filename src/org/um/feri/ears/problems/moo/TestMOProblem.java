@@ -2,8 +2,7 @@ package org.um.feri.ears.problems.moo;
 
 import org.um.feri.ears.algorithms.moo.ibea.D_IBEA;
 import org.um.feri.ears.algorithms.moo.moead.D_MOEAD;
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.StopCriterion;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
 import org.um.feri.ears.quality_indicator.GenerationalDistance;
@@ -22,8 +21,8 @@ public class TestMOProblem {
 
     	
 
-    	DoubleMOTask t1 = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
-    	DoubleMOTask t2 = new DoubleMOTask(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
+    	Task<NumberSolution<Double>, DoubleProblem> t1 = new Task<>(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
+    	Task<NumberSolution<Double>,DoubleProblem> t2 = new Task<>(new UnconstrainedProblem1(), StopCriterion.EVALUATIONS, 300000, 500, 300, 0.0001);
 
 
 
@@ -35,15 +34,15 @@ public class TestMOProblem {
     		ParetoSolution best1 = moead.execute(t1);
     		ParetoSolution best2 = ibea.execute(t2);
 
-    		best1.evaluate(new GenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
-    		best2.evaluate(new GenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
+    		best1.evaluate(new GenerationalDistance(t1.problem.getNumberOfObjectives(), t1.problem.getReferenceSetFileName()));
+    		best2.evaluate(new GenerationalDistance(t1.problem.getNumberOfObjectives(), t1.problem.getReferenceSetFileName()));
 
     		System.out.println("GD:");
     		System.out.println(best1.getEval());
     		System.out.println(best2.getEval());
 
-    		best1.evaluate(new InvertedGenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
-    		best2.evaluate(new InvertedGenerationalDistance(t1.getNumberOfObjectives(), t1.getProblemFileName()));
+    		best1.evaluate(new InvertedGenerationalDistance(t1.problem.getNumberOfObjectives(), t1.problem.getReferenceSetFileName()));
+    		best2.evaluate(new InvertedGenerationalDistance(t1.problem.getNumberOfObjectives(), t1.problem.getReferenceSetFileName()));
 
     		System.out.println("IGD:");
     		System.out.println(best1.getEval());

@@ -65,7 +65,7 @@ public class Spea2fitness {
             Arrays.sort(distance[i]);
             kDistance = 1.0 / (distance[i][k] + 2.0); // Calcule de D(i) distance
             // population.get(i).setFitness(rawFitness[i]);
-            solutionSet.get(i).setFitness(rawFitness[i] + kDistance);
+            solutionSet.get(i).setParetoFitness(rawFitness[i] + kDistance);
         }
     }
 
@@ -86,7 +86,7 @@ public class Spea2fitness {
 
         int i = 0;
         while (i < solutionSet.size()) {
-            if (solutionSet.get(i).getFitness() < 1.0) {
+            if (solutionSet.get(i).getParetoFitness() < 1.0) {
                 aux.add(solutionSet.get(i));
                 solutionSet.remove(i);
             } else {

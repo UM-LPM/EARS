@@ -8,9 +8,7 @@ import org.um.feri.ears.util.Util;
 public class F14 extends CEC2010 {
 
     public F14(int d) {
-        super(d, 14);
-
-        name = "F14 D/m-group Shifted and m-rotated Elliptic Function";
+        super("F14 D/m-group Shifted and m-rotated Elliptic Function", d, 14);
 
         P = new int[numberOfDimensions];
         P = Util.randomPermutation(numberOfDimensions);

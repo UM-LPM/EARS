@@ -22,7 +22,6 @@ package org.um.feri.ears.problems.moo.dtlz;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 
 public class DTLZ1 extends DTLZ{
@@ -33,14 +32,12 @@ public class DTLZ1 extends DTLZ{
 	
 	public DTLZ1(int numberOfVariables, int numberOfObjectives) {
 	     
-		super(numberOfVariables,0,numberOfObjectives);
+		super("DTLZ1", numberOfVariables,numberOfObjectives, 0);
 
-		fileName = "DTLZ1."+numberOfObjectives+"D";
-		name = "DTLZ1";
-		
+		referenceSetFileName = "DTLZ1."+numberOfObjectives+"D";
 
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+		upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 
 
 		for (int i = 0; i < numberOfDimensions; i++) {
@@ -51,20 +48,11 @@ public class DTLZ1 extends DTLZ{
 	}
 
 	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
-	}
-	
-	@Override
-	public double[] evaluate(Double ds[]) {
+	public double[] evaluate(double[] x) {
 		
 		double[] f = new double[numberOfObjectives];
-		double[] x = new double[numberOfDimensions] ;
 
 		int k = numberOfDimensions - numberOfObjectives + 1;
-
-		for (int i = 0; i < numberOfDimensions; i++) {
-			x[i] = ds[i];
-		}
 
 		double g = 0.0;
 		for (int i = numberOfDimensions - k; i < numberOfDimensions; i++) {

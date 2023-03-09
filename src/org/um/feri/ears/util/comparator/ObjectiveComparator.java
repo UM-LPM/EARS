@@ -1,6 +1,7 @@
 package org.um.feri.ears.util.comparator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+
+import org.um.feri.ears.problems.NumberSolution;
 
 import java.util.Comparator;
 
@@ -8,7 +9,7 @@ import java.util.Comparator;
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on a objective values.
  */
-public class ObjectiveComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class ObjectiveComparator<N extends Number> implements Comparator<NumberSolution<N>> {
 
     /**
      * Stores the index of the objective to compare
@@ -32,7 +33,7 @@ public class ObjectiveComparator<Type> implements Comparator<MOSolutionBase<Type
      * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
      * respectively.
      */
-    public int compare(MOSolutionBase<Type> solution1, MOSolutionBase<Type> solution2) {
+    public int compare(NumberSolution<N> solution1, NumberSolution<N> solution2) {
         if (solution1 == null)
             return 1;
         else if (solution2 == null)

@@ -23,14 +23,14 @@ package org.um.feri.ears.util;
 
 import java.util.List;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 
 /**
  * This class implements some utilities for calculating distances
  */
-public class Distance<Type extends Number> {
+public class Distance<N extends Number> {
 
 	public Distance() {}
     
@@ -40,8 +40,8 @@ public class Distance<Type extends Number> {
     * @param solutionSet The <code>SolutionSet</code>.
     * @return a matrix with distances.
     */
-	public double[][] distanceMatrix(ParetoSolution<Type> solutionSet) {
-		MOSolutionBase<Type> solutionI, solutionJ;
+	public double[][] distanceMatrix(ParetoSolution<N> solutionSet) {
+		NumberSolution<N> solutionI, solutionJ;
 
 		// The matrix of distances
 		double[][] distance = new double[solutionSet.size()][solutionSet.size()];
@@ -65,7 +65,7 @@ public class Distance<Type extends Number> {
     * @param solutionSet The <code>SolutionSet</code>.
     * @return The minimum distance between solution and the set.
     */  
-	public double distanceToSolutionSetInObjectiveSpace(MOSolutionBase<Type> solution, ParetoSolution<Type> solutionSet) {
+	public double distanceToSolutionSetInObjectiveSpace(NumberSolution<N> solution, ParetoSolution<N> solutionSet) {
 		// At start point the distance is the max
 		double distance = Double.MAX_VALUE;
 
@@ -86,7 +86,7 @@ public class Distance<Type extends Number> {
     * @param solutionSet The <code>SolutionSet</code>.
     * @return The minimum distance between solution and the set.
     */  
-	public double distanceToSolutionSetInSolutionSpace(MOSolutionBase<Type> solution, ParetoSolution<Type> solutionSet) {
+	public double distanceToSolutionSetInSolutionSpace(NumberSolution<N> solution, ParetoSolution<N> solutionSet) {
 		// At start point the distance is the max
 		double distance = Double.MAX_VALUE;
 
@@ -105,13 +105,13 @@ public class Distance<Type extends Number> {
     *  @param solutionJ The second <code>Solution</code>.
     *  @return the distance between solutions. 
     */
-	public double distanceBetweenSolutions(MOSolutionBase<Type> solutionI, MOSolutionBase<Type> solutionJ) {
+	public double distanceBetweenSolutions(NumberSolution<N> solutionI, NumberSolution<N> solutionJ) {
 		double distance = 0.0;
 		
 		if ((solutionI.getVariables() != null)
 				&& (solutionJ.getVariables() != null)) {
-			List<Type> decisionVariableI = solutionI.getVariables();
-			List<Type> decisionVariableJ = solutionJ.getVariables();
+			List<N> decisionVariableI = solutionI.getVariables();
+			List<N> decisionVariableJ = solutionJ.getVariables();
 
 			double diff; // Auxiliar var
 			// -> Calculate the Euclidean distance
@@ -129,11 +129,11 @@ public class Distance<Type extends Number> {
     *  @param solutionJ The second <code>Solution</code>.
     *  @return the distance between solutions in objective space.
     */
-	public double distanceBetweenObjectives(MOSolutionBase<Type> solutionI, MOSolutionBase<Type> solutionJ) {
+	public double distanceBetweenObjectives(NumberSolution<N> solutionI, NumberSolution<N> solutionJ) {
 		double diff; // Auxiliar var
 		double distance = 0.0;
 		// -> Calculate the euclidean distance
-		for (int nObj = 0; nObj < solutionI.numberOfObjectives(); nObj++) {
+		for (int nObj = 0; nObj < solutionI.getNumberOfObjectives(); nObj++) {
 			diff = solutionI.getObjective(nObj) - solutionJ.getObjective(nObj);
 			distance += Math.pow(diff, 2.0);
 		}
@@ -146,7 +146,7 @@ public class Distance<Type extends Number> {
     * @param solutionSet The <code>SolutionSet</code>.
     * @param nObjs Number of objectives.
     */
-	public void crowdingDistanceAssignment(ParetoSolution<Type> solutionSet, int nObjs) {
+	public void crowdingDistanceAssignment(ParetoSolution<N> solutionSet, int nObjs) {
 		int size = solutionSet.size();
 
 		if (size == 0)
@@ -164,7 +164,7 @@ public class Distance<Type extends Number> {
 		}
 
 		// Use a new SolutionSet to evite alter original solutionSet
-		ParetoSolution<Type> front = new ParetoSolution<>(size);
+		ParetoSolution<N> front = new ParetoSolution<>(size);
 		for (int i = 0; i < size; i++) {
 			front.add(solutionSet.get(i));
 		}

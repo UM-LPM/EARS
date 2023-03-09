@@ -21,17 +21,18 @@
 
 package org.um.feri.ears.util.comparator;
 
+import org.um.feri.ears.problems.NumberSolution;
+
 import java.util.Comparator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on the crowding distance, as in NSGA-II.
  */
-public class CrowdingComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class CrowdingComparator<N extends Number> implements Comparator<NumberSolution<N>> {
 
-	public class RankComparator<Type> implements Comparator<MOSolutionBase<Type>>{
+	public class RankComparator<N extends Number> implements Comparator<NumberSolution<N>>{
 		/**
 		 * Compares two solutions.
 		 * @param solution1 Object representing the first <code>Solution</code>.
@@ -39,7 +40,7 @@ public class CrowdingComparator<Type> implements Comparator<MOSolutionBase<Type>
 		 * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
 		 * respectively.
 		 */
-		public int compare(MOSolutionBase<Type> solution1, MOSolutionBase<Type> solution2) {
+		public int compare(NumberSolution<N> solution1, NumberSolution<N> solution2) {
 
 			if (solution1 == null)
 				return 1;
@@ -53,7 +54,7 @@ public class CrowdingComparator<Type> implements Comparator<MOSolutionBase<Type>
 	/**
 	 * stores a comparator for check the rank of solutions
 	 */
-	private final Comparator<MOSolutionBase<Type>> rankComparator = new RankComparator<>();
+	private final Comparator<NumberSolution<N>> rankComparator = new RankComparator<>();
 
 	/**
 	 * Compare two solutions.
@@ -62,7 +63,7 @@ public class CrowdingComparator<Type> implements Comparator<MOSolutionBase<Type>
 	 * @param solution2 Object representing the second <code>Solution</code>.
 	 * @return -1, or 0, or 1 if solution1 is less than, equal, or greater than solution2, respectively.
 	 */
-	public int compare(MOSolutionBase<Type> solution1, MOSolutionBase<Type> solution2) {
+	public int compare(NumberSolution<N> solution1, NumberSolution<N> solution2) {
 		if (solution1 == null)
 			return 1;
 		else if (solution2 == null)

@@ -1,19 +1,19 @@
 package org.um.feri.ears.algorithms.so.aaa;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.aaa.Alga;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AAA extends Algorithm {
+public class AAA extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -24,8 +24,7 @@ public class AAA extends Algorithm {
     @AlgorithmParameter(name = "adaptation probability constant", description = "determines the speed of the process in which algal colony, which could not find good solutions, tries to resemble itself to the biggest algal colony in the environment")
     private double adaptationConstant = 0.5;
 
-    private DoubleSolution best;
-    private Task task;
+    private NumberSolution<Double> best;
     private Alga[] population;
 
     public AAA() {
@@ -50,12 +49,12 @@ public class AAA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
 
         initPopulation();
         calculateGreatness();
-        while (!this.task.isStopCriterion()) {
+        while (!task.isStopCriterion()) {
 
             calculateEnergy();
             frictionForce();
@@ -66,12 +65,12 @@ public class AAA extends Algorithm {
                     while (neighbor == i) {
                         neighbor = tournamentMethod();
                     }
-                    double[] newColony = population[i].getDoubleVariables().clone();
+                    double[] newColony = Util.toDoubleArray(population[i].getVariables()).clone(); //clone necessary?
 
-                    int dim1 = Util.nextInt(task.getNumberOfDimensions());
-                    int dim2 = Util.nextInt(task.getNumberOfDimensions());
+                    int dim1 = Util.nextInt(task.problem.getNumberOfDimensions());
+                    int dim2 = Util.nextInt(task.problem.getNumberOfDimensions());
                     while (dim1 == dim2 ) {
-                        dim2 = Util.nextInt(task.getNumberOfDimensions());
+                        dim2 = Util.nextInt(task.problem.getNumberOfDimensions());
                     }
 
                     //In two-dimensional problems, algal movement is sinusoidal
@@ -81,29 +80,30 @@ public class AAA extends Algorithm {
                     newColony[dim2] = newColony[dim2] + (population[neighbor].getValue(dim2) - newColony[dim2]) * (shearForce - population[i].getFriction()) * Math.sin(Math.toRadians(degree));
 
                     //In case of three or more dimensions, algal movement is helical
-                    if(task.getNumberOfDimensions() > 2) {
-                        int dim3 = Util.nextInt(task.getNumberOfDimensions());
+                    if(task.problem.getNumberOfDimensions() > 2) {
+                        int dim3 = Util.nextInt(task.problem.getNumberOfDimensions());
                         while (dim1 == dim3 || dim2 == dim3) {
-                            dim3 = Util.nextInt(task.getNumberOfDimensions());
+                            dim3 = Util.nextInt(task.problem.getNumberOfDimensions());
                         }
                         degree = (int) (360 * Util.nextDouble());
                         newColony[dim3] = newColony[dim3] + (population[neighbor].getValue(dim3) - newColony[dim3]) * (shearForce - population[i].getFriction()) * Math.cos(Math.toRadians(degree));
                     }
 
-                    newColony = task.setFeasible(newColony);
+                    task.problem.setFeasible(newColony);
 
                     if (task.isStopCriterion())
                         break;
 
-                    newColony = task.setFeasible(newColony);
-                    Alga newAlga = new Alga(this.task.eval(newColony));
+                    NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(newColony));
+                    task.eval(newSolution);
+                    Alga newAlga = new Alga(newSolution);
                     population[i].setEnergy(population[i].getEnergy() - (energyLoss / 2));
-                    if (this.task.isFirstBetter(newAlga, population[i])) {
+                    if (task.problem.isFirstBetter(newAlga, population[i])) {
                         newAlga.copyAttributes(population[i]);
                         population[i] = newAlga;
                         iStarve = 1;
-                        if (task.isFirstBetter(newAlga, best))
-                            best = new DoubleSolution(newAlga);
+                        if (task.problem.isFirstBetter(newAlga, best))
+                            best = new NumberSolution<>(newAlga);
                     } else {
                         population[i].setEnergy(population[i].getEnergy() - (energyLoss / 2));
                     }
@@ -114,7 +114,7 @@ public class AAA extends Algorithm {
                 }
             }
             calculateGreatness();
-            int dim = (int) (this.task.getNumberOfDimensions() * Util.nextDouble());
+            int dim = (int) (task.problem.getNumberOfDimensions() * Util.nextDouble());
             int minColony = 0, maxColony = 0;
             for (int i = 1; i < popSize; i++) {
                 if (population[i].getColonySize() > population[maxColony].getColonySize())
@@ -131,11 +131,11 @@ public class AAA extends Algorithm {
             }
 
             if (Util.nextDouble() < adaptationConstant) {
-                for (int i = 0; i < this.task.getNumberOfDimensions(); i++) {
+                for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
                     population[maxStarving].setValue(i, population[maxStarving].getValue(i) + (best.getValue(i) - population[maxStarving].getValue(i)) * Util.nextDouble());
                 }
             }
-            this.task.incrementNumberOfIterations();
+            task.incrementNumberOfIterations();
         }
         return best;
     }
@@ -230,7 +230,7 @@ public class AAA extends Algorithm {
         while (colonyOne == colonyTwo) {
             colonyTwo = (int) ((popSize - 1) * Util.nextDouble());
         }
-        if (task.isFirstBetter(population[colonyOne], population[colonyTwo])) {
+        if (task.problem.isFirstBetter(population[colonyOne], population[colonyTwo])) {
             return colonyOne;
         } else {
             return colonyTwo;
@@ -246,8 +246,8 @@ public class AAA extends Algorithm {
             if (task.isStopCriterion())
                 break;
             population[i] = new Alga(task.getRandomEvaluatedSolution());
-            if (task.isFirstBetter(population[i], best)) {
-                best = new DoubleSolution(population[i]);
+            if (task.problem.isFirstBetter(population[i], best)) {
+                best = new NumberSolution(population[i]);
             }
         }
     }

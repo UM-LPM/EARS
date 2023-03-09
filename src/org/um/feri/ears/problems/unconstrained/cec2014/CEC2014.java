@@ -1,6 +1,6 @@
 package org.um.feri.ears.problems.unconstrained.cec2014;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.unconstrained.cec2015.input_data.DataReader;
 
 import java.io.BufferedReader;
@@ -12,14 +12,14 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Scanner;
 
-public abstract class CEC2014 extends Problem {
+public abstract class CEC2014 extends DoubleProblem {
 
     double[] OShift, M, y, z, x_bound;
     int[] SS;
     int funcNum;
 
-    public CEC2014(int d, int funcNum) {
-        super(d, 0);
+    public CEC2014(String name, int d, int funcNum) {
+        super(name, d, 1, 1, 0);
 
         if ((funcNum < 1) || (funcNum > 30)) {
             System.err.println("Function number must be between 1 and 30!");
@@ -40,9 +40,10 @@ public abstract class CEC2014 extends Problem {
 
         benchmarkName = "CEC20014";
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
+        objectiveSpaceOptima[0] = funcNum * 100;
 
         Locale.setDefault(Locale.US);
 
@@ -177,12 +178,6 @@ public abstract class CEC2014 extends Problem {
             e.printStackTrace();
         }
         input.close();
-        optimum[0] = OShift;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-
-        return funcNum * 100;
+        decisionSpaceOptima[0] = OShift;
     }
 }

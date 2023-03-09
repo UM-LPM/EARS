@@ -11,7 +11,7 @@ public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy
 
     @Override
     public void changeSolution(double[] x) {
-        double[] tmp = t.getRandomVariables();
+        double[] tmp = t.problem.getRandomVariables();
         for (int i = 0; i < x.length; i++) {
             if (Util.nextDouble() < 0.2)
                 x[i] = tmp[i];

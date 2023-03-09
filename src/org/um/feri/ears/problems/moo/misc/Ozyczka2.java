@@ -22,102 +22,83 @@ package org.um.feri.ears.problems.moo.misc;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.DoubleMOProblem;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.functions.Osyczka2_F1;
 import org.um.feri.ears.problems.moo.functions.Osyczka2_F2;
+import org.um.feri.ears.util.Util;
 
-public class Ozyczka2 extends DoubleMOProblem{
-	
-	public Ozyczka2() {
-	     
-		super(6,6,2);
+public class Ozyczka2 extends DoubleProblem {
 
-		fileName = "Osyczka2";
-		name = "Osyczka2";
-		
-	    upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+    public Ozyczka2() {
 
-		lowerLimit.add(0.0);
-		lowerLimit.add(0.0);
-		lowerLimit.add(1.0);
-		lowerLimit.add(0.0);
-		lowerLimit.add(1.0);
-		lowerLimit.add(0.0);
-		
-		upperLimit.add(10.0);
-		upperLimit.add(10.0);
-		upperLimit.add(5.0);
-		upperLimit.add(6.0);
-		upperLimit.add(5.0);
-		upperLimit.add(10.0);
+        super("Osyczka2", 6, 1, 6, 2);
 
-		this.addObjective(new Osyczka2_F1());
-		this.addObjective(new Osyczka2_F2());
-	}
+        referenceSetFileName = "Osyczka2";
 
-	@Override
-	public void evaluate(MOSolutionBase<Double> solution) {
-		
-		double[] x = solution.getVariables().stream().mapToDouble(i->i).toArray();
+        upperLimit = new ArrayList<>(numberOfDimensions);
+        lowerLimit = new ArrayList<>(numberOfDimensions);
 
-		double obj[] = new double[functions.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
-		}
-		solution.setObjectives(obj);
-		
-	}
+        lowerLimit.add(0.0);
+        lowerLimit.add(0.0);
+        lowerLimit.add(1.0);
+        lowerLimit.add(0.0);
+        lowerLimit.add(1.0);
+        lowerLimit.add(0.0);
 
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
-		double[] constraints = new double[numberOfConstraints];
-		
-		double[] dv = solution.getVariables().stream().mapToDouble(i->i).toArray();
-		
-		double x1,x2,x3,x4,x5,x6;
-	    x1 = dv[0];
-	    x2 = dv[1];
-	    x3 = dv[2];
-	    x4 = dv[3];
-	    x5 = dv[4];
-	    x6 = dv[5];
-	        
-	    constraints[0] = (x1 + x2)/2.0 - 1.0;
-	    constraints[1] = (6.0 - x1 - x2)/6.0;
-	    constraints[2] = (2.0 - x2 + x1)/2.0;
-	    constraints[3] = (2.0 - x1 + 3.0*x2)/2.0;
-	    constraints[4] = (4.0 - (x3-3.0)*(x3-3.0) - x4)/4.0;
-	    constraints[5] = ((x5-3.0)*(x5-3.0) +x6 - 4.0)/4.0;
+        upperLimit.add(10.0);
+        upperLimit.add(10.0);
+        upperLimit.add(5.0);
+        upperLimit.add(6.0);
+        upperLimit.add(5.0);
+        upperLimit.add(10.0);
 
-		solution.setConstraints(constraints);
+        addObjective(new Osyczka2_F1());
+        addObjective(new Osyczka2_F2());
+    }
 
-	    double total = 0.0;
-	    int number = 0;
-		for (int i = 0; i < constraints.length; i++) {
-			if (constraints[i]<0.0){
-		        total+=constraints[i];
-		        number++;
-			}
-		}
-	    solution.setOverallConstraintViolation(total);    
-	    solution.setNumberOfViolatedConstraint(number); 
-		
-	}
+    @Override
+    public void evaluate(NumberSolution<Double> solution) {
 
-	@Override
-	public double[] evaluate(Double[] ds) {
-		double[] x = new double[numberOfDimensions];
-		for (int i = 0; i < numberOfDimensions; i++)
-			x[i] = ds[i];
+        double[] x = Util.toDoubleArray(solution.getVariables());
 
-		double obj[] = new double[functions.size()];
-		for (int i = 0; i < obj.length; i++) {
-			obj[i] = functions.get(i).eval(x);
-		}
+        double[] obj = new double[objectives.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = objectives.get(i).eval(x);
+        }
+        solution.setObjectives(obj);
+    }
 
-		return obj;
-	}
+    public double[] evaluate(double[] x) {
 
+        double[] obj = new double[objectives.size()];
+        for (int i = 0; i < obj.length; i++) {
+            obj[i] = objectives.get(i).eval(x);
+        }
+
+        return obj;
+    }
+    @Override
+    public double[] calculateConstrains(NumberSolution<Double> solution) {
+        double[] constraints = new double[numberOfConstraints];
+
+        double[] dv = Util.toDoubleArray(solution.getVariables());
+
+        double x1, x2, x3, x4, x5, x6;
+        x1 = dv[0];
+        x2 = dv[1];
+        x3 = dv[2];
+        x4 = dv[3];
+        x5 = dv[4];
+        x6 = dv[5];
+
+        constraints[0] = (x1 + x2) / 2.0 - 1.0;
+        constraints[1] = (6.0 - x1 - x2) / 6.0;
+        constraints[2] = (2.0 - x2 + x1) / 2.0;
+        constraints[3] = (2.0 - x1 + 3.0 * x2) / 2.0;
+        constraints[4] = (4.0 - (x3 - 3.0) * (x3 - 3.0) - x4) / 4.0;
+        constraints[5] = ((x5 - 3.0) * (x5 - 3.0) + x6 - 4.0) / 4.0;
+
+        return constraints;
+    }
 }

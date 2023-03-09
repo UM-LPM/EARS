@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,13 +12,12 @@ import static java.lang.Math.*;
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/184-salomon-s-function
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Salomon
  */
-public class Salomon extends Problem {
+public class Salomon extends DoubleProblem {
 
     public Salomon(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Salomon";
+        super("Salomon", d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
     }
 
     @Override

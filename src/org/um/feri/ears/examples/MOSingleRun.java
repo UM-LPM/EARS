@@ -12,8 +12,7 @@ import org.um.feri.ears.algorithms.moo.paes.D_PAES;
 import org.um.feri.ears.algorithms.moo.pesa2MOEA.D_PESA2;
 import org.um.feri.ears.algorithms.moo.pso.OMOPSO;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.StopCriterion;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.zdt.ZDT6;
 import org.um.feri.ears.util.Util;
@@ -43,11 +42,11 @@ public class MOSingleRun {
 			ZDT6 p = new ZDT6(10);
 
 
-			DoubleMOTask task = new DoubleMOTask(p, StopCriterion.EVALUATIONS, 30000, 5000, 100);
+			Task<NumberSolution<Double>, DoubleProblem> task = new Task<>(p, StopCriterion.EVALUATIONS, 30000, 5000, 100);
 			ParetoSolution best = moead.execute(task);
 			best.printObjectivesToCSVFile("test");
 
-			//best.evaluate(new InvertedGenerationalDistance(p.getNumberOfObjectives(), p.getFileName()));
+			//best.evaluate(new InvertedGenerationalDistance(p.getNumberOfObjectives(), p.getReferenceSetFileName()));
 
 			System.out.println(best.getEval());
 

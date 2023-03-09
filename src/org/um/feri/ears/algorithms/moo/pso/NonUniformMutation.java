@@ -14,8 +14,9 @@
 package org.um.feri.ears.algorithms.moo.pso;
 
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 /**
@@ -24,7 +25,7 @@ import org.um.feri.ears.util.Util;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  * @author Juan J. Durillo
  */
-public class NonUniformMutation implements MutationOperator<Double, DoubleMOTask, MOSolutionBase<Double>> {
+public class NonUniformMutation implements MutationOperator<DoubleProblem, NumberSolution<Double>> {
     private double perturbation;
     private int maxIterations;
     private double mutationProbability;
@@ -68,26 +69,26 @@ public class NonUniformMutation implements MutationOperator<Double, DoubleMOTask
      * @param probability Mutation setProbability
      * @param solution    The solution to mutate
      */
-    public void doMutation(double probability, MOSolutionBase<Double> solution, DoubleMOTask task) {
+    public void doMutation(double probability, NumberSolution<Double> solution, DoubleProblem problem) {
         for (int i = 0; i < solution.numberOfVariables(); i++) {
             if (Util.nextDouble() < probability) {
                 double rand = Util.nextDouble();
                 double tmp;
 
                 if (rand <= 0.5) {
-                    tmp = delta(task.getUpperLimit(i) - solution.getValue(i),
+                    tmp = delta(problem.getUpperLimit(i) - solution.getValue(i),
                             perturbation);
                     tmp += solution.getValue(i);
                 } else {
-                    tmp = delta(task.getLowerLimit(i) - solution.getValue(i),
+                    tmp = delta(problem.getLowerLimit(i) - solution.getValue(i),
                             perturbation);
                     tmp += solution.getValue(i);
                 }
 
-                if (tmp < task.getLowerLimit(i)) {
-                    tmp = task.getLowerLimit(i);
-                } else if (tmp > task.getUpperLimit(i)) {
-                    tmp = task.getUpperLimit(i);
+                if (tmp < problem.getLowerLimit(i)) {
+                    tmp = problem.getLowerLimit(i);
+                } else if (tmp > problem.getUpperLimit(i)) {
+                    tmp = problem.getUpperLimit(i);
                 }
                 solution.setValue(i, tmp);
             }
@@ -111,9 +112,9 @@ public class NonUniformMutation implements MutationOperator<Double, DoubleMOTask
     }
 
     @Override
-    public MOSolutionBase<Double> execute(MOSolutionBase<Double> solution, DoubleMOTask tb) {
+    public NumberSolution<Double> execute(NumberSolution<Double> solution, DoubleProblem problem) {
 
-        doMutation(mutationProbability, solution, tb);
+        doMutation(mutationProbability, solution, problem);
         return solution;
     }
 

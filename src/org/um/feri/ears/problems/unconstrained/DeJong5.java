@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,22 +13,20 @@ import static java.lang.Math.pow;
 https://www.sfu.ca/~ssurjano/dejong5.html
  */
 
-public class DeJong5 extends Problem {
+public class DeJong5 extends DoubleProblem {
 
-    double[][] a;
+    private static final double[][] a = {
+            {-32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32},
+            {-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 32, 32, 32, 32, 32}
+    };
+
 
     public DeJong5() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -65.536));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 65.536));
-        name = "DeJong5";
+        super("DeJong5", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -65.536));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 65.536));
 
-        Arrays.fill(optimum[0], 1);
-
-        a = new double[2][];
-        a[0] = new double[]{-32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32};
-        a[1] = new double[]{-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 32, 32, 32, 32, 32};
-
+        Arrays.fill(decisionSpaceOptima[0], 1);
     }
 
     @Override

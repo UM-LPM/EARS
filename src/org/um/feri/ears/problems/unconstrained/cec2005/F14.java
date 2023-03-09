@@ -17,12 +17,10 @@ public class F14 extends CEC2005Base {
     private double[] m_zM;
 
     public F14(int d) {
-        super(d, 14);
+        super("Shifted Rotated Expanded Scaffer's F6 Function", d, 14);
 
-        name = "Shifted Rotated Expanded Scaffer's F6 Function";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
         m_o = new double[d];
         m_matrix = new double[d][d];
@@ -34,7 +32,7 @@ public class F14 extends CEC2005Base {
         loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
         // Load the matrix
         loadMatrixFromFile(DEFAULT_FILE_MX_PREFIX + d + DEFAULT_FILE_MX_SUFFIX, d, d, m_matrix);
-        optimum[0] = m_o;
+        decisionSpaceOptima[0] = m_o;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,13 +13,12 @@ http://infinity77.net/global_optimization/test_functions_nd_B.html#go_benchmark.
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/241-brown-s-function
 http://benchmarkfcns.xyz/benchmarkfcns/brownfcn.html
  */
-public class Brown extends Problem {
+public class Brown extends DoubleProblem {
 
     public Brown() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -1.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 4.0));
-        name = "Brown";
+        super("Brown", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -1.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 4.0));
     }
 
     @Override

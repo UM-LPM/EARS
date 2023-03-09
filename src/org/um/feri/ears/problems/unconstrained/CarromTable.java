@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,24 +13,19 @@ import static java.lang.Math.*;
 http://infinity77.net/global_optimization/test_functions_nd_C.html#go_benchmark.CarromTable
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/32-carrom-table-function
  */
-public class CarromTable extends Problem {
+public class CarromTable extends DoubleProblem {
 
     public CarromTable() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "CarromTable";
+        super("CarromTable", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
 
-        Arrays.fill(optimum[0], 9.646157266348881);
+        Arrays.fill(decisionSpaceOptima[0], 9.646157266348881);
+        objectiveSpaceOptima[0] = -24.15681551650653;
     }
 
     @Override
     public double eval(double[] x) {
         return (-1.0 / 30.0) * exp(2 * abs(1 - (sqrt(pow(x[0], 2) + pow(x[1], 2)) / PI))) * pow(cos(x[0]), 2) * pow(cos(x[1]), 2);
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -24.15681551650653;
     }
 }

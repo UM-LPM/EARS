@@ -1,8 +1,9 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.algorithms.AlgorithmBase;
-import org.um.feri.ears.problems.SolutionBase;
-import org.um.feri.ears.problems.TaskBase;
+import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.Solution;
+import org.um.feri.ears.problems.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,16 +12,16 @@ import java.util.Hashtable;
 /**
  * Class for storing benchmark results in different data structures/formats
  */
-public class BenchmarkResults<T extends TaskBase<?>, S extends SolutionBase<?>, A extends AlgorithmBase<T, S>> {
+public class BenchmarkResults<R extends Solution, S extends Solution, P extends Problem<S>, A extends Algorithm<R, S, P>> {
 
-    ArrayList<HashMap<T, ArrayList<AlgorithmRunResult<S, A, T>>>> runTaskAlgorithm; //run - task - results from all algorithms for the task
-    Hashtable<A, Hashtable<T, ArrayList<AlgorithmRunResult<S, A, T>>>> algorithmTaskRun; // algorithm - task - task results for all runs
+    ArrayList<HashMap<Task, ArrayList<AlgorithmRunResult<R, S, P, A>>>> runTaskAlgorithm; //run - task - results from all algorithms for the task
+    Hashtable<A, Hashtable<Task, ArrayList<AlgorithmRunResult<R, S, P, A>>>> algorithmTaskRun; // algorithm - task - task results for all runs
 
-    ArrayList<HashMap<T, ArrayList<AlgorithmRunResult<S, A, T>>>> getResultsByRun() {
+    ArrayList<HashMap<Task, ArrayList<AlgorithmRunResult<R, S, P, A>>>> getResultsByRun() {
         return runTaskAlgorithm;
     }
 
-    public Hashtable<A, Hashtable<T, ArrayList<AlgorithmRunResult<S, A, T>>>> getResultsByAlgorithm() {
+    public Hashtable<A, Hashtable<Task, ArrayList<AlgorithmRunResult<R, S, P, A>>>> getResultsByAlgorithm() {
         return algorithmTaskRun;
     }
 
@@ -29,7 +30,7 @@ public class BenchmarkResults<T extends TaskBase<?>, S extends SolutionBase<?>, 
         algorithmTaskRun = new Hashtable<>();
     }
 
-    public void addResults(int runNumber, T task, ArrayList<AlgorithmRunResult<S, A, T>> runResults) {
+    public void addResults(int runNumber, Task task, ArrayList<AlgorithmRunResult<R, S, P, A>> runResults) {
 
         while (runTaskAlgorithm.size() < runNumber + 1) {
             runTaskAlgorithm.add(new HashMap<>());
@@ -37,26 +38,26 @@ public class BenchmarkResults<T extends TaskBase<?>, S extends SolutionBase<?>, 
 
         runTaskAlgorithm.get(runNumber).put(task, runResults);
 
-        for (AlgorithmRunResult<S, A, T> res : runResults) {
+        for (AlgorithmRunResult<R, S, P, A> res : runResults) {
 
-            Hashtable<T, ArrayList<AlgorithmRunResult<S, A, T>>> algorithmsHs = algorithmTaskRun.computeIfAbsent(res.algorithm, k -> new Hashtable<>());
+            Hashtable<Task, ArrayList<AlgorithmRunResult<R, S, P, A>>> algorithmsHs = algorithmTaskRun.computeIfAbsent(res.algorithm, k -> new Hashtable<>());
 
-            ArrayList<AlgorithmRunResult<S, A, T>> tasksHs = algorithmsHs.computeIfAbsent(task, k -> new ArrayList<>());
+            ArrayList<AlgorithmRunResult<R, S, P, A>> tasksHs = algorithmsHs.computeIfAbsent(task, k -> new ArrayList<>());
             tasksHs.add(res);
         }
     }
 
-    public void addResult(int runNumber, T task, AlgorithmRunResult<S, A, T> runResult) {
+    public void addResult(int runNumber, Task task, AlgorithmRunResult<R, S, P, A> runResult) {
 
         while (runTaskAlgorithm.size() < runNumber + 1) {
             runTaskAlgorithm.add(new HashMap<>());
         }
         //runTaskAlgorithm.get(runNumber).put(task, runResult);
-        ArrayList<AlgorithmRunResult<S, A, T>> resultArray = runTaskAlgorithm.get(runNumber).computeIfAbsent(task, k -> new ArrayList<>());
+        ArrayList<AlgorithmRunResult<R, S, P, A>> resultArray = runTaskAlgorithm.get(runNumber).computeIfAbsent(task, k -> new ArrayList<>());
         resultArray.add(runResult);
 
-        Hashtable<T, ArrayList<AlgorithmRunResult<S, A, T>>> algorithmsHs = algorithmTaskRun.computeIfAbsent(runResult.algorithm, k -> new Hashtable<>());
-        ArrayList<AlgorithmRunResult<S, A, T>> tasksHs = algorithmsHs.computeIfAbsent(task, k -> new ArrayList<>());
+        Hashtable<Task, ArrayList<AlgorithmRunResult<R, S, P, A>>> algorithmsHs = algorithmTaskRun.computeIfAbsent(runResult.algorithm, k -> new Hashtable<>());
+        ArrayList<AlgorithmRunResult<R, S, P, A>> tasksHs = algorithmsHs.computeIfAbsent(task, k -> new ArrayList<>());
         tasksHs.add(runResult);
     }
 
@@ -65,7 +66,7 @@ public class BenchmarkResults<T extends TaskBase<?>, S extends SolutionBase<?>, 
         algorithmTaskRun.clear();
     }
 
-    public void removeAlgorithm(AlgorithmBase<T, S> algorithm) {
+    public void removeAlgorithm(Algorithm<R, S, P> algorithm) {
         //TODO
         /*for (HashMap<T, ArrayList<AlgorithmRunResult<S, A, T>>> run : runTaskAlgorithm) {
             for(ArrayList<AlgorithmRunResult<S, A, T>> results : run.values()) {

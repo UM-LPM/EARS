@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F12 extends CEC2014 {
 
     public F12(int d) {
-        super(d, 12);
-
-        name = "F12 Katsuura function";
+        super("F12 Katsuura function", d, 12);
     }
 
     @Override

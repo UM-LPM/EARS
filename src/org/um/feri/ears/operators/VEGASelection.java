@@ -16,14 +16,14 @@
  * along with the MOEA Framework.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.um.feri.ears.operators;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
 
-public class VEGASelection<Type extends Number> {
+public class VEGASelection<N extends Number> {
 	
-	private final ObjectiveComparator<Type> comparator;
+	private final ObjectiveComparator<N> comparator;
 	
 	/**
 	 * The tournament size. This is the number of solutions sampled from which
@@ -37,7 +37,7 @@ public class VEGASelection<Type extends Number> {
 	 * 
 	 * @param comparator the comparator used to determine the tournament winner
 	 */
-	public VEGASelection(ObjectiveComparator<Type>  comparator) {
+	public VEGASelection(ObjectiveComparator<N>  comparator) {
 		this(2, comparator);
 	}
 
@@ -48,7 +48,7 @@ public class VEGASelection<Type extends Number> {
 	 * @param size the tournament size
 	 * @param comparator the comparator used to determine the tournament winner
 	 */
-	public VEGASelection(int size, ObjectiveComparator<Type>  comparator) {
+	public VEGASelection(int size, ObjectiveComparator<N>  comparator) {
 		this.size = size;
 		this.comparator = comparator;
 	}
@@ -62,12 +62,12 @@ public class VEGASelection<Type extends Number> {
 	 *        selected
 	 * @return the winner of tournament selection
 	 */
-	public MOSolutionBase<Type> execute(Object object) {
-		ParetoSolution<Type> population = (ParetoSolution<Type>) object;
-		MOSolutionBase<Type> winner = population.get(Util.nextInt(population.size()));
+	public NumberSolution<N> execute(Object object) {
+		ParetoSolution<N> population = (ParetoSolution<N>) object;
+		NumberSolution<N> winner = population.get(Util.nextInt(population.size()));
 
 		for (int i = 1; i < size; i++) {
-			MOSolutionBase<Type> candidate = population
+			NumberSolution<N> candidate = population
 					.get(Util.nextInt(population.size()));
 
 			int flag = comparator.compare(winner, candidate);

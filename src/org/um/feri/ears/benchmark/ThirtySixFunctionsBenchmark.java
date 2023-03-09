@@ -1,13 +1,12 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.*;
 
 import java.util.ArrayList;
 
-public class ThirtySixFunctionsBenchmark extends Benchmark {
+public class ThirtySixFunctionsBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
 
     public ThirtySixFunctionsBenchmark() {
         super();
@@ -19,13 +18,13 @@ public class ThirtySixFunctionsBenchmark extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
-        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
+    protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
     @Override
     public void initAllProblems() {
-        ArrayList<Problem> problems = new ArrayList<Problem>();
+        ArrayList<DoubleProblem> problems = new ArrayList<>();
 
         problems.add(new Beale());
         problems.add(new Easom()); //wrong global minimum in paper
@@ -64,7 +63,7 @@ public class ThirtySixFunctionsBenchmark extends Benchmark {
         problems.add(new Salomon(5));
         problems.add(new Salomon(6)); //error in table Salomon10 instead of Salomon6
 
-        for (Problem p : problems) {
+        for (DoubleProblem p : problems) {
             addTask(p, stopCriterion, maxEvaluations, timeLimit, maxIterations);
         }
     }

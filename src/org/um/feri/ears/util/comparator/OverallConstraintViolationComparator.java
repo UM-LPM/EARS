@@ -22,55 +22,52 @@
 
 package org.um.feri.ears.util.comparator;
 
-import java.util.Comparator;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Solution;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import java.util.Comparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on the overall constraint violation of
  * the solutions, as in NSGA-II.
  */
-public class OverallConstraintViolationComparator<Type> implements Comparator<MOSolutionBase<Type>> {
+public class OverallConstraintViolationComparator implements Comparator<Solution> {
 
-	/** 
-	 * Compares two solutions.
-	 * @param o1 Object representing the first <code>Solution</code>.
-	 * @param o2 Object representing the second <code>Solution</code>.
-	 * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
-	 * respectively.
-	 */
-	public int compare(MOSolutionBase<Type> o1, MOSolutionBase<Type> o2) {    
-		double overall1, overall2;
-		overall1 = o1.getOverallConstraintViolation();
-		overall2 = o2.getOverallConstraintViolation();
+    /**
+     * Compares two solutions.
+     *
+     * @param s1 Object representing the first <code>Solution</code>.
+     * @param s2 Object representing the second <code>Solution</code>.
+     * @return -1, or 0, or 1 if s1 is less than, equal, or greater than s2,
+     * respectively.
+     */
+    public int compare(Solution s1, Solution s2) {
+        double overall1, overall2;
+        overall1 = s1.getOverallConstraintViolation();
+        overall2 = s2.getOverallConstraintViolation();
 
-		if ((overall1 < 0) && (overall2 < 0)) {
-			if (overall1 > overall2){
-				return -1;
-			} else if (overall2 > overall1){
-				return 1;
-			} else {
-				return 0;
-			}
-		} else if ((overall1 == 0) && (overall2 < 0)) {
-			return -1;
-		} else if ((overall1 < 0) && (overall2 == 0)) {        
-			return 1;
-		} else {
-			return 0;        
-		}
-	} // compare    
+        if ((overall1 < 0) && (overall2 < 0)) {
+            if (overall1 > overall2) {
+                return -1;
+            } else if (overall2 > overall1) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else if ((overall1 == 0) && (overall2 < 0)) {
+            return -1;
+        } else if ((overall1 < 0) && (overall2 == 0)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } // compare
 
-	/**
-	 * Returns true if solutions s1 and/or s2 have an overall constraint
-	 * violation < 0
-	 */
-	public boolean needToCompare(MOSolutionBase<Type> s1, MOSolutionBase<Type> s2) {
-		boolean needToCompare ;
-		needToCompare = (s1.getOverallConstraintViolation() < 0) ||
-				(s2.getOverallConstraintViolation() < 0);
-
-		return needToCompare ;
-	}
-} // OverallConstraintViolationComparator
+    /**
+     * Returns true if solutions s1 and/or s2 have an overall constraint violation < 0
+     */
+    public boolean needToCompare(Solution s1, Solution s2) {
+        return s1.getOverallConstraintViolation() < 0 || s2.getOverallConstraintViolation() < 0;
+    }
+}

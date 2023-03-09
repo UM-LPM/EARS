@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,19 +12,16 @@ import static java.lang.Math.pow;
 /*
 http://al-roomi.org/benchmarks/unconstrained/2-dimensions/65-powell-s-badly-scaled-function
  */
-public class PowellBadlyScaledFunction extends Problem {
+public class PowellBadlyScaledFunction extends DoubleProblem {
 
     public PowellBadlyScaledFunction() {
-        super(2, 0);
+        super("Powellbadlyscaledfunction", 2, 1, 1, 0);
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -50.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 50.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -50.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 50.0));
 
-        name = "Powellbadlyscaledfunction";
-
-        optimum[0][0] = 1.09815933e-5;
-        optimum[0][1] = 9.106146738;
-
+        decisionSpaceOptima[0][0] = 1.09815933e-5;
+        decisionSpaceOptima[0][1] = 9.106146738;
     }
 
     @Override

@@ -7,12 +7,14 @@
 
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 
-public class PolynomialMutation implements MutationOperator<Double, DoubleMOTask, MOSolutionBase<Double>>{
+public class PolynomialMutation implements MutationOperator<NumberProblem<Double>, NumberSolution<Double>>{
 	
 	
 	private static final double ETA_M_DEFAULT_ = 20.0;
@@ -27,14 +29,14 @@ public class PolynomialMutation implements MutationOperator<Double, DoubleMOTask
 		this.distributionIndex = distributionIndex;
 	}
 
-	public void doMutation(double probability, MOSolutionBase<Double> solution, DoubleMOTask task) {
+	public void doMutation(double probability, NumberSolution<Double> solution, NumberProblem<Double> problem) {
 		double rnd, delta1, delta2, mut_pow, deltaq;
 		double y, yl, yu, val, xy;
-		for (int var = 0; var < task.getNumberOfDimensions(); var++) {
+		for (int var = 0; var < problem.getNumberOfDimensions(); var++) {
 			if (Util.rnd.nextDouble() <= probability) {
 				y = solution.getValue(var);
-				yl = task.getLowerLimit(var);
-				yu = task.getUpperLimit(var);
+				yl = problem.getLowerLimit(var);
+				yu = problem.getUpperLimit(var);
 				delta1 = (y - yl) / (yu - yl);
 				delta2 = (yu - y) / (yu - yl);
 				rnd = Util.rnd.nextDouble();
@@ -58,10 +60,10 @@ public class PolynomialMutation implements MutationOperator<Double, DoubleMOTask
 		}
 	}
 
-	public MOSolutionBase<Double> execute(MOSolutionBase<Double> object, DoubleMOTask task) {
+	public NumberSolution<Double> execute(NumberSolution<Double> object, NumberProblem<Double> problem) {
 
-		MOSolutionBase<Double> solution = (MOSolutionBase<Double>) object;
-		doMutation(mutationProbability, solution, task);
+		NumberSolution<Double> solution = object;
+		doMutation(mutationProbability, solution, problem);
 		return solution;
 	}
 

@@ -1,15 +1,15 @@
 package org.um.feri.ears.quality_indicator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 
-public abstract class QualityIndicator<Type extends Number> {
+public abstract class QualityIndicator<N extends Number> {
 
     /**
      * Returns the value which represents the quality of the Pareto front approximation
      * @param paretoFrontApproximation the Pareto front approximation to be evaluated
      */
-    public abstract double evaluate(ParetoSolution<Type> paretoFrontApproximation);
+    public abstract double evaluate(ParetoSolution<N> paretoFrontApproximation);
 
     protected String name;
 
@@ -20,7 +20,7 @@ public abstract class QualityIndicator<Type extends Number> {
 
     protected String problem_file;
 
-    protected ParetoSolution<Type> referencePopulation;
+    protected ParetoSolution<N> referencePopulation;
 
     /**
      * Stores the number of objectives.
@@ -51,7 +51,7 @@ public abstract class QualityIndicator<Type extends Number> {
      */
     double[][] normalizedReference;
 
-    public QualityIndicator(int numObj, String fileName, ParetoSolution<Type> referenceSet) {
+    public QualityIndicator(int numObj, String fileName, ParetoSolution<N> referenceSet) {
 
         this.numberOfObjectives = numObj;
         this.problem_file = fileName;
@@ -75,7 +75,7 @@ public abstract class QualityIndicator<Type extends Number> {
         return eps;
     }
 
-    private double[][] normalize(ParetoSolution<Type> population) {
+    private double[][] normalize(ParetoSolution<N> population) {
 		
 		/*if (population.solutions.size() < 2) {
 			throw new IllegalArgumentException("requires at least two solutions");
@@ -95,7 +95,7 @@ public abstract class QualityIndicator<Type extends Number> {
         }
 
         for (int i = 0; i < referenceSet.length; i++) {
-            MOSolutionBase<Type> solution = population.get(i);
+            NumberSolution<N> solution = population.get(i);
 
             if (solution.violatesConstraints()) {
                 continue;
@@ -247,6 +247,10 @@ public abstract class QualityIndicator<Type extends Number> {
      * @return -1, or 0, or 1 if front1 is better than front2, both are
      * equal, or front2 is better than front1, respectively.
      */
-    public abstract int compare(ParetoSolution<Type> front1, ParetoSolution<Type> front2, Double epsilon);
+    public abstract int compare(ParetoSolution<N> front1, ParetoSolution<N> front2, Double epsilon);
+
+    public boolean isEqual(ParetoSolution<N> front1, ParetoSolution<N> front2, double drawLimit) {
+        return Math.abs(front1.getQiEval(getName()) - front2.getQiEval(getName())) < drawLimit;
+    }
 
 }

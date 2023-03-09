@@ -7,13 +7,13 @@
 
 package org.um.feri.ears.algorithms.moo.pesa2;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
 import java.util.Arrays;
 
-public class AdaptiveGrid<Type extends Number> {
+public class AdaptiveGrid<N extends Number> {
 
     private int bisections;
 
@@ -43,7 +43,7 @@ public class AdaptiveGrid<Type extends Number> {
         Arrays.fill(hypercubes, 0);
     }
 
-    private void updateLimits(ParetoSolution<Type> solutionSet) {
+    private void updateLimits(ParetoSolution<N> solutionSet) {
         // Init the lower and upper limits
         for (int obj = 0; obj < objectives; obj++) {
             // Set the lower limits to the max real
@@ -54,7 +54,7 @@ public class AdaptiveGrid<Type extends Number> {
 
         // Find the max and min limits of objetives into the population
         for (int ind = 0; ind < solutionSet.size(); ind++) {
-            MOSolutionBase<Type> tmpIndividual = solutionSet.get(ind);
+            NumberSolution<N> tmpIndividual = solutionSet.get(ind);
             for (int obj = 0; obj < objectives; obj++) {
                 if (tmpIndividual.getObjective(obj) < lowerLimits[obj]) {
                     lowerLimits[obj] = tmpIndividual.getObjective(obj);
@@ -66,7 +66,7 @@ public class AdaptiveGrid<Type extends Number> {
         }
     }
 
-    private void addSolutionSet(ParetoSolution<Type> solutionSet) {
+    private void addSolutionSet(ParetoSolution<N> solutionSet) {
         // Calculate the location of all individuals and update the grid
         mostPopulated = 0;
         int location;
@@ -82,7 +82,7 @@ public class AdaptiveGrid<Type extends Number> {
         calculateOccupied();
     }
 
-    public void updateGrid(ParetoSolution<Type> solutionSet) {
+    public void updateGrid(ParetoSolution<N> solutionSet) {
         // Update lower and upper limits
         updateLimits(solutionSet);
 
@@ -98,7 +98,7 @@ public class AdaptiveGrid<Type extends Number> {
         addSolutionSet(solutionSet);
     }
 
-    public void updateGrid(MOSolutionBase<Type> solution, ParetoSolution<Type> solutionSet) {
+    public void updateGrid(NumberSolution<N> solution, ParetoSolution<N> solutionSet) {
 
         int location = location(solution);
         if (location == -1) {// Re-build the Adaptative-Grid Update lower and upper limits
@@ -124,7 +124,7 @@ public class AdaptiveGrid<Type extends Number> {
         }
     }
 
-    public int location(MOSolutionBase<Type> solution) {
+    public int location(NumberSolution<N> solution) {
         // Create a int [] to store the range of each objetive
         int[] position = new int[objectives];
 

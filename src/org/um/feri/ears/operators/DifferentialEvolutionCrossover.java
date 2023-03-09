@@ -21,8 +21,10 @@
 
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 
@@ -42,7 +44,7 @@ import org.um.feri.ears.util.Util;
  *   - current-to-rand/1/bin (current-to-best/1/bin)
  *   - current-to-rand/1/exp (current-to-best/1/exp)
  */
-public class DifferentialEvolutionCrossover implements CrossoverOperator<Double, DoubleMOTask, MOSolutionBase<Double>> {
+public class DifferentialEvolutionCrossover implements CrossoverOperator<NumberProblem<Double>, NumberSolution<Double>> {
 	/**
 	 * DEFAULT_CR defines a default CR (crossover operation control) value
 	 */
@@ -70,7 +72,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 	private double K;
 	private String DE_Variant; // DE variant (rand/1/bin, rand/1/exp, etc.)
 
-	private MOSolutionBase<Double> currentSolution ;
+	private NumberSolution<Double> currentSolution ;
 	/**
 	 * Constructor
 	 */
@@ -91,7 +93,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 		this.DE_Variant = DE_VARIANT;
 	}
 
-	public void setCurrentSolution(MOSolutionBase<Double> current) {
+	public void setCurrentSolution(NumberSolution<Double> current) {
 		this.currentSolution = current ;
 	}
 
@@ -108,18 +110,18 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 
 
 	@Override
-	public MOSolutionBase<Double>[] execute(MOSolutionBase<Double>[] parent, DoubleMOTask task) {
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parent, NumberProblem<Double> problem) {
 
-		MOSolutionBase<Double> child;
+		NumberSolution<Double> child;
 		int jrand;
 
-		child = new MOSolutionBase<Double>(currentSolution.copy());
+		child = new NumberSolution<Double>(currentSolution.copy());
 
-		MOSolutionBase<Double> xParent0 = parent[0];
-		MOSolutionBase<Double> xParent1 = parent[1];
-		MOSolutionBase<Double> xParent2 = parent[2];
-		MOSolutionBase<Double> xCurrent = currentSolution;
-		MOSolutionBase<Double> xChild = child;
+		NumberSolution<Double> xParent0 = parent[0];
+		NumberSolution<Double> xParent1 = parent[1];
+		NumberSolution<Double> xParent2 = parent[2];
+		NumberSolution<Double> xCurrent = currentSolution;
+		NumberSolution<Double> xChild = child;
 
 		int numberOfVariables = xParent0.getVariables().size();
 		jrand = Util.rnd.nextInt(numberOfVariables - 1);
@@ -131,10 +133,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xParent2.getValue(j) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit(j))
-						value = task.getLowerLimit(j);
-					if (value > task.getUpperLimit(j))
-						value = task.getUpperLimit(j);
+					if (value < problem.getLowerLimit(j))
+						value = problem.getLowerLimit(j);
+					if (value > problem.getUpperLimit(j))
+						value = problem.getUpperLimit(j);
 					/*
 					 * if (value < xChild.getLowerBound(j)) { double rnd =
 					 * PseudoRandom.randDouble(0, 1) ; value =
@@ -159,10 +161,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xParent2.getValue(j) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit(j))
-						value = task.getLowerLimit(j);
-					if (value > task.getUpperLimit(j))
-						value = task.getUpperLimit(j);
+					if (value < problem.getLowerLimit(j))
+						value = problem.getLowerLimit(j);
+					if (value > problem.getUpperLimit(j))
+						value = problem.getUpperLimit(j);
 
 					xChild.setValue(j, value);
 				} else {
@@ -177,10 +179,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 				double value;
 				value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-				if (value < task.getLowerLimit(j))
-					value = task.getLowerLimit(j);
-				if (value > task.getUpperLimit(j))
-					value = task.getUpperLimit(j);
+				if (value < problem.getLowerLimit(j))
+					value = problem.getLowerLimit(j);
+				if (value > problem.getUpperLimit(j))
+					value = problem.getUpperLimit(j);
 
 				xChild.setValue(j, value);
 			}
@@ -191,10 +193,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit(j))
-						value = task.getLowerLimit(j);
-					if (value > task.getUpperLimit(j))
-						value = task.getUpperLimit(j);
+					if (value < problem.getLowerLimit(j))
+						value = problem.getLowerLimit(j);
+					if (value > problem.getUpperLimit(j))
+						value = problem.getUpperLimit(j);
 
 					xChild.setValue(j, value);
 				} else {
@@ -210,10 +212,10 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 					double value;
 					value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
-					if (value < task.getLowerLimit(j))
-						value = task.getLowerLimit(j);
-					if (value > task.getUpperLimit(j))
-						value = task.getUpperLimit(j);
+					if (value < problem.getLowerLimit(j))
+						value = problem.getLowerLimit(j);
+					if (value > problem.getUpperLimit(j))
+						value = problem.getUpperLimit(j);
 
 					xChild.setValue(j, value);
 				} else {
@@ -226,7 +228,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<Double,
 		} else {
 			System.err.println("Exception");
 		}
-		MOSolutionBase<Double>[] children = new MOSolutionBase[1];
+		NumberSolution<Double>[] children = new NumberSolution[1];
 		children[0] = child;
 		return children;
 	}

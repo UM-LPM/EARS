@@ -1,18 +1,17 @@
 package org.um.feri.ears.algorithms.so.goa;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.problems.*;
+import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class GOA extends Algorithm {
+public class GOA extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -21,10 +20,9 @@ public class GOA extends Algorithm {
     @AlgorithmParameter
     private double cMin = 0.00001;
 
-    private Task task;
-    private DoubleSolution best;
-    private ArrayList<DoubleSolution> population;
-    private ArrayList<DoubleSolution> offspringPopulation;
+    private NumberSolution<Double> best;
+    private ArrayList<NumberSolution<Double>> population;
+    private ArrayList<NumberSolution<Double>> offspringPopulation;
 
     public GOA() {
         this(20);
@@ -48,7 +46,7 @@ public class GOA extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task task) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
         initPopulation();
         int maxIt = 10000;
@@ -57,29 +55,29 @@ public class GOA extends Algorithm {
         }
 
         if (task.getStopCriterion() == StopCriterion.EVALUATIONS) {
-            maxIt = task.getMaxEvaluations() / popSize;
+            maxIt = (task.getMaxEvaluations() - popSize) / popSize;
         }
 
         double dist, r_ij1, r_ij2;
-        double[] ub = task.getUpperLimit();
-        double[] lb = task.getLowerLimit();
+        List<Double> ub = task.problem.getUpperLimit();
+        List<Double> lb = task.problem.getLowerLimit();
         double eps = Math.pow(2, -52);
         while (!task.isStopCriterion()) {
             //TODO normalize variables
             double c = cMax - (task.getNumberOfIterations() + 2) * ((cMax - cMin) / maxIt); // Eq. (2.8) in the paper
             double xj_xi, s_ij1, s_ij2;
             double[] S_total;
-            offspringPopulation = new ArrayList<DoubleSolution>();
+            offspringPopulation = new ArrayList<>();
             for (int i = 0; i < popSize; i++) {
-                double[] temp_i = population.get(i).getDoubleVariables();
-                double[] newPosition = new double[task.getNumberOfDimensions()];
-                S_total = new double[task.getNumberOfDimensions()];
-                for (int k = 0; k < task.getNumberOfDimensions(); k += 2) {
+                double[] temp_i = Util.toDoubleArray(population.get(i).getVariables());
+                double[] newPosition = new double[task.problem.getNumberOfDimensions()];
+                S_total = new double[task.problem.getNumberOfDimensions()];
+                for (int k = 0; k < task.problem.getNumberOfDimensions(); k += 2) {
                     for (int j = 0; j < popSize; j++) {
                         if (i == j)
                             continue;
 
-                        double[] temp_j = population.get(j).getDoubleVariables();
+                        double[] temp_j = Util.toDoubleArray(population.get(j).getVariables());
 
 
                         dist = distance(temp_i[k], temp_i[k + 1], temp_j[k], temp_j[k + 1]); //Calculate the distance between two grasshoppers
@@ -90,30 +88,32 @@ public class GOA extends Algorithm {
 
                         xj_xi = 2 + dist % 2; // |xjd - xid| in Eq. (2.7)
 
-                        s_ij1 = ((ub[k] - lb[k]) * c / 2) * functionS(xj_xi) * r_ij1;
-                        s_ij2 = ((ub[k + 1] - lb[k + 1]) * c / 2) * functionS(xj_xi) * r_ij2;
+                        s_ij1 = ((ub.get(k) - lb.get(k)) * c / 2) * functionS(xj_xi) * r_ij1;
+                        s_ij2 = ((ub.get(k + 1) - lb.get(k + 1)) * c / 2) * functionS(xj_xi) * r_ij2;
                         S_total[k] += s_ij1;
                         S_total[k + 1] += s_ij2;
                     }
                 }
 
-                for (int k = 0; k < task.getNumberOfDimensions(); k++) {
+                for (int k = 0; k < task.problem.getNumberOfDimensions(); k++) {
                     newPosition[k] = c * S_total[k] + best.getValue(k);
                 }
 
-                newPosition = task.setFeasible(newPosition);
+                task.problem.setFeasible(newPosition);
                 if (task.isStopCriterion())
                     break;
-                DoubleSolution newGH = task.eval(newPosition);
 
+
+                NumberSolution<Double> newGH = new NumberSolution<>(Util.toDoubleArrayList(newPosition));
+                task.eval(newGH);
                 offspringPopulation.add(newGH);
             }
 
             population = offspringPopulation;
-            for (DoubleSolution s : population) {
-                if (task.isFirstBetter(s, best)) {
+            for (NumberSolution<Double> s : population) {
+                if (task.problem.isFirstBetter(s, best)) {
                     //System.out.println(s.getEval());
-                    //best = new DoubleSolution(s);
+                    //best = new NumberSolution<Double>(s);
                     best = s;
                 }
             }
@@ -140,12 +140,12 @@ public class GOA extends Algorithm {
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            DoubleSolution newSolution = task.getRandomEvaluatedSolution();
+            NumberSolution<Double> newSolution = task.getRandomEvaluatedSolution();
             population.add(newSolution);
         }
 
-        population.sort(new TaskComparator(task));
-        best = new DoubleSolution(population.get(0));
+        population.sort(new ProblemComparator<>(task.problem));
+        best = new NumberSolution<>(population.get(0));
     }
 
     @Override

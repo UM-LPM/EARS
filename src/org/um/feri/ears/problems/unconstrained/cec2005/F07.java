@@ -17,12 +17,10 @@ public class F07 extends CEC2005Base {
     private double[] m_zM;
 
     public F07(int d) {
-        super(d, 7);
+        super("Shifted Rotated Griewank's Function without Bounds", d, 7);
 
-        name = "Shifted Rotated Griewank's Function without Bounds";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -600.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 600.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -600.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 600.0));
 
         m_o = new double[d];
         m_matrix = new double[d][d];
@@ -34,7 +32,7 @@ public class F07 extends CEC2005Base {
         loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
         // Load the matrix
         loadMatrixFromFile(DEFAULT_FILE_MX_PREFIX + d + DEFAULT_FILE_MX_SUFFIX, d, d, m_matrix);
-        optimum[0] = m_o;
+        decisionSpaceOptima[0] = m_o;
     }
 
     @Override

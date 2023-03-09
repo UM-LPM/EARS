@@ -4,17 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.Util;
 
-public class DummyAlgorithm extends Algorithm {
+public class DummyAlgorithm extends NumberAlgorithm {
 
     HashMap<String, double[]> results;
     HashMap<String, EvaluationStorage.Evaluation[]> problemEvaluations;
@@ -148,7 +145,7 @@ public class DummyAlgorithm extends Algorithm {
 
                             switch (task.getStopCriterion()) {
                                 case CPU_TIME: {
-                                    long stopCpuTime = task.getAllowedCPUTime();
+                                    long stopCpuTime = task.getAllowedCPUTimeNs();
                                     int index;
                                     for (index = 0; index < evaluationsPerRun.length; index++) {
                                         long cpuTime = evaluationsPerRun[index].time;
@@ -201,7 +198,7 @@ public class DummyAlgorithm extends Algorithm {
                                     double best = evaluationsPerRun[index++].fitness;
                                     for (; index < evaluationsPerRun.length; index++) {
 
-                                        if (task.isFirstBetter(evaluationsPerRun[index].fitness, best)) {
+                                        if (task.problem.isFirstBetter(evaluationsPerRun[index].fitness, best, 0)) {
                                             best = evaluationsPerRun[index].fitness;
                                             stagnationTrialCounter = 0;
                                         } else {
@@ -219,7 +216,7 @@ public class DummyAlgorithm extends Algorithm {
                                 case GLOBAL_OPTIMUM_OR_EVALUATIONS: {
                                     int index;
                                     for (index = 0; index < evaluationsPerRun.length; index++) {
-                                        if (task.isEqualToGlobalOptimum(evaluationsPerRun[index].fitness))
+                                        if (task.problem.isEqualToGlobalOptimum(evaluationsPerRun[index].fitness, 0))
                                             break;
                                     }
                                     index = Math.min(index, evaluationsPerRun.length - 1);
@@ -287,7 +284,7 @@ public class DummyAlgorithm extends Algorithm {
                 task.incrementNumberOfIterations();
 
             task.startTimer();
-            task.setEvaluationTime(evaluation.time);
+            task.setEvaluationTimeNs(evaluation.time);
 
         } catch (StopCriterionException e) {
             e.printStackTrace();

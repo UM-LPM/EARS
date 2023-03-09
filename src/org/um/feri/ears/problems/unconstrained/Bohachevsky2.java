@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,13 +13,12 @@ http://benchmarkfcns.xyz/benchmarkfcns/bohachevskyn2fcn.html
 http://benchmarkfcns.xyz/benchmarkfcns/bohachevskyn2fcn.html
  */
 
-public class Bohachevsky2 extends Problem {
+public class Bohachevsky2 extends DoubleProblem {
 
     public Bohachevsky2() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Bohachevsky2";
+        super("Bohachevsky2", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
     }
 
     @Override

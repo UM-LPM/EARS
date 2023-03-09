@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,15 +12,14 @@ import static java.lang.Math.max;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.Schwefel06
  */
-public class Schwefel26 extends Problem {
+public class Schwefel26 extends DoubleProblem {
 
     public Schwefel26() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Schwefel26";
+        super("Schwefel26", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
-        optimum[0] = new double[]{1.0, 3.0};
+        decisionSpaceOptima[0] = new double[]{1.0, 3.0};
     }
 
     @Override

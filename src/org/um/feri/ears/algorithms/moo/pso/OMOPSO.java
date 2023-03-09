@@ -27,9 +27,7 @@ import java.util.Comparator;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
@@ -51,7 +49,8 @@ import org.um.feri.ears.util.Util;
  *       Optimization, pp. 495-509.
  * </ol>
  */
-public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
+
+public class OMOPSO extends MOAlgorithm<Double, NumberSolution<Double>, DoubleProblem> {
 
     private int swarmSize;
     private int archiveSize;
@@ -59,14 +58,14 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
     private int maxIterations;
 
     private ParetoSolution<Double> swarm;
-    private MOSolutionBase<Double>[] localBest;
+    private NumberSolution<Double>[] localBest;
     private CrowdingDistanceArchive<Double> leaderArchive;
     private NondominatedPopulation<Double> epsilonArchive;
 
     private double[][] speed;
 
-    private Comparator<MOSolutionBase<Double>> dominanceComparator;
-    private Comparator<MOSolutionBase<Double>> crowdingDistanceComparator;
+    private DominanceComparator dominanceComparator;
+    private Comparator<NumberSolution<Double>> crowdingDistanceComparator;
 
     private UniformMutation uniformMutation;
     private NonUniformMutation nonUniformMutation;
@@ -95,8 +94,8 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
     }
 
     protected void initializeLeader(ParetoSolution<Double> swarm) {
-        for (MOSolutionBase<Double> solution : swarm) {
-            MOSolutionBase<Double> particle = solution.copy();
+        for (NumberSolution<Double> solution : swarm) {
+            NumberSolution<Double> particle = solution.copy();
             if (leaderArchive.add(particle)) {
                 epsilonArchive.add(particle.copy());
             }
@@ -111,15 +110,15 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
 
     protected void updateVelocity(ParetoSolution<Double> swarm) {
         double r1, r2, W, C1, C2;
-        MOSolutionBase<Double> bestGlobal;
+        NumberSolution<Double> bestGlobal;
 
         for (int i = 0; i < swarmSize; i++) {
-            MOSolutionBase<Double> particle = swarm.get(i);
-            MOSolutionBase<Double> bestParticle = localBest[i];
+            NumberSolution<Double> particle = swarm.get(i);
+            NumberSolution<Double> bestParticle = localBest[i];
 
             //Select a global localBest for calculate the speed of particle i, bestGlobal
-            MOSolutionBase<Double> one;
-            MOSolutionBase<Double> two;
+            NumberSolution<Double> one;
+            NumberSolution<Double> two;
             int pos1 = Util.nextInt(0, leaderArchive.getSolutionList().size());
             int pos2 = Util.nextInt(0, leaderArchive.getSolutionList().size());
             one = leaderArchive.getSolutionList().get(pos1);
@@ -139,7 +138,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
             W = Util.nextDouble(0.1, 0.5);
             //
 
-            for (int var = 0; var < numVar; var++) {
+            for (int var = 0; var < task.problem.getNumberOfDimensions(); var++) {
                 //Computing the velocity of this particle
                 speed[i][var] = W * speed[i][var] + C1 * r1 * (bestParticle.getValue(var) -
                         particle.getValue(var)) +
@@ -153,15 +152,15 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
      */
     protected void updatePosition(ParetoSolution<Double> swarm) {
         for (int i = 0; i < swarmSize; i++) {
-            MOSolutionBase<Double> particle = swarm.get(i);
-            for (int var = 0; var < numVar; var++) {
+            NumberSolution<Double> particle = swarm.get(i);
+            for (int var = 0; var < task.problem.getNumberOfDimensions(); var++) {
                 particle.setValue(var, particle.getValue(var) + speed[i][var]);
-                if (particle.getValue(var) < task.getLowerLimit(var)) {
-                    particle.setValue(var, task.getLowerLimit(var));
+                if (particle.getValue(var) < task.problem.getLowerLimit(var)) {
+                    particle.setValue(var, task.problem.getLowerLimit(var));
                     speed[i][var] = speed[i][var] * -1.0;
                 }
-                if (particle.getValue(var) > task.getUpperLimit(var)) {
-                    particle.setValue(var, task.getUpperLimit(var));
+                if (particle.getValue(var) > task.problem.getUpperLimit(var)) {
+                    particle.setValue(var, task.problem.getUpperLimit(var));
                     speed[i][var] = speed[i][var] * -1.0;
                 }
             }
@@ -194,9 +193,9 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
 
         for (int i = 0; i < swarm.size(); i++) {
             if (i % 3 == 0) {
-                nonUniformMutation.execute(swarm.get(i), task);
+                nonUniformMutation.execute(swarm.get(i), task.problem);
             } else if (i % 3 == 1) {
-                uniformMutation.execute(swarm.get(i), task);
+                uniformMutation.execute(swarm.get(i), task.problem);
             }
         }
     }
@@ -207,8 +206,8 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
      * @param swarm List of solutions (swarm)
      */
     protected void updateLeaders(ParetoSolution<Double> swarm) {
-        for (MOSolutionBase<Double> solution : swarm) {
-            MOSolutionBase<Double> particle = solution.copy();
+        for (NumberSolution<Double> solution : swarm) {
+            NumberSolution<Double> particle = solution.copy();
             if (leaderArchive.add(particle)) {
                 epsilonArchive.add(particle.copy());
             }
@@ -244,29 +243,29 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
         }
 
         currentIteration = 1;
-        swarm = new ParetoSolution<Double>(swarmSize);
+        swarm = new ParetoSolution<>(swarmSize);
         this.maxIterations = task.getMaxEvaluations() / swarmSize;
 
-        double mutationProbability = 1.0 / numVar;
+        double mutationProbability = 1.0 / task.problem.getNumberOfDimensions();
         this.uniformMutation = new UniformMutation(mutationProbability, 0.5);
         this.nonUniformMutation = new NonUniformMutation(mutationProbability, 0.5, maxIterations);
 
-        localBest = new MOSolutionBase[swarmSize];
-        leaderArchive = new CrowdingDistanceArchive<Double>(this.archiveSize);
+        localBest = new NumberSolution[swarmSize];
+        leaderArchive = new CrowdingDistanceArchive<>(this.archiveSize);
         epsilonArchive = new NondominatedPopulation<>(new DominanceComparator(eta));
 
-        dominanceComparator = new DominanceComparator<Double>();
-        crowdingDistanceComparator = new CrowdingDistanceComparator<Double>();
+        dominanceComparator = new DominanceComparator();
+        crowdingDistanceComparator = new CrowdingDistanceComparator<>();
 
-        speed = new double[swarmSize][numVar];
+        speed = new double[swarmSize][task.problem.getNumberOfDimensions()];
 
 
         // Create the initial population
-        MOSolutionBase<Double> newSolution;
+        NumberSolution<Double> newSolution;
         for (int i = 0; i < swarmSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new MOSolutionBase<Double>(task.getRandomMOSolution());
+            newSolution = new NumberSolution<>(task.getRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             swarm.add(newSolution);
         }
@@ -289,7 +288,7 @@ public class OMOPSO extends MOAlgorithm<DoubleMOTask, Double> {
             updatePosition(swarm);
             perturbation(swarm);
 
-            for (MOSolutionBase<Double> s : swarm) {
+            for (NumberSolution<Double> s : swarm) {
                 if (task.isStopCriterion())
                     break;
                 task.eval(s);

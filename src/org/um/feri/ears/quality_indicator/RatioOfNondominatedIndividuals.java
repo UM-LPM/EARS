@@ -1,6 +1,6 @@
 package org.um.feri.ears.quality_indicator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
@@ -29,7 +29,7 @@ public class RatioOfNondominatedIndividuals<T extends Number> extends QualityInd
     /**
      * stores a <code>Comparator</code> for dominance checking
      */
-    private static final Comparator<MOSolutionBase> dominance_ = new DominanceComparator();
+    private static final DominanceComparator dominance_ = new DominanceComparator();
 
     @Override
     public double evaluate(ParetoSolution<T> paretoFrontApproximation) {

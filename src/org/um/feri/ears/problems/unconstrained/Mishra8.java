@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,15 +13,15 @@ http://infinity77.net/global_optimization/test_functions_nd_D.html#go_benchmark.
 https://al-roomi.org/benchmarks/unconstrained/2-dimensions/49-mishra-s-function-no-8-or-decanomial-function
  */
 
-public class Mishra8 extends Problem {
+public class Mishra8 extends DoubleProblem {
 
     public Mishra8() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Mishra8"; //also known as Decanomial
+        super("Mishra8", 2, 1, 1, 0);
+        //also known as Decanomial
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
 
-        optimum[0] = new double[]{2, -3.0};
+        decisionSpaceOptima[0] = new double[]{2, -3.0};
     }
 
     @Override

@@ -4,9 +4,12 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.PMXCrossover;
 import org.um.feri.ears.operators.PermutationSwapMutation;
-import org.um.feri.ears.problems.IntegerMOTask;
+import org.um.feri.ears.problems.CombinatorialProblem;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 
-public class I_IBEA extends IBEA<IntegerMOTask, Integer> {
+public class I_IBEA extends IBEA<Integer, NumberProblem<Integer>> {
 	
 	public I_IBEA() {
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), 100, 100);
@@ -23,7 +26,7 @@ public class I_IBEA extends IBEA<IntegerMOTask, Integer> {
 		this(new PMXCrossover(), new PermutationSwapMutation(0.2), populationSize, archiveSize);
 	}
 
-	public I_IBEA(CrossoverOperator crossover, MutationOperator mutation, int populationSize, int archiveSize) {
+	public I_IBEA(CrossoverOperator<NumberProblem<Integer>, NumberSolution<Integer>> crossover, MutationOperator<NumberProblem<Integer>, NumberSolution<Integer>> mutation, int populationSize, int archiveSize) {
 		super(crossover, mutation, populationSize, archiveSize);
 	}
 	

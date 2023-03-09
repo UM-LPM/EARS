@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,15 +12,15 @@ import static java.lang.Math.pow;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_M.html#go_benchmark.Mishra02
  */
-public class Mishra2 extends Problem {
+public class Mishra2 extends DoubleProblem {
 
     public Mishra2() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 1.0));
-        name = "Mishra2";
+        super("Mishra2", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
 
-        Arrays.fill(optimum[0], 1.0);
+        Arrays.fill(decisionSpaceOptima[0], 1.0);
+        objectiveSpaceOptima[0] = 2.0;
     }
 
     @Override
@@ -30,10 +31,5 @@ public class Mishra2 extends Problem {
         }
         sum = numberOfDimensions - sum;
         return pow(1 + sum, sum);
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return 2.0;
     }
 }

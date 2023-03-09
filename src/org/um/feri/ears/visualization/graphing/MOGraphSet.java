@@ -6,11 +6,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.data.GraphDataSet;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 import com.panayotis.gnuplot.plot.DataSetPlot;
 import com.panayotis.gnuplot.style.NamedPlotColor;
@@ -96,7 +96,7 @@ public class MOGraphSet
 		{
 			if (allData[i][0].algorithm instanceof MOAlgorithm)
 			{
-				int l = ((MOSolutionBase)allData[i][0].solution).getObjectives().length;
+				int l = ((NumberSolution)allData[i][0].solution).getObjectives().length;
 				//for(int i1=0; i1<1; i1++) //DEBUG
 				for(int i1=0; i1<l; i1++)
 				{
@@ -132,7 +132,7 @@ public class MOGraphSet
 		this.graphs = new ArrayList<GraphEARS>();
 		for (int i=0; i<allData.length; i++)
 		{
-			if (allData[i][0].algorithm instanceof Algorithm)
+			if (allData[i][0].algorithm instanceof NumberAlgorithm)
 			{
 				if (type == 0 || type == 1)
 					graphs.add(new GraphEARSStatic(allData[i]));

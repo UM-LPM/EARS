@@ -1,8 +1,8 @@
 package org.um.feri.ears.engine;
 
 import org.um.feri.ears.algorithms.DummyAlgorithm;
-import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.benchmark.Benchmark;
+import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Util;
 

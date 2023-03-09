@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,13 +13,13 @@ import static java.lang.Math.floor;
 http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.Plateau
  */
 
-public class Plateau extends Problem {
+public class Plateau extends DoubleProblem {
 
     public Plateau() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.12));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.12));
-        name = "Plateau";
+        super("Plateau", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.12));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.12));
+        objectiveSpaceOptima[0] = 30.0;
     }
 
     @Override
@@ -28,10 +29,5 @@ public class Plateau extends Problem {
             fitness += floor(abs(x[i]));
         }
         return 30.0 + fitness;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return 30.0;
     }
 }

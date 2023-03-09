@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +10,7 @@ import static java.lang.Math.*;
 
 //http://profesores.elo.utfsm.cl/~tarredondo/info/soft-comp/functions/node15.html
 
-public class ModifiedLangermann10 extends Problem {
+public class ModifiedLangermann10 extends DoubleProblem {
 
     static final double[][] a = {
             {9.681, 0.667, 4.783, 9.095, 3.517, 9.325, 6.544, 0.211, 5.122, 2.020},
@@ -47,10 +48,9 @@ public class ModifiedLangermann10 extends Problem {
 
 
     public ModifiedLangermann10() {
-        super(10, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Modified Langermann10";
+        super("Modified Langermann10", 10, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
     }
 
     @Override

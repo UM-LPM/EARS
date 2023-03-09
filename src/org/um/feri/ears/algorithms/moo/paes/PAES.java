@@ -7,25 +7,21 @@
 
 package org.um.feri.ears.algorithms.moo.paes;
 
-import java.util.Comparator;
-
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 
-public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class PAES<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
-    AdaptiveGridArchive<Type> archive;
+    AdaptiveGridArchive<N> archive;
     int archiveSize = 100;
     int bisections = 5;
 
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    MutationOperator<P, NumberSolution<N>> mut;
 
     public PAES(MutationOperator mutation, int populationSize) {
 
@@ -46,25 +42,24 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     @Override
     protected void init() {
-        archive = new AdaptiveGridArchive<Type>(archiveSize, bisections, numObj);
+        archive = new AdaptiveGridArchive<>(archiveSize, bisections, numObj);
     }
 
     public void start() throws StopCriterionException {
 
-        Comparator<MOSolutionBase<Type>> dominance;
-        dominance = new DominanceComparator();
+        DominanceComparator dominance = new DominanceComparator();
 
         if (task.isStopCriterion())
             return;
-        MOSolutionBase<Type> solution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+        NumberSolution<N> solution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
         // problem.evaluateConstraints(solution);
 
-        archive.add(new MOSolutionBase<Type>(solution));
+        archive.add(new NumberSolution<N>(solution));
 
         do {
             // Create the mutate one
-            MOSolutionBase<Type> mutatedIndividual = new MOSolutionBase<Type>(solution);
-            mut.execute(mutatedIndividual, task);
+            NumberSolution<N> mutatedIndividual = new NumberSolution<N>(solution);
+            mut.execute(mutatedIndividual, task.problem);
 
             if (task.isStopCriterion())
                 break;
@@ -75,7 +70,7 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
             int flag = dominance.compare(solution, mutatedIndividual);
 
             if (flag == 1) { // If mutate solution dominate
-                solution = new MOSolutionBase<Type>(mutatedIndividual);
+                solution = new NumberSolution<N>(mutatedIndividual);
                 archive.add(mutatedIndividual);
             } else if (flag == 0) { // If none dominate the other
                 if (archive.add(mutatedIndividual)) {
@@ -95,26 +90,26 @@ public class PAES<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         best = archive;
     }
 
-    public MOSolutionBase<Type> test(MOSolutionBase<Type> solution,
-                                     MOSolutionBase<Type> mutatedSolution, AdaptiveGridArchive<Type> archive) {
+    public NumberSolution<N> test(NumberSolution<N> solution,
+                                  NumberSolution<N> mutatedSolution, AdaptiveGridArchive<N> archive) {
 
         int originalLocation = archive.getGrid().location(solution);
         int mutatedLocation = archive.getGrid().location(mutatedSolution);
 
         if (originalLocation == -1) {
-            return new MOSolutionBase<Type>(mutatedSolution);
+            return new NumberSolution<N>(mutatedSolution);
         }
 
         if (mutatedLocation == -1) {
-            return new MOSolutionBase<Type>(solution);
+            return new NumberSolution<N>(solution);
         }
 
         if (archive.getGrid().getLocationDensity(mutatedLocation) < archive
                 .getGrid().getLocationDensity(originalLocation)) {
-            return new MOSolutionBase<Type>(mutatedSolution);
+            return new NumberSolution<N>(mutatedSolution);
         }
 
-        return new MOSolutionBase<Type>(solution);
+        return new NumberSolution<N>(solution);
     }
 
 }

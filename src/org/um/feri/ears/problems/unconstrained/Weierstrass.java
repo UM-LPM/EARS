@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,13 +11,13 @@ import static java.lang.Math.*;
 /*
 http://infinity77.net/global_optimization/test_functions_nd_W.html#go_benchmark.Weierstrass
  */
-public class Weierstrass extends Problem {
+public class Weierstrass extends DoubleProblem {
 
     public Weierstrass() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -0.5));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.5));
-        name = "Weierstrass";
+        super("Weierstrass", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -0.5));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.5));
+        objectiveSpaceOptima[0] = 4.0;
     }
 
     @Override
@@ -35,10 +36,5 @@ public class Weierstrass extends Problem {
             fitness += sum1 - numberOfDimensions * sum2;
         }
         return fitness;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return 4.0;
     }
 }

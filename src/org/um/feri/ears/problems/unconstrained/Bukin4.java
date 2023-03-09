@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,13 +14,12 @@ http://infinity77.net/global_optimization/test_functions_nd_B.html#go_benchmark.
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/51-bukin-s-function-no-4
  */
 
-public class Bukin4 extends Problem {
+public class Bukin4 extends DoubleProblem {
 
     public Bukin4() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        name = "Bukin4";
+        super("Bukin4", 2, 1,1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
 
         lowerLimit.set(0, -15.0);
         upperLimit.set(0, -5.0);
@@ -27,8 +27,8 @@ public class Bukin4 extends Problem {
         lowerLimit.set(1, -3.0);
         upperLimit.set(1, 3.0);
 
-        optimum[0][0] = -10.0;
-        optimum[0][1] = 0.0;
+        decisionSpaceOptima[0][0] = -10.0;
+        decisionSpaceOptima[0][1] = 0.0;
     }
 
     @Override

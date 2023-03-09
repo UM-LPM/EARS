@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,44 +14,42 @@ https://al-roomi.org/benchmarks/unconstrained/2-dimensions/7-shekel-s-foxholes-f
 https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/7-shekel-s-foxholes-function
 */
 
-public class Foxholes extends Problem {
+public class Foxholes extends DoubleProblem {
 
-    public double[][] a;
+    private static final double[][] a = {{-32, -32},
+            {-16, -32},
+            {0, -32},
+            {16, -32},
+            {32, -32},
+            {-32, -16},
+            {-16, -16},
+            {0, -16},
+            {16, -16},
+            {32, -16},
+            {-32, 0},
+            {-16, 0},
+            {0, 0},
+            {16, 0},
+            {32, 0},
+            {-32, 16},
+            {-16, 16},
+            {0, 16},
+            {16, 16},
+            {32, 16},
+            {-32, 32},
+            {-16, 32},
+            {0, 32},
+            {16, 32},
+            {32, 32}
+    };
 
     public Foxholes() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -65.536));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 65.536));
-        name = "Shekel's Foxholes";
+        super("Shekel's Foxholes", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -65.536));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 65.536));
 
-        Arrays.fill(optimum[0], -31.97833);
-
-        a = new double[][]{{-32, -32},
-                {-16, -32},
-                {0, -32},
-                {16, -32},
-                {32, -32},
-                {-32, -16},
-                {-16, -16},
-                {0, -16},
-                {16, -16},
-                {32, -16},
-                {-32, 0},
-                {-16, 0},
-                {0, 0},
-                {16, 0},
-                {32, 0},
-                {-32, 16},
-                {-16, 16},
-                {0, 16},
-                {16, 16},
-                {32, 16},
-                {-32, 32},
-                {-16, 32},
-                {0, 32},
-                {16, 32},
-                {32, 32}
-        };
+        Arrays.fill(decisionSpaceOptima[0], -31.97833);
+        objectiveSpaceOptima[0] = 0.998003838;
     }
 
     @Override
@@ -67,10 +66,5 @@ public class Foxholes extends Problem {
         }
         fitness += 1.0 / 500.0;
         return pow(fitness, -1);
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return 0.998003838;
     }
 }

@@ -1,6 +1,6 @@
 package org.um.feri.ears.problems.misc;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.util.SpecialFunction;
 
 import java.io.BufferedReader;
@@ -8,9 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class SoilModelProblem extends Problem {
+public class SoilModelProblem extends DoubleProblem {
 
-    //TODO check if correct implementation
     //https://www.csee.umbc.edu/~tsimo1/CMSC483/cs220/code/trap/Trap.java
     //https://introcs.cs.princeton.edu/java/93integration/TrapezoidalRule.java.html
     //https://www.geeksforgeeks.org/trapezoidal-rule-for-approximate-value-of-definite-integral/
@@ -62,10 +61,10 @@ public class SoilModelProblem extends Problem {
     }
 
     private SoilModelProblem(int numberOfDimensions, int numberOfConstraints) {
-        super(numberOfDimensions, numberOfConstraints);
+        super("Soil Model", numberOfDimensions, 1, 1, numberOfConstraints);
 
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
 
         for (int i = 0; i < numberOfDimensions; i++) {
             if (i % 2 == 0) // resistance
@@ -78,8 +77,6 @@ public class SoilModelProblem extends Problem {
                 upperLimit.set(i, 40.0);
             }
         }
-
-        name = "Soil Model";
     }
 
     @Override

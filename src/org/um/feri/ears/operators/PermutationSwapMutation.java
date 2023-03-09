@@ -1,10 +1,11 @@
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.IntegerMOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.CombinatorialProblem;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 
-public class PermutationSwapMutation implements MutationOperator<Integer, IntegerMOTask, MOSolutionBase<Integer>> {
+public class PermutationSwapMutation implements MutationOperator<NumberProblem<Integer>, NumberSolution<Integer>> {
 
     private double mutationProbability;
 
@@ -19,19 +20,19 @@ public class PermutationSwapMutation implements MutationOperator<Integer, Intege
     }
 
     @Override
-    public MOSolutionBase<Integer> execute(MOSolutionBase<Integer> solution, IntegerMOTask tb) {
-        doMutation(solution, tb);
+    public NumberSolution<Integer> execute(NumberSolution<Integer> solution, NumberProblem<Integer> problem) {
+        doMutation(solution, problem);
         return solution;
     }
 
     /**
      * Performs the operation
      *
-     * @param tb
+     * @param problem
      */
-    public void doMutation(MOSolutionBase<Integer> solution, IntegerMOTask tb) {
+    public void doMutation(NumberSolution<Integer> solution, NumberProblem<Integer> problem) {
         int permutationLength;
-        permutationLength = tb.getNumberOfDimensions();
+        permutationLength = problem.getNumberOfDimensions();
 
         if ((permutationLength != 0) && (permutationLength != 1)) {
             if (Util.rnd.nextDouble() < mutationProbability) {

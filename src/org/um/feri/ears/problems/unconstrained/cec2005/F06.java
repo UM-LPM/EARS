@@ -12,12 +12,12 @@ public class F06 extends CEC2005Base {
     private double[] m_z;
 
     public F06(int d) {
-        super(d, 6);
+        super("Shifted Rosenbrock's Function", d, 6);
 
         name = "Shifted Rosenbrock's Function";
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
         // Note: dimension starts from 0
         m_o = new double[d];
@@ -31,7 +31,7 @@ public class F06 extends CEC2005Base {
         for (int i = 0; i < d; i++) {
             m_o[i] -= 1.0;
         }
-        optimum[0] = m_o;
+        decisionSpaceOptima[0] = m_o;
     }
 
     @Override

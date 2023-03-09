@@ -8,9 +8,8 @@ import org.um.feri.ears.util.Util;
 public class F19 extends CEC2010 {
 
     public F19(int d) {
-        super(d, 19);
+        super("F19 Shifted Schwefel's Problem 1.2", d, 19);
 
-        name = "F19 Shifted Schwefel's Problem 1.2";
         OShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {

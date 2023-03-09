@@ -839,7 +839,7 @@ class CEC2009helper {
 	 * @param nx the number of decision variables
 	 * @param n_obj the number of objectives
 	 */
-	public static void transform(Double[] x, Double[] zz, double[] psum, 
+	public static void transform(double[] x, double[] zz, double[] psum,
 			double[][] M, double[] lamda_l, int nx, int n_obj) {
 		int k = nx - n_obj + 1;
 		double[] p = new double[nx];

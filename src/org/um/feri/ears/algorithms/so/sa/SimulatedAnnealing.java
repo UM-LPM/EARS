@@ -1,9 +1,10 @@
 package org.um.feri.ears.algorithms.so.sa;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -11,7 +12,7 @@ import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 // source: https://uk.mathworks.com/matlabcentral/fileexchange/53149-real-coded-simulated-annealing-sa
 
-public class SimulatedAnnealing extends Algorithm {
+public class SimulatedAnnealing extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "mutation rate")
     private double mu = 0.5;
@@ -21,8 +22,7 @@ public class SimulatedAnnealing extends Algorithm {
     private static final double ALPHA = 0.99;
     private int subIterations = 20;
 
-    private DoubleSolution globalBest, currentBest;
-    private Task task;
+    private NumberSolution<Double> globalBest, currentBest;
     private double[] sigma;
 
     public SimulatedAnnealing() {
@@ -44,15 +44,15 @@ public class SimulatedAnnealing extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
-        sigma = task.getInterval();
-        for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+        this.task = task;
+        sigma = task.problem.getInterval();
+        for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
             sigma[i] *= 0.1;
         }
 
         globalBest = task.getRandomEvaluatedSolution();
-        currentBest = new DoubleSolution(globalBest);
+        currentBest = new NumberSolution<>(globalBest);
 
         while (!task.isStopCriterion()) {
 
@@ -61,11 +61,11 @@ public class SimulatedAnnealing extends Algorithm {
                 if (task.isStopCriterion())
                     break;
                 // create a neighbor by mutating the current best solution
-                DoubleSolution neighbor = neighbor(currentBest);
+                NumberSolution<Double> neighbor = createNeighbor(currentBest);
 
-                if (task.isFirstBetter(neighbor, currentBest)) {
+                if (task.problem.isFirstBetter(neighbor, currentBest)) {
                     currentBest = neighbor;
-                    if (task.isFirstBetter(currentBest, globalBest))
+                    if (task.problem.isFirstBetter(currentBest, globalBest))
                         globalBest = currentBest;
                 } else {
                     double DELTA = (currentBest.getEval() - neighbor.getEval()) / (currentBest.getEval() + 0.000000001);
@@ -77,25 +77,29 @@ public class SimulatedAnnealing extends Algorithm {
             }
             // Decreases T, cooling phase
             T *= ALPHA;
-            for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+            for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
                 sigma[i] *= 0.98;
             }
         }
         return globalBest;
     }
 
-    private DoubleSolution neighbor(DoubleSolution currentBest) throws StopCriterionException {
+    private NumberSolution<Double> createNeighbor(NumberSolution<Double> currentBest) throws StopCriterionException {
 
-        double[] currentVariables = currentBest.getDoubleVariables();
-        double[] x = new double[task.getNumberOfDimensions()];
-        for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+        double[] currentVariables = Util.toDoubleArray(currentBest.getVariables());
+        double[] x = new double[task.problem.getNumberOfDimensions()];
+        for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
             if (Util.nextDouble() <= mu) {
                 x[i] = currentVariables[i] + sigma[i] * Util.rnd.nextGaussian();
             } else
                 x[i] = currentVariables[i];
         }
-        x = task.setFeasible(x);
-        return task.eval(x);
+        task.problem.setFeasible(x);
+
+        NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(x));
+        task.eval(newSolution);
+
+        return newSolution;
     }
 
     @Override

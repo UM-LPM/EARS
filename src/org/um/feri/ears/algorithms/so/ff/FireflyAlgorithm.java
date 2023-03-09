@@ -1,22 +1,18 @@
 package org.um.feri.ears.algorithms.so.ff;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.TaskComparator;
+import org.um.feri.ears.problems.*;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.ff.FireflySolution;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
-public class FireflyAlgorithm extends Algorithm {
+public class FireflyAlgorithm extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -28,14 +24,13 @@ public class FireflyAlgorithm extends Algorithm {
     private double gamma = 1.0;
 
     private boolean debug = true;
-    private Task task;
     FireflySolution best;
     ArrayList<FireflySolution> population;
 
-    private double[] ub;
-    private double[] lb;
+    private List<Double> ub;
+    private List<Double> lb;
 
-    public FireflyAlgorithm(int popSize, int dimension) {
+    public FireflyAlgorithm(int popSize) {
 
         super();
         setDebug(debug);  //EARS prints some debug info
@@ -55,16 +50,15 @@ public class FireflyAlgorithm extends Algorithm {
     }
 
     public FireflyAlgorithm() {
-        this(20, 10);
+        this(20);
     }
 
-
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException { //EARS main evaluation loop
-        task = taskProblem;
-        ub = task.getUpperLimit();
-        lb = task.getLowerLimit();
-        //dimension = task.getNumberOfDimensions();
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException { //EARS main evaluation loop
+        this.task = task;
+        ub = task.problem.getUpperLimit();
+        lb = task.problem.getLowerLimit();
+        //dimension = task.problem.getNumberOfDimensions();
 
         initPopulation();
         sortFfa(); // initial sort
@@ -89,7 +83,7 @@ public class FireflyAlgorithm extends Algorithm {
     }
 
     public void initPopulation() throws StopCriterionException {
-        population = new ArrayList<FireflySolution>();
+        population = new ArrayList<>();
         FireflySolution firefly = new FireflySolution(task.getRandomEvaluatedSolution());
         firefly.setAttractiveness(1.0);
         firefly.setIntensity(1.0);
@@ -100,7 +94,7 @@ public class FireflyAlgorithm extends Algorithm {
             newFirefly.setAttractiveness(1.0);
             newFirefly.setIntensity(1.0);
             population.add(newFirefly);
-            if (task.isFirstBetter(newFirefly, best))
+            if (task.problem.isFirstBetter(newFirefly, best))
                 best = new FireflySolution(newFirefly);
             if (task.isStopCriterion())
                 break;
@@ -138,7 +132,7 @@ public class FireflyAlgorithm extends Algorithm {
             population.get(i).setIndex(i);
 
         // sort the population by fitness value
-        population.sort(new TaskComparator(task));
+        population.sort(new ProblemComparator<>(task.problem));
 
         // Bubble sort. needs to improve to a better sorting algorithm
 	    /*for(i=0;i<pop_size-1;i++)
@@ -165,11 +159,11 @@ public class FireflyAlgorithm extends Algorithm {
 
             for (j = 0; j < popSize; j++) {
                 double distance = 0.0; //it was called r in C++ version
-                double[] ffa_i = population.get(i).getDoubleVariables();
-                double[] ffa_j = population.get(j).getDoubleVariables();
-                for (k = 0; k < task.getNumberOfDimensions(); k++) {
+                ArrayList<Double> ffa_i = population.get(i).getVariables();
+                ArrayList<Double> ffa_j = population.get(j).getVariables();
+                for (k = 0; k < task.problem.getNumberOfDimensions(); k++) {
                     //r += (ffa[i][k]-ffa[j][k])*(ffa[i][k]-ffa[j][k]);
-                    distance += ((ffa_i[k] - ffa_j[k]) * (ffa_i[k] - ffa_j[k]));
+                    distance += ((ffa_i.get(k) - ffa_j.get(k)) * (ffa_i.get(k) - ffa_j.get(k)));
                 }
                 distance = Math.sqrt(distance);
                 //alex: from the paper, it is be low intensity moves to high intensity.
@@ -181,19 +175,19 @@ public class FireflyAlgorithm extends Algorithm {
                 {
                     double beta0 = 1.0;
                     beta = (beta0 - betamin) * Math.exp(-gamma * Math.pow(distance, 2.0)) + betamin;
-                    for (k = 0; k < task.getNumberOfDimensions(); k++) {
+                    for (k = 0; k < task.problem.getNumberOfDimensions(); k++) {
                         //alex: based on Yang's matlab code r is generated for each dimension
-                        scale = Math.abs(ub[k] - lb[k]); //alex: C++ version has scale bug!
-                        r = Util.nextDouble(lb[k], ub[k]);
+                        scale = Math.abs(ub.get(k) - lb.get(k)); //alex: C++ version has scale bug!
+                        r = Util.nextDouble(lb.get(k), ub.get(k));
                         double tmpf = alpha * (r - 0.5) * scale;
                         //the formula below is C++ version
                         //ffa[i][k] = ffa[i][k]*(1.0-beta)+ffa_tmp[j][k]*beta+tmpf;
                         //alex: I think the above ffa_tmp is a bug -- different from matlab version
                         //matlab's nso (ffa_tmp in C++) is from ns, which is updated result of ffa.
-                        ffa_i[k] = ffa_i[k] * (1.0 - beta) + ffa_j[k] * beta + tmpf;
+                        ffa_i.set(k,ffa_i.get(k) * (1.0 - beta) + ffa_j.get(k) * beta + tmpf);
                     }
-                    ffa_i = task.setFeasible(ffa_i); //check scope out of bound or not
-                    population.get(i).setVariables(Arrays.asList(ArrayUtils.toObject(ffa_i))); //update solution i
+                    task.problem.setFeasible(ffa_i); //check scope out of bound or not
+                    population.get(i).setVariables(ffa_i); //update solution i
 
                 }
             }

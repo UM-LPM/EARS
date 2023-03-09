@@ -1,6 +1,6 @@
 package org.um.feri.ears.algorithms.so.tlbo;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public class Statistic {
         return updatedByLearner;
     }
 
-    public DoubleSolution getBest() {
+    public NumberSolution getBest() {
         return a.get(a.size() - 1).best;
     }
 

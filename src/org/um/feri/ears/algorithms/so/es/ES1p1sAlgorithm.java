@@ -1,7 +1,8 @@
 package org.um.feri.ears.algorithms.so.es;
 
 import org.um.feri.ears.algorithms.*;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -9,16 +10,20 @@ import org.um.feri.ears.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ES1p1sAlgorithm extends Algorithm {
-    private DoubleSolution one;
+public class ES1p1sAlgorithm extends NumberAlgorithm {
+    private NumberSolution<Double> one;
     private double varianceOne;
     private int k, mem_k; // every k aVariance is calculated again
     private double c, mem_c;
-    private Task task;
 
     //source http://natcomp.liacs.nl/EA/slides/es_basic_algorithm.pdf
     public ES1p1sAlgorithm() {
         this(40, 0.8);
+    }
+
+    public ES1p1sAlgorithm(boolean d) {
+        this();
+        setDebug(d);
     }
 
     public ES1p1sAlgorithm(int k, double c) {
@@ -42,27 +47,22 @@ public class ES1p1sAlgorithm extends Algorithm {
 
     }
 
-    public ES1p1sAlgorithm(boolean d) {
-        this();
-        setDebug(d);
-    }
-
     private double getGaussian(double aMean, double aVariance) {
         return aMean + Util.rnd.nextGaussian() * aVariance;
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         resetToDefaultsBeforeNewRun(); //usually no need for this call
-        task = taskProblem;
-        DoubleSolution ii;
-        one = taskProblem.getRandomEvaluatedSolution();
+        this.task = task;
+        NumberSolution<Double> ii;
+        one = task.getRandomEvaluatedSolution();
         int everyK = 0; //recalculate variance
         double succ = 0;
         double[] oneplus;
         if (debug)
-            System.out.println(taskProblem.getNumberOfEvaluations() + " start " + one);
-        while (!taskProblem.isStopCriterion()) {
+            System.out.println(task.getNumberOfEvaluations() + " start " + one);
+        while (!task.isStopCriterion()) {
             everyK++;
             everyK = everyK % k;
             if (everyK == 0) { //1/5 rule
@@ -70,14 +70,17 @@ public class ES1p1sAlgorithm extends Algorithm {
                 else if ((succ / k) < 0.2) varianceOne = varianceOne * c;
                 succ = 0;
             }
-            oneplus = one.getDoubleVariables();
+            oneplus = Util.toDoubleArray(one.getVariables());
             mutate(oneplus, varianceOne);
-            ii = taskProblem.eval(oneplus);
-            if (taskProblem.isFirstBetter(ii, one)) {
+
+            ii = new NumberSolution<>(Util.toDoubleArrayList(oneplus));
+            task.eval(ii);
+
+            if (task.problem.isFirstBetter(ii, one)) {
                 succ++; //for 1/5 rule
                 one = ii;
                 if (debug)
-                    System.out.println(taskProblem.getNumberOfEvaluations() + " " + one);
+                    System.out.println(task.getNumberOfEvaluations() + " " + one);
             }
             task.incrementNumberOfIterations();
         }
@@ -86,15 +89,15 @@ public class ES1p1sAlgorithm extends Algorithm {
 
     private void mutate(double[] oneplus, double varianceOne) {
         for (int i = 0; i < oneplus.length; i++) {
-            oneplus[i] = task.setFeasible(oneplus[i] + getGaussian(0, varianceOne), i);
+            oneplus[i] = task.problem.setFeasible(oneplus[i] + getGaussian(0, varianceOne), i);
         }
 
     }
 
 
     @Override
-    public List<AlgorithmBase> getAlgorithmParameterTest(int dimension, int maxCombinations) {
-        List<AlgorithmBase> alternative = new ArrayList<AlgorithmBase>();
+    public List<Algorithm> getAlgorithmParameterTest(int dimension, int maxCombinations) {
+        List<Algorithm> alternative = new ArrayList<Algorithm>();
         if (maxCombinations == 1) {
             alternative.add(this);
         } else {

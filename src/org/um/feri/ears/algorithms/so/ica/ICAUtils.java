@@ -18,7 +18,7 @@
 
 package org.um.feri.ears.algorithms.so.ica;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
 import java.util.Arrays;
 
@@ -56,12 +56,12 @@ public class ICAUtils {
      * @param colonies the vector
      * @return the mean value
      */
-    public double getMean(DoubleSolution[] colonies) {
+    public double getMean(NumberSolution<Double>[] colonies) {
         if (colonies.length == 0)
             return 0;
 
         double sum = 0;
-		for (DoubleSolution colony : colonies) {
+		for (NumberSolution<Double> colony : colonies) {
 			sum += colony.getEval();
 		}
         return sum / colonies.length;
@@ -138,9 +138,9 @@ public class ICAUtils {
     }
 
 
-    public DoubleSolution getMax(DoubleSolution[] allImperialists) {
+    public NumberSolution<Double> getMax(NumberSolution<Double>[] allImperialists) {
 
-        DoubleSolution max = allImperialists[0];
+        NumberSolution<Double> max = allImperialists[0];
         for (int i = 1; i < allImperialists.length; i++) {
 
             if (allImperialists[i].getEval() > max.getEval()) {
@@ -151,7 +151,7 @@ public class ICAUtils {
         return max;
     }
 
-    public int getMinIndex(DoubleSolution[] colonies) {
+    public int getMinIndex(NumberSolution<Double>[] colonies) {
 
         double min = Double.MAX_VALUE;
         int bestIndex = 0;

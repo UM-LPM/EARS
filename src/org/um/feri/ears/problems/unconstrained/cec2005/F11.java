@@ -22,9 +22,7 @@ public class F11 extends CEC2005Base {
     private double[] m_zM;
 
     public F11(int d) {
-        super(d, 11);
-
-        name = "Shifted Rotated Weierstrass Function";
+        super("Shifted Rotated Weierstrass Function", d, 11);
 
         lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -0.5));
         upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.5));
@@ -39,7 +37,7 @@ public class F11 extends CEC2005Base {
         loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
         // Load the matrix
         loadMatrixFromFile(DEFAULT_FILE_MX_PREFIX + d + DEFAULT_FILE_MX_SUFFIX, d, d, m_matrix);
-        optimum[0] = m_o;
+        decisionSpaceOptima[0] = m_o;
     }
 
     @Override

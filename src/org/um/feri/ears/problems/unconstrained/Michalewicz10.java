@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,13 +12,13 @@ import static java.lang.Math.*;
 https://www.sfu.ca/~ssurjano/michal.html
 
  */
-public class Michalewicz10 extends Problem {
+public class Michalewicz10 extends DoubleProblem {
 
     public Michalewicz10() {
-        super(10, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, PI));
-        name = "Michalewicz10";
+        super("Michalewicz10", 10, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, PI));
+        objectiveSpaceOptima[0] = -9.66015171;
     }
 
     @Override
@@ -28,10 +29,5 @@ public class Michalewicz10 extends Problem {
             fitness += sin(x[i]) * pow(sin((i + 1) * x[i] * x[i] / PI), 2 * m);
         }
         return -fitness;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -9.66015171;
     }
 }

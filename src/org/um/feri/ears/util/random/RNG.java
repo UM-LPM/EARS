@@ -57,6 +57,7 @@ public class RNG {
     //TODO test benchmark before replacing Util.rnd with RNG + speed test
     //TODO separate methods for default and specific RNG
     //TODO synchronized causes overhead, ThreadLocalRandom, separate generator for each thread
+    //TODO random permutation from to (use in combinatorial problem)
 
     /**
      * @param upperBound

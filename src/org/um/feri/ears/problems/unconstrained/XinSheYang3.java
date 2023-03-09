@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,13 +12,13 @@ import static java.lang.Math.*;
 http://benchmarkfcns.xyz/benchmarkfcns/xinsheyangn3fcn.html
 http://infinity77.net/global_optimization/test_functions_nd_X.html#go_benchmark.XinSheYang03
  */
-public class XinSheYang3 extends Problem {
+public class XinSheYang3 extends DoubleProblem {
 
     public XinSheYang3() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -20.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 20.0));
-        name = "XinSheYang3";
+        super("XinSheYang3", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -20.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 20.0));
+        objectiveSpaceOptima[0] = -1.0;
     }
 
     @Override
@@ -31,10 +32,5 @@ public class XinSheYang3 extends Problem {
             prod *= pow(cos(x[i]), 2);
         }
         return exp(-sum1) - (2 * exp(-sum2)) * prod;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -1.0;
     }
 }

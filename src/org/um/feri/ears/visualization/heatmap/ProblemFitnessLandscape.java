@@ -1,7 +1,8 @@
 package org.um.feri.ears.visualization.heatmap;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.unconstrained.*;
-import org.um.feri.ears.problems.Problem;
+
 
 import java.io.*;
 
@@ -11,10 +12,10 @@ public class ProblemFitnessLandscape {
 
     public static void main(String[] args) {
 
-        Problem problem = new WayburnSeader3();
+        DoubleProblem problem = new WayburnSeader3();
 
-        double fit = problem.eval(problem.getOptimalVector()[0]);
-        double global = problem.getGlobalOptimum();
+        double fit = problem.eval(problem.getDecisionSpaceOptima()[0]);
+        double global = problem.getGlobalOptima()[0];
         double min = fit;
         System.out.println("Closeness to global: " + (global - fit));
         int numOfPartitions = 1000;

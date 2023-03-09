@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,16 +13,15 @@ https://www.sfu.ca/~ssurjano/beale.html
 http://benchmarkfcns.xyz/benchmarkfcns/bealefcn.html
 */
 
-public class Beale extends Problem {
+public class Beale extends DoubleProblem {
 
     public Beale() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -4.5));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 4.5));
-        name = "Beale";
+        super("Beale", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -4.5));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 4.5));
 
-        optimum[0][0] = 3;
-        optimum[0][1] = 0.5;
+        decisionSpaceOptima[0][0] = 3;
+        decisionSpaceOptima[0][1] = 0.5;
     }
 
     @Override

@@ -22,64 +22,52 @@ package org.um.feri.ears.problems.moo.dtlz;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
-public class DTLZ2 extends DTLZ{
-	
-	
-	public DTLZ2(int numberOfObjectives) {
-		this(numberOfObjectives + 9, numberOfObjectives);
-	}
-	
-	public DTLZ2(int numberOfVariables, int numberOfObjectives) {
-	     
-		super(numberOfVariables,0,numberOfObjectives);
-
-		fileName = "DTLZ2."+numberOfObjectives+"D";
-		name = "DTLZ2";
-
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+public class DTLZ2 extends DTLZ {
 
 
-		for (int i = 0; i < numberOfDimensions; i++) {
-			lowerLimit.add(0.0);
-			upperLimit.add(1.0);
-		}
+    public DTLZ2(int numberOfObjectives) {
+        this(numberOfObjectives + 9, numberOfObjectives);
+    }
 
-	}
+    public DTLZ2(int numberOfVariables, int numberOfObjectives) {
 
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
-	}
-	
-	@Override
-	public double[] evaluate(Double ds[]) {
-		
-		double [] x = new double[numberOfDimensions];
-	    double [] f = new double[numberOfObjectives];
-	    int k = numberOfDimensions - numberOfObjectives + 1;
-	        
-	    for (int i = 0; i < numberOfDimensions; i++)
-	      x[i] = ds[i];
-	        
-	    double g = 0.0;
-	    for (int i = numberOfDimensions - k; i < numberOfDimensions; i++)
-	      g += (x[i] - 0.5)*(x[i] - 0.5);
-	        
-	    for (int i = 0; i < numberOfObjectives; i++)
-	      f[i] = 1.0 + g;
-	        
-	    for (int i = 0; i < numberOfObjectives; i++){
-	      for (int j = 0; j < numberOfObjectives - (i + 1); j++)            
-	        f[i] *= Math.cos(x[j]*0.5*Math.PI);                
-	        if (i != 0){
-	          int aux = numberOfObjectives - (i + 1);
-	          f[i] *= Math.sin(x[aux]*0.5*Math.PI);
-	        }
-	    }
-		
-		return f;
-	}
+        super("DTLZ2", numberOfVariables, numberOfObjectives, 0);
 
+        referenceSetFileName = "DTLZ2." + numberOfObjectives + "D";
+
+        upperLimit = new ArrayList<>(numberOfDimensions);
+        lowerLimit = new ArrayList<>(numberOfDimensions);
+
+
+        for (int i = 0; i < numberOfDimensions; i++) {
+            lowerLimit.add(0.0);
+            upperLimit.add(1.0);
+        }
+
+    }
+
+    @Override
+    public double[] evaluate(double[] x) {
+
+        double[] f = new double[numberOfObjectives];
+        int k = numberOfDimensions - numberOfObjectives + 1;
+
+        double g = 0.0;
+        for (int i = numberOfDimensions - k; i < numberOfDimensions; i++)
+            g += (x[i] - 0.5) * (x[i] - 0.5);
+
+        for (int i = 0; i < numberOfObjectives; i++)
+            f[i] = 1.0 + g;
+
+        for (int i = 0; i < numberOfObjectives; i++) {
+            for (int j = 0; j < numberOfObjectives - (i + 1); j++)
+                f[i] *= Math.cos(x[j] * 0.5 * Math.PI);
+            if (i != 0) {
+                int aux = numberOfObjectives - (i + 1);
+                f[i] *= Math.sin(x[aux] * 0.5 * Math.PI);
+            }
+        }
+        return f;
+    }
 }

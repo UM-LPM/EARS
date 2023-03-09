@@ -1,25 +1,21 @@
 package org.um.feri.ears.algorithms.so.gsa;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import org.um.feri.ears.algorithms.so.gsa.GSASolution;
 
 
 /**
  * Code from http://www.mathworks.com/matlabcentral/fileexchange/27756-gravitational-search-algorithm--gsa-
  */
 
-public class GSA extends Algorithm {
+public class GSA extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -29,7 +25,7 @@ public class GSA extends Algorithm {
     private double alpha = 20; //Gconstant
     private double G0 = 100; //Gconstant
     private int D; //dimension
-    
+
     private static double eps = 2.2204e-16; //http://www.mathworks.com/help/matlab/ref/eps.html?searchHighlight=eps
     private boolean elitistCheck = true;
     private ArrayList<GSASolution> popX; //population
@@ -58,64 +54,72 @@ public class GSA extends Algorithm {
         setDebug(debug);  //EARS prints some debug info
         ai = new AlgorithmInfo("GSA", "Gravitational Search Algorithm",
                 "@article{Rashedi20092232," +
-                "title = \"GSA: A Gravitational Search Algorithm \"," +
-                "journal = \"Information Sciences \"," +
-                "volume = \"179\"," +
-                "number = \"13\"," +
-                "pages = \"2232 - 2248\"," +
-                "year = \"2009\"," +
-                "note = \"Special Section on High Order Fuzzy Sets \"," +
-                "issn = \"0020-0255\"," +
-                "doi = \"http://dx.doi.org/10.1016/j.ins.2009.03.004\"," +
-                "url = \"http://www.sciencedirect.com/science/article/pii/S0020025509001200\"," +
-                "author = \"Esmat Rashedi and Hossein Nezamabadi-pour and Saeid Saryazdi\"}"
+                        "title = \"GSA: A Gravitational Search Algorithm \"," +
+                        "journal = \"Information Sciences \"," +
+                        "volume = \"179\"," +
+                        "number = \"13\"," +
+                        "pages = \"2232 - 2248\"," +
+                        "year = \"2009\"," +
+                        "note = \"Special Section on High Order Fuzzy Sets \"," +
+                        "issn = \"0020-0255\"," +
+                        "doi = \"http://dx.doi.org/10.1016/j.ins.2009.03.004\"," +
+                        "url = \"http://www.sciencedirect.com/science/article/pii/S0020025509001200\"," +
+                        "author = \"Esmat Rashedi and Hossein Nezamabadi-pour and Saeid Saryazdi\"}"
         );
         au = new Author("Matej", "matej.crepinsek@um.si");
     }
 
 
     @Override
-    public DoubleSolution execute(Task t) throws StopCriterionException {
-        initPopulation(t);
-        int iteration = 1;
-        int maxIt = (t.getMaxEvaluations() - popSize) / popSize;  //-initpopulation!
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+        this.task = task;
+        initPopulation();
+
+        int maxIt = 10000;
+        if (task.getStopCriterion() == StopCriterion.ITERATIONS) {
+            maxIt = task.getMaxIterations();
+        }
+
+        if (task.getStopCriterion() == StopCriterion.EVALUATIONS) {
+            maxIt = (task.getMaxEvaluations() - popSize) / popSize;
+        }
+
         double[] M = new double[popSize];
         double G;
-        D = t.getNumberOfDimensions();
+        D = task.problem.getNumberOfDimensions();
         GSASolution tmpIn;
-        while (!t.isStopCriterion()) {
-            G = G0 * Math.exp(-alpha * iteration / maxIt); //%eq. 28. Gconstant;
+        while (!task.isStopCriterion()) {
+            G = G0 * Math.exp(-alpha * task.getNumberOfIterations() / maxIt); //%eq. 28. Gconstant;
             if (debug) {
-                System.out.println("Current iteration is " + iteration + "/" + maxIt + " G=" + G);
+                System.out.println("Current iteration is " + task.getNumberOfIterations() + "/" + maxIt + " G=" + G);
             }
             //%Calculation of M. eq.14-20
             //[M]=massCalculation(fitness,min_flag);
-            massCalculation(M, t); //put mass in Individual
+            massCalculation(M); //put mass in Individual
             //%Calculation of Gravitational constant. eq.13.
             //G=Gconstant(iteration,max_it);
             //%Calculation of accelaration in gravitational field. eq.7-10,21.
             //a=Gfield(M,X,G,Rnorm,Rpower,ElitistCheck,iteration,max_it);
-            Gfield(elitistCheck, iteration, maxIt, G);
+            Gfield(elitistCheck, maxIt, G);
             for (int i = 0; i < popSize; i++) {
-                tmpIn = popX.get(i).move(t);
-                if (t.isFirstBetter(tmpIn, popX.get(i))) { //CM all have this?
+                tmpIn = popX.get(i).move(task);
+                if (task.problem.isFirstBetter(tmpIn, popX.get(i))) { //CM all have this?
                     popX.set(i, tmpIn);
                 }
-                if (t.isFirstBetter(popX.get(i), g)) {
+                if (task.problem.isFirstBetter(popX.get(i), g)) {
                     g = popX.get(i);
                     if (debug) {
                         System.out.println("New best: " + g.getEval());
                     }
                 }
-                if (t.isStopCriterion()) break;
+                if (task.isStopCriterion()) break;
             }
-            iteration++;
-            t.incrementNumberOfIterations();
+            task.incrementNumberOfIterations();
         }
         return g;
     }
 
-    private void massCalculation(double[] m, Task t) {
+    private void massCalculation(double[] m) {
 		/*
 function [M]=massCalculation(fit,min_flag);
 %%%%here, make your own function of 'mass calculation'
@@ -140,13 +144,13 @@ M=M./sum(M); %eq. 16.
         worst = popX.get(0);
         //sum = pop_x.get(0).getEval(); //problem of negative values????
         for (int i = 1; i < popSize; i++) {
-            if (t.isFirstBetter(popX.get(i), best)) best = popX.get(i);
-            if (t.isFirstBetter(worst, popX.get(i))) worst = popX.get(i);
+            if (task.problem.isFirstBetter(popX.get(i), best)) best = popX.get(i);
+            if (task.problem.isFirstBetter(worst, popX.get(i))) worst = popX.get(i);
         }
         //Add moveFit CM
         double moveFit = 0;
         if (((best.getEval() < 0) && (worst.getEval() > 0)) || ((best.getEval() > 0) && (worst.getEval() < 0))) { //-3, -2, .., 3, 4 or 3, 2, .., -3, -4
-            if (!t.isMinimize())
+            if (!task.isMinimize())
                 moveFit = -worst.getEval();
             else
                 moveFit = +worst.getEval();
@@ -169,14 +173,14 @@ M=M./sum(M); %eq. 16.
     }
 
     /*
-    function a=Gfield(M,X,G,Rnorm,Rpower,ElitistCheck,iteration,max_it);
+    function a=Gfield(M,X,G,Rnorm,Rpower,ElitistCheck,iteration,maxIt);
 
     [N,dim]=size(X);
      final_per=2; %In the last iteration, only 2 percent of agents apply force to the others.
 
     %%%%total force calculation
      if ElitistCheck==1
-         kbest=final_per+(1-iteration/max_it)*(100-final_per); %kbest in eq. 21.
+         kbest=final_per+(1-iteration/maxIt)*(100-final_per); %kbest in eq. 21.
          kbest=round(N*kbest/100);
      else
          kbest=N; %eq.9.
@@ -203,11 +207,11 @@ M=M./sum(M); %eq. 16.
          *
          *
          */
-    private void Gfield(boolean elitistCheck, int iteration, int max_it, double G) {
+    private void Gfield(boolean elitistCheck, int maxIt, double G) {
         int kbest;
         double dkbest = 0;
         if (elitistCheck) {
-            dkbest = finalPer + (1. - (double) iteration / max_it) * (100. - finalPer);// %kbest in eq. 21.
+            dkbest = finalPer + (1. - (double) task.getNumberOfIterations() / maxIt) * (100. - finalPer);// %kbest in eq. 21.
             kbest = (int) Math.ceil(popSize * dkbest / 100); //CM instead round that return 0 in last iter
         } else {
             kbest = popSize;// %eq.9.
@@ -218,19 +222,14 @@ M=M./sum(M); %eq. 16.
 			System.out.println("Take mass for k-best endividuals:"+kbest+" ("+dkbest+")");
 		}
 		*/
-        popX.sort(new Comparator<GSASolution>() {
-            @Override
-            public int compare(GSASolution o1, GSASolution o2) {
-                if (o1.getMass() > o2.getMass()) return -1;
-                if (o1.getMass() < o2.getMass()) return 1;
-                return 0;
-            }
+        popX.sort((o1, o2) -> {
+            return Double.compare(o2.getMass(), o1.getMass());
         });
         /*	works OK
          */
         if (debug) {
             System.out.println("Descending masss (kbest=" + kbest + " )");
-            printPop(iteration);
+            printPop();
         }
         //*/
         double tmp, tm, R;
@@ -258,19 +257,19 @@ M=M./sum(M); %eq. 16.
         }
     }
 
-    private void printPop(int iteration) {
+    private void printPop() {
         for (int i = 0; i < popSize; i++) {
             System.out.println("" + i + ". Mass " + popX.get(i).getMass() + " fit:" + popX.get(i).getEval());
         }
     }
 
-    private void initPopulation(Task taskProblem) throws StopCriterionException {
+    private void initPopulation() throws StopCriterionException {
         popX = new ArrayList<>();
         for (int i = 0; i < popSize; i++) {
-            popX.add(new GSASolution(taskProblem));
+            popX.add(new GSASolution(task));
             if (i == 0) g = popX.get(0);
-            else if (taskProblem.isFirstBetter(popX.get(i), g)) g = popX.get(i);
-            if (taskProblem.isStopCriterion()) break;
+            else if (task.problem.isFirstBetter(popX.get(i), g)) g = popX.get(i);
+            if (task.isStopCriterion()) break;
         }
     }
 

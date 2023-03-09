@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.apache.commons.math3.util.ArithmeticUtils;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
 
@@ -41,7 +41,7 @@ import org.um.feri.ears.util.NondominatedPopulation;
  * vol. 7, no. 2, pp. 100-116, 2003.
  * </ol>
  */
-public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopulation<Type> {
+public class AdaptiveGridArchive<N extends Number> extends NondominatedPopulation<N> {
 
 	/**
 	 * The maximum capacity of this archive.
@@ -84,7 +84,7 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	 */
 	public AdaptiveGridArchive(int capacity, int numObj,
 			int numberOfDivisions) {
-		super(new DominanceComparator<Type>());
+		super(new DominanceComparator());
 		this.capacity = capacity;
 		this.numberOfDivisions = numberOfDivisions;
 		this.num_obj = numObj;
@@ -116,13 +116,13 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	}
 
 
-	public boolean add(MOSolutionBase<Type> solution) {
+	public boolean add(NumberSolution<N> solution) {
 		// check if the candidate dominates or is dominated by any member in
 		// the archive
-		Iterator<MOSolutionBase<Type>> iterator = iterator();
+		Iterator<NumberSolution<N>> iterator = iterator();
 
 		while (iterator.hasNext()) {
-			MOSolutionBase<Type> oldSolution = iterator.next();
+			NumberSolution<N> oldSolution = iterator.next();
 			int flag = comparator.compare(solution, oldSolution);
 
 			if (flag < 0) {
@@ -181,7 +181,7 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	}
 	
 	@Override
-	public boolean remove(MOSolutionBase<Type> solution) {
+	public boolean remove(NumberSolution<N> solution) {
 		boolean removed = super.remove(solution);
 
 		if (removed) {
@@ -232,8 +232,8 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	 * 
 	 * @return a solution residing in the densest grid cell
 	 */
-	protected MOSolutionBase<Type> pickSolutionFromDensestCell() {
-		MOSolutionBase<Type> solution = null;
+	protected NumberSolution<N> pickSolutionFromDensestCell() {
+		NumberSolution<N> solution = null;
 		int value = -1;
 
 		for (int i = 0; i < size(); i++) {
@@ -257,14 +257,14 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 		Arrays.fill(maximum, Double.NEGATIVE_INFINITY);
 		Arrays.fill(density, 0);
 
-		for (MOSolutionBase<Type> solution : this) {
+		for (NumberSolution<N> solution : this) {
 			for (int i = 0; i < num_obj; i++) {
 				minimum[i] = Math.min(minimum[i], solution.getObjective(i));
 				maximum[i] = Math.max(maximum[i], solution.getObjective(i));
 			}
 		}
 
-		for (MOSolutionBase<Type> solution : this) {
+		for (NumberSolution<N> solution : this) {
 			density[findIndex(solution)]++;
 		}
 	}
@@ -279,7 +279,7 @@ public class AdaptiveGridArchive<Type extends Number> extends NondominatedPopula
 	 *         archive, or {@code -1} if the solution is not within the current
 	 *         lower and upper bounds
 	 */
-	public int findIndex(MOSolutionBase<Type> solution) {
+	public int findIndex(NumberSolution<N> solution) {
 		int index = 0;
 
 		for (int i = 0; i < num_obj; i++) {

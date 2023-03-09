@@ -22,7 +22,6 @@ package org.um.feri.ears.problems.moo.zdt;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.Objective;
 
 public class ZDT4 extends ZDT{
@@ -32,13 +31,12 @@ public class ZDT4 extends ZDT{
 	}
 	public ZDT4(Integer numberOfVariables) {
 	     
-		super(numberOfVariables,0,2);
+		super("ZDT4", numberOfVariables,2,0);
 
-		fileName = "ZDT4";
-		name = "ZDT4";
-		
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+		referenceSetFileName = "ZDT4";
+
+		upperLimit = new ArrayList<>(numberOfDimensions);
+		lowerLimit = new ArrayList<>(numberOfDimensions);
 
 
 		lowerLimit.add(0.0);
@@ -52,10 +50,6 @@ public class ZDT4 extends ZDT{
 
 		this.addObjective(new ZDT4_F1());
 		this.addObjective(new ZDT4_F2());
-	}
-
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
 	}
 	
 	public class ZDT4_F1 extends Objective{

@@ -1,7 +1,7 @@
 package org.um.feri.ears.quality_indicator;
 
-import org.um.feri.ears.problems.moo.MOProblemBase;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.EuclideanDistance;
 import org.um.feri.ears.util.ManhattanDistance;
@@ -254,19 +254,19 @@ public final class QualityIndicatorUtil<T> {
      **/
     public static <T extends Number> void normalizeFront(ParetoSolution<T> front, double[] maximumValue, double[] minimumValue) {
 
-        MOSolutionBase<T> normSolution;
+        NumberSolution<T> normSolution;
         for (int i = 0; i < front.size(); i++) {
             normSolution = front.get(i);
-            for (int j = 0; j < front.get(i).numberOfObjectives(); j++) {
+            for (int j = 0; j < front.get(i).getNumberOfObjectives(); j++) {
                 normSolution.setObjective(j, (normSolution.getObjective(j) - minimumValue[j]) / (maximumValue[j] - minimumValue[j]));
             }
         }
     }
 
-    public static <T extends Number, P extends MOProblemBase<T>> double[][] getNormalizedFront(double[][] front, P problem) {
+    public static <T extends Number, P extends Problem<NumberSolution<T>>> double[][] getNormalizedFront(double[][] front, P problem) {
 
         ParetoSolution<T> referenceSet = new ParetoSolution<T>(0);
-        String fileName = problem.getFileName();
+        String fileName = problem.getReferenceSetFileName();
         double[][] normalizedFront = new double[front.length][];
 
         double[] maximumValue = new double[problem.getNumberOfObjectives()];
@@ -285,7 +285,7 @@ public final class QualityIndicatorUtil<T> {
         }
 
         for (int i = 0; i < referenceSet.size(); i++) {
-            MOSolutionBase<T> solution = referenceSet.get(i);
+            NumberSolution<T> solution = referenceSet.get(i);
 
             if (solution.violatesConstraints()) {
                 continue;
@@ -335,8 +335,8 @@ public final class QualityIndicatorUtil<T> {
 
     public static <T extends Number> void invertedFront(ParetoSolution<T> population) {
 
-        for (MOSolutionBase<T> sol : population) {
-            for (int i = 0; i < sol.numberOfObjectives(); i++) {
+        for (NumberSolution<T> sol : population) {
+            for (int i = 0; i < sol.getNumberOfObjectives(); i++) {
                 double value = sol.getObjective(i);
                 if (value < 0.0) {
                     value = 0.0;
@@ -371,7 +371,7 @@ public final class QualityIndicatorUtil<T> {
             while (aux != null) {
                 StringTokenizer st = new StringTokenizer(aux);
                 int i = 0;
-                MOSolutionBase<T> solution = new MOSolutionBase<T>(st.countTokens());
+                NumberSolution<T> solution = new NumberSolution<T>(st.countTokens());
                 while (st.hasMoreTokens()) {
                     double value = Double.parseDouble(st.nextToken());
                     solution.setObjective(i, value);
@@ -436,7 +436,7 @@ public final class QualityIndicatorUtil<T> {
      *
      * @param path The path of the file containing the data
      */
-    public static <T> void readNonDominatedSolutionSet(String path, NondominatedPopulation solutionSet) {
+    public static <T extends Number> void readNonDominatedSolutionSet(String path, NondominatedPopulation solutionSet) {
         try {
             /* Open the file */
             FileInputStream fis = new FileInputStream(path);
@@ -447,7 +447,7 @@ public final class QualityIndicatorUtil<T> {
             while (aux != null) {
                 StringTokenizer st = new StringTokenizer(aux);
                 int i = 0;
-                MOSolutionBase<T> solution = new MOSolutionBase<T>(st.countTokens());
+                NumberSolution<T> solution = new NumberSolution<T>(st.countTokens());
 
                 while (st.hasMoreTokens()) {
                     double value = Double.parseDouble(st.nextToken());

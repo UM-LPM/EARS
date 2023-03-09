@@ -7,7 +7,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.DummyBenchmark;
-import org.um.feri.ears.benchmark.BenchmarkBase;
+import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Util;
 
@@ -563,7 +563,7 @@ public class ExecuteTournaments {
         try {
             Class<?> clazz = Class.forName(BENCHMARK_PACKAGE + "." + benchmarkName);
             Object benchmark = clazz.newInstance();
-            numberOfRuns = ((BenchmarkBase) benchmark).getNumberOfRuns();
+            numberOfRuns = ((Benchmark) benchmark).getNumberOfRuns();
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Exception creating class from name: " + BENCHMARK_PACKAGE + "." + benchmarkName, e);
@@ -574,8 +574,8 @@ public class ExecuteTournaments {
         ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
         DummyBenchmark dr = new DummyBenchmark(0.000001); //Create benchmark
         dr.setDisplayRatingCharts(false);
-        dr.setRatingCalculation(BenchmarkBase.RatingCalculation.NORMAL);
-        BenchmarkBase.printInfo = false;
+        dr.setRatingCalculation(Benchmark.RatingCalculation.NORMAL);
+        Benchmark.printInfo = false;
 
         //parse algorithm and problem names
         String algorithmName, problemName, fileName;
@@ -605,7 +605,7 @@ public class ExecuteTournaments {
         for (String name : problems) {
             dr.addDummyTask(name);
         }
-        //TODO check if all algorithm has all problem files (get of list all problems from benchmark object)
+        //TODO check if all algorithms have all problem files (get of list all problems from benchmark object)
         //add problems to benchmark
         for (String name : algorithms) {
             players.add(new DummyAlgorithm(name, benchmarkResultsDir));

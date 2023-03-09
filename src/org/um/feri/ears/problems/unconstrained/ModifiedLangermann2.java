@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +10,7 @@ import static java.lang.Math.*;
 
 //http://profesores.elo.utfsm.cl/~tarredondo/info/soft-comp/functions/node15.html
 
-public class ModifiedLangermann2 extends Problem {
+public class ModifiedLangermann2 extends DoubleProblem {
 
     static final double[][] a = {
             {9.681, 0.667, 4.783, 9.095, 3.517, 9.325, 6.544, 0.211, 5.122, 2.020},
@@ -46,10 +47,10 @@ public class ModifiedLangermann2 extends Problem {
     static final double[] c = {0.806, 0.517, 1.5, 0.908, 0.965, 0.669, 0.524, 0.902, 0.531, 0.876, 0.462, 0.491, 0.463, 0.714, 0.352, 0.869, 0.813, 0.811, 0.828, 0.964, 0.789, 0.360, 0.369, 0.992, 0.332, 0.817, 0.632, 0.883, 0.608, 0.326};
 
     public ModifiedLangermann2() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 0.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "ModifiedLangermann2";
+        super("ModifiedLangermann2", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
+        objectiveSpaceOptima[0] = -1.08;
     }
 
     @Override
@@ -64,10 +65,5 @@ public class ModifiedLangermann2 extends Problem {
             fitness += c[i] * (exp((-1.0 / PI) * sum) * cos(PI * sum));
         }
         return fitness * -1.0;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return -1.08;
     }
 }

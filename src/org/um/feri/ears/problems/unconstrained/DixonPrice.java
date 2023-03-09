@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,16 +12,15 @@ import static java.lang.Math.pow;
 https://www.sfu.ca/~ssurjano/dixonpr.html
  */
 
-public class DixonPrice extends Problem {
+public class DixonPrice extends DoubleProblem {
     public DixonPrice(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Dixon_Price";
+        super("Dixon_Price", d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
 
         for (int i = 0; i < numberOfDimensions; i++) {
             double minX = pow(2, -(pow(2, i + 1) - 2) / pow(2, i + 1));
-            optimum[0][i] = minX;
+            decisionSpaceOptima[0][i] = minX;
         }
     }
 

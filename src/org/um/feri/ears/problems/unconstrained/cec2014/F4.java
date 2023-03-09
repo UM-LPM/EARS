@@ -5,9 +5,7 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 public class F4 extends CEC2014 {
 	
 	public F4(int d) {
-		super(d,4);
-
-		name = "F04 Rosenbrock Function";
+		super("F04 Rosenbrock Function", d,4);
 	}
 
 	@Override

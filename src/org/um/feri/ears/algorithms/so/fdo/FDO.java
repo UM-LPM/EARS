@@ -1,25 +1,24 @@
 package org.um.feri.ears.algorithms.so.fdo;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
-import org.um.feri.ears.algorithms.so.fdo.Bee;
 
 
-public class FDO extends Algorithm {
+public class FDO extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
 
     private Bee best;
-    private Task task;
     private Bee[] population;
 
     private boolean solutionMustRemainInsideBoundary = true;
@@ -45,25 +44,25 @@ public class FDO extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+        this.task = task;
         initPopulation();
 
         while (!task.isStopCriterion()) {
             for (int i = 0; i < popSize; i++) {
-                double[] tempXs = new double[task.getNumberOfDimensions()];
+                double[] tempXs = new double[task.problem.getNumberOfDimensions()];
                 ArrayList<Double> lastPace = new ArrayList<>();
                 double fitnessWeight = 0.0;
                 if (population[i].getEval() != 0) {
                     //generate fitness weight fW
-                    if (task.isFirstBetter(best.getEval(), (0.05 * population[i].getEval()))) {
+                    if (task.problem.isFirstBetter(best.getEval(), (0.05 * population[i].getEval()), 0)) {
                         fitnessWeight = 0.2;
                     } else {
                         double weightFactor = 0.0;
                         fitnessWeight = (best.getEval() / population[i].getEval()) - weightFactor;
                     }
                 }
-                for (int dim = 0; dim < task.getNumberOfDimensions(); dim++) {
+                for (int dim = 0; dim < task.problem.getNumberOfDimensions(); dim++) {
                     double distanceFromBestBee = best.getValue(dim) - population[i].getValue(dim);
                     double x = population[i].getValue(dim);
                     double pace = 0.0;
@@ -91,18 +90,21 @@ public class FDO extends Algorithm {
 
                 if (task.isStopCriterion())
                     break;
-                // create temporary bee for comparision purpose
-                Bee tempBee = new Bee(task.eval(tempXs));
+                // create temporary bee for comparison
+                NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(tempXs));
+                task.eval(newSolution);
 
-                if (task.isFirstBetter(tempBee, population[i])) {
+                Bee tempBee = new Bee(newSolution);
+
+                if (task.problem.isFirstBetter(tempBee, population[i])) {
                     population[i] = new Bee(tempBee);
                     population[i].setLastPace(lastPace);
-                    if (task.isFirstBetter(tempBee, best)) {
+                    if (task.problem.isFirstBetter(tempBee, best)) {
                         best = new Bee(tempBee);
                     }
                 } else if (population[i].getLastPace().size() > 0) {
-                    tempXs = new double[task.getNumberOfDimensions()];
-                    for (int n = 0; n < task.getNumberOfDimensions(); n++) {
+                    tempXs = new double[task.problem.getNumberOfDimensions()];
+                    for (int n = 0; n < task.problem.getNumberOfDimensions(); n++) {
                         double distanceFromBestBee = best.getValue(n) - population[i].getValue(n);
                         double x = population[i].getValue(n) + (distanceFromBestBee * fitnessWeight) + population[i].getLastPace().get(n);
                         if (solutionMustRemainInsideBoundary) {
@@ -112,17 +114,21 @@ public class FDO extends Algorithm {
                     }
                     if (task.isStopCriterion())
                         break;
-                    tempBee = new Bee(task.eval(tempXs));
 
-                    if (task.isFirstBetter(tempBee, population[i])) {
+                    newSolution = new NumberSolution<>(Util.toDoubleArrayList(tempXs));
+                    task.eval(newSolution);
+
+                    tempBee = new Bee(newSolution);
+
+                    if (task.problem.isFirstBetter(tempBee, population[i])) {
                         population[i] = new Bee(tempBee);
-                        if (task.isFirstBetter(tempBee, best)) {
+                        if (task.problem.isFirstBetter(tempBee, best)) {
                             best = new Bee(tempBee);
                         }
                     } else {
-                        tempXs = new double[task.getNumberOfDimensions()];
+                        tempXs = new double[task.problem.getNumberOfDimensions()];
 
-                        for (int n = 0; n < task.getNumberOfDimensions(); n++) {
+                        for (int n = 0; n < task.problem.getNumberOfDimensions(); n++) {
                             double r = simpleRandomWalk();
                             double x = population[i].getValue(n) + population[i].getValue(n) * r;
 
@@ -134,11 +140,15 @@ public class FDO extends Algorithm {
 
                         if (task.isStopCriterion())
                             break;
-                        tempBee = new Bee(task.eval(tempXs));
 
-                        if (task.isFirstBetter(tempBee, population[i])) {
+                        newSolution = new NumberSolution<>(Util.toDoubleArrayList(tempXs));
+                        task.eval(newSolution);
+
+                        tempBee = new Bee(newSolution);
+
+                        if (task.problem.isFirstBetter(tempBee, population[i])) {
                             population[i] = new Bee(tempBee);
-                            if (task.isFirstBetter(tempBee, best)) {
+                            if (task.problem.isFirstBetter(tempBee, best)) {
                                 best = new Bee(tempBee);
                             }
                             break;
@@ -178,10 +188,10 @@ public class FDO extends Algorithm {
     }
 
     private double setFeasible(double x, int d) {
-        if (x > task.getUpperLimit(d)) {
-            x = task.getUpperLimit(d) * Util.nextDouble();
-        } else if (x < task.getLowerLimit(d)) {
-            x = task.getLowerLimit(d) * Util.nextDouble();
+        if (x > task.problem.getUpperLimit(d)) {
+            x = task.problem.getUpperLimit(d) * Util.nextDouble();
+        } else if (x < task.problem.getLowerLimit(d)) {
+            x = task.problem.getLowerLimit(d) * Util.nextDouble();
         }
         return x;
     }
@@ -189,12 +199,12 @@ public class FDO extends Algorithm {
     private void initPopulation() throws StopCriterionException {
         population = new Bee[popSize];
         best = new Bee(task.getRandomEvaluatedSolution());
-        population[0] = new Bee(new DoubleSolution(best));
+        population[0] = new Bee(new NumberSolution(best));
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
             population[i] = new Bee(task.getRandomEvaluatedSolution());
-            if (task.isFirstBetter(population[i], best)) {
+            if (task.problem.isFirstBetter(population[i], best)) {
                 best = new Bee(population[i]);
             }
         }

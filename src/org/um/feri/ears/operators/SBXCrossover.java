@@ -21,15 +21,17 @@
 
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.DoubleMOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 
 
 /**
  * This class allows to apply a SBX crossover operator using two parent solutions.
  */
-public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOSolutionBase<Double>>{
+public class SBXCrossover implements CrossoverOperator<NumberProblem<Double>, NumberSolution<Double>>{
   /**
    * EPS defines the minimum difference allowed between real values
    */
@@ -46,7 +48,7 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOS
 	}
   /** 
    * Constructor
-   * Create a new SBX crossover operator whit a default
+   * Create a new SBX crossover operator with a default
    * index given by <code>DEFAULT_INDEX_CROSSOVER</code>
    */
 	public SBXCrossover(Double crossoverProbability, double distributionIndex) {
@@ -62,12 +64,12 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOS
    * @param parent2 The second parent
    * @return An array containing the two offsprings
    */
-	public MOSolutionBase<Double>[] doCrossover(double probability, MOSolutionBase<Double> parent1, MOSolutionBase<Double> parent2, DoubleMOTask task) {
+	public NumberSolution<Double>[] doCrossover(double probability, NumberSolution<Double> parent1, NumberSolution<Double> parent2, NumberProblem<Double> problem) {
 
-		MOSolutionBase<Double>[] offSpring = new MOSolutionBase[2];
+		NumberSolution<Double>[] offSpring = new NumberSolution[2];
 
-		offSpring[0] = new MOSolutionBase<Double>(parent1);
-		offSpring[1] = new MOSolutionBase<Double>(parent2);
+		offSpring[0] = new NumberSolution<>(parent1);
+		offSpring[1] = new NumberSolution<>(parent2);
 
 		int i;
 		double rand;
@@ -93,8 +95,8 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOS
 							y2 = valueX1;
 						}
 
-						yL = task.getLowerLimit(i);
-						yu = task.getUpperLimit(i);
+						yL = problem.getLowerLimit(i);
+						yu = problem.getUpperLimit(i);
 						rand = Util.rnd.nextDouble();
 						beta = 1.0 + (2.0 * (y1 - yL) / (y2 - y1));
 						alpha = 2.0 - java.lang.Math.pow(beta, -(distributionIndex + 1.0));
@@ -150,18 +152,19 @@ public class SBXCrossover implements CrossoverOperator<Double, DoubleMOTask, MOS
 		return offSpring;
 	}
 
-	public MOSolutionBase<Double>[] execute(MOSolutionBase<Double>[] parents, DoubleMOTask task) {
+	@Override
+	public NumberSolution<Double>[] execute(NumberSolution<Double>[] parents, NumberProblem<Double> problem) {
 
 		if (parents.length != 2) {
 			return null;
 		}
 
-		MOSolutionBase<Double>[] offSpring;
-		offSpring = doCrossover(crossoverProbability, parents[0], parents[1], task);
+		NumberSolution<Double>[] offSpring;
+		offSpring = doCrossover(crossoverProbability, parents[0], parents[1], problem);
 		return offSpring;
 	}
 	@Override
-	public void setCurrentSolution(MOSolutionBase<Double> current) {
+	public void setCurrentSolution(NumberSolution<Double> current) {
 
 	}
 }

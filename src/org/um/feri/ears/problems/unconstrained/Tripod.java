@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,15 +13,14 @@ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/71-tripod-functio
 http://infinity77.net/global_optimization/test_functions_nd_T.html#go_benchmark.Tripod
  */
 
-public class Tripod extends Problem {
+public class Tripod extends DoubleProblem {
 
     public Tripod() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
-        name = "Tripod";
+        super("Tripod", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
-        optimum[0] = new double[]{0.0, -50.0};
+        decisionSpaceOptima[0] = new double[]{0.0, -50.0};
     }
 
     @Override

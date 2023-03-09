@@ -1,18 +1,18 @@
 package org.um.feri.ears.algorithms.so.jade;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
-import org.um.feri.ears.algorithms.so.jade.JADESolution;
 
 import java.util.ArrayList;
 
-public class JADE extends Algorithm {
+public class JADE extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -34,8 +34,6 @@ public class JADE extends Algorithm {
 
     private ArrayList<Double> SCR; // list of successful F, CR in current gen
     private ArrayList<Double> SF; //
-
-    private Task task;
 
     public JADE() {
         this(30);
@@ -76,7 +74,7 @@ public class JADE extends Algorithm {
     private void updateEliteAndGlobalBest(JADESolution in) {
         boolean add = false;
         for (int i = 0; i < elite.size(); i++) {
-            if (task.isFirstBetter(in, elite.get(i))) {
+            if (task.problem.isFirstBetter(in, elite.get(i))) {
                 elite.add(i, in);
                 add = true;
                 break;
@@ -88,7 +86,7 @@ public class JADE extends Algorithm {
 
         if (g == null)
             g = in;
-        else if (task.isFirstBetter(in, g))
+        else if (task.problem.isFirstBetter(in, g))
             g = in;
         if (eliteSize < elite.size())
             elite.remove(eliteSize);
@@ -105,15 +103,15 @@ public class JADE extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         g = null;
-        task = taskProblem;
+        this.task = task;
         elite.clear();
         archX.clear();
         JADESolution[] popNew = new JADESolution[popSize];
         double[] tmp;
         int jRand;
-        int D = task.getNumberOfDimensions();
+        int D = task.problem.getNumberOfDimensions();
         int r1, r2, pBest;
         double Fpom;
         JADESolution inR2, tmpIn;
@@ -138,7 +136,7 @@ public class JADE extends Algorithm {
                 // System.out.print(
                 // "("+pop_x[i].getCR()+", "+pop_x[i].getF()+") ");
                 jRand = Util.rnd.nextInt(D);
-                tmp = popX[i].getDoubleVariables();
+                tmp = Util.toDoubleArray(popX[i].getVariables());
                 do {
                     r1 = Util.rnd.nextInt(popSize);
                 } while (r1 == i);
@@ -153,8 +151,7 @@ public class JADE extends Algorithm {
                 pBest = Util.rnd.nextInt(eliteSize);
                 for (int d = 0; d < D; d++) {
                     if ((Util.rnd.nextDouble() < popX[i].CR) || (d == jRand)) {
-                        tmp[d] = task
-                                .setFeasible(
+                        tmp[d] = task.problem.setFeasible(
                                         tmp[d]
                                                 + popX[i].F
                                                 * (elite.get(pBest).getValue(d) - tmp[d])
@@ -163,9 +160,13 @@ public class JADE extends Algorithm {
                                                 .getValue(d)), d);
                     }
                 }
-                tmpIn = new JADESolution(task.eval(tmp), popX[i].CR,
+
+                NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(tmp));
+                task.eval(newSolution);
+
+                tmpIn = new JADESolution(newSolution, popX[i].CR,
                         popX[i].F);
-                if (task.isFirstBetter(tmpIn, popX[i])) {
+                if (task.problem.isFirstBetter(tmpIn, popX[i])) {
                     SCR.add(tmpIn.CR); // save successful parameters
                     SF.add(tmpIn.F);
                     archX.add(popX[i]); // save old; good

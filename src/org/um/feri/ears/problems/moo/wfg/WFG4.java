@@ -20,9 +20,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.um.feri.ears.problems.moo.wfg;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
-
 /**
  * This class implements the WFG4 problem
  * Reference: Simon Huband, Luigi Barone, Lyndon While, Phil Hingston
@@ -55,10 +52,9 @@ public class WFG4 extends WFG {
 	 * @param m            Number of objective functions
 	 */
 	public WFG4(int k, int l, int m) {
-		super(k, l, m);
+		super("WFG4", k, l, m);
 
-		fileName = "WFG4."+m+"D";
-		name = "WFG4";
+		referenceSetFileName = "WFG4."+m+"D";
 
 		s = new int[m];
 		for (int i = 0; i < m; i++) {
@@ -72,7 +68,7 @@ public class WFG4 extends WFG {
 	}
 
 	/** Evaluate */
-	public double[] evaluateVar(double[] z) {
+	public double[] evaluate(double[] z) {
 		double[] y;
 
 		y = normalise(z);
@@ -129,34 +125,5 @@ public class WFG4 extends WFG {
 		result[M - 1] = (new Transformations()).rSum(subZ, subW);
 
 		return result;
-	}
-	
-	@Override
-	public double[] evaluate(Double[] ds) {
-		double[] d = ArrayUtils.toPrimitive(ds);
-		return evaluate(d);
-	}
-
-	/**
-	 * Evaluates a solution
-	 *
-	 * @param solution The solution to evaluate
-	 * @throws org.uma.jmetal.util.JMetalException
-	 */
-	public double[] evaluate(double[] ds) {
-
-		double[] x = new double[numberOfDimensions];
-
-		for (int i = 0; i < numberOfDimensions; i++) {
-			x[i] = ds[i];
-		}
-
-		double[] f = evaluateVar(x);
-
-		return f;
-	}
-
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
 	}
 }

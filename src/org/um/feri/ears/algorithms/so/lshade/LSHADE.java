@@ -1,10 +1,11 @@
 package org.um.feri.ears.algorithms.so.lshade;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class LSHADE extends Algorithm {
+public class LSHADE extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -31,10 +32,12 @@ public class LSHADE extends Algorithm {
 
     private int reductionIndNum;
 
-    private DoubleSolution[] population;
-    private DoubleSolution[] offspringPopulation;
-    private DoubleSolution best;
-    private Task task;
+    private NumberSolution<Double>[] population;
+    private NumberSolution<Double>[] offspringPopulation;
+    private NumberSolution<Double> best;
+
+    private List<Double> lowerLimit;
+    private List<Double> upperLimit;
 
     boolean initPopSizeSet = false;
     int initialPopSize;
@@ -64,12 +67,16 @@ public class LSHADE extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
-        task = taskProblem;
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
+        this.task = task;
+
+        lowerLimit = task.problem.getLowerLimit();
+        upperLimit = task.problem.getUpperLimit();
+
         if(initPopSizeSet) // if initial population size set
             popSize = initialPopSize;
         else
-            popSize = Math.round(task.getNumberOfDimensions() * popRate);
+            popSize = Math.round(task.problem.getNumberOfDimensions() * popRate);
 
         arcSize = (int) Math.round(popSize * arcRate);
 
@@ -78,7 +85,7 @@ public class LSHADE extends Algorithm {
         //for external archive
         int arcIndCount = 0;
         int randomSelectedArcInd;
-        DoubleSolution[] archive = new DoubleSolution[arcSize];
+        NumberSolution<Double>[] archive = new NumberSolution[arcSize];
 
         int numSuccessParams;
         List<Double> successSf = new ArrayList<>();
@@ -117,7 +124,7 @@ public class LSHADE extends Algorithm {
         int minPopSize = 4;
         int planPopSize;
 
-        double[] offspring = new double[task.getNumberOfDimensions()];
+        double[] offspring = new double[task.problem.getNumberOfDimensions()];
 
         //main loop
         while (!task.isStopCriterion()) {
@@ -169,16 +176,16 @@ public class LSHADE extends Algorithm {
                     r2 = Util.nextInt(0, popSize + arcIndCount);  //Math.round(Configuration.rand.getFloat() % (pop_size + arc_ind_count));
                 } while ((r2 == target) || (r2 == r1));
 
-                int random_variable = Util.nextInt(0, task.getNumberOfDimensions());  //Math.round(Configuration.rand.getFloat() % task.getNumberOfDimensions());
+                int random_variable = Util.nextInt(0, task.problem.getNumberOfDimensions());  //Math.round(Configuration.rand.getFloat() % task.problem.getNumberOfDimensions());
 
-                DoubleSolution solution;
+                NumberSolution<Double> solution;
                 if (r2 >= popSize) {
                     r2 -= popSize;
                     solution = archive[r2];
                 } else
                     solution = population[r2];
 
-                for (int i = 0; i < task.getNumberOfDimensions(); i++) {
+                for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
                     if ((Util.nextFloat() < crossRate) || (i == random_variable)) {
                         offspring[i] = population[target].getValue(i) + scalingFactor * (population[pBestInd].getValue(i) - population[target].getValue(i)) + scalingFactor * (population[r1].getValue(i) - solution.getValue(i));
                     } else {
@@ -192,18 +199,19 @@ public class LSHADE extends Algorithm {
                 if (task.isStopCriterion())
                     break;
                 // evaluate the children's fitness value
-                DoubleSolution newSolution = task.eval(offspring);
+                NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(offspring));
+                task.eval(newSolution);
                 offspringPopulation[target] = newSolution;
                 //update the best solution and check the current number of fitness evaluations
-                if (task.isFirstBetter(newSolution, best))
-                    best = new DoubleSolution(newSolution);
+                if (task.problem.isFirstBetter(newSolution, best))
+                    best = new NumberSolution<>(newSolution);
             }
 
             //generation alternation
             for (int i = 0; i < popSize; i++) {
                 if (offspringPopulation[i].getEval() == population[i].getEval()) {
                     population[i] = offspringPopulation[i];
-                } else if (task.isFirstBetter(offspringPopulation[i], population[i])) {
+                } else if (task.problem.isFirstBetter(offspringPopulation[i], population[i])) {
                     difFitness.add(Math.abs(population[i].getEval() - offspringPopulation[i].getEval()));
 
                     population[i] = offspringPopulation[i];
@@ -215,14 +223,14 @@ public class LSHADE extends Algorithm {
                     //parent vectors x_i which were worse than the trial vectors u_i are preserved
                     if (arcSize > 1) {
                         if (arcIndCount < arcSize) {
-                            archive[arcIndCount] = new DoubleSolution(population[i]);
+                            archive[arcIndCount] = new NumberSolution(population[i]);
                             arcIndCount++;
                         }
                         //Whenever the size of the archive exceeds, randomly selected elements are deleted to make space for the newly inserted elements
                         else {
                             randomSelectedArcInd = Util.nextInt(0, arcSize);  //(int)(Configuration.rand.getFloat() % arc_size);
-                            for (int j = 0; j < task.getNumberOfDimensions(); j++) {
-                                archive[randomSelectedArcInd] = new DoubleSolution(population[i]);
+                            for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
+                                archive[randomSelectedArcInd] = new NumberSolution(population[i]);
                             }
                         }
                     }
@@ -309,7 +317,7 @@ public class LSHADE extends Algorithm {
 
         for (int i = 0; i < indices.length; i++) {
             for (int j = i + 1; j < indices.length; j++) {
-                if (task.isFirstBetter(population[indices[j]], population[indices[i]])) {
+                if (task.problem.isFirstBetter(population[indices[j]], population[indices[i]])) {
                     int tmp = indices[i];
                     indices[i] = indices[j];
                     indices[j] = tmp;
@@ -320,16 +328,16 @@ public class LSHADE extends Algorithm {
     }
 
     private void initPopulation() throws StopCriterionException {
-        population = new DoubleSolution[popSize];
-        offspringPopulation = new DoubleSolution[popSize];
+        population = new NumberSolution[popSize];
+        offspringPopulation = new NumberSolution[popSize];
         best = task.getRandomEvaluatedSolution();
-        population[0] = new DoubleSolution(best);
+        population[0] = new NumberSolution<>(best);
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
             population[i] = task.getRandomEvaluatedSolution();
-            if (task.isFirstBetter(population[i], best)) {
-                best = new DoubleSolution(population[i]);
+            if (task.problem.isFirstBetter(population[i], best)) {
+                best = new NumberSolution<>(population[i]);
             }
         }
     }
@@ -340,7 +348,7 @@ public class LSHADE extends Algorithm {
         for (int i = 0; i < reductionIndNum; i++) {
             worst_ind = 0;
             for (int j = 1; j < popSize; j++) {
-                if (task.isFirstBetter(population[worst_ind], population[j])) {
+                if (task.problem.isFirstBetter(population[worst_ind], population[j])) {
                     worst_ind = j;
                 }
             }
@@ -349,15 +357,13 @@ public class LSHADE extends Algorithm {
         }
     }
 
-    private void modifySolutionWithParentMedium(double[] child, DoubleSolution parent) {
-        double[] lowerLimit = task.getLowerLimit();
-        double[] upperLimit = task.getUpperLimit();
+    private void modifySolutionWithParentMedium(double[] child, NumberSolution<Double> parent) {
 
-        for (int i = 0; i < task.getNumberOfDimensions(); i++) {
-            if (child[i] < lowerLimit[i]) {
-                child[i] = (lowerLimit[i] + parent.getValue(i)) / 2.0;
-            } else if (child[i] > upperLimit[i]) {
-                child[i] = (upperLimit[i] + parent.getValue(i)) / 2.0;
+        for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
+            if (child[i] < lowerLimit.get(i)) {
+                child[i] = (lowerLimit.get(i) + parent.getValue(i)) / 2.0;
+            } else if (child[i] > upperLimit.get(i)) {
+                child[i] = (upperLimit.get(i) + parent.getValue(i)) / 2.0;
             }
         }
     }

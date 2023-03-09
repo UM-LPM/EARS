@@ -21,8 +21,8 @@
 
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
 
@@ -30,13 +30,10 @@ import org.um.feri.ears.util.Util;
  * Class implementing the selection operator used in DE: three different
  * solutions are returned from a population.
  */
-public class DifferentialEvolutionSelection<Type extends Number> implements SelectionOperator<MOSolutionBase<Type>[], ParetoSolution<Type>, MOTask>{
+public class DifferentialEvolutionSelection<N extends Number> implements SelectionOperator<NumberSolution<N>[], ParetoSolution<N>, Problem<NumberSolution<N>>>{
 
 	private int currentIndex;
 
-	/**
-	 * Constructor
-	 */
 	public DifferentialEvolutionSelection() {
 	}
 
@@ -46,15 +43,14 @@ public class DifferentialEvolutionSelection<Type extends Number> implements Sele
 
 	/**
 	 * Executes the operation
-	 * @param object An object containing the population and the position (index) of the current individual
+	 * @param population containing the population and the position (index) of the current individual
 	 * @return An object containing the three selected parents
-	 * @throws Exception if the population has less than four solutions
 	 */
 	@Override
-	public MOSolutionBase<Type>[] execute(ParetoSolution<Type> population, MOTask tb) {
+	public NumberSolution<N>[] execute(ParetoSolution<N> population, Problem<NumberSolution<N>> problem) {
 
 		int index = currentIndex;
-		MOSolutionBase<Type>[] parents = new MOSolutionBase[3];
+		NumberSolution<N>[] parents = new NumberSolution[3];
 		int r1, r2, r3;
 
 		if (population.size() < 4)
@@ -64,13 +60,13 @@ public class DifferentialEvolutionSelection<Type extends Number> implements Sele
 		}
 
 		do {
-			r1 = (int) (Util.rnd.nextInt(population.size()));
+			r1 = Util.rnd.nextInt(population.size());
 		} while (r1 == index);
 		do {
-			r2 = (int) (Util.rnd.nextInt(population.size()));
+			r2 = Util.rnd.nextInt(population.size());
 		} while (r2 == index || r2 == r1);
 		do {
-			r3 = (int) (Util.rnd.nextInt(population.size()));
+			r3 = Util.rnd.nextInt(population.size());
 		} while (r3 == index || r3 == r1 || r3 == r2);
 
 		parents[0] = population.get(r1);

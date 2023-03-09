@@ -12,9 +12,9 @@ public class EvaluateSOProblem {
 
         double[] t = {50.3, 64.9};
 
-        System.out.println(Arrays.toString(p.getOptimalVector()[0]));
+        System.out.println(Arrays.toString(p.getDecisionSpaceOptima()[0]));
 
-        System.out.println(p.eval(p.getOptimalVector()[0]));
+        System.out.println(p.eval(p.getDecisionSpaceOptima()[0]));
 
         System.out.println(p.eval(t));
     }

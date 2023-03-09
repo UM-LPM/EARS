@@ -1,6 +1,6 @@
 package org.um.feri.analyse.sopvisualization;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.abc.ABC;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.ff.FireflyAlgorithm;
@@ -32,10 +32,10 @@ public class EA_SOP_VisualizationExample {
     public  static String PATH = "C:\\tmp"; //changed in main
 
 
-    public static void run(Algorithm alg, Task task) {
+    public static void run(NumberAlgorithm alg, Task<NumberSolution<Double>, DoubleProblem> task) {
         Util.rnd.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run
         task.enableAncestorLogging();
-        DoubleSolution best;
+        NumberSolution<Double> best;
         try {
             best = alg.execute(task);
             System.out.println("Best found solution :" + best); // print the best solution found after 10000 evaluations
@@ -45,7 +45,7 @@ public class EA_SOP_VisualizationExample {
         }
     }
 
-    public static void run4Task(Task task) {
+    public static void run4Task(Task<NumberSolution<Double>, DoubleProblem> task) {
         run(new RandomWalkAlgorithm(), task.clone());
         run(new GWO(), task.clone());
         run(new ABC(), task.clone());
@@ -55,8 +55,8 @@ public class EA_SOP_VisualizationExample {
 
     public static void main(String[] args) {
         PATH = GetUsersProjectRootDirectory();
-        Task task;
-        Problem problem;
+        Task<NumberSolution<Double>, DoubleProblem> task;
+        DoubleProblem problem;
         problem = new Sphere(6); // problem Sphere with five dimensions
         task = new Task(problem, StopCriterion.EVALUATIONS, 10000, 0, 0); // set the stopping criterion to max 10000 evaluations
         run4Task(task);

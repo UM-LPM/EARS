@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.unconstrained.cec2014.F1;
 import org.um.feri.ears.problems.unconstrained.cec2014.F10;
 import org.um.feri.ears.problems.unconstrained.cec2014.F11;
@@ -29,10 +29,10 @@ public class TestCD4Plot {
 	private static final String out_dir = "D:/Doktorat/OutPutEars/CF/cec2014/";
 	private static ArrayList<String> names = new  ArrayList<String>();
 	private static ArrayList<String> labels = new  ArrayList<String>();
-	private static ArrayList<Problem> problems = new  ArrayList<Problem>();
+	private static ArrayList<DoubleProblem> problems = new  ArrayList<>();
 	private static ArrayList<HashMap<Double, Integer>> cds = new  ArrayList<HashMap<Double, Integer>>();
 	
-	public static void createFile(Problem p, String fileName, String label) {
+	public static void createFile(DoubleProblem p, String fileName, String label) {
 	/*	names.clear();
 		labels.clear();
 		problems.clear();
@@ -95,7 +95,7 @@ public class TestCD4Plot {
 
 		int dimm[] = {2,10,20,30};
 		int numOfProblems = 16;
-		Problem problems[] = new Problem[numOfProblems];
+		DoubleProblem problems[] = new DoubleProblem[numOfProblems];
 		
 		for (int nDim = 0; nDim < dimm.length; ++nDim )
 		{

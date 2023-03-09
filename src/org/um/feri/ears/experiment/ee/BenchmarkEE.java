@@ -1,9 +1,8 @@
 package org.um.feri.ears.experiment.ee;
 
-import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
+import org.um.feri.ears.benchmark.SOBenchmark;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.Ackley1;
 import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.Rastrigin;
@@ -12,7 +11,7 @@ import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.SchwefelRidge;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 
-public class BenchmarkEE extends Benchmark {
+public class BenchmarkEE extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     int dim;
 
     public BenchmarkEE() {
@@ -29,8 +28,8 @@ public class BenchmarkEE extends Benchmark {
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
-        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
+    protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
     @Override

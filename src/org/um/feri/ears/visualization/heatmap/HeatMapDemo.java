@@ -1,7 +1,8 @@
 package org.um.feri.ears.visualization.heatmap;
 
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.unconstrained.Levy13;
-import org.um.feri.ears.problems.Problem;
+
 import org.um.feri.ears.problems.unconstrained.*;
 
 import javax.swing.*;
@@ -85,7 +86,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
                            Gradient.GRADIENT_PARULA,
                            Gradient.GRADIENT_VIRIDIS};
 
-    Problem[] problems = {
+    DoubleProblem[] problems = {
             new org.um.feri.ears.problems.unconstrained.cec2005.F01(2),
             new org.um.feri.ears.problems.unconstrained.cec2005.F02(2),
             new org.um.feri.ears.problems.unconstrained.cec2005.F03(2),
@@ -296,7 +297,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
             new SumSquares(2),
             new Zakharov(2)};
 
-    Problem selectedProblem;
+    DoubleProblem selectedProblem;
 
     public HeatMapDemo() throws Exception
     {

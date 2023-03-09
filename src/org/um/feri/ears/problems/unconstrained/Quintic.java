@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,15 +13,14 @@ import static java.lang.Math.pow;
 http://infinity77.net/global_optimization/test_functions_nd_Q.html#go_benchmark.Quintic
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/240-quintic-function
  */
-public class Quintic extends Problem {
+public class Quintic extends DoubleProblem {
 
     public Quintic() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Quintic";
+        super("Quintic", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
 
-        optimum[0] = new double[]{-1.0, 2.0};
+        decisionSpaceOptima[0] = new double[]{-1.0, 2.0};
     }
 
     @Override

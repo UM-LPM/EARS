@@ -22,61 +22,55 @@ package org.um.feri.ears.problems.moo.zdt;
 
 import java.util.ArrayList;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 import org.um.feri.ears.problems.moo.Objective;
 
-public class ZDT1 extends ZDT{
-	
-	public ZDT1() {
-		this(30); 
-	}
-	public ZDT1(Integer numberOfVariables) {
-	     
-		super(numberOfVariables,0,2);
+public class ZDT1 extends ZDT {
 
-		fileName = "ZDT1";
-		name = "ZDT1";
+    public ZDT1() {
+        this(30);
+    }
 
-		upperLimit = new ArrayList<Double>(numberOfDimensions);
-		lowerLimit = new ArrayList<Double>(numberOfDimensions);
+    public ZDT1(Integer numberOfVariables) {
 
+        super("ZDT1", numberOfVariables, 2, 0);
 
-		for (int i = 0; i < numberOfDimensions; i++) {
-			lowerLimit.add(0.0);
-			upperLimit.add(1.0);
-		}
+        referenceSetFileName = "ZDT1";
+
+        upperLimit = new ArrayList<>(numberOfDimensions);
+        lowerLimit = new ArrayList<>(numberOfDimensions);
 
 
-		this.addObjective(new ZDT1_F1());
-		this.addObjective(new ZDT1_F2());
-	}
+        for (int i = 0; i < numberOfDimensions; i++) {
+            lowerLimit.add(0.0);
+            upperLimit.add(1.0);
+        }
 
-	@Override
-	public void evaluateConstraints(MOSolutionBase<Double> solution) {
-	}
-	
-	public class ZDT1_F1 extends Objective{
+        addObjective(new ZDT1_F1());
+        addObjective(new ZDT1_F2());
+    }
 
-		@Override
-		public double eval(double[] ds) {
-			return ds[0];
-		}
-	}
-	
-	public class ZDT1_F2 extends Objective{
+    public class ZDT1_F1 extends Objective {
 
-		@Override
-		public double eval(double[] ds) {
-			double g = 0.0;
-			for (int i = 1; i < numberOfDimensions; i++) {
-				g += ds[i];
-			}
-			g = (9.0 / (numberOfDimensions - 1)) * g + 1.0;
+        @Override
+        public double eval(double[] ds) {
+            return ds[0];
+        }
+    }
 
-			double h = 1.0 - Math.sqrt(ds[0] / g);
-			
-			return g * h;
-		}
-	}
+    public class ZDT1_F2 extends Objective {
+
+        @Override
+        public double eval(double[] ds) {
+            double g = 0.0;
+            for (int i = 1; i < numberOfDimensions; i++) {
+                g += ds[i];
+            }
+            g = (9.0 / (numberOfDimensions - 1)) * g + 1.0;
+
+            double h = 1.0 - Math.sqrt(ds[0] / g);
+
+            return g * h;
+        }
+    }
 
 }

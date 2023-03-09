@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,13 +12,12 @@ import static java.lang.Math.*;
 https://al-roomi.org/benchmarks/unconstrained/n-dimensions/280-w-wavy-function
 http://infinity77.net/global_optimization/test_functions_nd_W.html#go_benchmark.Wavy
  */
-public class Wavy extends Problem {
+public class Wavy extends DoubleProblem {
 
     public Wavy() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -PI));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, PI));
-        name = "Wavy";
+        super("Wavy", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -PI));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, PI));
     }
 
     @Override

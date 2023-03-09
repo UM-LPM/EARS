@@ -32,9 +32,7 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.MOTask;
-import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
@@ -71,7 +69,7 @@ import org.um.feri.ears.util.Util;
  *       Matlab-DBEA.rar</a>
  * </ol>
  */
-public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, Type> {
+public class DBEA<N extends Number, P extends Problem<NumberSolution<N>>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
     int populationSize;
 
@@ -99,12 +97,12 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
     /**
      * Stores the population
      */
-    ParetoSolution<Type> population;
+    ParetoSolution<N> population;
 
     /**
      * The solutions that define the corners.
      */
-    ParetoSolution<Type> corner;
+    ParetoSolution<N> corner;
 
     /**
      * The number of outer divisions for generating reference points.
@@ -116,39 +114,39 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      */
     private final int divisionsInner;
 
-    CrossoverOperator<Type, T, MOSolutionBase<Type>> cross;
-    MutationOperator<Type, T, MOSolutionBase<Type>> mut;
+    CrossoverOperator<P, NumberSolution<N>> cross;
+    MutationOperator<P, NumberSolution<N>> mut;
 
 
-    public DBEA(CrossoverOperator crossover, MutationOperator mutation, MOTask problem) {
+    public DBEA(CrossoverOperator<P, NumberSolution<N>> crossover, MutationOperator<P, NumberSolution<N>> mutation, Task<NumberSolution<Double>,DoubleProblem> task) {
 
         this.cross = crossover;
         this.mut = mutation;
         int divisionsOuter = 4;
         int divisionsInner = 0;
 
-        if (problem.getNumberOfObjectives() == 1) {
+        if (task.problem.getNumberOfObjectives() == 1) {
             divisionsOuter = 100;
-        } else if (problem.getNumberOfObjectives() == 2) {
+        } else if (task.problem.getNumberOfObjectives() == 2) {
             divisionsOuter = 20;
-        } else if (problem.getNumberOfObjectives() == 3) {
+        } else if (task.problem.getNumberOfObjectives() == 3) {
             divisionsOuter = 12;
-        } else if (problem.getNumberOfObjectives() == 4) {
+        } else if (task.problem.getNumberOfObjectives() == 4) {
             divisionsOuter = 8;
-        } else if (problem.getNumberOfObjectives() == 5) {
+        } else if (task.problem.getNumberOfObjectives() == 5) {
             divisionsOuter = 6;
-        } else if (problem.getNumberOfObjectives() == 6) {
+        } else if (task.problem.getNumberOfObjectives() == 6) {
             divisionsOuter = 5;
-        } else if (problem.getNumberOfObjectives() == 7) {
+        } else if (task.problem.getNumberOfObjectives() == 7) {
             divisionsOuter = 3;
             divisionsInner = 2;
-        } else if (problem.getNumberOfObjectives() == 8) {
+        } else if (task.problem.getNumberOfObjectives() == 8) {
             divisionsOuter = 3;
             divisionsInner = 2;
-        } else if (problem.getNumberOfObjectives() == 9) {
+        } else if (task.problem.getNumberOfObjectives() == 9) {
             divisionsOuter = 3;
             divisionsInner = 2;
-        } else if (problem.getNumberOfObjectives() == 10) {
+        } else if (task.problem.getNumberOfObjectives() == 10) {
             divisionsOuter = 3;
             divisionsInner = 2;
         } else {
@@ -157,8 +155,8 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         }
 
         // compute number of reference points
-        int populationSize = (int) (CombinatoricsUtils.binomialCoefficient(problem.getNumberOfObjectives() + divisionsOuter - 1, divisionsOuter)
-                + (divisionsInner == 0 ? 0 : CombinatoricsUtils.binomialCoefficient(problem.getNumberOfObjectives() + divisionsInner - 1, divisionsInner)));
+        int populationSize = (int) (CombinatoricsUtils.binomialCoefficient(task.problem.getNumberOfObjectives() + divisionsOuter - 1, divisionsOuter)
+                + (divisionsInner == 0 ? 0 : CombinatoricsUtils.binomialCoefficient(task.problem.getNumberOfObjectives() + divisionsInner - 1, divisionsInner)));
 
         this.populationSize = populationSize;
 
@@ -205,12 +203,12 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
             for (int i = 0; i < population.size(); i++) {
                 int n = permutation[i];
 
-                MOSolutionBase<Type>[] parents = new MOSolutionBase[2];
+                NumberSolution<N>[] parents = new NumberSolution[2];
                 parents[0] = population.get(i);
                 parents[1] = population.get(n);
 
-                MOSolutionBase<Type>[] offSpring = cross.execute(parents, task);
-                mut.execute(offSpring[0], task);
+                NumberSolution<N>[] offSpring = cross.execute(parents, task.problem);
+                mut.execute(offSpring[0], task.problem);
 
                 if (task.isStopCriterion()) {
                     best = population;
@@ -240,12 +238,12 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
 
     public void initPopulation() throws StopCriterionException {
 
-        population = new ParetoSolution<Type>(populationSize);
+        population = new ParetoSolution<N>(populationSize);
         for (int i = 0; i < populationSize; i++) {
 
             if (task.isStopCriterion())
                 return;
-            MOSolutionBase<Type> newSolution = new MOSolutionBase<Type>(task.getRandomMOSolution());
+            NumberSolution<N> newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
 
             population.add(newSolution);
         }
@@ -257,7 +255,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param solution the solution
      * @return the constraint violation
      */
-    private double sumOfConstraintViolations(MOSolutionBase<Type> solution) {
+    private double sumOfConstraintViolations(NumberSolution<N> solution) {
         double result = 0.0;
 
         for (int i = 0; i < solution.getNumberOfConstraints(); i++) {
@@ -273,7 +271,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param population the population
      * @return the allowed constraint violation
      */
-    double constraintApproach(ParetoSolution<Type> population) {
+    double constraintApproach(ParetoSolution<N> population) {
         double feasible = 1;
         double violation = 0.0;
 
@@ -293,7 +291,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      *
      * @param child the child solution
      */
-    void updatePopulation(MOSolutionBase<Type> child) {
+    void updatePopulation(NumberSolution<N> child) {
         double eps = 0; // unused in I-DBEA
         double eps_con = constraintApproach(population);
         boolean success = false;
@@ -356,7 +354,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
             intercepts[i] = Double.NEGATIVE_INFINITY;
         }
 
-        ParetoSolution<Type> feasibleSolutions = getFeasibleSolutions(population);
+        ParetoSolution<N> feasibleSolutions = getFeasibleSolutions(population);
 
         if (!feasibleSolutions.isEmpty()) {
             for (int i = 0; i < feasibleSolutions.size(); i++) {
@@ -378,13 +376,13 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @return {@code true} if the solution is dominated; {@code false}
      * otherwise
      */
-    boolean checkDomination(MOSolutionBase<Type> solution) {
+    boolean checkDomination(NumberSolution<N> solution) {
         if (solution.violatesConstraints()) {
             return false;
         }
 
         // include the corner solutions
-        ParetoSolution<Type> combinedPopulation = new ParetoSolution<Type>();
+        ParetoSolution<N> combinedPopulation = new ParetoSolution<N>();
         combinedPopulation.addAll(population);
 
         if (corner != null) {
@@ -392,7 +390,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         }
 
         // check for dominance
-        for (MOSolutionBase<Type> otherSolution : getFeasibleSolutions(combinedPopulation).solutions) {
+        for (NumberSolution<N> otherSolution : getFeasibleSolutions(combinedPopulation).solutions) {
             int count = 0;
 
             for (int i = 0; i < numObj; i++) {
@@ -414,7 +412,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * Preserve the solutions that comprise the corners of the Pareto front.
      */
     void preserveCorner() {
-        ParetoSolution<Type> feasibleSolutions = getFeasibleSolutions(population);
+        ParetoSolution<N> feasibleSolutions = getFeasibleSolutions(population);
 
         if (feasibleSolutions.size() >= 2 * numObj) {
             corner = corner_sort(feasibleSolutions);
@@ -428,9 +426,9 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param population the population
      * @return the 2*M corner solutions
      */
-    ParetoSolution<Type> corner_sort(ParetoSolution<Type> population) {
-        ParetoSolution<Type> unique = new ParetoSolution<Type>();
-        ParetoSolution<Type> duplicates = new ParetoSolution<Type>();
+    ParetoSolution<N> corner_sort(ParetoSolution<N> population) {
+        ParetoSolution<N> unique = new ParetoSolution<N>();
+        ParetoSolution<N> duplicates = new ParetoSolution<N>();
 
         // remove duplicate solutions
         for (int i = 0; i < population.size(); i++) {
@@ -454,7 +452,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         }
 
         // sort the solutions
-        List<ParetoSolution<Type>> sortedSets = new ArrayList<ParetoSolution<Type>>();
+        List<ParetoSolution<N>> sortedSets = new ArrayList<ParetoSolution<N>>();
 
         for (int i = 0; i < numObj; i++) {
             sortedSets.add(orderBySmallestObjective(i, unique));
@@ -465,12 +463,12 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         }
 
         // identify the corners
-        ParetoSolution<Type> result = new ParetoSolution<Type>();
+        ParetoSolution<N> result = new ParetoSolution<N>();
         int current_id = 0;
         int current_f = 0;
 
         while (result.size() < unique.size()) {
-            MOSolutionBase<Type> r = sortedSets.get(current_f).get(current_id);
+            NumberSolution<N> r = sortedSets.get(current_f).get(current_id);
 
             if (!result.contains(r)) {
                 result.add(r);
@@ -487,7 +485,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
         result.addAll(duplicates);
 
         // reduce the set to 2*M solutions
-        ParetoSolution<Type> prunedSet = new ParetoSolution<Type>();
+        ParetoSolution<N> prunedSet = new ParetoSolution<N>();
 
         for (int i = 0; i < 2 * numObj; i++) {
             prunedSet.add(result.get(i));
@@ -504,9 +502,9 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param population the population
      * @return a copy of the population ordered by the objective value
      */
-    private ParetoSolution<Type> orderBySmallestObjective(int objective,
-                                                          ParetoSolution<Type> population) {
-        ParetoSolution<Type> result = new ParetoSolution<Type>();
+    private ParetoSolution<N> orderBySmallestObjective(int objective,
+                                                       ParetoSolution<N> population) {
+        ParetoSolution<N> result = new ParetoSolution<N>();
         result.addAll(population);
         result.sort(new ObjectiveComparator(objective));
         return result;
@@ -521,15 +519,15 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @return a copy of the population ordered by the sum-of-squares of all
      * but one objective
      */
-    private ParetoSolution<Type> orderBySmallestSquaredValue(final int objective,
-                                                             ParetoSolution<Type> population) {
-        ParetoSolution<Type> result = new ParetoSolution<Type>();
+    private ParetoSolution<N> orderBySmallestSquaredValue(final int objective,
+                                                          ParetoSolution<N> population) {
+        ParetoSolution<N> result = new ParetoSolution<N>();
         result.addAll(population);
 
-        result.sort(new Comparator<MOSolutionBase<Type>>() {
+        result.sort(new Comparator<NumberSolution<N>>() {
 
             @Override
-            public int compare(MOSolutionBase<Type> s1, MOSolutionBase<Type> s2) {
+            public int compare(NumberSolution<N> s1, NumberSolution<N> s2) {
                 double sum1 = 0.0;
                 double sum2 = 0.0;
 
@@ -554,10 +552,10 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      *                   infeasible solutions
      * @return the feasible solutions in the population
      */
-    private ParetoSolution<Type> getFeasibleSolutions(ParetoSolution<Type> population) {
-        ParetoSolution<Type> feasibleSolutions = new ParetoSolution<Type>();
+    private ParetoSolution<N> getFeasibleSolutions(ParetoSolution<N> population) {
+        ParetoSolution<N> feasibleSolutions = new ParetoSolution<N>();
 
-        for (MOSolutionBase<Type> solution : population.solutions) {
+        for (NumberSolution<N> solution : population.solutions) {
             if (!solution.violatesConstraints()) {
                 feasibleSolutions.add(solution);
             }
@@ -571,7 +569,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      *
      * @param solution the new solution
      */
-    void updateIdealPointAndIntercepts(MOSolutionBase<Type> solution) {
+    void updateIdealPointAndIntercepts(NumberSolution<N> solution) {
         if (!solution.violatesConstraints()) {
             // update the ideal point
             for (int j = 0; j < numObj; j++) {
@@ -580,14 +578,14 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
             }
 
             // compute the axis intercepts
-            ParetoSolution<Type> feasibleSolutions = getFeasibleSolutions(population);
+            ParetoSolution<N> feasibleSolutions = getFeasibleSolutions(population);
             feasibleSolutions.add(solution);
 
-            ParetoSolution<Type> nondominatedSolutions = getNondominatedFront(feasibleSolutions);
+            ParetoSolution<N> nondominatedSolutions = getNondominatedFront(feasibleSolutions);
 
             if (!nondominatedSolutions.isEmpty()) {
                 // find the points with the largest value in each objective
-                ParetoSolution<Type> extremePoints = new ParetoSolution<Type>();
+                ParetoSolution<N> extremePoints = new ParetoSolution<N>();
 
                 for (int i = 0; i < numObj; i++) {
                     extremePoints.add(largestObjectiveValue(i, nondominatedSolutions));
@@ -637,8 +635,8 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param population the entire population
      * @return the solutions that are non-dominated
      */
-    private ParetoSolution<Type> getNondominatedFront(ParetoSolution<Type> population) {
-        NondominatedPopulation<Type> front = new NondominatedPopulation<Type>();
+    private ParetoSolution<N> getNondominatedFront(ParetoSolution<N> population) {
+        NondominatedPopulation<N> front = new NondominatedPopulation<N>();
         front.addAll(population);
         return front;
     }
@@ -651,12 +649,12 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param population the population of solutions
      * @return the solution with the largest objective value
      */
-    private MOSolutionBase<Type> largestObjectiveValue(int objective,
-                                                       ParetoSolution<Type> population) {
-        MOSolutionBase<Type> largest = null;
+    private NumberSolution<N> largestObjectiveValue(int objective,
+                                                    ParetoSolution<N> population) {
+        NumberSolution<N> largest = null;
         double value = Double.NEGATIVE_INFINITY;
 
-        for (MOSolutionBase<Type> solution : population.solutions) {
+        for (NumberSolution<N> solution : population.solutions) {
             if (solution.getObjective(objective) > value) {
                 largest = solution;
                 value = solution.getObjective(objective);
@@ -674,7 +672,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param population the population
      * @return the number of unique solutions in the population
      */
-    private int numberOfUniqueSolutions(ParetoSolution<Type> population) {
+    private int numberOfUniqueSolutions(ParetoSolution<N> population) {
         int count = 0;
 
         for (int i = 0; i < population.size(); i++) {
@@ -822,7 +820,7 @@ public class DBEA<T extends MOTask, Type extends Number> extends MOAlgorithm<T, 
      * @param solution the solution
      * @return the normalized objective values
      */
-    private double[] normalizedObjectives(MOSolutionBase<Type> solution) {
+    private double[] normalizedObjectives(NumberSolution<N> solution) {
         double[] objectiveValues = new double[numObj];
 
         for (int j = 0; j < numObj; j++) {

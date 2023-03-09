@@ -40,12 +40,10 @@ public class F19 extends CEC2005Base {
     private double[][] m_zM;
 
     public F19(int d) {
-        super(d, 19);
+        super("Rotated Hybrid Composition Function 2 with narrow basin global optimum", d, 19);
 
-        name = "Rotated Hybrid Composition Function 2 with narrow basin global optimum";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
 
         m_o = new double[NUM_FUNC][d];
         m_M = new double[NUM_FUNC][d][d];
@@ -87,7 +85,7 @@ public class F19 extends CEC2005Base {
             m_fmax[i] = Math.abs(hcData.basicFunc(i, m_testPointM));
         }
         hcData.fmax = m_fmax;
-        optimum = m_o;
+        decisionSpaceOptima = m_o;
     }
 
     private class LocalHCData extends HybridCompositionData {

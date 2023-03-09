@@ -1,14 +1,14 @@
 package org.um.feri.ears.algorithms.so.aaa;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
-public class Alga extends DoubleSolution {
+public class Alga extends NumberSolution<Double> {
     private double colonySize;
     private double colonyStarving;
     private double energy;
     private double friction;
 
-    public Alga(DoubleSolution solution) {
+    public Alga(NumberSolution<Double> solution) {
         super(solution);
         colonySize = 1;
         colonyStarving = 0;

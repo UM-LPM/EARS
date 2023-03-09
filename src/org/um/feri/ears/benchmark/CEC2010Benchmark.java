@@ -1,29 +1,28 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.cec2010.*;
 
-public class CEC2010Benchmark extends Benchmark {
+public class CEC2010Benchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
     protected int dimension = 1000; //recommended
 
     public CEC2010Benchmark() {
         this(1e-7);
     }
 
-    public CEC2010Benchmark(double draw_limit) {
+    public CEC2010Benchmark(double drawLimit) {
         super();
         String name = "Benchmark CEC 2010";
-        this.drawLimit = draw_limit;
+        this.drawLimit = drawLimit;
         stopCriterion = StopCriterion.EVALUATIONS;
         maxEvaluations = 10000; //(int) (1 * 1e6);
         maxIterations = 0;
     }
 
     @Override
-    protected void addTask(Problem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
-        tasks.add(new Task(problem, stopCriterion, maxEvaluations, time, maxIterations));
+    protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
     @Override

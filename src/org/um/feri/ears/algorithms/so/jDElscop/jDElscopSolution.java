@@ -1,15 +1,15 @@
 package org.um.feri.ears.algorithms.so.jDElscop;
 
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
 import java.util.Arrays;
 
 
-public class jDElscopSolution extends DoubleSolution {
+public class jDElscopSolution extends NumberSolution<Double> {
     private double[] parameters;
 
-    public jDElscopSolution(DoubleSolution eval) {
+    public jDElscopSolution(NumberSolution<Double> eval) {
         super(eval);
         parameters = new double[jDElscop.Strategy.COUNT * 2];
     }
@@ -19,7 +19,7 @@ public class jDElscopSolution extends DoubleSolution {
         parameters = Arrays.copyOf(eval.parameters, eval.parameters.length);
     }
 
-    public static jDElscopSolution setInitState(DoubleSolution a) {
+    public static jDElscopSolution setInitState(NumberSolution<Double> a) {
         jDElscopSolution tmp = new jDElscopSolution(a);
         for (int i = 0; i < jDElscop.Strategy.COUNT; i++) {
             tmp.parameters[i * 2] = 0.5; //F
@@ -41,7 +41,7 @@ public class jDElscopSolution extends DoubleSolution {
         return Arrays.copyOf(parameters, parameters.length);
     }
 
-    public static jDElscopSolution setParamState(DoubleSolution tmpI,
+    public static jDElscopSolution setParamState(NumberSolution<Double> tmpI,
                                                  double[] tmp_par) {
         jDElscopSolution tmp = new jDElscopSolution(tmpI);
         tmp.parameters = tmp_par;

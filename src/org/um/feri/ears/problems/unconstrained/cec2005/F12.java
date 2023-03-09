@@ -16,12 +16,10 @@ public class F12 extends CEC2005Base {
     private double[] m_B;
 
     public F12(int d) {
-        super(d, 12);
+        super("Schwefel's Problem 2.13", d, 12);
 
-        name = "Schwefel's Problem 2.13";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -Math.PI));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, Math.PI));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -Math.PI));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, Math.PI));
 
         m_o = new double[d];
         m_a = new double[d][d];
@@ -52,7 +50,7 @@ public class F12 extends CEC2005Base {
                 m_A[i] += (m_a[i][j] * Math.sin(m_o[j]) + m_b[i][j] * Math.cos(m_o[j]));
             }
         }
-        optimum[0] = m_o;
+        decisionSpaceOptima[0] = m_o;
     }
 
     @Override

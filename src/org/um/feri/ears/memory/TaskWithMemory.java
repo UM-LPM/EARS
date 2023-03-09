@@ -1,8 +1,9 @@
 package org.um.feri.ears.memory;
 
 import org.um.feri.ears.problems.*;
+import org.um.feri.ears.util.Util;
 
-public class TaskWithMemory extends Task {
+public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> {
     protected MemoryBankDoubleSolution mb;
     int xPrecision;
     private int stopAtEval;
@@ -12,10 +13,10 @@ public class TaskWithMemory extends Task {
     private static int NOT_SET_EVAL=-1;
     private boolean isStagnation;
     int internalStagnationCounter;
-    DoubleSolution best;
+    NumberSolution<Double> best;
 
     public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
-                          Problem p, int xPrecision, DuplicationRemovalStrategy strategy, int stopDuplicatesStagnationPerc) {
+                          DoubleProblem p, int xPrecision, DuplicationRemovalStrategy strategy, int stopDuplicatesStagnationPerc) {
         this(stop, eval, allowedTime, maxIterations, epsilon, p, xPrecision, strategy);
         stopWhenPercDuplicates = true;
         stopIfDuplicatesCount = eval/stopDuplicatesStagnationPerc;
@@ -32,7 +33,7 @@ public class TaskWithMemory extends Task {
     }
 
     public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
-                          Problem p, int xPrecision, DuplicationRemovalStrategy strategy) {
+                          DoubleProblem p, int xPrecision, DuplicationRemovalStrategy strategy) {
         super(p, stop, eval, allowedTime, maxIterations, epsilon);
         stopWhenPercDuplicates = false;
         this.xPrecision = xPrecision;
@@ -41,15 +42,18 @@ public class TaskWithMemory extends Task {
         sb = new StringBuilder();
     }
 
-    public DoubleSolution evalOrg(double[] x) throws StopCriterionException {
-        DoubleSolution tmp = super.eval(x);
+    public NumberSolution<Double> evalOrg(double[] x) throws StopCriterionException {
+
+        NumberSolution<Double> tmp = new NumberSolution<>(Util.toDoubleArrayList(x));
+        super.eval(tmp);
+
         if (isStagnation) {
             if (best == null) {
                 best = tmp;
                 internalStagnationCounter = 1;
             }
             else {
-                if (isFirstBetter(tmp,best)) {
+                if (problem.isFirstBetter(tmp,best)) {
                     best= tmp;
                     internalStagnationCounter = 0;
                 } else
@@ -60,13 +64,8 @@ public class TaskWithMemory extends Task {
     }
 
     @Override
-    public DoubleSolution getRandomEvaluatedSolution() throws StopCriterionException {
+    public NumberSolution<Double> getRandomEvaluatedSolution() throws StopCriterionException {
         return mb.getRandomSolution(this);
-    }
-
-    @Override
-    public DoubleSolution eval(double[] x) throws StopCriterionException {
-        return mb.eval(this, x);
     }
 
     @Override

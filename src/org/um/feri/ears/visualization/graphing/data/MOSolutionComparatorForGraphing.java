@@ -1,14 +1,13 @@
 package org.um.feri.ears.visualization.graphing.data;
 
+import org.um.feri.ears.problems.NumberSolution;
+
 import java.util.Comparator;
-
-import org.um.feri.ears.problems.moo.MOSolutionBase;
-
 
 
 
 @SuppressWarnings("rawtypes")
-public class MOSolutionComparatorForGraphing implements Comparator<MOSolutionBase>
+public class MOSolutionComparatorForGraphing implements Comparator<NumberSolution>
 {
 	int objectiveIndexes[] = null;
 	
@@ -27,7 +26,7 @@ public class MOSolutionComparatorForGraphing implements Comparator<MOSolutionBas
 	
 	
 	
-	public int compare(MOSolutionBase obj1, MOSolutionBase obj2) 
+	public int compare(NumberSolution obj1, NumberSolution obj2)
 	{
 
 		double[] o1 = obj1.getObjectives();

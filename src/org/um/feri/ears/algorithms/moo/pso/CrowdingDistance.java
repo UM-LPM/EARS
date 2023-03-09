@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 
@@ -27,14 +27,14 @@ import org.um.feri.ears.util.comparator.ObjectiveComparator;
  *
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
-public class CrowdingDistance<Type extends Number> {
+public class CrowdingDistance<N extends Number> {
 
     /**
      * Assigns crowding distances to all solutions in a <code>SolutionSet</code>.
      *
      * @param solutionList The <code>SolutionSet</code>.
      */
-    public void computeDensityEstimator(ParetoSolution<Type> solutionList) {
+    public void computeDensityEstimator(ParetoSolution<N> solutionList) {
         int size = solutionList.size();
 
         if (size == 0) {
@@ -54,8 +54,8 @@ public class CrowdingDistance<Type extends Number> {
         }
 
         //Use a new SolutionSet to avoid altering the original solutionSet
-        List<MOSolutionBase<Type>> front = new ArrayList<>(size);
-        for (MOSolutionBase<Type> solution : solutionList) {
+        List<NumberSolution<N>> front = new ArrayList<>(size);
+        for (NumberSolution<N> solution : solutionList) {
             front.add(solution);
         }
 
@@ -67,11 +67,11 @@ public class CrowdingDistance<Type extends Number> {
         double objetiveMinn;
         double distance;
 
-        int numberOfObjectives = solutionList.get(0).numberOfObjectives();
+        int numberOfObjectives = solutionList.get(0).getNumberOfObjectives();
 
         for (int i = 0; i < numberOfObjectives; i++) {
             // Sort the population by Obj n
-            Collections.sort(front, new ObjectiveComparator<Type>(i));
+            Collections.sort(front, new ObjectiveComparator<N>(i));
             objetiveMinn = front.get(0).getObjective(i);
             objetiveMaxn = front.get(front.size() - 1).getObjective(i);
 
@@ -89,12 +89,12 @@ public class CrowdingDistance<Type extends Number> {
     }
 
 
-    public Object getAttribute(MOSolutionBase<Type> solution) {
+    public Object getAttribute(NumberSolution<N> solution) {
         return solution.getAttribute(getAttributeID());
     }
 
 
-    public void setAttribute(MOSolutionBase<Type> solution, Object value) {
+    public void setAttribute(NumberSolution<N> solution, Object value) {
         solution.setAttribute(getAttributeID(), value);
     }
 

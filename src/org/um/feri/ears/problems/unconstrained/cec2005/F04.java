@@ -14,12 +14,10 @@ public class F04 extends CEC2005Base {
 	private double[] m_z;
 
 	public F04(int d) {
-		super(d,4);
+		super("Shifted Schwefel's Problem 1.2 with Noise in Fitness", d,4);
 
-		name = "Shifted Schwefel's Problem 1.2 with Noise in Fitness";
-
-		lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-		upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+		lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+		upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
 		// Note: dimension starts from 0
 		m_o = new double[d];
@@ -27,7 +25,7 @@ public class F04 extends CEC2005Base {
 
 		// Load the shifted global optimum
 		loadRowVectorFromFile(DEFAULT_FILE_DATA, d, m_o);
-		optimum[0] = m_o;
+		decisionSpaceOptima[0] = m_o;
 	}
 
 	@Override

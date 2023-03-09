@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,13 +12,12 @@ import static java.lang.Math.*;
 http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.Parsopoulos
 https://al-roomi.org/benchmarks/unconstrained/2-dimensions/252-parsopoulos-function
  */
-public class Parsopoulos extends Problem {
+public class Parsopoulos extends DoubleProblem {
 
     public Parsopoulos() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
-        name = "Parsopoulos";
+        super("Parsopoulos", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
     }
 
     @Override

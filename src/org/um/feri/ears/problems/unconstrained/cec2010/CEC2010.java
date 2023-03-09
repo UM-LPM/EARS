@@ -1,12 +1,13 @@
 package org.um.feri.ears.problems.unconstrained.cec2010;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class CEC2010 extends Problem {
+public abstract class CEC2010 extends DoubleProblem {
 
     double[] OShift, M, y, z, x_bound;
     int funcNum;
@@ -14,8 +15,8 @@ public abstract class CEC2010 extends Problem {
     int[] P;
     int m = 50;
 
-    public CEC2010(int d, int funcNum) {
-        super(d, 0);
+    public CEC2010(String name, int d, int funcNum) {
+        super(name, d, 1, 1, 0);
 
         this.funcNum = funcNum;
         shortName = "F" + funcNum;
@@ -39,7 +40,7 @@ public abstract class CEC2010 extends Problem {
             lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
             upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.0));
         }
-        optimum[0] = OShift;
+        decisionSpaceOptima[0] = OShift;
     }
 
     protected List<Double> getPermutatedIndices(List<Double> x, int[] perm, int start, int length) {

@@ -1,7 +1,8 @@
 package org.um.feri.ears.algorithms.so.es;
 
 import org.um.feri.ears.algorithms.*;
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
@@ -9,13 +10,11 @@ import org.um.feri.ears.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ES1cNsAlgorithm extends Algorithm {
-    private DoubleSolution one;
+public class ES1cNsAlgorithm extends NumberAlgorithm {
+    private NumberSolution<Double> one;
     private double varianceOne;
     private int k, mem_k, n; // every k aVariance is calculated again
     private double c, mem_c;
-
-    private Task task;
 
     // source http://natcomp.liacs.nl/EA/slides/es_basic_algorithm.pdf
     public ES1cNsAlgorithm() {
@@ -48,18 +47,18 @@ public class ES1cNsAlgorithm extends Algorithm {
     }
 
     @Override
-    public DoubleSolution execute(Task taskProblem) throws StopCriterionException {
+    public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         resetToDefaultsBeforeNewRun(); // usually no need for this call
-        task = taskProblem;
-        DoubleSolution ii;
-        one = taskProblem.getRandomEvaluatedSolution();
-        DoubleSolution oneTmp;
+        this.task = task;
+        NumberSolution<Double> ii;
+        one = task.getRandomEvaluatedSolution();
+        NumberSolution<Double> oneTmp;
         int everyK = 0; // recalculate variance
         double succ = 0;
         double[] oneplus;
         if (debug)
-            System.out.println(taskProblem.getNumberOfEvaluations() + " start " + one);
-        while (!taskProblem.isStopCriterion()) {
+            System.out.println(task.getNumberOfEvaluations() + " start " + one);
+        while (!task.isStopCriterion()) {
             everyK++;
             everyK = everyK % k;
             if (everyK == 0) { // 1/5 rule
@@ -69,19 +68,24 @@ public class ES1cNsAlgorithm extends Algorithm {
                     varianceOne = varianceOne * c;
                 succ = 0;
             }
-            oneTmp = new DoubleSolution(one);
-            oneplus = oneTmp.getDoubleVariables();
+            oneTmp = new NumberSolution<>(one);
+            oneplus = Util.toDoubleArray(oneTmp.getVariables());
             mutate(oneplus, varianceOne);
-            one = taskProblem.eval(oneplus);
+            one.setVariables(Util.toDoubleArrayList(oneplus));
+            task.eval(one);
+
             for (int i = 0; i < n - 1; i++) {
-                oneplus = oneTmp.getDoubleVariables();
+                oneplus = Util.toDoubleArray(oneTmp.getVariables());
                 mutate(oneplus, varianceOne);
-                ii = taskProblem.eval(oneplus);
-                if (taskProblem.isFirstBetter(ii, one)) {
+
+                ii = new NumberSolution<>(Util.toDoubleArrayList(oneplus));
+                task.eval(ii);
+
+                if (task.problem.isFirstBetter(ii, one)) {
                     succ++; // for 1/5 rule
                     one = ii;
                     if (debug)
-                        System.out.println(taskProblem.getNumberOfEvaluations() + " " + one);
+                        System.out.println(task.getNumberOfEvaluations() + " " + one);
                 }
                 if (task.isStopCriterion()) break;
             }
@@ -92,14 +96,13 @@ public class ES1cNsAlgorithm extends Algorithm {
 
     private void mutate(double[] oneplus, double varianceOne) {
         for (int i = 0; i < oneplus.length; i++) {
-            oneplus[i] = task.setFeasible(oneplus[i] + getGaussian(0, varianceOne), i);
+            oneplus[i] = task.problem.setFeasible(oneplus[i] + getGaussian(0, varianceOne), i);
         }
-
     }
 
     @Override
-    public List<AlgorithmBase> getAlgorithmParameterTest(int dimension, int maxCombinations) {
-        List<AlgorithmBase> alternative = new ArrayList<AlgorithmBase>();
+    public List<Algorithm> getAlgorithmParameterTest(int dimension, int maxCombinations) {
+        List<Algorithm> alternative = new ArrayList<Algorithm>();
         if (maxCombinations == 1) {
             alternative.add(this);
         } else {

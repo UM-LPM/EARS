@@ -26,7 +26,7 @@
 
 package org.um.feri.ears.quality_indicator;
 
-import org.um.feri.ears.problems.moo.MOSolutionBase;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.PointComparator;
 import org.um.feri.ears.util.Point;
@@ -49,7 +49,7 @@ public class WFGHypervolume<T extends Number> extends QualityIndicator<T> {
     private int currentDeep;
     private int currentDimension;
     private int maxNumberOfPoints;
-    private Comparator<MOSolutionBase<T>> pointComparator;
+    private Comparator<NumberSolution<T>> pointComparator;
 
     /**
      * Constructor Creates a new instance of MultiDelta
@@ -72,8 +72,8 @@ public class WFGHypervolume<T extends Number> extends QualityIndicator<T> {
 
         ParetoSolution<T> copy = new ParetoSolution<T>(paretoFrontApproximation.getCapacity());
 
-        for (MOSolutionBase<T> solution : paretoFrontApproximation) {
-            MOSolutionBase<T> clone = solution.copy();
+        for (NumberSolution<T> solution : paretoFrontApproximation) {
+            NumberSolution<T> clone = solution.copy();
             copy.add(clone);
         }
 
@@ -113,7 +113,7 @@ public class WFGHypervolume<T extends Number> extends QualityIndicator<T> {
         return hv;
     }
 
-    public double getInclusiveHV(MOSolutionBase<T> point) {
+    public double getInclusiveHV(NumberSolution<T> point) {
         double volume = 1;
         for (int i = 0; i < currentDimension; i++) {
             volume *= Math.abs(point.getObjective(i) - referencePoint.getDimensionValue(i));
@@ -164,16 +164,16 @@ public class WFGHypervolume<T extends Number> extends QualityIndicator<T> {
 
         for (int i = 0; i < z; i++) {
             for (int j = 0; j < currentDimension; j++) {
-                MOSolutionBase<T> point1 = front.get(p);
-                MOSolutionBase<T> point2 = front.get(p + 1 + i);
+                NumberSolution<T> point1 = front.get(p);
+                NumberSolution<T> point2 = front.get(p + 1 + i);
                 double worseValue = worse(point1.getObjective(j), point2.getObjective(j), false);
                 int cd = currentDeep;
-                MOSolutionBase<T> point3 = fs[currentDeep].get(i);
+                NumberSolution<T> point3 = fs[currentDeep].get(i);
                 point3.setObjective(j, worseValue);
             }
         }
 
-        MOSolutionBase<T> t;
+        NumberSolution<T> t;
         fs[currentDeep].setCapacity(1);
 
         for (int i = 1; i < z; i++) {
@@ -214,7 +214,7 @@ public class WFGHypervolume<T extends Number> extends QualityIndicator<T> {
         double contribution = Double.POSITIVE_INFINITY;
 
         for (int i = 0; i < solutionList.getCapacity(); i++) {
-            double[] v = new double[solutionList.get(i).numberOfObjectives()];
+            double[] v = new double[solutionList.get(i).getNumberOfObjectives()];
             for (int j = 0; j < v.length; j++) {
                 v[j] = solutionList.get(i).getObjective(j);
             }
@@ -241,14 +241,14 @@ public class WFGHypervolume<T extends Number> extends QualityIndicator<T> {
             numberOfPoints = solutionSet.size();
         }
 
-        int dimensions = solutionSet.get(0).numberOfObjectives();
+        int dimensions = solutionSet.get(0).getNumberOfObjectives();
 
         ParetoSolution<T> front = new ParetoSolution<T>(numberOfPoints);
 
         int index = 0;
         for (int i = 0; i < solutionSet.size(); i++) {
             if (i != notLoadingIndex) {
-                MOSolutionBase<T> point = new MOSolutionBase<T>(dimensions);
+                NumberSolution<T> point = new NumberSolution<T>(dimensions);
                 for (int j = 0; j < dimensions; j++) {
                     point.setObjective(j, solutionSet.get(i).getObjective(j));
                 }
@@ -269,7 +269,7 @@ public class WFGHypervolume<T extends Number> extends QualityIndicator<T> {
         return result;
     }
 
-    int dominates2way(MOSolutionBase<T> p, MOSolutionBase<T> q) {
+    int dominates2way(NumberSolution<T> p, NumberSolution<T> q) {
         // returns -1 if p dominates q, 1 if q dominates p, 2 if p == q, 0 otherwise
         // ASSUMING MINIMIZATION
 

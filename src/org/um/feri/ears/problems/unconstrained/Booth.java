@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,16 +13,15 @@ https://www.sfu.ca/~ssurjano/booth.html
 http://benchmarkfcns.xyz/benchmarkfcns/boothfcn.html
 */
 
-public class Booth extends Problem {
+public class Booth extends DoubleProblem {
 
     public Booth() {
-        super(2, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 10.0));
-        name = "Booth";
+        super("Booth", 2, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
 
-        optimum[0][0] = 1.0;
-        optimum[0][1] = 3.0;
+        decisionSpaceOptima[0][0] = 1.0;
+        decisionSpaceOptima[0][1] = 3.0;
     }
 
     @Override

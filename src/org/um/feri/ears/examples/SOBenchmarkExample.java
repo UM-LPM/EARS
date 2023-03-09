@@ -1,6 +1,6 @@
 package org.um.feri.ears.examples;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.abc.ABC;
 import org.um.feri.ears.algorithms.so.gwo.GWO;
 import org.um.feri.ears.algorithms.so.jade.JADE;
@@ -19,7 +19,7 @@ public class SOBenchmarkExample {
         Benchmark.printInfo = false; //prints one on one results
         //add algorithms to a list
 
-        ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
+        ArrayList<NumberAlgorithm> algorithms = new ArrayList<NumberAlgorithm>();
         algorithms.add(new ABC());
         algorithms.add(new GWO());
         algorithms.add(new TLBOAlgorithm());

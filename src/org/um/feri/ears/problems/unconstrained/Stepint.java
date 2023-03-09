@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained;
 
-import org.um.feri.ears.problems.Problem;
+import org.um.feri.ears.problems.DoubleProblem;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,16 +12,16 @@ import static java.lang.Math.floor;
 /*
 https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/195-stepint-function
  */
-public class Stepint extends Problem {
+public class Stepint extends DoubleProblem {
     public Stepint(int d) {
-        super(d, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.12));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.12));
-        name = "Stepint";
+        super("Stepint", d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.12));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.12));
 
         //infinite number of global optima
         // -5.12 <= x < -5.0
-        Arrays.fill(optimum[0], -5.12);
+        Arrays.fill(decisionSpaceOptima[0], -5.12);
+        objectiveSpaceOptima[0] = 25.0 - 6.0 * numberOfDimensions;
     }
 
     @Override
@@ -30,10 +31,5 @@ public class Stepint extends Problem {
             fitness += floor(x[i]);
         }
         return fitness + 25.0;
-    }
-
-    @Override
-    public double getGlobalOptimum() {
-        return 25.0 - 6.0 * numberOfDimensions;
     }
 }

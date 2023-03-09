@@ -17,8 +17,8 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.benchmark.MOBenchmark;
+import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.benchmark.BenchmarkBase;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,7 +35,7 @@ public class GenerateBenchmarksFile {
     static final String BENCHMARK_PACKAGE = "org.um.feri.ears.benchmark";
     private static final String DUMMY_BENCHMARK_CLASS_NAME = DummyBenchmark.class.getSimpleName();
     private static final String MO_BENCHMARK_CLASS_NAME = MOBenchmark.class.getSimpleName();
-    private static final String SO_BENCHMARK_CLASS_NAME = Benchmark.class.getSimpleName();
+    private static final String SO_BENCHMARK_CLASS_NAME = SOBenchmark.class.getSimpleName();
 
     public static void main(String[] args) {
 
@@ -68,26 +68,26 @@ public class GenerateBenchmarksFile {
                             System.out.println("Multi-Objective: " + clazz.getName());
                             Object benchmark = clazz.newInstance();
                             BenchmarkJson b = new BenchmarkJson();
-                            b.name = ((BenchmarkBase) benchmark).getName();
+                            b.name = ((Benchmark) benchmark).getName();
                             b.fileName = clazz.getSimpleName();
-                            b.numberOfRuns = ((BenchmarkBase) benchmark).getNumberOfRuns();
+                            b.numberOfRuns = ((Benchmark) benchmark).getNumberOfRuns();
                             b.type = "Multi-Objective";
-                            b.stopCriteria = ((BenchmarkBase) benchmark).getStopCriterion().toString();
-                            b.stopCondition = ((BenchmarkBase) benchmark).getStoppingCriterion();
-                            b.problems = ((BenchmarkBase) benchmark).getProblems();
+                            b.stopCriteria = ((Benchmark) benchmark).getStopCriterion().toString();
+                            b.stopCondition = ((Benchmark) benchmark).getStoppingCriterion();
+                            b.problems = ((Benchmark) benchmark).getProblems();
                             benchmarks.add(b);
 
                         } else if (clazz.getSuperclass().getSimpleName().equals(SO_BENCHMARK_CLASS_NAME)) {
                             System.out.println("Single-Objective: " + clazz.getName());
                             Object benchmark = clazz.newInstance();
                             BenchmarkJson b = new BenchmarkJson();
-                            b.name = ((BenchmarkBase) benchmark).getName();
+                            b.name = ((Benchmark) benchmark).getName();
                             b.fileName = clazz.getSimpleName();
-                            b.numberOfRuns = ((BenchmarkBase) benchmark).getNumberOfRuns();
+                            b.numberOfRuns = ((Benchmark) benchmark).getNumberOfRuns();
                             b.type = "Single-Objective";
-                            b.stopCriteria = ((BenchmarkBase) benchmark).getStopCriterion().toString();
-                            b.stopCondition = ((BenchmarkBase) benchmark).getStoppingCriterion();
-                            b.problems = ((BenchmarkBase) benchmark).getProblems();
+                            b.stopCriteria = ((Benchmark) benchmark).getStopCriterion().toString();
+                            b.stopCondition = ((Benchmark) benchmark).getStoppingCriterion();
+                            b.problems = ((Benchmark) benchmark).getProblems();
                             benchmarks.add(b);
                         }
                     }

@@ -17,12 +17,10 @@ public class F10 extends CEC2005Base {
     private double[] m_zM;
 
     public F10(int d) {
-        super(d, 10);
+        super("Shifted Rotated Rastrigin's Function", d, 10);
 
-        name = "Shifted Rotated Rastrigin's Function";
-
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -5.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 5.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));
 
         m_o = new double[d];
         m_matrix = new double[d][d];
@@ -35,7 +33,7 @@ public class F10 extends CEC2005Base {
         // Load the matrix
         loadMatrixFromFile(DEFAULT_FILE_MX_PREFIX + d + DEFAULT_FILE_MX_SUFFIX, d, d, m_matrix);
 
-        optimum[0] = m_o;
+        decisionSpaceOptima[0] = m_o;
     }
 
     @Override

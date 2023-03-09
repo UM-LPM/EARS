@@ -1,10 +1,10 @@
 package org.um.feri.ears.algorithms.so.ica;
 
-import org.um.feri.ears.problems.DoubleSolution;
+import org.um.feri.ears.problems.NumberSolution;
 
 public class EmpireSolution {
-	
-	DoubleSolution imperialist;
-	DoubleSolution[] colonies;
+
+	NumberSolution<Double> imperialist;
+	NumberSolution<Double>[] colonies;
 	double totalCost;
 }

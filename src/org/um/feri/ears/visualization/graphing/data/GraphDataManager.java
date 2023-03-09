@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 
-import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.problems.moo.MOSolutionBase;
 
 public class GraphDataManager
 {
@@ -43,7 +43,7 @@ public class GraphDataManager
 				if(prob == null || all[i].problemName == prob)
 				{
 					// SO:
-					if (all[i].algorithm instanceof Algorithm)
+					if (all[i].algorithm instanceof NumberAlgorithm)
 					{
 						if (!allSOdata.contains(all[i].algorithm.hashCode()+"_"+all[i].problemHashCode))
 						{
@@ -97,7 +97,7 @@ public class GraphDataManager
 				if(prob == null || all[i].problemName == prob)
 				{
 					// SO:
-					if (all[i].algorithm instanceof Algorithm)
+					if (all[i].algorithm instanceof NumberAlgorithm)
 					{
 						if (!allSOdata.contains(all[i].algorithm.hashCode()+"_"+all[i].problemHashCode))
 						{
@@ -136,19 +136,19 @@ public class GraphDataManager
 		//MOProblem problem = (MOProblem)all[0].problem;
 		//problem.
 		ArrayList<RecordedData> out = new ArrayList<RecordedData>(Arrays.asList(all));
-		MOSolutionBase sol1;
-		MOSolutionBase sol2;
+		NumberSolution sol1;
+		NumberSolution sol2;
 		int l = all.length;
-		int ol = ((MOSolutionBase)all[0].solution).getObjectives().length;
+		int ol = ((NumberSolution)all[0].solution).getObjectives().length;
 		
 		for (int i=0; i<l; i++)
 		{
-			sol1 = (MOSolutionBase)all[i].solution;
+			sol1 = (NumberSolution)all[i].solution;
 			for (int j=0; j<l; j++)
 			{
 				if (i==j || !out.contains(all[j]))
 					continue;
-				sol2 = (MOSolutionBase)all[j].solution;
+				sol2 = (NumberSolution)all[j].solution;
 				if (isFirstDominatedBySecond(sol1, sol2, ol))
 				{
 					if (out.contains(all[i]))
@@ -169,19 +169,19 @@ public class GraphDataManager
 		//MOProblem problem = (MOProblem)all[0].problem;
 		//problem.
 		ArrayList<RecordedData> out = new ArrayList<RecordedData>(Arrays.asList(all));
-		MOSolutionBase sol1;
-		MOSolutionBase sol2;
+		NumberSolution sol1;
+		NumberSolution sol2;
 		int l = all.length;
 		int[] axisArray = new int[]{axisX, axisY};
 		
 		for (int i=0; i<l; i++)
 		{
-			sol1 = (MOSolutionBase)all[i].solution;
+			sol1 = (NumberSolution)all[i].solution;
 			for (int j=0; j<l; j++)
 			{
 				if (i==j || !out.contains(all[j]))
 					continue;
-				sol2 = (MOSolutionBase)all[j].solution;
+				sol2 = (NumberSolution)all[j].solution;
 				if (isFirstDominatedBySecond(sol1, sol2, axisArray))	//if (isFirstDominatedBySecond(sol1, sol2, ol)) OLD: for all axis dominated space
 				{
 					if (out.contains(all[i]))
@@ -195,7 +195,7 @@ public class GraphDataManager
 		return out2;
 	}
 	
-	protected static boolean isFirstDominatedBySecond(MOSolutionBase sol1, MOSolutionBase sol2, int[] objectiveIndexes)
+	protected static boolean isFirstDominatedBySecond(NumberSolution sol1, NumberSolution sol2, int[] objectiveIndexes)
 	{
 		boolean allObjBetterOrEqual;
 		int numOfBetterObj;
@@ -229,7 +229,7 @@ public class GraphDataManager
 	}
 	
 	
-	protected static boolean isFirstDominatedBySecond(MOSolutionBase sol1, MOSolutionBase sol2, int ol)
+	protected static boolean isFirstDominatedBySecond(NumberSolution sol1, NumberSolution sol2, int ol)
 	{
 		boolean allObjBetterOrEqual;
 		int numOfBetterObj;
