@@ -20,10 +20,7 @@
 package org.um.feri.ears.problems.gp;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 import static java.lang.String.format;
@@ -351,13 +348,31 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
             final TreeNode<B> target,
             final Function<? super T, ? extends B> mapper
     ) {
-        for (int i = 0; i < source.childCount(); ++i) {
+        /*for (int i = 0; i < source.childCount(); ++i) {
             final Tree<? extends T, ?> child = source.childAt(i);
             final TreeNode<B> targetChild = of();
             targetChild.operation = (Op<B>) child.operation();
             targetChild.coefficient = (B) child.coeficient();
             target.attach(targetChild);
             copy(child, targetChild, mapper);
+        }*/
+
+        final Stack<Pair<Tree<? extends T, ?>, TreeNode<B>>> stack = new Stack<>();
+        stack.push(new Pair<>(source, target));
+
+        while (!stack.empty()) {
+            final Pair<Tree<? extends T, ?>, TreeNode<B>> pair = stack.pop();
+            final Tree<? extends T, ?> srcNode = pair.getFirst();
+            final TreeNode<B> tgtNode = pair.getSecond();
+            tgtNode.operation = (Op<B>) srcNode.operation();
+            tgtNode.coefficient = mapper.apply(srcNode.coeficient());
+
+            for (int i = 0; i < srcNode.childCount(); ++i) {
+                final Tree<? extends T, ?> srcChild = srcNode.childAt(i);
+                final TreeNode<B> tgtChild = of();
+                tgtNode.attach(tgtChild);
+                stack.push(new Pair<>(srcChild, tgtChild));
+            }
         }
     }
 

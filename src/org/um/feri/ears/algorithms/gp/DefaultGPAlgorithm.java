@@ -4,8 +4,11 @@ package org.um.feri.ears.algorithms.gp;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.GPAlgorithm;
-import org.um.feri.ears.operators.SinglePointCrossover;
-import org.um.feri.ears.operators.SingleTreeNodeMutation;
+import org.um.feri.ears.operators.Selection;
+import org.um.feri.ears.operators.gp.GPCrossover;
+import org.um.feri.ears.operators.gp.GPMutation;
+import org.um.feri.ears.operators.gp.SinglePointCrossover;
+import org.um.feri.ears.operators.gp.SingleTreeNodeMutation;
 import org.um.feri.ears.operators.TournamentSelection;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -20,7 +23,7 @@ import java.util.List;
 public class DefaultGPAlgorithm extends GPAlgorithm {
 
     @AlgorithmParameter(name = "population size")
-    private int popSize; //Usually around 500
+    private int popSize;
 
     @AlgorithmParameter(name = "crossover probability")
     private double crossoverProbability;
@@ -34,12 +37,12 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     private ArrayList<ProgramSolution<Double>> population;
 
     private ProblemComparator<ProgramSolution<Double>> comparator;
-    private TournamentSelection<ProgramSolution<Double>, ProgramProblem<Double>> selectionOperator;
-    private SinglePointCrossover<Double> singlePointCrossover;
-    private SingleTreeNodeMutation<Double> singleTreeNodeMutation;
+    private Selection<ProgramSolution<Double>, ProgramProblem<Double>> selectionOperator;
+    private final GPCrossover<Double> crossoverOperator;
+    private final GPMutation<Double> mutationOperator;
 
-    public DefaultGPAlgorithm(){
-        this(50, 0.1, 0.9, 2);
+    public DefaultGPAlgorithm() {
+        this(100, 0.9, 0.5, 2);
     }
 
     public DefaultGPAlgorithm(int popSize, double crossoverProbability, double mutationProbability, int numberOfTournaments) {
@@ -48,8 +51,8 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         this.mutationProbability = mutationProbability;
         this.numberOfTournaments = numberOfTournaments;
 
-        this.singlePointCrossover = new SinglePointCrossover<>(this.crossoverProbability);
-        this.singleTreeNodeMutation = new SingleTreeNodeMutation<>(this.mutationProbability);
+        this.crossoverOperator = new SinglePointCrossover<>(this.crossoverProbability);
+        this.mutationOperator = new SingleTreeNodeMutation<>(this.mutationProbability);
 
         au = new Author("marko", "marko.smid2@um.si");
         ai = new AlgorithmInfo("DGP", "Default GP Algorithm",
@@ -66,7 +69,6 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         initPopulation();
 
         while (!task.isStopCriterion()) {
-            System.out.println("Generation: " + this.task.getNumberOfIterations());
             ProgramSolution<Double>[] parents = new ProgramSolution[2];
             List<ProgramSolution<Double>> selectedIndividuals = new ArrayList<>(population.size());
             // Selection and Crossover
@@ -76,9 +78,9 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
 
                 //selectedIndividuals.add(parents[0]);
                 //selectedIndividuals.add(parents[1]);
-                //TODO -> uredi da križanje ne bo preseglo višino drevesa
+                //TODO -> uredi da križanje ne bo preseglo višino drevesa (trenutno je infinite loop znotraj operatorja)
                 try {
-                    ProgramSolution<Double>[] newSolution = singlePointCrossover.execute(parents, task.problem);
+                    ProgramSolution<Double>[] newSolution = crossoverOperator.execute(parents, task.problem);
                     selectedIndividuals.add(newSolution[0]);
                     selectedIndividuals.add(newSolution[1]);
                 } catch (Exception ex) {
@@ -86,11 +88,13 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                     selectedIndividuals.add(parents[1]);
                 }
             }
+
             // Mutation
             for (int i = 0; i < selectedIndividuals.size(); i++) {
                 try {
-                    selectedIndividuals.set(i,singleTreeNodeMutation.execute(selectedIndividuals.get(i), task.problem));
-                } catch (Exception ex) { }
+                    selectedIndividuals.set(i, mutationOperator.execute(selectedIndividuals.get(i), task.problem));
+                } catch (Exception ex) {
+                }
             }
 
             // Evaluate
@@ -101,8 +105,9 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 if (this.task.isStopCriterion())
                     break;
             }
-            if (this.task.isStopCriterion())
-                break;
+
+            // Bloat control - Remove all redundant nodes
+            // TODO
 
             this.task.incrementNumberOfIterations();
         }
@@ -117,7 +122,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
 
     /**
      * Initialize @popSize individuals and evaluate them. Best random generated solution is saved to @best
-     * */
+     */
     private void initPopulation() throws StopCriterionException {
         population = new ArrayList<>();
         for (int i = 0; i < popSize; i++) {
@@ -128,4 +133,5 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 break;
         }
     }
+
 }

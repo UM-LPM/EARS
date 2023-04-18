@@ -6,7 +6,7 @@ import java.util.List;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.SolutionListUtils;
 
-public class TournamentSelection<Source extends Solution, P extends Problem> implements SelectionOperator<Source, List<Source>, P> {
+public class TournamentSelection<Source extends Solution, P extends Problem> extends Selection<Source, P>{
 
     private final int numberOfTournaments;
     private final Comparator<Source> comparator;
