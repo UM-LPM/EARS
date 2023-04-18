@@ -86,13 +86,13 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
     }
     @Override
     public boolean isFeasible(ProgramSolution<T> solution){
-        //TODO
-        return true;
+        // TODO add more conditions if necesary
+        return solution.getProgram().treeHeight() <= this.getMaxTreeHeight() && solution.getProgram().treeHeight() >= this.getMinTreeHeight();
     }
 
     @Override
     public void makeFeasible(ProgramSolution<T> solution){
-        //TODO
+        // TODO
     }
     @Override
     public ProgramSolution<T> getRandomEvaluatedSolution() {

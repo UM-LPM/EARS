@@ -16,7 +16,7 @@ public class ProgramSolution<T> extends Solution {
 
     public ProgramSolution(ProgramSolution<T> s) {
         super(s);
-        program = s.program;
+        program = s.program.copy();
         parents = new ArrayList<>();
     }
 
