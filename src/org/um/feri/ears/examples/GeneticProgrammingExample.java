@@ -75,7 +75,7 @@ public class GeneticProgrammingExample {
         Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp2, StopCriterion.EVALUATIONS, 15000, 0, 0);
 
 
-        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.5, 2);
+        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.1, 2);
         RandomWalkGPAlgorithm rndAlg = new RandomWalkGPAlgorithm();
 
         try {
@@ -143,12 +143,17 @@ public class GeneticProgrammingExample {
 //        benchmark.run(10); //start the tournament with 10 runs/repetitions
 
 
-
+//        long startTime = System.currentTimeMillis();
 //        ProgramSolution<Double> ps = sgp.getRandomSolution();
+//        for (int i =0; i < 10000; i++){
+//            int a = ps.getProgram().treeHeight();
+//        }
 //        System.out.println("Fitness: " + ps.getEval());
 //        System.out.println("AncestorCount: " + ps.getProgram().ancestors().getAncestorCount());
-//        ps.getProgram().displayTree("TestBTree");
-
+//        //ps.getProgram().displayTree("TestBTree");
+//        long elapsedTime = (System.currentTimeMillis() - startTime) ;
+//
+//        System.out.println("Elapsed time: " + elapsedTime + " ms");
 
 
         /*// SinglePointCrossover example
