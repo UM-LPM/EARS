@@ -180,6 +180,13 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
         return this;
     }
 
+    public TreeNode<T> replace (final TreeNode<T> currentChild, final TreeNode<T> newChild){
+        requireNonNull(currentChild);
+        requireNonNull(newChild);
+
+        return replace(this.getChildren().indexOf(currentChild), newChild);
+    }
+
     public TreeNode<T> remove(final int index) {
         if (children == null) {
             throw new ArrayIndexOutOfBoundsException(format(
@@ -205,6 +212,12 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
             throw new IllegalArgumentException("The given child is not a child.");
         }
         remove(indexOf(child));
+    }
+
+    public void detach(){
+        if (parent != null) {
+            parent.remove(this);
+        }
     }
 
     private void createChildrenIfMissing() {
@@ -424,35 +437,13 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
 
     @Override
     public int treeHeight(){
-        return getTreeHeight();
-        /*nt numOfAncestors = this.ancestors().ancestors.size();
         int maxHeight = 0;
-
-        for(int i = 1; i < numOfAncestors;i++){
-            int treeHeight = ancestorAt(i).getTreeHeightPosition();
-            //System.out.println("Tree height: " + treeHeight);
-            if(maxHeight < treeHeight){
-                maxHeight = treeHeight;
-            }
-        }
-
-        return maxHeight;*/
-
-        /*int maxHeight = 0;
         for (TreeNode child : this.children) {
             int childHeight = child.treeHeight();
             maxHeight = Math.max(maxHeight, childHeight);
         }
-        return maxHeight + 1;*/
-    }
-
-    public int getTreeHeight(){
-        int maxHeight = 0;
-        for (TreeNode child : this.children) {
-            int childHeight = child.getTreeHeight();
-            maxHeight = Math.max(maxHeight, childHeight);
-        }
         return maxHeight + 1;
     }
+
 }
 

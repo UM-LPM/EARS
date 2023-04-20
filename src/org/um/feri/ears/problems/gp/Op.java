@@ -45,6 +45,14 @@ public interface Op<T> extends Function<T[], T>, Supplier<Op<T>> {
         return type() == OperationType.CONSTANT;
     }
 
+    default boolean isComplex() {
+        return arity() > 0;
+    }
+
+    default boolean isSimple() {
+        return arity() < 0;
+    }
+
     @Override
     default Op<T> get() {
         return this;
