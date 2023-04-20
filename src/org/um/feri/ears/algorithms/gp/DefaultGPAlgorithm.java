@@ -78,7 +78,6 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
 
                 //selectedIndividuals.add(parents[0]);
                 //selectedIndividuals.add(parents[1]);
-                //TODO -> uredi da križanje ne bo preseglo višino drevesa (trenutno je infinite loop znotraj operatorja)
                 try {
                     ProgramSolution<Double>[] newSolution = crossoverOperator.execute(parents, task.problem);
                     selectedIndividuals.add(newSolution[0]);
