@@ -46,8 +46,8 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution<Dou
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200)));
 
-        sgp.setMaxTreeHeight(6);
-        sgp.setMaxNodeChildrenNum(2);
+        sgp.setMaxTreeHeight(8);
+        sgp.setMinTreeHeight(2);
 
         SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem();
         sgp2.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST, MathOp.PI));
@@ -64,8 +64,8 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution<Dou
                 new Target().when("x", 9).targetIs(975),
                 new Target().when("x", 10).targetIs(1292)));
 
-        sgp2.setMaxTreeHeight(8);
-        sgp2.setMaxNodeChildrenNum(2);
+        sgp2.setMaxTreeHeight(10);
+        sgp2.setMinTreeHeight(2);
 
 
         //addTask(sgp, stopCriterion, maxEvaluations, timeLimit, maxIterations);

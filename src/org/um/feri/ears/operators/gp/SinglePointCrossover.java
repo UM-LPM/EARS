@@ -29,11 +29,13 @@ public class SinglePointCrossover<T> extends GPCrossover<T> {
         }
 
         if(Util.rnd.nextDouble() <= this.crossoverProbability) {
-            ProgramSolution<T> parent1 = programSolutions[0].copy();
-            ProgramSolution<T> parent2 = programSolutions[1].copy();
-
+            ProgramSolution<T> parent1;
+            ProgramSolution<T> parent2;
             // Perform crossover so long that it's inside boundaries
             do {
+                parent1 = programSolutions[0].copy();
+                parent2 = programSolutions[1].copy();
+
                 // Get lengths of both parents and select random crossover points
                 int childCount1 = parent1.getProgram().ancestors().getAncestorCount();
                 int childCount2 = parent2.getProgram().ancestors().getAncestorCount();

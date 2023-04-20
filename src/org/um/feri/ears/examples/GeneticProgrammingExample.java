@@ -31,9 +31,8 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200)));
 
-        sgp.setMaxTreeHeight(8);
-        sgp.setMinTreeHeight(2);
-        sgp.setMaxNodeChildrenNum(2); // TODO not in use
+        sgp.setMaxTreeHeight(5);
+        sgp.setMinTreeHeight(3);
 
         SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem();
         sgp2.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST, MathOp.PI));
@@ -50,15 +49,33 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 9).targetIs(975),
                 new Target().when("x", 10).targetIs(1292)));
 
-        sgp2.setMaxTreeHeight(8);
+        sgp2.setMaxTreeHeight(6);
         sgp2.setMinTreeHeight(2);
-        sgp2.setMaxNodeChildrenNum(2); // TODO not in use
+
+        //y=4x^3 -15x^2 +8x - 12
+        SymbolicRegressionProblem sgp3 = new SymbolicRegressionProblem();
+        sgp3.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST, MathOp.PI));
+        sgp3.setBaseTerminals(Utils.list(Op.define("x", OperationType.VARIABLE)));
+        sgp3.setEvalData(Util.list( new Target().when("x", 0).targetIs(-12),
+                new Target().when("x", 1).targetIs(-15),
+                new Target().when("x", 2).targetIs(-4),
+                new Target().when("x", 3).targetIs(27),
+                new Target().when("x", 4).targetIs(100),
+                new Target().when("x", 5).targetIs(203),
+                new Target().when("x", 6).targetIs(340),
+                new Target().when("x", 7).targetIs(515),
+                new Target().when("x", 8).targetIs(723),
+                new Target().when("x", 9).targetIs(995),
+                new Target().when("x", 10).targetIs(1308)));
+
+        sgp3.setMaxTreeHeight(15);
+        sgp3.setMinTreeHeight(3);
 
         //GP algorithm execution example
-        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp, StopCriterion.EVALUATIONS, 10000, 0, 0);
+        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp2, StopCriterion.EVALUATIONS, 15000, 0, 0);
 
 
-        GPAlgorithm alg = new DefaultGPAlgorithm(200, 0.9, 0.5, 2);
+        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.5, 2);
         RandomWalkGPAlgorithm rndAlg = new RandomWalkGPAlgorithm();
 
         try {
@@ -67,7 +84,7 @@ public class GeneticProgrammingExample {
             ArrayList<Double> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
             ProgramSolution<Double> sol;
-            for (int i = 0; i < 5; i++){
+            for (int i = 0; i < 10; i++){
                 sol = alg.execute(symbolicRegression);
                 solutions.add(sol.getEval());
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
@@ -81,17 +98,21 @@ public class GeneticProgrammingExample {
 
             double max = Double.MAX_VALUE;
             double maxRnd = Double.MAX_VALUE;
-
+            int wins = 0;
             for (int i = 0; i < solutions.size(); i++){
                 if(solutions.get(i) < max)
                     max = solutions.get(i);
                 if(solutionsRnd.get(i) < maxRnd)
                     maxRnd = solutionsRnd.get(i);
+
+                if(solutions.get(i) < solutionsRnd.get(i))
+                    wins++;
             }
 
             System.out.println("=====================================");
             System.out.println("Best fitness (DefaultGpAlgorithm)  -> " + max);
             System.out.println("Best fitness (RandomWalkAlgorithm) -> " + maxRnd);
+            System.out.println("Wins (DefaultGpAlgorithm) -> " + wins);
 
             long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
 
@@ -106,6 +127,10 @@ public class GeneticProgrammingExample {
             e.printStackTrace();
         }
 
+        //ProgramSolution<Double> sol = sgp.getRandomEvaluatedSolution();
+        //ProgramSolution<Double> sol2 = sol.copy();
+        //int a = 10;
+
 
 //        ArrayList<GPAlgorithm> algorithms = new ArrayList<>();
 //        algorithms.add(new RandomWalkGPAlgorithm());
@@ -115,16 +140,14 @@ public class GeneticProgrammingExample {
 //
 //        benchmark.addAlgorithms(algorithms);  // register the algorithms in the benchmark
 //
-//        benchmark.run(20); //start the tournament with 10 runs/repetitions
+//        benchmark.run(10); //start the tournament with 10 runs/repetitions
 
 
 
-        /*ProgramSolution<Double> ps = sgp.getRandomSolution();
-        sgp.eval(ps);
-        System.out.println("Fitness: " + ps.getEval());
-        System.out.println("AncestorCount: " + ps.getProgram().ancestors().getAncestorCount());
-        System.out.println("TestNode: " + ps.getProgram().ancestorAt(5).getOperation().name());
-        ps.getProgram().displayTree("TestBTree");*/
+//        ProgramSolution<Double> ps = sgp.getRandomSolution();
+//        System.out.println("Fitness: " + ps.getEval());
+//        System.out.println("AncestorCount: " + ps.getProgram().ancestors().getAncestorCount());
+//        ps.getProgram().displayTree("TestBTree");
 
 
 

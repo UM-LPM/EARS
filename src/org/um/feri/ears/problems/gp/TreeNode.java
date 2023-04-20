@@ -336,7 +336,7 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
             final Tree<? extends T, ?> tree,
             final Function<? super T, ? extends B> mapper
     ) {
-        final TreeNode<B> target = of();
+        final TreeNode<B> target = new TreeNode<>();
         target.operation = (Op<B>) tree.operation();
         target.coefficient = (B) tree.coeficient();
         copy(tree, target, mapper);
@@ -369,7 +369,7 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
 
             for (int i = 0; i < srcNode.childCount(); ++i) {
                 final Tree<? extends T, ?> srcChild = srcNode.childAt(i);
-                final TreeNode<B> tgtChild = of();
+                final TreeNode<B> tgtChild = new TreeNode<>();
                 tgtNode.attach(tgtChild);
                 stack.push(new Pair<>(srcChild, tgtChild));
             }
@@ -378,14 +378,6 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
 
     public static <T> TreeNode<T> ofTree(final Tree<? extends T, ?> tree) {
         return ofTree(tree, Function.identity());
-    }
-
-    public static <T> TreeNode<T> of() {
-        return TreeNode.of(null);
-    }
-
-    public static <T> TreeNode<T> of(final T value) {
-        return new TreeNode<>(value);
     }
 
     public TreeNode<T> attach(final TreeNode<T> child) {
@@ -403,7 +395,7 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
     @SafeVarargs
     public final TreeNode<T> attach(final T... children) {
         for (T child : children) {
-            attach(TreeNode.of(child));
+            attach(new TreeNode<>(child));
         }
 
         return this;
@@ -416,7 +408,7 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
      * @return {@code this} tree-node, for method chaining
      */
     public TreeNode<T> attach(final T child) {
-        return attach(TreeNode.of(child));
+        return attach(new TreeNode<>(child));
     }
 
     @Override
