@@ -59,7 +59,11 @@ public class SinglePointCrossover<T> extends GPCrossover<T> {
                 //Switch nodes and it's subtrees
                 mutationNodeParent1.get().replace(crossOverNodeIndex1, crossOverNode2);
                 mutationNodeParent2.get().replace(crossOverNodeIndex2, crossOverNode1);
+
+                // TODO Maybe call problem.makeFeasible() if offsprings are not feasible here?
             } while (!problem.isFeasible(parent1) || !problem.isFeasible(parent2));
+
+            return new ProgramSolution[]{parent1, parent2};
         }
         return programSolutions;
     }
