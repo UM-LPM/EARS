@@ -8,7 +8,7 @@ import org.um.feri.ears.operators.Selection;
 import org.um.feri.ears.operators.gp.GPCrossover;
 import org.um.feri.ears.operators.gp.GPMutation;
 import org.um.feri.ears.operators.gp.SinglePointCrossover;
-import org.um.feri.ears.operators.gp.SingleTreeNodeMutation;
+import org.um.feri.ears.operators.gp.SubtreeMutation;
 import org.um.feri.ears.operators.TournamentSelection;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -52,7 +52,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         this.numberOfTournaments = numberOfTournaments;
 
         this.crossoverOperator = new SinglePointCrossover<>(this.crossoverProbability);
-        this.mutationOperator = new SingleTreeNodeMutation<>(this.mutationProbability);
+        this.mutationOperator = new SubtreeMutation<>(this.mutationProbability);
 
         au = new Author("marko", "marko.smid2@um.si");
         ai = new AlgorithmInfo("DGP", "Default GP Algorithm",
@@ -84,8 +84,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                     selectedIndividuals.add(newSolution[0]);
                     selectedIndividuals.add(newSolution[1]);
                 } catch (Exception ex) {
-                    selectedIndividuals.add(parents[0]);
-                    selectedIndividuals.add(parents[1]);
+                    throw new StopCriterionException("Crossover error");
                 }
             }
 
@@ -94,6 +93,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 try {
                     selectedIndividuals.set(i, mutationOperator.execute(selectedIndividuals.get(i), task.problem));
                 } catch (Exception ex) {
+                    throw new StopCriterionException("Mutation error");
                 }
             }
 

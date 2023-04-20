@@ -32,8 +32,8 @@ public enum MathOp implements Op<Double> {
     PI("π", OperationType.TERMINAL, v -> Math.PI),
     CONST("const", OperationType.CONSTANT, v -> MathOp.generateRandomConstant());
 
-    private static Double minVal = -20.0;
-    private static Double maxVal = 20.0;
+    private static final Double minVal = -20.0;
+    private static final Double maxVal = 20.0;
 
     public static Double generateRandomConstant(){
         return minVal + (maxVal - minVal) * new Random().nextDouble();

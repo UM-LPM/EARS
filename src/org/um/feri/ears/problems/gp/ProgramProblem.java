@@ -1,11 +1,10 @@
 package org.um.feri.ears.problems.gp;
 
 import org.um.feri.ears.problems.Problem;
-import org.um.feri.ears.util.random.RNG;
+import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
@@ -18,16 +17,18 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
      * List of base terminals which can be used during when generating tree individuals
      */
     protected List<Op<T>> baseTerminals;
+
+    protected List<Op<T>> complexFunctions;
+
     protected int minTreeHeight;
     protected int maxTreeHeight;
-    protected int maxNodeChildrenNum;
-    protected boolean useAllBaseFunctions;
-    protected boolean useAllBaseTerminals;
 
     public ProgramProblem(String name) {
         super(name, 1, 1, 0);
         this.baseFunctions = new ArrayList<>();
         this.baseTerminals = new ArrayList<>();
+        this.minTreeHeight = 0;
+        this.maxTreeHeight = 100;
     }
 
     public List<Op<T>> getBaseFunctions() {
@@ -36,6 +37,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
     public void setBaseFunctions(List<Op<T>> baseFunctions) {
         this.baseFunctions = baseFunctions;
+        setComplexFunctions();
     }
 
     public List<Op<T>> getBaseTerminals() {
@@ -44,6 +46,14 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
     public void setBaseTerminals(List<Op<T>> baseTerminals) {
         this.baseTerminals = baseTerminals;
+    }
+
+    public List<Op<T>> getComplexFunctions() {
+        return complexFunctions;
+    }
+
+    public void setComplexFunctions() {
+        this.complexFunctions = this.baseFunctions.stream().filter(x -> x.arity() > 0).toList();
     }
 
     public int getMaxTreeHeight() {
@@ -62,33 +72,11 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
         this.minTreeHeight = minTreeHeight;
     }
 
-    public int getMaxNodeChildrenNum() {
-        return maxNodeChildrenNum;
-    }
-
-    public void setMaxNodeChildrenNum(int maxNodeChildrenNum) {
-        this.maxNodeChildrenNum = maxNodeChildrenNum;
-    }
-
-    public boolean isUseAllBaseFunctions() {
-        return useAllBaseFunctions;
-    }
-
-    public void setUseAllBaseFunctions(boolean useAllBaseFunctions) {
-        this.useAllBaseFunctions = useAllBaseFunctions;
-    }
-
-    public boolean isUseAllBaseTerminals() {
-        return useAllBaseTerminals;
-    }
-
-    public void setUseAllBaseTerminals(boolean useAllBaseTerminals) {
-        this.useAllBaseTerminals = useAllBaseTerminals;
-    }
     @Override
     public boolean isFeasible(ProgramSolution<T> solution){
         // TODO add more conditions if necesary
-        return solution.getProgram().treeHeight() <= this.getMaxTreeHeight() && solution.getProgram().treeHeight() >= this.getMinTreeHeight();
+        int treeHeight = solution.getProgram().treeHeight();
+        return treeHeight <= this.getMaxTreeHeight() && treeHeight >= this.getMinTreeHeight();
     }
 
     @Override
@@ -110,10 +98,13 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
         //System.out.println("Current depth: " + currentDepth);
         ProgramSolution<T> newSolution = new ProgramSolution<>(numberOfObjectives);
 
-        // First we select one from baseFunctions, otherwise the tree would stop here (we also exclude functions that are actually constants)
-        List<Op<T>> filteredOperations = this.baseFunctions.stream().filter(x -> (!x.isVariable() && !x.isTerminal() && !x.isConstant() || !isRoot)).toList(); //File > Settings > Build, Execution, Deployment > Compiler > Java Compiler: Ensure that the Project bytecode version is set to 16.
+        // First we select one from baseFunctions, otherwise the tree would stop here (we also exclude functions that are actually constants). Only if we are not at the root of the tree
+        Op<T> op;
+        if(!isRoot && (currentDepth >= this.minTreeHeight))
+            op = this.baseFunctions.get(Util.rnd.nextInt(this.baseFunctions.size()));
+        else
+            op = this.complexFunctions.get(Util.rnd.nextInt(this.complexFunctions.size()));
 
-        Op<T> op = filteredOperations.get(RNG.nextInt(filteredOperations.size()));
         TreeNode<T> rootNode = new TreeNode<>(op);
 
         if(currentDepth < this.maxTreeHeight - 1) { //Function
@@ -127,7 +118,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
                 }
             }
         }else { //Terminal
-            Op<T> t = this.baseTerminals.get(RNG.nextInt(this.baseTerminals.size()));
+            Op<T> t = this.baseTerminals.get(Util.rnd.nextInt(this.baseTerminals.size()));
             rootNode = new TreeNode<>(t);
         }
 
@@ -137,8 +128,12 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
     private void generateSubTree(TreeNode<T> node, int index, int currentDepth) {
         //Randomly select one terminal or one function
-        if(currentDepth < this.maxTreeHeight - 1 && RNG.nextInt(2) == 0) { //Function
-            Op<T> op = this.baseFunctions.get(RNG.nextInt(this.baseFunctions.size()));
+        if((currentDepth < this.maxTreeHeight - 1 && Util.rnd.nextInt(2) == 0) || !(currentDepth >= this.minTreeHeight)) { //Function
+            Op<T> op;
+            if(!(currentDepth >= this.minTreeHeight - 1))
+                op = this.complexFunctions.get(Util.rnd.nextInt(this.complexFunctions.size()));
+            else
+                op = this.baseFunctions.get(Util.rnd.nextInt(this.baseFunctions.size()));
 
             if(op.isConstant()){
                 TreeNode<T> childNode = new TreeNode<>(op.apply(null));
@@ -155,7 +150,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
             }
         }
         else { //Terminal
-            Op<T> t = this.baseTerminals.get(RNG.nextInt(this.baseTerminals.size()));
+            Op<T> t = this.baseTerminals.get(Util.rnd.nextInt(this.baseTerminals.size()));
             TreeNode<T> child = new TreeNode<T>(t);
             node.insert(index, child);
         }
