@@ -91,7 +91,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
     }
 
     public ProgramSolution<T> getRandomSolution() {
-        return getRandomSolution(true, 0);
+        return getRandomSolution(true, 1);
     }
 
     public ProgramSolution<T> getRandomSolution(boolean isRoot, int currentDepth) {
