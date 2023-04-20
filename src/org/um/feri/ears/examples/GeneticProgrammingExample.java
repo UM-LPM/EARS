@@ -31,11 +31,11 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200)));
 
-        sgp.setMaxTreeHeight(6);
+        sgp.setMaxTreeHeight(8);
         sgp.setMinTreeHeight(3);
 
         SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem();
-        sgp2.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST, MathOp.PI));
+        sgp2.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST));
         sgp2.setBaseTerminals(Utils.list(Op.define("x", OperationType.VARIABLE)));
         sgp2.setEvalData(Util.list( new Target().when("x", 0).targetIs(12),
                 new Target().when("x", 1).targetIs(23),
@@ -49,12 +49,12 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 9).targetIs(975),
                 new Target().when("x", 10).targetIs(1292)));
 
-        sgp2.setMaxTreeHeight(8);
-        sgp2.setMinTreeHeight(2);
+        sgp2.setMaxTreeHeight(6);
+        sgp2.setMinTreeHeight(4);
 
         //y=4x^3 -15x^2 +8x - 12
         SymbolicRegressionProblem sgp3 = new SymbolicRegressionProblem();
-        sgp3.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST, MathOp.PI));
+        sgp3.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST));
         sgp3.setBaseTerminals(Utils.list(Op.define("x", OperationType.VARIABLE)));
         sgp3.setEvalData(Util.list( new Target().when("x", 0).targetIs(-12),
                 new Target().when("x", 1).targetIs(-15),
@@ -72,10 +72,10 @@ public class GeneticProgrammingExample {
         sgp3.setMinTreeHeight(3);
 
         //GP algorithm execution example
-        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
+        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp2, StopCriterion.EVALUATIONS, 50000, 0, 0);
 
 
-        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.05, 2);
+        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.025, 2);
         RandomWalkGPAlgorithm rndAlg = new RandomWalkGPAlgorithm();
 
         try {
@@ -84,7 +84,7 @@ public class GeneticProgrammingExample {
             ArrayList<Double> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
             ProgramSolution<Double> sol;
-            for (int i = 0; i < 20; i++){
+            for (int i = 0; i < 10; i++){
                 sol = alg.execute(symbolicRegression);
                 solutions.add(sol.getEval());
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
@@ -127,10 +127,6 @@ public class GeneticProgrammingExample {
             e.printStackTrace();
         }
 
-        //ProgramSolution<Double> sol = sgp.getRandomEvaluatedSolution();
-        //ProgramSolution<Double> sol2 = sol.copy();
-        //int a = 10;
-
 
 //        ArrayList<GPAlgorithm> algorithms = new ArrayList<>();
 //        algorithms.add(new RandomWalkGPAlgorithm());
@@ -145,19 +141,25 @@ public class GeneticProgrammingExample {
 
 //        long startTime = System.currentTimeMillis();
 //        ProgramSolution<Double> ps = sgp.getRandomSolution();
-//        /*for (int i =0; i < 100000; i++){
-//            int a = ps.getProgram().treeHeight();
-//        }*/
-//        System.out.println("Fitness: " + ps.getEval());
-//        System.out.println("AncestorCount: " + ps.getProgram().ancestors().getAncestorCount());
-//        System.out.println("Tree Depth: " + ps.getProgram().treeHeight());
-//        TreeAncestor<Double> ancestor = ps.getProgram().ancestorAt(5);
-//        System.out.println("Ancestor at 5: " + ancestor.getTreeHeightPosition());
-//        System.out.println("Ancestor at 5: " + ancestor.getTreeNode().getOperation().name());
+////        for (int i =0; i < 100000; i++){
+////            int a = ps.getProgram().treeHeight();
+////        }
+////        System.out.println("Fitness: " + ps.getEval());
+////        System.out.println("AncestorCount: " + ps.getProgram().ancestors().getAncestorCount());
+////        System.out.println("Tree Depth: " + ps.getProgram().treeHeight());
+////        TreeAncestor<Double> ancestor = ps.getProgram().ancestorAt(5);
+////        System.out.println("Ancestor at 5: " + ancestor.getTreeHeightPosition());
+////        System.out.println("Ancestor at 5: " + ancestor.getTreeNode().getOperation().name());
+//
 //        ps.getProgram().displayTree("TestBTree");
+//        sgp2.makeFeasible(ps);
+//        ps.getProgram().displayTree("TestBTree");
+//        //sgp2.evaluate(ps);
 //        long elapsedTime = (System.currentTimeMillis() - startTime) ;
 //
 //        System.out.println("Elapsed time: " + elapsedTime + " ms");
+
+
 
 
         /*// SinglePointCrossover example

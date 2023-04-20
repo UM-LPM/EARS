@@ -18,6 +18,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
      */
     protected List<Op<T>> baseTerminals;
 
+    protected List<Op<T>> simpleFunctions;
     protected List<Op<T>> complexFunctions;
 
     protected int minTreeHeight;
@@ -38,6 +39,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
     public void setBaseFunctions(List<Op<T>> baseFunctions) {
         this.baseFunctions = baseFunctions;
         setComplexFunctions();
+        setSimpleFunctions();
     }
 
     public List<Op<T>> getBaseTerminals() {
@@ -53,12 +55,21 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
     }
 
     public void setComplexFunctions() {
-        this.complexFunctions = this.baseFunctions.stream().filter(x -> x.arity() > 0).toList();
+        this.complexFunctions = this.baseFunctions.stream().filter(x -> x.isComplex()).toList();
+    }
+
+    public List<Op<T>> getSimpleFunctions() {
+        return simpleFunctions;
+    }
+
+    public void setSimpleFunctions() {
+        this.complexFunctions = this.baseFunctions.stream().filter(x -> x.isComplex()).toList();
     }
 
     public int getMaxTreeHeight() {
         return maxTreeHeight;
     }
+
 
     public void setMaxTreeHeight(int maxTreeHeight) {
         this.maxTreeHeight = maxTreeHeight;
@@ -81,7 +92,9 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
     @Override
     public void makeFeasible(ProgramSolution<T> solution){
-        // TODO
+        // TODO add more if more conditions  exist
+        pruneProgramSolution(solution);
+        completeProgramSolution(solution);
     }
     @Override
     public ProgramSolution<T> getRandomEvaluatedSolution() {
@@ -107,7 +120,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
         TreeNode<T> rootNode = new TreeNode<>(op);
 
-        if(currentDepth < this.maxTreeHeight - 1) { //Function
+        if(currentDepth < this.maxTreeHeight) { //Function
             if (op.isConstant()) {
                 rootNode = new TreeNode<>(op.apply(null));
                 TreeNode<T> finalRootNode = rootNode;
@@ -119,7 +132,14 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
             }
         }else { //Terminal
             Op<T> t = this.baseTerminals.get(Util.rnd.nextInt(this.baseTerminals.size()));
-            rootNode = new TreeNode<>(t);
+            if(t.isConstant()){
+                rootNode = new TreeNode<>(t.apply(null));
+                TreeNode<T> finalRootNode = rootNode;
+                rootNode.setOperation(Op.define(rootNode.getCoefficient().toString(), OperationType.TERMINAL, 0, v -> finalRootNode.getCoefficient()));
+            }
+            else{
+                rootNode = new TreeNode<>(t);
+            }
         }
 
         newSolution.setProgram(rootNode);
@@ -128,9 +148,9 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
     private void generateSubTree(TreeNode<T> node, int index, int currentDepth) {
         //Randomly select one terminal or one function
-        if((currentDepth < this.maxTreeHeight - 1 && Util.rnd.nextInt(2) == 0) || !(currentDepth >= this.minTreeHeight)) { //Function
+        if((currentDepth < this.maxTreeHeight - 1 && Util.rnd.nextInt(2) == 0) || !(currentDepth >= this.minTreeHeight - 1)) { //Function
             Op<T> op;
-            if(!(currentDepth >= this.minTreeHeight - 1))
+            if(!(currentDepth > this.minTreeHeight))
                 op = this.complexFunctions.get(Util.rnd.nextInt(this.complexFunctions.size()));
             else
                 op = this.baseFunctions.get(Util.rnd.nextInt(this.baseFunctions.size()));
@@ -151,8 +171,66 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
         }
         else { //Terminal
             Op<T> t = this.baseTerminals.get(Util.rnd.nextInt(this.baseTerminals.size()));
-            TreeNode<T> child = new TreeNode<T>(t);
-            node.insert(index, child);
+            if(t.isConstant()){
+                TreeNode<T> child = new TreeNode<>(t.apply(null));
+                child.setOperation(Op.define(child.getCoefficient().toString(), OperationType.TERMINAL, 0, v -> child.getCoefficient()));
+                node.insert(index, child);
+            }
+            else{
+                TreeNode<T> child = new TreeNode<>(t);
+                node.insert(index, child);
+            }
         }
     }
+
+    public void pruneProgramSolution(ProgramSolution<T> solution){
+        pruneProgramHeight(solution.getProgram(), 1);
+    }
+
+    private void pruneProgramHeight(TreeNode<T> current, int currentHeight){
+        if(currentHeight >= this.maxTreeHeight){
+            //current.getChildren().clear();
+            if(current.operation().isComplex()){
+                ProgramSolution<T> newSolution = getRandomSolution(false, currentHeight);
+                if(current.parent().isPresent()){
+                    try {
+                        current.parent().get().replace(current, newSolution.getProgram());
+                    } catch (Exception e) {
+                        throw new RuntimeException("Error replacing node");
+                    }
+                }
+
+            }
+        }else{
+            for (TreeNode child : current.getChildren()) {
+                pruneProgramHeight(child, currentHeight + 1);
+            }
+        }
+    }
+
+    public void completeProgramSolution(ProgramSolution<T> solution){
+        completeProgramHeight(solution.getProgram(), 1);
+    }
+
+    private void completeProgramHeight(TreeNode<T> current, int currentHeight){
+        if(currentHeight < this.minTreeHeight){
+            if(!current.getOperation().isComplex()){
+                ProgramSolution<T> newSolution = getRandomSolution(false, currentHeight);
+                if(current.parent().isPresent()){
+                    current.parent().get().replace(current, newSolution.getProgram());
+                }
+            }else {
+                for (TreeNode child : current.getChildren()) {
+                    completeProgramHeight(child, currentHeight + 1);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
 }
