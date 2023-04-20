@@ -24,8 +24,8 @@ public class Util {
     public static DecimalFormat dfcshort = new DecimalFormat("0.##E0");
     public static DecimalFormat intf = new DecimalFormat("###,###,###");
     private static long initialSeed = 316227711;
-    //public static Random rnd = new MersenneTwister(316227711); // TODO change back(initialSeed)
-    public static Random rnd = new MersenneTwister(System.nanoTime());
+    public static Random rnd = new MersenneTwister(316227711); // TODO change back(initialSeed)
+    //public static Random rnd = new MersenneTwister(System.nanoTime());
     static final String JSON_DIR = "Cache\\Pareto_Cache_%s.json";
 
     public static double roundDouble3(double r) {
