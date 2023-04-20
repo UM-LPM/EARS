@@ -32,7 +32,7 @@ public class SinglePointCrossover<T> extends GPCrossover<T> {
             ProgramSolution<T> parent1;
             ProgramSolution<T> parent2;
             // Perform crossover so long that it's inside boundaries
-            do {
+            //do {
                 parent1 = programSolutions[0].copy();
                 parent2 = programSolutions[1].copy();
 
@@ -61,7 +61,13 @@ public class SinglePointCrossover<T> extends GPCrossover<T> {
                 mutationNodeParent2.get().replace(crossOverNodeIndex2, crossOverNode1);
 
                 // TODO Maybe call problem.makeFeasible() if offsprings are not feasible here?
-            } while (!problem.isFeasible(parent1) || !problem.isFeasible(parent2));
+                if(!problem.isFeasible(parent1)) {
+                    problem.makeFeasible(parent1);
+                }
+                if(!problem.isFeasible(parent2)) {
+                    problem.makeFeasible(parent2);
+                }
+            //} while (!problem.isFeasible(parent1) || !problem.isFeasible(parent2));
 
             return new ProgramSolution[]{parent1, parent2};
         }
