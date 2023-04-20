@@ -4,8 +4,8 @@ public class TreeAncestor<T> {
     private int treeHeightPosition;
     private TreeNode<T> treeNode;
 
-    public TreeAncestor(int treeDepthPosition, TreeNode<T> treeNode){
-        this.treeHeightPosition = treeDepthPosition;
+    public TreeAncestor(int treeHeightPosition, TreeNode<T> treeNode){
+        this.treeHeightPosition = treeHeightPosition;
         this.treeNode = treeNode;
     }
 

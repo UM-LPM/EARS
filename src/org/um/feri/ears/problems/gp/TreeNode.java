@@ -117,7 +117,7 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
                 TreeNode<T> next = it.next();
                 currentInd++;
                 if(currentInd == index){
-                    return new TreeAncestor<>(treeAncestor.getTreeHeightPosition(), next);
+                    return new TreeAncestor<>(treeAncestor.getTreeHeightPosition() + 1, next);
                 }
                 nodesToCheck.add(new TreeAncestor<>(treeAncestor.getTreeHeightPosition() + 1, next));
             }
@@ -424,7 +424,8 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
 
     @Override
     public int treeHeight(){
-        int numOfAncestors = this.ancestors().ancestors.size();
+        return getTreeHeight();
+        /*nt numOfAncestors = this.ancestors().ancestors.size();
         int maxHeight = 0;
 
         for(int i = 1; i < numOfAncestors;i++){
@@ -435,7 +436,23 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
             }
         }
 
-        return maxHeight;
+        return maxHeight;*/
+
+        /*int maxHeight = 0;
+        for (TreeNode child : this.children) {
+            int childHeight = child.treeHeight();
+            maxHeight = Math.max(maxHeight, childHeight);
+        }
+        return maxHeight + 1;*/
+    }
+
+    public int getTreeHeight(){
+        int maxHeight = 0;
+        for (TreeNode child : this.children) {
+            int childHeight = child.getTreeHeight();
+            maxHeight = Math.max(maxHeight, childHeight);
+        }
+        return maxHeight + 1;
     }
 }
 
