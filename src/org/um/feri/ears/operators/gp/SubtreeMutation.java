@@ -1,6 +1,5 @@
 package org.um.feri.ears.operators.gp;
 
-import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.problems.gp.TreeAncestor;
@@ -9,11 +8,11 @@ import org.um.feri.ears.util.Util;
 
 import java.util.Optional;
 
-public class SingleTreeNodeMutation<T> extends GPMutation<T> {
+public class SubtreeMutation<T> extends GPMutation<T> {
 
     private Double mutationProbability = 0.5;
 
-    public SingleTreeNodeMutation(Double mutationProbability){
+    public SubtreeMutation(Double mutationProbability){
         this.mutationProbability = mutationProbability;
     }
 
