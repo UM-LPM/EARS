@@ -174,7 +174,6 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
         assert oldChild != null;
         assert oldChild.parent == this;
 
-        oldChild.setParent(null);
         child.setParent(this);
 
         return this;
