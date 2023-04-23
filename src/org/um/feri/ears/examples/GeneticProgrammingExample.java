@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class GeneticProgrammingExample {
     public static void main(String[] args) throws IOException {
 
-        //Test TreeNode individual generator
+        // y=x^2 + 10x
         SymbolicRegressionProblem sgp = new SymbolicRegressionProblem();
         sgp.setBaseFunctions(Util.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST));
         sgp.setBaseTerminals(Util.list(Op.define("x", OperationType.VARIABLE)));
@@ -34,6 +34,7 @@ public class GeneticProgrammingExample {
         sgp.setMaxTreeHeight(8);
         sgp.setMinTreeHeight(3);
 
+        // y=x^3 + 2x^2 + 8x + 12
         SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem();
         sgp2.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST));
         sgp2.setBaseTerminals(Utils.list(Op.define("x", OperationType.VARIABLE)));
@@ -49,8 +50,8 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 9).targetIs(975),
                 new Target().when("x", 10).targetIs(1292)));
 
-        sgp2.setMaxTreeHeight(6);
-        sgp2.setMinTreeHeight(4);
+        sgp2.setMaxTreeHeight(8);
+        sgp2.setMinTreeHeight(3);
 
         //y=4x^3 -15x^2 +8x - 12
         SymbolicRegressionProblem sgp3 = new SymbolicRegressionProblem();
@@ -69,24 +70,24 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 10).targetIs(1308)));
 
         sgp3.setMaxTreeHeight(15);
-        sgp3.setMinTreeHeight(3);
+        sgp3.setMinTreeHeight(5);
 
         //GP algorithm execution example
-        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp2, StopCriterion.EVALUATIONS, 50000, 0, 0);
+        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp2, StopCriterion.EVALUATIONS, 30000, 0, 0);
 
 
-        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.025, 2);
+        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.025, 4);
         RandomWalkGPAlgorithm rndAlg = new RandomWalkGPAlgorithm();
 
         try {
             long startTime = System.currentTimeMillis();
             System.out.println("Starting DefaultGpAlgorithm");
-            ArrayList<Double> solutions = new ArrayList<>();
+            ArrayList<ProgramSolution<Double>> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
             ProgramSolution<Double> sol;
             for (int i = 0; i < 10; i++){
                 sol = alg.execute(symbolicRegression);
-                solutions.add(sol.getEval());
+                solutions.add(sol);
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
                 symbolicRegression.resetCounter();
 
@@ -96,28 +97,28 @@ public class GeneticProgrammingExample {
                 symbolicRegression.resetCounter();
             }
 
-            double max = Double.MAX_VALUE;
+            ProgramSolution<Double> maxSol = solutions.get(0);
             double maxRnd = Double.MAX_VALUE;
             int wins = 0;
             for (int i = 0; i < solutions.size(); i++){
-                if(solutions.get(i) < max)
-                    max = solutions.get(i);
+                if(solutions.get(i).getEval() < maxSol.getEval())
+                    maxSol = solutions.get(i);
                 if(solutionsRnd.get(i) < maxRnd)
                     maxRnd = solutionsRnd.get(i);
 
-                if(solutions.get(i) < solutionsRnd.get(i))
+                if(solutions.get(i).getEval() < solutionsRnd.get(i))
                     wins++;
             }
 
             System.out.println("=====================================");
-            System.out.println("Best fitness (DefaultGpAlgorithm)  -> " + max);
+            System.out.println("Best fitness (DefaultGpAlgorithm)  -> " + maxSol.getEval());
             System.out.println("Best fitness (RandomWalkAlgorithm) -> " + maxRnd);
             System.out.println("Wins (DefaultGpAlgorithm) -> " + wins);
 
             long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
 
             System.out.println("Elapsed time: " + elapsedTime + " s");
-
+            maxSol.getProgram().displayTree("TestBTree");
             /*ProgramSolution<Double> sol = alg.execute(symbolicRegression);
             System.out.println("Best fitness: " + sol.getEval());
             System.out.println("AncestorCount: " + sol.getProgram().ancestors().getAncestorCount());
@@ -140,7 +141,7 @@ public class GeneticProgrammingExample {
 
 
 //        long startTime = System.currentTimeMillis();
-//        ProgramSolution<Double> ps = sgp.getRandomSolution();
+//        ProgramSolution<Double> ps = sgp3.getRandomSolution();
 ////        for (int i =0; i < 100000; i++){
 ////            int a = ps.getProgram().treeHeight();
 ////        }
@@ -223,5 +224,35 @@ public class GeneticProgrammingExample {
         sol1.getProgram().displayTree("TestBtTree");
         sol2.getProgram().displayTree("TestBtTree");*/
 
+        // Test program for prunning
+//        TreeNode<Double> root = new TreeNode<>(MathOp.SUB); // -
+//
+//        root.insert(0, new TreeNode<>(MathOp.ADD)); // +
+//        root.insert(1, new TreeNode<>(MathOp.SUB)); // -
+//
+//        root.childAt(0).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
+//        root.childAt(0).insert(1, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
+//
+//        root.childAt(1).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
+//        root.childAt(1).insert(1, new TreeNode<>(MathOp.ADD)); // x
+//
+//        root.childAt(1).childAt(1).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
+//        root.childAt(1).childAt(1).insert(1, new TreeNode<>(MathOp.ADD)); // +
+//
+//        root.childAt(1).childAt(1).childAt(1).insert(0, new TreeNode<>(MathOp.DIV)); // /
+//        root.childAt(1).childAt(1).childAt(1).insert(1, new TreeNode<>(MathOp.DIV)); // /
+//
+//        root.childAt(1).childAt(1).childAt(1).childAt(0).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
+//        root.childAt(1).childAt(1).childAt(1).childAt(0).insert(1, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
+//
+//        root.childAt(1).childAt(1).childAt(1).childAt(1).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
+//        root.childAt(1).childAt(1).childAt(1).childAt(1).insert(1, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
+//
+//        root.displayTree("TestBTree");
+//        ProgramSolution<Double> ps = new ProgramSolution<>(1);
+//        ps.setProgram(root);
+//
+//        sgp2.makeFeasible(ps);
+//        ps.getProgram().displayTree("TestBTree");
     }
 }
