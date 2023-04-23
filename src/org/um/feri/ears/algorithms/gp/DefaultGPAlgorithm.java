@@ -42,7 +42,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     private final GPMutation<Double> mutationOperator;
 
     public DefaultGPAlgorithm() {
-        this(100, 0.9, 0.5, 2);
+        this(100, 0.95, 0.025, 2);
     }
 
     public DefaultGPAlgorithm(int popSize, double crossoverProbability, double mutationProbability, int numberOfTournaments) {
@@ -104,6 +104,9 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 if (this.task.isStopCriterion())
                     break;
             }
+
+            if (this.task.isStopCriterion())
+                break;
 
             // Bloat control - Remove all redundant nodes
             // TODO

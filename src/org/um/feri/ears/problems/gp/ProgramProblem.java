@@ -93,8 +93,8 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
     @Override
     public void makeFeasible(ProgramSolution<T> solution){
         // TODO add more if more conditions  exist
-        pruneProgramSolution(solution);
         completeProgramSolution(solution);
+        pruneProgramSolution(solution);
     }
     @Override
     public ProgramSolution<T> getRandomEvaluatedSolution() {
@@ -184,17 +184,16 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
     }
 
     public void pruneProgramSolution(ProgramSolution<T> solution){
-        pruneProgramHeight(solution.getProgram(), 1);
+        pruneProgramHeight(solution.getProgram(), null, 1);
     }
 
-    private void pruneProgramHeight(TreeNode<T> current, int currentHeight){
+    private void pruneProgramHeight(TreeNode<T> current, TreeNode<T> parent, int currentHeight){
         if(currentHeight >= this.maxTreeHeight){
-            //current.getChildren().clear();
             if(current.operation().isComplex()){
                 ProgramSolution<T> newSolution = getRandomSolution(false, currentHeight);
-                if(current.parent().isPresent()){
+                if(parent != null){
                     try {
-                        current.parent().get().replace(current, newSolution.getProgram());
+                        parent.replace(current, newSolution.getProgram());
                     } catch (Exception e) {
                         throw new RuntimeException("Error replacing node");
                     }
@@ -202,26 +201,26 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
             }
         }else{
-            for (TreeNode child : current.getChildren()) {
-                pruneProgramHeight(child, currentHeight + 1);
+            for (TreeNode<T> child : current.getChildren()) {
+                pruneProgramHeight(child, current, currentHeight + 1);
             }
         }
     }
 
     public void completeProgramSolution(ProgramSolution<T> solution){
-        completeProgramHeight(solution.getProgram(), 1);
+        completeProgramHeight(solution.getProgram(), null, 1);
     }
 
-    private void completeProgramHeight(TreeNode<T> current, int currentHeight){
+    private void completeProgramHeight(TreeNode<T> current, TreeNode<T> parent, int currentHeight){
         if(currentHeight < this.minTreeHeight){
             if(!current.getOperation().isComplex()){
                 ProgramSolution<T> newSolution = getRandomSolution(false, currentHeight);
-                if(current.parent().isPresent()){
-                    current.parent().get().replace(current, newSolution.getProgram());
+                if(parent != null){
+                    parent.replace(current, newSolution.getProgram());
                 }
             }else {
                 for (TreeNode child : current.getChildren()) {
-                    completeProgramHeight(child, currentHeight + 1);
+                    completeProgramHeight(child, current, currentHeight + 1);
                 }
             }
         }
