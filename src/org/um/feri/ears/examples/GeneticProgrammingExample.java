@@ -3,7 +3,13 @@ package org.um.feri.ears.examples;
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
-import org.um.feri.ears.benchmark.SymbolicRegressionBenchmark;
+import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
+import org.um.feri.ears.individual.representations.gp.MathOp;
+import org.um.feri.ears.individual.representations.gp.Op;
+import org.um.feri.ears.individual.representations.gp.OperationType;
+import org.um.feri.ears.individual.representations.gp.Target;
+import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
+import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -16,67 +22,80 @@ public class GeneticProgrammingExample {
     public static void main(String[] args) throws IOException {
 
         // y=x^2 + 10x
-        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem();
-        sgp.setBaseFunctions(Util.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST));
-        sgp.setBaseTerminals(Util.list(Op.define("x", OperationType.VARIABLE)));
-        sgp.setEvalData(Util.list( new Target().when("x", 0).targetIs(0),
-                new Target().when("x", 1).targetIs(11),
-                new Target().when("x", 2).targetIs(24),
-                new Target().when("x", 3).targetIs(39),
-                new Target().when("x", 4).targetIs(56),
-                new Target().when("x", 5).targetIs(75),
-                new Target().when("x", 6).targetIs(96),
-                new Target().when("x", 7).targetIs(119),
-                new Target().when("x", 8).targetIs(144),
-                new Target().when("x", 9).targetIs(171),
-                new Target().when("x", 10).targetIs(200)));
+        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem(
+                Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST),
+                Utils.list(Op.define("x", OperationType.VARIABLE)),
+                3,
+                8,
+                200,
+                new GPDepthBasedTreePruningOperator<>(),
+                new GPTreeExpansionOperator<>(),
+                Util.list( new Target().when("x", 0).targetIs(0),
+                    new Target().when("x", 1).targetIs(11),
+                    new Target().when("x", 2).targetIs(24),
+                    new Target().when("x", 3).targetIs(39),
+                    new Target().when("x", 4).targetIs(56),
+                    new Target().when("x", 5).targetIs(75),
+                    new Target().when("x", 6).targetIs(96),
+                    new Target().when("x", 7).targetIs(119),
+                    new Target().when("x", 8).targetIs(144),
+                    new Target().when("x", 9).targetIs(171),
+                    new Target().when("x", 10).targetIs(200)),
+                new GPRandomProgramSolution<>()
+        );
 
-        sgp.setMaxTreeHeight(8);
-        sgp.setMinTreeHeight(3);
 
         // y=x^3 + 2x^2 + 8x + 12
-        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem();
-        sgp2.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST));
-        sgp2.setBaseTerminals(Utils.list(Op.define("x", OperationType.VARIABLE)));
-        sgp2.setEvalData(Util.list( new Target().when("x", 0).targetIs(12),
-                new Target().when("x", 1).targetIs(23),
-                new Target().when("x", 2).targetIs(44),
-                new Target().when("x", 3).targetIs(81),
-                new Target().when("x", 4).targetIs(140),
-                new Target().when("x", 5).targetIs(227),
-                new Target().when("x", 6).targetIs(348),
-                new Target().when("x", 7).targetIs(509),
-                new Target().when("x", 8).targetIs(716),
-                new Target().when("x", 9).targetIs(975),
-                new Target().when("x", 10).targetIs(1292)));
-
-        sgp2.setMaxTreeHeight(8);
-        sgp2.setMinTreeHeight(3);
+        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(
+                Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST),
+                Utils.list(Op.define("x", OperationType.VARIABLE)),
+                3,
+                8,
+                200,
+                new GPDepthBasedTreePruningOperator<>(),
+                new GPTreeExpansionOperator<>(),
+                Util.list( new Target().when("x", 0).targetIs(12),
+                    new Target().when("x", 1).targetIs(23),
+                    new Target().when("x", 2).targetIs(44),
+                    new Target().when("x", 3).targetIs(81),
+                    new Target().when("x", 4).targetIs(140),
+                    new Target().when("x", 5).targetIs(227),
+                    new Target().when("x", 6).targetIs(348),
+                    new Target().when("x", 7).targetIs(509),
+                    new Target().when("x", 8).targetIs(716),
+                    new Target().when("x", 9).targetIs(975),
+                    new Target().when("x", 10).targetIs(1292)),
+                new GPRandomProgramSolution<>()
+        );
 
         //y=4x^3 -15x^2 +8x - 12
-        SymbolicRegressionProblem sgp3 = new SymbolicRegressionProblem();
-        sgp3.setBaseFunctions(Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST));
-        sgp3.setBaseTerminals(Utils.list(Op.define("x", OperationType.VARIABLE)));
-        sgp3.setEvalData(Util.list( new Target().when("x", 0).targetIs(-12),
-                new Target().when("x", 1).targetIs(-15),
-                new Target().when("x", 2).targetIs(-4),
-                new Target().when("x", 3).targetIs(27),
-                new Target().when("x", 4).targetIs(100),
-                new Target().when("x", 5).targetIs(203),
-                new Target().when("x", 6).targetIs(340),
-                new Target().when("x", 7).targetIs(515),
-                new Target().when("x", 8).targetIs(723),
-                new Target().when("x", 9).targetIs(995),
-                new Target().when("x", 10).targetIs(1308)));
-
-        sgp3.setMaxTreeHeight(15);
-        sgp3.setMinTreeHeight(5);
+        SymbolicRegressionProblem sgp3 = new SymbolicRegressionProblem(
+                Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST),
+                Utils.list(Op.define("x", OperationType.VARIABLE)),
+                3,
+                15,
+                200,
+                new GPDepthBasedTreePruningOperator<>(),
+                new GPTreeExpansionOperator<>(),
+                Util.list( new Target().when("x", 0).targetIs(-12),
+                        new Target().when("x", 1).targetIs(-15),
+                        new Target().when("x", 2).targetIs(-4),
+                        new Target().when("x", 3).targetIs(27),
+                        new Target().when("x", 4).targetIs(100),
+                        new Target().when("x", 5).targetIs(203),
+                        new Target().when("x", 6).targetIs(340),
+                        new Target().when("x", 7).targetIs(515),
+                        new Target().when("x", 8).targetIs(723),
+                        new Target().when("x", 9).targetIs(995),
+                        new Target().when("x", 10).targetIs(1308)),
+                new GPRandomProgramSolution<>() // TODO -> this is GROW strategy, change naming
+        );
 
         //GP algorithm execution example
         Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp2, StopCriterion.EVALUATIONS, 30000, 0, 0);
 
 
-        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.025, 4);
+        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.025, 2);
         RandomWalkGPAlgorithm rndAlg = new RandomWalkGPAlgorithm();
 
         try {
@@ -85,7 +104,7 @@ public class GeneticProgrammingExample {
             ArrayList<ProgramSolution<Double>> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
             ProgramSolution<Double> sol;
-            for (int i = 0; i < 10; i++){
+            for (int i = 0; i < 30; i++){
                 sol = alg.execute(symbolicRegression);
                 solutions.add(sol);
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
@@ -118,7 +137,7 @@ public class GeneticProgrammingExample {
             long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
 
             System.out.println("Elapsed time: " + elapsedTime + " s");
-            maxSol.getProgram().displayTree("TestBTree");
+            maxSol.getProgram().displayTree("TestBTree", true);
             /*ProgramSolution<Double> sol = alg.execute(symbolicRegression);
             System.out.println("Best fitness: " + sol.getEval());
             System.out.println("AncestorCount: " + sol.getProgram().ancestors().getAncestorCount());
@@ -152,9 +171,9 @@ public class GeneticProgrammingExample {
 ////        System.out.println("Ancestor at 5: " + ancestor.getTreeHeightPosition());
 ////        System.out.println("Ancestor at 5: " + ancestor.getTreeNode().getOperation().name());
 //
-//        ps.getProgram().displayTree("TestBTree");
+//        ps.getProgram().displayTree("TestBTree", true);
 //        sgp2.makeFeasible(ps);
-//        ps.getProgram().displayTree("TestBTree");
+//        ps.getProgram().displayTree("TestBTree", true);
 //        //sgp2.evaluate(ps);
 //        long elapsedTime = (System.currentTimeMillis() - startTime) ;
 //

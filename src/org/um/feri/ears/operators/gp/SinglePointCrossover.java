@@ -1,10 +1,9 @@
 package org.um.feri.ears.operators.gp;
 
-import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
-import org.um.feri.ears.problems.gp.TreeAncestor;
-import org.um.feri.ears.problems.gp.TreeNode;
+import org.um.feri.ears.individual.representations.gp.TreeAncestor;
+import org.um.feri.ears.individual.representations.gp.TreeNode;
 import org.um.feri.ears.util.Util;
 
 import java.util.Optional;
