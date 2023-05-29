@@ -2,8 +2,8 @@ package org.um.feri.ears.operators.gp;
 
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
-import org.um.feri.ears.problems.gp.TreeAncestor;
-import org.um.feri.ears.problems.gp.TreeNode;
+import org.um.feri.ears.individual.representations.gp.TreeAncestor;
+import org.um.feri.ears.individual.representations.gp.TreeNode;
 import org.um.feri.ears.util.Util;
 
 import java.util.Optional;
@@ -38,7 +38,7 @@ public class SubtreeMutation<T> extends GPMutation<T> {
 
         int crossOverNodeIndex = mutationNodeParent.get().indexOf(crossOverNode);
 
-        mutationNodeParent.get().replace(crossOverNodeIndex, problem.getRandomSolution(false, crossOverNodeAncestor.getTreeHeightPosition()).getProgram());
+        mutationNodeParent.get().replace(crossOverNodeIndex, problem.getProgramSolutionGenerator().generate(problem, false, crossOverNodeAncestor.getTreeHeightPosition()).getProgram());
 
     }
 

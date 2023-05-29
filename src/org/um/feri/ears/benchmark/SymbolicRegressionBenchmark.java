@@ -1,7 +1,10 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.GPAlgorithm;
-import org.um.feri.ears.benchmark.SOBenchmark;
+import org.um.feri.ears.individual.representations.gp.MathOp;
+import org.um.feri.ears.individual.representations.gp.Op;
+import org.um.feri.ears.individual.representations.gp.OperationType;
+import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;

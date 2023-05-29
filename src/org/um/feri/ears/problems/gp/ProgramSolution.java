@@ -1,5 +1,6 @@
 package org.um.feri.ears.problems.gp;
 
+import org.um.feri.ears.individual.representations.gp.TreeNode;
 import org.um.feri.ears.problems.Solution;
 
 import java.util.ArrayList;

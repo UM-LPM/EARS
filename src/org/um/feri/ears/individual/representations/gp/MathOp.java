@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package org.um.feri.ears.problems.gp;
+package org.um.feri.ears.individual.representations.gp;
 
 import java.util.Random;
 import java.util.function.Function;

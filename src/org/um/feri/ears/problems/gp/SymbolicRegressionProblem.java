@@ -1,5 +1,11 @@
 package org.um.feri.ears.problems.gp;
 
+import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
+import org.um.feri.ears.individual.representations.gp.Op;
+import org.um.feri.ears.individual.representations.gp.Target;
+import org.um.feri.ears.individual.representations.gp.TreeNode;
+import org.um.feri.ears.operators.gp.GPOperator;
+
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +15,12 @@ public class SymbolicRegressionProblem extends ProgramProblem<Double>{
 
     public SymbolicRegressionProblem() {
         super("SymbolicRegression");
+    }
+
+    public SymbolicRegressionProblem(List<Op<Double>> baseFunctions, List<Op<Double>> baseTerminals, int minTreeHeight, int maxTreeHeight, int maxTreeNodes, GPOperator<Double> pruningOperator, GPOperator<Double> expansionOperator, List<Target> evalData, GPProgramSolution<Double> programSolutionGenerator) {
+        super("SymbolicRegression", baseFunctions, baseTerminals, minTreeHeight, maxTreeHeight, maxTreeNodes, pruningOperator, expansionOperator, programSolutionGenerator);
+
+        setEvalData(evalData);
     }
 
     public List<?> getEvalData() {

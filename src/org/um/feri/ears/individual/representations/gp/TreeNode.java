@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package org.um.feri.ears.problems.gp;
+package org.um.feri.ears.individual.representations.gp;
 
 import java.io.Serializable;
 import java.util.*;
@@ -269,11 +269,11 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
     /*
      * Creates .dot file and png image with visual representation of a tree
      * */
-    public void displayTree(String filename){
+    public String displayTree(String filename, boolean show){
         GraphPrinter gp = new GraphPrinter(filename);
         setTreeNodes(gp);
         displaySubTree(gp);
-        gp.print();
+        return gp.print(show);
     }
 
     /*
