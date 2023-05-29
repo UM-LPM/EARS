@@ -1,4 +1,4 @@
-package org.um.feri.ears.problems.gp;
+package org.um.feri.ears.individual.representations.gp;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -42,7 +42,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     private final GPMutation<Double> mutationOperator;
 
     public DefaultGPAlgorithm() {
-        this(100, 0.95, 0.025, 2);
+        this(100, 0.90, 0.025, 2);
     }
 
     public DefaultGPAlgorithm(int popSize, double crossoverProbability, double mutationProbability, int numberOfTournaments) {
@@ -65,7 +65,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         this.task = task;
         comparator = new ProblemComparator<>(task.problem);
         selectionOperator = new TournamentSelection<>(this.numberOfTournaments, comparator);
-        // Population inicialization and evaluation
+        // Population initialization and evaluation
         initPopulation();
 
         while (!task.isStopCriterion()) {

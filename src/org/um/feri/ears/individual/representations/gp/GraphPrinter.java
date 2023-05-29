@@ -1,4 +1,4 @@
-package org.um.feri.ears.problems.gp;
+package org.um.feri.ears.individual.representations.gp;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -42,7 +42,7 @@ public class GraphPrinter {
      * dot -Tpng <filePrefix>.dot -o <filePrefix>.png
      * If you want to change the certain format, change below.
      */
-    public void print() {
+    public String print(boolean showImage) {
         try {
 
             if (filePrefix == null || filePrefix.isEmpty()) {
@@ -60,10 +60,20 @@ public class GraphPrinter {
 
             executeCommand(command.toString());
 
-            displayImage(filePrefix + ".png");
+            // Delete the .dot file
+            File dotFile = new File(filePrefix + ".dot");
+            if (dotFile.exists() && !dotFile.isDirectory()) {
+                dotFile.delete();
+            }
+
+            if(showImage)
+                displayImage(filePrefix + ".png");
+
+            return filePrefix + ".png";
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        return null;
     }
 
     private void executeCommand(String command) throws Exception {
