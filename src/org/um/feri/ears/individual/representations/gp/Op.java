@@ -50,7 +50,7 @@ public interface Op<T> extends Function<T[], T>, Supplier<Op<T>> {
     }
 
     default boolean isSimple() {
-        return arity() < 0;
+        return arity() <= 0;
     }
 
     @Override

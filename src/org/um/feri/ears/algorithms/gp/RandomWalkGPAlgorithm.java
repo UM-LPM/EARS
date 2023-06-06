@@ -8,6 +8,9 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 
+import java.util.Collections;
+import java.util.List;
+
 public class RandomWalkGPAlgorithm extends GPAlgorithm {
     private ProgramSolution<Double> best;
 
@@ -35,5 +38,32 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
 
     @Override
     public void resetToDefaultsBeforeNewRun() {
+        if(this.task != null){
+            this.task.resetCounter();
+        }
+        this.best = null;
     }
+
+
+    @Override
+    public ProgramSolution<Double> executeStep() throws StopCriterionException{
+        return null;
+    }
+
+    @Override
+    public ProgramSolution<Double> executeGeneration() throws StopCriterionException{
+        return null;
+    }
+
+    @Override
+    public List<ProgramSolution<Double>> getPopulation() {
+        return Collections.singletonList(best);
+    }
+
+    @Override
+    public ProgramSolution<Double> getBest() {
+        return best;
+    }
+
+
 }

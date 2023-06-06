@@ -43,6 +43,11 @@ public interface Tree<V, T extends Tree<V, T>> extends Self<T>, Iterable<T> {
     /*Returns the depth of the tree*/
     int treeHeight();
 
+    int treeSize();
+
+    int numberOfFunctions();
+    int numberOfTerminals();
+
     default boolean isAncestor(final Tree<?, ?> node) {
         requireNonNull(node);
 
