@@ -437,11 +437,46 @@ public class TreeNode<T> implements Tree<T, TreeNode<T>>, Iterable<TreeNode<T>>,
     @Override
     public int treeHeight(){
         int maxHeight = 0;
-        for (TreeNode child : this.children) {
+        for (TreeNode<T> child : this.children) {
             int childHeight = child.treeHeight();
             maxHeight = Math.max(maxHeight, childHeight);
         }
         return maxHeight + 1;
+    }
+
+    @Override
+    public int treeSize(){
+        // Count all nodes from root to leaves
+        int size = 1;
+        for (TreeNode<T> child : this.children) {
+            size += child.treeSize();
+        }
+        return size;
+    }
+
+    @Override
+    public int numberOfFunctions(){
+        if(this.operation.isComplex()){
+            int size = 1;
+            for (TreeNode<T> child : this.children) {
+                size += child.numberOfFunctions();
+            }
+            return size;
+        }
+        return 0;
+    }
+
+    @Override
+    public int numberOfTerminals(){
+        int size = 0;
+        if(this.operation.isSimple()){
+            size++;
+        }
+        for (TreeNode<T> child : this.children) {
+            size += child.numberOfTerminals();
+        }
+
+        return size;
     }
 
 }

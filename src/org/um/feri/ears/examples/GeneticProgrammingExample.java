@@ -98,22 +98,49 @@ public class GeneticProgrammingExample {
         GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.025, 2);
         RandomWalkGPAlgorithm rndAlg = new RandomWalkGPAlgorithm();
 
+//        try {
+//            GPAlgorithm alg2 = new DefaultGPAlgorithm(100, 0.95, 0.025, 2, symbolicRegression);
+//            /*alg2.executeStep();
+//            alg2.executeStep();
+//            alg2.executeStep();
+//            alg2.executeStep();
+//            alg2.executeStep();*/
+//            /*alg2.executeGeneration();
+//            alg2.executeGeneration();
+//            alg2.executeGeneration();*/
+//
+//            for(int i = 0; i < 10; i++){
+//                ProgramSolution<Double> solution = null;
+//                while(solution == null){
+//                    solution = alg2.executeGeneration();
+//                }
+//                System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + solution.getEval());
+//                System.out.println("Number of iterations -> " + symbolicRegression.getNumberOfIterations());
+//                alg2.resetToDefaultsBeforeNewRun();
+//            }
+//            //solution.getProgram().displayTree("TestBTree", true);
+//
+//        } catch (StopCriterionException e) {
+//            e.printStackTrace();
+//        }
+
         try {
             long startTime = System.currentTimeMillis();
             System.out.println("Starting DefaultGpAlgorithm");
             ArrayList<ProgramSolution<Double>> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
             ProgramSolution<Double> sol;
-            for (int i = 0; i < 30; i++){
+            for (int i = 0; i < 20; i++){
                 sol = alg.execute(symbolicRegression);
                 solutions.add(sol);
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
-                symbolicRegression.resetCounter();
+                alg.resetToDefaultsBeforeNewRun();
 
                 sol = rndAlg.execute(symbolicRegression);
                 solutionsRnd.add(sol.getEval());
                 System.out.println("Best fitness (RandomWalkAlgorithm) (for i = " + i + ") -> " + sol.getEval());
-                symbolicRegression.resetCounter();
+                rndAlg.resetToDefaultsBeforeNewRun();
+                alg.resetToDefaultsBeforeNewRun();
             }
 
             ProgramSolution<Double> maxSol = solutions.get(0);
