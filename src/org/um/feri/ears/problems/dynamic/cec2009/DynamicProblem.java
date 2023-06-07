@@ -17,9 +17,9 @@ public abstract class DynamicProblem extends DoubleProblem {
 
     protected final ChangeTypeCounter changeTypeCounter;
     protected int numberOfPeaksOrFunctions; // TODO: preveri ali je to število globalnih optimumov (v problemu numberOfGlobalOptimums?)
-    private Double minHeight, maxHeight;    // minimum/maximum height of all peaks (local optima) in RotationDBG (CompositionDBG)
+    protected Double minHeight, maxHeight;    // minimum/maximum height of all peaks (local optima) in RotationDBG (CompositionDBG)
     private Double chaoticConstant;
-    private Double[] peakHeight;    // peak height in RotationDBG, height of global optima in CompositionDBG   // TODO: preveri, če to predstavlja fitness, potem že obstaja in je to spremeljivka objectiveSpaceOptima
+    protected Double[] peakHeight;    // peak height in RotationDBG, height of global optima in CompositionDBG   // TODO: preveri, če to predstavlja fitness, potem že obstaja in je to spremeljivka objectiveSpaceOptima
     protected ChangeType changeType;
     protected int periodicity;    // definite period for values repeating
     private boolean isDimensionChanged;  // true if the number of dimensions has changed, false otherwise
@@ -34,7 +34,10 @@ public abstract class DynamicProblem extends DoubleProblem {
     protected Double[] fit;   // objective value of each basic function in CompositionDBG, peak height in RotationDBG
     protected Double[] weight;   // weight value of each basic function in CompositionDBG, peak width in RotationDBG
     protected float recurrentNoisySeverity; // deviation severity from the trajectory of recurrent change
-    protected final Double gLowerLimit, gUpperLimit;  // solution space
+    protected final Double gLowerLimit, gUpperLimit;  // solution space // TODO: spada to samo v DynamicCompositinProblem?
+    protected Double globalOptima;  // global optima value // TODO: preveri ali to že obstaja v nadrazredu (EARS)
+    protected Double[] globalOptimaPosition;    // position of global optima   // TODO: preveri ali to že obstaja v nadrazredu (EARS)
+    protected Matrix[] rotationMatrix;  // orthogonal rotation matrices for each function // TODO: ali boš uporabil svoj razred Matrix?
 
     public DynamicProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints,
                           int numberOfPeaksOrFunctions, Double minHeight, Double maxHeight, Double chaoticConstant, ChangeType changeType,
@@ -61,9 +64,31 @@ public abstract class DynamicProblem extends DoubleProblem {
         weight = new Double[numberOfPeaksOrFunctions];
         this.gLowerLimit = gLowerLimit;
         this.gUpperLimit = gUpperLimit;
+        rotationMatrix = new Matrix[numberOfPeaksOrFunctions];
 
         if (changeType == ChangeType.RECURRENT_NOISY) {
             recurrentNoisySeverity = 0.8f;
+        }
+    }
+
+    public void setPeriodicity(int periodicity) {
+        if (periodicity < 1) {
+            return; // TODO: je to OK? malo čudno... bi moral vrečti izjemo?
+        }
+        this.periodicity = periodicity;
+        rotationPlanes = new int[periodicity][][];
+        for (int i = 0; i < periodicity; i++) {
+            rotationPlanes[i] = new int[numberOfPeaksOrFunctions][];
+            for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
+                rotationPlanes[i][j] = new int[numberOfDimensions];
+            }
+        }
+    }
+
+    // TODO: ta metoda verjetno ni potrebna tukaj? samo v podrazredu DynamicRotationProblem
+    public void setWeight(Double weight) {
+        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+            this.weight[i] = weight;
         }
     }
 
@@ -112,6 +137,8 @@ public abstract class DynamicProblem extends DoubleProblem {
             increaseDimension(newDimension);
         }
     }
+
+    protected abstract void calculateGlobalOptima();
 
     protected abstract void increaseDimension(int newDimension);
 
@@ -164,6 +191,77 @@ public abstract class DynamicProblem extends DoubleProblem {
             if (peakHeight[i] > maxHeight || peakHeight[i] < minHeight) {
                 peakHeight[i] = peakHeight[i] - step;
             }
+        }
+    }
+
+    // TODO: premisli, če je to pravo mesto za to metodo, ker potem razred DynamicProblem več ni tako "splošen"
+    // TODO: premisli glede imena metode
+    // TODO: glede na originalno kodo parameter 'angle' ni potreben, lahko je lokalna spremenljivka v metodi
+    public void positionStandardChange(double angle) {
+        // for each basic function of dimension n(even number) , R = R(l1, l2) * R(l3, l4) * .... * R(li - 1, li), 0 <= li <= n
+        if (changeType == ChangeType.CHAOTIC) {
+            for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+                for (int j = 0; j < numberOfDimensions; j++) {
+                    position[i][j] = getChaoticValue(position[i][j], gLowerLimit, gUpperLimit);
+                }
+            }
+            return;
+        }
+        int[] d = new int[numberOfDimensions];
+        Matrix I = new Matrix(numberOfDimensions);
+        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+            if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY)
+                    && changeTypeCounter.getNumberOfOccurrences(changeType) >= periodicity) {
+                System.arraycopy(rotationPlanes[changeTypeCounter.getNumberOfOccurrences(changeType) % periodicity][i], 0, d, 0, numberOfDimensions);
+            } else {
+                initializeRandomArray(d, numberOfDimensions);
+                if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) &&
+                        changeTypeCounter.getNumberOfOccurrences(changeType) % periodicity == 0) {
+                    System.arraycopy(d, 0, rotationPlanes[changeTypeCounter.getNumberOfOccurrences(changeType)][i], 0, numberOfDimensions);
+                }
+
+                if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) &&
+                        changeTypeCounter.getNumberOfOccurrences(changeType) % periodicity == 0) {
+                    System.arraycopy(initialPosition[i], 0, position[i], 0, numberOfDimensions);
+                }
+
+                I.identity();
+                for (int j = 0; j + 1 < numberOfDimensions; j += 2) {
+                    if (changeType == ChangeType.SMALL_STEP || changeType == ChangeType.LARGE_STEP || changeType == ChangeType.U_RANDOM) {
+                        angle = standardChange(-Math.PI, Math.PI);
+                    }
+                    I.setRotation(d[j], d[j + 1], angle);
+                    if (j == 0) {
+                        rotationMatrix[i] = I;
+                    } else {
+                        rotationMatrix[i] = rotationMatrix[i].multiply(I);
+                    }
+                    Matrix m = new Matrix(numberOfDimensions, 1);
+                    m.setData(position[i], numberOfDimensions);
+                    m = m.multiply(rotationMatrix[i]);
+                    // System.arraycopy(m.getData()[0], 0, genes, 0, dimension); // TODO: preveri kaj so genes, še jih ne uporabljaš
+                    // correction(); // TODO: tukaj bo verjetno klic metode makeFeasible
+                    // System.arraycopy(genes, 0, position[i], 0, dimension); // TODO
+                }
+            }
+        }
+    }
+
+    // TODO: nisem prepričani, če je to pravo mesto za to metodo
+    // generate a set of random numbers from 0-|a| without repeat
+    public void initializeRandomArray(int[] array, int dim) {
+        int[] temp = new int[dim];
+        for (int i = 0; i < dim; i++) {
+            temp[i] = i;
+        }
+        int d = dim;
+        for (int i = 0; i < dim; i++) {
+            int t = (int) (d * new Random().nextGaussian());  // TODO: use appropriate random
+            array[i] = temp[t];
+            for (int k = t; k < d - 1; k++) {
+                temp[k] = temp[k + 1];
+            }
+            d--;
         }
     }
 }

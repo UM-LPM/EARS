@@ -5,6 +5,7 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.dynamic.cec2009.BasicFunction;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 import org.um.feri.ears.problems.dynamic.cec2009.DynamicCompositionProblem;
 import org.um.feri.ears.problems.dynamic.cec2009.DynamicProblem;
@@ -88,7 +89,8 @@ public class CEC2009DynamicOptimizationBenchmark extends SOBenchmark<NumberSolut
                 changeFrequency,
                 5,   // heightSeverity
                 heightNormalizeSeverity,
-                gLowerLimit, gUpperLimit
+                gLowerLimit, gUpperLimit,
+                BasicFunction.SPHERE
         ));
     }
 
