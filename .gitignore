@@ -18,6 +18,7 @@
 /build/
 TestBTe.*
 TestBTree.*
+/src/org/um/feri/ears/visualization/gp/images/
 
 ## Java
 

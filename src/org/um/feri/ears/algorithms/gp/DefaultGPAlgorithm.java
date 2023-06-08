@@ -77,6 +77,8 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         this.task = task;
         this.bestGenFitness = new ArrayList<>();
         this.avgGenFitness = new ArrayList<>();
+        this.avgGenTreeHeight = new ArrayList<>();
+        this.avgGenTreeSize = new ArrayList<>();
     }
 
     @Override
@@ -125,6 +127,8 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         this.population = new ArrayList<>();
         this.bestGenFitness = new ArrayList<>();
         this.avgGenFitness = new ArrayList<>();
+        this.avgGenTreeHeight = new ArrayList<>();
+        this.avgGenTreeSize = new ArrayList<>();
     }
 
     public void algorithmInitialization(Task<ProgramSolution<Double>, ProgramProblem<Double>> task, ProblemComparator<ProgramSolution<Double>> comparator, Selection<ProgramSolution<Double>, ProgramProblem<Double>> selectionOperator) {
@@ -222,12 +226,28 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 break;
             case EVALUATION:
                 performEvaluation();
-                this.bestGenFitness.add(this.best.getEval());
-                double sum = 0;
-                for (ProgramSolution<Double> sol: this.population) {
-                    sum += sol.getEval();
+                if(this.isDebug()){
+                    this.bestGenFitness.add(this.best.getEval());
+                    double sum = 0;
+                    for (ProgramSolution<Double> sol: this.population) {
+                        sum += sol.getEval();
+                    }
+                    this.avgGenFitness.add(sum / this.population.size());
+
+                    // add current avg tree height to list
+                    double avgHeight = 0;
+                    for (ProgramSolution<Double> sol: this.population) {
+                        avgHeight += sol.getProgram().treeHeight();
+                    }
+                    this.avgGenTreeHeight.add(avgHeight / this.population.size());
+
+                    // add current avg tree height to list
+                    double avgSize = 0;
+                    for (ProgramSolution<Double> sol: this.population) {
+                        avgSize += sol.getProgram().treeSize();
+                    }
+                    this.avgGenTreeSize.add(avgSize / this.population.size());
                 }
-                this.avgGenFitness.add(sum / this.population.size());
                 break;
             default:
                 throw new StopCriterionException("Unknown algorithm step");

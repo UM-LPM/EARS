@@ -12,6 +12,8 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution<Double>, Pro
 
     protected ArrayList<Double> bestGenFitness;
     protected ArrayList<Double> avgGenFitness;
+    protected ArrayList<Double> avgGenTreeHeight;
+    protected ArrayList<Double> avgGenTreeSize;
     public abstract ProgramSolution<Double> executeStep() throws StopCriterionException;
 
     public abstract ProgramSolution<Double> executeGeneration() throws StopCriterionException;
@@ -34,6 +36,14 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution<Double>, Pro
 
     public void setAvgGenFitness(ArrayList<Double> avgGenFitness) {
         this.avgGenFitness = avgGenFitness;
+    }
+
+    public ArrayList<Double> getAvgGenTreeHeight() {
+        return avgGenTreeHeight;
+    }
+
+    public ArrayList<Double> getAvgGenTreeSize() {
+        return avgGenTreeSize;
     }
 
 }
