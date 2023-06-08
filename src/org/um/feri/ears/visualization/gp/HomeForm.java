@@ -70,6 +70,8 @@ public class HomeForm extends JFrame {
     private JLabel bestIndividualNumOfFunc;
     private JLabel bestIndividualNumOfTerm;
     private ImagePanel bestIndividualImagePanel;
+    private GraphPanel avgTreeHeightGraphPanel;
+    private GraphPanel avgTreeSizeGraphPanel;
 
     private String lastUuid;
     public HomeForm() {
@@ -179,7 +181,8 @@ public class HomeForm extends JFrame {
         // Create fitness convergence line graph
         this.fitnessConvergenceGraph = new GraphPanel(null);
         this.avgFitnessConvergenceGraph = new GraphPanel(null);
-
+        this.avgTreeHeightGraphPanel = new GraphPanel(null);
+        this.avgTreeSizeGraphPanel = new GraphPanel(null);
 
     }
 
@@ -191,6 +194,8 @@ public class HomeForm extends JFrame {
         // Update convergence graph
         this.fitnessConvergenceGraph.setScores(this.gpAlgorithm.getBestGenFitness());
         this.avgFitnessConvergenceGraph.setScores(this.gpAlgorithm.getAvgGenFitness());
+        this.avgTreeHeightGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeHeight());
+        this.avgTreeSizeGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeSize());
 
         // Update population list
         displayPopulation(updatePopulation);
@@ -365,7 +370,7 @@ public class HomeForm extends JFrame {
     public static void main(String[] args) {
         HomeForm form = new HomeForm();
         form.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        form.setSize(1200, 800);
+        form.setSize(1400, 1000);
         form.setVisible(true);
     }
 }
