@@ -112,11 +112,11 @@ public class DynamicCompositionProblem extends DynamicProblem {
     @Override
     public void decreaseDimension(int newDimension) {
         numberOfDimensions = newDimension;
-        // TODO: ta pogoj mislim, da je odveč. to v original kodi potreboval, ker je kopiral objekt...
+        // TODO: ta pogoj vključno z operacijo mislim, da je odveč. to v original kodi potreboval, ker je kopiral objekt...
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
             setPeriodicity(periodicity);
         }
-        // TODO: naredi to, kar se zgodi v parameterSetting metodi (mislim, da popravi polja glede na novo zmanjšanja dimenzijo
+        // TODO: naredi to, kar se zgodi v parameterSetting metodi (mislim, da popravi polja glede na novo zmanjšanja dimenzijo)
         calculateGlobalOptima();
     }
 
@@ -179,7 +179,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
                     peakHeight[i] = sinValueNoisy(changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY), minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
                 }
                 initialAngle2 = Math.PI * (Math.sin(2 * Math.PI * (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY)) / periodicity) + 1) / 12.;
-                noisy = recurrentNoisySeverity * new Random().nextGaussian();   // TODO: use appropriate random
+                noisy = recurrentNoisySeverity * new Random().nextDouble();   // TODO: use appropriate random
                 positionStandardChange(initialAngle2 + noisy);
 
                 calculateGlobalOptima();

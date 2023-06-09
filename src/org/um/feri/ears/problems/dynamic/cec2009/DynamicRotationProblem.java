@@ -67,12 +67,34 @@ public class DynamicRotationProblem extends DynamicProblem {
 
     @Override
     public void increaseDimension(int newDimension) {
-        // TODO
+        numberOfDimensions = newDimension;
+        // r_dbg->Parameter_Setting(*this); // TODO
+        Double lower = gLowerLimit;
+        Double upper = gUpperLimit;
+
+        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+            position[i][numberOfDimensions] = lower + (upper - lower) * new Random().nextGaussian();    // TODO: use appropriate random
+            initialPosition[i][numberOfDimensions] = position[i][numberOfDimensions];
+        }
+
+        if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
+            for (int i = 0; i < periodicity; i++) {
+                if (changeTypeCounter.getNumberOfOccurrences(changeType) <= i) {
+                    break;
+                }
+                for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
+                    rotationPlanes[i][j][numberOfDimensions] = numberOfDimensions;
+                }
+            }
+        }
+        calculateGlobalOptima();
     }
 
     @Override
     public void decreaseDimension(int newDimension) {
-        // TODO
+        numberOfDimensions = newDimension;
+        // r_dbg->Parameter_Setting(*this); // TODO: mislim, da moram popraviti vsa polja glede na novo dimenzijo?
+        calculateGlobalOptima();
     }
 
     @Override
