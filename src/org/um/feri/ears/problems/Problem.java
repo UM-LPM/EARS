@@ -10,7 +10,6 @@ public abstract class Problem<S extends Solution> {
 
     protected int numberOfObjectives;
     protected int numberOfGlobalOptima;
-    protected boolean minimize = true;
     protected boolean[] objectiveMaximizationFlags;
 
     protected double[] objectiveSpaceOptima;
@@ -134,6 +133,10 @@ public abstract class Problem<S extends Solution> {
         return objectiveSpaceOptima;
     }
 
+    public boolean[] getObjectiveMaximizationFlags() {
+        return objectiveMaximizationFlags;
+    }
+
     public int getNumberOfObjectives() {
         return numberOfObjectives;
     }
@@ -145,10 +148,6 @@ public abstract class Problem<S extends Solution> {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isMinimize() {
-        return minimize;
     }
 
     public String getShortName() {

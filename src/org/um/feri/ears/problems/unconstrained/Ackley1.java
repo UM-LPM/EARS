@@ -8,11 +8,11 @@ import java.util.Collections;
 
 import static java.lang.Math.*;
 
-/**
- * http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page295.htm
- * https://www.sfu.ca/~ssurjano/ackley.html
- * https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/227-ackley-s-function-no-1-or-ackley-s-path-function
- * http://infinity77.net/global_optimization/test_functions_nd_A.html#go_benchmark.Ackley
+/*
+ http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page295.htm
+ https://www.sfu.ca/~ssurjano/ackley.html
+ https://www.al-roomi.org/benchmarks/unconstrained/n-dimensions/227-ackley-s-function-no-1-or-ackley-s-path-function
+ http://infinity77.net/global_optimization/test_functions_nd_A.html#go_benchmark.Ackley
  */
 
 public class Ackley1 extends DoubleProblem {

@@ -9,10 +9,12 @@ import java.util.Collections;
 
 import static java.lang.Math.pow;
 
-/**
+/*
  https://www.sfu.ca/~ssurjano/rosen.html
  http://www.geatbx.com/ver_3_5/fcnfun2.html
  */
+
+// Same as RosenbrockD2a
 public class RosenbrockDeJong2 extends DoubleProblem {
     public RosenbrockDeJong2(int d) {
         super("Rosenbrock - De Jong's function 2", d, 1, 1, 0);

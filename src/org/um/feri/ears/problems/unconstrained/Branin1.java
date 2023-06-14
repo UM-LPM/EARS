@@ -8,10 +8,10 @@ import java.util.Collections;
 
 import static java.lang.Math.*;
 
-/**
- * https://www.sfu.ca/~ssurjano/branin.html
- * http://infinity77.net/global_optimization/test_functions_nd_B.html#go_benchmark.Branin01
- * https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/13-branin-s-rcos-function-no-1
+/*
+ https://www.sfu.ca/~ssurjano/branin.html
+ http://infinity77.net/global_optimization/test_functions_nd_B.html#go_benchmark.Branin01
+ https://www.al-roomi.org/benchmarks/unconstrained/2-dimensions/13-branin-s-rcos-function-no-1
  */
 
 public class Branin1 extends DoubleProblem {

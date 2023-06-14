@@ -9,6 +9,9 @@ import java.util.Collections;
 import static java.lang.Math.exp;
 import static java.lang.Math.pow;
 
+/*
+https://www.sfu.ca/~ssurjano/hart6.html
+ */
 public class Hartman6 extends DoubleProblem {
 
     private static final double[][] a = {

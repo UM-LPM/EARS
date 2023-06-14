@@ -11,7 +11,7 @@ public class Task<S extends Solution, P extends Problem<S>> {
     public static final class Accessor { private Accessor() {} }
     private static final Accessor ACCESSOR_INSTANCE = new Accessor();
 
-    //add "Task.Accessor accessor" to method call
+    //TODO add "Task.Accessor accessor" to method call
 
     public P problem;
     protected S bestSolution;
@@ -393,15 +393,6 @@ public class Task<S extends Solution, P extends Problem<S>> {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Use to check if the problem is to be minimized.
-     *
-     * @return true if the problem is to be minimized
-     */
-    public boolean isMinimize() {
-        return problem.isMinimize();
     }
 
     /**

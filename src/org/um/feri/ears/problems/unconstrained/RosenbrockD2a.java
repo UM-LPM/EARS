@@ -12,6 +12,7 @@ http://infinity77.net/global_optimization/test_functions_nd_R.html#go_benchmark.
 http://benchmarkfcns.xyz/benchmarkfcns/rosenbrockfcn.html
 http://www.geatbx.com/docu/fcnindex-01.html#P86_3059
  */
+// Same ase RosenbrockDeJong2
 public class RosenbrockD2a extends DoubleProblem {
 
     public RosenbrockD2a() {
