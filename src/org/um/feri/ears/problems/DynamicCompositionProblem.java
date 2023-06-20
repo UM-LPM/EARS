@@ -1,6 +1,8 @@
-package org.um.feri.ears.problems.dynamic.cec2009;
+package org.um.feri.ears.problems;
 
-import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.dynamic.cec2009.BasicFunction;
+import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
+import org.um.feri.ears.problems.dynamic.cec2009.Matrix;
 import org.um.feri.ears.problems.unconstrained.*;
 
 import java.util.Arrays;
@@ -17,23 +19,37 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
     public DynamicCompositionProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives,
                                      int numberOfConstraints, int numberOfPeaksOrFunctions, Double minHeight, Double maxHeight,
-                                     Double chaoticConstant, ChangeType changeType, int periodicity, boolean isDimensionChanged,
+                                     Double chaoticConstant, ChangeType changeType, int periodicity, boolean dimensionChanging,
                                      int minDimension, int maxDimension, int changeFrequency, int heightSeverity,
                                      Double heightNormalizeSeverity, Double gLowerLimit, Double gUpperLimit, BasicFunction basicFunction) {
 
         super(name, numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints,
                 numberOfPeaksOrFunctions, minHeight, maxHeight, chaoticConstant, changeType, periodicity,
-                isDimensionChanged, minDimension, maxDimension, changeFrequency, heightSeverity, gLowerLimit, gUpperLimit);
+                dimensionChanging, minDimension, maxDimension, changeFrequency, heightSeverity, gLowerLimit, gUpperLimit);
+
+        initPeakHeight();
 
         this.heightNormalizeSeverity = heightNormalizeSeverity;
-        convergeSeverity = new Double[numberOfPeaksOrFunctions];
-        stretchSeverity = new Double[numberOfPeaksOrFunctions];
-        initStretchSeverity();
 
         basicFunctions = new DoubleProblem[numberOfPeaksOrFunctions];
         initBasicFunctions(basicFunction);
+
+        convergeSeverity = new Double[numberOfPeaksOrFunctions];
+        Arrays.fill(convergeSeverity, 1.0);
+        stretchSeverity = new Double[numberOfPeaksOrFunctions];
+        initStretchSeverity();
     }
 
+    private void initPeakHeight() {
+        if (changeType == ChangeType.CHAOTIC) {
+            Double peakHeightValue = minHeight + (maxHeight - minHeight) * new Random().nextGaussian();    // TODO: use appropriate random
+            Arrays.fill(peakHeights, peakHeightValue);
+        } else {
+            Arrays.fill(peakHeights, 50.0);
+        }
+    }
+
+    // TODO: NOVI: array ustvari v benchmarku in ga pošlji v konstruktor
     private void initBasicFunctions(BasicFunction basicFunction) {
         switch (basicFunction) {
             case SPHERE:
@@ -54,14 +70,13 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 // if (basicFunctions.length != 10) throw new IllegalStateException("The number of dimension should be 10 for CEC2009DOBenchmark.");
                 basicFunctions[0] = basicFunctions[1] = new Sphere(numberOfDimensions);
                 basicFunctions[2] = basicFunctions[3] = new Rastrigin(numberOfDimensions);
-                basicFunctions[4] = basicFunctions[5] = new Weierstrass();
+                basicFunctions[4] = basicFunctions[5] = new Weierstrass(numberOfDimensions);
                 basicFunctions[6] = basicFunctions[7] = new Griewank(numberOfDimensions);
                 basicFunctions[8] = basicFunctions[9] = new Ackley1(numberOfDimensions);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown BasicFunction value passed in constructor.");
         }
-
     }
 
     private void initStretchSeverity() {
@@ -72,17 +87,23 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
     @Override
     public void increaseDimension(int newDimension) {
-        int oldDimension = numberOfDimensions;
         numberOfDimensions = newDimension;
+        int newDimensionIndex = newDimension - 1;
 
-        // TODO: parameterSetting(this);
-
-        Double lower = gLowerLimit; // lowerLimit.get(oldDimension);
-        Double upper = gUpperLimit; // upperLimit.get(oldDimension);
+        if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
+            for (int i = 0; i < periodicity; i++) {
+                if (changeTypeCounter.getNumberOfOccurrences(changeType) <= i) {
+                    break;
+                }
+                for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
+                    System.arraycopy(rotationPlanes[i][j], 0, rotationPlanes[i][j], 0, numberOfDimensions); // TODO: mogoče ne rabim, ker imam velikost nastavljeno na 'maxDimension'?
+                }
+            }
+        }
 
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            position[i][oldDimension] = lower + (upper - lower) * new Random().nextGaussian();    // TODO: use appropriate random
-            initialPosition[i][oldDimension] = position[i][oldDimension];
+            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * new Random().nextGaussian();    // TODO: use appropriate random
+            initialPeakPositions[i][newDimensionIndex] = peakPositions[i][newDimensionIndex];
         }
 
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
@@ -91,20 +112,22 @@ public class DynamicCompositionProblem extends DynamicProblem {
                     break;
                 }
                 for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
-                    rotationPlanes[i][j][oldDimension] = oldDimension;
+                    rotationPlanes[i][j][newDimensionIndex] = newDimensionIndex;
                 }
             }
         }
+
+        setRotationMatrix();
 
         calculateGlobalOptima();
     }
 
     @Override
     protected void calculateGlobalOptima() {
-        globalOptima = Arrays.stream(peakHeight).min(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);   // Global.extremum(height, numPeakOrFun, Compare.MIN);
+        globalOptima = Arrays.stream(peakHeights).min(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);   // Global.extremum(height, numPeakOrFun, Compare.MIN);
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            if (peakHeight[i] == globalOptima) {
-                System.arraycopy(position[i], 0, globalOptimaPosition, 0, numberOfDimensions);
+            if (peakHeights[i] == globalOptima) {
+                System.arraycopy(peakPositions[i], 0, decisionSpaceOptima[0], 0, numberOfDimensions);
             }
         }
     }
@@ -112,17 +135,52 @@ public class DynamicCompositionProblem extends DynamicProblem {
     @Override
     public void decreaseDimension(int newDimension) {
         numberOfDimensions = newDimension;
-        // TODO: ta pogoj vključno z operacijo mislim, da je odveč. to v original kodi potreboval, ker je kopiral objekt...
+
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
-            setPeriodicity(periodicity);
+            for (int i = 0; i < periodicity; i++) {
+                if (changeTypeCounter.getNumberOfOccurrences(changeType) <= i) {
+                    break;
+                }
+                for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
+                    for (int m = 0, k = 0; k < newDimension; k++, m++) {
+                        if (rotationPlanes[i][j][m] == newDimension) {
+                            k--;
+                        } else {
+                            rotationPlanes[i][j][k] = rotationPlanes[i][j][m];
+                        }
+                    }
+                }
+            }
         }
-        // TODO: naredi to, kar se zgodi v parameterSetting metodi (mislim, da popravi polja glede na novo zmanjšanja dimenzijo)
+
+        setRotationMatrix();
+
         calculateGlobalOptima();
     }
 
+    public void setRotationMatrix() {
+        // randomly generate rotation matrix for each basic function
+        // for each basic function of dimension n(even number), R=R(l1,l2)*R(l3,l4)*....*R(ln-1,ln), 0<=li<=n
+        Matrix I = new Matrix(numberOfDimensions, numberOfDimensions);
+
+        int[] d = new int[numberOfDimensions];
+        initializeRandomArray(d, numberOfDimensions);
+        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+            for (int j = 0; j + 1 < numberOfDimensions; j += 2) {
+                double angle = 2 * Math.PI * new Random().nextGaussian();   // random angle for rotation plane of d[j]-d[j+1] from d[j]th axis to d[j+1]th axis // TODO: use appropriate random
+                I.setRotation(d[j], d[j + 1], angle);
+                if (j == 0) {
+                    rotationMatrix[i] = I;
+                } else {
+                    rotationMatrix[i] = rotationMatrix[i].multiply(I);
+                }
+                I.identity();
+            }
+        }
+    }
+
     @Override
-    public void makeChange() {
-        changeCounter++;
+    public void performChange() {
         switch (changeType) {
             case SMALL_STEP:
                 heightStandardChange();
@@ -150,7 +208,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                     initialAngle = (double) periodicity * i / numberOfPeaksOrFunctions;
-                    peakHeight[i] = minHeight + heightRange * (Math.sin(2 * Math.PI *
+                    peakHeights[i] = minHeight + heightRange * (Math.sin(2 * Math.PI *
                             (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT) + initialAngle) / periodicity) + 1) / 2.;
                 }
                 initialAngle = Math.PI * (Math.sin(2 * Math.PI * changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT) / periodicity) + 1) / 12.;
@@ -161,7 +219,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 break;
             case CHAOTIC:
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-                    peakHeight[i] = getChaoticValue(peakHeight[i], minHeight, maxHeight);
+                    peakHeights[i] = getChaoticValue(peakHeights[i], minHeight, maxHeight);
                 }
 
                 positionStandardChange(0);
@@ -176,7 +234,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 double noisy;
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                     initialAngle2 = (double) periodicity * i / numberOfPeaksOrFunctions;
-                    peakHeight[i] = sinValueNoisy(changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY), minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
+                    peakHeights[i] = sinValueNoisy(changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY), minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
                 }
                 initialAngle2 = Math.PI * (Math.sin(2 * Math.PI * (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY)) / periodicity) + 1) / 12.;
                 noisy = recurrentNoisySeverity * new Random().nextDouble();   // TODO: use appropriate random
@@ -185,6 +243,10 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 calculateGlobalOptima();
                 changeTypeCounter.increaseNumberOfOccurrences(ChangeType.RECURRENT_NOISY);
                 break;
+        }
+
+        if (dimensionChanging) {
+            changeDimension();
         }
     }
 
@@ -228,8 +290,10 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
             // System.arraycopy(x, 0, genes, 0, dimension); // TODO: genes
         }
-
-        globalOptima = Arrays.stream(peakHeight).min(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);   // Global.extremum(height, numPeakOrFun, Compare.MIN);
+        if (objectiveMaximizationFlags[0])
+            globalOptima = Arrays.stream(peakHeights).min(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);   // Global.extremum(height, numPeakOrFun, Compare.MIN);
+        else
+            globalOptima = Arrays.stream(peakHeights).max(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);
 
         double sumWeight = 0;
         double maxWeight = Arrays.stream(weight).max(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);
@@ -248,7 +312,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
         double obj = 0;
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            obj += weight[i] * (fit[i] + peakHeight[i]);
+            obj += weight[i] * (fit[i] + peakHeights[i]);
         }
 
         return obj;

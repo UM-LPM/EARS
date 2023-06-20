@@ -1,4 +1,6 @@
-package org.um.feri.ears.problems.dynamic.cec2009;
+package org.um.feri.ears.problems;
+
+import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -35,14 +37,6 @@ public class DynamicRotationProblem extends DynamicProblem {
         }
     }
 
-    @Override
-    public void setPeriodicity(int periodicity) {
-        if (periodicity < 1) {
-            return; // TODO
-        }
-        super.setPeriodicity(periodicity);
-    }
-
     public void widthStandardChange() {
         Double step;
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
@@ -57,10 +51,10 @@ public class DynamicRotationProblem extends DynamicProblem {
 
     @Override
     protected void calculateGlobalOptima() {
-        globalOptima = Arrays.stream(peakHeight).max(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);
+        globalOptima = Arrays.stream(peakHeights).max(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            if (peakHeight[i] == globalOptima) {
-                System.arraycopy(position[i], 0, globalOptimaPosition, 0, numberOfDimensions);
+            if (peakHeights[i] == globalOptima) {
+                System.arraycopy(peakPositions[i], 0, decisionSpaceOptima[0], 0, numberOfDimensions);
             }
         }
     }
@@ -68,13 +62,22 @@ public class DynamicRotationProblem extends DynamicProblem {
     @Override
     public void increaseDimension(int newDimension) {
         numberOfDimensions = newDimension;
-        // r_dbg->Parameter_Setting(*this); // TODO
-        Double lower = gLowerLimit;
-        Double upper = gUpperLimit;
+        int newDimensionIndex = newDimension - 1;
+
+        if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
+            for (int i = 0; i < periodicity; i++) {
+                if (changeTypeCounter.getNumberOfOccurrences(changeType) <= i) {
+                    break;
+                }
+                for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
+                    System.arraycopy(rotationPlanes[i][j], 0, rotationPlanes[i][j], 0, newDimensionIndex);   // TODO: mogoče ne rabim, ker imam velikost nastavljeno na 'maxDimension'?
+                }
+            }
+        }
 
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            position[i][numberOfDimensions] = lower + (upper - lower) * new Random().nextGaussian();    // TODO: use appropriate random
-            initialPosition[i][numberOfDimensions] = position[i][numberOfDimensions];
+            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * new Random().nextGaussian();    // TODO: use appropriate random
+            initialPeakPositions[i][newDimensionIndex] = peakPositions[i][newDimensionIndex];
         }
 
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
@@ -83,23 +86,41 @@ public class DynamicRotationProblem extends DynamicProblem {
                     break;
                 }
                 for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
-                    rotationPlanes[i][j][numberOfDimensions] = numberOfDimensions;
+                    rotationPlanes[i][j][newDimensionIndex] = newDimensionIndex;
                 }
             }
         }
+
         calculateGlobalOptima();
     }
 
     @Override
     public void decreaseDimension(int newDimension) {
         numberOfDimensions = newDimension;
-        // r_dbg->Parameter_Setting(*this); // TODO: mislim, da moram popraviti vsa polja glede na novo dimenzijo?
+
+        if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
+            for (int i = 0; i < periodicity; i++) {
+                if (changeTypeCounter.getNumberOfOccurrences(changeType) <= i) {
+                    break;
+                }
+                for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
+                    for (int m = 0, k = 0; k < newDimension; k++, m++) {
+                        if (rotationPlanes[i][j][m] == newDimension) {
+                            k--;
+                            continue;
+                        } else {
+                            rotationPlanes[i][j][k] = rotationPlanes[i][j][m];
+                        }
+                    }
+                }
+            }
+        }
+
         calculateGlobalOptima();
     }
 
     @Override
-    public void makeChange() {
-        changeCounter++;
+    public void performChange() {
         switch (changeType) {
             case SMALL_STEP:
                 heightStandardChange();
@@ -128,7 +149,7 @@ public class DynamicRotationProblem extends DynamicProblem {
                 double widthRange = maxWidth - minWidth;
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                     initialAngle = (double) periodicity * i / numberOfPeaksOrFunctions;
-                    peakHeight[i] = minHeight + heightRange * (Math.sin(2 * Math.PI * (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT) + initialAngle) / periodicity) + 1) / 2.;
+                    peakHeights[i] = minHeight + heightRange * (Math.sin(2 * Math.PI * (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT) + initialAngle) / periodicity) + 1) / 2.;
                     weight[i] = minWidth + widthRange * (Math.sin(2 * Math.PI * (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT) + initialAngle) / periodicity) + 1) / 2.;
                 }
                 initialAngle = Math.PI * (Math.sin(2 * Math.PI * (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT)) / periodicity) + 1) / 12.;
@@ -140,7 +161,7 @@ public class DynamicRotationProblem extends DynamicProblem {
                 break;
             case CHAOTIC:
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-                    peakHeight[i] = getChaoticValue(peakHeight[i], minHeight, maxHeight);
+                    peakHeights[i] = getChaoticValue(peakHeights[i], minHeight, maxHeight);
                     weight[i] = getChaoticValue(weight[i], minWidth, maxWidth);
                 }
                 positionStandardChange(0);
@@ -154,7 +175,7 @@ public class DynamicRotationProblem extends DynamicProblem {
                 double noisy;
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                     initialAngle2 = (double) periodicity * i / numberOfPeaksOrFunctions;
-                    peakHeight[i] = sinValueNoisy(changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY), minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
+                    peakHeights[i] = sinValueNoisy(changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY), minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
                     weight[i] = sinValueNoisy(changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY), minWidth, maxWidth, widthRange2, initialAngle2, recurrentNoisySeverity);
                 }
                 initialAngle2 = Math.PI * (Math.sin(2 * Math.PI * (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY)) / periodicity) + 1) / 12.;
@@ -164,6 +185,10 @@ public class DynamicRotationProblem extends DynamicProblem {
                 calculateGlobalOptima();
                 changeTypeCounter.increaseNumberOfOccurrences(ChangeType.RECURRENT_NOISY);
                 break;
+        }
+
+        if (dimensionChanging) {
+            changeDimension();
         }
     }
 }

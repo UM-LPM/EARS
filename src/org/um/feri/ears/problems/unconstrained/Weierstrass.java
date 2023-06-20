@@ -20,6 +20,13 @@ public class Weierstrass extends DoubleProblem {
         objectiveSpaceOptima[0] = 4.0;
     }
 
+    public Weierstrass(int numberOfDimensions) {
+        super("Weierstrass", numberOfDimensions, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -0.5));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.5));
+        objectiveSpaceOptima[0] = 4.0;
+    }
+
     @Override
     public double eval(double[] x) {
         double fitness = 0;

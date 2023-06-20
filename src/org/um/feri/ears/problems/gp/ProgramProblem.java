@@ -5,6 +5,7 @@ import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
@@ -110,7 +111,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
         ProgramSolution<T> newSolution = new ProgramSolution<>(numberOfObjectives);
 
         // First we select one from baseFunctions, otherwise the tree would stop here (we also exclude functions that are actually constants)
-        List<Op<T>> filteredOperations = this.baseFunctions.stream().filter(x -> (!x.isVariable() && !x.isTerminal() && !x.isConstant() || !isRoot)).toList();
+        List<Op<T>> filteredOperations = this.baseFunctions.stream().filter(x -> (!x.isVariable() && !x.isTerminal() && !x.isConstant() || !isRoot)).collect(Collectors.toList());
         Op<T> op = filteredOperations.get(Util.rnd.nextInt(filteredOperations.size()));
         TreeNode<T> rootNode = new TreeNode<>(op);
 

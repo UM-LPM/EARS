@@ -1,7 +1,11 @@
-package org.um.feri.ears.problems.dynamic.cec2009;
+package org.um.feri.ears.problems;
 
-import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
+import org.um.feri.ears.problems.dynamic.cec2009.ChangeTypeCounter;
+import org.um.feri.ears.problems.dynamic.cec2009.Matrix;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public abstract class DynamicProblem extends DoubleProblem {
@@ -13,76 +17,106 @@ public abstract class DynamicProblem extends DoubleProblem {
     // initialPosition?, height (če je fitness, že obstaja in je objectiveSpaceOptima), heightSeverity, fit?, weight?,
     // rotationMatrix?, rotationPlanes?, globalOptimaPosition?
 
-    // metode: change abstraktna
-
-    protected final ChangeTypeCounter changeTypeCounter;
-    protected int numberOfPeaksOrFunctions; // TODO: preveri ali je to število globalnih optimumov (v problemu numberOfGlobalOptimums?)
+    protected final ChangeTypeCounter changeTypeCounter;    // TODO: novi: preveri ali se changeType spreminja znotraj problema. če ne, naj bo navadni integer
+    protected int numberOfPeaksOrFunctions;
     protected Double minHeight, maxHeight;    // minimum/maximum height of all peaks (local optima) in RotationDBG (CompositionDBG)
     private Double chaoticConstant;
-    protected Double[] peakHeight;    // peak height in RotationDBG, height of global optima in CompositionDBG   // TODO: preveri, če to predstavlja fitness, potem že obstaja in je to spremeljivka objectiveSpaceOptima
+    protected Double[] peakHeights;    // peak height in RotationDBG, height of global optima in CompositionDBG   // TODO: preveri, če to predstavlja fitness, potem že obstaja in je to spremeljivka objectiveSpaceOptima
     protected ChangeType changeType;
     protected int periodicity;    // definite period for values repeating
-    private boolean isDimensionChanged;  // true if the number of dimensions has changed, false otherwise
-    private int minDimension, maxDimension;
+    protected boolean dimensionChanging;  // true if the number of dimensions has changed, false otherwise
+    private int minDimensions, maxDimensions;
     private boolean isDimensionIncreasing;  // true if the direction should be changed, false otherwise
-    protected int changeCounter;  // counter for the number of changes
     private int changeFrequency;    // number of evaluations between two successive changes
     private int heightSeverity;
-    protected Double[][] position;  // positions of local or global optima (local optima in RotationDBG, global optima of basic function in CompositionDBG) // TODO: preveri ali je positon=decisionSpaceOptima
-    protected Double[][] initialPosition;   // save the initial positions   // TODO: preveri kaj predstavlja ta matrika
+    protected Double[][] peakPositions;  // positions of local or global optima (local optima in RotationDBG, global optima of basic function in CompositionDBG)
+    protected Double[][] initialPeakPositions;   // save the initial positions
     protected int[][][] rotationPlanes;    // save the planes rotated during one periodicity
     protected Double[] fit;   // objective value of each basic function in CompositionDBG, peak height in RotationDBG
     protected Double[] weight;   // weight value of each basic function in CompositionDBG, peak width in RotationDBG
     protected float recurrentNoisySeverity; // deviation severity from the trajectory of recurrent change
-    protected final Double gLowerLimit, gUpperLimit;  // solution space // TODO: spada to samo v DynamicCompositinProblem?
+    protected final Double gLowerLimit, gUpperLimit;  // solution space // TODO: spada to samo v DynamicCompositionProblem?
     protected Double globalOptima;  // global optima value // TODO: preveri ali to že obstaja v nadrazredu (EARS)
-    protected Double[] globalOptimaPosition;    // position of global optima   // TODO: preveri ali to že obstaja v nadrazredu (EARS)
     protected Matrix[] rotationMatrix;  // orthogonal rotation matrices for each function // TODO: ali boš uporabil svoj razred Matrix?
+
+    // TODO: V originalni kodi imajo spremenljivko OptimizationType (MIN, MAX). Kako to "zapakiram" v EARS?
 
     public DynamicProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints,
                           int numberOfPeaksOrFunctions, Double minHeight, Double maxHeight, Double chaoticConstant, ChangeType changeType,
-                          int periodicity, boolean isDimensionChanged, int minDimension, int maxDimension, int changeFrequency,
+                          int periodicity, boolean dimensionChanging, int minDimensions, int maxDimensions, int changeFrequency,
                           int heightSeverity, Double gLowerLimit, Double gUpperLimit) {
 
         super(name, numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
+
+        // TODO
+        if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) && periodicity != 12) {
+            throw new IllegalArgumentException("Periodicity must be 12 if changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY");
+        }
+        if ((changeType != ChangeType.RECURRENT && changeType != ChangeType.RECURRENT_NOISY) && periodicity != 0) {
+            throw new IllegalArgumentException("Periodicity must be 0 if changeType != ChangeType.RECURRENT && changeType != ChangeType.RECURRENT_NOISY");
+        }
 
         changeTypeCounter = new ChangeTypeCounter();
         this.numberOfPeaksOrFunctions = numberOfPeaksOrFunctions;
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
         this.chaoticConstant = chaoticConstant;
-        peakHeight = new Double[numberOfPeaksOrFunctions];
+        peakHeights = new Double[numberOfPeaksOrFunctions];
         this.changeType = changeType;
         this.periodicity = periodicity;
-        this.isDimensionChanged = isDimensionChanged;
-        this.minDimension = minDimension;
-        this.maxDimension = maxDimension;
-        changeCounter = 0;
+        this.dimensionChanging = dimensionChanging;
+        this.isDimensionIncreasing = dimensionChanging; // TODO: preveri, če je to OK
+        this.minDimensions = minDimensions;
+        this.maxDimensions = maxDimensions;
         this.changeFrequency = changeFrequency;
         this.heightSeverity = heightSeverity;
+        peakPositions = new Double[numberOfPeaksOrFunctions][];
+        initialPeakPositions = new Double[numberOfPeaksOrFunctions][];
+        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+            peakPositions[i] = new Double[maxDimensions];
+            initialPeakPositions[i] = new Double[maxDimensions];
+        }
         fit = new Double[numberOfPeaksOrFunctions];
         weight = new Double[numberOfPeaksOrFunctions];
         this.gLowerLimit = gLowerLimit;
         this.gUpperLimit = gUpperLimit;
         rotationMatrix = new Matrix[numberOfPeaksOrFunctions];
-
-        if (changeType == ChangeType.RECURRENT_NOISY) {
-            recurrentNoisySeverity = 0.8f;
-        }
-    }
-
-    public void setPeriodicity(int periodicity) {
-        if (periodicity < 1) {
-            return; // TODO: je to OK? malo čudno... bi moral vrečti izjemo?
-        }
-        this.periodicity = periodicity;
         rotationPlanes = new int[periodicity][][];
         for (int i = 0; i < periodicity; i++) {
             rotationPlanes[i] = new int[numberOfPeaksOrFunctions][];
             for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
-                rotationPlanes[i][j] = new int[numberOfDimensions];
+                rotationPlanes[i][j] = new int[maxDimensions];
             }
         }
+
+        lowerLimit = new ArrayList<>(Collections.nCopies(maxDimensions, gLowerLimit));
+        upperLimit = new ArrayList<>(Collections.nCopies(maxDimensions, gUpperLimit));
+
+        if (changeType == ChangeType.RECURRENT_NOISY) {
+            recurrentNoisySeverity = 0.8f;
+        }
+
+        decisionSpaceOptima = new double[numberOfGlobalOptima][maxDimensions];  // globalOptimaPosition
+    }
+
+    public int getMinDimensions() {
+        return minDimensions;
+    }
+
+    public int getMaxDimensions() {
+        return maxDimensions;
+    }
+
+    public boolean isDimensionIncreasing() {
+        return isDimensionIncreasing;
+    }
+
+    public boolean isDimensionChanging() {
+        return dimensionChanging;
+    }
+
+    public int getChangeFrequency() {
+        return changeFrequency;
     }
 
     // TODO: ta metoda verjetno ni potrebna tukaj? samo v podrazredu DynamicRotationProblem
@@ -113,15 +147,15 @@ public abstract class DynamicProblem extends DoubleProblem {
 
     // dimension changes (linear increase or decrease).
     public void changeDimension() {
-        if (!isDimensionChanged) {
+        if (!dimensionChanging) {
             return;
         }
 
         int newDimension = numberOfDimensions;
-        if (numberOfDimensions == minDimension) {
+        if (numberOfDimensions == minDimensions) {
             isDimensionIncreasing = true;
         }
-        if (numberOfDimensions == maxDimension) {
+        if (numberOfDimensions == maxDimensions) {
             isDimensionIncreasing = false;
         }
 
@@ -144,14 +178,14 @@ public abstract class DynamicProblem extends DoubleProblem {
 
     protected abstract void decreaseDimension(int newDimension);
 
-    public abstract void makeChange();
+    public abstract void performChange();
 
     // TODO: premisli, če je to pravo mesto za to metodo, ker potem razred DynamicProblem več ni tako "splošen". Ideja: podrazred GeneralizedDynamicBenchmark
     public Double standardChange(final Double min, final Double max) {
         double step = 0.0;
         int sign;
 
-        final double ALPHA = 0.04;    // TODO: where to put this variable?
+        final double ALPHA = 0.04;    // TODO: where to put this variable?  // TODO: ALPHA = 0.02 v članku, v originalni kodi za CEC'09 pa 0.04
         final double MAX_ALPHA = 0.1;   // TODO: where to put this variable?
 
         switch (changeType) {
@@ -187,9 +221,9 @@ public abstract class DynamicProblem extends DoubleProblem {
         double step;
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             step = heightSeverity * standardChange(minHeight, maxHeight);
-            peakHeight[i] = peakHeight[i] + step;
-            if (peakHeight[i] > maxHeight || peakHeight[i] < minHeight) {
-                peakHeight[i] = peakHeight[i] - step;
+            peakHeights[i] = peakHeights[i] + step;
+            if (peakHeights[i] > maxHeight || peakHeights[i] < minHeight) {
+                peakHeights[i] = peakHeights[i] - step;
             }
         }
     }
@@ -202,7 +236,7 @@ public abstract class DynamicProblem extends DoubleProblem {
         if (changeType == ChangeType.CHAOTIC) {
             for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                 for (int j = 0; j < numberOfDimensions; j++) {
-                    position[i][j] = getChaoticValue(position[i][j], gLowerLimit, gUpperLimit);
+                    peakPositions[i][j] = getChaoticValue(peakPositions[i][j], gLowerLimit, gUpperLimit);
                 }
             }
             return;
@@ -222,7 +256,7 @@ public abstract class DynamicProblem extends DoubleProblem {
 
                 if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) &&
                         changeTypeCounter.getNumberOfOccurrences(changeType) % periodicity == 0) {
-                    System.arraycopy(initialPosition[i], 0, position[i], 0, numberOfDimensions);
+                    System.arraycopy(initialPeakPositions[i], 0, peakPositions[i], 0, numberOfDimensions);
                 }
 
                 I.identity();
@@ -237,7 +271,7 @@ public abstract class DynamicProblem extends DoubleProblem {
                         rotationMatrix[i] = rotationMatrix[i].multiply(I);
                     }
                     Matrix m = new Matrix(numberOfDimensions, 1);
-                    m.setData(position[i], numberOfDimensions);
+                    m.setData(peakPositions[i], numberOfDimensions);
                     m = m.multiply(rotationMatrix[i]);
                     // System.arraycopy(m.getData()[0], 0, genes, 0, dimension); // TODO: preveri kaj so genes, še jih ne uporabljaš
                     // correction(); // TODO: tukaj bo verjetno klic metode makeFeasible

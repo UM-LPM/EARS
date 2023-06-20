@@ -1,16 +1,9 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.NumberAlgorithm;
-import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.problems.StopCriterion;
-import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.dynamic.cec2009.BasicFunction;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
-import org.um.feri.ears.problems.dynamic.cec2009.DynamicCompositionProblem;
-import org.um.feri.ears.problems.dynamic.cec2009.DynamicProblem;
-
-import java.util.ArrayList;
 
 /**
  * Generalized Dynamic Benchmark Generator
@@ -37,36 +30,24 @@ import java.util.ArrayList;
 
 public class CEC2009DynamicOptimizationBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
 
-    private final int numberOfPeaksOrFunctions;
-    private final Double heightNormalizeSeverity;   // the constant number for normalizing all basic functions with similar height
-    private final Double minHeight, maxHeight;  // peak height
-    private final Double chaoticConstant;    // value must be between 1.0 and 4.0
-    private final int minDimension, maxDimension;
-    private final int changeFrequency;  // number of evaluations between two successive changes
-    private final int numberOfChanges;  // the number of changes = how many times the problem will change
-    private final Double gLowerLimit, gUpperLimit;    // search range // TODO: nisem prepričani kaj je to; spodnja in zgornja meja dinamičnega problema "kot celota"?
+    private final int numberOfPeaksOrFunctions = 10;
+    private final Double heightNormalizeSeverity = 2000.0;  // the constant number for normalizing all basic functions with similar height
+    private final Double minPeakHeight = 10.0, maxPeakHeight = 100.0;
+    private final Double chaoticConstant = 3.67;    // value must be between 1.0 and 4.0
+    private final int minDimensions = 5, maxDimensions = 15;
+    private final int changeFrequency = 10000;  // number of evaluations between two successive changes
+    private final int numberOfChanges = 60;  // the number of changes = how many times the problem will change
+    private final Double gLowerLimit = -5.0, gUpperLimit = 5.0;    // search range
+    private final int changeFrequencyPerDimension = 10000;
 
     public CEC2009DynamicOptimizationBenchmark() {
         super();
         name = "Benchmark CEC 2009 Dynamic Optimization";
         dimension = 10;
-        numberOfPeaksOrFunctions = 10;
-        heightNormalizeSeverity = 2000.0;
-        minHeight = 10.0;
-        maxHeight = 100.0;
-        chaoticConstant = 3.67;
-        minDimension = 5;
-        maxDimension = 15;
-        changeFrequency = 10000;
-        numberOfChanges = 60;
-        gLowerLimit = -5.0;
-        gUpperLimit = 5.0;
     }
 
     @Override
     public void initAllProblems() {
-        ArrayList<DynamicProblem> problems = new ArrayList<>();
-
         /*
             TODO:
                 DynamicCompositionProblem
@@ -74,28 +55,64 @@ public class CEC2009DynamicOptimizationBenchmark extends SOBenchmark<NumberSolut
                     - problems for all change types (small step, large step, u_random ...) - first inner loop in C++
                     - two problems with different number of peaks (10 and 50) for Sphere - second inner loop in C++
          */
-        problems.add(new DynamicCompositionProblem("DynamicCompositionProblemSphereSmallStepPeaks10",
+        DynamicCompositionProblem problem1 = new DynamicCompositionProblem("DynamicCompositionProblemSphereSmallStepPeaks10",
                 dimension, // numberOfDimensions
-                -1, // TODO: numberOfGlobalOptimums - ali vem to vnaprej pri dinamičnem problemu? je to numberOfPeaksOrFunctions?
-                -1, // TODO: numberOfObjectives
-                -1, // TODO: numberOfConstraints
-                numberOfPeaksOrFunctions, // numberOfPeaksOrFunctions
-                minHeight, maxHeight,
+                1, // numberOfGlobalOptima
+                1, // numberOfObjectives
+                0, // numberOfConstraints
+                numberOfPeaksOrFunctions,
+                minPeakHeight, maxPeakHeight,
                 chaoticConstant,
                 ChangeType.SMALL_STEP,
                 0,  // periodicity
-                false,  // isDimensionChanged
-                minDimension, maxDimension,
+                true,   //false,  // isDimensionChanged
+                minDimensions, maxDimensions,
                 changeFrequency,
                 5,   // heightSeverity
                 heightNormalizeSeverity,
                 gLowerLimit, gUpperLimit,
                 BasicFunction.SPHERE
-        ));
+        );
+        int maxEvaluations = calculateNumberOfEvaluations(problem1);
+        addTask(problem1, stopCriterion, maxEvaluations, timeLimit, maxIterations);
+    }
+
+    private int calculateNumberOfEvaluations(DynamicProblem p) {
+        int maxEvaluations = 0;
+
+        if (p.isDimensionChanging()) {
+            boolean isDimensionIncreasing = p.isDimensionIncreasing();
+            int currentNumberOfDimensions = p.getNumberOfDimensions();
+
+            for (int i = 0; i < numberOfChanges; i++) {
+                maxEvaluations += (p.getChangeFrequency() * currentNumberOfDimensions);
+
+                if (currentNumberOfDimensions == p.getMinDimensions()) {
+                    isDimensionIncreasing = true;
+                }
+                if (currentNumberOfDimensions == p.getMaxDimensions()) {
+                    isDimensionIncreasing = false;
+                }
+                if (isDimensionIncreasing) {
+                    currentNumberOfDimensions++;
+                } else {
+                    currentNumberOfDimensions--;
+                }
+            }
+        } else {
+            maxEvaluations = p.getChangeFrequency() * p.getNumberOfDimensions() * numberOfChanges;
+        }
+
+        return maxEvaluations;
     }
 
     @Override
     protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
-        tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, time, maxIterations));
+        tasks.add(new DynamicTask<>(problem, stopCriterion, maxEvaluations, time, maxIterations, changeFrequencyPerDimension));
+    }
+
+    public static void main(String[] args) {
+        CEC2009DynamicOptimizationBenchmark benchmark = new CEC2009DynamicOptimizationBenchmark();
+        benchmark.initAllProblems();
     }
 }
