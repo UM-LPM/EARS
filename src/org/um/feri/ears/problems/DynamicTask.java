@@ -29,7 +29,7 @@ public class DynamicTask<S extends Solution, P extends Problem<S>> extends Task<
         super.eval(solution);
         changeCounter++;
         if (changeCounter == changeFrequencyPerDimension * ((DynamicProblem) problem).getNumberOfDimensions()) {
-            ((DynamicProblem) problem).performChange();
+            ((DynamicProblem) problem).performChange(changeCounter);
             changeCounter = 0;
             changeOccurred = true;
         }
@@ -40,7 +40,7 @@ public class DynamicTask<S extends Solution, P extends Problem<S>> extends Task<
         super.eval(solution, parents);
         changeCounter++;
         if (changeCounter == changeFrequencyPerDimension * ((DynamicProblem) problem).getNumberOfDimensions()) {
-            ((DynamicProblem) problem).performChange();
+            ((DynamicProblem) problem).performChange(changeCounter);
             changeCounter = 0;
             changeOccurred = true;
         }

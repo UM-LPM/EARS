@@ -86,13 +86,13 @@ public class DynamicCompositionProblem extends DynamicProblem {
     }
 
     @Override
-    public void increaseDimension(int newDimension) {
+    public void increaseDimension(int newDimension, int changeCounter) {
         numberOfDimensions = newDimension;
         int newDimensionIndex = newDimension - 1;
 
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
             for (int i = 0; i < periodicity; i++) {
-                if (changeTypeCounter.getNumberOfOccurrences(changeType) <= i) {
+                if (changeCounter <= i) {
                     break;
                 }
                 for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
@@ -108,7 +108,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
             for (int i = 0; i < periodicity; i++) {
-                if (changeTypeCounter.getNumberOfOccurrences(changeType) <= i) {
+                if (changeCounter <= i) {
                     break;
                 }
                 for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
@@ -133,12 +133,12 @@ public class DynamicCompositionProblem extends DynamicProblem {
     }
 
     @Override
-    public void decreaseDimension(int newDimension) {
+    public void decreaseDimension(int newDimension, int changeCounter) {
         numberOfDimensions = newDimension;
 
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
             for (int i = 0; i < periodicity; i++) {
-                if (changeTypeCounter.getNumberOfOccurrences(changeType) <= i) {
+                if (changeCounter <= i) {
                     break;
                 }
                 for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
@@ -180,27 +180,24 @@ public class DynamicCompositionProblem extends DynamicProblem {
     }
 
     @Override
-    public void performChange() {
+    public void performChange(int changeCounter) {
         switch (changeType) {
             case SMALL_STEP:
                 heightStandardChange();
-                positionStandardChange(0);
+                positionStandardChange(0, changeCounter);
                 calculateGlobalOptima();
-                changeTypeCounter.increaseNumberOfOccurrences(ChangeType.SMALL_STEP);
                 break;
             case LARGE_STEP:
                 heightStandardChange();
-                positionStandardChange(0);
+                positionStandardChange(0, changeCounter);
                 calculateGlobalOptima();
-                changeTypeCounter.increaseNumberOfOccurrences(ChangeType.LARGE_STEP);
                 break;
             case U_RANDOM:
                 // change the global minimum value of each function
                 heightStandardChange();
                 // change the position of global optimum of each function randomly
-                positionStandardChange(0);
+                positionStandardChange(0, changeCounter);
                 calculateGlobalOptima();
-                changeTypeCounter.increaseNumberOfOccurrences(ChangeType.U_RANDOM);
                 break;
             case RECURRENT:
                 double initialAngle;
@@ -208,24 +205,18 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                     initialAngle = (double) periodicity * i / numberOfPeaksOrFunctions;
-                    peakHeights[i] = minHeight + heightRange * (Math.sin(2 * Math.PI *
-                            (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT) + initialAngle) / periodicity) + 1) / 2.;
+                    peakHeights[i] = minHeight + heightRange * (Math.sin(2 * Math.PI * (changeCounter + initialAngle) / periodicity) + 1) / 2.;
                 }
-                initialAngle = Math.PI * (Math.sin(2 * Math.PI * changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT) / periodicity) + 1) / 12.;
-                positionStandardChange(initialAngle);
-
+                initialAngle = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
+                positionStandardChange(initialAngle, changeCounter);
                 calculateGlobalOptima();
-                changeTypeCounter.increaseNumberOfOccurrences(ChangeType.RECURRENT);
                 break;
             case CHAOTIC:
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                     peakHeights[i] = getChaoticValue(peakHeights[i], minHeight, maxHeight);
                 }
-
-                positionStandardChange(0);
-
+                positionStandardChange(0, changeCounter);
                 calculateGlobalOptima();
-                changeTypeCounter.increaseNumberOfOccurrences(ChangeType.CHAOTIC);
                 break;
             case RECURRENT_NOISY:
                 double initialAngle2;   // TODO: poimenovanje...
@@ -234,19 +225,17 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 double noisy;
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                     initialAngle2 = (double) periodicity * i / numberOfPeaksOrFunctions;
-                    peakHeights[i] = sinValueNoisy(changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY), minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
+                    peakHeights[i] = sinValueNoisy(changeCounter, minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
                 }
-                initialAngle2 = Math.PI * (Math.sin(2 * Math.PI * (changeTypeCounter.getNumberOfOccurrences(ChangeType.RECURRENT_NOISY)) / periodicity) + 1) / 12.;
+                initialAngle2 = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
                 noisy = recurrentNoisySeverity * new Random().nextDouble();   // TODO: use appropriate random
-                positionStandardChange(initialAngle2 + noisy);
-
+                positionStandardChange(initialAngle2 + noisy, changeCounter);
                 calculateGlobalOptima();
-                changeTypeCounter.increaseNumberOfOccurrences(ChangeType.RECURRENT_NOISY);
                 break;
         }
 
         if (dimensionChanging) {
-            changeDimension();
+            changeDimension(changeCounter);
         }
     }
 

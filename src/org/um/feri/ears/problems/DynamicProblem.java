@@ -1,7 +1,6 @@
 package org.um.feri.ears.problems;
 
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
-import org.um.feri.ears.problems.dynamic.cec2009.ChangeTypeCounter;
 import org.um.feri.ears.problems.dynamic.cec2009.Matrix;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public abstract class DynamicProblem extends DoubleProblem {
     // initialPosition?, height (če je fitness, že obstaja in je objectiveSpaceOptima), heightSeverity, fit?, weight?,
     // rotationMatrix?, rotationPlanes?, globalOptimaPosition?
 
-    protected final ChangeTypeCounter changeTypeCounter;    // TODO: novi: preveri ali se changeType spreminja znotraj problema. če ne, naj bo navadni integer
+    //protected final ChangeTypeCounter changeTypeCounter;    // TODO: novi: preveri ali se changeType spreminja znotraj problema. če ne, naj bo navadni integer
     protected int numberOfPeaksOrFunctions;
     protected Double minHeight, maxHeight;    // minimum/maximum height of all peaks (local optima) in RotationDBG (CompositionDBG)
     private Double chaoticConstant;
@@ -56,7 +55,7 @@ public abstract class DynamicProblem extends DoubleProblem {
             throw new IllegalArgumentException("Periodicity must be 0 if changeType != ChangeType.RECURRENT && changeType != ChangeType.RECURRENT_NOISY");
         }
 
-        changeTypeCounter = new ChangeTypeCounter();
+        //changeTypeCounter = new ChangeTypeCounter();
         this.numberOfPeaksOrFunctions = numberOfPeaksOrFunctions;
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
@@ -146,7 +145,7 @@ public abstract class DynamicProblem extends DoubleProblem {
     }
 
     // dimension changes (linear increase or decrease).
-    public void changeDimension() {
+    public void changeDimension(int changeCounter) {
         if (!dimensionChanging) {
             return;
         }
@@ -166,19 +165,19 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
 
         if (newDimension < numberOfDimensions) {
-            decreaseDimension(newDimension);
+            decreaseDimension(newDimension, changeCounter);
         } else {
-            increaseDimension(newDimension);
+            increaseDimension(newDimension, changeCounter);
         }
     }
 
     protected abstract void calculateGlobalOptima();
 
-    protected abstract void increaseDimension(int newDimension);
+    protected abstract void increaseDimension(int newDimension, int changeCounter);
 
-    protected abstract void decreaseDimension(int newDimension);
+    protected abstract void decreaseDimension(int newDimension, int changeCounter);
 
-    public abstract void performChange();
+    public abstract void performChange(int changeCounter);
 
     // TODO: premisli, če je to pravo mesto za to metodo, ker potem razred DynamicProblem več ni tako "splošen". Ideja: podrazred GeneralizedDynamicBenchmark
     public Double standardChange(final Double min, final Double max) {
@@ -231,7 +230,7 @@ public abstract class DynamicProblem extends DoubleProblem {
     // TODO: premisli, če je to pravo mesto za to metodo, ker potem razred DynamicProblem več ni tako "splošen"
     // TODO: premisli glede imena metode
     // TODO: glede na originalno kodo parameter 'angle' ni potreben, lahko je lokalna spremenljivka v metodi
-    public void positionStandardChange(double angle) {
+    public void positionStandardChange(double angle, int changeCounter) {
         // for each basic function of dimension n(even number) , R = R(l1, l2) * R(l3, l4) * .... * R(li - 1, li), 0 <= li <= n
         if (changeType == ChangeType.CHAOTIC) {
             for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
@@ -245,17 +244,15 @@ public abstract class DynamicProblem extends DoubleProblem {
         Matrix I = new Matrix(numberOfDimensions);
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY)
-                    && changeTypeCounter.getNumberOfOccurrences(changeType) >= periodicity) {
-                System.arraycopy(rotationPlanes[changeTypeCounter.getNumberOfOccurrences(changeType) % periodicity][i], 0, d, 0, numberOfDimensions);
+                    && changeCounter >= periodicity) {
+                System.arraycopy(rotationPlanes[changeCounter % periodicity][i], 0, d, 0, numberOfDimensions);
             } else {
                 initializeRandomArray(d, numberOfDimensions);
-                if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) &&
-                        changeTypeCounter.getNumberOfOccurrences(changeType) % periodicity == 0) {
-                    System.arraycopy(d, 0, rotationPlanes[changeTypeCounter.getNumberOfOccurrences(changeType)][i], 0, numberOfDimensions);
+                if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) && changeCounter % periodicity == 0) {
+                    System.arraycopy(d, 0, rotationPlanes[changeCounter][i], 0, numberOfDimensions);
                 }
 
-                if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) &&
-                        changeTypeCounter.getNumberOfOccurrences(changeType) % periodicity == 0) {
+                if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) && changeCounter % periodicity == 0) {
                     System.arraycopy(initialPeakPositions[i], 0, peakPositions[i], 0, numberOfDimensions);
                 }
 
