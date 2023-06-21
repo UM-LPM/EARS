@@ -52,7 +52,6 @@ public class Matrix {
                 }
             }
         }
-        //MyFileWriter.getInstance().write(String.valueOf(r.data[0][0]));
         col = r.col;
         row = r.row;
         data = r.data;

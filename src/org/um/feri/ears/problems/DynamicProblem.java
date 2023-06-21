@@ -9,45 +9,33 @@ import java.util.Random;
 
 public abstract class DynamicProblem extends DoubleProblem {
 
-    // Iz Global v Problem: dimension, numPeakOrFun (število globalnih optimumov, preveri v problemu), hnS, boundary,
-    // minHeight, maxHeight, chaoticConstant, minWidth, maxWidth, change, periodicity, minDimension, maxDimension,
-    // changeFrequency, alpha, maxAlpha; GeneralDbg: recurrentNoisySeverity, flagDimensionChange, dirDimensionChange;
-    // RealDbg: genes so x-i (Solution) -> pri evaluate parameter Solution (iz nadrazreda), position=decisionSpaceOptima,
-    // initialPosition?, height (če je fitness, že obstaja in je objectiveSpaceOptima), heightSeverity, fit?, weight?,
-    // rotationMatrix?, rotationPlanes?, globalOptimaPosition?
-
-    //protected final ChangeTypeCounter changeTypeCounter;    // TODO: novi: preveri ali se changeType spreminja znotraj problema. če ne, naj bo navadni integer
     protected int numberOfPeaksOrFunctions;
-    protected Double minHeight, maxHeight;    // minimum/maximum height of all peaks (local optima) in RotationDBG (CompositionDBG)
-    private Double chaoticConstant;
-    protected Double[] peakHeights;    // peak height in RotationDBG, height of global optima in CompositionDBG   // TODO: preveri, če to predstavlja fitness, potem že obstaja in je to spremeljivka objectiveSpaceOptima
+    protected double minHeight, maxHeight;    // minimum/maximum height of all peaks (local optima) in RotationDBG (CompositionDBG)
+    private final double chaoticConstant;
+    protected double[] peakHeights;    // peak height in RotationDBG, height of global optima in CompositionDBG
     protected ChangeType changeType;
     protected int periodicity;    // definite period for values repeating
     protected boolean dimensionChanging;  // true if the number of dimensions has changed, false otherwise
-    private int minDimensions, maxDimensions;
+    private final int minDimensions, maxDimensions;
     private boolean isDimensionIncreasing;  // true if the direction should be changed, false otherwise
-    private int changeFrequency;    // number of evaluations between two successive changes
-    private int heightSeverity;
+    private final int changeFrequency;    // number of evaluations between two successive changes
+    private final int heightSeverity;
     protected double[][] peakPositions;  // positions of local or global optima (local optima in RotationDBG, global optima of basic function in CompositionDBG)
-    protected Double[][] initialPeakPositions;   // save the initial positions
+    protected double[][] initialPeakPositions;   // save the initial positions
     protected int[][][] rotationPlanes;    // save the planes rotated during one periodicity
-    //protected Double[] fit;   // objective value of each basic function in CompositionDBG, peak height in RotationDBG
-    protected Double[] weight;   // weight value of each basic function in CompositionDBG, peak width in RotationDBG
+    protected double[] weight;   // weight value of each basic function in CompositionDBG, peak width in RotationDBG
     protected float recurrentNoisySeverity; // deviation severity from the trajectory of recurrent change
-    protected final Double gLowerLimit, gUpperLimit;  // solution space // TODO: spada to samo v DynamicCompositionProblem?
-    protected Double globalOptima;  // global optima value // TODO: preveri ali to že obstaja v nadrazredu (EARS)
-    protected Matrix[] rotationMatrix;  // orthogonal rotation matrices for each function // TODO: ali boš uporabil svoj razred Matrix?
-
-    // TODO: V originalni kodi imajo spremenljivko OptimizationType (MIN, MAX). Kako to "zapakiram" v EARS?
+    protected final double gLowerLimit, gUpperLimit;  // solution space // TODO: spada to samo v DynamicCompositionProblem?
+    protected double globalOptima;  // global optima value
+    protected Matrix[] rotationMatrix;  // orthogonal rotation matrices for each function
 
     public DynamicProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints,
-                          int numberOfPeaksOrFunctions, Double minHeight, Double maxHeight, Double chaoticConstant, ChangeType changeType,
+                          int numberOfPeaksOrFunctions, double minHeight, double maxHeight, double chaoticConstant, ChangeType changeType,
                           int periodicity, boolean dimensionChanging, int minDimensions, int maxDimensions, int changeFrequency,
-                          int heightSeverity, Double gLowerLimit, Double gUpperLimit) {
+                          int heightSeverity, double gLowerLimit, double gUpperLimit) {
 
         super(name, numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints);
 
-        // TODO
         if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) && periodicity != 12) {
             throw new IllegalArgumentException("Periodicity must be 12 if changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY");
         }
@@ -55,27 +43,39 @@ public abstract class DynamicProblem extends DoubleProblem {
             throw new IllegalArgumentException("Periodicity must be 0 if changeType != ChangeType.RECURRENT && changeType != ChangeType.RECURRENT_NOISY");
         }
 
-        //changeTypeCounter = new ChangeTypeCounter();
         this.numberOfPeaksOrFunctions = numberOfPeaksOrFunctions;
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
         this.chaoticConstant = chaoticConstant;
-        peakHeights = new Double[numberOfPeaksOrFunctions];
+        peakHeights = new double[numberOfPeaksOrFunctions];
+        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+            if (changeType == ChangeType.CHAOTIC) {
+                peakHeights[i] = minHeight + (maxHeight - minHeight) * new Random().nextDouble();    // TODO: use appropriate random
+            } else {
+                peakHeights[i] = 50;
+            }
+        }
         this.changeType = changeType;
         this.periodicity = periodicity;
         this.dimensionChanging = dimensionChanging;
-        this.isDimensionIncreasing = dimensionChanging; // TODO: preveri, če je to OK
+        this.isDimensionIncreasing = true;
         this.minDimensions = minDimensions;
         this.maxDimensions = maxDimensions;
         this.changeFrequency = changeFrequency;
         this.heightSeverity = heightSeverity;
         peakPositions = new double[numberOfPeaksOrFunctions][];
-        initialPeakPositions = new Double[numberOfPeaksOrFunctions][];
+        initialPeakPositions = new double[numberOfPeaksOrFunctions][];
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             peakPositions[i] = new double[maxDimensions];
-            initialPeakPositions[i] = new Double[maxDimensions];
+            initialPeakPositions[i] = new double[maxDimensions];
         }
-        weight = new Double[numberOfPeaksOrFunctions];
+        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+            for (int j = 0; j < maxDimensions; j++) {
+                peakPositions[i][j] = gLowerLimit + (gUpperLimit - gLowerLimit) * new Random().nextDouble();    // TODO: use appropriate random
+                initialPeakPositions[i][j] = peakPositions[i][j];
+            }
+        }
+        weight = new double[numberOfPeaksOrFunctions];
         this.gLowerLimit = gLowerLimit;
         this.gUpperLimit = gUpperLimit;
         rotationMatrix = new Matrix[numberOfPeaksOrFunctions];
@@ -117,15 +117,14 @@ public abstract class DynamicProblem extends DoubleProblem {
         return changeFrequency;
     }
 
-    // TODO: ta metoda verjetno ni potrebna tukaj? samo v podrazredu DynamicRotationProblem
-    public void setWeight(Double weight) {
+    public void setWeight(double weight) {
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             this.weight[i] = weight;
         }
     }
 
     // return a value calculated by the logistics function
-    protected Double getChaoticValue(final Double x, final Double min, final Double max) {
+    protected double getChaoticValue(final double x, final double min, final double max) {
         if (min > max) {
             return -1.0;
         }
@@ -136,7 +135,7 @@ public abstract class DynamicProblem extends DoubleProblem {
     }
 
     // return a value in recurrent with noisy dynamism environment
-    protected Double sinValueNoisy(final int x, final Double min, final Double max, final Double amplitude, final double angle, final double noisySeverity) {
+    protected double sinValueNoisy(final int x, final double min, final double max, final double amplitude, final double angle, final double noisySeverity) {
         double y = min + amplitude * (Math.sin(2 * Math.PI * (x + angle) / periodicity) + 1) / 2.;
         double noisy = noisySeverity * new Random().nextGaussian();    // TODO: use appropriate random
         double t = y + noisy;
@@ -178,8 +177,7 @@ public abstract class DynamicProblem extends DoubleProblem {
 
     public abstract void performChange(int changeCounter);
 
-    // TODO: premisli, če je to pravo mesto za to metodo, ker potem razred DynamicProblem več ni tako "splošen". Ideja: podrazred GeneralizedDynamicBenchmark
-    public Double standardChange(final Double min, final Double max) {
+    public double standardChange(final double min, final double max) {
         double step = 0.0;
         int sign;
 
@@ -188,14 +186,14 @@ public abstract class DynamicProblem extends DoubleProblem {
 
         switch (changeType) {
             case SMALL_STEP:
-                step = -1 + 2 * new Random().nextGaussian();    // TODO: use appropriate random
+                step = -1 + 2 * new Random().nextDouble();    // TODO: use appropriate random
                 step = ALPHA * step * (max - min);
                 break;
             case U_RANDOM:
                 step = new Random().nextGaussian();    // TODO: use appropriate random
                 break;
             case LARGE_STEP:
-                step = -1 + 2 * new Random().nextGaussian();    // TODO: use appropriate random
+                step = -1 + 2 * new Random().nextDouble();    // TODO: use appropriate random
                 if (step > 0) {
                     sign = 1;
                 } else if (step < 0) {
@@ -213,8 +211,6 @@ public abstract class DynamicProblem extends DoubleProblem {
         return step;
     }
 
-    // TODO: premisli, če je to pravo mesto za to metodo, ker potem razred DynamicProblem več ni tako "splošen"
-    // TODO: premisli glede imena metode
     public void heightStandardChange() {
         double step;
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
@@ -226,8 +222,6 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
     }
 
-    // TODO: premisli, če je to pravo mesto za to metodo, ker potem razred DynamicProblem več ni tako "splošen"
-    // TODO: premisli glede imena metode
     // TODO: glede na originalno kodo parameter 'angle' ni potreben, lahko je lokalna spremenljivka v metodi
     public void positionStandardChange(double angle, int changeCounter) {
         // for each basic function of dimension n(even number) , R = R(l1, l2) * R(l3, l4) * .... * R(li - 1, li), 0 <= li <= n
@@ -286,7 +280,7 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
         int d = dim;
         for (int i = 0; i < dim; i++) {
-            int t = (int) (d * new Random().nextGaussian());  // TODO: use appropriate random
+            int t = (int) (d * new Random().nextDouble());  // TODO: use appropriate random
             array[i] = temp[t];
             for (int k = t; k < d - 1; k++) {
                 temp[k] = temp[k + 1];

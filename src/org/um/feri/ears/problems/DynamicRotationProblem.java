@@ -3,19 +3,18 @@ package org.um.feri.ears.problems;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
 public class DynamicRotationProblem extends DynamicProblem {
 
-    private Double widthSeverity;   // width severity for each peak
-    private Double minWidth, maxWidth;  // peak width
+    private final double widthSeverity;   // width severity for each peak
+    private final double minWidth, maxWidth;  // peak width
 
     public DynamicRotationProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints,
-                                  int numberOfPeaksOrFunctions, Double minHeight, Double maxHeight, Double chaoticConstant, ChangeType changeType,
-                                  int periodicity, boolean isDimensionChanged, int minDimension, int maxDimension, Double minWidth, Double maxWidth,
-                                  int changeFrequency, int heightSeverity, Double gLowerLimit, Double gUpperLimit, Double widthSeverity) {
+                                  int numberOfPeaksOrFunctions, double minHeight, double maxHeight, double chaoticConstant, ChangeType changeType,
+                                  int periodicity, boolean isDimensionChanged, int minDimension, int maxDimension, double minWidth, double maxWidth,
+                                  int changeFrequency, int heightSeverity, double gLowerLimit, double gUpperLimit, double widthSeverity) {
 
         super(name, numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints,
                 numberOfPeaksOrFunctions, minHeight, maxHeight, chaoticConstant, changeType, periodicity,
@@ -24,13 +23,15 @@ public class DynamicRotationProblem extends DynamicProblem {
         this.widthSeverity = widthSeverity;
         this.minWidth = minWidth;
         this.maxWidth = maxWidth;
+        setWeight(5);   // TODO: pass value to constructor? between 1 and 10
+        calculateGlobalOptima();
     }
 
     @Override
-    public void setWeight(Double weight) {  // TODO: pokliči v konstruktorju (vrednost med 1 in 10)
+    public void setWeight(double weight) {
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             if (changeType == ChangeType.CHAOTIC) {
-                this.weight[i] = minWidth + (maxWidth - minWidth) * new Random().nextGaussian();    // TODO: use appropriate random
+                this.weight[i] = minWidth + (maxWidth - minWidth) * new Random().nextDouble();    // TODO: use appropriate random
             } else {
                 this.weight[i] = weight;
             }
@@ -38,7 +39,7 @@ public class DynamicRotationProblem extends DynamicProblem {
     }
 
     public void widthStandardChange() {
-        Double step;
+        double step;
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             step = widthSeverity * standardChange(minWidth, maxWidth);
             weight[i] = weight[i] + step;
@@ -51,7 +52,7 @@ public class DynamicRotationProblem extends DynamicProblem {
 
     @Override
     protected void calculateGlobalOptima() {
-        globalOptima = Arrays.stream(peakHeights).max(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);
+        globalOptima = Arrays.stream(peakHeights).max().orElseThrow(NoSuchElementException::new);
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             if (peakHeights[i] == globalOptima) {
                 System.arraycopy(peakPositions[i], 0, decisionSpaceOptima[0], 0, numberOfDimensions);
@@ -76,7 +77,7 @@ public class DynamicRotationProblem extends DynamicProblem {
         }
 
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * new Random().nextGaussian();    // TODO: use appropriate random
+            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * new Random().nextDouble();    // TODO: use appropriate random
             initialPeakPositions[i][newDimensionIndex] = peakPositions[i][newDimensionIndex];
         }
 
