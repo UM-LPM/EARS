@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class DynamicCompositionProblem extends DynamicProblem {
 
-    private DoubleProblem[] basicFunctions;   // which basic function is used to compose the composition function TODO: je DoubleProblem ustrezen tip?
+    private DoubleProblem[] basicFunctions;   // which basic function is used to compose the composition function
     private Double[] convergeSeverity;  // severity of converge range for each function
     private Double[] stretchSeverity;   // severity of stretching original function, greater than 1 for stretch, less than 1 for compress the original function
     private final Double heightNormalizeSeverity;   // the constant number for normalizing all basic functions with similar height
@@ -239,50 +239,53 @@ public class DynamicCompositionProblem extends DynamicProblem {
         }
     }
 
+
     @Override
     public double eval(double[] x) {
-        // System.arraycopy(x, 0, genes, 0, dimension); // TODO: ne veš še kaj so genes, z Mihom sva se pogovarjala, da prejme eval x-e v metodo in sma predvidevala, da je x enako genes
+        double[] tempX = new double[numberOfDimensions];
+        double[] functionFitness = new double[numberOfPeaksOrFunctions];
 
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {    // calculate weight for each function
             weight[i] = 0.0;
             for (int j = 0; j < numberOfDimensions; j++) {
-                // weight[i] += (genes[j] - position[i][j]) * (genes[j] - position[i][j]);  // TODO: genes
+                weight[i] += (x[j] - peakPositions[i][j]) * (x[j] - peakPositions[i][j]);
             }
             weight[i] = Math.exp(-Math.sqrt(weight[i] / (2 * numberOfDimensions * convergeSeverity[i] * convergeSeverity[i])));
         }
 
-        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {   // calculate objective value for each function
+        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {    // calculate objective value for each function
             for (int j = 0; j < numberOfDimensions; j++) {  // calculate the objective value of tranformation function i
-                // genes[j] = (genes[j] - position[i][j]) / stretchSeverity[i]; // ((1+fabs(position[i][j]/boundary[j].upper))* // TODO: genes
+                tempX[j] = (x[j] - peakPositions[i][j]) / stretchSeverity[i]; // ((1+fabs(position[i][j]/boundary[j].upper))*
             }
             Matrix m = new Matrix(numberOfDimensions, 1);
-            // m.setData(genes, dimension); // TODO: genes
+            m.setData(tempX, numberOfDimensions);
 
             m = m.multiply(rotationMatrix[i]);
 
-            // System.arraycopy(m.getData()[0], 0, genes, 0, dimension);    // TODO: genes
-            // correction(componentFunction[i]);    // TODO: makeFeasible?
-            // fit[i] = basicFunctions[i].eval(x);  // TODO: je 'x' pravi argument?
+            setFeasible(tempX); // correction(componentFunction[i]);
+            functionFitness[i] = basicFunctions[i].eval(x);
 
             for (int j = 0; j < numberOfDimensions; j++) {   // calculate the estimate max value of funciton i
-                // genes[j] = boundary[j].upper;    // TODO: genes
-                // genes[j] /= stretchSeverity[i];  // TODO: genes
+                tempX[j] = basicFunctions[i].getUpperLimit(j) / stretchSeverity[i];
             }
-            // m.setData(genes, dimension); // TODO: genes
+            m.setData(tempX, numberOfDimensions);
             m = m.multiply(rotationMatrix[i]);
-            // System.arraycopy(m.getData()[0], 0, genes, 0, dimension);    // TODO: genes
-            // correction(componentFunction[i]);    // TODO: makeFeasible?
-            // double fMax = basicFunctions[i].eval(x); // double fMax = selectFun(componentFunction[i]);   // TODO: je 'x' pravi argument?
-            // if (fMax != 0) {
-            //     fit[i] = heightNormalizeSeverity * fit[i] / Math.abs(fMax);
-            // }
-
-            // System.arraycopy(x, 0, genes, 0, dimension); // TODO: genes
+            System.arraycopy(m.getData()[0], 0, tempX, 0, numberOfDimensions);
+            setFeasible(tempX);
+            double fMax = basicFunctions[i].eval(x); // double fMax = selectFun(componentFunction[i]);
+            if (fMax != 0) {
+                functionFitness[i] = heightNormalizeSeverity * functionFitness[i] / Math.abs(fMax);
+            }
         }
-        if (objectiveMaximizationFlags[0])
+
+        /*
+        if (objectiveMaximizationFlags[0]) {
             globalOptima = Arrays.stream(peakHeights).min(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);   // Global.extremum(height, numPeakOrFun, Compare.MIN);
-        else
+        }
+        else {
             globalOptima = Arrays.stream(peakHeights).max(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);
+        }
+        */
 
         double sumWeight = 0;
         double maxWeight = Arrays.stream(weight).max(Comparator.comparing(Double::doubleValue)).orElseThrow(NoSuchElementException::new);
@@ -301,7 +304,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
         double obj = 0;
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            obj += weight[i] * (fit[i] + peakHeights[i]);
+            obj += weight[i] * (functionFitness[i] + peakHeights[i]);
         }
 
         return obj;

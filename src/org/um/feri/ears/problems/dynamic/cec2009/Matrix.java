@@ -4,7 +4,7 @@ package org.um.feri.ears.problems.dynamic.cec2009;
 public class Matrix {
 
     public int col, row;    // matrix size
-    private Double[][] data;    // value of each element
+    private double[][] data;    // value of each element
 
     public Matrix(int numberOfDimension) {
         row = numberOfDimension;
@@ -12,13 +12,13 @@ public class Matrix {
         if (row == 0) {
             throw new IllegalArgumentException("if (row == 0) return;");
         }
-        data = new Double[row][col];
+        data = new double[row][col];
     }
 
     public Matrix(final int col, final int row) {
         this.col = col;
         this.row = row;
-        this.data = new Double[row][col];
+        this.data = new double[row][col];
     }
 
     public Matrix(Matrix other) {
@@ -34,7 +34,7 @@ public class Matrix {
         if (this == m) return this;
         row = m.row;
         col = m.col;
-        this.data = new Double[row][col];
+        this.data = new double[row][col];
         for (int i = 0; i < row; i++) {
             System.arraycopy(m.data[i], 0, this.data[i], 0, col);
         }
@@ -83,11 +83,11 @@ public class Matrix {
         data[c][c] = Math.cos(angle);
     }
 
-    public void setData(final Double[] d, final int c) {
+    public void setData(final double[] d, final int c) {
         setData(d, c, 1);
     }
 
-    public void setData(final Double[] d, final int c, final int r) {
+    public void setData(final double[] d, final int c, final int r) {
         if (r != row)
             return;
         for (int i = 0; i < row; i++) {
@@ -95,7 +95,7 @@ public class Matrix {
         }
     }
 
-    public Double[][] getData() {
+    public double[][] getData() {
         return data;
     }
 

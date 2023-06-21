@@ -28,10 +28,10 @@ public abstract class DynamicProblem extends DoubleProblem {
     private boolean isDimensionIncreasing;  // true if the direction should be changed, false otherwise
     private int changeFrequency;    // number of evaluations between two successive changes
     private int heightSeverity;
-    protected Double[][] peakPositions;  // positions of local or global optima (local optima in RotationDBG, global optima of basic function in CompositionDBG)
+    protected double[][] peakPositions;  // positions of local or global optima (local optima in RotationDBG, global optima of basic function in CompositionDBG)
     protected Double[][] initialPeakPositions;   // save the initial positions
     protected int[][][] rotationPlanes;    // save the planes rotated during one periodicity
-    protected Double[] fit;   // objective value of each basic function in CompositionDBG, peak height in RotationDBG
+    //protected Double[] fit;   // objective value of each basic function in CompositionDBG, peak height in RotationDBG
     protected Double[] weight;   // weight value of each basic function in CompositionDBG, peak width in RotationDBG
     protected float recurrentNoisySeverity; // deviation severity from the trajectory of recurrent change
     protected final Double gLowerLimit, gUpperLimit;  // solution space // TODO: spada to samo v DynamicCompositionProblem?
@@ -69,13 +69,12 @@ public abstract class DynamicProblem extends DoubleProblem {
         this.maxDimensions = maxDimensions;
         this.changeFrequency = changeFrequency;
         this.heightSeverity = heightSeverity;
-        peakPositions = new Double[numberOfPeaksOrFunctions][];
+        peakPositions = new double[numberOfPeaksOrFunctions][];
         initialPeakPositions = new Double[numberOfPeaksOrFunctions][];
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            peakPositions[i] = new Double[maxDimensions];
+            peakPositions[i] = new double[maxDimensions];
             initialPeakPositions[i] = new Double[maxDimensions];
         }
-        fit = new Double[numberOfPeaksOrFunctions];
         weight = new Double[numberOfPeaksOrFunctions];
         this.gLowerLimit = gLowerLimit;
         this.gUpperLimit = gUpperLimit;

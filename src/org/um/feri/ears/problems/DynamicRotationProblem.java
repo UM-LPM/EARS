@@ -27,7 +27,7 @@ public class DynamicRotationProblem extends DynamicProblem {
     }
 
     @Override
-    public void setWeight(Double weight) {
+    public void setWeight(Double weight) {  // TODO: pokliči v konstruktorju (vrednost med 1 in 10)
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             if (changeType == ChangeType.CHAOTIC) {
                 this.weight[i] = minWidth + (maxWidth - minWidth) * new Random().nextGaussian();    // TODO: use appropriate random
@@ -181,5 +181,18 @@ public class DynamicRotationProblem extends DynamicProblem {
         if (dimensionChanging) {
             changeDimension(changeCounter);
         }
+    }
+
+    @Override
+    public double eval(double[] x) {
+        double[] peakFitness = new double[numberOfPeaksOrFunctions];
+        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+            peakFitness[i] = 0.0;
+            for (int j = 0; j < numberOfDimensions; j++)
+                peakFitness[i] += (x[j] - peakPositions[i][j]) * (x[j] - peakPositions[i][j]);
+            peakFitness[i] = Math.sqrt(peakFitness[i] / numberOfDimensions);
+            peakFitness[i] = peakHeights[i] / (1 + weight[i] * peakFitness[i]);
+        }
+        return Arrays.stream(peakFitness).max().orElseThrow(NoSuchElementException::new);
     }
 }
