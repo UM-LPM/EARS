@@ -1,5 +1,6 @@
 package org.um.feri.ears.problems;
 
+import org.um.feri.ears.benchmark.CEC2009DynamicBenchmark;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 import org.um.feri.ears.problems.dynamic.cec2009.Matrix;
 
@@ -181,19 +182,19 @@ public abstract class DynamicProblem extends DoubleProblem {
         double step = 0.0;
         int sign;
 
-        final double ALPHA = 0.04;    // TODO: where to put this variable?  // TODO: ALPHA = 0.02 v članku, v originalni kodi za CEC'09 pa 0.04
-        final double MAX_ALPHA = 0.1;   // TODO: where to put this variable?
+        final double ALPHA = 0.04;
+        final double MAX_ALPHA = 0.1;
 
         switch (changeType) {
             case SMALL_STEP:
-                step = -1 + 2 * new Random().nextDouble();    // TODO: use appropriate random
+                step = -1 + 2 * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
                 step = ALPHA * step * (max - min);
                 break;
             case U_RANDOM:
-                step = new Random().nextGaussian();    // TODO: use appropriate random
+                step = CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
                 break;
             case LARGE_STEP:
-                step = -1 + 2 * new Random().nextDouble();    // TODO: use appropriate random
+                step = -1 + 2 * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
                 if (step > 0) {
                     sign = 1;
                 } else if (step < 0) {
@@ -222,7 +223,6 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
     }
 
-    // TODO: glede na originalno kodo parameter 'angle' ni potreben, lahko je lokalna spremenljivka v metodi
     public void positionStandardChange(double angle, int changeCounter) {
         // for each basic function of dimension n(even number) , R = R(l1, l2) * R(l3, l4) * .... * R(li - 1, li), 0 <= li <= n
         if (changeType == ChangeType.CHAOTIC) {
@@ -236,8 +236,7 @@ public abstract class DynamicProblem extends DoubleProblem {
         int[] d = new int[numberOfDimensions];
         Matrix I = new Matrix(numberOfDimensions);
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY)
-                    && changeCounter >= periodicity) {
+            if ((changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) && changeCounter >= periodicity) {
                 System.arraycopy(rotationPlanes[changeCounter % periodicity][i], 0, d, 0, numberOfDimensions);
             } else {
                 initializeRandomArray(d, numberOfDimensions);
@@ -263,9 +262,8 @@ public abstract class DynamicProblem extends DoubleProblem {
                     Matrix m = new Matrix(numberOfDimensions, 1);
                     m.setData(peakPositions[i], numberOfDimensions);
                     m = m.multiply(rotationMatrix[i]);
-                    // System.arraycopy(m.getData()[0], 0, genes, 0, dimension); // TODO: preveri kaj so genes, še jih ne uporabljaš
-                    // correction(); // TODO: tukaj bo verjetno klic metode makeFeasible
-                    // System.arraycopy(genes, 0, position[i], 0, dimension); // TODO
+                    System.arraycopy(m.getData()[0], 0, peakPositions[i], 0, numberOfDimensions);
+                    setFeasible(peakPositions[i]);
                 }
             }
         }

@@ -28,7 +28,9 @@ import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
  * - non-dimensional changes
  */
 
-public class CEC2009DynamicOptimizationBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
+public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
+
+    public static MyRandom myRandom = new MyRandom();
 
     private final int numberOfPeaksOrFunctions = 10;
     private final Double heightNormalizeSeverity = 2000.0;  // the constant number for normalizing all basic functions with similar height
@@ -40,7 +42,7 @@ public class CEC2009DynamicOptimizationBenchmark extends SOBenchmark<NumberSolut
     private final Double gLowerLimit = -5.0, gUpperLimit = 5.0;    // search range
     private final int changeFrequencyPerDimension = 10000;
 
-    public CEC2009DynamicOptimizationBenchmark() {
+    public CEC2009DynamicBenchmark() {
         super();
         name = "Benchmark CEC 2009 Dynamic Optimization";
         dimension = 10;
@@ -112,7 +114,44 @@ public class CEC2009DynamicOptimizationBenchmark extends SOBenchmark<NumberSolut
     }
 
     public static void main(String[] args) {
-        CEC2009DynamicOptimizationBenchmark benchmark = new CEC2009DynamicOptimizationBenchmark();
-        benchmark.initAllProblems();
+        //CEC2009DynamicOptimizationBenchmark benchmark = new CEC2009DynamicOptimizationBenchmark();
+        //benchmark.initAllProblems();
+
+        DynamicCompositionProblem problem1 = new DynamicCompositionProblem("DynamicCompositionProblemSphereSmallStepPeaks10",
+                10, // numberOfDimensions
+                1, // numberOfGlobalOptima
+                1, // numberOfObjectives
+                0, // numberOfConstraints
+                10,
+                10.0, 100.0,
+                3.67,
+                ChangeType.SMALL_STEP,
+                0,  // periodicity
+                true,   //false,  // isDimensionChanged
+                5, 10,
+                10000,
+                5,   // heightSeverity
+                2000.0,
+                -5.0, 5.0,
+                BasicFunction.SPHERE
+        );
+
+        int changeCounter = 0;
+        for (int g = 1; g <= problem1.getChangeFrequency() * 60; g++) {
+            if (g % problem1.getChangeFrequency() == 0) {
+                // generate a solution
+                Double[] x = new Double[10];
+                for (int i = 0; i < 10; i++) {
+                    x[i] = -5.0 + (5.0 - (-5.0)) * myRandom.nextDouble();
+                }
+                double fit = problem1.eval(x);
+                System.out.println(fit);
+                problem1.performChange(changeCounter++);
+
+                if (problem1.isDimensionChanging()) {
+                    problem1.changeDimension(changeCounter);
+                }
+            }
+        }
     }
 }
