@@ -1,5 +1,6 @@
 package org.um.feri.ears.problems;
 
+import org.um.feri.ears.benchmark.CEC2009DynamicBenchmark;
 import org.um.feri.ears.problems.dynamic.cec2009.BasicFunction;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 import org.um.feri.ears.problems.dynamic.cec2009.Matrix;
@@ -44,7 +45,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
     private void initPeakHeight() {
         if (changeType == ChangeType.CHAOTIC) {
-            double peakHeightValue = minHeight + (maxHeight - minHeight) * new Random().nextGaussian();    // TODO: use appropriate random
+            double peakHeightValue = minHeight + (maxHeight - minHeight) * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
             Arrays.fill(peakHeights, peakHeightValue);
         } else {
             Arrays.fill(peakHeights, 50.0);
@@ -83,7 +84,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
     private void initStretchSeverity() {
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            stretchSeverity[i] = convergeSeverity[i] * (gUpperLimit - gLowerLimit) / (basicFunctions[i].getLowerLimit(0) - basicFunctions[i].getLowerLimit(0));
+            stretchSeverity[i] = convergeSeverity[i] * (gUpperLimit - gLowerLimit) / (basicFunctions[i].getUpperLimit(0) - basicFunctions[i].getLowerLimit(0));
         }
     }
 
@@ -104,7 +105,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
         }
 
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * new Random().nextDouble();    // TODO: use appropriate random
+            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
             initialPeakPositions[i][newDimensionIndex] = peakPositions[i][newDimensionIndex];
         }
 
@@ -169,7 +170,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
         initializeRandomArray(d, numberOfDimensions);
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             for (int j = 0; j + 1 < numberOfDimensions; j += 2) {
-                double angle = 2 * Math.PI * new Random().nextDouble();   // random angle for rotation plane of d[j]-d[j+1] from d[j]th axis to d[j+1]th axis // TODO: use appropriate random
+                double angle = 2 * Math.PI * CEC2009DynamicBenchmark.myRandom.nextDouble();   // random angle for rotation plane of d[j]-d[j+1] from d[j]th axis to d[j+1]th axis // TODO: use appropriate random
                 I.setRotation(d[j], d[j + 1], angle);
                 if (j == 0) {
                     rotationMatrix[i] = I;
@@ -230,7 +231,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
                     peakHeights[i] = sinValueNoisy(changeCounter, minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
                 }
                 initialAngle2 = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
-                noisy = recurrentNoisySeverity * new Random().nextGaussian();   // TODO: use appropriate random
+                noisy = recurrentNoisySeverity * CEC2009DynamicBenchmark.myRandom.nextGaussian();   // TODO: use appropriate random
                 positionStandardChange(initialAngle2 + noisy, changeCounter);
                 calculateGlobalOptima();
                 break;
@@ -264,17 +265,18 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
             m = m.multiply(rotationMatrix[i]);
 
-            setFeasible(tempX); // correction(componentFunction[i]);
-            functionFitness[i] = basicFunctions[i].eval(x);
+            System.arraycopy(m.getData()[0], 0, tempX, 0, numberOfDimensions);
+            basicFunctions[i].setFeasible(tempX); // correction(componentFunction[i]);
+            functionFitness[i] = basicFunctions[i].eval(tempX);
 
             for (int j = 0; j < numberOfDimensions; j++) {   // calculate the estimate max value of funciton i
-                tempX[j] = basicFunctions[i].getUpperLimit(j) / stretchSeverity[i];
+                tempX[j] = gUpperLimit / stretchSeverity[i];
             }
             m.setData(tempX, numberOfDimensions);
             m = m.multiply(rotationMatrix[i]);
             System.arraycopy(m.getData()[0], 0, tempX, 0, numberOfDimensions);
-            setFeasible(tempX);
-            double fMax = basicFunctions[i].eval(x); // double fMax = selectFun(componentFunction[i]);
+            basicFunctions[i].setFeasible(tempX);
+            double fMax = basicFunctions[i].eval(tempX); // double fMax = selectFun(componentFunction[i]);
             if (fMax != 0) {
                 functionFitness[i] = heightNormalizeSeverity * functionFitness[i] / Math.abs(fMax);
             }

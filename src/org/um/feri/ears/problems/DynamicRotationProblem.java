@@ -1,5 +1,6 @@
 package org.um.feri.ears.problems;
 
+import org.um.feri.ears.benchmark.CEC2009DynamicBenchmark;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 
 import java.util.Arrays;
@@ -31,7 +32,7 @@ public class DynamicRotationProblem extends DynamicProblem {
     public void setWeight(double weight) {
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             if (changeType == ChangeType.CHAOTIC) {
-                this.weight[i] = minWidth + (maxWidth - minWidth) * new Random().nextDouble();    // TODO: use appropriate random
+                this.weight[i] = minWidth + (maxWidth - minWidth) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
             } else {
                 this.weight[i] = weight;
             }
@@ -77,7 +78,7 @@ public class DynamicRotationProblem extends DynamicProblem {
         }
 
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * new Random().nextDouble();    // TODO: use appropriate random
+            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
             initialPeakPositions[i][newDimensionIndex] = peakPositions[i][newDimensionIndex];
         }
 
@@ -173,7 +174,7 @@ public class DynamicRotationProblem extends DynamicProblem {
                     weight[i] = sinValueNoisy(changeCounter, minWidth, maxWidth, widthRange2, initialAngle2, recurrentNoisySeverity);
                 }
                 initialAngle2 = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
-                noisy = recurrentNoisySeverity * new Random().nextGaussian();    // TODO: use appropriate random
+                noisy = recurrentNoisySeverity * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
                 positionStandardChange(initialAngle2 + noisy, changeCounter);
                 calculateGlobalOptima();
                 break;

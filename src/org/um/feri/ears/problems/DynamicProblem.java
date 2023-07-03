@@ -51,7 +51,7 @@ public abstract class DynamicProblem extends DoubleProblem {
         peakHeights = new double[numberOfPeaksOrFunctions];
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             if (changeType == ChangeType.CHAOTIC) {
-                peakHeights[i] = minHeight + (maxHeight - minHeight) * new Random().nextDouble();    // TODO: use appropriate random
+                peakHeights[i] = minHeight + (maxHeight - minHeight) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
             } else {
                 peakHeights[i] = 50;
             }
@@ -71,8 +71,8 @@ public abstract class DynamicProblem extends DoubleProblem {
             initialPeakPositions[i] = new double[maxDimensions];
         }
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            for (int j = 0; j < maxDimensions; j++) {
-                peakPositions[i][j] = gLowerLimit + (gUpperLimit - gLowerLimit) * new Random().nextDouble();    // TODO: use appropriate random
+            for (int j = 0; j < numberOfDimensions; j++) {  // TODO: pogoj zanke mora biti: j < maxDimensions | spremenjeno le zaradi debuggiranja (enako število uporabe Random)
+                peakPositions[i][j] = gLowerLimit + (gUpperLimit - gLowerLimit) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
                 initialPeakPositions[i][j] = peakPositions[i][j];
             }
         }
@@ -138,7 +138,7 @@ public abstract class DynamicProblem extends DoubleProblem {
     // return a value in recurrent with noisy dynamism environment
     protected double sinValueNoisy(final int x, final double min, final double max, final double amplitude, final double angle, final double noisySeverity) {
         double y = min + amplitude * (Math.sin(2 * Math.PI * (x + angle) / periodicity) + 1) / 2.;
-        double noisy = noisySeverity * new Random().nextGaussian();    // TODO: use appropriate random
+        double noisy = noisySeverity * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
         double t = y + noisy;
         return (t > min && t < max) ? t : (t - noisy);
     }
@@ -278,7 +278,7 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
         int d = dim;
         for (int i = 0; i < dim; i++) {
-            int t = (int) (d * new Random().nextDouble());  // TODO: use appropriate random
+            int t = (int) (d * CEC2009DynamicBenchmark.myRandom.nextDouble());  // TODO: use appropriate random
             array[i] = temp[t];
             for (int k = t; k < d - 1; k++) {
                 temp[k] = temp[k + 1];

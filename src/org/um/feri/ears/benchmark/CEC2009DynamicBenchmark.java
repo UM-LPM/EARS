@@ -127,8 +127,8 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
                 3.67,
                 ChangeType.SMALL_STEP,
                 0,  // periodicity
-                true,   //false,  // isDimensionChanged
-                5, 10,
+                false,   //false,  // isDimensionChanged
+                5, 15,
                 10000,
                 5,   // heightSeverity
                 2000.0,
