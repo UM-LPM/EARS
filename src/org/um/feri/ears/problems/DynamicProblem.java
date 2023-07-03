@@ -17,7 +17,7 @@ public abstract class DynamicProblem extends DoubleProblem {
     protected ChangeType changeType;
     protected int periodicity;    // definite period for values repeating
     protected boolean dimensionChanging;  // true if the number of dimensions has changed, false otherwise
-    private final int minDimensions, maxDimensions;
+    protected final int minDimensions, maxDimensions;
     private boolean isDimensionIncreasing;  // true if the direction should be changed, false otherwise
     private final int changeFrequency;    // number of evaluations between two successive changes
     private final int heightSeverity;

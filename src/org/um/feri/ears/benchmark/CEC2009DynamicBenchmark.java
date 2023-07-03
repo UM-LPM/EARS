@@ -127,7 +127,7 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
                 3.67,
                 ChangeType.SMALL_STEP,
                 0,  // periodicity
-                false,   //false,  // isDimensionChanged
+                true,   //false,  // isDimensionChanged
                 5, 15,
                 10000,
                 5,   // heightSeverity
@@ -140,17 +140,17 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
         for (int g = 1; g <= problem1.getChangeFrequency() * 60; g++) {
             if (g % problem1.getChangeFrequency() == 0) {
                 // generate a solution
-                Double[] x = new Double[10];
-                for (int i = 0; i < 10; i++) {
+                Double[] x = new Double[problem1.getNumberOfDimensions()];
+                for (int i = 0; i < problem1.getNumberOfDimensions(); i++) {
                     x[i] = -5.0 + (5.0 - (-5.0)) * myRandom.nextDouble();
                 }
                 double fit = problem1.eval(x);
                 System.out.println(fit);
                 problem1.performChange(changeCounter++);
 
-                if (problem1.isDimensionChanging()) {
-                    problem1.changeDimension(changeCounter);
-                }
+                //if (problem1.isDimensionChanging()) {
+                //    problem1.changeDimension(changeCounter);
+                //}
             }
         }
     }

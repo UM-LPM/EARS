@@ -93,6 +93,8 @@ public class DynamicCompositionProblem extends DynamicProblem {
         numberOfDimensions = newDimension;
         int newDimensionIndex = newDimension - 1;
 
+        initBasicFunctions(BasicFunction.SPHERE);   // TODO: BasicFunction.SPHERE nastavljen samo za testiranje...
+
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
             for (int i = 0; i < periodicity; i++) {
                 if (changeCounter <= i) {
@@ -103,6 +105,8 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 }
             }
         }
+
+        setRotationMatrix();
 
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
@@ -120,7 +124,6 @@ public class DynamicCompositionProblem extends DynamicProblem {
             }
         }
 
-        setRotationMatrix();
 
         calculateGlobalOptima();
     }
@@ -138,6 +141,8 @@ public class DynamicCompositionProblem extends DynamicProblem {
     @Override
     public void decreaseDimension(int newDimension, int changeCounter) {
         numberOfDimensions = newDimension;
+
+        initBasicFunctions(BasicFunction.SPHERE);   // TODO: BasicFunction.SPHERE nastavljen samo za testiranje...
 
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
             for (int i = 0; i < periodicity; i++) {
