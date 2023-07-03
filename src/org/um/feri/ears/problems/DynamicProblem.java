@@ -5,8 +5,8 @@ import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 import org.um.feri.ears.problems.dynamic.cec2009.Matrix;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Random;
 
 public abstract class DynamicProblem extends DoubleProblem {
 
@@ -48,15 +48,9 @@ public abstract class DynamicProblem extends DoubleProblem {
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
         this.chaoticConstant = chaoticConstant;
-        peakHeights = new double[numberOfPeaksOrFunctions];
-        for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            if (changeType == ChangeType.CHAOTIC) {
-                peakHeights[i] = minHeight + (maxHeight - minHeight) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
-            } else {
-                peakHeights[i] = 50;
-            }
-        }
         this.changeType = changeType;
+        peakHeights = new double[numberOfPeaksOrFunctions];
+        initPeakHeights();
         this.periodicity = periodicity;
         this.dimensionChanging = dimensionChanging;
         this.isDimensionIncreasing = true;
@@ -96,6 +90,16 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
 
         decisionSpaceOptima = new double[numberOfGlobalOptima][maxDimensions];  // globalOptimaPosition
+    }
+
+    private void initPeakHeights() {
+        if (changeType == ChangeType.CHAOTIC) {
+            for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
+                peakHeights[i] = minHeight + (maxHeight - minHeight) * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
+            }
+        } else {
+            Arrays.fill(peakHeights, 50.0);
+        }
     }
 
     public int getMinDimensions() {

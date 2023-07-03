@@ -125,7 +125,7 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
                 10,
                 10.0, 100.0,
                 3.67,
-                ChangeType.SMALL_STEP,
+                ChangeType.CHAOTIC,
                 0,  // periodicity
                 true,   //false,  // isDimensionChanged
                 5, 15,

@@ -28,8 +28,6 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 numberOfPeaksOrFunctions, minHeight, maxHeight, chaoticConstant, changeType, periodicity,
                 dimensionChanging, minDimension, maxDimension, changeFrequency, heightSeverity, gLowerLimit, gUpperLimit);
 
-        initPeakHeight();
-
         this.heightNormalizeSeverity = heightNormalizeSeverity;
 
         basicFunctions = new DoubleProblem[numberOfPeaksOrFunctions];
@@ -41,15 +39,6 @@ public class DynamicCompositionProblem extends DynamicProblem {
         initStretchSeverity();
         setRotationMatrix();
         calculateGlobalOptima();
-    }
-
-    private void initPeakHeight() {
-        if (changeType == ChangeType.CHAOTIC) {
-            double peakHeightValue = minHeight + (maxHeight - minHeight) * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
-            Arrays.fill(peakHeights, peakHeightValue);
-        } else {
-            Arrays.fill(peakHeights, 50.0);
-        }
     }
 
     // TODO: NOVI: array ustvari v benchmarku in ga pošlji v konstruktor
