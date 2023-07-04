@@ -6,41 +6,58 @@ import org.um.feri.ears.problems.dynamic.cec2009.BasicFunction;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 
 /**
- * Generalized Dynamic Benchmark Generator
- * <p>
- * Original source code:
- * - https://github.com/P-N-Suganthan/CEC2009-Dynamic-Optimization
- * <p>
+ * Generalized Dynamic Benchmark Generator (GDBG)
+ * <p></p>
  * Two different instances of generators:
- * - Dynamic Composition Benchmark Generator for continuous problems
- * - Dynamic Rotation Benchmark Generator for continuous problems
- * <p>
+ * <ul>
+ * <li>Dynamic Rotation Benchmark Generator for continuous problems</li>
+ * <li>Dynamic Composition Benchmark Generator for continuous problems</li>
+ * </ul>
  * Six types of changes of control parameters in GDBG:
- * - small step change
- * - large step change
- * - random change
- * - chaotic change
- * - recurrent change
- * - recurrent change with noisy
- * <p>
+ * <ul>
+ * <li>small step change</li>
+ * <li>large step change</li>
+ * <li>random change</li>
+ * <li>chaotic change</li>
+ * <li>recurrent change</li>
+ * <li>recurrent change with noisy</li>
+ * </ul>
  * Two types of environmental changes:
- * - dimensional changes
- * - non-dimensional changes
+ * <ul>
+ * <li>dimensional changes</li>
+ * <li>non-dimensional changes</li>
+ * </ul>
+ * Original source code (C++):
+ * <a href="https://github.com/P-N-Suganthan/CEC2009-Dynamic-Optimization">https://github.com/P-N-Suganthan/CEC2009-Dynamic-Optimization</a>
  */
-
 public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
 
     public static MyRandom myRandom = new MyRandom();
 
     private final int numberOfPeaksOrFunctions = 10;
-    private final double heightNormalizeSeverity = 2000.0;  // the constant number for normalizing all basic functions with similar height
+    /**
+     * The constant number for normalizing all basic functions with similar height.
+     */
+    private final double heightNormalizeSeverity = 2000.0;
     private final double minPeakHeight = 10.0, maxPeakHeight = 100.0;
     private final double minPeakWidth = 1.0, maxPeakWidth = 10.0;
-    private final double chaoticConstant = 3.67;    // value must be between 1.0 and 4.0
+    /**
+     * Value must be between 1.0 and 4.0.
+     */
+    private final double chaoticConstant = 3.67;
     private final int minDimensions = 5, maxDimensions = 15;
-    private final int changeFrequency = 10000;  // number of evaluations between two successive changes
-    private final int numberOfChanges = 60;  // the number of changes = how many times the problem will change
-    private final double gLowerLimit = -5.0, gUpperLimit = 5.0;    // search range
+    /**
+     * Number of evaluations between two successive changes.
+     */
+    private final int changeFrequency = 10000;
+    /**
+     * How many times the problem will change.
+     */
+    private final int numberOfChanges = 60;
+    /**
+     * Search range.
+     */
+    private final double gLowerLimit = -5.0, gUpperLimit = 5.0;
     private final int changeFrequencyPerDimension = 10000;
 
     public CEC2009DynamicBenchmark() {

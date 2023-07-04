@@ -5,12 +5,17 @@ import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
-import java.util.Random;
 
 public class DynamicRotationProblem extends DynamicProblem {
 
-    private final double widthSeverity;   // width severity for each peak
-    private final double minWidth, maxWidth;  // peak width
+    /**
+     * Width severity for each peak.
+     */
+    private final double widthSeverity;
+    /**
+     * Peak width.
+     */
+    private final double minWidth, maxWidth;
 
     public DynamicRotationProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints,
                                   int numberOfPeaksOrFunctions, double minHeight, double maxHeight, double chaoticConstant, ChangeType changeType,
@@ -24,7 +29,7 @@ public class DynamicRotationProblem extends DynamicProblem {
         this.widthSeverity = widthSeverity;
         this.minWidth = minWidth;
         this.maxWidth = maxWidth;
-        setWeight(5);   // TODO: pass value to constructor? between 1 and 10
+        setWeight(5);   // TODO: Should I pass the value to the constructor? The value should be between 1 and 10.
         calculateGlobalOptima();
     }
 
@@ -72,7 +77,7 @@ public class DynamicRotationProblem extends DynamicProblem {
                     break;
                 }
                 for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
-                    System.arraycopy(rotationPlanes[i][j], 0, rotationPlanes[i][j], 0, newDimensionIndex);   // TODO: mogoče ne rabim, ker imam velikost nastavljeno na 'maxDimension'?
+                    System.arraycopy(rotationPlanes[i][j], 0, rotationPlanes[i][j], 0, newDimensionIndex);
                 }
             }
         }
@@ -142,7 +147,7 @@ public class DynamicRotationProblem extends DynamicProblem {
                 positionStandardChange(0, changeCounter);
                 calculateGlobalOptima();
                 break;
-            case RECURRENT:
+            case RECURRENT: {
                 double initialAngle;
                 double heightRange = maxHeight - minHeight;
                 double widthRange = maxWidth - minWidth;
@@ -155,6 +160,7 @@ public class DynamicRotationProblem extends DynamicProblem {
                 positionStandardChange(initialAngle, changeCounter);
                 calculateGlobalOptima();
                 break;
+            }
             case CHAOTIC:
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                     peakHeights[i] = getChaoticValue(peakHeights[i], minHeight, maxHeight);
@@ -163,21 +169,22 @@ public class DynamicRotationProblem extends DynamicProblem {
                 positionStandardChange(0, changeCounter);
                 calculateGlobalOptima();
                 break;
-            case RECURRENT_NOISY:
-                double initialAngle2;   // TODO: poimenovanje za vse tri spremenljivke
-                double heightRange2 = maxHeight - minHeight;
-                double widthRange2 = maxWidth - minWidth;
+            case RECURRENT_NOISY: {
+                double initialAngle;
+                double heightRange = maxHeight - minHeight;
+                double widthRange = maxWidth - minWidth;
                 double noisy;
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-                    initialAngle2 = (double) periodicity * i / numberOfPeaksOrFunctions;
-                    peakHeights[i] = sinValueNoisy(changeCounter, minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
-                    weight[i] = sinValueNoisy(changeCounter, minWidth, maxWidth, widthRange2, initialAngle2, recurrentNoisySeverity);
+                    initialAngle = (double) periodicity * i / numberOfPeaksOrFunctions;
+                    peakHeights[i] = sinValueNoisy(changeCounter, minHeight, maxHeight, heightRange, initialAngle, recurrentNoisySeverity);
+                    weight[i] = sinValueNoisy(changeCounter, minWidth, maxWidth, widthRange, initialAngle, recurrentNoisySeverity);
                 }
-                initialAngle2 = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
+                initialAngle = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
                 noisy = recurrentNoisySeverity * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
-                positionStandardChange(initialAngle2 + noisy, changeCounter);
+                positionStandardChange(initialAngle + noisy, changeCounter);
                 calculateGlobalOptima();
                 break;
+            }
         }
 
         if (dimensionChanging) {

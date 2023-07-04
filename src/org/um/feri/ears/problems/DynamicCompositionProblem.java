@@ -7,16 +7,26 @@ import org.um.feri.ears.problems.dynamic.cec2009.Matrix;
 import org.um.feri.ears.problems.unconstrained.*;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.NoSuchElementException;
-import java.util.Random;
 
 public class DynamicCompositionProblem extends DynamicProblem {
 
-    private DoubleProblem[] basicFunctions;   // which basic function is used to compose the composition function
-    private double[] convergeSeverity;  // severity of converge range for each function
-    private double[] stretchSeverity;   // severity of stretching original function, greater than 1 for stretch, less than 1 for compress the original function
-    private final double heightNormalizeSeverity;   // the constant number for normalizing all basic functions with similar height
+    /**
+     * Which basic function is used to compose the composition function.
+     */
+    private DoubleProblem[] basicFunctions;
+    /**
+     * Severity of converge range for each function.
+     */
+    private double[] convergeSeverity;
+    /**
+     * Severity of stretching original function, greater than 1 for stretch, less than 1 for compress the original function.
+     */
+    private double[] stretchSeverity;
+    /**
+     * The constant number for normalizing all basic functions with similar height.
+     */
+    private final double heightNormalizeSeverity;
 
     public DynamicCompositionProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives,
                                      int numberOfConstraints, int numberOfPeaksOrFunctions, double minHeight, double maxHeight,
@@ -41,7 +51,8 @@ public class DynamicCompositionProblem extends DynamicProblem {
         calculateGlobalOptima();
     }
 
-    // TODO: NOVI: array ustvari v benchmarku in ga pošlji v konstruktor
+    // TODO: Create an array outside of the class and pass it to the constructor. Currently, the class is fixed
+    // TODO: to the CEC 2009 Dynamic Optimization Competition Benchmark Generator scenarios.
     private void initBasicFunctions(BasicFunction basicFunction) {
         switch (basicFunction) {
             case SPHERE:
@@ -57,8 +68,6 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 Arrays.fill(basicFunctions, new Ackley1(numberOfDimensions));
                 break;
             case MIXED:
-                // TODO: benchmark CEC 2009 ima vedno 10 dimenzij, zato bo OK. smiselno bi bilo dodati preverjanje dolžine polja
-                // TODO: ali pa da je BasicFunctions že inicializiran array, ki se pošlje v konstruktor
                 // if (basicFunctions.length != 10) throw new IllegalStateException("The number of dimension should be 10 for CEC2009DOBenchmark.");
                 basicFunctions[0] = basicFunctions[1] = new Sphere(numberOfDimensions);
                 basicFunctions[2] = basicFunctions[3] = new Rastrigin(numberOfDimensions);
@@ -90,7 +99,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
                     break;
                 }
                 for (int j = 0; j < numberOfPeaksOrFunctions; j++) {
-                    System.arraycopy(rotationPlanes[i][j], 0, rotationPlanes[i][j], 0, numberOfDimensions); // TODO: mogoče ne rabim, ker imam velikost nastavljeno na 'maxDimension'?
+                    System.arraycopy(rotationPlanes[i][j], 0, rotationPlanes[i][j], 0, numberOfDimensions);
                 }
             }
         }
@@ -155,9 +164,12 @@ public class DynamicCompositionProblem extends DynamicProblem {
         calculateGlobalOptima();
     }
 
+    /**
+     * Randomly generate rotation matrix for each basic function.
+     * For each basic function of dimension n(even number), R=R(l1,l2)*R(l3,l4)*....*R(ln-1,ln), 0<=li<=n
+     */
     public void setRotationMatrix() {
-        // randomly generate rotation matrix for each basic function
-        // for each basic function of dimension n(even number), R=R(l1,l2)*R(l3,l4)*....*R(ln-1,ln), 0<=li<=n
+        //
         Matrix I = new Matrix(numberOfDimensions, numberOfDimensions);
 
         int[] d = new int[numberOfDimensions];
@@ -196,7 +208,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 positionStandardChange(0, changeCounter);
                 calculateGlobalOptima();
                 break;
-            case RECURRENT:
+            case RECURRENT: {
                 double initialAngle;
                 double heightRange = maxHeight - minHeight;
 
@@ -208,6 +220,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 positionStandardChange(initialAngle, changeCounter);
                 calculateGlobalOptima();
                 break;
+            }
             case CHAOTIC:
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
                     peakHeights[i] = getChaoticValue(peakHeights[i], minHeight, maxHeight);
@@ -215,20 +228,21 @@ public class DynamicCompositionProblem extends DynamicProblem {
                 positionStandardChange(0, changeCounter);
                 calculateGlobalOptima();
                 break;
-            case RECURRENT_NOISY:
-                double initialAngle2;   // TODO: poimenovanje...
-                double heightRange2 = maxHeight - minHeight; // TODO: poimenovanje
+            case RECURRENT_NOISY: {
+                double initialAngle;
+                double heightRange = maxHeight - minHeight;
 
                 double noisy;
                 for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-                    initialAngle2 = (double) periodicity * i / numberOfPeaksOrFunctions;
-                    peakHeights[i] = sinValueNoisy(changeCounter, minHeight, maxHeight, heightRange2, initialAngle2, recurrentNoisySeverity);
+                    initialAngle = (double) periodicity * i / numberOfPeaksOrFunctions;
+                    peakHeights[i] = sinValueNoisy(changeCounter, minHeight, maxHeight, heightRange, initialAngle, recurrentNoisySeverity);
                 }
-                initialAngle2 = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
+                initialAngle = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
                 noisy = recurrentNoisySeverity * CEC2009DynamicBenchmark.myRandom.nextGaussian();   // TODO: use appropriate random
-                positionStandardChange(initialAngle2 + noisy, changeCounter);
+                positionStandardChange(initialAngle + noisy, changeCounter);
                 calculateGlobalOptima();
                 break;
+            }
         }
 
         if (dimensionChanging) {
@@ -263,7 +277,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
             basicFunctions[i].setFeasible(tempX); // correction(componentFunction[i]);
             functionFitness[i] = basicFunctions[i].eval(tempX);
 
-            for (int j = 0; j < numberOfDimensions; j++) {   // calculate the estimate max value of funciton i
+            for (int j = 0; j < numberOfDimensions; j++) {   // calculate the estimate max value of function i
                 tempX[j] = gUpperLimit / stretchSeverity[i];
             }
             m.setData(tempX, numberOfDimensions);

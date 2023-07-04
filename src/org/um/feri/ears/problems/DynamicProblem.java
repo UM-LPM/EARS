@@ -11,24 +11,66 @@ import java.util.Collections;
 public abstract class DynamicProblem extends DoubleProblem {
 
     protected int numberOfPeaksOrFunctions;
-    protected double minHeight, maxHeight;    // minimum/maximum height of all peaks (local optima) in RotationDBG (CompositionDBG)
+    /**
+     * Minimum/Maximum height of all peaks (local optima) in RotationDBG (CompositionDBG).
+     */
+    protected double minHeight, maxHeight;
     private final double chaoticConstant;
-    protected double[] peakHeights;    // peak height in RotationDBG, height of global optima in CompositionDBG
+    /**
+     * Peak height in RotationDBG, height of global optima in CompositionDBG.
+     */
+    protected double[] peakHeights;
     protected ChangeType changeType;
-    protected int periodicity;    // definite period for values repeating
-    protected boolean dimensionChanging;  // true if the number of dimensions has changed, false otherwise
+    /**
+     * Definite period for values repeating.
+     */
+    protected int periodicity;
+    /**
+     * True if the number of dimensions has changed, false otherwise.
+     */
+    protected boolean dimensionChanging;
     protected final int minDimensions, maxDimensions;
-    private boolean isDimensionIncreasing;  // true if the direction should be changed, false otherwise
-    private final int changeFrequency;    // number of evaluations between two successive changes
+    /**
+     * True if the direction should be changed, false otherwise.
+     */
+    private boolean isDimensionIncreasing;
+    /**
+     * Number of evaluations between two successive changes.
+     */
+    private final int changeFrequency;
     private final int heightSeverity;
-    protected double[][] peakPositions;  // positions of local or global optima (local optima in RotationDBG, global optima of basic function in CompositionDBG)
-    protected double[][] initialPeakPositions;   // save the initial positions
-    protected int[][][] rotationPlanes;    // save the planes rotated during one periodicity
-    protected double[] weight;   // weight value of each basic function in CompositionDBG, peak width in RotationDBG
-    protected float recurrentNoisySeverity; // deviation severity from the trajectory of recurrent change
-    protected final double gLowerLimit, gUpperLimit;  // solution space // TODO: spada to samo v DynamicCompositionProblem?
-    protected double globalOptima;  // global optima value
-    protected Matrix[] rotationMatrix;  // orthogonal rotation matrices for each function
+    /**
+     * Positions of local or global optima (local optima in RotationDBG, global optima of basic function in CompositionDBG).
+     */
+    protected double[][] peakPositions;
+    /**
+     * Save the initial positions.
+     */
+    protected double[][] initialPeakPositions;
+    /**
+     * Save the planes rotated during one periodicity.
+     */
+    protected int[][][] rotationPlanes;
+    /**
+     * Weight value of each basic function in CompositionDBG, peak width in RotationDBG.
+     */
+    protected double[] weight;
+    /**
+     * Deviation severity from the trajectory of recurrent change.
+     */
+    protected float recurrentNoisySeverity;
+    /**
+     * Solution space.
+     */
+    protected final double gLowerLimit, gUpperLimit;
+    /**
+     * Global optima value.
+     */
+    protected double globalOptima;
+    /**
+     * Orthogonal rotation matrices for each function.
+     */
+    protected Matrix[] rotationMatrix;
 
     public DynamicProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives, int numberOfConstraints,
                           int numberOfPeaksOrFunctions, double minHeight, double maxHeight, double chaoticConstant, ChangeType changeType,
@@ -65,7 +107,7 @@ public abstract class DynamicProblem extends DoubleProblem {
             initialPeakPositions[i] = new double[maxDimensions];
         }
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            for (int j = 0; j < numberOfDimensions; j++) {  // TODO: pogoj zanke mora biti: j < maxDimensions | spremenjeno le zaradi debuggiranja (enako število uporabe Random)
+            for (int j = 0; j < numberOfDimensions; j++) {
                 peakPositions[i][j] = gLowerLimit + (gUpperLimit - gLowerLimit) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
                 initialPeakPositions[i][j] = peakPositions[i][j];
             }
@@ -128,7 +170,9 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
     }
 
-    // return a value calculated by the logistics function
+    /**
+     * Return a value calculated by the logistics function.
+     */
     protected double getChaoticValue(final double x, final double min, final double max) {
         if (min > max) {
             return -1.0;
@@ -139,7 +183,9 @@ public abstract class DynamicProblem extends DoubleProblem {
         return min + chaoticValue * (max - min);
     }
 
-    // return a value in recurrent with noisy dynamism environment
+    /**
+     * Return a value in recurrent with noisy dynamism environment.
+     */
     protected double sinValueNoisy(final int x, final double min, final double max, final double amplitude, final double angle, final double noisySeverity) {
         double y = min + amplitude * (Math.sin(2 * Math.PI * (x + angle) / periodicity) + 1) / 2.;
         double noisy = noisySeverity * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
@@ -147,7 +193,9 @@ public abstract class DynamicProblem extends DoubleProblem {
         return (t > min && t < max) ? t : (t - noisy);
     }
 
-    // dimension changes (linear increase or decrease).
+    /**
+     * Dimension changes (linear increase or decrease).
+     */
     public void changeDimension(int changeCounter) {
         if (!dimensionChanging) {
             return;
@@ -273,8 +321,9 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
     }
 
-    // TODO: nisem prepričani, če je to pravo mesto za to metodo
-    // generate a set of random numbers from 0-|a| without repeat
+    /**
+     * Generate a set of random numbers from 0-|array| without repeat.
+     */
     public void initializeRandomArray(int[] array, int dim) {
         int[] temp = new int[dim];
         for (int i = 0; i < dim; i++) {

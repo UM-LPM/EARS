@@ -1,10 +1,13 @@
 package org.um.feri.ears.problems.dynamic.cec2009;
 
-// orthogonal rotation matrix
+/**
+ * Orthogonal rotation matrix.
+ */
+
 public class Matrix {
 
-    public int col, row;    // matrix size
-    private double[][] data;    // value of each element
+    public int col, row;
+    private double[][] data;
 
     public Matrix(int numberOfDimension) {
         row = numberOfDimension;
@@ -19,26 +22,6 @@ public class Matrix {
         this.col = col;
         this.row = row;
         this.data = new double[row][col];
-    }
-
-    public Matrix(Matrix other) {
-        this.col = other.col;
-        this.row = other.row;
-        this.data = other.data;
-    }
-
-    public Matrix copy(final Matrix m) {
-        if (row != m.row || col != m.col) {
-            return this;
-        }
-        if (this == m) return this;
-        row = m.row;
-        col = m.col;
-        this.data = new double[row][col];
-        for (int i = 0; i < row; i++) {
-            System.arraycopy(m.data[i], 0, this.data[i], 0, col);
-        }
-        return this;
     }
 
     public Matrix multiply(Matrix m) {
@@ -96,15 +79,5 @@ public class Matrix {
 
     public double[][] getData() {
         return data;
-    }
-
-    // used for debug
-    public void print() {
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                System.out.print(data[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 }
