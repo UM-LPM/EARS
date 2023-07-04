@@ -33,13 +33,14 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
     public static MyRandom myRandom = new MyRandom();
 
     private final int numberOfPeaksOrFunctions = 10;
-    private final Double heightNormalizeSeverity = 2000.0;  // the constant number for normalizing all basic functions with similar height
-    private final Double minPeakHeight = 10.0, maxPeakHeight = 100.0;
-    private final Double chaoticConstant = 3.67;    // value must be between 1.0 and 4.0
+    private final double heightNormalizeSeverity = 2000.0;  // the constant number for normalizing all basic functions with similar height
+    private final double minPeakHeight = 10.0, maxPeakHeight = 100.0;
+    private final double minPeakWidth = 1.0, maxPeakWidth = 10.0;
+    private final double chaoticConstant = 3.67;    // value must be between 1.0 and 4.0
     private final int minDimensions = 5, maxDimensions = 15;
     private final int changeFrequency = 10000;  // number of evaluations between two successive changes
     private final int numberOfChanges = 60;  // the number of changes = how many times the problem will change
-    private final Double gLowerLimit = -5.0, gUpperLimit = 5.0;    // search range
+    private final double gLowerLimit = -5.0, gUpperLimit = 5.0;    // search range
     private final int changeFrequencyPerDimension = 10000;
 
     public CEC2009DynamicBenchmark() {
@@ -50,14 +51,65 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
 
     @Override
     public void initAllProblems() {
-        /*
-            TODO:
-                DynamicCompositionProblem
-                    - problems for all basic functions (Sphere, Rastrigin, Griewank ...) - first for loop in C++
-                    - problems for all change types (small step, large step, u_random ...) - first inner loop in C++
-                    - two problems with different number of peaks (10 and 50) for Sphere - second inner loop in C++
-         */
-        DynamicCompositionProblem problem1 = new DynamicCompositionProblem("DynamicCompositionProblemSphereSmallStepPeaks10",
+        addRotationProblem(ChangeType.SMALL_STEP, 10, 0, false, "DOPRotationSmallStepPeaks10");
+        addRotationProblem(ChangeType.SMALL_STEP, 50, 0, false, "DOPRotationSmallStepPeaks50");
+        addRotationProblem(ChangeType.LARGE_STEP, 10, 0, false, "DOPRotationLargeStepPeaks10");
+        addRotationProblem(ChangeType.LARGE_STEP, 50, 0, false, "DOPRotationLargeStepPeaks50");
+        addRotationProblem(ChangeType.U_RANDOM, 10, 0, false, "DOPRotationRandomPeaks10");
+        addRotationProblem(ChangeType.U_RANDOM, 50, 0, false, "DOPRotationRandomPeaks50");
+        addRotationProblem(ChangeType.RECURRENT, 10, 12, false, "DOPRotationRecurrentPeaks10");
+        addRotationProblem(ChangeType.RECURRENT, 50, 12, false, "DOPRotationRecurrentPeaks50");
+        addRotationProblem(ChangeType.RECURRENT_NOISY, 10, 12, false, "DOPRotationRecurrentNoisyPeaks10");
+        addRotationProblem(ChangeType.RECURRENT_NOISY, 50, 12, false, "DOPRotationRecurrentNoisyPeaks50");
+        addRotationProblem(ChangeType.CHAOTIC, 10, 0, false, "DOPRotationChaoticPeaks10");
+        addRotationProblem(ChangeType.CHAOTIC, 50, 0, false, "DOPRotationChaoticPeaks50");
+        addRotationProblem(ChangeType.U_RANDOM, 10, 0, true, "DOPRotationRandomPeaks10DimensionChanging");
+        addRotationProblem(ChangeType.U_RANDOM, 50, 0, true, "DOPRotationRandomPeaks10DimensionChanging");
+
+        addCompositionProblem(BasicFunction.SPHERE, ChangeType.SMALL_STEP, 0, false, "DOPCompositionSphereSmallStepPeaks10");
+        addCompositionProblem(BasicFunction.SPHERE, ChangeType.LARGE_STEP, 0, false, "DOPCompositionSphereLargeStepPeaks10");
+        addCompositionProblem(BasicFunction.SPHERE, ChangeType.U_RANDOM, 0, false, "DOPCompositionSphereRandomPeaks10");
+        addCompositionProblem(BasicFunction.SPHERE, ChangeType.RECURRENT, 12, false, "DOPCompositionSphereRecurrentPeaks10");
+        addCompositionProblem(BasicFunction.SPHERE, ChangeType.RECURRENT_NOISY, 12, false, "DOPCompositionSphereRecurrentNoisyPeaks10");
+        addCompositionProblem(BasicFunction.SPHERE, ChangeType.CHAOTIC, 0, false, "DOPCompositionSphereChaoticPeaks10");
+        addCompositionProblem(BasicFunction.SPHERE, ChangeType.U_RANDOM, 0, true, "DOPCompositionSphereRandomPeaks10DimensionChanging");
+
+        addCompositionProblem(BasicFunction.RASTRIGIN, ChangeType.SMALL_STEP, 0, false, "DOPCompositionRastriginSmallStepPeaks10");
+        addCompositionProblem(BasicFunction.RASTRIGIN, ChangeType.LARGE_STEP, 0, false, "DOPCompositionRastriginLargeStepPeaks10");
+        addCompositionProblem(BasicFunction.RASTRIGIN, ChangeType.U_RANDOM, 0, false, "DOPCompositionRastriginRandomPeaks10");
+        addCompositionProblem(BasicFunction.RASTRIGIN, ChangeType.RECURRENT, 12, false, "DOPCompositionRastriginRecurrentPeaks10");
+        addCompositionProblem(BasicFunction.RASTRIGIN, ChangeType.RECURRENT_NOISY, 12, false, "DOPCompositionRastriginRecurrentNoisyPeaks10");
+        addCompositionProblem(BasicFunction.RASTRIGIN, ChangeType.CHAOTIC, 0, false, "DOPCompositionRastriginChaoticPeaks10");
+        addCompositionProblem(BasicFunction.RASTRIGIN, ChangeType.U_RANDOM, 0, true, "DOPCompositionRastriginRandomPeaks10DimensionChanging");
+
+        addCompositionProblem(BasicFunction.GRIEWANK, ChangeType.SMALL_STEP, 0, false, "DOPCompositionGriewankSmallStepPeaks10");
+        addCompositionProblem(BasicFunction.GRIEWANK, ChangeType.LARGE_STEP, 0, false, "DOPCompositionGriewankLargeStepPeaks10");
+        addCompositionProblem(BasicFunction.GRIEWANK, ChangeType.U_RANDOM, 0, false, "DOPCompositionGriewankRandomPeaks10");
+        addCompositionProblem(BasicFunction.GRIEWANK, ChangeType.RECURRENT, 12, false, "DOPCompositionGriewankRecurrentPeaks10");
+        addCompositionProblem(BasicFunction.GRIEWANK, ChangeType.RECURRENT_NOISY, 12, false, "DOPCompositionGriewankRecurrentNoisyPeaks10");
+        addCompositionProblem(BasicFunction.GRIEWANK, ChangeType.CHAOTIC, 0, false, "DOPCompositionGriewankChaoticPeaks10");
+        addCompositionProblem(BasicFunction.GRIEWANK, ChangeType.U_RANDOM, 0, true, "DOPCompositionGriewankRandomPeaks10DimensionChanging");
+
+        addCompositionProblem(BasicFunction.ACKLEY, ChangeType.SMALL_STEP, 0, false, "DOPCompositionAckleySmallStepPeaks10");
+        addCompositionProblem(BasicFunction.ACKLEY, ChangeType.LARGE_STEP, 0, false, "DOPCompositionAckleyLargeStepPeaks10");
+        addCompositionProblem(BasicFunction.ACKLEY, ChangeType.U_RANDOM, 0, false, "DOPCompositionAckleyRandomPeaks10");
+        addCompositionProblem(BasicFunction.ACKLEY, ChangeType.RECURRENT, 12, false, "DOPCompositionAckleyRecurrentPeaks10");
+        addCompositionProblem(BasicFunction.ACKLEY, ChangeType.RECURRENT_NOISY, 12, false, "DOPCompositionAckleyRecurrentNoisyPeaks10");
+        addCompositionProblem(BasicFunction.ACKLEY, ChangeType.CHAOTIC, 0, false, "DOPCompositionAckleyChaoticPeaks10");
+        addCompositionProblem(BasicFunction.ACKLEY, ChangeType.U_RANDOM, 0, true, "DOPCompositionAckleyRandomPeaks10DimensionChanging");
+
+        addCompositionProblem(BasicFunction.MIXED, ChangeType.SMALL_STEP, 0, false, "DOPCompositionMixedSmallStepPeaks10");
+        addCompositionProblem(BasicFunction.MIXED, ChangeType.LARGE_STEP, 0, false, "DOPCompositionMixedLargeStepPeaks10");
+        addCompositionProblem(BasicFunction.MIXED, ChangeType.U_RANDOM, 0, false, "DOPCompositionMixedRandomPeaks10");
+        addCompositionProblem(BasicFunction.MIXED, ChangeType.RECURRENT, 12, false, "DOPCompositionMixedRecurrentPeaks10");
+        addCompositionProblem(BasicFunction.MIXED, ChangeType.RECURRENT_NOISY, 12, false, "DOPCompositionMixedRecurrentNoisyPeaks10");
+        addCompositionProblem(BasicFunction.MIXED, ChangeType.CHAOTIC, 0, false, "DOPCompositionMixedChaoticPeaks10");
+        addCompositionProblem(BasicFunction.MIXED, ChangeType.U_RANDOM, 0, true, "DOPCompositionMixedRandomPeaks10DimensionChanging");
+    }
+
+    private void addRotationProblem(ChangeType changeType, int numberOfPeaksOrFunctions, int periodicity, boolean dimensionChanging, String problemName) {
+        DynamicRotationProblem problem = new DynamicRotationProblem(
+                problemName,
                 dimension, // numberOfDimensions
                 1, // numberOfGlobalOptima
                 1, // numberOfObjectives
@@ -65,18 +117,42 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
                 numberOfPeaksOrFunctions,
                 minPeakHeight, maxPeakHeight,
                 chaoticConstant,
-                ChangeType.SMALL_STEP,
-                0,  // periodicity
-                true,   //false,  // isDimensionChanged
+                changeType,
+                periodicity,
+                dimensionChanging,
+                minDimensions, maxDimensions,
+                minPeakWidth, maxPeakWidth,
+                changeFrequency,
+                5,   // heightSeverity
+                gLowerLimit, gUpperLimit,
+                0.5 // widthSeverity
+        );
+        int maxEvaluations = calculateNumberOfEvaluations(problem);
+        addTask(problem, stopCriterion, maxEvaluations, timeLimit, maxIterations);
+    }
+
+    private void addCompositionProblem(BasicFunction basicFunction, ChangeType changeType, int periodicity, boolean dimensionChanging, String problemName) {
+        DynamicCompositionProblem problem = new DynamicCompositionProblem(
+                problemName,
+                dimension, // numberOfDimensions
+                1, // numberOfGlobalOptima
+                1, // numberOfObjectives
+                0, // numberOfConstraints
+                numberOfPeaksOrFunctions,
+                minPeakHeight, maxPeakHeight,
+                chaoticConstant,
+                changeType,
+                periodicity,
+                dimensionChanging,
                 minDimensions, maxDimensions,
                 changeFrequency,
                 5,   // heightSeverity
                 heightNormalizeSeverity,
                 gLowerLimit, gUpperLimit,
-                BasicFunction.SPHERE
+                basicFunction
         );
-        int maxEvaluations = calculateNumberOfEvaluations(problem1);
-        addTask(problem1, stopCriterion, maxEvaluations, timeLimit, maxIterations);
+        int maxEvaluations = calculateNumberOfEvaluations(problem);
+        addTask(problem, stopCriterion, maxEvaluations, timeLimit, maxIterations);
     }
 
     private int calculateNumberOfEvaluations(DynamicProblem p) {
@@ -117,7 +193,7 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
         //CEC2009DynamicOptimizationBenchmark benchmark = new CEC2009DynamicOptimizationBenchmark();
         //benchmark.initAllProblems();
 
-        DynamicCompositionProblem problem1 = new DynamicCompositionProblem("DynamicCompositionProblemSphereSmallStepPeaks10",
+        DynamicRotationProblem problem1 = new DynamicRotationProblem("DynamicCompositionProblemSphereSmallStepPeaks10",
                 10, // numberOfDimensions
                 1, // numberOfGlobalOptima
                 1, // numberOfObjectives
@@ -127,13 +203,13 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
                 3.67,
                 ChangeType.CHAOTIC,
                 0,  // periodicity
-                true,   //false,  // isDimensionChanged
+                true,  // isDimensionChanged
                 5, 15,
+                1.0, 10.0,
                 10000,
                 5,   // heightSeverity
-                2000.0,
                 -5.0, 5.0,
-                BasicFunction.SPHERE
+                0.5
         );
 
         int changeCounter = 0;
