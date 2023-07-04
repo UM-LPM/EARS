@@ -28,6 +28,8 @@ public class DynamicCompositionProblem extends DynamicProblem {
      */
     private final double heightNormalizeSeverity;
 
+    private final BasicFunction basicFunction;  // TODO: It should be removed when the array with all basic functions is passed to the class's constructor.
+
     public DynamicCompositionProblem(String name, int numberOfDimensions, int numberOfGlobalOptima, int numberOfObjectives,
                                      int numberOfConstraints, int numberOfPeaksOrFunctions, double minHeight, double maxHeight,
                                      double chaoticConstant, ChangeType changeType, int periodicity, boolean dimensionChanging,
@@ -40,6 +42,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
 
         this.heightNormalizeSeverity = heightNormalizeSeverity;
 
+        this.basicFunction = basicFunction;
         basicFunctions = new DoubleProblem[numberOfPeaksOrFunctions];
         initBasicFunctions(basicFunction);
 
@@ -91,7 +94,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
         numberOfDimensions = newDimension;
         int newDimensionIndex = newDimension - 1;
 
-        initBasicFunctions(BasicFunction.SPHERE);   // TODO: BasicFunction.SPHERE nastavljen samo za testiranje...
+        initBasicFunctions(basicFunction);
 
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
             for (int i = 0; i < periodicity; i++) {
@@ -140,7 +143,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
     public void decreaseDimension(int newDimension, int changeCounter) {
         numberOfDimensions = newDimension;
 
-        initBasicFunctions(BasicFunction.SPHERE);   // TODO: BasicFunction.SPHERE nastavljen samo za testiranje...
+        initBasicFunctions(basicFunction);
 
         if (changeType == ChangeType.RECURRENT || changeType == ChangeType.RECURRENT_NOISY) {
             for (int i = 0; i < periodicity; i++) {
