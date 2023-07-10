@@ -1,8 +1,8 @@
 package org.um.feri.ears.problems;
 
-import org.um.feri.ears.benchmark.CEC2009DynamicBenchmark;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 import org.um.feri.ears.problems.dynamic.cec2009.Matrix;
+import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,7 +108,7 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             for (int j = 0; j < numberOfDimensions; j++) {
-                peakPositions[i][j] = gLowerLimit + (gUpperLimit - gLowerLimit) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
+                peakPositions[i][j] = gLowerLimit + (gUpperLimit - gLowerLimit) * Util.nextDouble();
                 initialPeakPositions[i][j] = peakPositions[i][j];
             }
         }
@@ -137,7 +137,7 @@ public abstract class DynamicProblem extends DoubleProblem {
     private void initPeakHeights() {
         if (changeType == ChangeType.CHAOTIC) {
             for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-                peakHeights[i] = minHeight + (maxHeight - minHeight) * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
+                peakHeights[i] = minHeight + (maxHeight - minHeight) * Util.nextGaussian();
             }
         } else {
             Arrays.fill(peakHeights, 50.0);
@@ -188,7 +188,7 @@ public abstract class DynamicProblem extends DoubleProblem {
      */
     protected double sinValueNoisy(final int x, final double min, final double max, final double amplitude, final double angle, final double noisySeverity) {
         double y = min + amplitude * (Math.sin(2 * Math.PI * (x + angle) / periodicity) + 1) / 2.;
-        double noisy = noisySeverity * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
+        double noisy = noisySeverity * Util.nextGaussian();
         double t = y + noisy;
         return (t > min && t < max) ? t : (t - noisy);
     }
@@ -239,14 +239,14 @@ public abstract class DynamicProblem extends DoubleProblem {
 
         switch (changeType) {
             case SMALL_STEP:
-                step = -1 + 2 * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
+                step = -1 + 2 * Util.nextDouble();
                 step = ALPHA * step * (max - min);
                 break;
             case U_RANDOM:
-                step = CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
+                step = Util.nextGaussian();
                 break;
             case LARGE_STEP:
-                step = -1 + 2 * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
+                step = -1 + 2 * Util.nextDouble();
                 if (step > 0) {
                     sign = 1;
                 } else if (step < 0) {
@@ -331,7 +331,7 @@ public abstract class DynamicProblem extends DoubleProblem {
         }
         int d = dim;
         for (int i = 0; i < dim; i++) {
-            int t = (int) (d * CEC2009DynamicBenchmark.myRandom.nextDouble());  // TODO: use appropriate random
+            int t = (int) (d * Util.nextDouble());
             array[i] = temp[t];
             for (int k = t; k < d - 1; k++) {
                 temp[k] = temp[k + 1];

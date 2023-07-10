@@ -1,10 +1,10 @@
 package org.um.feri.ears.problems;
 
-import org.um.feri.ears.benchmark.CEC2009DynamicBenchmark;
 import org.um.feri.ears.problems.dynamic.cec2009.BasicFunction;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
 import org.um.feri.ears.problems.dynamic.cec2009.Matrix;
 import org.um.feri.ears.problems.unconstrained.*;
+import org.um.feri.ears.util.Util;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -39,6 +39,8 @@ public class DynamicCompositionProblem extends DynamicProblem {
         super(name, numberOfDimensions, numberOfGlobalOptima, numberOfObjectives, numberOfConstraints,
                 numberOfPeaksOrFunctions, minHeight, maxHeight, chaoticConstant, changeType, periodicity,
                 dimensionChanging, minDimension, maxDimension, changeFrequency, heightSeverity, gLowerLimit, gUpperLimit);
+
+        objectiveMaximizationFlags[0] = false;
 
         this.heightNormalizeSeverity = heightNormalizeSeverity;
 
@@ -110,7 +112,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
         setRotationMatrix();
 
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
+            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * Util.nextDouble();
             initialPeakPositions[i][newDimensionIndex] = peakPositions[i][newDimensionIndex];
         }
 
@@ -179,7 +181,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
         initializeRandomArray(d, numberOfDimensions);
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             for (int j = 0; j + 1 < numberOfDimensions; j += 2) {
-                double angle = 2 * Math.PI * CEC2009DynamicBenchmark.myRandom.nextDouble();   // random angle for rotation plane of d[j]-d[j+1] from d[j]th axis to d[j+1]th axis // TODO: use appropriate random
+                double angle = 2 * Math.PI * Util.nextDouble();   // random angle for rotation plane of d[j]-d[j+1] from d[j]th axis to d[j+1]th axis
                 I.setRotation(d[j], d[j + 1], angle);
                 if (j == 0) {
                     rotationMatrix[i] = I;
@@ -241,7 +243,7 @@ public class DynamicCompositionProblem extends DynamicProblem {
                     peakHeights[i] = sinValueNoisy(changeCounter, minHeight, maxHeight, heightRange, initialAngle, recurrentNoisySeverity);
                 }
                 initialAngle = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
-                noisy = recurrentNoisySeverity * CEC2009DynamicBenchmark.myRandom.nextGaussian();   // TODO: use appropriate random
+                noisy = recurrentNoisySeverity * Util.nextGaussian();
                 positionStandardChange(initialAngle + noisy, changeCounter);
                 calculateGlobalOptima();
                 break;

@@ -1,5 +1,7 @@
 package org.um.feri.ears.problems;
 
+import scala.Dynamic;
+
 import java.util.List;
 
 public class DynamicTask<S extends Solution, P extends Problem<S>> extends Task<S, P> {
@@ -24,6 +26,18 @@ public class DynamicTask<S extends Solution, P extends Problem<S>> extends Task<
         }
     }
 
+    public DynamicTask(DynamicTask<S, P> task) {
+        super(task);
+        changeCounter = task.changeCounter;
+        changeOccurred = task.changeOccurred;
+        changeFrequencyPerDimension = task.changeFrequencyPerDimension;
+    }
+
+    @Override
+    public DynamicTask<S, P> clone() {
+        return new DynamicTask<>(this);
+    }
+
     @Override
     public void eval(S solution) throws StopCriterionException {
         super.eval(solution);
@@ -46,7 +60,7 @@ public class DynamicTask<S extends Solution, P extends Problem<S>> extends Task<
         }
     }
 
-    // hint for moro: to pokliči v algoritmu
+    // TODO: hint for moro: to pokliči v algoritmu
     public boolean hasChangeOccurred() {
         if (changeOccurred) {
             changeOccurred = false;

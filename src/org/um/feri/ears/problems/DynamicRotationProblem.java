@@ -1,7 +1,7 @@
 package org.um.feri.ears.problems;
 
-import org.um.feri.ears.benchmark.CEC2009DynamicBenchmark;
 import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
+import org.um.feri.ears.util.Util;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -26,6 +26,7 @@ public class DynamicRotationProblem extends DynamicProblem {
                 numberOfPeaksOrFunctions, minHeight, maxHeight, chaoticConstant, changeType, periodicity,
                 isDimensionChanged, minDimension, maxDimension, changeFrequency, heightSeverity, gLowerLimit, gUpperLimit);
 
+        objectiveMaximizationFlags[0] = true;
         this.widthSeverity = widthSeverity;
         this.minWidth = minWidth;
         this.maxWidth = maxWidth;
@@ -37,7 +38,7 @@ public class DynamicRotationProblem extends DynamicProblem {
     public void setWeight(double weight) {
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
             if (changeType == ChangeType.CHAOTIC) {
-                this.weight[i] = minWidth + (maxWidth - minWidth) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
+                this.weight[i] = minWidth + (maxWidth - minWidth) * Util.nextDouble();
             } else {
                 this.weight[i] = weight;
             }
@@ -83,7 +84,7 @@ public class DynamicRotationProblem extends DynamicProblem {
         }
 
         for (int i = 0; i < numberOfPeaksOrFunctions; i++) {
-            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * CEC2009DynamicBenchmark.myRandom.nextDouble();    // TODO: use appropriate random
+            peakPositions[i][newDimensionIndex] = gLowerLimit + (gUpperLimit - gLowerLimit) * Util.nextDouble();
             initialPeakPositions[i][newDimensionIndex] = peakPositions[i][newDimensionIndex];
         }
 
@@ -180,7 +181,7 @@ public class DynamicRotationProblem extends DynamicProblem {
                     weight[i] = sinValueNoisy(changeCounter, minWidth, maxWidth, widthRange, initialAngle, recurrentNoisySeverity);
                 }
                 initialAngle = Math.PI * (Math.sin(2 * Math.PI * changeCounter / periodicity) + 1) / 12.;
-                noisy = recurrentNoisySeverity * CEC2009DynamicBenchmark.myRandom.nextGaussian();    // TODO: use appropriate random
+                noisy = recurrentNoisySeverity * Util.nextGaussian();
                 positionStandardChange(initialAngle + noisy, changeCounter);
                 calculateGlobalOptima();
                 break;

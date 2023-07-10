@@ -32,8 +32,6 @@ import org.um.feri.ears.problems.dynamic.cec2009.ChangeType;
  */
 public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm> {
 
-    public static MyRandom myRandom = new MyRandom();
-
     private final int numberOfPeaksOrFunctions = 10;
     /**
      * The constant number for normalizing all basic functions with similar height.
@@ -204,47 +202,5 @@ public class CEC2009DynamicBenchmark extends SOBenchmark<NumberSolution<Double>,
     @Override
     protected void addTask(DoubleProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
         tasks.add(new DynamicTask<>(problem, stopCriterion, maxEvaluations, time, maxIterations, changeFrequencyPerDimension));
-    }
-
-    public static void main(String[] args) {
-        //CEC2009DynamicOptimizationBenchmark benchmark = new CEC2009DynamicOptimizationBenchmark();
-        //benchmark.initAllProblems();
-
-        DynamicRotationProblem problem1 = new DynamicRotationProblem("DynamicCompositionProblemSphereSmallStepPeaks10",
-                10, // numberOfDimensions
-                1, // numberOfGlobalOptima
-                1, // numberOfObjectives
-                0, // numberOfConstraints
-                10,
-                10.0, 100.0,
-                3.67,
-                ChangeType.CHAOTIC,
-                0,  // periodicity
-                true,  // isDimensionChanged
-                5, 15,
-                1.0, 10.0,
-                10000,
-                5,   // heightSeverity
-                -5.0, 5.0,
-                0.5
-        );
-
-        int changeCounter = 0;
-        for (int g = 1; g <= problem1.getChangeFrequency() * 60; g++) {
-            if (g % problem1.getChangeFrequency() == 0) {
-                // generate a solution
-                Double[] x = new Double[problem1.getNumberOfDimensions()];
-                for (int i = 0; i < problem1.getNumberOfDimensions(); i++) {
-                    x[i] = -5.0 + (5.0 - (-5.0)) * myRandom.nextDouble();
-                }
-                double fit = problem1.eval(x);
-                System.out.println(fit);
-                problem1.performChange(changeCounter++);
-
-                //if (problem1.isDimensionChanging()) {
-                //    problem1.changeDimension(changeCounter);
-                //}
-            }
-        }
     }
 }
