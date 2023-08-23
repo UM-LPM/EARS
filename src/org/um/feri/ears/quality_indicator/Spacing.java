@@ -26,7 +26,7 @@ public class Spacing<T extends Number> extends QualityIndicator<T> {
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
         double S = 0.0;
         double sum = 0.0;
@@ -36,12 +36,12 @@ public class Spacing<T extends Number> extends QualityIndicator<T> {
          */
         double[][] normalizedApproximation;
         // TODO remove constraint violations
-        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
-        double[] d = new double[paretoFrontApproximation.size()];
+        double[] d = new double[paretoFrontApproximation.length];
 
 
-        for (int i = 0; i < paretoFrontApproximation.size(); i++) {
+        for (int i = 0; i < paretoFrontApproximation.length; i++) {
             double min = Double.POSITIVE_INFINITY;
             double[] solutionI = normalizedApproximation[i];
 			
@@ -49,7 +49,7 @@ public class Spacing<T extends Number> extends QualityIndicator<T> {
 				continue;
 			}*/
 
-            for (int j = 0; j < paretoFrontApproximation.size(); j++) {
+            for (int j = 0; j < paretoFrontApproximation.length; j++) {
                 if (i != j) {
                     double[] solutionJ = normalizedApproximation[j];
 					
@@ -67,16 +67,16 @@ public class Spacing<T extends Number> extends QualityIndicator<T> {
             d[i] = min;
         }
 
-        double dbar = StatUtils.sum(d) / paretoFrontApproximation.size();
+        double dbar = StatUtils.sum(d) / paretoFrontApproximation.length;
 
-        for (int i = 0; i < paretoFrontApproximation.size(); i++) {
-            if (paretoFrontApproximation.get(i).violatesConstraints()) {
+        for (int i = 0; i < paretoFrontApproximation.length; i++) {
+            /*if (paretoFrontApproximation.get(i).violatesConstraints()) {
                 continue;
-            }
+            }*/
             sum += Math.pow(d[i] - dbar, 2.0);
         }
 
-        return Math.sqrt(sum / (paretoFrontApproximation.size() - 1));
+        return Math.sqrt(sum / (paretoFrontApproximation.length - 1));
 		
 		/*try {
 			for (int i = 0; i < population.size(); i++)

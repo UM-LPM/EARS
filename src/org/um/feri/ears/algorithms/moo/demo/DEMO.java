@@ -35,7 +35,7 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
 public class DEMO<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
@@ -54,7 +54,7 @@ public class DEMO<N extends Number, P extends NumberProblem<N>> extends MOAlgori
     double rho = 2.0;
 
     Distance<N> distance;
-    DominanceComparator dominance;
+    SolutionDominanceComparator dominance;
 
     NumberSolution<N>[] parents;
 
@@ -83,7 +83,7 @@ public class DEMO<N extends Number, P extends NumberProblem<N>> extends MOAlgori
     protected void start() throws StopCriterionException {
 
         distance = new Distance<>();
-        dominance = new DominanceComparator();
+        dominance = new SolutionDominanceComparator();
         DifferentialEvolutionCrossover dec = new DifferentialEvolutionCrossover();
         DifferentialEvolutionSelection<N> des = new DifferentialEvolutionSelection<N>();
 
@@ -274,7 +274,7 @@ public class DEMO<N extends Number, P extends NumberProblem<N>> extends MOAlgori
                 B = new ParetoSolution<N>(1);
                 B.add(solutionSet.get(i));
 
-                int flag = (new DominanceComparator()).compare(A.get(0), B.get(0));
+                int flag = (new SolutionDominanceComparator()).compare(A.get(0), B.get(0));
 
                 double value = 0.0;
                 if (flag == -1) {

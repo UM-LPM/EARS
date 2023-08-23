@@ -45,14 +45,14 @@ public class R3<T extends Number> extends RIndicator<T> {
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
         /*
          * Stores the normalized approximation set.
          */
         double[][] normalizedApproximation;
 
-        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
         double sum = 0.0;
 

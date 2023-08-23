@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
 /**
  * A population that maintains the property of pair-wise non-dominance between
@@ -36,7 +36,7 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
     /**
      * The dominance comparator used by this non-dominated population.
      */
-    protected final DominanceComparator comparator;
+    protected final SolutionDominanceComparator comparator;
 
     /**
      * If {@code true}, allow duplicate solutions in this non-dominated
@@ -50,7 +50,7 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
      * relation.
      */
     public NondominatedPopulation() {
-        this(new DominanceComparator());
+        this(new SolutionDominanceComparator());
     }
 
     /**
@@ -60,7 +60,7 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
      * @param comparator the dominance relation used by this non-dominated
      *                   population
      */
-    public NondominatedPopulation(DominanceComparator comparator) {
+    public NondominatedPopulation(SolutionDominanceComparator comparator) {
         this(comparator, false);
     }
 
@@ -73,7 +73,7 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
      * @param allowDuplicates allow duplicate solutions into the non-dominated
      *                        population
      */
-    public NondominatedPopulation(DominanceComparator comparator,
+    public NondominatedPopulation(SolutionDominanceComparator comparator,
                                   boolean allowDuplicates) {
         super();
         this.comparator = comparator;
@@ -96,7 +96,7 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
      * @param comparator the dominance relation used by this non-dominated
      *                   population
      */
-    public NondominatedPopulation(DominanceComparator comparator,
+    public NondominatedPopulation(SolutionDominanceComparator comparator,
                                   ParetoSolution<T> population) {
         this(comparator);
         addAll(population);
@@ -104,7 +104,7 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
 
     public NondominatedPopulation(int capacity) {
         super(capacity);
-        comparator = new DominanceComparator();
+        comparator = new SolutionDominanceComparator();
         allowDuplicates = false;
     }
 
@@ -199,7 +199,7 @@ public class NondominatedPopulation<T extends Number> extends ParetoSolution<T> 
      *
      * @return the dominance comparator used by this non-dominated population
      */
-    public DominanceComparator getComparator() {
+    public SolutionDominanceComparator getComparator() {
         return comparator;
     }
 }

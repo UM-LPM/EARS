@@ -41,7 +41,7 @@ public class EpsilonBin<T extends Number> extends QualityIndicator<T> {
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
         return 0;
     }
 
@@ -65,13 +65,13 @@ public class EpsilonBin<T extends Number> extends QualityIndicator<T> {
         //normalize both fronts
 
         //TODO add +1 to all normalized values if additive method [1,2]
-        double[][] front = ArrayUtils.addAll(front1.writeObjectivesToMatrix(), front2.writeObjectivesToMatrix());
+        double[][] front = ArrayUtils.addAll(front1.getObjectivesAsMatrix(), front2.getObjectivesAsMatrix());
 
         maximumValue = QualityIndicatorUtil.getMaximumValues(front, numberOfObjectives);
         minimumValue = QualityIndicatorUtil.getMinimumValues(front, numberOfObjectives);
 
-        double[][] normalizedFront1 = QualityIndicatorUtil.getNormalizedFront(front1.writeObjectivesToMatrix(), maximumValue, minimumValue);
-        double[][] normalizedFront2 = QualityIndicatorUtil.getNormalizedFront(front2.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        double[][] normalizedFront1 = QualityIndicatorUtil.normalizeFront(front1.getObjectivesAsMatrix(), maximumValue, minimumValue);
+        double[][] normalizedFront2 = QualityIndicatorUtil.normalizeFront(front2.getObjectivesAsMatrix(), maximumValue, minimumValue);
 
         double eps1, eps2;
 

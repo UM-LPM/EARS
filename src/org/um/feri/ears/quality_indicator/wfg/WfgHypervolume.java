@@ -6,7 +6,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.quality_indicator.QualityIndicatorUtil;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
-import org.um.feri.ears.util.comparator.PointComparator;
+import org.um.feri.ears.util.comparator.SolutionPointComparator;
 
 /**
  * Created by ajnebro on 2/2/15.
@@ -16,37 +16,31 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 	private double offset = 0.0;
 	static final int OPT = 2;
 	ParetoSolution<T>[] fs;
-	private NumberSolution<T> referencePoint;
 	boolean maximizing;
 	private int currentDeep;
 	private int currentDimension;
-	private Comparator<NumberSolution<T>> pointComparator;
+	private Comparator<NumberSolution<T>> pointComparator = new SolutionPointComparator();
 
-	public WfgHypervolume(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
-		
+	public WfgHypervolume(int numObj, String fileName) {
+		super(numObj, fileName, getReferenceSet(fileName));
 		name = "WFG Hypervolume";
 		maximizing = false;
-		currentDeep = 0;
-		currentDimension = num_obj;
-		numberOfObjectives = num_obj;
-		pointComparator = new PointComparator();
-
-		referencePoint = new NumberSolution<T>(numberOfObjectives);
-		for (int i = 0; i < numberOfObjectives; i++) {
-			referencePoint.setObjective(i, 0.0);
-		}
-
 	}
 
+	public WfgHypervolume(int numObj, String problemName, double[][] referenceFront, double[] referencePoint) {
+		super(numObj, problemName, referenceFront, referencePoint);
+		name = "WFG Hypervolume";
+	}
 
 	@Override
 	public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
 
+		currentDeep = 0;
+		currentDimension = numberOfObjectives;
 		double hv = 0;
-		
+
 		ParetoSolution<T> copy = new ParetoSolution<T>(paretoFrontApproximation);
-		
+
 		QualityIndicatorUtil.normalizeFront(copy, maximumValue, minimumValue);
 		QualityIndicatorUtil.invertedFront(copy);
 		
@@ -59,52 +53,40 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 		if (paretoFrontApproximation.size() == 0) {
 			hv = 0.0;
 		} else {
-			numberOfObjectives = paretoFrontApproximation.get(0).getNumberOfObjectives();
-			updateReferencePoint(copy);
-
-			if (numberOfObjectives == 2) {
-				//Collections.sort(population, new ObjectiveComparator<Solution<?>>(numberOfObjectives-1, ObjectiveComparator.Ordering.DESCENDING));
-				//hv = get2DHV(population) ;
-			} else {
-
-				hv = getHV(new ParetoSolution<T>(copy));
+			if(referencePoint == null) {
+				updateReferencePoint(copy);
 			}
+			hv = getHV(new ParetoSolution<T>(copy));
 		}
-
 		return hv;
+	}
+
+	@Override
+	public double evaluate(double[][] paretoFrontApproximation) {
+		System.err.println("WFG Hypervolume not implemented");
+		return 0;
 	}
 
 	/**
 	 * Updates the reference point
 	 */
 	private void updateReferencePoint(ParetoSolution<T> front) {
-		double[] maxObjectives = new double[numberOfObjectives];
+		double[] maxObjectives = QualityIndicatorUtil.getMaximumValues(front.getObjectivesAsMatrix(), numberOfObjectives);
+		referencePoint = new double[numberOfObjectives];
 		for (int i = 0; i < numberOfObjectives; i++) {
-			maxObjectives[i] = 0;
-		}
-
-		for (int i = 0; i < front.size(); i++) {
-			for (int j = 0; j < numberOfObjectives; j++) {
-				if (maxObjectives[j] < front.get(i).getObjective(j)) {
-					maxObjectives[j] = front.get(i).getObjective(j) ;
-				}
-			}
-		}
-
-		for (int i = 0; i < referencePoint.getNumberOfObjectives(); i++) {
-			referencePoint.setObjective(i, maxObjectives[i] + offset);
+			referencePoint[i] = maxObjectives[i] + offset;
 		}
 	}
 
 	public double get2DHV(ParetoSolution<T> front) {
 		double hv = 0.0;
 
-		hv = Math.abs((front.get(0).getObjective(0) - referencePoint.getObjective(0)) *
-				(front.get(0).getObjective(1) - referencePoint.getObjective(1))) ;
+		hv = Math.abs((front.get(0).getObjective(0) - referencePoint[0]) *
+				(front.get(0).getObjective(1) - referencePoint[1])) ;
 
 		int v = front.size() ;
 		for (int i = 1; i < front.size(); i++) {
-			hv += Math.abs((front.get(i).getObjective(0) - referencePoint.getObjective(0)) *
+			hv += Math.abs((front.get(i).getObjective(0) - referencePoint[0]) *
 					(front.get(i).getObjective(1) - front.get(i - 1).getObjective(1)));
 
 		}
@@ -115,7 +97,7 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 	public double getInclusiveHV(NumberSolution<T> point) {
 		double volume = 1;
 		for (int i = 0; i < currentDimension; i++) {
-			volume *= Math.abs(point.getObjective(i) - referencePoint.getObjective(i));
+			volume *= Math.abs(point.getObjective(i) - referencePoint[i]);
 		}
 
 		return volume;
@@ -148,7 +130,7 @@ public class WfgHypervolume<T extends Number> extends QualityIndicator<T>{
 			int numberOfPoints = front.size() ;
 			for (int i = numberOfPoints - 1; i >= 0; i--) {
 				volume += Math.abs(front.get(i).getObjective(currentDimension) -
-						referencePoint.getObjective(currentDimension)) *
+						referencePoint[currentDimension]) *
 						this.getExclusiveHV(front, i);
 			}
 			currentDimension++;

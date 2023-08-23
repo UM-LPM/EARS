@@ -44,7 +44,7 @@ public class MOSingleRun {
 
 			Task<NumberSolution<Double>, DoubleProblem> task = new Task<>(p, StopCriterion.EVALUATIONS, 30000, 5000, 100);
 			ParetoSolution best = moead.execute(task);
-			best.printObjectivesToCSVFile("test");
+			best.saveObjectivesToCSVFile("test");
 
 			//best.evaluate(new InvertedGenerationalDistance(p.getNumberOfObjectives(), p.getReferenceSetFileName()));
 

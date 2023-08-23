@@ -29,7 +29,7 @@ public class Hartman3 extends DoubleProblem {
     private static final double[] c = {1, 1.2, 3, 3.2};
 
     public Hartman3() {
-        super("Hartman3", 3, 1, 1, 0);
+        super("Hartman", 3, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 1.0));
 

@@ -1,10 +1,7 @@
 package org.um.feri.ears.problems;
 
 import com.ctc.wstx.shaded.msv_core.datatype.xsd.Comparator;
-import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.quality_indicator.QualityIndicator;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
 public abstract class Problem<S extends Solution> {
 
@@ -25,7 +22,7 @@ public abstract class Problem<S extends Solution> {
     protected String referenceSetFileName;
     protected String benchmarkName;
     protected String description;
-    DominanceComparator dominanceComparator;
+    SolutionDominanceComparator solutionDominanceComparator;
 
     protected String version = "1.0";
     public static final int CONSTRAINED_TYPE_COUNT = 1;
@@ -40,8 +37,8 @@ public abstract class Problem<S extends Solution> {
         this.numberOfConstraints = numberOfConstraints;
         objectiveSpaceOptima = new double[numberOfGlobalOptima];
         objectiveMaximizationFlags = new boolean[numberOfObjectives];
-        dominanceComparator = new DominanceComparator();
-        dominanceComparator.setObjectiveMaximizationFlags(objectiveMaximizationFlags);
+        solutionDominanceComparator = new SolutionDominanceComparator();
+        solutionDominanceComparator.setObjectiveMaximizationFlags(objectiveMaximizationFlags);
     }
 
     public abstract void evaluate(S solution);
@@ -64,7 +61,7 @@ public abstract class Problem<S extends Solution> {
     public abstract S getRandomSolution();
 
     public boolean isFirstBetter(S solution1, S solution2)  {
-        return Comparator.LESS == dominanceComparator.compare(solution1,solution2);
+        return Comparator.LESS == solutionDominanceComparator.compare(solution1,solution2);
     }
 
     /**
@@ -133,6 +130,11 @@ public abstract class Problem<S extends Solution> {
         return objectiveSpaceOptima;
     }
 
+    /**
+     * Used to check which objectives are to be minimized.
+     *
+     * @return objectiveMaximizationFlags
+     */
     public boolean[] getObjectiveMaximizationFlags() {
         return objectiveMaximizationFlags;
     }

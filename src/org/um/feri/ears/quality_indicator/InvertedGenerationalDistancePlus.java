@@ -18,12 +18,17 @@ public class InvertedGenerationalDistancePlus<T extends Number> extends QualityI
         name = "Inverted Generational Distance Plus";
     }
 
+    public InvertedGenerationalDistancePlus(int numObj, String problemName, double[][] referenceFront, double[] referencePoint) {
+        super(numObj, problemName, referenceFront, referencePoint);
+        name = "Inverted Generational Distance Plus";
+    }
+
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
 
         double[][] normalizedApproximation;
-        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
         double sum = 0.0;
         try {

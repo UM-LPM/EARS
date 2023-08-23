@@ -44,7 +44,7 @@ public class Foxholes extends DoubleProblem {
     };
 
     public Foxholes() {
-        super("Shekel's Foxholes", 2, 1, 1, 0);
+        super("ShekelsFoxholes", 2, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -65.536));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 65.536));
 

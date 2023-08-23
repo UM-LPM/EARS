@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 import org.apache.commons.math3.util.ArithmeticUtils;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
 
 /**
@@ -84,7 +84,7 @@ public class AdaptiveGridArchive<N extends Number> extends NondominatedPopulatio
 	 */
 	public AdaptiveGridArchive(int capacity, int numObj,
 			int numberOfDivisions) {
-		super(new DominanceComparator());
+		super(new SolutionDominanceComparator());
 		this.capacity = capacity;
 		this.numberOfDivisions = numberOfDivisions;
 		this.num_obj = numObj;

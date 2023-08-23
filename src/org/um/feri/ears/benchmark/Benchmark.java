@@ -52,7 +52,7 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
         this.runInParallel = runInParallel;
     }
 
-    public TournamentResults getResultArena() {
+    public TournamentResults getTournamentResults() {
         return tournamentResults;
     }
 

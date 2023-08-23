@@ -21,6 +21,7 @@
 package org.um.feri.ears.quality_indicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.comparator.LexicoGraphicalComparator;
 
 import java.util.Arrays;
 
@@ -42,13 +43,13 @@ public class GeneralizedSpread<T extends Number> extends QualityIndicator<T> {
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
         /**
          * Stores the normalized approximation set.
          */
         double[][] normalizedApproximation;
-        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
         double[][] extremeValues = new double[numberOfObjectives][numberOfObjectives];
         for (int i = 0; i < numberOfObjectives; i++) {

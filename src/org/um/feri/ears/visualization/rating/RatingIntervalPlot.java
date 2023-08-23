@@ -1,6 +1,23 @@
 package org.um.feri.ears.visualization.rating;
 
+import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.awt.PdfPrinterGraphics2D;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import com.itextpdf.text.Document;
+
+
+import net.sf.epsgraphics.ColorMode;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.TranscodingHints;
+import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.apache.xmlgraphics.java2d.GraphicContext;
+import org.apache.xmlgraphics.java2d.ps.EPSDocumentGraphics2D;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.CategoryAxis;
@@ -14,16 +31,41 @@ import org.jfree.ui.RefineryUtilities;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.statistic.rating_system.Rating;
 import org.um.feri.ears.statistic.rating_system.RatingType;
+import net.sf.epsgraphics.EpsGraphics;
 
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.w3c.dom.DOMImplementation;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class RatingIntervalPlot extends ApplicationFrame {
+
+    public enum FileType {
+        PNG, JPEG, SVG, PDF, EPS
+    }
+
+    static class Range {
+        int lower, upper;
+
+        public Range(int lower, int upper) {
+            this.lower = lower;
+            this.upper = upper;
+        }
+    }
 
     static final int DEFAULT_WIDTH = 1000, DEFAULT_HEIGHT = 500, DEFAULT_RANGE_LOWER = 1000, DEFAULT_RANGE_UPPER = 2000;
     protected int width, height, rangeLower, rangeUpper;
@@ -31,7 +73,7 @@ public class RatingIntervalPlot extends ApplicationFrame {
     protected int plotIndex = 0;
     final CategoryPlot plot;
     RatingType ratingType;
-
+    final JFreeChart chart;
 
     public RatingIntervalPlot(String title, ArrayList<Player> players) {
         this(players, RatingType.GLICKO2, title, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_RANGE_LOWER, DEFAULT_RANGE_UPPER);
@@ -64,7 +106,7 @@ public class RatingIntervalPlot extends ApplicationFrame {
         plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
         plotIndex++;
 
-        final JFreeChart chart = new JFreeChart(
+        chart = new JFreeChart(
                 title,
                 new Font("SansSerif", Font.BOLD, 16),
                 plot,
@@ -78,11 +120,141 @@ public class RatingIntervalPlot extends ApplicationFrame {
         chart.setPadding(new RectangleInsets(10, 10, 10, 10)); // Fix: tick label cut off
     }
 
+    /**
+     * Displays the rating interval chart with the default window dimensions. The range of the rating interval is calculated automatically.
+     * @param players that will be displayed
+     * @param ratingType used to calculate the rating
+     * @param title of the chart
+     */
+    public static void displayChart(ArrayList<Player> players, RatingType ratingType, String title) {
+        Range range = getRange(players, ratingType);
+        displayChart(players, ratingType, title, DEFAULT_WIDTH, DEFAULT_HEIGHT, range.lower, range.upper);
+    }
+
+    /**
+     * Displays the rating interval chart with the given dimensions. The default range of the rating interval is used.
+     * @param players that will be displayed
+     * @param ratingType used to calculate the rating
+     * @param title of the chart
+     * @param width of the window
+     * @param height of the window
+     */
     public static void displayChart(ArrayList<Player> players, RatingType ratingType, String title, int width, int height) {
         displayChart(players, ratingType, title, width, height, DEFAULT_RANGE_LOWER, DEFAULT_RANGE_UPPER);
     }
+    /**
+     * Displays the rating interval chart with the given dimensions and range of the rating interval.
+     * @param players that will be displayed
+     * @param ratingType used to calculate the rating
+     * @param title of the chart
+     * @param width of the window
+     * @param height of the window
+     * @param rangeLower lower bound of the rating interval
+     * @param rangeUpper upper bound of the rating interval
+     */
+    public static void displayChart(ArrayList<Player> players, RatingType ratingType, String title, int width, int height, int rangeLower, int rangeUpper) {
+        RatingIntervalPlot plot = new RatingIntervalPlot(players, ratingType, title, width, height, rangeLower, rangeUpper);
+        plot.pack();
+        RefineryUtilities.centerFrameOnScreen(plot);
+        plot.setVisible(true);
+    }
 
-    public static void displayChart(ArrayList<Player> players, RatingType ratingType, String title) {
+    /**
+     * Saves the chart with the default window dimensions in the given file. The range of the rating interval is calculated automatically.
+     * @param players that will be stored
+     * @param ratingType used to calculate the rating
+     * @param fileName of the chart
+     * @param fileType of the chart
+     */
+    public static void saveChartToFile(ArrayList<Player> players, RatingType ratingType, String fileName, FileType fileType) {
+        Range range = getRange(players, ratingType);
+        saveChartToFile(players, ratingType, fileName, fileType, DEFAULT_WIDTH, DEFAULT_HEIGHT, range.lower, range.upper);
+    }
+
+    /**
+     * Saves the chart the with the given dimensions in the given file. The range of the rating interval is calculated automatically.
+     * @param players that will be stored
+     * @param ratingType used to calculate the rating
+     * @param fileName of the chart
+     * @param fileType of the chart
+     * @param width of the window
+     * @param height of the window
+     */
+    public static void saveChartToFile(ArrayList<Player> players, RatingType ratingType, String fileName, FileType fileType, int width, int height) {
+        saveChartToFile(players, ratingType, fileName, fileType, width, height, DEFAULT_RANGE_LOWER, DEFAULT_RANGE_UPPER);
+    }
+
+    /**
+     * Saves the chart the with the given dimensions and range of the rating interval in the given file.
+     * @param players that will be stored
+     * @param ratingType used to calculate the rating
+     * @param fileName of the chart
+     * @param fileType of the chart
+     * @param width of the window
+     * @param height of the window
+     * @param rangeLower lower bound of the rating interval
+     * @param rangeUpper upper bound of the rating interval
+     */
+    public static void saveChartToFile(ArrayList<Player> players, RatingType ratingType, String fileName, FileType fileType, int width, int height, int rangeLower, int rangeUpper) {
+        RatingIntervalPlot plot = new RatingIntervalPlot(players, ratingType, "Rating Interval", width, height, rangeLower, rangeUpper);
+        String file = fileName + "." + fileType.toString().toLowerCase();
+        try {
+            switch (fileType) {
+                case PNG:
+                    ChartUtilities.saveChartAsPNG(new File(file), plot.chart, width, height);
+                    break;
+                case JPEG:
+                    ChartUtilities.saveChartAsJPEG(new File(file), plot.chart, width, height);
+                    break;
+                case PDF: {
+                    com.itextpdf.text.Document document = new com.itextpdf.text.Document(new com.itextpdf.text.Rectangle(width, height), 0, 0, 0, 0);
+                    PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(Paths.get(file)));
+                    document.open();
+                    PdfContentByte contentByte = writer.getDirectContent();
+                    PdfTemplate template = contentByte.createTemplate(width, height);
+                    Graphics2D g2 = template.createGraphics(width, height, new DefaultFontMapper());
+                    plot.chart.draw(g2, new Rectangle(width, height));
+                    g2.dispose();
+                    contentByte.addTemplate(template, 0, 0);
+                    document.close();
+                    break;
+                }
+                case SVG: {
+                    DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+                    org.w3c.dom.Document document = domImpl.createDocument(null, "svg", null);
+                    SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
+                    plot.chart.draw(svgGenerator, new Rectangle2D.Double(0, 0, width, height), null);
+                    try (Writer writer = new OutputStreamWriter(Files.newOutputStream(Paths.get(file)), StandardCharsets.UTF_8)) {
+                        svgGenerator.stream(writer, true);
+                    }
+                    break;
+                }
+                case EPS: {
+                    try (FileOutputStream fos = new FileOutputStream(file)) {
+                        EpsGraphics g = new EpsGraphics(fileName, fos, 0, 0,
+                                width, height, ColorMode.COLOR_RGB);
+                        plot.chart.draw(g, new Rectangle2D.Double(0, 0, width, height), null);
+
+                        g.flush();
+                        g.close();
+                    }
+                    break;
+                }
+                default:
+                    ChartUtilities.saveChartAsPNG(new File(file), plot.chart, width, height);
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println("Error saving chart to file: " + e.getMessage());
+        }
+    }
+    /**
+     * Gets upper and lower of the rating interval of all players
+     * @param players
+     * @param ratingType
+     * @return
+     */
+    private static Range getRange(ArrayList<Player> players, RatingType ratingType) {
 
         int rangeLower = Integer.MAX_VALUE, rangeUpper = Integer.MIN_VALUE;
         for (Player p : players) {
@@ -97,25 +269,18 @@ public class RatingIntervalPlot extends ApplicationFrame {
         }
         rangeLower -= 1;
 
-        if(ratingType == RatingType.GLICKO2) {
+        if (ratingType == RatingType.GLICKO2) {
             if (rangeLower < 0) {
                 rangeLower = 0;
             }
         }
 
-        if(rangeUpper < rangeLower)
+        if (rangeUpper < rangeLower)
             rangeUpper = rangeLower;
 
         rangeUpper += 1;
 
-        displayChart(players, ratingType, title, DEFAULT_WIDTH, DEFAULT_HEIGHT, rangeLower, rangeUpper);
-    }
-
-    public static void displayChart(ArrayList<Player> players, RatingType type, String title, int width, int height, int rangeLower, int rangeUpper) {
-        RatingIntervalPlot plot = new RatingIntervalPlot(players, type, title, width, height, rangeLower, rangeUpper);
-        plot.pack();
-        RefineryUtilities.centerFrameOnScreen(plot);
-        plot.setVisible(true);
+        return new Range(rangeLower, rangeUpper);
     }
 
     private MyMinMaxCategoryRenderer createRenderer(Color color) {

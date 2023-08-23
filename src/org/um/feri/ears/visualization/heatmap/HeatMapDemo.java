@@ -171,7 +171,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
             new Shubert3(2),
             new Shubert4(2),
             new Schwefel1(),
-            new Schwefel12(),
+            new Schwefel12(2),
             new Schwefel24(),
             new Schwefel26(),
             new Schwefel220(),
@@ -294,7 +294,7 @@ class HeatMapDemo extends JFrame implements ItemListener, FocusListener
             new Schwefel226(2),
             new Shubert1(2),
             new Sphere(2),
-            new SumSquares(2),
+            new SumOfSquares(2),
             new Zakharov(2)};
 
     DoubleProblem selectedProblem;

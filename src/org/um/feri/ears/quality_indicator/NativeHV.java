@@ -14,16 +14,21 @@ public class NativeHV<T extends Number> extends QualityIndicator<T> {
 
     private static final double DELTA_ = 0.01;
 
-    public NativeHV(int num_obj, String file_name) {
-        super(num_obj, file_name, getReferenceSet(file_name));
+    public NativeHV(int numObj, String file_name) {
+        super(numObj, file_name, getReferenceSet(file_name));
+        name = "WFGHypervolume";
+    }
+
+    public NativeHV(int numObj, String problemName, double[][] referenceFront, double[] referencePoint) {
+        super(numObj, problemName, referenceFront, referencePoint);
         name = "WFGHypervolume";
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
         double[][] normalizedApproximation;
-        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
         double[][] invertedFront = QualityIndicatorUtil.invertedFront(normalizedApproximation);
 

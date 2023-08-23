@@ -40,7 +40,7 @@ public class ErrorRatio<T extends Number> extends QualityIndicator<T> {
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
 
         int nonTruePoint = 0;
@@ -56,14 +56,14 @@ public class ErrorRatio<T extends Number> extends QualityIndicator<T> {
 
         boolean thePointIsInTheParetoFront, found;
 
-        for (int i = 0; i < paretoFrontApproximation.size(); i++) {
-            NumberSolution<T> currentPoint = paretoFrontApproximation.get(i);
+        for (int i = 0; i < paretoFrontApproximation.length; i++) {
+            double[] currentPoint = paretoFrontApproximation[i];
             thePointIsInTheParetoFront = false;
             for (int j = 0; j < referenceSet.length; j++) {
                 double[] currentParetoFrontPoint = referenceSet[j];
                 found = true;
                 for (int k = 0; k < numberOfObjectives; k++) {
-                    if (Math.abs(currentPoint.getObjective(k) - currentParetoFrontPoint[k]) > epsilon) {
+                    if (Math.abs(currentPoint[k] - currentParetoFrontPoint[k]) > epsilon) {
                         found = false;
                         break;
                     }
@@ -78,7 +78,7 @@ public class ErrorRatio<T extends Number> extends QualityIndicator<T> {
             }
         }
 
-        double ER = (double) nonTruePoint / (double) paretoFrontApproximation.size();
+        double ER = (double) nonTruePoint / (double) paretoFrontApproximation.length;
         return ER;
     }
 

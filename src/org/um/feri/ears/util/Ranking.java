@@ -25,7 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
 /**
  * This class implements some facilities for ranking solutions.
@@ -51,7 +51,7 @@ public class Ranking<N extends Number> {
 	/**
 	 * stores a <code>Comparator</code> for dominance checking
 	 */
-	private static DominanceComparator dominance;
+	private static SolutionDominanceComparator dominance;
 
   /**
    * stores a <code>Comparator</code> for Overal Constraint Violation Comparator
@@ -65,7 +65,7 @@ public class Ranking<N extends Number> {
      */       
 	public Ranking(ParetoSolution solutionSet) {
 		solutions = solutionSet;
-		dominance = new DominanceComparator();
+		dominance = new SolutionDominanceComparator();
 
 		// dominateMe[i] contains the number of solutions dominating i
 		int[] dominateMe = new int[solutions.size()];

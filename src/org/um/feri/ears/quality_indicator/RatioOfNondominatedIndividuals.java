@@ -1,10 +1,8 @@
 package org.um.feri.ears.quality_indicator;
 
-import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
-
-import java.util.Comparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
 /**
  * This class implements the RNI (Ratio Of Nondominated Individuals) indicator.
@@ -29,23 +27,23 @@ public class RatioOfNondominatedIndividuals<T extends Number> extends QualityInd
     /**
      * stores a <code>Comparator</code> for dominance checking
      */
-    private static final DominanceComparator dominance_ = new DominanceComparator();
+    private static final DominanceComparator dominance = new DominanceComparator();
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
         int flagDominate;
-        int[] dominateMe = new int[paretoFrontApproximation.size()];
+        int[] dominateMe = new int[paretoFrontApproximation.length];
 
         // Set of nondominated individuals
         int X = 0;
 
-        for (int p = 0; p < (paretoFrontApproximation.size() - 1); p++) {
+        for (int p = 0; p < (paretoFrontApproximation.length - 1); p++) {
             // For all q individuals , calculate if p dominates q or vice versa
-            for (int q = p + 1; q < paretoFrontApproximation.size(); q++) {
+            for (int q = p + 1; q < paretoFrontApproximation.length; q++) {
                 // flagDominate
                 // =constraint_.compare(solutionSet.get(p),solutionSet.get(q));
-				flagDominate = dominance_.compare(paretoFrontApproximation.get(p), paretoFrontApproximation.get(q));
+				flagDominate = dominance.compare(paretoFrontApproximation[p], paretoFrontApproximation[q]);
 				if (flagDominate == -1) {
                     dominateMe[q]++;
                 } else if (flagDominate == 1) {
@@ -54,12 +52,12 @@ public class RatioOfNondominatedIndividuals<T extends Number> extends QualityInd
             }
         }
         // Sum all nondominated individuals
-        for (int p = 0; p < paretoFrontApproximation.size(); p++) {
+        for (int p = 0; p < paretoFrontApproximation.length; p++) {
             if (dominateMe[p] == 0) {
                 X++;
             }
         }
-		return (double) X / (double) paretoFrontApproximation.size();
+		return (double) X / (double) paretoFrontApproximation.length;
     }
 
     @Override

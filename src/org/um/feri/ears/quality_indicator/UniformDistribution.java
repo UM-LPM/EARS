@@ -10,7 +10,7 @@ public class UniformDistribution<T extends Number> extends QualityIndicator<T>{
 	}
 	
 	@Override
-	public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+	public double evaluate(double[][] paretoFrontApproximation) {
 		
 		double sigma_share;
 		

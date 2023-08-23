@@ -3,8 +3,7 @@ package org.um.feri.ears.quality_indicator;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.DominanceComparator;
-
-import java.util.Comparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
 /**
  * This class implements the ONVGR (Overall Nondominated Vector Generation and Ratio) indicator.
@@ -28,21 +27,21 @@ public class OverallNondominatedVectorGenerationRatio<T extends Number> extends 
     private final DominanceComparator dominance = new DominanceComparator();
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
         int flagDominate;
-        int[] dominateMe = new int[paretoFrontApproximation.size()];
+        int[] dominateMe = new int[paretoFrontApproximation.length];
 
         // Set of nondominated individuals
         double PFFalse = 0;
         double PFTrue = 0;
 
-        for (int p = 0; p < (paretoFrontApproximation.size() - 1); p++) {
+        for (int p = 0; p < (paretoFrontApproximation.length - 1); p++) {
             // For all q individuals , calculate if p dominates q or vice versa
-            for (int q = p + 1; q < paretoFrontApproximation.size(); q++) {
+            for (int q = p + 1; q < paretoFrontApproximation.length; q++) {
                 // flagDominate
                 // =constraint_.compare(solutionSet.get(p),solutionSet.get(q));
-                flagDominate = dominance.compare(paretoFrontApproximation.get(p), paretoFrontApproximation.get(q));
+                flagDominate = dominance.compare(paretoFrontApproximation[p], paretoFrontApproximation[q]);
                 if (flagDominate == -1) {
                     dominateMe[q]++;
                 } else if (flagDominate == 1) {
@@ -50,7 +49,7 @@ public class OverallNondominatedVectorGenerationRatio<T extends Number> extends 
                 }
             }
         }
-        for (int p = 0; p < paretoFrontApproximation.size(); p++) {
+        for (int p = 0; p < paretoFrontApproximation.length; p++) {
             if (dominateMe[p] == 0) {
                 PFFalse++;
             }
@@ -62,7 +61,7 @@ public class OverallNondominatedVectorGenerationRatio<T extends Number> extends 
             for (int q = p + 1; q < referenceSet.length; q++) {
                 // flagDominate
                 // =constraint_.compare(solutionSet.get(p),solutionSet.get(q));
-                flagDominate = dominance.compare(referencePopulation.get(p), referencePopulation.get(q));
+                flagDominate = dominance.compare(referenceSet[p], referenceSet[q]);
                 if (flagDominate == -1) {
                     dominateMe[q]++;
                 } else if (flagDominate == 1) {

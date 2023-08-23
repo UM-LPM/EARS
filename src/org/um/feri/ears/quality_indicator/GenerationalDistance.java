@@ -40,24 +40,29 @@ public class GenerationalDistance<T extends Number> extends QualityIndicator<T>{
 	/**
 	 * Constructor. Creates a new instance of the generational distance metric.
 	 */
-	public GenerationalDistance(int num_obj, String file_name) {
-		super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+	public GenerationalDistance(int numObj, String problemName) {
+		super(numObj, problemName, (ParetoSolution<T>) getReferenceSet(problemName));
+		name = "Generational Distance";
+	}
+
+	public GenerationalDistance(int numObj, String problemName, double[][] referenceFront, double[] referencePoint) {
+		super(numObj, problemName, referenceFront, referencePoint);
 		name = "Generational Distance";
 	}
 
 	@Override
-	public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+	public double evaluate(double[][] paretoFrontApproximation) {
 		
 		/**
 		 * Stores the normalized approximation set.
 		 */
 		double[][] normalizedApproximation;
 
-		normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+		normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
 		double sum = 0.0;
 		try {
-			for (int i = 0; i < paretoFrontApproximation.size(); i++)
+			for (int i = 0; i < paretoFrontApproximation.length; i++)
 				sum += Math.pow(QualityIndicatorUtil.distanceToNearestPoint(normalizedApproximation[i], normalizedReference), pow);
 		} catch (Exception e) {
 			e.printStackTrace();

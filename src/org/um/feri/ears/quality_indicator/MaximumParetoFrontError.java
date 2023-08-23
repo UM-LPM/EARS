@@ -23,14 +23,14 @@ public class MaximumParetoFrontError<T extends Number> extends QualityIndicator<
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
         /*
          * Stores the normalized approximation set.
          */
         double[][] normalizedApproximation;
 
-        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
         double max = 0.0;
 

@@ -13,7 +13,7 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.*;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
 public class PAES<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
 
@@ -47,7 +47,7 @@ public class PAES<N extends Number, P extends NumberProblem<N>> extends MOAlgori
 
     public void start() throws StopCriterionException {
 
-        DominanceComparator dominance = new DominanceComparator();
+        SolutionDominanceComparator dominance = new SolutionDominanceComparator();
 
         if (task.isStopCriterion())
             return;

@@ -71,11 +71,11 @@ public final class QualityIndicatorUtil<T> {
     }
 
     /**
-     * Gets the maximun values for each objectives in a given pareto front
+     * Gets the maximum values for each objective in a given pareto front
      *
      * @param front        The pareto front
      * @param noObjectives Number of objectives in the pareto front
-     * @return double [] An array of noOjectives values whit the maximun values for each objective
+     * @return double [] An array of objective values with the maximum values for each objective
      **/
     public static double[] getMaximumValues(double[][] front, int noObjectives) {
         double[] maximumValue = new double[noObjectives];
@@ -93,12 +93,12 @@ public final class QualityIndicatorUtil<T> {
 
 
     /**
-     * Gets the minimun values for each objectives in a given pareto
+     * Gets the minimum values for each objective in a given pareto
      * front
      *
      * @param front        The pareto front
      * @param noObjectives Number of objectives in the pareto front
-     * @return double [] An array of noOjectives values whit the minimum values
+     * @return double [] An array of objectives values with the minimum values
      * for each objective
      **/
     public static double[] getMinimumValues(double[][] front, int noObjectives) {
@@ -153,7 +153,7 @@ public final class QualityIndicatorUtil<T> {
 
         for (int i = 0; i < front.length; i++) {
             double aux = distance.compute(point, front[i]);
-            if (aux < minDistance && aux > 0) {
+            if (aux < minDistance) {
                 minDistance = aux;
             }
         }
@@ -215,14 +215,14 @@ public final class QualityIndicatorUtil<T> {
 
     /**
      * This method receives a pareto front and two points, one whit maximum values
-     * and the other with minimum values allowed, and returns a the normalized Pareto front.
+     * and the other with minimum values allowed, and returns the normalized Pareto front.
      *
      * @param front        A pareto front.
-     * @param maximumValue The maximun values allowed
-     * @param minimumValue The mininum values allowed
+     * @param maximumValue The maximum values allowed
+     * @param minimumValue The minimum values allowed
      * @return the normalized pareto front
      **/
-    public static double[][] getNormalizedFront(double[][] front, double[] maximumValue, double[] minimumValue) {
+    public static double[][] normalizeFront(double[][] front, double[] maximumValue, double[] minimumValue) {
 
         if (maximumValue == null || minimumValue == null)
             return front;
@@ -233,10 +233,10 @@ public final class QualityIndicatorUtil<T> {
             normalizedFront[i] = new double[front[i].length];
             for (int j = 0; j < front[i].length; j++) {
                 if (front[i][j] < minimumValue[j]) {
-                    System.err.println("Warning: when performing normaliazation, objective " + (j + 1) + " value " + front[i][j] + " is smaller than min " + minimumValue[j] + "");
+                    System.err.println("Warning: when performing normalization, objective " + (j + 1) + " value " + front[i][j] + " is smaller than min " + minimumValue[j]);
                 }
                 if (front[i][j] > maximumValue[j]) {
-                    System.err.println("Warning: when performing normaliazation, objective " + (j + 1) + " value " + front[i][j] + " is largeer than max " + maximumValue[j] + "");
+                    System.err.println("Warning: when performing normalization, objective " + (j + 1) + " value " + front[i][j] + " is larger than max " + maximumValue[j]);
                 }
                 normalizedFront[i][j] = (front[i][j] - minimumValue[j]) / (maximumValue[j] - minimumValue[j]);
             }
@@ -249,8 +249,8 @@ public final class QualityIndicatorUtil<T> {
      * and the other with minimum values allowed, and normalizes the objective values.
      *
      * @param front        A pareto front.
-     * @param maximumValue The maximun values allowed
-     * @param minimumValue The mininum values allowed
+     * @param maximumValue The maximum values allowed
+     * @param minimumValue The minimum values allowed
      **/
     public static <T extends Number> void normalizeFront(ParetoSolution<T> front, double[] maximumValue, double[] minimumValue) {
 
@@ -263,7 +263,7 @@ public final class QualityIndicatorUtil<T> {
         }
     }
 
-    public static <T extends Number, P extends Problem<NumberSolution<T>>> double[][] getNormalizedFront(double[][] front, P problem) {
+    public static <T extends Number, P extends Problem<NumberSolution<T>>> double[][] normalizeFront(double[][] front, P problem) {
 
         ParetoSolution<T> referenceSet = new ParetoSolution<T>(0);
         String fileName = problem.getReferenceSetFileName();
@@ -275,7 +275,7 @@ public final class QualityIndicatorUtil<T> {
         if (fileName != null && !fileName.isEmpty()) {
             referenceSet = QualityIndicatorUtil.readNonDominatedSolutionSet("pf_data/" + fileName + ".dat");
         } else {
-            System.out.println("The file name containg the Paret front is not valid.");
+            System.out.println("The file name containing the Pareto front is not valid.");
         }
 
 
@@ -407,7 +407,7 @@ public final class QualityIndicatorUtil<T> {
             while (aux != null) {
                 StringTokenizer st = new StringTokenizer(aux);
                 if (st.hasMoreTokens())
-                    name = new String(st.nextToken());
+                    name = st.nextToken();
 
                 if (problemName.toLowerCase().equals(name.toLowerCase())) {
                     referencePoint = new double[st.countTokens()];

@@ -618,8 +618,8 @@ public class ExecuteTournaments {
         dr.run(numberOfRuns);
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         logger.log(Level.INFO, "Total execution time: " + estimatedTime + "s");
-        ArrayList<Player> list = dr.getResultArena().getPlayers();
-        Player.JsonPlayer[] jsonPlayers = dr.getResultArena().getPlayersJson();
+        ArrayList<Player> list = dr.getTournamentResults().getPlayers();
+        Player.JsonPlayer[] jsonPlayers = dr.getTournamentResults().getPlayersJson();
         StringBuilder sb = new StringBuilder();
         for (Player p : list) {
             //System.out.println(p); //print ranks

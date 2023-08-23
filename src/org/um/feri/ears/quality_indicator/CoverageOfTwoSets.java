@@ -1,7 +1,7 @@
 package org.um.feri.ears.quality_indicator;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
 /**
  * This class implements the Coverage of two sets indicator.
@@ -30,12 +30,12 @@ public class CoverageOfTwoSets<N extends Number> extends QualityIndicator<N> {
     /**
      * stores a <code>Comparator</code> for dominance checking
      */
-    private final DominanceComparator dominance = new DominanceComparator();
+    private final SolutionDominanceComparator dominance = new SolutionDominanceComparator();
 
     @Override
-    public double evaluate(ParetoSolution<N> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
         // TODO calculate throw error if second front is null
-        System.err.println("Cannot evaluate wit binary indicator!");
+        System.err.println("Cannot evaluate with binary indicator!");
         return Double.MAX_VALUE;
     }
 

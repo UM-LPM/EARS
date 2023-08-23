@@ -22,7 +22,7 @@ import java.util.List;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
 /**
  * Created by Antonio J. Nebro on 04/10/14.
@@ -181,7 +181,7 @@ public class SolutionListUtils {
 
     public static <T extends Number> boolean isSolutionDominatedBySolutionList(NumberSolution<T> solution, ParetoSolution<T> solutionSet) {
         boolean result = false;
-        Comparator dominance = new DominanceComparator();
+        Comparator dominance = new SolutionDominanceComparator();
 
         int i = 0;
 

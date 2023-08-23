@@ -8,7 +8,7 @@
 package org.um.feri.ears.algorithms.moo.spea2;
 
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.comparator.MOFitnessComparator;
 import org.um.feri.ears.util.Distance;
 
@@ -24,7 +24,7 @@ public class Spea2fitness {
 
     private static final Comparator distanceNodeComparator = new DistanceNodeComparator();
 
-    private static final Comparator dominance = new DominanceComparator();
+    private static final Comparator dominance = new SolutionDominanceComparator();
 
     public Spea2fitness(ParetoSolution solutionSet) {
         distance = DISTANCE.distanceMatrix(solutionSet);

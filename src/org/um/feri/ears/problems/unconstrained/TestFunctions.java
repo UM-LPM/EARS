@@ -181,7 +181,7 @@ public class TestFunctions {
 		System.out.println(p35.getGlobalOptima()[0]);
 		System.out.println(p35.eval(p35.getDecisionSpaceOptima()[0]));
 		
-		Schwefel12 p36 = new Schwefel12();
+		Schwefel12 p36 = new Schwefel12(2);
 		System.out.println(p36.getName());
 		System.out.println(p36.getGlobalOptima()[0]);
 		System.out.println(p36.eval(p36.getDecisionSpaceOptima()[0]));
@@ -236,7 +236,7 @@ public class TestFunctions {
 		System.out.println(p46.getGlobalOptima()[0]);
 		System.out.println(p46.eval(p46.getDecisionSpaceOptima()[0]));
 		
-		SumSquares p47 = new SumSquares(2);
+		SumOfSquares p47 = new SumOfSquares(2);
 		System.out.println(p47.getName());
 		System.out.println(p47.getGlobalOptima()[0]);
 		System.out.println(p47.eval(p47.getDecisionSpaceOptima()[0]));

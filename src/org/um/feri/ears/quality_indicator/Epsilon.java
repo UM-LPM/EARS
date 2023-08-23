@@ -45,10 +45,10 @@ public class Epsilon<T extends Number> extends QualityIndicator<T> {
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
         //TODO add +1 to all normalized values if additive method [1,2]
-        double[][] normalizedFront = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        double[][] normalizedFront = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
         int i, j, k;
         double eps, epsJ = 0.0, epsK = 0.0, epsTemp;

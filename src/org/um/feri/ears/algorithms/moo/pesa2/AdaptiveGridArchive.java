@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
 public class AdaptiveGridArchive<N extends Number> extends ParetoSolution<N> {
 
@@ -19,12 +19,12 @@ public class AdaptiveGridArchive<N extends Number> extends ParetoSolution<N> {
 
     private int maxSize;
 
-    private DominanceComparator dominance;
+    private SolutionDominanceComparator dominance;
 
     public AdaptiveGridArchive(int maxSize, int bisections, int objectives) {
         super(maxSize);
         this.maxSize = maxSize;
-        dominance = new DominanceComparator();
+        dominance = new SolutionDominanceComparator();
         grid = new AdaptiveGrid<>(bisections, objectives);
     }
 

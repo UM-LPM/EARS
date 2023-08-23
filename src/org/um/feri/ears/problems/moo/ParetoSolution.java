@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
@@ -365,7 +367,7 @@ public class ParetoSolution<N extends Number> extends Solution implements Iterab
      *
      * @return A matrix containing the objectives
      */
-    public double[][] writeObjectivesToMatrix() {
+    public double[][] getObjectivesAsMatrix() {
         if (this.size() == 0) {
             return null;
         }
@@ -404,12 +406,29 @@ public class ParetoSolution<N extends Number> extends Solution implements Iterab
     }
 
     /**
-     * Prints the objectives to a file in CSV format.
+     * Saves the objectives to a file.
      *
      * @param fileName The name of the file.
      */
-    public void printObjectivesToCSVFile(String fileName) {
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + ".csv")))) {
+    public void saveObjectivesToFile(String fileName) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(fileName + ".dat"))))) {
+            for (NumberSolution<N> solution : solutions) {
+                for (int j = 0; j < solution.getNumberOfObjectives(); j++)
+                    bw.write(solution.getObjective(j) + " ");
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Saves the objectives to a file in CSV format.
+     *
+     * @param fileName The name of the file.
+     */
+    public void saveObjectivesToCSVFile(String fileName) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(fileName + ".csv"))))) {
             for (NumberSolution<N> solution : solutions) {
                 // if (this.vector[i].getFitness()<1.0) {
                 bw.write(solution.toStringCSV());
@@ -422,13 +441,13 @@ public class ParetoSolution<N extends Number> extends Solution implements Iterab
     }
 
     /**
-     * Prints the variables to a file.
+     * Saves the variables to a file.
      *
      * @param fileName The name of the file.
      */
-    public void printVariablesToFile(String fileName) {
+    public void saveVariablesToFile(String fileName) {
 
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName)))) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(fileName + ".dat"))))) {
             if (solutions.size() > 0) {
                 int numberOfVariables = solutions.get(0).getVariables().size();
                 for (NumberSolution<N> solution : solutions) {
@@ -473,13 +492,14 @@ public class ParetoSolution<N extends Number> extends Solution implements Iterab
         final String algorithmName = algorithm.replace("_", "\\_");
         final String problemName = problemN.replace("_", "\\_");
 
-        final double[][] front = this.writeObjectivesToMatrix();
+        final double[][] front = this.getObjectivesAsMatrix();
         Thread t = new Thread(new Runnable() {
             public void run() {
                 PlotStyle myPlotStyle = new PlotStyle();
                 myPlotStyle.setStyle(Style.POINTS);
                 myPlotStyle.setPointType(7); // 7 - circle
                 myPlotStyle.setLineType(3); // blue color
+
 
                 // myPlotStyle.setPointSize(1);
                 // myPlotStyle.setLineType(9);
@@ -499,12 +519,11 @@ public class ParetoSolution<N extends Number> extends Solution implements Iterab
             }
         });
         t.start();
-
     }
 
     public void saveParetoImage(final String algorithmName, final String problemName) {
 
-        final double[][] front = this.writeObjectivesToMatrix();
+        final double[][] front = this.getObjectivesAsMatrix();
         Thread t = new Thread(new Runnable() {
             public void run() {
                 PostscriptTerminal eps = new PostscriptTerminal(algorithmName + ".eps");

@@ -2,7 +2,6 @@ package org.um.feri.ears.problems;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.comparator.DominanceComparator;
 
 import javax.annotation.CheckReturnValue;
 import java.util.ArrayList;

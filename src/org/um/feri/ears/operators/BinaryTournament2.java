@@ -23,7 +23,7 @@ package org.um.feri.ears.operators;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.Util;
 
 
@@ -36,7 +36,7 @@ public class BinaryTournament2<N extends Number> {
   /**
    * dominance_ store the <code>Comparator</code> for check dominance_
    */
-  private final DominanceComparator dominance = new DominanceComparator();
+  private final SolutionDominanceComparator dominance = new SolutionDominanceComparator();
   
   /**
    * a stores a permutation of the solutions in the solutionSet used

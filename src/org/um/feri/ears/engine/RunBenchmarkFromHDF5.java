@@ -78,7 +78,7 @@ public class RunBenchmarkFromHDF5 {
         dr.run(numberOfSolutions); //repeat competition 50X
         long estimatedTime = (System.currentTimeMillis() - initTime) / 1000;
         System.out.println("Benchmark execution time: " + estimatedTime + "s");
-        ArrayList<Player> list = dr.getResultArena().getPlayers();
+        ArrayList<Player> list = dr.getTournamentResults().getPlayers();
 
         String[] algorithms = new String[list.size()];
         double[] ratings = new double[list.size()];

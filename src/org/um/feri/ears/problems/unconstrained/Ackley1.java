@@ -18,9 +18,9 @@ import static java.lang.Math.*;
 public class Ackley1 extends DoubleProblem {
 
     public Ackley1(int d) {
-        super("Ackley1", d, 1, 1, 0);
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.768));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.768));
+        super("Ackley", d, 1, 1, 0);
+        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
+        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.0));
     }
 
     @Override

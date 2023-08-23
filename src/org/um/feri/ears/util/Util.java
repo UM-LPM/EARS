@@ -368,14 +368,15 @@ public class Util {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(fileLocation))) {
             String line;
-            while ((line = br.readLine()) != null)
+            while ((line = br.readLine()) != null) {
                 sb.append(line);
+                sb.append(System.lineSeparator());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return sb.toString();
     }
-
     public static double max(double... args) {
         double maxValue = args[0];
         for (double arg : args) {

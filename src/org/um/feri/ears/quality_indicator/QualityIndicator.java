@@ -5,11 +5,11 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 
 public abstract class QualityIndicator<N extends Number> {
 
-    /**
-     * Returns the value which represents the quality of the Pareto front approximation
-     * @param paretoFrontApproximation the Pareto front approximation to be evaluated
-     */
-    public abstract double evaluate(ParetoSolution<N> paretoFrontApproximation);
+    public enum IndicatorType {
+        UNARY,
+        BINARY,
+        ARBITRARY
+    }
 
     protected String name;
 
@@ -18,9 +18,7 @@ public abstract class QualityIndicator<N extends Number> {
      */
     protected double eps;
 
-    protected String problem_file;
-
-    protected ParetoSolution<N> referencePopulation;
+    protected String problemName;
 
     /**
      * Stores the number of objectives.
@@ -36,32 +34,44 @@ public abstract class QualityIndicator<N extends Number> {
      * Stores the maximum values of the reference set.
      */
     protected double[] maximumValue;
+
     /**
      * Stores the minimum values of the reference set.
      */
     protected double[] minimumValue;
-
     /**
      * Stores the reference point for the problem.
      */
-    double[] referencePoint;
+    protected double[] referencePoint;
 
     /**
      * Stores the normalized Reference set.
      */
     double[][] normalizedReference;
 
-    public QualityIndicator(int numObj, String fileName, ParetoSolution<N> referenceSet) {
+    public QualityIndicator(int numObj, String problemName, ParetoSolution<N> referenceSet) {
+        this(numObj, problemName, referenceSet.getObjectivesAsMatrix(), getReferencePoint(problemName));
+    }
+
+    public QualityIndicator(int numObj, String problemName, double[][] referenceSet, double[] referencePoint) {
 
         this.numberOfObjectives = numObj;
-        this.problem_file = fileName;
+        this.problemName = problemName;
+        this.referenceSet = referenceSet;
+        this.referencePoint = referencePoint;
 
-		/*minimumValue = new double[numberOfObjectives];
-		maximumValue = new double[numberOfObjectives];*/
-        referencePoint = getReferencePoint(problem_file);
-        referencePopulation = referenceSet;
-        this.referenceSet = referenceSet.writeObjectivesToMatrix();
-        normalizedReference = normalize(referenceSet);
+        minimumValue = QualityIndicatorUtil.getMinimumValues(referenceSet, numberOfObjectives);
+        maximumValue = QualityIndicatorUtil.getMaximumValues(referenceSet, numberOfObjectives);
+
+        if (referencePoint != null) {
+            for (int i = 0; i < numberOfObjectives; i++) {
+                if (referencePoint[i] > maximumValue[i]) {
+                    maximumValue[i] = referencePoint[i];
+                }
+            }
+        }
+
+        normalizedReference = QualityIndicatorUtil.normalizeFront(referenceSet, maximumValue, minimumValue);
     }
 
     /**
@@ -70,6 +80,16 @@ public abstract class QualityIndicator<N extends Number> {
     public QualityIndicator(int numObj) {
         this.numberOfObjectives = numObj;
     }
+
+    /**
+     * Returns the value which represents the quality of the Pareto front approximation
+     * @param paretoFrontApproximation the Pareto front approximation to be evaluated
+     */
+    public double evaluate(ParetoSolution<N> paretoFrontApproximation) {
+        return evaluate(paretoFrontApproximation.getObjectivesAsMatrix());
+    }
+
+    public abstract double evaluate(double[][] paretoFrontApproximation);
 
     public double getEpsilon() {
         return eps;
@@ -83,7 +103,7 @@ public abstract class QualityIndicator<N extends Number> {
 
         //no reference set given return unchanged front
         if (referenceSet == null) {
-            return population.writeObjectivesToMatrix();
+            return population.getObjectivesAsMatrix();
         }
 
         minimumValue = new double[numberOfObjectives];
@@ -116,7 +136,7 @@ public abstract class QualityIndicator<N extends Number> {
 
         checkRanges();
 
-        return QualityIndicatorUtil.getNormalizedFront(population.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        return QualityIndicatorUtil.normalizeFront(population.getObjectivesAsMatrix(), maximumValue, minimumValue);
     }
 
     /**
@@ -142,24 +162,14 @@ public abstract class QualityIndicator<N extends Number> {
         if (fileName != null && !fileName.isEmpty()) {
             referenceSet = QualityIndicatorUtil.<T>readNonDominatedSolutionSet("/org/um/feri/ears/problems/moo/pf_data/" + fileName + ".dat");
         } else {
-            System.out.println("The file name containg the Paret front is not valid.");
+            System.out.println("The file name containing the Pareto front is not valid.");
         }
 
         return referenceSet;
     }
 
     protected static double[] getReferencePoint(String problemName) {
-        double[] referencePoint;
-
-        referencePoint = QualityIndicatorUtil.readReferencePoint("/org/um/feri/ears/problems/moo/pf_data/ReferencePoint.dat", problemName);
-
-        return referencePoint;
-    }
-
-    public enum IndicatorType {
-        UNARY,
-        BINARY,
-        ARBITRARY
+        return QualityIndicatorUtil.readReferencePoint("/org/um/feri/ears/problems/moo/pf_data/ReferencePoint.dat", problemName);
     }
 
     public enum IndicatorName {

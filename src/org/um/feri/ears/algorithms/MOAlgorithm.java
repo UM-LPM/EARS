@@ -138,8 +138,8 @@ public abstract class MOAlgorithm<N extends Number, S extends Solution, P extend
             String algName = this.getAlgorithmInfo().getAcronym();
             best.saveParetoImage(algName, task.getProblemName());
             best.printFeasibleFUN("FUN_" + algName);
-            best.printVariablesToFile("VAR_" + algName);
-            best.printObjectivesToCSVFile("FUN_" + algName);
+            best.saveVariablesToFile("VAR_" + algName);
+            best.saveObjectivesToCSVFile("FUN_" + algName);
         }
         if (displayData) {
             best.displayAllUnaryQualityIndicators(task.problem.getNumberOfObjectives(), task.problem.getReferenceSetFileName());

@@ -37,13 +37,18 @@ public class Hypervolume<T extends Number> extends QualityIndicator<T> {
     /**
      * Constructor Creates a new instance of MultiDelta
      */
-    public Hypervolume(int num_obj, String file_name) {
-        super(num_obj, file_name, (ParetoSolution<T>) getReferenceSet(file_name));
+    public Hypervolume(int numObj, String problemName) {
+        super(numObj, problemName, (ParetoSolution<T>) getReferenceSet(problemName));
+        name = "Hypervolume";
+    }
+
+    public Hypervolume(int numObj, String problemName, double[][] referenceFront, double[] referencePoint) {
+        super(numObj, problemName, referenceFront, referencePoint);
         name = "Hypervolume";
     }
 
     /*
-     * returns true if 'point1' dominates 'points2' with respect to the to the
+     * returns true if 'point1' dominates 'points2' with respect to the
      * first 'noObjectives' objectives
      */
     boolean dominates(double[] point1, double[] point2, int noObjectives) {
@@ -198,7 +203,7 @@ public class Hypervolume<T extends Number> extends QualityIndicator<T> {
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
 
         double[][] normalizedApproximation;
@@ -212,7 +217,7 @@ public class Hypervolume<T extends Number> extends QualityIndicator<T> {
         //0.4217095828301254
         //0.6484027573510406
 
-        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
         // Inverse the pareto front. This is needed because of the original
         // metric by Zitzler is for maximization problems

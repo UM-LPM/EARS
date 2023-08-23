@@ -2,7 +2,7 @@ package org.um.feri.ears.quality_indicator;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
 
 /**
@@ -23,7 +23,7 @@ public class NR<T extends Number> extends QualityIndicator<T> {
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
         return 0;
     }
 
@@ -51,7 +51,7 @@ public class NR<T extends Number> extends QualityIndicator<T> {
         ndp.addAll(front1);
         ndp.addAll(front2);
 
-        DominanceComparator sc = new DominanceComparator();
+        SolutionDominanceComparator sc = new SolutionDominanceComparator();
 
         for (NumberSolution<T> s1 : front1) {
             for (NumberSolution<T> ndSolution : ndp) {

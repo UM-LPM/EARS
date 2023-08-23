@@ -39,24 +39,29 @@ public class InvertedGenerationalDistance<T extends Number> extends QualityIndic
     /**
      * Constructor. Creates a new instance of the generational distance metric.
      */
-    public InvertedGenerationalDistance(int num_obj, String file_name) {
-        super(num_obj, file_name, getReferenceSet(file_name));
+    public InvertedGenerationalDistance(int numObj, String problemName) {
+        super(numObj, problemName, getReferenceSet(problemName));
+        name = "Inverted Generational Distance";
+    }
+
+    public InvertedGenerationalDistance(int numObj, String problemName, double[][] referenceFront, double[] referencePoint) {
+        super(numObj, problemName, referenceFront, referencePoint);
         name = "Inverted Generational Distance";
     }
 
     @Override
-    public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+    public double evaluate(double[][] paretoFrontApproximation) {
 
         double[][] normalizedApproximation;
 
-        normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+        normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 
         // Sum the distances between each point of the true Pareto front
         // and the nearest point in the true Pareto front
         double sum = 0.0;
         try {
-            for (double[] rferencePoint : normalizedReference)
-                sum += Math.pow(QualityIndicatorUtil.distanceToNearestPoint(rferencePoint, normalizedApproximation, new EuclideanDistance()), pow);
+            for (double[] referencePoint : normalizedReference)
+                sum += Math.pow(QualityIndicatorUtil.distanceToNearestPoint(referencePoint, normalizedApproximation, new EuclideanDistance()), pow);
         } catch (Exception e) {
             e.printStackTrace();
         }

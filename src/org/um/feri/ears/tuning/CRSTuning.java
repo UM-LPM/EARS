@@ -91,7 +91,7 @@ public class CRSTuning {
     public void removeAlgorithm(Algorithm algorithm) {
         benchmark.removeAlgorithm(algorithm);
         algorithms.remove(algorithm.getId());
-        benchmark.getResultArena().removePlayer(algorithm.getId());
+        benchmark.getTournamentResults().removePlayer(algorithm.getId());
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getId().compareTo(algorithm.getId()) == 0) {
                 players.remove(i);

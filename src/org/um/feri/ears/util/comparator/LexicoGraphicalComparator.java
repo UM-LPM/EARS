@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package org.um.feri.ears.quality_indicator;
+package org.um.feri.ears.util.comparator;
 
 import java.util.Comparator;
 

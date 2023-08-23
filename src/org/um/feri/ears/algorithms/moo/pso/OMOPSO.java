@@ -29,7 +29,7 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
 import org.um.feri.ears.util.Util;
 
@@ -64,7 +64,7 @@ public class OMOPSO extends MOAlgorithm<Double, NumberSolution<Double>, DoublePr
 
     private double[][] speed;
 
-    private DominanceComparator dominanceComparator;
+    private SolutionDominanceComparator solutionDominanceComparator;
     private Comparator<NumberSolution<Double>> crowdingDistanceComparator;
 
     private UniformMutation uniformMutation;
@@ -169,7 +169,7 @@ public class OMOPSO extends MOAlgorithm<Double, NumberSolution<Double>, DoublePr
 
     protected void updateParticlesMemory(ParetoSolution<Double> swarm) {
         for (int i = 0; i < swarm.size(); i++) {
-            int flag = dominanceComparator.compare(swarm.get(i), localBest[i]);
+            int flag = solutionDominanceComparator.compare(swarm.get(i), localBest[i]);
             if (flag != 1) {
                 localBest[i] = swarm.get(i).copy();
             }
@@ -252,9 +252,9 @@ public class OMOPSO extends MOAlgorithm<Double, NumberSolution<Double>, DoublePr
 
         localBest = new NumberSolution[swarmSize];
         leaderArchive = new CrowdingDistanceArchive<>(this.archiveSize);
-        epsilonArchive = new NondominatedPopulation<>(new DominanceComparator(eta));
+        epsilonArchive = new NondominatedPopulation<>(new SolutionDominanceComparator(eta));
 
-        dominanceComparator = new DominanceComparator();
+        solutionDominanceComparator = new SolutionDominanceComparator();
         crowdingDistanceComparator = new CrowdingDistanceComparator<>();
 
         speed = new double[swarmSize][task.problem.getNumberOfDimensions()];

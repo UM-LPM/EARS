@@ -13,11 +13,11 @@ https://www.sfu.ca/~ssurjano/sumsqu.html
 http://benchmarkfcns.xyz/benchmarkfcns/sumsquaresfcn.html
  */
 
-public class SumSquares extends DoubleProblem {
-    public SumSquares(int d) {
-        super("SumSquares", d, 1, 1, 0);
-        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
-        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
+public class SumOfSquares extends DoubleProblem {
+    public SumOfSquares(int d) {
+        super("SumOfSquares", d, 1, 1, 0);
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
     }
 
     public double eval(double[] x) {

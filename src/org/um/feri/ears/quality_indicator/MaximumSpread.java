@@ -23,13 +23,13 @@ public class MaximumSpread<T extends Number> extends QualityIndicator<T> {
 	}
 	
 	@Override
-	public double evaluate(ParetoSolution<T> paretoFrontApproximation) {
+	public double evaluate(double[][] paretoFrontApproximation) {
 		
 		//double[][] front = population.writeObjectivesToMatrix();
 		
 		double[][] normalizedApproximation;
 
-		normalizedApproximation = QualityIndicatorUtil.getNormalizedFront(paretoFrontApproximation.writeObjectivesToMatrix(), maximumValue, minimumValue);
+		normalizedApproximation = QualityIndicatorUtil.normalizeFront(paretoFrontApproximation, maximumValue, minimumValue);
 		
 
 		double sum = 0.0;

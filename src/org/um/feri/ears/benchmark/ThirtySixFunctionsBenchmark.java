@@ -43,10 +43,10 @@ public class ThirtySixFunctionsBenchmark extends SOBenchmark<NumberSolution<Doub
         problems.add(new Michalewicz10());
         problems.add(new Step2(30)); //x[-5.12,5.12]
         problems.add(new Sphere(30));
-        problems.add(new SumSquares(30));
+        problems.add(new SumOfSquares(30));
         problems.add(new Quartic(30)); //paper uses noise
         problems.add(new Schwefel222(30)); //x[-10,10]
-        problems.add(new Schwefel12());
+        problems.add(new Schwefel12(2));
         problems.add(new RosenbrockDeJong2(30)); //x[-30,30]
         problems.add(new DixonPrice(30));
         problems.add(new Rastrigin(30));

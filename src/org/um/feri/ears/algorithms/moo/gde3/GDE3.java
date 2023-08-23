@@ -30,7 +30,7 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.CrowdingComparator;
 import org.um.feri.ears.util.Distance;
-import org.um.feri.ears.util.comparator.DominanceComparator;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
 /**
@@ -71,7 +71,7 @@ public class GDE3<N extends Number, P extends NumberProblem<N>> extends MOAlgori
         Distance<N> distance;
 
         distance = new Distance<>();
-        DominanceComparator dominance = new DominanceComparator();
+        SolutionDominanceComparator dominance = new SolutionDominanceComparator();
 
         NumberSolution<N>[] parent;
 
