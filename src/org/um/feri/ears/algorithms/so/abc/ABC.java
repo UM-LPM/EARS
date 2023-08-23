@@ -24,12 +24,13 @@ public class ABC extends NumberAlgorithm {
     protected ArrayList<ABCSolution> population;
 
     public ABC() {
-        this(60);
+        this(60, 100);
     }
 
-    public ABC(int popSize) {
+    public ABC(int popSize, int limit) {
         super();
         this.popSize = popSize;
+        this.limit = limit;
         this.foodNumber = popSize / 2;
 
         au = new Author("miha", "miha.ravber@um.si");
@@ -48,7 +49,7 @@ public class ABC extends NumberAlgorithm {
     @Override
     public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
-        limit = (popSize * task.problem.getNumberOfDimensions()) / 2;
+        //limit = (popSize * task.problem.getNumberOfDimensions()) / 2;
         initPopulation();
 
         while (!task.isStopCriterion()) {
