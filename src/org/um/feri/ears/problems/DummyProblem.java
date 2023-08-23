@@ -6,12 +6,12 @@ public class DummyProblem extends DoubleProblem {
 
 
 	public DummyProblem (String name){
-		this(name, true);
+		this(name, false);
 	}
 
-	public DummyProblem (String name, boolean minimize){
+	public DummyProblem (String name, boolean objectiveMaximizationFlag){
 		super(name, 0, 1, 1, 0);
-		objectiveMaximizationFlags[0] = minimize;
+		objectiveMaximizationFlags[0] = objectiveMaximizationFlag;
 	}
 
 	@Override
