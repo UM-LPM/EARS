@@ -12,7 +12,7 @@ public class SOSingleRun {
 
         Util.rnd.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run
 
-        DoubleProblem problem = new Sphere(5); // problem Sphere with five dimensions
+        DoubleProblem problem = new Sphere(2); // problem Sphere with five dimensions
 
         Task sphere = new Task(problem, StopCriterion.EVALUATIONS, 10000, 0, 0); // set the stopping criterion to max 10000 evaluations
 

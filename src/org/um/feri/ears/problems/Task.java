@@ -37,6 +37,7 @@ public class Task<S extends Solution, P extends Problem<S>> {
     protected boolean isEvaluationHistoryEnabled = false;
     protected int storeEveryNthEvaluation = 10000;
 
+
     /**
      * @param problem          the problem to be solved
      * @param stopCriterion    the stopping criterion
@@ -210,6 +211,7 @@ public class Task<S extends Solution, P extends Problem<S>> {
 
         if (problem.isFirstBetter(solution, bestSolution)) {
             bestSolution = (S) solution.copy();
+
             stagnationTrialCounter = 0;
         } else {
             stagnationTrialCounter++;
@@ -482,4 +484,5 @@ public class Task<S extends Solution, P extends Problem<S>> {
         } else
             return "";
     }
+
 }
