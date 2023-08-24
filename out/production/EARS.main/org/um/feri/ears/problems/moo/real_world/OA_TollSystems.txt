@@ -1,0 +1,448 @@
+DIMENSION 73
+DEPENDENCY
+1	13 Us	44 Us	
+2	
+3	2 I	
+4	13 Us	17 Us	18 As	37 Us	44 Us	71 Us	
+5	7 Us	22 Us	66 Us	
+6	7 Us	
+7	9 As	12 I	17 As	22 As	35 Us	37 Us	59 As	60 As	61 As	65 As	66 As	67 Us	69 As	
+8	44 Ad	47 Us	51 I	
+9	10 Us	13 Us	15 I	
+10	13 Us	16 Us	28 Us	
+11	13 Us	16 Us	30 Us	33 Us	37 Us	44 Us	48 Us	64 Us	72 Us	
+12	35 Us	
+13	16 Us	33 Us	44 As	48 Us	
+14	13 Us	15 As	
+15	13 Us	
+16	33 As	48 As	
+17	13 Us	22 As	35 I	44 Us	49 As	
+18	30 Us	33 Us	37 Us	42 Us	72 Us	
+19	
+20	64 I	
+21	13 Us	15 I	44 Us	47 I	49 As	
+22	1 Us	13 Us	15 I	37 Us	42 Us	44 Us	
+23	22 Us	25 Us	66 Us	
+24	25 Us	
+25	12 I	17 As	22 As	35 Us	61 As	66 Us	
+26	13 Ad	15 Us	51 I	
+27	64 I	
+28	56 Us	
+29	37 I	
+30	
+31	12 As	22 As	35 Us	37 Us	43 As	66 As	
+32	70 I	
+33	
+34	31 Ad	32 As	
+35	
+36	35 As	
+37	
+38	
+39	30 Us	33 Us	48 Us	64 Us	65 As	72 Us	
+40	56 Us	
+41	
+42	
+43	1 Us	22 As	
+44	56 Us	
+45	
+46	13 As	15 As	44 Us	47 Us	
+47	13 Us	44 Us	
+48	
+49	
+50	37 I	
+51	
+52	53 Ad	54 As	
+53	12 As	18 As	35 Us	37 Us	40 Us	41 Us	
+54	18 Us	19 As	30 Us	70 I	72 Us	
+55	64 I	
+56	
+57	18 As	37 Us	40 I	41 I	44 As	47 As	56 Us	
+58	28 Us	37 Us	42 Us	48 As	56 As	
+59	37 Us	42 Us	
+60	13 As	15 Us	37 Us	42 Us	44 Us	47 I	48 As	58 As	
+61	22 As	47 As	49 I	
+62	37 Us	50 Us	53 As	70 I	
+63	53 Ad	62 Us	
+64	
+65	
+66	37 Us	42 Us	
+67	37 Us	42 Us	64 Us	65 Us	66 Us	68 Us	
+68	64 Us	65 I	
+69	13 Us	15 I	33 As	56 Us	
+70	37 Us	
+71	13 It	16 It	30 Us	33 Us	44 It	48 Us	56 It	72 Us	
+72	
+73	50 Us
+ATTRIBUTE
+1	13 4	44 7	
+2	
+3	
+4	13 4	17 2	18 7	37 2	44 7	
+5	7 9	22 1	66 4	
+6	7 9	
+7	17 2	22 1	37 2	59 2	60 4	61 2	66 4	69 2	
+8	44 7	
+9	10 1	13 4	
+10	13 4	16 4	28 2	
+11	13 4	16 4	30 3	33 2	37 2	44 7	48 3	64 6	72 2	
+12	
+13	16 4	33 2	44 7	48 3	
+14	13 4	
+15	13 4	
+16	33 2	48 3	
+17	13 4	22 1	44 7	
+18	30 3	33 2	37 2	42 2	72 2	
+19	
+20	
+21	13 4	44 7	
+22	1 5	13 4	37 2	42 2	44 7	
+23	22 1	25 3	66 4	
+24	25 3	
+25	17 2	22 1	61 2	66 4	
+26	13 4	
+27	
+28	56 4	
+29	
+30	
+31	22 1	37 2	43 2	66 4	
+32	
+33	
+34	31 4	32 3	
+35	
+36	
+37	
+38	
+39	30 3	33 2	48 3	64 6	72 2	
+40	56 4	
+41	
+42	
+43	1 5	22 1	
+44	56 4	
+45	
+46	13 4	44 7	
+47	13 4	44 7	
+48	
+49	
+50	
+51	
+52	53 2	54 7	
+53	18 7	37 2	
+54	18 7	19 3	30 3	72 2	
+55	
+56	
+57	18 7	37 2	44 7	56 4	
+58	28 2	37 2	42 2	48 3	56 4	
+59	37 2	42 2	
+60	13 4	37 2	42 2	44 7	48 3	58 7	
+61	22 1	
+62	37 2	50 3	53 2	
+63	53 2	62 10	
+64	
+65	
+66	37 2	42 2	
+67	37 2	42 2	64 6	66 4	68 4	
+68	64 6	
+69	13 4	33 2	56 4	
+70	37 2	
+71	13 4	16 4	30 3	33 2	44 7	48 3	56 4	72 2	
+72
+73
+METHOD
+1	13 3	44 1	
+2	
+3	
+4	13 1	17 1	18 1	37 1	44 1	
+5	7 1	
+6	7 1	
+7	9 1	17 1	37 1	59 3	60 2	61 1	65 1	66 1	67 1	69 1	
+8	
+9	10 2	13 1	
+10	13 3	16 2	28 1	
+11	37 1	44 2	64 2	72 1	
+12	
+13	16 10	33 1	44 2	48 1	
+14	13 1	15 1	
+15	
+16	33 1	48 1	
+17	13 1	22 1	44 1	49 2	
+18	30 1	33 1	37 1	42 1	72 1	
+19	
+20	
+21	13 1	44 1	49 1	
+22	1 6	13 1	37 1	42 1	44 2	
+23	25 1	
+24	25 1	
+25	17 1	61 1	
+26	
+27	
+28	56 2	
+29	
+30	
+31	12 2	22 2	37 1	43 2	66 3	
+32	
+33	
+34	32 2	
+35	
+36	35 2	
+37	
+38	
+39	30 1	33 1	48 1	72 1	
+40	
+41	
+42	
+43	1 2	
+44	
+45	
+46	13 3	15 1	44 2	47 1	
+47	
+48	
+49	
+50	
+51	
+52	54 5	
+53	12 3	18 2	37 1	
+54	18 2	19 4	30 1	72 1	
+55	
+56	
+57	18 4	37 1	44 4	47 1	
+58	28 1	37 1	42 1	48 3	56 3	
+59	37 1	42 1	
+60	13 3	37 1	42 1	58 3	
+61	22 1	47 1	
+62	37 1	50 1	53 2	
+63	62 2	
+64	
+65	
+66	37 1	42 1	
+67	37 1	42 1	66 1	68 2	
+68	
+69	13 3	33 2	56 1	
+70	37 1	
+71	13 1	16 2	30 2	33 1	44 1	48 1	56 2	72 2	
+72
+73
+METHODRETURNTYPE
+1	13 3	44 1	
+2	
+3	
+4	13 1	18 1	37 1	44 1	
+5	
+6	
+7	37 1	59 2	60 1	65 1	66 1	67 1	
+8	
+9	10 1	13 1	
+10	13 3	16 1	28 1	
+11	37 1	44 1	64 1	
+12	
+13	16 6	44 2	
+14	13 1	15 1	
+15	
+16	
+17	13 1	22 1	44 1	49 1	
+18	37 1	
+19	
+20	
+21	13 1	44 1	
+22	1 4	13 1	37 1	44 1	
+23	
+24	
+25	
+26	
+27	
+28	56 1	
+29	
+30	
+31	12 2	22 1	37 1	43 1	66 2	
+32	
+33	
+34	32 1	
+35	
+36	35 1	
+37	
+38	
+39	
+40	
+41	
+42	
+43	1 2	
+44	
+45	
+46	13 2	15 1	44 2	47 1	
+47	
+48	
+49	
+50	
+51	
+52	54 1	
+53	12 1	18 1	37 1	
+54	18 1	19 2	
+55	
+56	
+57	18 2	37 1	44 2	47 1	
+58	28 1	37 1	56 1	
+59	37 1	
+60	13 3	37 1	58 2	
+61	22 1	47 1	
+62	37 1	50 1	53 2	
+63	62 1	
+64	
+65	
+66	37 1	
+67	37 1	66 1	68 1	
+68	
+69	13 3	56 1	
+70	37 1	
+71	16 1	56 1	
+72
+73
+METHODPARAMTYPE
+1	
+2	
+3	
+4	
+5	7 2	
+6	7 2	
+7	9 1	17 2	59 1	60 2	61 2	67 2	69 2	
+8	
+9	10 2	13 1	
+10	13 1	28 2	
+11	
+12	
+13	16 3	
+14	15 2	
+15	
+16	
+17	22 2	49 1	
+18	42 1	
+19	
+20	
+21	
+22	1 4	42 1	
+23	25 2	
+24	25 2	
+25	17 2	61 2	
+26	
+27	
+28	
+29	
+30	
+31	43 2	66 1	
+32	
+33	
+34	32 1	
+35	
+36	35 1	
+37	
+38	
+39	
+40	
+41	
+42	
+43	
+44	
+45	
+46	13 1	15 2	47 2	
+47	
+48	
+49	
+50	
+51	
+52	54 4	
+53	18 1	
+54	19 2	
+55	
+56	
+57	44 4	47 1	
+58	28 1	42 1	56 3	
+59	42 1	
+60	13 2	42 1	58 3	
+61	22 1	47 1	
+62	
+63	62 2	
+64	
+65	
+66	42 1	
+67	42 1	68 3	
+68	
+69	13 2	
+70	
+71	13 1	16 1	44 3	56 3	
+72
+73
+ASPECTS
+2	3	4	5	6	8	11	14	20	23	24	26	27	29	34	36	39	46	51	52	55	63	71	73
+END
+MAPPING
+1	ec.noe.tollsystem.etbo.Account
+2	ec.noe.tollsystem.obu.asynchronoustransmission.AsynchronousExecution - aspecto
+3	ec.noe.tollsystem.obu.asynchronoustransmission.AsynchronousTransmission - aspecto
+4	ec.noe.tollsystem.obu.BuildClientConnection - aspecto
+5	ec.noe.tollsystem.chargingvariability.CentralChargingConfigurationEtbo - aspecto
+6	ec.noe.tollsystem.chargingvariability.CentralChargingConfigurationObu - aspecto
+7	ec.noe.tollsystem.etbo.CentralChargingFactory
+8	ec.noe.tollsystem.obu.CentralJourneyObserver - aspecto
+9	ec.noe.tollsystem.chargedataprocessing.ChargeDataProcessor
+10	ec.noe.tollsystem.chargedataprocessing.Charger
+11	ec.noe.tollsystem.chargedataprocessing.ChargingBase - aspecto
+12	ec.noe.tollsystem.etbo.ChargingModelFactory
+13	ec.noe.tollsystem.chargedataprocessing.ChargingRecord
+14	ec.noe.tollsystem.common.ChargingRecordPipe - aspecto
+15	ec.noe.tollsystem.common.ChargingRecordProcessor
+16	ec.noe.tollsystem.chargedataprocessing.ChargingSection
+17	ec.noe.tollsystem.etbo.Communication
+18	ec.noe.tollsystem.obu.Configuration
+19	ec.noe.tollsystem.gui.Configurator
+20	ec.noe.tollsystem.chargedataprocessing.CostPerUnitComponent - aspecto
+21	ec.noe.tollsystem.obu.DataBuffer
+22	ec.noe.tollsystem.etbo.DataStorage
+23	ec.noe.tollsystem.chargingvariability.DecentralChargingConfigurationEtbo - aspecto
+24	ec.noe.tollsystem.chargingvariability.DecentralChargingConfigurationObu - aspecto
+25	ec.noe.tollsystem.etbo.DecentralChargingFactory
+26	ec.noe.tollsystem.obu.DecentralJourneyObserver - aspecto
+27	ec.noe.tollsystem.chargedataprocessing.DiscountChargeComponent - aspecto
+28	ec.noe.tollsystem.common.DistanceCalculator
+29	ec.noe.tollsystem.etbo.logging.ETBOLogger - aspecto
+30	ec.noe.tollsystem.common.EcologicalClassification
+31	ec.noe.tollsystem.etbo.ElectronicTollingBackOffice
+32	ec.noe.tollsystem.gui.ElectronicTollingBackOfficeGUI
+33	ec.noe.tollsystem.common.EnvironmentProperties
+34	ec.noe.tollsystem.gui.EtboGUIAspect - aspecto
+35	ec.noe.tollsystem.common.EtboRemoteCommunication
+36	ec.noe.tollsystem.etbo.EtboServer - aspecto
+37	ec.noe.tollsystem.common.ExceptionLogger
+38	ec.noe.tollsystem.common.Exclude
+39	ec.noe.tollsystem.chargedataprocessing.FactoryBase - aspecto
+40	ec.noe.tollsystem.obu.GpsReceiver
+41	ec.noe.tollsystem.obu.IgnitionSensor
+42	ec.noe.tollsystem.common.InitializationError
+43	ec.noe.tollsystem.etbo.InvoicingProcessor
+44	ec.noe.tollsystem.common.Journey
+45	ec.noe.tollsystem.common.JourneyClosed
+46	ec.noe.tollsystem.common.JourneyPipe - aspecto
+47	ec.noe.tollsystem.common.JourneyProcessor
+48	ec.noe.tollsystem.common.KindOfRoad
+49	ec.noe.tollsystem.etbo.Notifications
+50	ec.noe.tollsystem.obu.logging.OBULogger - aspecto
+51	ec.noe.tollsystem.obu.ObserverProtocol - aspecto
+52	ec.noe.tollsystem.gui.ObuGUIAspect - aspecto
+53	ec.noe.tollsystem.obu.OnBoardUnit
+54	ec.noe.tollsystem.gui.OnBoardUnitGUI
+55	ec.noe.tollsystem.chargedataprocessing.PenaltyChargeComponent - aspecto
+56	ec.noe.tollsystem.common.Position
+57	ec.noe.tollsystem.obu.Recorder
+58	ec.noe.tollsystem.roadrecognition.RoadMap
+59	ec.noe.tollsystem.roadrecognition.RoadRecognitionConfiguration
+60	ec.noe.tollsystem.roadrecognition.RoadRecognitionProcessor
+61	ec.noe.tollsystem.etbo.Scheduler
+62	ec.noe.tollsystem.gui.SimulationGUI
+63	ec.noe.tollsystem.gui.SimulationGUIAspect - aspecto
+64	ec.noe.tollsystem.chargedataprocessing.TariffComponent
+65	ec.noe.tollsystem.chargedataprocessing.TariffModel
+66	ec.noe.tollsystem.chargedataprocessing.TariffModelConfiguration
+67	ec.noe.tollsystem.chargedataprocessing.TariffModelFactory
+68	ec.noe.tollsystem.chargedataprocessing.TariffModelImpl
+69	ec.noe.tollsystem.chargedataprocessing.TimeAnalysis
+70	ec.noe.tollsystem.gui.TollSystemGUI
+71	ec.noe.tollsystem.common.TransmissionDataSerializer - aspecto
+72	ec.noe.tollsystem.common.VehicleProperties
+73	DeliverInstance

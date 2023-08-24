@@ -1,0 +1,896 @@
+DIMENSION 148
+DEPENDENCY
+1	
+2	1 I	
+3	4 I	37 I	43 Us	
+4	38 I	
+5	137 I	
+6	5 As	113 As	137 I	
+7	93 Us	
+8	137 I	
+9	10 Us	14 Us	51 Us	69 Us	75 Us	78 Us	85 Us	95 Us	96 I	105 Us	108 Us	121 Us	145 Us	
+10	95 I	
+11	8 Us	12 I	16 Us	19 Us	35 I	43 Us	98 Us	131 Us	134 Us	138 Us	141 Us	
+12	36 I	139 I	
+13	15 I	27 Us	29 Us	31 Us	35 Us	37 I	43 Us	101 Us	
+14	11 Us	95 I	
+15	22 I	38 I	
+16	8 Us	140 I	
+17	2 I	27 Us	
+18	2 I	11 Us	13 Us	23 Us	
+19	11 I	20 I	21 As	43 Us	113 Us	
+20	12 I	
+21	16 I	113 As	
+22	
+23	
+24	25 I	31 Us	
+25	
+26	148 I	
+27	28 I	29 I	31 Us	35 Us	43 Us	
+28	30 I	
+29	30 I	35 I	
+30	36 I	
+31	32 I	35 I	43 Us	
+32	36 I	
+33	35 I	43 Us	
+34	
+35	31 Us	36 I	
+36	
+37	29 I	38 I	
+38	30 I	
+39	35 I	40 I	43 Us	
+40	36 I	
+41	35 I	42 I	43 Us	
+42	36 I	
+43	
+44	6 Us	8 Us	31 Us	35 I	43 Us	45 I	46 As	48 Us	113 Us	141 Us	
+45	36 I	46 Us	
+46	8 Us	47 I	113 Us	
+47	138 Us	140 I	141 Us	
+48	31 Us	35 I	43 Us	49 I	
+49	36 I	
+50	31 Us	35 Us	39 I	43 Us	44 Us	46 Us	53 I	54 As	
+51	95 I	
+52	1 I	50 Us	
+53	40 I	139 I	
+54	140 I	
+55	31 Us	35 I	43 Us	56 I	59 Us	101 Us	130 As	
+56	36 I	129 I	
+57	31 Us	35 I	43 Us	58 I	
+58	36 I	
+59	31 Us	35 Us	39 I	43 Us	60 I	101 Us	130 As	
+60	40 I	129 I	
+61	7 I	93 Us	
+62	140 I	
+63	64 I	
+64	140 I	
+65	66 I	
+66	
+67	64 I	
+68	31 Us	35 Us	39 I	43 Us	71 I	73 As	
+69	68 Us	95 I	
+70	1 I	68 Us	
+71	40 I	139 I	
+72	140 I	
+73	140 I	
+74	31 Us	35 Us	39 I	43 Us	76 I	101 Us	130 As	
+75	74 Us	95 I	
+76	40 I	129 I	
+77	8 Us	31 Us	35 Us	39 I	43 Us	79 I	80 As	130 Us	
+78	77 Us	95 I	
+79	40 I	139 I	
+80	8 Us	140 I	
+81	35 I	43 Us	82 I	83 As	
+82	36 I	139 I	
+83	6 Us	8 Us	140 I	
+84	31 Us	35 Us	39 I	43 Us	86 I	101 Us	130 As	
+85	84 Us	95 I	
+86	40 I	129 I	
+87	
+88	7 Us	61 Us	93 Us	102 Us	106 Us	119 Us	
+89	31 As	41 Us	81 Us	90 I	95 Us	96 As	
+90	
+91	31 Us	35 I	43 Us	92 I	101 Us	130 As	
+92	36 I	129 I	
+93	
+94	97 I	
+95	
+96	95 Us	
+97	31 Us	88 Us	127 I	
+98	8 Us	11 I	43 Us	99 I	100 As	
+99	12 I	
+100	8 As	16 I	
+101	
+102	7 I	93 As	
+103	104 I	
+104	
+105	95 I	
+106	7 I	93 Us	107 I	
+107	
+108	95 I	111 Us	
+109	107 As	110 I	
+110	
+111	31 Us	35 Us	39 I	43 Us	101 Us	112 I	130 Us	
+112	22 I	40 I	
+113	137 I	
+114	2 I	23 Us	115 Us	117 Us	
+115	31 Us	35 I	43 Us	116 I	
+116	36 I	
+117	27 Us	29 Us	31 Us	35 Us	37 I	43 Us	118 I	
+118	38 I	
+119	7 I	
+120	29 Us	31 Us	35 Us	37 I	43 Us	101 Us	123 I	
+121	95 I	
+122	2 I	91 Us	120 Us	
+123	22 I	38 I	
+124	35 I	43 Us	125 I	126 As	141 Us	
+125	36 I	139 I	
+126	138 Us	140 I	141 Us	
+127	11 I	128 I	
+128	12 I	
+129	22 I	
+130	35 As	129 Us	
+131	43 Us	113 Us	127 I	132 I	133 As	
+132	128 I	
+133	16 I	113 As	
+134	43 Us	113 Us	127 I	135 I	136 As	
+135	128 I	
+136	16 I	113 As	
+137	
+138	
+139	
+140	137 Us	
+141	137 I	
+142	31 Us	35 Us	39 I	43 Us	101 Us	130 As	143 I	
+143	36 I	129 I	
+144	27 Us	29 Us	31 Us	35 Us	37 I	43 Us	101 Us	147 I	
+145	95 I	124 Us	
+146	2 I	23 Us	124 Us	144 Us	
+147	22 I	38 I	
+148	
+ATTRIBUTE
+1	
+2	
+3	43 28	
+4	
+5	
+6	5 3	113 4	
+7	
+8	
+9	14 4	145 3	
+10	
+11	8 2	16 1	19 2	43 28	98 2	131 2	134 2	138 6	141 7	
+12	
+13	27 2	29 12	31 2	35 6	43 28	101 10	
+14	11 8	
+15	
+16	8 2	
+17	27 2	
+18	11 8	13 8	
+19	21 3	43 28	113 4	
+20	
+21	113 4	
+22	
+23	
+24	31 2	
+25	
+26	
+27	31 2	35 6	43 28	
+28	
+29	
+30	
+31	43 28	
+32	
+33	43 28	
+34	
+35	31 2	
+36	
+37	
+38	
+39	43 28	
+40	
+41	43 28	
+42	
+43	
+44	6 3	8 2	31 2	43 28	46 1	48 1	113 4	141 7	
+45	46 1	
+46	8 2	113 4	
+47	138 6	141 7	
+48	31 2	43 28	
+49	
+50	31 2	35 6	43 28	44 5	46 1	54 3	
+51	
+52	50 5	
+53	
+54	
+55	31 2	43 28	59 4	101 10	130 8	
+56	
+57	31 2	43 28	
+58	
+59	31 2	35 6	43 28	101 10	130 8	
+60	
+61	
+62	
+63	
+64	
+65	
+66	
+67	
+68	31 2	35 6	43 28	73 2	
+69	68 3	
+70	68 3	
+71	
+72	
+73	
+74	31 2	35 6	43 28	101 10	130 8	
+75	74 3	
+76	
+77	8 2	31 2	35 6	43 28	80 1	130 8	
+78	77 3	
+79	
+80	8 2	
+81	43 28	83 1	
+82	
+83	6 3	8 2	
+84	31 2	35 6	43 28	101 10	130 8	
+85	84 3	
+86	
+87	
+88	7 6	102 2	
+89	31 2	41 5	81 4	
+90	
+91	31 2	43 28	101 10	130 8	
+92	
+93	
+94	
+95	
+96	
+97	31 2	88 8	
+98	8 2	43 28	100 2	
+99	
+100	8 2	
+101	
+102	
+103	
+104	
+105	
+106	
+107	
+108	111 2	
+109	
+110	
+111	31 2	35 6	43 28	101 10	130 8	
+112	
+113	
+114	115 3	117 3	
+115	31 2	43 28	
+116	
+117	27 2	29 12	31 2	35 6	43 28	
+118	
+119	
+120	29 12	31 2	35 6	43 28	101 10	
+121	
+122	91 5	120 3	
+123	
+124	43 28	126 1	141 7	
+125	
+126	138 6	141 7	
+127	
+128	
+129	
+130	35 6	129 9	
+131	43 28	113 4	133 3	
+132	
+133	113 4	
+134	43 28	113 4	136 2	
+135	
+136	113 4	
+137	
+138	
+139	
+140	137 6	
+141	
+142	31 2	35 6	43 28	101 10	130 8	
+143	
+144	27 2	29 12	31 2	35 6	43 28	101 10	
+145	124 3	
+146	124 3	144 5	
+147	
+148	
+METHOD
+1	
+2	
+3	43 3	
+4	
+5	
+6	5 4	113 9	
+7	93 4	
+8	
+9	10 1	14 1	51 1	69 1	75 1	78 1	85 1	105 1	108 1	121 1	145 1	
+10	
+11	8 1	16 3	19 1	43 3	98 1	131 1	134 1	138 1	141 2	
+12	
+13	27 2	29 5	31 2	35 2	43 7	101 2	
+14	11 6	
+15	
+16	8 1	
+17	27 3	
+18	11 6	13 3	23 1	
+19	21 3	43 1	113 1	
+20	
+21	113 1	
+22	
+23	
+24	31 1	
+25	
+26	
+27	31 1	35 1	43 6	
+28	
+29	
+30	
+31	43 2	
+32	
+33	43 1	
+34	
+35	31 2	
+36	
+37	
+38	
+39	43 1	
+40	
+41	43 15	
+42	
+43	
+44	6 2	8 1	31 1	43 3	46 5	48 1	
+45	
+46	8 1	113 1	
+47	138 1	141 1	
+48	31 1	43 2	
+49	
+50	31 1	35 2	43 5	44 1	54 2	
+51	
+52	50 2	
+53	
+54	
+55	31 1	43 3	59 2	101 2	130 5	
+56	
+57	31 1	43 2	
+58	
+59	31 1	35 2	43 3	101 2	130 6	
+60	
+61	
+62	
+63	
+64	
+65	
+66	
+67	
+68	31 2	35 2	43 1	73 2	
+69	68 2	
+70	68 2	
+71	
+72	
+73	
+74	31 2	35 2	43 1	101 2	130 5	
+75	74 2	
+76	
+77	8 1	31 2	35 2	43 1	80 5	130 1	
+78	77 2	
+79	
+80	8 1	
+81	43 2	83 4	
+82	
+83	6 2	8 3	
+84	31 2	35 2	43 1	101 2	130 5	
+85	84 2	
+86	
+87	
+88	7 1	61 1	93 1	102 1	106 1	119 1	
+89	31 2	41 2	81 2	95 2	96 12	
+90	
+91	31 1	43 4	101 2	130 7	
+92	
+93	
+94	
+95	
+96	
+97	31 1	88 1	
+98	8 1	43 1	100 3	
+99	
+100	8 1	
+101	
+102	93 1	
+103	
+104	
+105	
+106	
+107	
+108	111 2	
+109	107 3	
+110	
+111	31 1	35 2	43 2	101 2	130 1	
+112	
+113	
+114	23 1	115 3	117 2	
+115	31 1	43 5	
+116	
+117	27 2	29 2	31 2	35 2	43 4	
+118	
+119	
+120	29 2	31 2	35 3	43 3	101 2	
+121	
+122	91 2	120 2	
+123	
+124	43 4	126 3	141 1	
+125	
+126	138 1	141 1	
+127	
+128	
+129	
+130	35 1	129 5	
+131	43 1	113 1	133 4	
+132	
+133	113 1	
+134	43 1	113 1	136 3	
+135	
+136	113 1	
+137	
+138	
+139	
+140	137 1	
+141	
+142	31 1	35 2	43 2	101 2	130 5	
+143	
+144	27 2	29 3	31 2	35 2	43 4	101 2	
+145	124 2	
+146	23 1	124 2	144 3	
+147	
+148	
+METHODRETURNTYPE
+1	
+2	
+3	
+4	
+5	
+6	5 2	113 3	
+7	93 2	
+8	
+9	
+10	
+11	8 1	16 2	141 1	
+12	
+13	27 2	29 1	31 2	35 1	
+14	11 2	
+15	
+16	
+17	27 2	
+18	11 2	13 2	23 1	
+19	21 2	113 1	
+20	
+21	
+22	
+23	
+24	31 1	
+25	
+26	
+27	31 1	35 1	
+28	
+29	
+30	
+31	
+32	
+33	
+34	
+35	31 2	
+36	
+37	
+38	
+39	
+40	
+41	
+42	
+43	
+44	6 1	8 1	31 1	46 2	48 1	
+45	
+46	
+47	
+48	31 1	
+49	
+50	31 1	35 1	44 1	54 1	
+51	
+52	50 2	
+53	
+54	
+55	31 1	59 2	130 3	
+56	
+57	31 1	
+58	
+59	31 1	35 1	130 4	
+60	
+61	
+62	
+63	
+64	
+65	
+66	
+67	
+68	31 2	35 1	73 1	
+69	68 2	
+70	68 2	
+71	
+72	
+73	
+74	31 2	35 1	130 3	
+75	74 2	
+76	
+77	8 1	31 2	35 1	80 2	
+78	77 2	
+79	
+80	
+81	83 3	
+82	
+83	6 1	8 2	
+84	31 2	35 1	130 3	
+85	84 2	
+86	
+87	
+88	7 1	
+89	31 1	41 1	81 1	95 2	96 2	
+90	
+91	31 1	130 4	
+92	
+93	
+94	
+95	
+96	
+97	31 1	
+98	8 1	100 2	
+99	
+100	
+101	
+102	93 1	
+103	
+104	
+105	
+106	
+107	
+108	111 2	
+109	107 1	
+110	
+111	31 1	35 1	
+112	
+113	
+114	23 1	115 2	117 2	
+115	31 1	
+116	
+117	27 2	29 1	31 2	35 1	
+118	
+119	
+120	29 1	31 2	35 2	
+121	
+122	91 2	120 2	
+123	
+124	126 2	141 1	
+125	
+126	
+127	
+128	
+129	
+130	35 1	
+131	113 1	133 2	
+132	
+133	
+134	113 1	136 2	
+135	
+136	
+137	
+138	
+139	
+140	137 1	
+141	
+142	31 1	35 1	130 3	
+143	
+144	27 2	29 1	31 2	35 1	
+145	124 2	
+146	23 1	124 2	144 2	
+147	
+148	
+METHODPARAMTYPE
+1	
+2	
+3	
+4	
+5	
+6	5 2	113 2	
+7	93 2	
+8	
+9	
+10	
+11	8 1	16 2	19 2	98 2	131 2	134 2	141 2	
+12	
+13	27 4	29 3	31 1	35 2	
+14	11 4	
+15	
+16	8 1	
+17	27 4	
+18	11 4	13 4	23 1	
+19	113 1	
+20	
+21	113 1	
+22	
+23	
+24	
+25	
+26	
+27	31 1	35 2	
+28	
+29	
+30	
+31	
+32	
+33	
+34	
+35	31 1	
+36	
+37	
+38	
+39	
+40	
+41	
+42	
+43	
+44	6 2	8 1	46 5	48 3	
+45	
+46	8 1	113 1	
+47	141 1	
+48	
+49	
+50	35 2	44 3	54 2	
+51	
+52	50 3	
+53	
+54	
+55	59 2	130 1	
+56	
+57	
+58	
+59	35 2	130 2	
+60	
+61	
+62	
+63	
+64	
+65	
+66	
+67	
+68	31 1	35 2	73 1	
+69	68 3	
+70	68 3	
+71	
+72	
+73	
+74	31 1	35 2	130 1	
+75	74 3	
+76	
+77	8 1	31 1	35 2	80 1	
+78	77 3	
+79	
+80	8 1	
+81	83 2	
+82	
+83	6 2	8 2	
+84	31 1	35 2	130 1	
+85	84 3	
+86	
+87	
+88	7 1	61 6	102 6	106 5	119 2	
+89	31 1	41 2	81 2	95 2	96 2	
+90	
+91	130 2	
+92	
+93	
+94	
+95	
+96	
+97	88 2	
+98	8 1	
+99	
+100	8 1	
+101	
+102	93 2	
+103	
+104	
+105	
+106	
+107	
+108	111 3	
+109	107 2	
+110	
+111	35 2	
+112	
+113	
+114	23 1	115 3	117 4	
+115	
+116	
+117	27 4	29 3	31 1	35 2	
+118	
+119	
+120	29 3	31 1	35 3	
+121	
+122	91 3	120 3	
+123	
+124	126 1	141 1	
+125	
+126	141 1	
+127	
+128	
+129	
+130	35 1	
+131	113 1	
+132	
+133	113 1	
+134	113 1	
+135	
+136	113 1	
+137	
+138	
+139	
+140	
+141	
+142	35 2	130 1	
+143	
+144	27 4	29 3	31 1	35 2	
+145	124 2	
+146	23 1	124 2	144 4	
+147	
+148	
+END
+MAPPING
+1	org.jboss.management.j2ee.deployers.AbstractJSR77Deployer
+2	org.jboss.management.j2ee.deployers.AbstractVFSJSR77Deployer
+3	org.jboss.management.j2ee.AppClientModule
+4	org.jboss.management.j2ee.AppClientModuleMBean
+5	org.jboss.management.j2ee.statistics.BoundaryStatisticImpl
+6	org.jboss.management.j2ee.statistics.BoundedRangeStatisticImpl
+7	org.jboss.management.mejb.ClientNotificationListener
+8	org.jboss.management.j2ee.statistics.CountStatisticImpl
+9	org.jboss.management.j2ee.factory.DefaultManagedObjectFactoryMap
+10	org.jboss.management.j2ee.factory.EARModuleFactory
+11	org.jboss.management.j2ee.EJB
+12	org.jboss.management.j2ee.EJBMBean
+13	org.jboss.management.j2ee.EJBModule
+14	org.jboss.management.j2ee.factory.EJBModuleFactory
+15	org.jboss.management.j2ee.EJBModuleMBean
+16	org.jboss.management.j2ee.statistics.EJBStatsImpl
+17	org.jboss.management.j2ee.deployers.EarModuleJSR77Deployer
+18	org.jboss.management.j2ee.deployers.EjbModuleJSR77Deployer
+19	org.jboss.management.j2ee.EntityBean
+20	org.jboss.management.j2ee.EntityBeanMBean
+21	org.jboss.management.j2ee.statistics.EntityBeanStatsImpl
+22	org.jboss.management.j2ee.EventProvider
+23	org.jboss.management.j2ee.factory.FactoryUtils
+24	org.jboss.management.j2ee.cluster.HAManagementService
+25	org.jboss.management.j2ee.cluster.HAManagementServiceMBean
+26	org.jboss.management.j2ee.InvalidParentException
+27	org.jboss.management.j2ee.J2EEApplication
+28	org.jboss.management.j2ee.J2EEApplicationMBean
+29	org.jboss.management.j2ee.J2EEDeployedObject
+30	org.jboss.management.j2ee.J2EEDeployedObjectMBean
+31	org.jboss.management.j2ee.J2EEDomain
+32	org.jboss.management.j2ee.J2EEDomainMBean
+33	org.jboss.management.j2ee.J2EEDomainTarget
+34	org.jboss.management.j2ee.J2EEDomainTargetMBean
+35	org.jboss.management.j2ee.J2EEManagedObject
+36	org.jboss.management.j2ee.J2EEManagedObjectMBean
+37	org.jboss.management.j2ee.J2EEModule
+38	org.jboss.management.j2ee.J2EEModuleMBean
+39	org.jboss.management.j2ee.J2EEResource
+40	org.jboss.management.j2ee.J2EEResourceMBean
+41	org.jboss.management.j2ee.J2EEServer
+42	org.jboss.management.j2ee.J2EEServerMBean
+43	org.jboss.management.j2ee.J2EETypeConstants
+44	org.jboss.management.j2ee.JCAConnectionFactory
+45	org.jboss.management.j2ee.JCAConnectionFactoryMBean
+46	org.jboss.management.j2ee.statistics.JCAConnectionPoolStatsImpl
+47	org.jboss.management.j2ee.statistics.JCAConnectionStatsImpl
+48	org.jboss.management.j2ee.JCAManagedConnectionFactory
+49	org.jboss.management.j2ee.JCAManagedConnectionFactoryMBean
+50	org.jboss.management.j2ee.JCAResource
+51	org.jboss.management.j2ee.factory.JCAResourceFactory
+52	org.jboss.management.j2ee.deployers.JCAResourceJSR77Deployer
+53	org.jboss.management.j2ee.JCAResourceMBean
+54	org.jboss.management.j2ee.statistics.JCAStatsImpl
+55	org.jboss.management.j2ee.JDBCDataSource
+56	org.jboss.management.j2ee.JDBCDataSourceMBean
+57	org.jboss.management.j2ee.JDBCDriver
+58	org.jboss.management.j2ee.JDBCDriverMBean
+59	org.jboss.management.j2ee.JDBCResource
+60	org.jboss.management.j2ee.JDBCResourceMBean
+61	org.jboss.management.mejb.JMSClientNotificationListener
+62	org.jboss.management.j2ee.statistics.JMSConnectionStatsImpl
+63	org.jboss.management.j2ee.statistics.JMSConsumerStatsImpl
+64	org.jboss.management.j2ee.statistics.JMSEndpointStatsImpl
+65	org.jboss.management.mejb.JMSNotificationListener
+66	org.jboss.management.mejb.JMSNotificationListenerMBean
+67	org.jboss.management.j2ee.statistics.JMSProducerStatsImpl
+68	org.jboss.management.j2ee.JMSResource
+69	org.jboss.management.j2ee.factory.JMSResourceFactory
+70	org.jboss.management.j2ee.deployers.JMSResourceJSR77Deployer
+71	org.jboss.management.j2ee.JMSResourceMBean
+72	org.jboss.management.j2ee.statistics.JMSSessionStatsImpl
+73	org.jboss.management.j2ee.statistics.JMSStatsImpl
+74	org.jboss.management.j2ee.JNDIResource
+75	org.jboss.management.j2ee.factory.JNDIResourceFactory
+76	org.jboss.management.j2ee.JNDIResourceMBean
+77	org.jboss.management.j2ee.JTAResource
+78	org.jboss.management.j2ee.factory.JTAResourceFactory
+79	org.jboss.management.j2ee.JTAResourceMBean
+80	org.jboss.management.j2ee.statistics.JTAStatsImpl
+81	org.jboss.management.j2ee.JVM
+82	org.jboss.management.j2ee.JVMMBean
+83	org.jboss.management.j2ee.statistics.JVMStatsImpl
+84	org.jboss.management.j2ee.JavaMailResource
+85	org.jboss.management.j2ee.factory.JavaMailResourceFactory
+86	org.jboss.management.j2ee.JavaMailResourceMBean
+87	org.jboss.management.mejb.ListenerMBean
+88	org.jboss.management.mejb.ListenerRegistration
+89	org.jboss.management.j2ee.LocalJBossServerDomain
+90	org.jboss.management.j2ee.LocalJBossServerDomainMBean
+91	org.jboss.management.j2ee.MBean
+92	org.jboss.management.j2ee.MBeanMBean
+93	org.jboss.management.mejb.MEJB
+94	org.jboss.management.mejb.MEJBSession
+95	org.jboss.management.j2ee.factory.ManagedObjectFactory
+96	org.jboss.management.j2ee.factory.ManagedObjectFactoryMap
+97	org.jboss.management.mejb.ManagementBean
+98	org.jboss.management.j2ee.MessageDrivenBean
+99	org.jboss.management.j2ee.MessageDrivenBeanMBean
+100	org.jboss.management.j2ee.statistics.MessageDrivenBeanStatsImpl
+101	org.jboss.management.j2ee.NotificationConstants
+102	org.jboss.management.mejb.PollingClientNotificationListener
+103	org.jboss.management.mejb.PollingNotificationListener
+104	org.jboss.management.mejb.PollingNotificationListenerMBean
+105	org.jboss.management.j2ee.factory.RARModuleFactory
+106	org.jboss.management.mejb.RMIClientNotificationListener
+107	org.jboss.management.mejb.RMIClientNotificationListenerInterface
+108	org.jboss.management.j2ee.factory.RMIIIOPResourceFactory
+109	org.jboss.management.mejb.RMINotificationListener
+110	org.jboss.management.mejb.RMINotificationListenerMBean
+111	org.jboss.management.j2ee.RMI_IIOPResource
+112	org.jboss.management.j2ee.RMI_IIOPResourceMBean
+113	org.jboss.management.j2ee.statistics.RangeStatisticImpl
+114	org.jboss.management.j2ee.deployers.RarModuleJSR77Deployer
+115	org.jboss.management.j2ee.ResourceAdapter
+116	org.jboss.management.j2ee.ResourceAdapterMBean
+117	org.jboss.management.j2ee.ResourceAdapterModule
+118	org.jboss.management.j2ee.ResourceAdapterModuleMBean
+119	org.jboss.management.mejb.SearchClientNotificationListener
+120	org.jboss.management.j2ee.ServiceModule
+121	org.jboss.management.j2ee.factory.ServiceModuleFactory
+122	org.jboss.management.j2ee.deployers.ServiceModuleJSR77Deployer
+123	org.jboss.management.j2ee.ServiceModuleMBean
+124	org.jboss.management.j2ee.Servlet
+125	org.jboss.management.j2ee.ServletMBean
+126	org.jboss.management.j2ee.statistics.ServletStatsImpl
+127	org.jboss.management.j2ee.SessionBean
+128	org.jboss.management.j2ee.SessionBeanMBean
+129	org.jboss.management.j2ee.StateManageable
+130	org.jboss.management.j2ee.StateManagement
+131	org.jboss.management.j2ee.StatefulSessionBean
+132	org.jboss.management.j2ee.StatefulSessionBeanMBean
+133	org.jboss.management.j2ee.statistics.StatefulSessionBeanStatsImpl
+134	org.jboss.management.j2ee.StatelessSessionBean
+135	org.jboss.management.j2ee.StatelessSessionBeanMBean
+136	org.jboss.management.j2ee.statistics.StatelessSessionBeanStatsImpl
+137	org.jboss.management.j2ee.statistics.StatisticImpl
+138	org.jboss.management.j2ee.StatisticsConstants
+139	org.jboss.management.j2ee.statistics.StatisticsProvider
+140	org.jboss.management.j2ee.statistics.StatsBase
+141	org.jboss.management.j2ee.statistics.TimeStatisticImpl
+142	org.jboss.management.j2ee.URLResource
+143	org.jboss.management.j2ee.URLResourceMBean
+144	org.jboss.management.j2ee.WebModule
+145	org.jboss.management.j2ee.factory.WebModuleFactory
+146	org.jboss.management.j2ee.deployers.WebModuleJSR77Deployer
+147	org.jboss.management.j2ee.WebModuleMBean
+148	org.jboss.management.j2ee.WrapperException
