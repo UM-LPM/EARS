@@ -99,8 +99,7 @@ public class GWO extends NumberAlgorithm {
                 NumberSolution<Double> newWolf = new NumberSolution<>(Util.toDoubleArrayList(newPosition));
                 task.eval(newWolf);
 
-                if (task.problem.isFirstBetter(newWolf, population.get(index)))
-                    population.set(index, newWolf);
+                population.set(index, newWolf);
             }
             updateABD();
             task.incrementNumberOfIterations();

@@ -67,13 +67,25 @@ public class ABC extends NumberAlgorithm {
 
     private void sendScoutBees() throws StopCriterionException {
 
-        for (int i = 0; i < foodNumber; i++) {
+        /*for (int i = 0; i < foodNumber; i++) {
             if (population.get(i).trials >= limit) {
                 if (task.isStopCriterion())
                     return;
                 ABCSolution newBee = new ABCSolution(task.getRandomEvaluatedSolution());
                 population.set(i, newBee);
             }
+        }*/
+
+        int maxtrialindex = 0;
+        for (int i = 0; i < foodNumber; i++) {
+            if(population.get(i).trials > population.get(maxtrialindex).trials)
+                maxtrialindex = i;
+        }
+        if(population.get(maxtrialindex).trials >= limit) {
+            if (task.isStopCriterion())
+                return;
+            ABCSolution newBee = new ABCSolution(task.getRandomEvaluatedSolution());
+            population.set(maxtrialindex, newBee);
         }
 
     }
@@ -108,7 +120,7 @@ public class ABC extends NumberAlgorithm {
 
                 phi = Util.nextDouble(-1, 1);
 
-                newValue = population.get(i).getValue(param2change) + (population.get(i).getValue(param2change) - population.get(neighbour).getValue(param2change)) * (phi - 0.5) * 2;
+                newValue = population.get(i).getValue(param2change) + (population.get(i).getValue(param2change) - population.get(neighbour).getValue(param2change)) * phi;
                 newValue = task.problem.setFeasible(newValue, param2change);
 
                 ABCSolution newBee = new ABCSolution(population.get(i));
@@ -167,8 +179,7 @@ public class ABC extends NumberAlgorithm {
 
             phi = Util.nextDouble(-1, 1);
 
-            //TODO pomno�i samo z phi
-            newValue = population.get(i).getValue(param2change) + (population.get(i).getValue(param2change) - population.get(neighbour).getValue(param2change)) * (phi - 0.5) * 2;
+            newValue = population.get(i).getValue(param2change) + (population.get(i).getValue(param2change) - population.get(neighbour).getValue(param2change)) * phi;
             newValue = task.problem.setFeasible(newValue, param2change);
 
             ABCSolution newBee = new ABCSolution(population.get(i));
