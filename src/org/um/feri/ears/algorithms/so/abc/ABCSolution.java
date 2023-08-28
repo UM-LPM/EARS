@@ -21,6 +21,7 @@ public class ABCSolution extends NumberSolution<Double> {
 
     public ABCSolution(ABCSolution s) {
         super(s);
+        this.prob = s.prob;
     }
 
     public double getABCEval() {
