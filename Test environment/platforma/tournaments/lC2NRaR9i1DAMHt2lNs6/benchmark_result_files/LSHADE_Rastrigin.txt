@@ -1,0 +1,16 @@
+algorithm name:LSHADE,algorithm version:1.0,historical memory size : 6, archive size : 10, population rate : 18, archive rate : 2.6, current best mutation : 0.11, population size : 4,submissionId:TM0hQJiVuELlnoHAkjkn,submissionAuthor:Miha_Ravber,;problem name:Rastrigin,problem number of dimensions:30,problem number of constraints:0,problem version:1.0,task stop criterion:Max evaluation = 100000,epsilon:0.0,
+0.5504564095184605
+0.3911046013168402
+0.3150402179334151
+0.7432910344912784
+1.257944959506176
+0.4736121686893284
+0.5641637035033114
+1.803628082590194
+3.2241251348053197
+1.727591871201355
+0.2781355175548015
+0.3102708878009821
+0.2609357908044103
+3.2520352486889124
+2.0343568662401594

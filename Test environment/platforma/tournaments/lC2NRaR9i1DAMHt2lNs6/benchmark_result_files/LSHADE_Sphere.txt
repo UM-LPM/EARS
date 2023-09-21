@@ -1,0 +1,16 @@
+algorithm name:LSHADE,algorithm version:1.0,historical memory size : 6, archive size : 10, population rate : 18, archive rate : 2.6, current best mutation : 0.11, population size : 4,submissionId:TM0hQJiVuELlnoHAkjkn,submissionAuthor:Miha_Ravber,;problem name:Sphere,problem number of dimensions:30,problem number of constraints:0,problem version:1.0,task stop criterion:Max evaluation = 100000,epsilon:0.0,
+1.5336880241488324E-27
+1.171327728273255E-26
+7.130426816561106E-27
+1.7251254381409254E-27
+3.184622170597415E-28
+4.031191078719527E-28
+1.6447219836006992E-28
+1.7657006393440737E-26
+5.800844838645995E-27
+5.822799224591179E-27
+1.852532681570318E-27
+1.1737440035126789E-26
+9.739108160505915E-27
+1.8714336046748976E-26
+8.512133406736737E-29

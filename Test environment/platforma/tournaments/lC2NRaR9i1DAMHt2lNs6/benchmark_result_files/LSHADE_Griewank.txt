@@ -1,0 +1,16 @@
+algorithm name:LSHADE,algorithm version:1.0,historical memory size : 6, archive size : 10, population rate : 18, archive rate : 2.6, current best mutation : 0.11, population size : 4,submissionId:TM0hQJiVuELlnoHAkjkn,submissionAuthor:Miha_Ravber,;problem name:Griewank,problem number of dimensions:30,problem number of constraints:0,problem version:1.0,task stop criterion:Max evaluation = 100000,epsilon:0.0,
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0

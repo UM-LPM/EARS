@@ -1,0 +1,16 @@
+algorithm name:LSHADE,algorithm version:1.0,historical memory size : 6, archive size : 10, population rate : 18, archive rate : 2.6, current best mutation : 0.11, population size : 4,submissionId:TM0hQJiVuELlnoHAkjkn,submissionAuthor:Miha_Ravber,;problem name:SchwefelRigle(30),problem number of dimensions:30,problem number of constraints:0,problem version:1.0,task stop criterion:Max evaluation = 100000,epsilon:0.0,
+2.3177504768704247E-5
+4.060611998261214E-4
+8.023392733541838E-4
+8.162100967152566E-4
+0.0010565427138435734
+0.0013940743090434884
+0.001385113906205579
+3.038253190974769E-5
+3.7639390892305963E-4
+0.0023061690167032215
+3.526126492167963E-5
+4.204773273742226E-4
+8.640021919118571E-4
+0.040925300664933675
+0.0033833403797993316

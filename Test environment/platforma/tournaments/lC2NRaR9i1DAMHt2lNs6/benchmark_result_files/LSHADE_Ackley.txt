@@ -1,0 +1,16 @@
+algorithm name:LSHADE,algorithm version:1.0,historical memory size : 6, archive size : 0, population rate : 18, archive rate : 2.6, current best mutation : 0.11, population size : 0,submissionId:TM0hQJiVuELlnoHAkjkn,submissionAuthor:Miha_Ravber,;problem name:Ackley,problem number of dimensions:30,problem number of constraints:0,problem version:1.0,task stop criterion:Max evaluation = 100000,epsilon:0.0,
+7.860379014346108E-14
+5.0182080713057076E-14
+4.3076653355456074E-14
+6.794564910705958E-14
+8.570921750106208E-14
+5.728750807065808E-14
+2.886579864025407E-14
+2.886579864025407E-14
+8.215650382226158E-14
+3.952393967665557E-14
+7.505107646466058E-14
+5.0182080713057076E-14
+5.0182080713057076E-14
+7.505107646466058E-14
+5.0182080713057076E-14

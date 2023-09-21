@@ -68,7 +68,7 @@ public class ExecuteTournamentsTest {
         inputBenchmarkId = "lC2NRaR9i1DAMHt2lNs6";
         runOneTournament = true;
         runValidator = false;
-        //override = true;
+        override = true;
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("override")) {
@@ -157,6 +157,11 @@ public class ExecuteTournamentsTest {
                         benchmarkFilesChanged = true;
                         Future<Void> future = service.submit(createRunnable(algorithmDir, algorithmName, benchmarkName, benchmarkResultsDir, author, id));
 
+                        //Run on main thread
+                        //FutureTask<Void> futureTask = new FutureTask<>(createRunnable(algorithmDir, algorithmName, benchmarkName, benchmarkResultsDir, author, id));
+                        //futureTask.run();
+
+                        //Run single thread
 				        /*try {
 				        	future.get(5, TimeUnit.HOURS);
 				        } catch (TimeoutException e) {
@@ -166,8 +171,8 @@ public class ExecuteTournamentsTest {
                     }
                 }
 
-                service.shutdown();
-                service.awaitTermination(newestSubmission.size() * 5, TimeUnit.HOURS);
+                //service.shutdown();
+                //service.awaitTermination(newestSubmission.size() * 5, TimeUnit.HOURS);
 
                 System.out.println("Shutdown");
 
@@ -185,7 +190,7 @@ public class ExecuteTournamentsTest {
     }
 
     /**
-     * Go through all of the submissions and return only the newest submission for each author
+     * Go through all the submissions and return only the newest submission for each author
      * @param benchmarkId ID of the benchmark
      * @return list of newest submissions for each author
      */
@@ -425,7 +430,7 @@ public class ExecuteTournamentsTest {
             try {
                 ProcessBuilder pb;
                 if (SystemUtils.IS_OS_WINDOWS) {
-                    pb = new ProcessBuilder("java", "-cp", "\"" + earsPath + File.pathSeparator + algorithmDir + "\\\\\"", BENCHMARK_RUNNER_FILENAME);
+                    pb = new ProcessBuilder("java", "-cp", "\"" + earsPath + File.pathSeparator + algorithmDir + "\"", BENCHMARK_RUNNER_FILENAME);
                 } else {
                     pb = new ProcessBuilder("java", "-cp", earsPath + File.pathSeparator + algorithmDir + "/", BENCHMARK_RUNNER_FILENAME);
                 }
@@ -525,8 +530,8 @@ public class ExecuteTournamentsTest {
 
     private static void startProcess(ProcessBuilder pb, String algorithmDir, String algorithmName, String benchmarkResultsDir) throws Exception {
 
-        logger.log(Level.INFO, "Starting process with command: " + String.join(" ",pb.command().toArray(new String[0])));
         String command = String.join(" ",pb.command().toArray(new String[0]));
+        logger.log(Level.INFO, "Starting process with command: " + command);
         pb.redirectErrorStream(true);
         Process p = pb.start();
 

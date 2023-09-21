@@ -1,0 +1,14 @@
+[
+   {
+      "id":"lC2NRaR9i1DAMHt2lNs6",
+      "name":"Test tournament",
+      "timestamp":1695124176,
+      "starts":1695037499,
+      "ends":1726746299,
+      "benchmarks":"RPUOed30Benchmark",
+      "path":"test2023",
+      "description":"Tournament for testing",
+      "password":"",
+      "visible":true
+   }
+]

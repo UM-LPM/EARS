@@ -1,0 +1,16 @@
+algorithm name:LSHADE,algorithm version:1.0,historical memory size : 6, archive size : 10, population rate : 18, archive rate : 2.6, current best mutation : 0.11, population size : 4,submissionId:TM0hQJiVuELlnoHAkjkn,submissionAuthor:Miha_Ravber,;problem name:Schwefel226,problem number of dimensions:30,problem number of constraints:0,problem version:1.0,task stop criterion:Max evaluation = 100000,epsilon:0.0,
+-12569.28446716451
+-12569.345783511722
+-12569.094822802293
+-12569.423410071979
+-12568.911798295996
+-12568.483960146621
+-12569.448219194484
+-12569.409418340907
+-12569.309685737077
+-12569.031069525714
+-12569.123702435742
+-12569.307908629435
+-12569.276897836224
+-12569.418056727822
+-12568.958182699362

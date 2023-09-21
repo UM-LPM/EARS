@@ -1,0 +1,16 @@
+algorithm name:LSHADE,algorithm version:1.0,historical memory size : 6, archive size : 10, population rate : 18, archive rate : 2.6, current best mutation : 0.11, population size : 4,submissionId:TM0hQJiVuELlnoHAkjkn,submissionAuthor:Miha_Ravber,;problem name:Rosenbrock - De Jong's function 2,problem number of dimensions:30,problem number of constraints:0,problem version:1.0,task stop criterion:Max evaluation = 100000,epsilon:0.0,
+10.958763542878684
+9.513805844498338
+9.652827989825122
+9.703525112298491
+8.120078653171404
+9.846556096544894
+7.9976928390019095
+9.46614779295295
+8.412249630901682
+9.013155698009555
+9.265167555312066
+11.512276211686402
+10.415653560392023
+9.528264351072732
+9.630592840416986
