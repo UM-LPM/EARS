@@ -26,6 +26,9 @@ public class ABC extends NumberAlgorithm {
     public ABC() {
         this(60, 100);
     }
+    public ABC(int popSize) {
+        this(popSize, 100);
+    }
 
     public ABC(int popSize, int limit) {
         super();

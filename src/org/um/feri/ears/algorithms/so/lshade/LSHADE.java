@@ -223,7 +223,7 @@ public class LSHADE extends NumberAlgorithm {
                     //parent vectors x_i which were worse than the trial vectors u_i are preserved
                     if (arcSize > 1) {
                         if (arcIndCount < arcSize) {
-                            archive[arcIndCount] = new NumberSolution(population[i]);
+                            archive[arcIndCount] = new NumberSolution<>(population[i]);
                             arcIndCount++;
                         }
                         //Whenever the size of the archive exceeds, randomly selected elements are deleted to make space for the newly inserted elements

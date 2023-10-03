@@ -44,7 +44,7 @@ public class PMXCrossover implements CrossoverOperator<NumberProblem<Integer>, N
 		offspring[0] = parents[0].copy();
 		offspring[1] = parents[1].copy();
 
-		int permutationLength = parents[0].numberOfVariables() ;
+		int permutationLength = parents[0].numberOfVariables();
 
 		if (Util.nextDouble() < probability) {
 			int cuttingPoint1;
