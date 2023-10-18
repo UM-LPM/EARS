@@ -8,6 +8,7 @@ import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.benchmark.CEC2009Benchmark;
 import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.util.random.RNG;
 import org.um.feri.ears.visualization.graphing.GraphSet;
 import org.um.feri.ears.visualization.graphing.PlotType;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
@@ -28,7 +29,6 @@ public class Test_08_MainMOO
 	{
 		//if (TEST3()) return;
 		
-        Util.rnd.setSeed(System.currentTimeMillis());
         Benchmark.printInfo = true; //prints one on one results
         ArrayList<MOAlgorithm> players = new ArrayList<MOAlgorithm>();
         players.add(new D_MOEAD_DRA());

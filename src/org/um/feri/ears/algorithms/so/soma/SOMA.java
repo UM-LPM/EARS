@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 
@@ -138,7 +139,7 @@ public class SOMA extends NumberAlgorithm {
 
     private NumberSolution<Double>[] allToOneRandom() throws StopCriterionException {
         NumberSolution<Double>[] newPopulation = new NumberSolution[popSize];
-        int leaderId = Util.nextInt(popSize);
+        int leaderId = RNG.nextInt(popSize);
         NumberSolution<Double> leader = population[leaderId];
         for (int i = 0; i < popSize; i++) {
             if (i == leaderId) {
@@ -243,7 +244,7 @@ public class SOMA extends NumberAlgorithm {
         boolean ok = false;
         do {
             for (int i = 0; i < prtVector.length; i++) {
-                prtVector[i] = Util.nextDouble() < prt;
+                prtVector[i] = RNG.nextDouble() < prt;
                 if (prtVector[i]) {
                     ok = true;
                 }

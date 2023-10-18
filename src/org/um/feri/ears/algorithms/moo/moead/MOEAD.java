@@ -17,6 +17,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.InitWeight;
 import org.um.feri.ears.util.Ranking;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.List;
 import java.util.Vector;
@@ -155,13 +156,13 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
 
         // STEP 2. Update
         do {
-            int[] permutation = Util.randomPermutation(populationSize);
+            int[] permutation = RNG.randomPermutation(populationSize);
 
             for (int i = 0; i < populationSize; i++) {
                 int n = permutation[i]; // or int n = i;
 
                 int type;
-                double rnd = Util.rnd.nextDouble();
+                double rnd = RNG.nextDouble();
 
                 // STEP 2.1. Mating selection based on probability
                 if (rnd < delta) // if (rnd < realb)
@@ -325,11 +326,11 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
         ss = neighborhood[cid].length;
         while (list.size() < size) {
             if (type == 1) {
-                r = Util.rnd.nextInt(ss);
+                r = RNG.nextInt(ss);
                 p = neighborhood[cid][r];
                 // p = population[cid].table[r];
             } else {
-                p = Util.rnd.nextInt(populationSize);
+                p = RNG.nextInt(populationSize);
             }
             boolean flag = true;
             for (int i = 0; i < list.size(); i++) {
@@ -370,7 +371,7 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
         } else {
             size = population.size();
         }
-        int[] perm = Util.randomPermutation(size);
+        int[] perm = RNG.randomPermutation(size);
 
         for (int i = 0; i < size; i++) {
             int k;

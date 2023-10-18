@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 
@@ -165,8 +166,8 @@ public class FDO extends NumberAlgorithm {
     private double simpleRandomWalk() {
         double beta = 0.5;
         double sigma = Math.pow((gamma(1 + beta) * Math.sin((Math.PI * beta) / 2) / (gamma((1 + beta) / 2) * beta * Math.pow(2, (beta - 1) / 2))), (1 / beta));
-        double r1 = (0.1 * (Util.nextDouble() * 2 - 1)) * sigma;
-        double r2 = 0.1 * (Util.nextDouble() * 2 - 1);
+        double r1 = (0.1 * (RNG.nextDouble() * 2 - 1)) * sigma;
+        double r2 = 0.1 * (RNG.nextDouble() * 2 - 1);
         double levyFlight = (r1 / Math.pow(Math.abs(r2), 1 / beta)) * 0.01;
         if (levyFlight >= 1.0 || levyFlight <= -1.0) {
             return simpleRandomWalk();
@@ -189,9 +190,9 @@ public class FDO extends NumberAlgorithm {
 
     private double setFeasible(double x, int d) {
         if (x > task.problem.getUpperLimit(d)) {
-            x = task.problem.getUpperLimit(d) * Util.nextDouble();
+            x = task.problem.getUpperLimit(d) * RNG.nextDouble();
         } else if (x < task.problem.getLowerLimit(d)) {
-            x = task.problem.getLowerLimit(d) * Util.nextDouble();
+            x = task.problem.getLowerLimit(d) * RNG.nextDouble();
         }
         return x;
     }

@@ -5,6 +5,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.Arrays;
 
@@ -78,7 +79,7 @@ public class GSASolution extends NumberSolution<Double> {
 
         boolean feasable = true;
         for (int i = 0; i < x.length; i++) {
-            v[i] = Util.rnd.nextDouble() * v[i] + a[i];
+            v[i] = RNG.nextDouble() * v[i] + a[i];
             if (!t.problem.isFeasible(x[i] + v[i], i)) { //not moved on edge
                 feasable = false;
                 break;

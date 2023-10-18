@@ -20,6 +20,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class VEGASelection<N extends Number> {
 	
@@ -64,11 +65,11 @@ public class VEGASelection<N extends Number> {
 	 */
 	public NumberSolution<N> execute(Object object) {
 		ParetoSolution<N> population = (ParetoSolution<N>) object;
-		NumberSolution<N> winner = population.get(Util.nextInt(population.size()));
+		NumberSolution<N> winner = population.get(RNG.nextInt(population.size()));
 
 		for (int i = 1; i < size; i++) {
 			NumberSolution<N> candidate = population
-					.get(Util.nextInt(population.size()));
+					.get(RNG.nextInt(population.size()));
 
 			int flag = comparator.compare(winner, candidate);
 

@@ -4,6 +4,7 @@ import org.um.feri.ears.problems.CombinatorialProblem;
 import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class PermutationSwapMutation implements MutationOperator<NumberProblem<Integer>, NumberSolution<Integer>> {
 
@@ -35,15 +36,15 @@ public class PermutationSwapMutation implements MutationOperator<NumberProblem<I
         permutationLength = problem.getNumberOfDimensions();
 
         if ((permutationLength != 0) && (permutationLength != 1)) {
-            if (Util.rnd.nextDouble() < mutationProbability) {
-                int pos1 = Util.nextInt(0, permutationLength);
-                int pos2 = Util.nextInt(0, permutationLength);
+            if (RNG.nextDouble() < mutationProbability) {
+                int pos1 = RNG.nextInt(0, permutationLength);
+                int pos2 = RNG.nextInt(0, permutationLength);
 
                 while (pos1 == pos2) {
                     if (pos1 == (permutationLength - 1))
-                        pos2 = Util.nextInt(0, permutationLength - 1);
+                        pos2 = RNG.nextInt(0, permutationLength - 1);
                     else
-                        pos2 = Util.nextInt(pos1, permutationLength);
+                        pos2 = RNG.nextInt(pos1, permutationLength);
                 }
 
                 Integer temp = solution.getValue(pos1);

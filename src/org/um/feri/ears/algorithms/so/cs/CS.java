@@ -13,6 +13,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 public class CS extends NumberAlgorithm {
 
@@ -89,16 +90,16 @@ public class CS extends NumberAlgorithm {
         //A fraction of worse nests are discovered with probability pa
         ArrayList<NumberSolution<Double>> offspringPopulation = new ArrayList<>();
 
-        int[] per1 = Util.randomPermutation(popSize);
-        int[] per2 = Util.randomPermutation(popSize);
+        int[] per1 = RNG.randomPermutation(popSize);
+        int[] per2 = RNG.randomPermutation(popSize);
 
         double stepsize;
         for (int i = 0; i < popSize; i++) {
 
-            if (Util.nextDouble() > pa) {
+            if (RNG.nextDouble() > pa) {
                 double[] newSolution = new double[task.problem.getNumberOfDimensions()];
                 for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
-                    stepsize = Util.nextDouble() * (nest.get(per1[i]).getValue(j) - (nest.get(per2[i]).getValue(j)));
+                    stepsize = RNG.nextDouble() * (nest.get(per1[i]).getValue(j) - (nest.get(per2[i]).getValue(j)));
                     newSolution[j] = nest.get(i).getValue(j) + stepsize;
                 }
                 task.problem.setFeasible(newSolution);
@@ -137,13 +138,13 @@ public class CS extends NumberAlgorithm {
             double u, v, step, stepsize;
             double[] newSolution = new double[task.problem.getNumberOfDimensions()];
             for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
-                u = Util.nextDouble() * sigma;
-                v = Util.nextDouble();
+                u = RNG.nextDouble() * sigma;
+                v = RNG.nextDouble();
 
                 step = u / Math.pow(Math.abs(v), 1 / beta);
 
                 stepsize = 0.01 * step * (s.getValue(j) - best.getValue(j));
-                newSolution[j] = s.getValue(j) + stepsize * Util.nextDouble();
+                newSolution[j] = s.getValue(j) + stepsize * RNG.nextDouble();
             }
 
             task.problem.setFeasible(newSolution);

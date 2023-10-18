@@ -11,12 +11,11 @@ import org.um.feri.ears.problems.unconstrained.RosenbrockDeJong2;
 import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class SOBenchmarkExample {
 
     public static void main(String[] args) {
-        Util.rnd.setSeed(System.currentTimeMillis());
-
         DoubleProblem[] problems = new DoubleProblem[5];
         int[] dimmensions = {10};
         PSO psoLogging = new PSO();

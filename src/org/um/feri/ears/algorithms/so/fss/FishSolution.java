@@ -2,6 +2,7 @@ package org.um.feri.ears.algorithms.so.fss;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.Comparator;
 
@@ -36,7 +37,7 @@ public class FishSolution extends NumberSolution<Double> {
 
         deltaX = new double[s.getVariables().size()];
         //init fish weight
-        weightNow = Util.nextDouble(FSS.FISH_WEIGHT_MIN, FSS.FISH_WEIGHT_MAX);
+        weightNow = RNG.nextDouble(FSS.FISH_WEIGHT_MIN, FSS.FISH_WEIGHT_MAX);
         weightPast = weightNow;
     }
 }

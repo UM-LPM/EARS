@@ -18,6 +18,7 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 /**
  * This class implements a non-uniform mutation operator.
@@ -71,8 +72,8 @@ public class NonUniformMutation implements MutationOperator<DoubleProblem, Numbe
      */
     public void doMutation(double probability, NumberSolution<Double> solution, DoubleProblem problem) {
         for (int i = 0; i < solution.numberOfVariables(); i++) {
-            if (Util.nextDouble() < probability) {
-                double rand = Util.nextDouble();
+            if (RNG.nextDouble() < probability) {
+                double rand = RNG.nextDouble();
                 double tmp;
 
                 if (rand <= 0.5) {
@@ -100,7 +101,7 @@ public class NonUniformMutation implements MutationOperator<DoubleProblem, Numbe
      * Calculates the delta value used in NonUniform mutation operator
      */
     private double delta(double y, double bMutationParameter) {
-        double rand = Util.nextDouble();
+        double rand = RNG.nextDouble();
         int it, maxIt;
         it = currentIteration;
         maxIt = maxIterations;

@@ -2,6 +2,7 @@ package org.um.feri.ears.problems.unconstrained.cec2010;
 
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +20,7 @@ public class F2 extends CEC2010 {
         OShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {
-            OShift[i] = Util.nextDouble(lowerLimit.get(i), upperLimit.get(i));
+            OShift[i] = RNG.nextDouble(lowerLimit.get(i), upperLimit.get(i));
         }
     }
 

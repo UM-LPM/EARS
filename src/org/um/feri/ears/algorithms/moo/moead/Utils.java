@@ -22,6 +22,7 @@
 package org.um.feri.ears.algorithms.moo.moead;
 
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 /**
  * Utilities methods to used by MOEA/D
@@ -88,7 +89,7 @@ public class Utils {
 
         int num = 0;
         while (num < size) {
-            int start = Util.rnd.nextInt(size);
+            int start = RNG.nextInt(size);
             // int start = int(size*nd_uni(&rnd_uni_init));
             while (true) {
                 if (flag[start]) {

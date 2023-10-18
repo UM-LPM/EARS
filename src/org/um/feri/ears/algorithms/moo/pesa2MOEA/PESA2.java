@@ -34,6 +34,7 @@ import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 /**
  * Implementation of the Pareto Envelope-based Selection Algorithm (PESA2).
@@ -182,7 +183,7 @@ public class PESA2<N extends Number, P extends NumberProblem<N>> extends MOAlgor
          * @return the randomly selected map entry
          */
         protected Entry<Integer, List<NumberSolution<N>>> draw() {
-            int index = Util.nextInt(gridMap.size());
+            int index = RNG.nextInt(gridMap.size());
             Iterator<Entry<Integer, List<NumberSolution<N>>>> iterator = gridMap.entrySet().iterator();
 
             while (iterator.hasNext()) {
@@ -211,13 +212,13 @@ public class PESA2<N extends Number, P extends NumberProblem<N>> extends MOAlgor
             // pick the grid index with smaller density
             if (entry1 != entry2) {
                 if ((archive.getDensity(entry2.getKey()) < archive.getDensity(entry1.getKey())) ||
-                        (archive.getDensity(entry2.getKey()) == archive.getDensity(entry1.getKey()) && Util.nextBoolean())) {
+                        (archive.getDensity(entry2.getKey()) == archive.getDensity(entry1.getKey()) && RNG.nextBoolean())) {
                     selection = entry2;
                 }
             }
 
             // randomly pick a solution from the selected grid index
-            return Util.nextItem(selection.getValue());
+            return RNG.nextItem(selection.getValue());
         }
 
     }

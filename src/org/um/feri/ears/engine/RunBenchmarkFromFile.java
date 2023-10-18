@@ -5,6 +5,7 @@ import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ public class RunBenchmarkFromFile {
         String srcFile = args[0];
         String destFile = args[1];
 
-        Util.rnd.setSeed(System.currentTimeMillis());
         Benchmark.printInfo = true; //prints one on one results
 
         //from args

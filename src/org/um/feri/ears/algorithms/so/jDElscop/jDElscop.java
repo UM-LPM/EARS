@@ -7,6 +7,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 
 public class jDElscop extends NumberAlgorithm {
@@ -74,7 +75,7 @@ public class jDElscop extends NumberAlgorithm {
         while (!task.isStopCriterion()) {
             // iteration++;
             for (int i = 0; i < variablePopSize; i++) {
-                if (Util.rnd.nextDouble() < 0.1
+                if (RNG.nextDouble() < 0.1
                         && task.getNumberOfEvaluations() > MaxFES / 2)
                     strategy = Strategy.STRATEGY_JDE_BEST;
                 else if (i < variablePopSize / 2)
@@ -85,16 +86,16 @@ public class jDElscop extends NumberAlgorithm {
                 tmp = Util.toDoubleArray(popX[i].getVariables());
                 tmpPar = popX[i].getNewPara();
                 do {
-                    r1 = Util.rnd.nextInt(variablePopSize);
+                    r1 = RNG.nextInt(variablePopSize);
                 } while (r1 == i);
                 do {
-                    r2 = Util.rnd.nextInt(variablePopSize);
+                    r2 = RNG.nextInt(variablePopSize);
                 } while (r2 == i || r2 == r1);
                 do {
-                    r3 = Util.rnd.nextInt(variablePopSize);
+                    r3 = RNG.nextInt(variablePopSize);
                 } while (r3 == i || r3 == r1 || r3 == r2);
                 offset = strategy.ordinal() * 2; // 0, 2, 4
-                n = Util.rnd.nextInt(D);
+                n = RNG.nextInt(D);
                 double F_l = 0.1 + Math.sqrt(1.0 / variablePopSize); // for small NP
                 double CR_l = 0;
                 double CR_u = 0.95;
@@ -113,14 +114,14 @@ public class jDElscop extends NumberAlgorithm {
                         CR_l = 0.7;
                 }// jDEbest
                 // *** LOWER and UPPER values for strategies ***
-                if (Util.rnd.nextDouble() < tau1) {
-                    tmpPar[offset] = F = F_l + Util.rnd.nextDouble()
+                if (RNG.nextDouble() < tau1) {
+                    tmpPar[offset] = F = F_l + RNG.nextDouble()
                             * (1. - F_l);
                 } else {
                     F = tmpPar[offset];
                 }
-                if (Util.rnd.nextDouble() < tau2) {
-                    tmpPar[1 + offset] = CR = CR_l + Util.rnd.nextDouble()
+                if (RNG.nextDouble() < tau2) {
+                    tmpPar[1 + offset] = CR = CR_l + RNG.nextDouble()
                             * (CR_u - CR_l);
                 } else {
                     CR = tmpPar[1 + offset];
@@ -128,7 +129,7 @@ public class jDElscop extends NumberAlgorithm {
                 switch (strategy) {
                     case STRATEGY_JDE_BEST:
                         for (L = 0; L < D; L++) /* perform D binomial trials */ {
-                            if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
+                            if ((RNG.nextDouble() < CR) || L == (D - 1)) {
                                 tmp[n] = F
                                         * (g.getValue(n))
                                         + F
@@ -138,7 +139,7 @@ public class jDElscop extends NumberAlgorithm {
                         }
                         break;
                     case STRATEGY_JDE_EXP:
-                        if (Util.rnd.nextDouble() < 0.75
+                        if (RNG.nextDouble() < 0.75
                                 && task.problem.isFirstBetter(popX[r3], popX[r2]))
                             F = -F;
 
@@ -149,16 +150,16 @@ public class jDElscop extends NumberAlgorithm {
                                     * (popX[r2].getValue(n) - popX[r3].getValue(n));
                             n = (n + 1) % D;
                             L++;
-                        } while ((Util.rnd.nextDouble() < CR) && (L < D));
+                        } while ((RNG.nextDouble() < CR) && (L < D));
 
                         break;
                     case STRATEGY_JDE_BIN:
-                        if (Util.rnd.nextDouble() < 0.75
+                        if (RNG.nextDouble() < 0.75
                                 && task.problem.isFirstBetter(popX[r3], popX[r2]))
                             F = -F;
 
                         for (L = 0; L < D; L++) /* perform D binomial trials */ {
-                            if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
+                            if ((RNG.nextDouble() < CR) || L == (D - 1)) {
                                 tmp[n] = popX[r1].getValue(n)
                                         + F
                                         * (popX[r2].getValue(n) - popX[r3].getValue(n));

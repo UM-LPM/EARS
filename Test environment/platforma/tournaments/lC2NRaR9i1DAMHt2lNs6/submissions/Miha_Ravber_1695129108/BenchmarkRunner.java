@@ -22,7 +22,6 @@ public class BenchmarkRunner {
 	static Logger logger = Logger.getLogger(BenchmarkRunner.class.getName());
 
 	public static void main(String args[]) {
-		Util.rnd.setSeed(System.currentTimeMillis());
 
 		String destFolder = "D:\\IdeaProjects\\EARS\\Test environment\\platforma\\tournaments\\lC2NRaR9i1DAMHt2lNs6\\benchmark_result_files";
 		String fileName;

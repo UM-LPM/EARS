@@ -16,13 +16,12 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.zdt.ZDT6;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class MOSingleRun {
 
 
 	public static void main(String[] args) {
-		
-		Util.rnd.setSeed(System.currentTimeMillis());
 		
 		D_NSGAII nsga2 = new D_NSGAII();
 		D_MOEAD moead = new D_MOEAD();

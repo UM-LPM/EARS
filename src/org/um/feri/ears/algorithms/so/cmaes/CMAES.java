@@ -28,6 +28,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class CMAES extends NumberAlgorithm {
 
@@ -172,7 +173,7 @@ public class CMAES extends NumberAlgorithm {
 			if (typicalX != null) {
 				xmean = typicalX.clone();
 				for (i = 0; i < N; ++i)
-					xmean[i] += sigma*diagD[i] * Util.nextGaussian();
+					xmean[i] += sigma*diagD[i] * RNG.nextGaussian();
 				/* set via boundaries, is depriciated */
 			} else {
 				System.out.println("no initial search point (solution) X or typical X specified");
@@ -184,14 +185,14 @@ public class CMAES extends NumberAlgorithm {
 						offset = 0.4 * (task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i));
 						range = 0.2 * (task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i));
 					}
-					xmean[i] = task.problem.getLowerLimit(i) + offset + Util.nextDouble() * range;
+					xmean[i] = task.problem.getLowerLimit(i) + offset + RNG.nextDouble() * range;
 				}
 			} 
 			/*else {
 				System.out.println("no initial search point (solution) X or typical X specified");
 				xmean = new double[N];
 				for (i = 0; i < N; ++i)
-					xmean[i] = Util.nextDouble();
+					xmean[i] = RNG.nextDouble();
 			}*/
 		}
 
@@ -311,10 +312,10 @@ public class CMAES extends NumberAlgorithm {
 		/* generate scaled random vector (D * z) */
 		if (flgdiag)
 			for (i = 0; i < N; ++i)
-				arx[index].setValue(i, xmean[i] + sigma * diagD[i] * Util.nextGaussian());
+				arx[index].setValue(i, xmean[i] + sigma * diagD[i] * RNG.nextGaussian());
 		else {
 			for (i = 0; i < N; ++i) 
-				artmp[i] = diagD[i] * Util.nextGaussian();
+				artmp[i] = diagD[i] * RNG.nextGaussian();
 
 			/* add mutation (sigma * B * (D*z)) */
 			for (i = 0; i < N; ++i) {
@@ -499,12 +500,12 @@ public class CMAES extends NumberAlgorithm {
 			
 			if (flgdiag) { 
 				for (int i = 0; i < N; ++i)
-					var.add(xmean[i] + sigma * diagD[i] * Util.nextGaussian());
+					var.add(xmean[i] + sigma * diagD[i] * RNG.nextGaussian());
 					//arx[iNk].setValue(i, xmean[i] + sigma * diagD[i] * Util.nextGaussian());
 			}
 			else {
 				for (int i = 0; i < N; ++i) 
-					artmp[i] = diagD[i] * Util.nextGaussian();
+					artmp[i] = diagD[i] * RNG.nextGaussian();
 
 				/* add mutation (sigma * B * (D*z)) */
 				for (int i = 0; i < N; ++i) {

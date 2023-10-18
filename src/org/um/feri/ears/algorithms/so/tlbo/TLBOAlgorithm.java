@@ -8,6 +8,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,10 +100,10 @@ public class TLBOAlgorithm extends NumberAlgorithm {
                 if (Arrays.equals(tmp1, tmp2)) {
                     // on random place change value
                     stat.getCurrent_g().incDouple();
-                    int pos = Util.rnd.nextInt(dimensions);
+                    int pos = RNG.nextInt(dimensions);
                     tmp3 = Util.toDoubleArray(population[j].getVariables());
 
-                    tmp3[pos] = Util.nextDouble(lowerLimit.get(pos), upperLimit.get(pos));
+                    tmp3[pos] = RNG.nextDouble(lowerLimit.get(pos), upperLimit.get(pos));
                     StopCriterionException.id = " 3";
 
                     NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(tmp3));
@@ -172,8 +173,8 @@ public class TLBOAlgorithm extends NumberAlgorithm {
             // For every dimension it calculates dif_mean
             for (int n = 0; n < dimensions; n++) {
                 if (useTF)
-                    TF = Util.rnd.nextInt(2) + 1; // in source code is fix to 1
-                difMean[n] = Util.rnd.nextDouble() * (newMean[n] - TF * M[n]);
+                    TF = RNG.nextInt(2) + 1; // in source code is fix to 1
+                difMean[n] = RNG.nextDouble() * (newMean[n] - TF * M[n]);
             }
             if (test)
                 System.out.println("difMean difMean=" + Arrays.toString(difMean));
@@ -206,10 +207,10 @@ public class TLBOAlgorithm extends NumberAlgorithm {
             for (; i_first < popSize; i_first++) {
                 if (task.isStopCriterion())
                     break; // in loop after incEval
-                ii = Util.rnd.nextInt(popSize);
+                ii = RNG.nextInt(popSize);
                 while (i_first == ii)
-                    ii = Util.rnd.nextInt(popSize); // select different pair i, ii
-                double rand = Util.rnd.nextDouble();
+                    ii = RNG.nextInt(popSize); // select different pair i, ii
+                double rand = RNG.nextDouble();
                 if (test)
                     System.out.println("Rand=" + rand);
                 if (test)

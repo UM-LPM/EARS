@@ -3,6 +3,7 @@ package org.um.feri.ears.problems.unconstrained;
 import org.um.feri.ears.problems.DoubleProblem;
 
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +34,7 @@ public class Quartic extends DoubleProblem {
             fitness += (i + 1) * Math.pow(x[i], 4);
         }
         if (noise) {
-            fitness += Util.nextDouble();
+            fitness += RNG.nextDouble();
         }
         return fitness;
     }

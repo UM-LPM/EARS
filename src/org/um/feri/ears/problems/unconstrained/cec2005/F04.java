@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class F04 extends CEC2005Base {
 
@@ -38,7 +39,7 @@ public class F04 extends CEC2005Base {
 
 		// NOISE
 		// Comment the next line to remove the noise
-		result *= (1.0 + 0.4 * Math.abs(Util.rnd.nextGaussian()));
+		result *= (1.0 + 0.4 * Math.abs(RNG.nextGaussian()));
 
 		result += m_biases[funcNum -1];
 

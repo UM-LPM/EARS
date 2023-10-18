@@ -10,6 +10,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class DEexample extends NumberAlgorithm {
     int popSize;
@@ -49,18 +50,18 @@ public class DEexample extends NumberAlgorithm {
             for (int i = 0; i < popSize; i++) {
                 if (task.isStopCriterion()) break;
                 do
-                    a = Util.rnd.nextInt(popSize);
+                    a = RNG.nextInt(popSize);
                 while (a == i);
                 do
-                    b = Util.rnd.nextInt(popSize);
+                    b = RNG.nextInt(popSize);
                 while ((b == i) || (b == a));
                 do
-                    c = Util.rnd.nextInt(popSize);
+                    c = RNG.nextInt(popSize);
                 while ((c == i) || (c == a) || (c == b));
-                R = Util.rnd.nextInt(task.problem.getNumberOfDimensions());
+                R = RNG.nextInt(task.problem.getNumberOfDimensions());
                 double[] x = new double[task.problem.getNumberOfDimensions()];
                 for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
-                    if ((Util.nextDouble() < CR) || (j == R)) {
+                    if ((RNG.nextDouble() < CR) || (j == R)) {
                         x[j] = task.problem.setFeasible(pop.get(a).getValue(j) + F * (pop.get(b).getValue(j) - pop.get(c).getValue(j)), j);
                     } else x[j] = pop.get(i).getValue(j);
                 }

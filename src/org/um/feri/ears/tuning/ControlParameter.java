@@ -1,6 +1,7 @@
 package org.um.feri.ears.tuning;
 
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class ControlParameter {
 
@@ -20,7 +21,7 @@ public class ControlParameter {
 		this.lower_bound = lower_bound;
 		this.upper_bound = upper_bound;
 		this.epsilon_neighbourhood = epsilon_neighbourhood;
-		this.factor = (upper_bound-lower_bound)/(3.9+Util.rnd.nextDouble()); // for initialisation to the interval [1,5]
+		this.factor = (upper_bound-lower_bound)/(3.9+RNG.nextDouble()); // for initialisation to the interval [1,5]
 	}
 
 	
@@ -32,7 +33,7 @@ public class ControlParameter {
 		this.lower_bound = lower_bound;
 		this.upper_bound = upper_bound;
 		this.epsilon_neighbourhood = 0;
-		this.factor = (upper_bound-lower_bound)/(3.9+Util.rnd.nextDouble()); // for initialisation to the interval [1,5]
+		this.factor = (upper_bound-lower_bound)/(3.9+ RNG.nextDouble()); // for initialisation to the interval [1,5]
 	}
 	
 	public ControlParameter(String name, String type, double lower_bound, ControlParameter dependency) {
@@ -42,7 +43,7 @@ public class ControlParameter {
 		this.lower_bound = lower_bound;
 		this.dependency = dependency;
 		this.epsilon_neighbourhood = 0;
-		this.factor = (upper_bound-lower_bound)/(3.9+Util.rnd.nextDouble());
+		this.factor = (upper_bound-lower_bound)/(3.9+RNG.nextDouble());
 	}
 
 
@@ -63,22 +64,22 @@ public class ControlParameter {
 		if (type.compareTo("int")==0){
 			if (start<lower_bound){
 				start = lower_bound;
-				neighbour = (int)(start) + Util.rnd.nextInt((int)(end - start));
+				neighbour = (int)(start) + RNG.nextInt((int)(end - start));
 			}else if (end>upper_bound){
 				end = upper_bound;
-				neighbour = (int)(start) + Util.rnd.nextInt((int)(end - start));
+				neighbour = (int)(start) + RNG.nextInt((int)(end - start));
 			}else{
-				neighbour = (int)(start) + Util.rnd.nextInt((int)(end - start));
+				neighbour = (int)(start) + RNG.nextInt((int)(end - start));
 			}
 		}else{
 			if (start<lower_bound){
 				start = lower_bound;
-				neighbour = (start) + (end - start)*Util.rnd.nextDouble();
+				neighbour = (start) + (end - start)*RNG.nextDouble();
 			}else if (end>upper_bound){
 				end = upper_bound;
-				neighbour = (start) + (end - start)*Util.rnd.nextDouble();
+				neighbour = (start) + (end - start)*RNG.nextDouble();
 			}else{
-				neighbour = (start) + (end - start)*Util.rnd.nextDouble();
+				neighbour = (start) + (end - start)*RNG.nextDouble();
 			}
 		}
 		return neighbour;		
@@ -89,9 +90,9 @@ public class ControlParameter {
 		double start = lower_bound;
 		double end = upper_bound;
 		if (type.toLowerCase().equals("int")){
-			value = Util.nextInt((int)start, (int)end);
+			value = RNG.nextInt((int)start, (int)end);
 		}else{
-			value = Util.nextDouble(start, end);
+			value = RNG.nextDouble(start, end);
 		}
 		return value;		
 	}
@@ -100,9 +101,9 @@ public class ControlParameter {
 		double value = 0;
 		if (start == end) return start;
 		if (type.toLowerCase().equals("int")){
-			value = Util.nextInt((int)start, (int)end);
+			value = RNG.nextInt((int)start, (int)end);
 			}else{
-				value = Util.nextDouble(start, end);
+				value = RNG.nextDouble(start, end);
 		}
 		return value;		
 	}

@@ -6,6 +6,7 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -247,7 +248,7 @@ M=M./sum(M); %eq. 16.
                     //end of Euclidian distanse
                     for (int d = 0; d < D; d++) {
                         // E(i,k)=E(i,k)+rand*(M(j))*((X(j,k)-X(i,k))/(R^Rpower+eps));
-                        popX.get(i).getE()[d] += Util.rnd.nextDouble() * popX.get(ii).getMass() * (popX.get(ii).getValue(d) - popX.get(i).getValue(d)) / (Math.pow(R, Rpower) + eps);
+                        popX.get(i).getE()[d] += RNG.nextDouble() * popX.get(ii).getMass() * (popX.get(ii).getValue(d) - popX.get(i).getValue(d)) / (Math.pow(R, Rpower) + eps);
                     }
                 }
             }

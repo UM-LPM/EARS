@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems;
 
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,7 +22,7 @@ public abstract class CombinatorialProblem extends NumberProblem<Integer> {
             var.add(j);
         }
 
-        Util.shuffle(var);
+        RNG.shuffle(var);
 
         NumberSolution<Integer> sol = new NumberSolution<>(numberOfObjectives, var);
         evaluate(sol);

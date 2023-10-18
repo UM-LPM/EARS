@@ -14,6 +14,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,7 +136,7 @@ public class ICA extends NumberAlgorithm {
     private void imperialisticCompetition() {
 
         //TODO not in original
-        if (Util.nextDouble() > .11) {
+        if (RNG.nextDouble() > .11) {
             return;
         }
 
@@ -174,7 +175,7 @@ public class ICA extends NumberAlgorithm {
 
         // Generate a random integer
         int numOfColoniesOfWeakestEmpire = empiresList[weakestEmpireInd].colonies.length;
-        int indexOfSelectedColony = Util.nextInt(numOfColoniesOfWeakestEmpire);
+        int indexOfSelectedColony = RNG.nextInt(numOfColoniesOfWeakestEmpire);
 
         // Update the positions of the colonies of the selected empire
         // by adding the position of the randomly selected colony of the weakest empire
@@ -226,7 +227,7 @@ public class ICA extends NumberAlgorithm {
         // Create a vector of random numbers
         double[] randVector = new double[probability.length];
         for (int i = 0; i < probability.length; i++) {
-            randVector[i] = Util.nextDouble();
+            randVector[i] = RNG.nextDouble();
         }
 
         // Substract to each element of this vector the corresponding
@@ -317,7 +318,7 @@ public class ICA extends NumberAlgorithm {
         // Get the number of colonies to revolve
         int numOfRevolvingColonies = (int) Math.round((revolutionRate * empire.colonies.length));
 
-        int[] R = Util.randomPermutation(empire.colonies.length);
+        int[] R = RNG.randomPermutation(empire.colonies.length);
 
         for (int i = 0; i < R.length; i++) {
 
@@ -370,7 +371,7 @@ public class ICA extends NumberAlgorithm {
             ArrayList<Double> newColony = new ArrayList<>();
             for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                 //TODO 2 * beta -> matlab samo beta = 1.5
-                newColony.add(empire.colonies[i].getValue(j) + 2 * assimilationCoefficient * Util.nextDouble() * (empire.imperialist.getValue(j) - empire.colonies[i].getValue(j)));
+                newColony.add(empire.colonies[i].getValue(j) + 2 * assimilationCoefficient * RNG.nextDouble() * (empire.imperialist.getValue(j) - empire.colonies[i].getValue(j)));
                 newColony.set(j, task.problem.setFeasible(newColony.get(j), j));
             }
             empire.colonies[i].setVariables(newColony);
@@ -418,7 +419,7 @@ public class ICA extends NumberAlgorithm {
 		}*/
 
         // Create a random permutation of integers
-        int[] randomIndex = Util.randomPermutation(numOfAllColonies);
+        int[] randomIndex = RNG.randomPermutation(numOfAllColonies);
         int index = 0;
         // Create the empires and attribute them their colonies
         for (int i = 0; i < numOfInitialImperialists; i++) {

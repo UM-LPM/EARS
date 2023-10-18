@@ -13,6 +13,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 
 /* jDE[1] - Janez Brest */
@@ -228,39 +229,39 @@ public class DEAlgorithm extends NumberAlgorithm {
                 if (task.isStopCriterion())
                     break;
                 do /* Pick a random population member */ { /* Endless loop for NP < 2 !!! */
-                    r1 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
+                    r1 = RNG.nextInt(popSize); // (int) (RNG.nextDouble() *
                     // NP);
                 } while (r1 == i);
 
                 do /* Pick a random population member */ { /* Endless loop for NP < 3 !!! */
-                    r2 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
+                    r2 = RNG.nextInt(popSize); // (int) (RNG.nextDouble() *
                     // NP);
                 } while ((r2 == i) || (r2 == r1));
 
                 do /* Pick a random population member */ { /* Endless loop for NP < 4 !!! */
-                    r3 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
+                    r3 = RNG.nextInt(popSize); // (int) (RNG.nextDouble() *
                     // NP);
                 } while ((r3 == i) || (r3 == r1) || (r3 == r2));
 
                 do /* Pick a random population member */ { /* Endless loop for NP < 5 !!! */
-                    r4 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
+                    r4 = RNG.nextInt(popSize); // (int) (RNG.nextDouble() *
                     // NP);
                 } while ((r4 == i) || (r4 == r1) || (r4 == r2) || (r4 == r3));
 
                 do /* Pick a random population member */ { /* Endless loop for NP < 6 !!! */
-                    r5 = Util.rnd.nextInt(popSize); // (int) (Util.rnd.nextDouble() *
+                    r5 = RNG.nextInt(popSize); // (int) (RNG.nextDouble() *
                     // NP);
                 } while ((r5 == i) || (r5 == r1) || (r5 == r2) || (r5 == r3) || (r5 == r4));
 
                 if (strategy == Strategy.DE_BEST_1_EXP) /* strategy DE0 (not in our paper) */ {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     L = 0;
                     do {
                         tmp[n] = bestit.getValue(n) + F * (pold[r2].getValue(n) - pold[r3].getValue(n));
                         n = (n + 1) % D;
                         L++;
-                    } while ((Util.rnd.nextDouble() < CR) && (L < D));
+                    } while ((RNG.nextDouble() < CR) && (L < D));
                 }
 
                 /*-------DE/rand/1/exp-------------------------------------------------------------------*/
@@ -269,13 +270,13 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------as a first guess.---------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_RAND_1_EXP) /* strategy DE1 in the techreport */ {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     L = 0;
                     do {
                         tmp[n] = pold[r1].getValue(n) + F * (pold[r2].getValue(n) - pold[r3].getValue(n));
                         n = (n + 1) % D;
                         L++;
-                    } while ((Util.rnd.nextDouble() < CR) && (L < D));
+                    } while ((RNG.nextDouble() < CR) && (L < D));
                 }
 
                 /*-------DE/rand-to-best/1/exp-----------------------------------------------------------*/
@@ -284,44 +285,44 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------should play around with all three control variables.----------------------------*/
                 else if (strategy == Strategy.DE_RAND_TO_BEST_1_EXP) /* similiar to DE2 but generally better */ {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     L = 0;
                     do {
                         tmp[n] = tmp[n] + F * (bestit.getValue(n) - tmp[n]) + F * (pold[r1].getValue(n) - pold[r2].getValue(n));
                         n = (n + 1) % D;
                         L++;
-                    } while ((Util.rnd.nextDouble() < CR) && (L < D));
+                    } while ((RNG.nextDouble() < CR) && (L < D));
                 }
 
                 /*-------DE/best/2/exp is another powerful strategy worth trying--------------------------*/
                 else if (strategy == Strategy.DE_BEST_2_EXP) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     L = 0;
                     do {
                         tmp[n] = bestit.getValue(n) + (pold[r1].getValue(n) + pold[r2].getValue(n) - pold[r3].getValue(n) - pold[r4].getValue(n)) * F;
                         n = (n + 1) % D;
                         L++;
-                    } while ((Util.rnd.nextDouble() < CR) && (L < D));
+                    } while ((RNG.nextDouble() < CR) && (L < D));
                 }
                 /*-------DE/rand/2/exp seems to be a robust optimizer for many functions-------------------*/
                 else if (strategy == Strategy.DE_RAND_2_EXP) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     L = 0;
                     do {
                         tmp[n] = pold[r5].getValue(n) + (pold[r1].getValue(n) + pold[r2].getValue(n) - pold[r3].getValue(n) - pold[r4].getValue(n)) * F;
                         n = (n + 1) % D;
                         L++;
-                    } while ((Util.rnd.nextDouble() < CR) && (L < D));
+                    } while ((RNG.nextDouble() < CR) && (L < D));
                 }
 
                 /*-------DE/best/1/bin--------------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_BEST_1_BIN) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
-                        if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) /*
+                        if ((RNG.nextDouble() < CR) || L == (D - 1)) /*
                          * change
                          * at
                          * least
@@ -336,9 +337,9 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/rand/1/bin-------------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_RAND_1_BIN) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
-                        if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) {
+                        if ((RNG.nextDouble() < CR) || L == (D - 1)) {
                             tmp[n] = pold[r1].getValue(n) + F * (pold[r2].getValue(n) - pold[r3].getValue(n));
                             /*
                              * if (Math.abs(tmp[n])>100) {
@@ -361,21 +362,21 @@ public class DEAlgorithm extends NumberAlgorithm {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     tmpF = pold[i].getF();
                     tmpCR = pold[i].getCR();
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     // SELF-ADAPTATION OF CONTROL PARAMETERS
-                    if (Util.rnd.nextDouble() < tao1) { // F
-                        F = Fl + Util.rnd.nextDouble() * Fu;
+                    if (RNG.nextDouble() < tao1) { // F
+                        F = Fl + RNG.nextDouble() * Fu;
                         tmpF = F;
                     } else
                         F = tmpF;
-                    if (Util.rnd.nextDouble() < tao2) { // CR
-                        CR = CRl + Util.rnd.nextDouble() * CRu;
+                    if (RNG.nextDouble() < tao2) { // CR
+                        CR = CRl + RNG.nextDouble() * CRu;
                         tmpCR = CR;
                     } else
                         CR = tmpCR;
 
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
-                        if ((Util.rnd.nextDouble() < CR) || L == D) {
+                        if ((RNG.nextDouble() < CR) || L == D) {
                             tmp[n] = pold[r1].getValue(n) + F * (pold[r2].getValue(n) - pold[r3].getValue(n));
                         }
                         n = (n + 1) % D;
@@ -385,9 +386,9 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/rand-to-best/1/bin-----------------------------------------------------------*/
                 else if (strategy == Strategy.DE_RAND_TO_BEST_1_BIN) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
-                        if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) /*
+                        if ((RNG.nextDouble() < CR) || L == (D - 1)) /*
                          * change
                          * at
                          * least
@@ -402,9 +403,9 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/best/2/bin--------------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_BEST_2_BIN) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
-                        if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) /*
+                        if ((RNG.nextDouble() < CR) || L == (D - 1)) /*
                          * change
                          * at
                          * least
@@ -419,9 +420,9 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/rand/2/bin--------------------------------------------------------------------*/
                 else {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (Util.rnd.nextDouble() * D);
+                    n = (int) (RNG.nextDouble() * D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
-                        if ((Util.rnd.nextDouble() < CR) || L == (D - 1)) /*
+                        if ((RNG.nextDouble() < CR) || L == (D - 1)) /*
                          * change
                          * at
                          * least

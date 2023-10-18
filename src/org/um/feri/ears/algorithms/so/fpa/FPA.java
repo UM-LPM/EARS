@@ -14,6 +14,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class FPA extends NumberAlgorithm {
             for (int i = 0; i < popSize; i++) {
 
                 candidate = new double[task.problem.getNumberOfDimensions()];
-                if (Util.nextDouble() > switchProbability) {
+                if (RNG.nextDouble() > switchProbability) {
                     /* Global Pollination */
                     levy = levy();
 
@@ -79,13 +80,13 @@ public class FPA extends NumberAlgorithm {
                     }
                 } else {
                     /* Local Pollination */
-                    epsilon = Util.nextDouble();
+                    epsilon = RNG.nextDouble();
 
                     do {
-                        rand1 = Util.nextInt(popSize);
+                        rand1 = RNG.nextInt(popSize);
                     } while (rand1 == i);
                     do {
-                        rand2 = Util.nextInt(popSize);
+                        rand2 = RNG.nextInt(popSize);
                     } while (rand2 == rand1);
 
                     for (int j = 0; j < task.problem.getNumberOfDimensions(); j++)
@@ -131,8 +132,8 @@ public class FPA extends NumberAlgorithm {
 
         for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
 
-            double u = Distribution.normal(Util.rnd, meanND, stdDevND) * sigma;
-            double v = Distribution.normal(Util.rnd, meanND, stdDevND);
+            double u = Distribution.normal(meanND, stdDevND) * sigma;
+            double v = Distribution.normal(meanND, stdDevND);
 
             step[i] = 0.01 * u / (Math.pow(Math.abs(v), (1 - lambda)));
         }

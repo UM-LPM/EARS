@@ -10,12 +10,11 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.cec2014.*;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class SoCEC2014Benchmark {
 	
     public static void main(String[] args) {
-        Util.rnd.setSeed(System.currentTimeMillis());
-        
         DoubleProblem[] problems = new DoubleProblem[16];
         int dimm;
         try

@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.unconstrained.cec2005;
 
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,7 +49,7 @@ public class F17 extends CEC2005Base {
     public F17(int d) {
         super("Rotated Hybrid Composition Function 1 with Noise in Fitness", d, 17);
 
-        noise = Math.abs(Util.rnd.nextGaussian());
+        noise = Math.abs(RNG.nextGaussian());
 
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -5.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 5.0));

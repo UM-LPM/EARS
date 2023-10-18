@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,25 +68,25 @@ public class AAA extends NumberAlgorithm {
                     }
                     double[] newColony = Util.toDoubleArray(population[i].getVariables()).clone(); //clone necessary?
 
-                    int dim1 = Util.nextInt(task.problem.getNumberOfDimensions());
-                    int dim2 = Util.nextInt(task.problem.getNumberOfDimensions());
+                    int dim1 = RNG.nextInt(task.problem.getNumberOfDimensions());
+                    int dim2 = RNG.nextInt(task.problem.getNumberOfDimensions());
                     while (dim1 == dim2 ) {
-                        dim2 = Util.nextInt(task.problem.getNumberOfDimensions());
+                        dim2 = RNG.nextInt(task.problem.getNumberOfDimensions());
                     }
 
                     //In two-dimensional problems, algal movement is sinusoidal
-                    double p = Util.nextDouble(-1,1);
+                    double p = RNG.nextDouble(-1,1);
                     newColony[dim1] = newColony[dim1] + (population[neighbor].getValue(dim1) - newColony[dim1]) * (shearForce - population[i].getFriction()) * p;
-                    int degree = (int) (360 * Util.nextDouble());
+                    int degree = (int) (360 * RNG.nextDouble());
                     newColony[dim2] = newColony[dim2] + (population[neighbor].getValue(dim2) - newColony[dim2]) * (shearForce - population[i].getFriction()) * Math.sin(Math.toRadians(degree));
 
                     //In case of three or more dimensions, algal movement is helical
                     if(task.problem.getNumberOfDimensions() > 2) {
-                        int dim3 = Util.nextInt(task.problem.getNumberOfDimensions());
+                        int dim3 = RNG.nextInt(task.problem.getNumberOfDimensions());
                         while (dim1 == dim3 || dim2 == dim3) {
-                            dim3 = Util.nextInt(task.problem.getNumberOfDimensions());
+                            dim3 = RNG.nextInt(task.problem.getNumberOfDimensions());
                         }
-                        degree = (int) (360 * Util.nextDouble());
+                        degree = (int) (360 * RNG.nextDouble());
                         newColony[dim3] = newColony[dim3] + (population[neighbor].getValue(dim3) - newColony[dim3]) * (shearForce - population[i].getFriction()) * Math.cos(Math.toRadians(degree));
                     }
 
@@ -114,7 +115,7 @@ public class AAA extends NumberAlgorithm {
                 }
             }
             calculateGreatness();
-            int dim = (int) (task.problem.getNumberOfDimensions() * Util.nextDouble());
+            int dim = (int) (task.problem.getNumberOfDimensions() * RNG.nextDouble());
             int minColony = 0, maxColony = 0;
             for (int i = 1; i < popSize; i++) {
                 if (population[i].getColonySize() > population[maxColony].getColonySize())
@@ -130,9 +131,9 @@ public class AAA extends NumberAlgorithm {
                     maxStarving = i;
             }
 
-            if (Util.nextDouble() < adaptationConstant) {
+            if (RNG.nextDouble() < adaptationConstant) {
                 for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
-                    population[maxStarving].setValue(i, population[maxStarving].getValue(i) + (best.getValue(i) - population[maxStarving].getValue(i)) * Util.nextDouble());
+                    population[maxStarving].setValue(i, population[maxStarving].getValue(i) + (best.getValue(i) - population[maxStarving].getValue(i)) * RNG.nextDouble());
                 }
             }
             task.incrementNumberOfIterations();
@@ -225,10 +226,10 @@ public class AAA extends NumberAlgorithm {
     }
 
     private int tournamentMethod() {
-        int colonyOne = (int) ((popSize - 1) * Util.nextDouble());
-        int colonyTwo = (int) ((popSize - 1) * Util.nextDouble());
+        int colonyOne = (int) ((popSize - 1) * RNG.nextDouble());
+        int colonyTwo = (int) ((popSize - 1) * RNG.nextDouble());
         while (colonyOne == colonyTwo) {
-            colonyTwo = (int) ((popSize - 1) * Util.nextDouble());
+            colonyTwo = (int) ((popSize - 1) * RNG.nextDouble());
         }
         if (task.problem.isFirstBetter(population[colonyOne], population[colonyTwo])) {
             return colonyOne;

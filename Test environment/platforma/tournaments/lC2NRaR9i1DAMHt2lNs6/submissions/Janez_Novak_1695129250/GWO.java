@@ -60,8 +60,8 @@ public class GWO extends NumberAlgorithm {
                 double[] newPosition = new double[task.problem.getNumberOfDimensions()];
                 for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
 
-                    double r1 = Util.nextDouble();
-                    double r2 = Util.nextDouble();
+                    double r1 = RNG.nextDouble();
+                    double r2 = RNG.nextDouble();
 
                     double a1 = 2 * a * r1 - a; // Equation (3.3)
                     double c = 2 * r2; // Equation (3.4)
@@ -70,8 +70,8 @@ public class GWO extends NumberAlgorithm {
                     double x1 = alpha.getValue(i) - a1 * D_alpha; //Equation (3.6)-part 1
 
 
-                    r1 = Util.nextDouble();
-                    r2 = Util.nextDouble();
+                    r1 = RNG.nextDouble();
+                    r2 = RNG.nextDouble();
 
                     a1 = 2 * a * r1 - a; // Equation (3.3)
                     c = 2 * r2; // Equation (3.4)
@@ -80,8 +80,8 @@ public class GWO extends NumberAlgorithm {
                     double x2 = beta.getValue(i) - a1 * D_beta; //Equation (3.6)-part 2
 
 
-                    r1 = Util.nextDouble();
-                    r2 = Util.nextDouble();
+                    r1 = RNG.nextDouble();
+                    r2 = RNG.nextDouble();
 
                     a1 = 2 * a * r1 - a; // Equation (3.3)
                     c = 2 * r2; // Equation (3.4)

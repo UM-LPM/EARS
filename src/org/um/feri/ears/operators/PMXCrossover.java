@@ -5,6 +5,7 @@ import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class PMXCrossover implements CrossoverOperator<NumberProblem<Integer>, NumberSolution<Integer>> {
 
@@ -46,15 +47,15 @@ public class PMXCrossover implements CrossoverOperator<NumberProblem<Integer>, N
 
 		int permutationLength = parents[0].numberOfVariables();
 
-		if (Util.nextDouble() < probability) {
+		if (RNG.nextDouble() < probability) {
 			int cuttingPoint1;
 			int cuttingPoint2;
 
 			// STEP 1: Get two cutting points
-			cuttingPoint1 = Util.nextInt(0, permutationLength);
-			cuttingPoint2 = Util.nextInt(0, permutationLength);
+			cuttingPoint1 = RNG.nextInt(0, permutationLength);
+			cuttingPoint2 = RNG.nextInt(0, permutationLength);
 			while (cuttingPoint2 == cuttingPoint1)
-				cuttingPoint2 = Util.nextInt(0, permutationLength);
+				cuttingPoint2 = RNG.nextInt(0, permutationLength);
 
 			if (cuttingPoint1 > cuttingPoint2) {
 				int swap;

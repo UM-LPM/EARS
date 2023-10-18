@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 public class RMO extends NumberAlgorithm {
 
@@ -46,7 +47,7 @@ public class RMO extends NumberAlgorithm {
         for (int i = 0; i < popSize; ++i) {
 
             for (int j = 0; j < X[i].length; ++j) {
-                X[i][j] = Util.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
+                X[i][j] = RNG.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
             }
 
             NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(X[i]));
@@ -83,7 +84,7 @@ public class RMO extends NumberAlgorithm {
             for (int i = 0; i < popSize; ++i) {
                 for (int j = 0; j < V[i].length; ++j) {
                     //Velocity vector
-                    V[i][j] = Util.nextDouble(-1, 1) * ((task.problem.getUpperLimit(j) - task.problem.getLowerLimit(j)) / k);//Util.nextDouble(task.getLowerLimit()[j], task.problem.getUpperLimit()[j]) / 100.0;
+                    V[i][j] = RNG.nextDouble(-1, 1) * ((task.problem.getUpperLimit(j) - task.problem.getLowerLimit(j)) / k);//RNG.nextDouble(task.getLowerLimit()[j], task.problem.getUpperLimit()[j]) / 100.0;
 
                     //Move particle and check constrains
                     X[i][j] = task.problem.setFeasible(V[i][j] * W + cp[j], j);

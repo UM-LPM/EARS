@@ -13,6 +13,7 @@ import org.um.feri.ears.util.ParetoSolutionCache;
 import org.um.feri.ears.util.ParetoWithEval;
 import org.um.feri.ears.util.Ranking;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public abstract class MOAlgorithm<N extends Number, S extends Solution, P extends Problem<S>> extends Algorithm<ParetoSolution<N>, S, P> {
 
@@ -57,7 +58,7 @@ public abstract class MOAlgorithm<N extends Number, S extends Solution, P extend
                     }
                     all_solutions.put(s.getKey(), solutions);
                     positions.put(s.getKey(), 0);
-                    Integer[] per = ArrayUtils.toObject(Util.randomPermutation(all_solutions.get(s.getKey()).size()));
+                    Integer[] per = ArrayUtils.toObject(RNG.randomPermutation(all_solutions.get(s.getKey()).size()));
                     permutations.put(s.getKey(), per);
                 }
                 benchmarkInCache = task.problem.getBenchmarkName();
@@ -72,7 +73,7 @@ public abstract class MOAlgorithm<N extends Number, S extends Solution, P extend
         if (all_solutions.containsKey(key)) {
             if (caching == Cache.RANDOM) {
                 List<ParetoSolution<N>> pareto = all_solutions.get(key);
-                return pareto.get(Util.nextInt(pareto.size()));
+                return pareto.get(RNG.nextInt(pareto.size()));
             }
             if (caching == Cache.ROUND_ROBIN) {
                 List<ParetoSolution<N>> pareto = all_solutions.get(key);

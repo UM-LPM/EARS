@@ -25,6 +25,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.InitWeight;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 /**
  * Reference: Q. Zhang,  W. Liu,  and H Li, The Performance of a New Version of
@@ -161,7 +162,7 @@ public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>> extends MOA
 
         // STEP 2. Update
         do {
-            int[] permutation = Util.randomPermutation(populationSize);
+            int[] permutation = RNG.randomPermutation(populationSize);
             //Utils.randomPermutation(permutation, populationSize);
 
             List<Integer> order = tour_selection(10);
@@ -172,7 +173,7 @@ public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>> extends MOA
                 frequency[n]++;
 
                 int type;
-                double rnd = Util.rnd.nextDouble();
+                double rnd = RNG.nextDouble();
 
                 // STEP 2.1. Mating selection based on probability
                 if (rnd < delta) // if (rnd < realb)
@@ -356,11 +357,11 @@ public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>> extends MOA
         ss = neighborhood[cid].length;
         while (list.size() < size) {
             if (type == 1) {
-                r = Util.rnd.nextInt(ss);
+                r = RNG.nextInt(ss);
                 p = neighborhood[cid][r];
                 // p = population[cid].table[r];
             } else {
-                p = Util.rnd.nextInt(populationSize);
+                p = RNG.nextInt(populationSize);
             }
             boolean flag = true;
             for (int i = 0; i < list.size(); i++) {
@@ -394,14 +395,14 @@ public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>> extends MOA
             // int best_idd = (int) (rnd_uni(&rnd_uni_init)*candidate.size()),
             // i2;
             // izberemo prvega kandidata
-            int best_idd = (int) (Util.rnd.nextDouble() * candidate.size());
+            int best_idd = (int) (RNG.nextDouble() * candidate.size());
             // System.out.println(best_idd);
             int i2;
             int best_sub = candidate.get(best_idd);
             int s2;
             // izberemo naslednjih depth-1 kandidatov
             for (int i = 1; i < depth; i++) {
-                i2 = (int) (Util.rnd.nextDouble() * candidate.size());
+                i2 = (int) (RNG.nextDouble() * candidate.size());
                 s2 = candidate.get(i2);
                 // System.out.println("Candidate: "+i2);
                 if (utility[s2] > utility[best_sub]) {
@@ -439,7 +440,7 @@ public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>> extends MOA
         } else {
             size = population.size();
         }
-        int[] perm = Util.randomPermutation(size);
+        int[] perm = RNG.randomPermutation(size);
 
         //Utils.randomPermutation(perm, size);
 
@@ -542,7 +543,7 @@ public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>> extends MOA
         } else { // general case (more than two objectives)
 
             Distance<N> distance_utility = new Distance<N>();
-            int random_index = Util.rnd.nextInt(population.size());
+            int random_index = RNG.nextInt(population.size());
 
             // create a list containing all the solutions but the selected one (only references to them)
             List<NumberSolution<N>> candidate = new LinkedList<NumberSolution<N>>();

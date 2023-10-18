@@ -10,6 +10,7 @@ import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -551,8 +552,6 @@ public class ExecuteTournaments {
     }
 
     private static void performRating(String benchmarkResultsDir, String benchmarkName, String benchmarkId) {
-
-        Util.rnd.setSeed(System.currentTimeMillis());
 
         List<String> problems = new ArrayList<String>();
         List<String> algorithms = new ArrayList<String>();

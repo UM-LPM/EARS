@@ -11,6 +11,7 @@ import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,9 +32,8 @@ public class EA_SOP_VisualizationExample {
     }
     public  static String PATH = "C:\\tmp"; //changed in main
 
-
     public static void run(NumberAlgorithm alg, Task<NumberSolution<Double>, DoubleProblem> task) {
-        Util.rnd.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run
+        RNG.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run
         task.enableAncestorLogging();
         NumberSolution<Double> best;
         try {

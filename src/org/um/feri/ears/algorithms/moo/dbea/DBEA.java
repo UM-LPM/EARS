@@ -37,6 +37,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 /* The original Matlab version of I-DBEA was written by Md. Asafuddoula,
  * Tapabrata Ray and Ruhul Sarker.  This class has been tested against their
@@ -198,7 +199,7 @@ public class DBEA<N extends Number, P extends Problem<NumberSolution<N>>> extend
     protected void start() throws StopCriterionException {
 
         do {
-            int[] permutation = Util.randomPermutation(population.size());
+            int[] permutation = RNG.randomPermutation(population.size());
 
             for (int i = 0; i < population.size(); i++) {
                 int n = permutation[i];
@@ -303,7 +304,7 @@ public class DBEA<N extends Number, P extends Problem<NumberSolution<N>>> extend
         }
 
         double[] f2 = normalizedObjectives(child);
-        int[] order = Util.randomPermutation(population.size());
+        int[] order = RNG.randomPermutation(population.size());
 
         if (TESTING_MODE) {
             for (int i = 0; i < order.length; i++) {

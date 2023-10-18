@@ -1,6 +1,7 @@
 package org.um.feri.ears.memory;
 
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy {
     int maxHits;
@@ -13,7 +14,7 @@ public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy
     public void changeSolution(double[] x) {
         double[] tmp = t.problem.getRandomVariables();
         for (int i = 0; i < x.length; i++) {
-            if (Util.nextDouble() < 0.2)
+            if (RNG.nextDouble() < 0.2)
                 x[i] = tmp[i];
         }
 

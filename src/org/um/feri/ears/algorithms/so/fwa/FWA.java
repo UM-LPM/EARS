@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.List;
 
@@ -148,18 +149,18 @@ public class FWA extends NumberAlgorithm {
                 for (j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                     randflag[j] = false;
                 }
-                int numExplosionDirections = (int) (task.problem.getNumberOfDimensions() * Util.nextDouble());
+                int numExplosionDirections = (int) (task.problem.getNumberOfDimensions() * RNG.nextDouble());
                 int randomCount = 0;
                 int tmpRand;
                 while (randomCount < numExplosionDirections) {
-                    tmpRand = Util.nextInt(task.problem.getNumberOfDimensions());
+                    tmpRand = RNG.nextInt(task.problem.getNumberOfDimensions());
                     if (!randflag[tmpRand]) {
                         randflag[tmpRand] = true;
                         randomCount++;
                     }
                 }
                 //explode
-                double displacement = ampExplosion[i] * (Util.nextDouble() - 0.5) * 2;
+                double displacement = ampExplosion[i] * (RNG.nextDouble() - 0.5) * 2;
                 for (j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                     if (randflag[j]) {
                         tmpPos[j] = fireworkPos[j] + displacement;
@@ -196,7 +197,7 @@ public class FWA extends NumberAlgorithm {
         for (k = 0; k < numGaussianSparks; k++) {
             //gaussiansparks[k] = new NumberSolution<Double>();
             //randomly select a firework
-            i = Math.abs(Util.nextInt()) % popSize;
+            i = Math.abs(RNG.nextInt()) % popSize;
             fireworkPos = Util.toDoubleArray(fireworks[i].getVariables());
             //select z directions
             boolean[] randFlag = new boolean[task.problem.getNumberOfDimensions()];
@@ -204,18 +205,18 @@ public class FWA extends NumberAlgorithm {
             for (j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                 randFlag[j] = false;
             }
-            int numExplosionDirections = (int) (task.problem.getNumberOfDimensions() * Util.nextDouble());
+            int numExplosionDirections = (int) (task.problem.getNumberOfDimensions() * RNG.nextDouble());
             int randomcount = 0;
             int tmprand;
             while (randomcount < numExplosionDirections) {
-                tmprand = Math.abs(Util.nextInt()) % task.problem.getNumberOfDimensions();
+                tmprand = Math.abs(RNG.nextInt()) % task.problem.getNumberOfDimensions();
                 if (!randFlag[tmprand]) {
                     randFlag[tmprand] = true;
                     randomcount++;
                 }
             }
             //explode
-            double gaussianCoef = 1.0 + Util.nextGaussian();
+            double gaussianCoef = 1.0 + RNG.nextGaussian();
             for (j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                 if (randFlag[j]) {
                     tmpPos[j] = fireworkPos[j] * gaussianCoef;
@@ -324,7 +325,7 @@ public class FWA extends NumberAlgorithm {
         //select n-1 locations according to the selection probability
         int[] nextLocations = new int[popSize - 1];
         for (k = 0; k < popSize - 1; k++) {
-            double randPointer = Util.nextDouble();
+            double randPointer = RNG.nextDouble();
             for (i = 0; i < numFireworksSparks; i++) {
                 if (randPointer <= cumulativeProbability[i]) {
                     break;

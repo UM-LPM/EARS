@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 
 import java.util.ArrayList;
@@ -45,14 +46,14 @@ public class PSOOmega extends NumberAlgorithm {
         while (!task.isStopCriterion()) {
             for (int i = 0; i < popSize; i++) {
                 velocity = new double[task.problem.getNumberOfDimensions()];
-                // r*vec(x) double r = Util.rnd.nextDouble();
+                // r*vec(x) double r = RNG.nextDouble();
                 for (int d = 0; d < task.problem.getNumberOfDimensions(); d++) {
                     //http://www.atscience.org/IJISAE/article/view/7
                     //omega different formula omega multiplies with
                     velocity[d] = omega * (
                             population.get(i).velocity[d] +
-                                    phiP * Util.rnd.nextDouble() * (population.get(i).pBest.getValue(d) - population.get(i).getValue(d)) +
-                                    phiG * Util.rnd.nextDouble() * (gBest.getValue(d) - population.get(i).getValue(d)));
+                                    phiP * RNG.nextDouble() * (population.get(i).pBest.getValue(d) - population.get(i).getValue(d)) +
+                                    phiG * RNG.nextDouble() * (gBest.getValue(d) - population.get(i).getValue(d)));
                     //if (v[d]>(task.getIntervalLength()[d])) v[d]=task.getIntervalLength()[d];
                     //if (v[d]<(task.getIntervalLength()[d])) v[d]=-task.getIntervalLength()[d];
                 }

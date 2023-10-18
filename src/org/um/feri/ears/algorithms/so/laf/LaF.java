@@ -10,6 +10,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,9 +66,9 @@ public class LaF extends NumberAlgorithm {
             for (int i = 0; i < popSize; i++) {
                 if (task.isStopCriterion())
                     break;
-                leaderIndex = Util.nextInt(popSize);
+                leaderIndex = RNG.nextInt(popSize);
                 NumberSolution<Double> leader = leaders.get(leaderIndex);
-                followerIndex = Util.nextInt(popSize);
+                followerIndex = RNG.nextInt(popSize);
                 NumberSolution<Double> follower = followers.get(followerIndex);
                 NumberSolution<Double> trial = trial(leader, follower); //one fit eval here
                 //System.out.println(trailCost);
@@ -120,7 +121,7 @@ public class LaF extends NumberAlgorithm {
             if (farthest[i] > ub.get(i)) {
                 maxSteps[i] = (ub.get(i) - follower.getValue(i)) / (ub.get(i) - lb.get(i));
             }
-            double rand = Util.nextDouble();
+            double rand = RNG.nextDouble();
             result[i] = follower.getValue(i) + maxSteps[i] * rand * gap[i];
         }
 
@@ -174,14 +175,14 @@ public class LaF extends NumberAlgorithm {
     //return an array w/ two int that are not selected before
 	private int[] randomSample(boolean[] selected) {
         int[] pick2 = {0, 0};
-        int r1 = Util.nextInt(selected.length);
+        int r1 = RNG.nextInt(selected.length);
         while (selected[r1]) {
-            r1 = Util.nextInt(selected.length);
+            r1 = RNG.nextInt(selected.length);
         }
 
-        int r2 = Util.nextInt(selected.length);
+        int r2 = RNG.nextInt(selected.length);
         while (selected[r2]) {
-            r2 = Util.nextInt(selected.length);
+            r2 = RNG.nextInt(selected.length);
         }
         pick2[0] = r1;
         pick2[1] = r2;

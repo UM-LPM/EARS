@@ -4,6 +4,7 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class F19 extends CEC2010 {
 
@@ -13,12 +14,12 @@ public class F19 extends CEC2010 {
         OShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {
-            OShift[i] = Util.nextDouble(lowerLimit.get(i), upperLimit.get(i));
+            OShift[i] = RNG.nextDouble(lowerLimit.get(i), upperLimit.get(i));
         }
 
         M = new double[m * m];
 
-        DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, Util.rnd);
+        DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, RNG.getAsRandom());
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < m; j++) {

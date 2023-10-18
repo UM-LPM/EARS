@@ -5,12 +5,13 @@ import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class SOSingleRun {
 
     public static void main(String[] args) {
 
-        Util.rnd.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run
+        //RNG.setSeed(100); // set a specific seed for the random generator
 
         DoubleProblem problem = new Sphere(5); // problem Sphere with five dimensions
 

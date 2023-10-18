@@ -4,6 +4,7 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class SBXCrossoverSO implements CrossoverOperator<DoubleProblem, NumberSolution<Double>>{
 
@@ -60,11 +61,11 @@ public class SBXCrossoverSO implements CrossoverOperator<DoubleProblem, NumberSo
 
 		int numberOfVariables = parent1.getVariables().size();
 
-		if (Util.rnd.nextDouble() <= probability) {
+		if (RNG.nextDouble() <= probability) {
 			for (i = 0; i < numberOfVariables; i++) {
 				valueX1 = parent1.getValue(i);
 				valueX2 = parent2.getValue(i);
-				if (Util.rnd.nextDouble() <= 0.5) {
+				if (RNG.nextDouble() <= 0.5) {
 					if (java.lang.Math.abs(valueX1 - valueX2) > EPS) {
 
 						if (valueX1 < valueX2) {
@@ -77,7 +78,7 @@ public class SBXCrossoverSO implements CrossoverOperator<DoubleProblem, NumberSo
 
 						yL = problem.getLowerLimit(i);
 						yu = problem.getUpperLimit(i);
-						rand = Util.rnd.nextDouble();
+						rand = RNG.nextDouble();
 						beta = 1.0 + (2.0 * (y1 - yL) / (y2 - y1));
 						alpha = 2.0 - java.lang.Math.pow(beta, -(distributionIndex + 1.0));
 
@@ -111,7 +112,7 @@ public class SBXCrossoverSO implements CrossoverOperator<DoubleProblem, NumberSo
 						if (c2 > yu)
 							c2 = yu;
 
-						if (Util.rnd.nextDouble() <= 0.5) {
+						if (RNG.nextDouble() <= 0.5) {
 							offSpring[0].setValue(i, c2);
 							offSpring[1].setValue(i, c1);
 						} else {

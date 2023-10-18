@@ -12,6 +12,7 @@ import javax.management.JMException;
 import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class PESA2Selection<N extends Number> {
 
@@ -36,7 +37,7 @@ public class PESA2Selection<N extends Number> {
 				} else if (archive.getGrid().getLocationDensity(hypercube2) < archive.getGrid().getLocationDensity(hypercube1)) {
 					selected = hypercube2;
 				} else {
-					if (Util.rnd.nextDouble() < 0.5) {
+					if (RNG.nextDouble() < 0.5) {
 						selected = hypercube2;
 					} else {
 						selected = hypercube1;
@@ -45,7 +46,7 @@ public class PESA2Selection<N extends Number> {
 			} else {
 				selected = hypercube1;
 			}
-			int base = Util.rnd.nextInt(archive.size());
+			int base = RNG.nextInt(archive.size());
 			int cnt = 0;
 			while (cnt < archive.size()) {
 				NumberSolution<N> individual = archive.get((base + cnt) % archive.size());

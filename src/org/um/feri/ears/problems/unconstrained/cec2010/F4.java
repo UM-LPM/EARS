@@ -4,6 +4,7 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class F4 extends CEC2010 {
 
@@ -11,7 +12,7 @@ public class F4 extends CEC2010 {
         super("F04 Single-group Shifted and m-rotated Elliptic Function", d, 4);
 
         P = new int[numberOfDimensions];
-        P = Util.randomPermutation(numberOfDimensions);
+        P = RNG.randomPermutation(numberOfDimensions);
         OShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {
@@ -20,7 +21,7 @@ public class F4 extends CEC2010 {
 
         M = new double[m * m];
 
-        DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, Util.rnd);
+        DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, RNG.getAsRandom());
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < m; j++) {

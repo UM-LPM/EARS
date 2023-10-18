@@ -2,6 +2,7 @@ package org.um.feri.ears.problems;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import javax.annotation.CheckReturnValue;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
 
         List<Double> x = new ArrayList<>();
         for (int j = 0; j < numberOfDimensions; j++) {
-            x.add(Util.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
+            x.add(RNG.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
         }
 
         return new NumberSolution<>(numberOfObjectives, x);
@@ -42,7 +43,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
     public double[] getRandomVariables() {
         double[] x = new double[numberOfDimensions];
         for (int j = 0; j < numberOfDimensions; j++) {
-            x[j] = Util.nextDouble(lowerLimit.get(j), upperLimit.get(j));
+            x[j] = RNG.nextDouble(lowerLimit.get(j), upperLimit.get(j));
         }
         return x;
     }

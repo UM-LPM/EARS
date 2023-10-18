@@ -8,6 +8,7 @@ import java.util.List;
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 /**
  * Problem function!
@@ -45,7 +46,7 @@ public class F1 extends DoubleProblem {
         //initialization range=[0,6.35]
         double[] var = new double[numberOfDimensions];
         for (int j = 0; j < numberOfDimensions; j++) {
-            var[j] = Util.nextDouble(0, 6.35);
+            var[j] = RNG.nextDouble(0, 6.35);
         }
         return var;
     }

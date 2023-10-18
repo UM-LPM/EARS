@@ -2,6 +2,7 @@ package org.um.feri.ears.problems.gp;
 
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +112,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
         // First we select one from baseFunctions, otherwise the tree would stop here (we also exclude functions that are actually constants)
         List<Op<T>> filteredOperations = this.baseFunctions.stream().filter(x -> (!x.isVariable() && !x.isTerminal() && !x.isConstant() || !isRoot)).toList();
-        Op<T> op = filteredOperations.get(Util.rnd.nextInt(filteredOperations.size()));
+        Op<T> op = filteredOperations.get(RNG.nextInt(filteredOperations.size()));
         TreeNode<T> rootNode = new TreeNode<>(op);
 
         if(currentDepth < this.maxTreeHeight - 1) { //Function
@@ -125,7 +126,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
                 }
             }
         }else { //Terminal
-            Op<T> t = this.baseTerminals.get(Util.rnd.nextInt(this.baseTerminals.size()));
+            Op<T> t = this.baseTerminals.get(RNG.nextInt(this.baseTerminals.size()));
             rootNode = new TreeNode<>(t);
         }
 
@@ -135,8 +136,8 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
 
     private void generateSubTree(TreeNode<T> node, int index, int currentDepth) {
         //Randomly select one terminal or one function
-        if(currentDepth < this.maxTreeHeight - 1 && Util.rnd.nextInt(2) == 0) { //Function
-            Op<T> op = this.baseFunctions.get(Util.rnd.nextInt(this.baseFunctions.size()));
+        if(currentDepth < this.maxTreeHeight - 1 && RNG.nextInt(2) == 0) { //Function
+            Op<T> op = this.baseFunctions.get(RNG.nextInt(this.baseFunctions.size()));
 
             if(op.isConstant()){
                 TreeNode<T> childNode = new TreeNode<>(op.apply(null));
@@ -153,7 +154,7 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
             }
         }
         else { //Terminal
-            Op<T> t = this.baseTerminals.get(Util.rnd.nextInt(this.baseTerminals.size()));
+            Op<T> t = this.baseTerminals.get(RNG.nextInt(this.baseTerminals.size()));
             TreeNode<T> child = new TreeNode<T>(t);
             node.insert(index, child);
         }

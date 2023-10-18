@@ -10,6 +10,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 
 import java.util.ArrayList;
@@ -99,14 +100,14 @@ public class MBF extends NumberAlgorithm {
                         if ((BestResult[1].getEval() / BestResult[0].getEval()) < 0.85) {
                             //Update Movement Cichilds Protected by Mother using Regularity
                             solution.movement[d] = SP * solution.movement[d]
-                                    + Dis * Util.nextDouble() * (solution.localBest.getValue(d) - solution.getValue(d))
-                                    + Dis * Util.nextDouble() * (best.getValue(d) - solution.getValue(d));
+                                    + Dis * RNG.nextDouble() * (solution.localBest.getValue(d) - solution.getValue(d))
+                                    + Dis * RNG.nextDouble() * (best.getValue(d) - solution.getValue(d));
                         } else {
                             //Update Movement Cichlids Protected by Mother using Force of Nature
                             solution.movement[d] = SP * solution.movement[d]
-                                    + Dis * Util.nextDouble() * (solution.localBest.getValue(d) - solution.getValue(d))
-                                    + Dis * Util.nextDouble() * (BestResult[1].getValue(d) - solution.getValue(d))
-                                    + Dis * Util.nextDouble() * NatureForce[kk - 1].movement[d];
+                                    + Dis * RNG.nextDouble() * (solution.localBest.getValue(d) - solution.getValue(d))
+                                    + Dis * RNG.nextDouble() * (BestResult[1].getValue(d) - solution.getValue(d))
+                                    + Dis * RNG.nextDouble() * NatureForce[kk - 1].movement[d];
                             checkCONV = checkCONV + 1;
                         }
                     }
@@ -154,15 +155,15 @@ public class MBF extends NumberAlgorithm {
                     int[] randSample = new int[NMC];
 
                     for (int j = 0; j < NMC; j++) {
-                        randSample[j] = Util.nextInt(task.problem.getNumberOfDimensions());
+                        randSample[j] = RNG.nextInt(task.problem.getNumberOfDimensions());
                     }
 
                     double UASDP = 4 * ASDP;
-                    int ind = Util.nextInt(popSize);
+                    int ind = RNG.nextInt(popSize);
 
                     List<Double> p = population.get(ind).getVariables();
                     for (int k = 0; k < NMC; k++) {
-                        population.get(ind).setValue(randSample[k], UASDP * Util.nextDouble() + population.get(ind).getValue(randSample[k]));
+                        population.get(ind).setValue(randSample[k], UASDP * RNG.nextDouble() + population.get(ind).getValue(randSample[k]));
 
                     }
 
@@ -275,7 +276,7 @@ public class MBF extends NumberAlgorithm {
                 for (int iii = 0; iii < nShark; iii++) {
 
 
-                    int num = Util.nextInt(task.problem.getNumberOfDimensions());
+                    int num = RNG.nextInt(task.problem.getNumberOfDimensions());
                     ;
                     List<Double> p = population.get(num).getVariables();
 
@@ -322,7 +323,7 @@ public class MBF extends NumberAlgorithm {
         double[] y2 = new double[task.problem.getNumberOfDimensions()];
 
         for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
-            alpha = Util.nextDouble(-gamma, 1 + gamma);
+            alpha = RNG.nextDouble(-gamma, 1 + gamma);
 
             y1[i] = alpha * x1.get(i) + (1 - alpha) * x2.get(i);
             y2[i] = alpha * x2.get(i) + (1 - alpha) * x1.get(i);

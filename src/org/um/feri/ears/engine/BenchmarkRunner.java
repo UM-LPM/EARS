@@ -8,6 +8,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.io.*;
 import java.net.URL;
@@ -23,7 +24,6 @@ public class BenchmarkRunner {
 	static Logger logger = Logger.getLogger(BenchmarkRunner.class.getName());
 	
 	public static void main(String args[]) {
-		Util.rnd.setSeed(System.currentTimeMillis());
 
 		String destFolder = "D:\\Benchmark results\\test\\";
 		String fileName;

@@ -14,6 +14,7 @@ import org.um.feri.ears.quality_indicator.QualityIndicatorUtil;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 
@@ -141,7 +142,7 @@ public class FSS extends NumberAlgorithm {
                 for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
 
                     //continue to update neighbor with dilate/shrink
-                    newSolution[i] += (step_size * direction * Util.nextDouble() * (newSolution[i] - schoolBarycentre[i])) / de;
+                    newSolution[i] += (step_size * direction * RNG.nextDouble() * (newSolution[i] - schoolBarycentre[i])) / de;
                 }
 
                 //take care about bounds of search space
@@ -274,7 +275,7 @@ public class FSS extends NumberAlgorithm {
 
             for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
                 //calculate displacement
-                fish.deltaX[i] = Util.nextDouble(-1, 1) * step_size;
+                fish.deltaX[i] = RNG.nextDouble(-1, 1) * step_size;
                 //generate new solution in neighbor
                 newSolution[i] += fish.deltaX[i];
             }

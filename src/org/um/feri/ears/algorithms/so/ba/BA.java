@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 
@@ -66,21 +67,21 @@ public class BA extends NumberAlgorithm {
 
 			for (int i = 0; i < popSize; i++) {
 				//Generate new solutions by adjusting frequency, and updating velocities and locations/solutions [Eq.(2) to(4)]
-				population.get(i).Q = Util.nextDouble(Qmin, Qmax);
+				population.get(i).Q = RNG.nextDouble(Qmin, Qmax);
 				
 				for(int j = 0; j < task.problem.getNumberOfDimensions() ; j++){
 					population.get(i).v[j] += (population.get(i).getValue(j) - best.getValue(j)) * population.get(i).Q;
 					S[j] =  population.get(i).getValue(j) + population.get(i).v[j];
 				}
 				
-				if(Util.nextDouble() > r)
+				if(RNG.nextDouble() > r)
 				{
 					//Select a solution among the best solutions and generate a local solution around the best solution
 					//TODO how to select from best solutions?
 					for(int j = 0; j < task.problem.getNumberOfDimensions() ; j++){
-						S[j] = best.getValue(j) + 0.001 * (2 * Util.nextDouble() - 1);
-						//S[j] = best.getValue(j) + 0.001 * population.get(i).A * (2 * Util.nextDouble() - 1);
-						//S[j] = population.get(i).getValue(j) + Util.nextDouble() * avgA;
+						S[j] = best.getValue(j) + 0.001 * (2 * RNG.nextDouble() - 1);
+						//S[j] = best.getValue(j) + 0.001 * population.get(i).A * (2 * RNG.nextDouble() - 1);
+						//S[j] = population.get(i).getValue(j) + RNG.nextDouble() * avgA;
 					}
 				}
 				
@@ -98,7 +99,7 @@ public class BA extends NumberAlgorithm {
 				newBat.r = population.get(i).r;
 				
 				
-				if(task.problem.isFirstBetter(newBat, population.get(i)) && Util.nextDouble() < A)
+				if(task.problem.isFirstBetter(newBat, population.get(i)) && RNG.nextDouble() < A)
 				{
 					//Update loudness and pulse rate
 					newBat.A = alpha * newBat.A;
@@ -127,8 +128,8 @@ public class BA extends NumberAlgorithm {
 			
 			BatSolution newSolution = new BatSolution(task.getRandomEvaluatedSolution());
 			newSolution.v = new double[task.problem.getNumberOfDimensions()];
-			newSolution.A = Util.nextDouble(1,2);
-			newSolution.r = Util.nextDouble();
+			newSolution.A = RNG.nextDouble(1,2);
+			newSolution.r = RNG.nextDouble();
 			if(task.problem.isFirstBetter(newSolution, best))
 				best = new BatSolution(newSolution);
 			

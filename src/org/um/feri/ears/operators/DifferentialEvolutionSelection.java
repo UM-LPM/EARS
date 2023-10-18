@@ -25,6 +25,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 /**
  * Class implementing the selection operator used in DE: three different
@@ -60,13 +61,13 @@ public class DifferentialEvolutionSelection<N extends Number> implements Selecti
 		}
 
 		do {
-			r1 = Util.rnd.nextInt(population.size());
+			r1 = RNG.nextInt(population.size());
 		} while (r1 == index);
 		do {
-			r2 = Util.rnd.nextInt(population.size());
+			r2 = RNG.nextInt(population.size());
 		} while (r2 == index || r2 == r1);
 		do {
-			r3 = Util.rnd.nextInt(population.size());
+			r3 = RNG.nextInt(population.size());
 		} while (r3 == index || r3 == r1 || r3 == r2);
 
 		parents[0] = population.get(r1);

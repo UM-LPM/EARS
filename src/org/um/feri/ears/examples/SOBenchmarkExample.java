@@ -9,13 +9,13 @@ import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 
 public class SOBenchmarkExample {
 
     public static void main(String[] args) {
-        Util.rnd.setSeed(System.currentTimeMillis()); //set the seed of the random generator
         Benchmark.printInfo = false; //prints one on one results
         //add algorithms to a list
 

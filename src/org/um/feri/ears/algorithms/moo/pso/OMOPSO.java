@@ -32,6 +32,7 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 /**
  * Implementation of OMOPSO, a multi-objective particle swarm optimizer (MOPSO).
@@ -119,8 +120,8 @@ public class OMOPSO extends MOAlgorithm<Double, NumberSolution<Double>, DoublePr
             //Select a global localBest for calculate the speed of particle i, bestGlobal
             NumberSolution<Double> one;
             NumberSolution<Double> two;
-            int pos1 = Util.nextInt(0, leaderArchive.getSolutionList().size());
-            int pos2 = Util.nextInt(0, leaderArchive.getSolutionList().size());
+            int pos1 = RNG.nextInt(0, leaderArchive.getSolutionList().size());
+            int pos2 = RNG.nextInt(0, leaderArchive.getSolutionList().size());
             one = leaderArchive.getSolutionList().get(pos1);
             two = leaderArchive.getSolutionList().get(pos2);
 
@@ -131,11 +132,11 @@ public class OMOPSO extends MOAlgorithm<Double, NumberSolution<Double>, DoublePr
             }
 
             //Parameters for velocity equation
-            r1 = Util.nextDouble();
-            r2 = Util.nextDouble();
-            C1 = Util.nextDouble(1.5, 2.0);
-            C2 = Util.nextDouble(1.5, 2.0);
-            W = Util.nextDouble(0.1, 0.5);
+            r1 = RNG.nextDouble();
+            r2 = RNG.nextDouble();
+            C1 = RNG.nextDouble(1.5, 2.0);
+            C2 = RNG.nextDouble(1.5, 2.0);
+            W = RNG.nextDouble(0.1, 0.5);
             //
 
             for (int var = 0; var < task.problem.getNumberOfDimensions(); var++) {

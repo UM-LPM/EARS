@@ -8,13 +8,11 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class TestMOCRSTuning {
 
     public static void main(String[] args) {
-
-
-        Util.rnd.setSeed(System.currentTimeMillis());
 
         ArrayList<ControlParameter> control_parameters = new ArrayList<ControlParameter>();
         ControlParameter populationSize = new ControlParameter("populationSize", "int", 20, 500);

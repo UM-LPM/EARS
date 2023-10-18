@@ -5,6 +5,7 @@ import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.problems.gp.TreeAncestor;
 import org.um.feri.ears.problems.gp.TreeNode;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.Optional;
 
@@ -22,10 +23,10 @@ public class SingleTreeNodeMutation<T> implements MutationOperator<ProgramProble
     }
 
     private void doMutation(double probability, ProgramSolution<T> solution, ProgramProblem<T> problem) {
-        if (Util.rnd.nextDouble() <= probability) {
+        if (RNG.nextDouble() <= probability) {
             //System.out.println("Tree is in order to be mutated");
             int childCount = solution.getProgram().ancestors().getAncestorCount();
-            int crossPoint = Util.rnd.nextInt(childCount) + 1;
+            int crossPoint = RNG.nextInt(childCount) + 1;
 
             TreeAncestor crossOverNodeAncestor = solution.getProgram().ancestorAt(crossPoint);
             TreeNode<T> crossOverNode = crossOverNodeAncestor.getTreeNode();

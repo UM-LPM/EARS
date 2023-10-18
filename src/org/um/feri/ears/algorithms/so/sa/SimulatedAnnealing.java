@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 // source: https://uk.mathworks.com/matlabcentral/fileexchange/53149-real-coded-simulated-annealing-sa
 
@@ -71,7 +72,7 @@ public class SimulatedAnnealing extends NumberAlgorithm {
                     double DELTA = (currentBest.getEval() - neighbor.getEval()) / (currentBest.getEval() + 0.000000001);
                     double P = Math.exp(DELTA / T);
 
-                    if (Util.nextDouble() <= P)
+                    if (RNG.nextDouble() <= P)
                         currentBest = neighbor;
                 }
             }
@@ -89,8 +90,8 @@ public class SimulatedAnnealing extends NumberAlgorithm {
         double[] currentVariables = Util.toDoubleArray(currentBest.getVariables());
         double[] x = new double[task.problem.getNumberOfDimensions()];
         for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
-            if (Util.nextDouble() <= mu) {
-                x[i] = currentVariables[i] + sigma[i] * Util.rnd.nextGaussian();
+            if (RNG.nextDouble() <= mu) {
+                x[i] = currentVariables[i] + sigma[i] * RNG.nextGaussian();
             } else
                 x[i] = currentVariables[i];
         }

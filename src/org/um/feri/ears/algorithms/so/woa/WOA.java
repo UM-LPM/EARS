@@ -7,6 +7,7 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 
@@ -87,18 +88,18 @@ public class WOA extends NumberAlgorithm {
                 double[] newPosition = new double[task.problem.getNumberOfDimensions()];
 
                 // Randoms for A and C
-                r1 = Util.nextDouble();
-                r2 = Util.nextDouble();
+                r1 = RNG.nextDouble();
+                r2 = RNG.nextDouble();
 
                 A = (2.0 * a * r1) - a; // Random value on the interval of shrinking a
                 C = 2.0 * r2;
 
                 // Eq 2.5 parameters
                 b = 1.0;
-                l = (a2 - 1.0) * Util.nextDouble() + 1.0;
+                l = (a2 - 1.0) * RNG.nextDouble() + 1.0;
 
                 // Get p
-                p = Util.nextDouble();
+                p = RNG.nextDouble();
 
                 // For each dimension
                 for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
@@ -107,7 +108,7 @@ public class WOA extends NumberAlgorithm {
                         if (Math.abs(A) >= 1) {
                             // Exploration
                             // Select random agent and update position of current (Eq. 2.8)
-                            int randAgentIndex = Util.nextInt(popSize);
+                            int randAgentIndex = RNG.nextInt(popSize);
                             NumberSolution<Double> randAgent = population.get(randAgentIndex);
                             double dXRand = Math.abs(C * randAgent.getValue(i) - currentAgent.getValue(i));
                             newPosition[i] = randAgent.getValue(i) - A * dXRand;

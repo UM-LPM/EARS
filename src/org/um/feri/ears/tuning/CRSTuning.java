@@ -8,6 +8,7 @@ import org.um.feri.ears.statistic.rating_system.GameInfo;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.comparator.RatingComparator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -66,12 +67,10 @@ public class CRSTuning {
     }
 
     public CRSTuning(boolean printDebug, boolean printSingleRunDuration, SOBenchmark benchmark, int max_execs) {
-        Util.rnd.setSeed(System.currentTimeMillis());
         algorithms = new HashMap<>();
         this.printDebug = printDebug;
         this.benchmark = benchmark;
         players = new ArrayList<>();
-        Util.rnd.setSeed(System.currentTimeMillis());
         this.printSingleRunDuration = printSingleRunDuration;
         this.max_execs = max_execs;
     }
@@ -158,7 +157,7 @@ public class CRSTuning {
                 while (algorithms.size() < M) {
                     for (int j = 0; j < n_players; j++) {
                         // Find two individuals for crossover
-                        if (Util.rnd.nextDouble() < Cr_rate && algorithms.size() < M) {
+                        if (RNG.nextDouble() < Cr_rate && algorithms.size() < M) {
                             if (cr1 != 0) cr2 = j;
                             else cr1 = j;
                         }
@@ -167,7 +166,7 @@ public class CRSTuning {
                             ArrayList<Double> child1 = new ArrayList<Double>();
                             ArrayList<Double> child2 = new ArrayList<Double>();
                             for (int k = 0; k < control_parameters.size(); k++) {
-                                if (Util.rnd.nextDouble() < 0.5) {
+                                if (RNG.nextDouble() < 0.5) {
                                     child1.add(algorithms.get(cr1).getControlParameters().get(k));
                                     child2.add(algorithms.get(cr2).getControlParameters().get(k));
                                 } else {
@@ -187,7 +186,7 @@ public class CRSTuning {
                         // Mutation
                         int mutated = 0;
                         for (int m = 0; m < control_parameters.size(); m++) {
-                            if (Util.rnd.nextDouble() < F_rate && algorithms.size() < M) {
+                            if (RNG.nextDouble() < F_rate && algorithms.size() < M) {
                                 child.add(control_parameters.get(m).randomValue());
                                 mutated = 1;
                             } else {

@@ -6,11 +6,10 @@ import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class TestSoilModelProblem {
     public static void main(String[] args) throws StopCriterionException {
-        Util.rnd.setSeed(System.currentTimeMillis());
-
         NumberAlgorithm algorithm = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN, 50);
 
         String[] data = {"TE1", "TE2", "TE3"};

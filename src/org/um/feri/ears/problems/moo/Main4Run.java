@@ -17,11 +17,10 @@ import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class Main4Run {
     public static void main(String[] args) {
-    	Util.rnd.setSeed(System.currentTimeMillis());
-    	
     	ZDT1 zdt = new ZDT1();
     	ParetoSolution filePareto = new ParetoSolution();
     	filePareto.loadObjectivesFromFile("test_pareto//ZDT1_middle.dat");

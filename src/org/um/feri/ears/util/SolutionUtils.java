@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
+import org.um.feri.ears.util.random.RNG;
 
 public class SolutionUtils {
 
@@ -23,7 +24,7 @@ public class SolutionUtils {
         } else if (flag == 1) {
             result = solution2;
         } else {
-            if (Util.nextDouble() < 0.5) {
+            if (RNG.nextDouble() < 0.5) {
                 result = solution1;
             } else {
                 result = solution2;

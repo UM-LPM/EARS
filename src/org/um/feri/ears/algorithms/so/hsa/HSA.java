@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 public class HSA extends NumberAlgorithm {
 
@@ -53,13 +54,13 @@ public class HSA extends NumberAlgorithm {
             double[] newHarmony = new double[task.problem.getNumberOfDimensions()];
 
             for (int i = 0; i < task.problem.getNumberOfDimensions(); i++) {
-                if (Util.nextDouble() < HMCR) {
-                    newHarmony[i] = population[(int) (popSize * Util.nextDouble())].getValue(i);
-                    if (Util.nextDouble() < PAR) {
+                if (RNG.nextDouble() < HMCR) {
+                    newHarmony[i] = population[(int) (popSize * RNG.nextDouble())].getValue(i);
+                    if (RNG.nextDouble() < PAR) {
                         newHarmony[i] = pitchAdjust(newHarmony[i], i);
                     }
                 } else {
-                    newHarmony[i] = task.problem.getLowerLimit(i) + (task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i)) * Util.nextDouble();
+                    newHarmony[i] = task.problem.getLowerLimit(i) + (task.problem.getUpperLimit(i) - task.problem.getLowerLimit(i)) * RNG.nextDouble();
                 }
             }
             if (task.isStopCriterion())
@@ -91,10 +92,10 @@ public class HSA extends NumberAlgorithm {
 
     private double pitchAdjust(double value, int dimension) {
         double newValue;
-        if (Util.nextDouble() < 0.5) {
-            newValue = value + Util.nextDouble() * BW;
+        if (RNG.nextDouble() < 0.5) {
+            newValue = value + RNG.nextDouble() * BW;
         } else {
-            newValue = value - Util.nextDouble() * BW;
+            newValue = value - RNG.nextDouble() * BW;
         }
         return task.problem.setFeasible(newValue, dimension);
     }

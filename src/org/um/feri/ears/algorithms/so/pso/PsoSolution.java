@@ -5,6 +5,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class PsoSolution extends NumberSolution<Double> {
     public PsoSolution pBest;
@@ -18,7 +19,7 @@ public class PsoSolution extends NumberSolution<Double> {
         for (int i = 0; i < t.problem.getNumberOfDimensions(); i++) {
             l = -Math.abs(t.problem.getUpperLimit(i) - t.problem.getLowerLimit(i)) / 4;
             r = Math.abs(t.problem.getUpperLimit(i) - t.problem.getLowerLimit(i)) / 4;
-            velocity[i] = Util.nextDouble(l, r);
+            velocity[i] = RNG.nextDouble(l, r);
         }
         pBest = new PsoSolution(this);
     }

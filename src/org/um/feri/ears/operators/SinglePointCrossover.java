@@ -5,6 +5,7 @@ import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.problems.gp.TreeAncestor;
 import org.um.feri.ears.problems.gp.TreeNode;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.Optional;
 
@@ -31,14 +32,14 @@ public class SinglePointCrossover<T extends Number> implements CrossoverOperator
         ProgramSolution<T> parent1 = new ProgramSolution<>(programSolutions[0]);
         ProgramSolution<T> parent2 = new ProgramSolution<>(programSolutions[1]);
 
-        if(Util.rnd.nextDouble() <= this.crossoverProbability) {
+        if(RNG.nextDouble() <= this.crossoverProbability) {
             // Get lengths of both parents and select random crossover points
             int childCount1 = parent1.getProgram().ancestors().getAncestorCount();
             int childCount2 = parent2.getProgram().ancestors().getAncestorCount();
 
             //TODO check if indices not the same?
-            int crossoverIndex1 = Util.rnd.nextInt(childCount1) + 1;
-            int crossoverIndex2 = Util.rnd.nextInt(childCount2) + 1;
+            int crossoverIndex1 = RNG.nextInt(childCount1) + 1;
+            int crossoverIndex2 = RNG.nextInt(childCount2) + 1;
 
             //System.out.println("crossoverIndex1: " + crossoverIndex1);
             //System.out.println("crossoverIndex2: " + crossoverIndex2);

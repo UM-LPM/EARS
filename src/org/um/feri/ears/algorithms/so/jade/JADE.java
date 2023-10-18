@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 
@@ -123,34 +124,34 @@ public class JADE extends NumberAlgorithm {
             SCR.clear();
             for (int i = 0; i < popSize; i++) {
                 // Generate CRi
-                popX[i].setCR(Util.rnd.nextGaussian() * 0.1 + muCR);
+                popX[i].setCR(RNG.nextGaussian() * 0.1 + muCR);
                 // http://introcs.cs.princeton.edu/java/stdlib/StdRandom.java.html
                 // cauchy
                 // Generate Fi
                 do {
                     Fpom = 0.1
-                            * Math.tan(Math.PI * (Util.rnd.nextDouble() - 0.5))
+                            * Math.tan(Math.PI * (RNG.nextDouble() - 0.5))
                             + muF;
                 } while (Fpom <= 0);
                 popX[i].setF(Fpom);
                 // System.out.print(
                 // "("+pop_x[i].getCR()+", "+pop_x[i].getF()+") ");
-                jRand = Util.rnd.nextInt(D);
+                jRand = RNG.nextInt(D);
                 tmp = Util.toDoubleArray(popX[i].getVariables());
                 do {
-                    r1 = Util.rnd.nextInt(popSize);
+                    r1 = RNG.nextInt(popSize);
                 } while (r1 == i);
                 do {
-                    r2 = Util.rnd.nextInt(popSize
+                    r2 = RNG.nextInt(popSize
                             + Math.min(archX.size(), popSize));
                 } while (r2 == i || r2 == r1);
                 if (r2 < popSize)
                     inR2 = popX[r2];
                 else
                     inR2 = archX.get(r2 - popSize);
-                pBest = Util.rnd.nextInt(eliteSize);
+                pBest = RNG.nextInt(eliteSize);
                 for (int d = 0; d < D; d++) {
-                    if ((Util.rnd.nextDouble() < popX[i].CR) || (d == jRand)) {
+                    if ((RNG.nextDouble() < popX[i].CR) || (d == jRand)) {
                         tmp[d] = task.problem.setFeasible(
                                         tmp[d]
                                                 + popX[i].F
@@ -182,16 +183,16 @@ public class JADE extends NumberAlgorithm {
             if (popSize >= 0) System.arraycopy(popNew, 0, popX, 0, popSize);
             // empty archive if it is too big
             while (archX.size() > popSize)
-                archX.remove(Util.rnd.nextInt(archX.size())); // arch full
+                archX.remove(RNG.nextInt(archX.size())); // arch full
             // Update parameters
             if (SCR.size() > 0) {
                 muCR = (1. - c) * muCR + c * (sum(SCR) / SCR.size());
                 muF = (1. - c) * muF + c * (sum2(SF) / sum(SF)); // Lehmer mean
             } else { // not defined in paper
-                muCR = Util.rnd.nextDouble();
+                muCR = RNG.nextDouble();
                 if (muCR < 0.1)
                     muCR = 0.1;
-                muF = Util.rnd.nextDouble();
+                muF = RNG.nextDouble();
                 if (muF < 0.1)
                     muF = 0.1;
             }

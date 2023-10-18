@@ -4,6 +4,7 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 public class PolynomialMutationSO implements MutationOperator<DoubleProblem, NumberSolution<Double>>{
 
@@ -31,13 +32,13 @@ public class PolynomialMutationSO implements MutationOperator<DoubleProblem, Num
 		double rnd, delta1, delta2, mut_pow, deltaq;
 		double y, yl, yu, val, xy;
 		for (int var = 0; var < problem.getNumberOfDimensions(); var++) {
-			if (Util.rnd.nextDouble() <= probability) {
+			if (RNG.nextDouble() <= probability) {
 				y = solution.getValue(var);
 				yl = problem.getLowerLimit(var);
 				yu = problem.getUpperLimit(var);
 				delta1 = (y - yl) / (yu - yl);
 				delta2 = (yu - y) / (yu - yl);
-				rnd = Util.rnd.nextDouble();
+				rnd = RNG.nextDouble();
 				mut_pow = 1.0 / (eta_m + 1.0);
 				if (rnd <= 0.5) {
 					xy = 1.0 - delta1;

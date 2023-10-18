@@ -6,6 +6,7 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ES1cNsAlgorithm extends NumberAlgorithm {
     }
 
     private double getGaussian(double aMean, double aVariance) {
-        return aMean + Util.rnd.nextGaussian() * aVariance;
+        return aMean + RNG.nextGaussian() * aVariance;
     }
 
     @Override

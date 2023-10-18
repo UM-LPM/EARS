@@ -8,6 +8,7 @@ import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.benchmark.RPUOed2Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkRunnerBestAlgSettings;
+import org.um.feri.ears.util.random.RNG;
 import org.um.feri.ears.visualization.graphing.GraphSet;
 import org.um.feri.ears.visualization.graphing.PlotType;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
@@ -28,7 +29,6 @@ public class Test_11_MainV3 {
      * @param args
      */
     public static void main(String[] args) {
-        Util.rnd.setSeed(System.currentTimeMillis());
         Benchmark.printInfo = true; //prints one on one results
         BenchmarkRunnerBestAlgSettings rbs = new BenchmarkRunnerBestAlgSettings(true,false, new RPUOed2Benchmark());
         rbs.addAlgorithm(new RandomWalkAlgorithm());

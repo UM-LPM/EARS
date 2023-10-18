@@ -10,6 +10,7 @@ package org.um.feri.ears.algorithms.moo.pesa2;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.Arrays;
 
@@ -221,7 +222,7 @@ public class AdaptiveGrid<N extends Number> {
         }
 
         // Calculate a random value between 0 and sumaInversa
-        double random = Util.rnd.nextDouble() * inverseSum;
+        double random = RNG.nextDouble() * inverseSum;
         int hypercube = 0;
         double accumulatedSum = 0.0;
         while (hypercube < hypercubes.length) {
@@ -261,7 +262,7 @@ public class AdaptiveGrid<N extends Number> {
     }
 
     public int randomOccupiedHypercube() {
-        int rand = Util.rnd.nextInt(occupied.length);
+        int rand = RNG.nextInt(occupied.length);
         return occupied[rand];
     }
 }

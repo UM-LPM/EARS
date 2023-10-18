@@ -22,7 +22,6 @@ public class BenchmarkRunner {
 	static Logger logger = Logger.getLogger(BenchmarkRunner.class.getName());
 
 	public static void main(String args[]) {
-		Util.rnd.setSeed(System.currentTimeMillis());
 
 		String destFolder = "@DEST_FOLDER";
 		String fileName;

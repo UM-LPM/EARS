@@ -108,7 +108,7 @@ public class SOSingleRun {
 
     public static void main(String[] args) {
 
-        Util.rnd.setSeed(System.currentTimeMillis()); // set a new seed for the random generator for each run
+        //RNG.setSeed(100); // set a specific seed for the random generator
 
         DoubleProblem problem = new Sphere(5); // problem Sphere with five dimensions
 
@@ -143,7 +143,7 @@ import java.util.ArrayList;
 public class SOBenchmarkExample {
 
     public static void main(String[] args) {
-        Util.rnd.setSeed(System.currentTimeMillis()); //set the seed of the random generator
+        RNG.setSeed(System.currentTimeMillis()); //set the seed of the random generator
         Benchmark.printInfo = false; //prints one on one results
         //add algorithms to a list
 
@@ -234,7 +234,7 @@ public class ExpBasExample {
                 // Mutation
                 Set<Integer> mySet = new LinkedHashSet<Integer>();
                 while (mySet.size() < 3) {
-                    mySet.add(org.um.feri.ears.util.Util.rnd.nextInt(NP));
+                    mySet.add(org.um.feri.ears.util.RNG.nextInt(NP));
                 }
                 List<Integer> uniqInds = new ArrayList<Integer>();
                 uniqInds.addAll(mySet);
@@ -247,7 +247,7 @@ public class ExpBasExample {
                 // Crossover
                 ArrayList<Double> u = new ArrayList<>();
                 for(int j = 0; j < problem.getNumberOfDimensions(); j++){
-                    if(org.um.feri.ears.util.Util.rnd.nextDouble() <= CR || i == Util.rnd.nextInt(NP))
+                    if(org.um.feri.ears.util.RNG.nextDouble() <= CR || i == RNG.nextInt(NP))
                         u.add(v.get(j));
                     else
                         u.add(population.get(i).get(j));

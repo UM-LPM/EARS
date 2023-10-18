@@ -18,6 +18,7 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 /**
  * This class implements a uniform mutation operator.
@@ -51,8 +52,8 @@ public class UniformMutation implements MutationOperator<DoubleProblem, NumberSo
      */
     public void doMutation(double probability, NumberSolution<Double> solution, DoubleProblem problem) {
         for (int i = 0; i < solution.numberOfVariables(); i++) {
-            if (Util.nextDouble() < probability) {
-                double rand = Util.nextDouble();
+            if (RNG.nextDouble() < probability) {
+                double rand = RNG.nextDouble();
                 double tmp = (rand - 0.5) * perturbation;
 
                 tmp += solution.getValue(i);

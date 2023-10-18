@@ -3,6 +3,7 @@ package org.um.feri.ears.problems.unconstrained.cec2005;
 import org.um.feri.ears.problems.DoubleProblem;
 
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -91,7 +92,7 @@ public abstract class CEC2005Base extends DoubleProblem {
 
         // NOISE
         // Comment the next line to remove the noise
-        sum *= (1.0 + 0.1 * Math.abs(Util.rnd.nextGaussian()));
+        sum *= (1.0 + 0.1 * Math.abs(RNG.nextGaussian()));
 
         return (sum);
     }

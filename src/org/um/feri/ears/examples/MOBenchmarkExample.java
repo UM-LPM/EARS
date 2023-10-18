@@ -11,6 +11,7 @@ import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,6 @@ public class MOBenchmarkExample {
 
     public static void main(String[] args) {
 
-        Util.rnd.setSeed(System.currentTimeMillis());
         Benchmark.printInfo = true; //prints one on one results
 
         ArrayList<MOAlgorithm<Double, NumberSolution<Double>, NumberProblem<Double>>> players = new ArrayList<>();

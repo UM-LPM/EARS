@@ -3,6 +3,7 @@ package org.um.feri.ears.problems.unconstrained;
 import org.um.feri.ears.problems.DoubleProblem;
 
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +32,7 @@ public class XinSheYang1 extends DoubleProblem {
     public double eval(double[] x) {
         double fitness = 0;
         for (int i = 0; i < numberOfDimensions; i++) {
-            fitness += Util.nextDouble() * abs(x[i] - 1.0 / (i + 1));
+            fitness += RNG.nextDouble() * abs(x[i] - 1.0 / (i + 1));
         }
         return fitness;
     }

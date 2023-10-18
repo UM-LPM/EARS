@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -105,7 +106,7 @@ public class BFO extends NumberAlgorithm {
         double[] xn = new double[task.problem.getNumberOfDimensions()];
         double rootProduct = 0;
         for (int i = 0; i < di.length; i++) {
-            di[i] = 2 * Util.nextDouble() - 1;
+            di[i] = 2 * RNG.nextDouble() - 1;
             rootProduct += Math.pow(di[i], 2);
         }
         for (int i = 0; i < xn.length; i++) {
@@ -168,7 +169,7 @@ public class BFO extends NumberAlgorithm {
     }
 
     private Bacteria eliminationAndDispersal(Bacteria b, int i) throws StopCriterionException {
-        double prob = Util.nextDouble();
+        double prob = RNG.nextDouble();
         if (prob < Ped) {
             Bacteria bx = new Bacteria(task, Ci);
             if (task.problem.isFirstBetter(bx, best)) {

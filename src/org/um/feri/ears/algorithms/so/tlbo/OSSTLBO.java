@@ -10,6 +10,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.Arrays;
 
@@ -81,9 +82,9 @@ public class OSSTLBO extends NumberAlgorithm {
             for (int n = 0; n < task.problem.getNumberOfDimensions(); n++) {
                 double X = population[i].getValue(n);
                 double XO = (task.problem.getLowerLimit(n) + task.problem.getUpperLimit(n) - X);
-                double XOD = X + Util.nextDouble() * (Util.nextDouble() * XO - X);
+                double XOD = X + RNG.nextDouble() * (RNG.nextDouble() * XO - X);
                 if (XOD < task.problem.getLowerLimit(n) || XOD > task.problem.getUpperLimit(n)) {
-                    XOD = Util.nextInt((int) (task.problem.getUpperLimit(n) - task.problem.getLowerLimit(n)));
+                    XOD = RNG.nextInt((int) (task.problem.getUpperLimit(n) - task.problem.getLowerLimit(n)));
                 }
                 newX[n] = XOD;
             }
@@ -108,13 +109,13 @@ public class OSSTLBO extends NumberAlgorithm {
             double[] newX = new double[task.problem.getNumberOfDimensions()];
             double[] means = calculateXMean();
             for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
-                double Tf = Util.nextInt(1, 3);
-                double differenceMean = Util.nextDouble() * (best.getValue(j) - Tf * means[j]);
-                double differenceTeacherStudent = Util.nextDouble() * (best.getValue(j) - population[i].getValue(j));
+                double Tf = RNG.nextInt(1, 3);
+                double differenceMean = RNG.nextDouble() * (best.getValue(j) - Tf * means[j]);
+                double differenceTeacherStudent = RNG.nextDouble() * (best.getValue(j) - population[i].getValue(j));
                 double x = population[i].getValue(j) + differenceMean + differenceTeacherStudent;
 
                 if (!task.problem.isFeasible(x, j)) {
-                    x = Util.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
+                    x = RNG.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
                 }
                 newX[j] = x;
             }
@@ -139,25 +140,25 @@ public class OSSTLBO extends NumberAlgorithm {
 
         for (int i = 0; i < popSize; i++) {
             NumberSolution<Double> solution = population[i];
-            NumberSolution<Double> randomSolution = population[Util.nextInt(popSize)];
+            NumberSolution<Double> randomSolution = population[RNG.nextInt(popSize)];
             while (randomSolution == solution)
-                randomSolution = population[Util.nextInt(popSize)];
+                randomSolution = population[RNG.nextInt(popSize)];
 
             double[] newX = new double[task.problem.getNumberOfDimensions()];
 
             if (task.problem.isFirstBetter(randomSolution, solution)) {
                 for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
-                    double x = solution.getValue(j) + Util.nextDouble() * (randomSolution.getValue(j) - (solution.getValue(j)));
+                    double x = solution.getValue(j) + RNG.nextDouble() * (randomSolution.getValue(j) - (solution.getValue(j)));
                     if (!task.problem.isFeasible(x, j)) {
-                        x = Util.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
+                        x = RNG.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
                     }
                     newX[j] = x;
                 }
             } else {
                 for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
-                    double x = solution.getValue(j) + Util.nextDouble() * (solution.getValue(j) - (randomSolution.getValue(j)));
+                    double x = solution.getValue(j) + RNG.nextDouble() * (solution.getValue(j) - (randomSolution.getValue(j)));
                     if (!task.problem.isFeasible(x, j)) {
-                        x = Util.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
+                        x = RNG.nextDouble(task.problem.getLowerLimit(j), task.problem.getUpperLimit(j));
                     }
                     newX[j] = x;
                 }

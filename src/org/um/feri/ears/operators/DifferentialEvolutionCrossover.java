@@ -26,6 +26,7 @@ import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 
 /**
@@ -124,12 +125,12 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<NumberP
 		NumberSolution<Double> xChild = child;
 
 		int numberOfVariables = xParent0.getVariables().size();
-		jrand = Util.rnd.nextInt(numberOfVariables - 1);
+		jrand = RNG.nextInt(numberOfVariables - 1);
 
 		// STEP 4. Checking the DE variant
 		if ((DE_Variant.compareTo("rand/1/bin") == 0) || (DE_Variant.compareTo("best/1/bin") == 0)) {
 			for (int j = 0; j < numberOfVariables; j++) {
-				if (Util.rnd.nextDouble() < CR || j == jrand) {
+				if (RNG.nextDouble() < CR || j == jrand) {
 					double value;
 					value = xParent2.getValue(j) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
@@ -157,7 +158,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<NumberP
 		}
  else if ((DE_Variant.compareTo("rand/1/exp") == 0) || (DE_Variant.compareTo("best/1/exp") == 0)) {
 			for (int j = 0; j < numberOfVariables; j++) {
-				if (Util.rnd.nextDouble() < CR || j == jrand) {
+				if (RNG.nextDouble() < CR || j == jrand) {
 					double value;
 					value = xParent2.getValue(j) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
@@ -189,7 +190,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<NumberP
 		}
  else if ((DE_Variant.compareTo("current-to-rand/1/bin") == 0) || (DE_Variant.compareTo("current-to-best/1/bin") == 0)) {
 			for (int j = 0; j < numberOfVariables; j++) {
-				if (Util.rnd.nextDouble() < CR || j == jrand) {
+				if (RNG.nextDouble() < CR || j == jrand) {
 					double value;
 					value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 
@@ -208,7 +209,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<NumberP
 		}
  else if ((DE_Variant.compareTo("current-to-rand/1/exp") == 0) || (DE_Variant.compareTo("current-to-best/1/exp") == 0)) {
 			for (int j = 0; j < numberOfVariables; j++) {
-				if (Util.rnd.nextDouble() < CR || j == jrand) {
+				if (RNG.nextDouble() < CR || j == jrand) {
 					double value;
 					value = xCurrent.getValue(j) + K * (xParent2.getValue(j) - xCurrent.getValue(j)) + F * (xParent0.getValue(j) - xParent1.getValue(j));
 

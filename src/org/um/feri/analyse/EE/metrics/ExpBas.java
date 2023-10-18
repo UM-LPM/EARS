@@ -3,6 +3,7 @@ package org.um.feri.analyse.EE.metrics;
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 
 import java.util.*;
@@ -330,7 +331,7 @@ public class ExpBas{
                 // Mutation
                 Set<Integer> mySet = new LinkedHashSet<Integer>();
                 while (mySet.size() < 3) {
-                    mySet.add(org.um.feri.ears.util.Util.rnd.nextInt(NP));
+                    mySet.add(RNG.nextInt(NP));
                 }
                 List<Integer> uniqInds = new ArrayList<Integer>();
                 uniqInds.addAll(mySet);
@@ -343,7 +344,7 @@ public class ExpBas{
                 // Crossover
                 ArrayList<Double> u = new ArrayList<>();
                 for(int j = 0; j < problem.getNumberOfDimensions(); j++){
-                    if(org.um.feri.ears.util.Util.rnd.nextDouble() <= CR || i == Util.rnd.nextInt(NP))
+                    if(RNG.nextDouble() <= CR || i == RNG.nextInt(NP))
                         u.add(v.get(j));
                     else
                         u.add(population.get(i).get(j));
