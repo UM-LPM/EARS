@@ -9,8 +9,6 @@ import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.unconstrained.cec2014.*;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
 
 public class SoCEC2014Benchmark {
 	

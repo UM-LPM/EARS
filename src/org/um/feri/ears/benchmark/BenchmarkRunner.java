@@ -5,8 +5,6 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.comparator.RatingComparator;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.HashMap;

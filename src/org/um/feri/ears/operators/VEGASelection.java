@@ -16,10 +16,10 @@
  * along with the MOEA Framework.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.um.feri.ears.operators;
+
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 public class VEGASelection<N extends Number> {

@@ -22,17 +22,18 @@
 package org.um.feri.ears.algorithms.moo.pso;
 
 
-import java.util.Comparator;
-
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
-import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.Comparator;
 
 /**
  * Implementation of OMOPSO, a multi-objective particle swarm optimizer (MOPSO).

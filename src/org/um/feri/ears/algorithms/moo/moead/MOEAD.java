@@ -12,11 +12,12 @@ import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.InitWeight;
 import org.um.feri.ears.util.Ranking;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.List;

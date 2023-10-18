@@ -2,13 +2,14 @@ package org.um.feri.ears.problems.moo;
 
 import org.um.feri.ears.algorithms.moo.ibea.D_IBEA;
 import org.um.feri.ears.algorithms.moo.moead.D_MOEAD;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.StopCriterion;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
 import org.um.feri.ears.quality_indicator.GenerationalDistance;
 import org.um.feri.ears.quality_indicator.InvertedGenerationalDistance;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
 
 public class TestMOProblem {
     public static void main(String[] args) {

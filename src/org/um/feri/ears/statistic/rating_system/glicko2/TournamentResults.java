@@ -1,17 +1,15 @@
 package org.um.feri.ears.statistic.rating_system.glicko2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.um.feri.ears.statistic.rating_system.GameResult;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.statistic.rating_system.RatingType;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.comparator.RatingComparator;
 import org.um.feri.ears.visualization.rating.RatingIntervalPlot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class TournamentResults {
     private HashMap<String, Player> playersMap;

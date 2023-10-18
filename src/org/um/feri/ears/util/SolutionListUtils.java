@@ -13,17 +13,13 @@
 
 package org.um.feri.ears.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.*;
 
 /**
  * Created by Antonio J. Nebro on 04/10/14.

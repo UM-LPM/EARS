@@ -17,11 +17,6 @@
  */
 package org.um.feri.ears.algorithms.moo.dbea;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
@@ -34,10 +29,14 @@ import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.NondominatedPopulation;
-import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.comparator.ObjectiveComparator;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 /* The original Matlab version of I-DBEA was written by Md. Asafuddoula,
  * Tapabrata Ray and Ruhul Sarker.  This class has been tested against their

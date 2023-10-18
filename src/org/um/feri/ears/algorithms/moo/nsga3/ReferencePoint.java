@@ -1,14 +1,13 @@
 package org.um.feri.ears.algorithms.moo.nsga3;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by ajnebro on 5/11/14.

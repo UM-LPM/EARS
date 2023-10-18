@@ -1,10 +1,9 @@
 package org.um.feri.analyse.correlationdependence;
 
-import java.util.ArrayList;
-
-import org.um.feri.ears.problems.*;
-import org.um.feri.ears.util.Util;
+import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.ArrayList;
 
 public class CorrelationAndDependence {
     // http://en.wikipedia.org/wiki/Correlation_and_dependence

@@ -17,24 +17,20 @@
  */
 package org.um.feri.ears.algorithms.moo.pesa2MOEA;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.NoSuchElementException;
-
 import org.apache.commons.math3.util.ArithmeticUtils;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Implementation of the Pareto Envelope-based Selection Algorithm (PESA2).

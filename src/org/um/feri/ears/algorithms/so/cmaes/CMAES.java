@@ -16,19 +16,19 @@
  */
 package org.um.feri.ears.algorithms.so.cmaes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.comparator.ProblemComparator;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CMAES extends NumberAlgorithm {
 

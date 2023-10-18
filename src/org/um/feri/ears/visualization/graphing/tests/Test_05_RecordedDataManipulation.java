@@ -5,14 +5,11 @@ import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.benchmark.SOBenchmark;
-import org.um.feri.ears.benchmark.RPUOed2Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkRunnerBestAlgSettings;
-import org.um.feri.ears.util.random.RNG;
+import org.um.feri.ears.benchmark.RPUOed2Benchmark;
 import org.um.feri.ears.visualization.graphing.data.RecordedCombination;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
-import org.um.feri.ears.util.Util;
 
 //import net.sourceforge.jswarm_pso.SwarmAlgorithm;
 //import com.erciyes.karaboga.bee.BeeColonyAlgorithm;

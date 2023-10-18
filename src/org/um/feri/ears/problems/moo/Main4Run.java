@@ -1,23 +1,20 @@
 package org.um.feri.ears.problems.moo;
 
-import java.util.ArrayList;
-
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.ibea.I_IBEA;
 import org.um.feri.ears.algorithms.moo.moead.I_MOEAD;
 import org.um.feri.ears.algorithms.moo.nsga2.I_NSGAII;
 import org.um.feri.ears.algorithms.moo.pesa2.I_PESAII;
 import org.um.feri.ears.algorithms.moo.spea2.I_SPEA2;
-import org.um.feri.ears.operators.CrossoverOperator;
-import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.operators.PMXCrossover;
-import org.um.feri.ears.operators.PermutationSwapMutation;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.StopCriterion;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.real_world.CITOProblem;
 import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1;
 import org.um.feri.ears.problems.moo.zdt.ZDT1;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
+
+import java.util.ArrayList;
 
 public class Main4Run {
     public static void main(String[] args) {

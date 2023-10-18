@@ -7,25 +7,26 @@
 
 package org.um.feri.ears.algorithms.moo.moead_dra;
 
-import static java.util.Arrays.asList;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
-
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.algorithms.moo.moead.Utils;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.Distance;
 import org.um.feri.ears.util.InitWeight;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+
+import static java.util.Arrays.asList;
 
 /**
  * Reference: Q. Zhang,  W. Liu,  and H Li, The Performance of a New Version of

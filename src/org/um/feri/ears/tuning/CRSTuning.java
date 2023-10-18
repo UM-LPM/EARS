@@ -1,13 +1,12 @@
 package org.um.feri.ears.tuning;
 
-import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.Algorithm;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.statistic.rating_system.GameInfo;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.util.comparator.RatingComparator;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.io.BufferedWriter;

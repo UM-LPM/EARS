@@ -3,7 +3,6 @@ package org.um.feri.ears.problems.unconstrained.cec2010;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 public class F19 extends CEC2010 {

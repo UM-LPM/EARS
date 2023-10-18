@@ -1,27 +1,13 @@
 package org.um.feri.ears.tuning;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
 import org.um.feri.ears.algorithms.Algorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.benchmark.AlgorithmRunResult;
 import org.um.feri.ears.benchmark.MOAlgorithmEvalResult;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.quality_indicator.IndicatorFactory;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
@@ -30,8 +16,17 @@ import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.statistic.rating_system.GameResult;
 import org.um.feri.ears.statistic.rating_system.Player;
 import org.um.feri.ears.statistic.rating_system.glicko2.TournamentResults;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class MOCRSTuning<N extends Number> {
 

@@ -1,11 +1,8 @@
 package org.um.feri.ears.algorithms.so.cro;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.operators.PolynomialMutationSO;
 import org.um.feri.ears.operators.SBXCrossoverSO;
 import org.um.feri.ears.operators.TournamentSelection;
@@ -13,10 +10,12 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.comparator.ProblemComparator;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CRO extends NumberAlgorithm {
 

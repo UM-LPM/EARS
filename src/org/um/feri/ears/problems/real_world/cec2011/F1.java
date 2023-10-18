@@ -1,14 +1,13 @@
 package org.um.feri.ears.problems.real_world.cec2011;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Problem function!

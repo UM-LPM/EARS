@@ -2,9 +2,7 @@ package org.um.feri.analyse.EE.metrics;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
-
 
 import java.util.*;
 

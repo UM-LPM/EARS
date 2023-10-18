@@ -1,10 +1,9 @@
 package org.um.feri.ears.algorithms.so.gsa;
 
-import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
+import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.problems.*;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.random.RNG;
 

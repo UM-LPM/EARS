@@ -4,7 +4,6 @@ import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.problems.gp.TreeAncestor;
 import org.um.feri.ears.problems.gp.TreeNode;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.Optional;

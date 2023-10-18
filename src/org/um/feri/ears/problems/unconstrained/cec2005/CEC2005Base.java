@@ -1,8 +1,6 @@
 package org.um.feri.ears.problems.unconstrained.cec2005;
 
 import org.um.feri.ears.problems.DoubleProblem;
-
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.io.BufferedReader;

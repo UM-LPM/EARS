@@ -5,17 +5,14 @@ import org.um.feri.ears.algorithms.moo.moead_dra.D_MOEAD_DRA;
 import org.um.feri.ears.algorithms.moo.moead_dra.MOEAD_DRA;
 import org.um.feri.ears.algorithms.moo.nsga2.D_NSGAII;
 import org.um.feri.ears.benchmark.Benchmark;
-import org.um.feri.ears.benchmark.SOBenchmark;
 import org.um.feri.ears.benchmark.CEC2009Benchmark;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.util.random.RNG;
+import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.visualization.graphing.GraphSet;
 import org.um.feri.ears.visualization.graphing.PlotType;
 import org.um.feri.ears.visualization.graphing.data.GraphDataManager;
 import org.um.feri.ears.visualization.graphing.data.GraphDataSet;
 import org.um.feri.ears.visualization.graphing.data.RecordedData;
-import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;

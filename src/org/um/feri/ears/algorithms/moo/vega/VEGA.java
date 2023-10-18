@@ -23,10 +23,11 @@ import org.um.feri.ears.algorithms.MOAlgorithm;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.operators.VEGASelection;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.ObjectiveComparator;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 /**

@@ -1,9 +1,7 @@
 package org.um.feri.ears.operators;
 
-import org.um.feri.ears.problems.CombinatorialProblem;
 import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 public class PermutationSwapMutation implements MutationOperator<NumberProblem<Integer>, NumberSolution<Integer>> {

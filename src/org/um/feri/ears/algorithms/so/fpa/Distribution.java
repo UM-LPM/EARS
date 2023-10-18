@@ -2,8 +2,6 @@ package org.um.feri.ears.algorithms.so.fpa;
 
 import org.um.feri.ears.util.random.RNG;
 
-import java.util.Random;
-
 public class Distribution {
     private static double spare;
     private static boolean isSpareReady = false;

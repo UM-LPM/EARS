@@ -7,7 +7,6 @@ import org.um.feri.ears.problems.moo.unconstrained.cec2009.UnconstrainedProblem1
 import org.um.feri.ears.quality_indicator.IndicatorFactory;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.util.Util;
 
 public class QualityIndicatorExample {
 

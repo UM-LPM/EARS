@@ -1,6 +1,5 @@
 package org.um.feri.ears.problems;
 
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;

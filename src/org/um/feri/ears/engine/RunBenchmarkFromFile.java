@@ -4,8 +4,6 @@ import org.um.feri.ears.algorithms.DummyAlgorithm;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.DummyBenchmark;
 import org.um.feri.ears.statistic.rating_system.Player;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
 
 import java.io.*;
 import java.util.ArrayList;

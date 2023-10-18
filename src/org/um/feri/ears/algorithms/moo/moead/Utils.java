@@ -21,7 +21,6 @@
 
 package org.um.feri.ears.algorithms.moo.moead;
 
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 /**

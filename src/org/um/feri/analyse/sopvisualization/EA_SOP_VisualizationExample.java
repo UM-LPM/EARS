@@ -10,7 +10,6 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.Schwefel226;
 import org.um.feri.ears.problems.unconstrained.Sphere;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.nio.file.Path;

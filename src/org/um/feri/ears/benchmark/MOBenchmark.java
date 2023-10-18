@@ -1,7 +1,10 @@
 package org.um.feri.ears.benchmark;
 
 import org.um.feri.ears.algorithms.MOAlgorithm;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.NumberProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.StopCriterion;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.quality_indicator.IndicatorFactory;
 import org.um.feri.ears.quality_indicator.QualityIndicator;
@@ -9,7 +12,6 @@ import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorType;
 import org.um.feri.ears.statistic.rating_system.GameResult;
 import org.um.feri.ears.util.comparator.QualityIndicatorComparator;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;

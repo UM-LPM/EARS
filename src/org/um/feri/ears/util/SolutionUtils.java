@@ -1,10 +1,10 @@
 package org.um.feri.ears.util;
 
-import java.util.Comparator;
-
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.Comparator;
 
 public class SolutionUtils {
 

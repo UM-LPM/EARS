@@ -7,12 +7,11 @@
 
 package org.um.feri.ears.operators;
 
-import javax.management.JMException;
-
 import org.um.feri.ears.algorithms.moo.pesa2.AdaptiveGridArchive;
 import org.um.feri.ears.problems.NumberSolution;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
+
+import javax.management.JMException;
 
 public class PESA2Selection<N extends Number> {
 

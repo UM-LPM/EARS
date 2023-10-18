@@ -5,8 +5,6 @@ import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
 
 public class TestSoilModelProblem {
     public static void main(String[] args) throws StopCriterionException {

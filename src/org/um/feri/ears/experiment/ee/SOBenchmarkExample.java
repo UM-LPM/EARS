@@ -4,14 +4,11 @@ import org.um.feri.analyse.sopvisualization.AncestorUtil;
 import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
 import org.um.feri.ears.algorithms.so.jade.JADE;
 import org.um.feri.ears.algorithms.so.pso.PSO;
-import org.um.feri.ears.problems.*;
-import org.um.feri.ears.problems.unconstrained.Griewank;
-import org.um.feri.ears.problems.unconstrained.Rastrigin;
-import org.um.feri.ears.problems.unconstrained.RosenbrockDeJong2;
-import org.um.feri.ears.problems.unconstrained.Schwefel226;
-import org.um.feri.ears.problems.unconstrained.Sphere;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.StopCriterion;
+import org.um.feri.ears.problems.StopCriterionException;
+import org.um.feri.ears.problems.Task;
+import org.um.feri.ears.problems.unconstrained.*;
 
 public class SOBenchmarkExample {
 

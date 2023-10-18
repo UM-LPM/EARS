@@ -12,11 +12,12 @@ import org.um.feri.ears.algorithms.moo.paes.D_PAES;
 import org.um.feri.ears.algorithms.moo.pesa2MOEA.D_PESA2;
 import org.um.feri.ears.algorithms.moo.pso.OMOPSO;
 import org.um.feri.ears.algorithms.moo.spea2.D_SPEA2;
-import org.um.feri.ears.problems.*;
+import org.um.feri.ears.problems.DoubleProblem;
+import org.um.feri.ears.problems.NumberSolution;
+import org.um.feri.ears.problems.StopCriterion;
+import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.zdt.ZDT6;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
 
 public class MOSingleRun {
 

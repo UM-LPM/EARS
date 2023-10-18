@@ -10,8 +10,6 @@ import org.um.feri.ears.benchmark.CEC2009Benchmark;
 import org.um.feri.ears.problems.NumberProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.quality_indicator.QualityIndicator.IndicatorName;
-import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.List;
