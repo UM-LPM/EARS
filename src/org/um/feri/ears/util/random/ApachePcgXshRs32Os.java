@@ -2,13 +2,13 @@ package org.um.feri.ears.util.random;
 
 import org.apache.commons.rng.simple.RandomSource;
 
-public class ApachePCGXSHRS32OS extends ApacheRandomGenerator {
+public class ApachePcgXshRs32Os extends ApacheRandomGenerator {
 
-    public ApachePCGXSHRS32OS() {
+    public ApachePcgXshRs32Os() {
         super(RandomSource.PCG_XSH_RS_32_OS);
     }
 
-    public ApachePCGXSHRS32OS(long seed) {
+    public ApachePcgXshRs32Os(long seed) {
         super(RandomSource.PCG_XSH_RS_32_OS, seed);
     }
 }

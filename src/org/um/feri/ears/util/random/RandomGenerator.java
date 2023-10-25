@@ -1,18 +1,8 @@
 package org.um.feri.ears.util.random;
 
-public interface RandomGenerator {
-    /**
-     * Generates {@code byte} values and places them into a user-supplied array.
-     * <p>
-     * The number of random bytes produced is equal to the length of the
-     * the byte array.
-     * </p>
-     *
-     * @param bytes Byte array in which to put the random bytes.
-     * Cannot be {@code null}.
-     */
-    void nextBytes(byte[] bytes);
+import java.util.Random;
 
+public abstract class RandomGenerator extends Random {
     /**
      * Generates {@code byte} values and places them into a user-supplied array.
      *
@@ -31,64 +21,8 @@ public interface RandomGenerator {
      * @throws IndexOutOfBoundsException if {@code len < 0} or
      * {@code len > bytes.length - start}.
      */
-    void nextBytes(byte[] bytes,
-                   int start,
-                   int len);
+    abstract void nextBytes(byte[] bytes,
+                            int start,
+                            int len);
 
-    /**
-     * Generates an {@code int} value.
-     *
-     * @return the next random value.
-     */
-    abstract int nextInt();
-
-    /**
-     * Generates an {@code int} value between 0 (inclusive) and the
-     * specified value (exclusive).
-     *
-     * @param n Bound on the random number to be returned.  Must be positive.
-     * @return a random {@code int} value between 0 (inclusive) and {@code n}
-     * (exclusive).
-     * @throws IllegalArgumentException if {@code n} is negative.
-     */
-    int nextInt(int n);
-
-    /**
-     * Generates a {@code long} value.
-     *
-     * @return the next random value.
-     */
-    long nextLong();
-
-    /**
-     * Generates a {@code long} value between 0 (inclusive) and the specified
-     * value (exclusive).
-     *
-     * @param n Bound on the random number to be returned.  Must be positive.
-     * @return a random {@code long} value between 0 (inclusive) and {@code n}
-     * (exclusive).
-     * @throws IllegalArgumentException if {@code n} is negative.
-     */
-    long nextLong(long n);
-
-    /**
-     * Generates a {@code boolean} value.
-     *
-     * @return the next random value.
-     */
-    boolean nextBoolean();
-
-    /**
-     * Generates a {@code float} value between 0 and 1.
-     *
-     * @return the next random value between 0 and 1.
-     */
-    float nextFloat();
-
-    /**
-     * Generates a {@code double} value between 0 and 1.
-     *
-     * @return the next random value between 0 and 1.
-     */
-    double nextDouble();
 }

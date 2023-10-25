@@ -2,13 +2,13 @@ package org.um.feri.ears.util.random;
 
 import org.apache.commons.rng.simple.RandomSource;
 
-public class ApacheXOROShiRO64S extends ApacheRandomGenerator {
+public class ApacheXoRoShiRo64S extends ApacheRandomGenerator {
 
-    public ApacheXOROShiRO64S() {
+    public ApacheXoRoShiRo64S() {
         super(RandomSource.XO_RO_SHI_RO_64_S);
     }
 
-    public ApacheXOROShiRO64S(long seed) {
+    public ApacheXoRoShiRo64S(long seed) {
         super(RandomSource.XO_RO_SHI_RO_64_S, seed);
     }
 }

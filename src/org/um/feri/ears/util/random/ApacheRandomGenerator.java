@@ -3,8 +3,10 @@ package org.um.feri.ears.util.random;
 import org.apache.commons.rng.UniformRandomProvider;
 import org.apache.commons.rng.simple.RandomSource;
 
+import java.util.Random;
 
-public class ApacheRandomGenerator implements RandomGenerator {
+
+public class ApacheRandomGenerator extends RandomGenerator {
 
     private UniformRandomProvider rng;
 

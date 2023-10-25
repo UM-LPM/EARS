@@ -1,5 +1,7 @@
 package org.um.feri.ears.util.random;
 
+import org.apache.commons.math3.distribution.*;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -10,89 +12,86 @@ public class RNG {
 
 
     public enum RngType {
-        APACHE_JDK,
-        APACHE_WELL_512_A,
-        APACHE_WELL_1024_A,
-        APACHE_WELL_19937_A,
-        APACHE_WELL_19937_C,
-        APACHE_WELL_44497_A,
-        APACHE_WELL_44497_B,
-        APACHE_MT,
-        APACHE_ISAAC,
-        APACHE_SPLIT_MIX_64,
-        APACHE_TWO_CMRES,
-        APACHE_MT_64,
-        APACHE_MWC_256,
-        APACHE_KISS,
-        APACHE_XOR_SHIFT_1024_S,
-        APACHE_XO_RO_SHI_RO_64_S,
-        APACHE_XO_RO_SHI_RO_64_SS,
-        APACHE_XO_SHI_RO_128_PLUS,
-        APACHE_XO_SHI_RO_128_SS,
-        APACHE_XO_RO_SHI_RO_128_PLUS,
-        APACHE_XO_RO_SHI_RO_128_SS,
-        APACHE_XO_SHI_RO_256_PLUS,
-        APACHE_XO_SHI_RO_256_SS,
-        APACHE_XO_SHI_RO_512_PLUS,
-        APACHE_XO_SHI_RO_512_SS,
-        APACHE_PCG_XSH_RR_32,
-        APACHE_PCG_XSH_RS_32,
-        APACHE_PCG_RXS_M_XS_64,
-        APACHE_PCG_MCG_XSH_RR_32,
-        APACHE_PCG_MCG_XSH_RS_32,
-        APACHE_MSWS,
-        APACHE_SFC_32,
-        APACHE_SFC_64,
-        APACHE_JSF_32,
-        APACHE_JSF_64,
-        APACHE_XO_SHI_RO_128_PP,
-        APACHE_XO_RO_SHI_RO_128_PP,
-        APACHE_XO_SHI_RO_256_PP,
-        APACHE_XO_SHI_RO_512_PP,
-        APACHE_XO_RO_SHI_RO_1024_PP,
-        APACHE_XO_RO_SHI_RO_1024_S,
-        APACHE_XO_RO_SHI_RO_1024_SS,
-        APACHE_PCG_XSH_RR_32_OS,
-        APACHE_PCG_XSH_RS_32_OS,
-        APACHE_PCG_RXS_M_XS_64_OS
+        APACHE_JDK("JDK"),
+        APACHE_WELL_512_A("Well512a"),
+        APACHE_WELL_1024_A("Well1024a"),
+        APACHE_WELL_19937_A("Well19937a"),
+        APACHE_WELL_19937_C("Well19937c"),
+        APACHE_WELL_44497_A("Well44497a"),
+        APACHE_WELL_44497_B("Well44497b"),
+        APACHE_MT("Mersenne Twister"),
+        APACHE_ISAAC("ISAAC"),
+        APACHE_SPLIT_MIX_64("SplitMix64"),
+        APACHE_TWO_CMRES("TwoCmres"),
+        APACHE_MT_64("Mersenne Twister 64"),
+        APACHE_MWC_256("MultiplyWithCarry256"),
+        APACHE_KISS("KISS"),
+        APACHE_XOR_SHIFT_1024_S("XoRShift1024star"),
+        APACHE_XOR_SHIFT_1024_S_PHI("XorShift1024StarPhi"),
+        APACHE_XO_RO_SHI_RO_64_S("XoRoShiRo64Star"),
+        APACHE_XO_RO_SHI_RO_64_SS("XoRoShiRo64StarStar"),
+        APACHE_XO_SHI_RO_128_PLUS("XoShiRo128Plus"),
+        APACHE_XO_SHI_RO_128_SS("XoShiRo128StarStar"),
+        APACHE_XO_RO_SHI_RO_128_PLUS("XoRoShiRo128Plus"),
+        APACHE_XO_RO_SHI_RO_128_SS("XoRoShiRo128StarStar"),
+        APACHE_XO_SHI_RO_256_PLUS("XoShiRo256Plus"),
+        APACHE_XO_SHI_RO_256_SS("XoShiRo256StarStar"),
+        APACHE_XO_SHI_RO_512_PLUS("XoShiRo512Plus"),
+        APACHE_XO_SHI_RO_512_SS("XoShiRo512StarStar"),
+        APACHE_PCG_XSH_RR_32("PcgXshRr32"),
+        APACHE_PCG_XSH_RS_32("PcgXshRs32"),
+        APACHE_PCG_RXS_M_XS_64("PcgRxsMXs64"),
+        APACHE_PCG_MCG_XSH_RR_32("PcgMcgXshRr32"),
+        APACHE_PCG_MCG_XSH_RS_32("PcgMcgXshRs32"),
+        APACHE_MSWS("MiddleSquareWeylSequence"),
+        APACHE_SFC_32("SmallFastCounting32"),
+        APACHE_SFC_64("SmallFastCounting64"),
+        APACHE_JSF_32("JenkinsSmallFast32"),
+        APACHE_JSF_64("JenkinsSmallFast64"),
+        APACHE_XO_SHI_RO_128_PP("XoShiRo128PlusPlus"),
+        APACHE_XO_RO_SHI_RO_128_PP("XoRoShiRo128PlusPlus"),
+        APACHE_XO_SHI_RO_256_PP("XoShiRo256PlusPlus"),
+        APACHE_XO_SHI_RO_512_PP("XoShiRo512PlusPlus"),
+        APACHE_XO_RO_SHI_RO_1024_PP("XoRoShiRo1024PlusPlus"),
+        APACHE_XO_RO_SHI_RO_1024_S("XoRoShiRo1024Star"),
+        APACHE_XO_RO_SHI_RO_1024_SS("XoRoShiRo1024StarStar"),
+        APACHE_PCG_XSH_RR_32_OS("PcgXshRr32Os"),
+        APACHE_PCG_XSH_RS_32_OS("PcgXshRs32Os"),
+        APACHE_PCG_RXS_M_XS_64_OS("PcgRxsMXs64Os");
+
+        public final String name;
+        RngType(String name) {
+            this.name = name;
+        }
     }
 
-    public static Random getAsRandom() {
-        RandomGenerator randomGenerator = randomGenerators.get(selectedGenerator);
-        return new RandomAdapter(randomGenerator);
+    public enum DistributionType {
+        BETA("Beta"),
+        CAUCHY("Cauchy"),
+        EXPONENTIAL("Exponential"),
+        GAUSSIAN("Gaussian"),
+        GAMMA("Gamma"),
+        LOGISTIC("Logistic"),
+        NORMAL("Normal"),
+        TRIANGULAR("Triangular"),
+        UNIFORM("Uniform"),
+        WEIBULL("Weibull");
+
+        public final String name;
+        DistributionType(String name) {
+            this.name = name;
+        }
     }
 
-    private static class RandomAdapter extends Random {
-        private final RandomGenerator randomGenerator;
-
-        public RandomAdapter(RandomGenerator randomGenerator) {
-            this.randomGenerator = randomGenerator;
-        }
-
-        @Override
-        protected int next(int bits) {
-            return randomGenerator.nextInt() >>> (32 - bits);
-        }
-        @Override
-        public double nextDouble() {
-            return randomGenerator.nextInt();
-        }
-
-        @Override
-        public int nextInt() {
-            return randomGenerator.nextInt();
-        }
-
-        @Override
-        public boolean nextBoolean() {
-            return randomGenerator.nextBoolean();
-        }
+    public static Random getSelectedRng() {
+        return randomGenerators.get(selectedGenerator);
     }
 
     private static final HashMap<RngType, RandomGenerator> randomGenerators = new HashMap<>();
     private static ConcurrentHashMap<RngType, Double> nextGaussian = new ConcurrentHashMap<>();
 
     private static RngType selectedGenerator = RngType.APACHE_MT_64; // the default selected random generator
+    private static DistributionType selectedDistribution = DistributionType.UNIFORM; // the default selected distribution
 
     static {
         long defaultSeed = System.currentTimeMillis();
@@ -128,20 +127,8 @@ public class RNG {
         RNG.selectedGenerator = selectedGenerator;
     }
 
-    //TODO rename randomGenerators to use camelCase
-
-    //TODO test benchmark before replacing Util.rnd with RNG + speed test
-    //TODO separate methods for default and specific RNG
-    //TODO synchronized causes overhead, ThreadLocalRandom, separate generator for each thread
-
-    public static void main(String[] args) {
-        for (RngType rs : RngType.values()) {
-            selectedGenerator = rs;
-            System.out.println(rs.toString());
-            for (int i = 0; i < 100; i++) {
-                System.out.println(nextDouble());
-            }
-        }
+    public static void setSelectedDistribution(DistributionType selectedDistribution) {
+        RNG.selectedDistribution = selectedDistribution;
     }
 
     /**
@@ -182,37 +169,39 @@ public class RNG {
             case APACHE_KISS:
                 return new ApacheKISS(seed);
             case APACHE_XOR_SHIFT_1024_S:
-                return new ApacheXORShift1024S(seed);
+                return new ApacheXorShift1024S(seed);
+            case APACHE_XOR_SHIFT_1024_S_PHI:
+                return new ApacheXorShift1024SPhi(seed);
             case APACHE_XO_RO_SHI_RO_64_S:
-                return new ApacheXOROShiRO64S(seed);
+                return new ApacheXoRoShiRo64S(seed);
             case APACHE_XO_RO_SHI_RO_64_SS:
-                return new ApacheXOROShiRO64SS(seed);
+                return new ApacheXoRoShiRo64SS(seed);
             case APACHE_XO_SHI_RO_128_PLUS:
-                return new ApacheXOSHIRO128Plus(seed);
+                return new ApacheXoShiRo128P(seed);
             case APACHE_XO_SHI_RO_128_SS:
-                return new ApacheXOSHIRO128SS(seed);
+                return new ApacheXoShiRo128SS(seed);
             case APACHE_XO_RO_SHI_RO_128_PLUS:
-                return new ApacheXOROShiRO128Plus(seed);
+                return new ApacheXoRoShiRo1024P(seed);
             case APACHE_XO_RO_SHI_RO_128_SS:
-                return new ApacheXOROShiRO128SS(seed);
+                return new ApacheXoRoShiRo128SS(seed);
             case APACHE_XO_SHI_RO_256_PLUS:
-                return new ApacheXOSHIRO256Plus(seed);
+                return new ApacheXoShiRo256P(seed);
             case APACHE_XO_SHI_RO_256_SS:
-                return new ApacheXOSHIRO256SS(seed);
+                return new ApacheXoShiRo256SS(seed);
             case APACHE_XO_SHI_RO_512_PLUS:
-                return new ApacheXOSHIRO512Plus(seed);
+                return new ApacheXoShiRo512P(seed);
             case APACHE_XO_SHI_RO_512_SS:
-                return new ApacheXOSHIRO512SS(seed);
+                return new ApacheXoShiRo512SS(seed);
             case APACHE_PCG_XSH_RR_32:
-                return new ApachePCGXSHRR32(seed);
+                return new ApachePcgXshRr32(seed);
             case APACHE_PCG_XSH_RS_32:
-                return new ApachePCGXSHRS32(seed);
+                return new ApachePcgXshRs32(seed);
             case APACHE_PCG_RXS_M_XS_64:
-                return new ApachePCGRXSMXS64(seed);
+                return new ApachePcgRxsMXs64(seed);
             case APACHE_PCG_MCG_XSH_RR_32:
-                return new ApachePCGMCGXSHRR32(seed);
+                return new ApachePcgMcgXshRr32(seed);
             case APACHE_PCG_MCG_XSH_RS_32:
-                return new ApachePCGMCGXSHRS32(seed);
+                return new ApachePcgMcgXshRs32(seed);
             case APACHE_MSWS:
                 return new ApacheMSWS(seed);
             case APACHE_SFC_32:
@@ -224,28 +213,80 @@ public class RNG {
             case APACHE_JSF_64:
                 return new ApacheJSF64(seed);
             case APACHE_XO_SHI_RO_128_PP:
-                return new ApacheXOSHIRO128PP(seed);
+                return new ApacheXoShiRo128PP(seed);
             case APACHE_XO_RO_SHI_RO_128_PP:
-                return new ApacheXOROShiRO128PP(seed);
+                return new ApacheXoRoShiRo128PP(seed);
             case APACHE_XO_SHI_RO_256_PP:
-                return new ApacheXOSHIRO256PP(seed);
+                return new ApacheXoShiRo256PP(seed);
             case APACHE_XO_SHI_RO_512_PP:
-                return new ApacheXOSHIRO512PP(seed);
+                return new ApacheXoShiRo512PP(seed);
             case APACHE_XO_RO_SHI_RO_1024_PP:
-                return new ApacheXOROShiRO1024PP(seed);
+                return new ApacheXoRoShiRo1024PP(seed);
             case APACHE_XO_RO_SHI_RO_1024_S:
-                return new ApacheXOROShiRO1024S(seed);
+                return new ApacheXoRoShiRo1024S(seed);
             case APACHE_XO_RO_SHI_RO_1024_SS:
-                return new ApacheXOROShiRO1024SS(seed);
+                return new ApacheXoRoShiRo1024SS(seed);
             case APACHE_PCG_XSH_RR_32_OS:
-                return new ApachePCGXSHRR32OS(seed);
+                return new ApachePcgXshRr32Os(seed);
             case APACHE_PCG_XSH_RS_32_OS:
-                return new ApachePCGXSHRS32OS(seed);
+                return new ApachePcgXshRs32Os(seed);
             case APACHE_PCG_RXS_M_XS_64_OS:
-                return new ApachePCGRXSMXS64OS(seed);
+                return new ApachePcgRxsMXs64Os(seed);
             default:
                 return new ApacheJdk(seed);
         }
+    }
+
+    /**
+     * Returns the next random, {@code double} value
+     * between {@code 0.0} (inclusive) and {@code 1.0} (exclusive) distributed based on the selected distribution.
+     *
+     * @return the next random, {@code double} value
+     * between {@code 0.0} (inclusive) and {@code 1.0} (exclusive) distributed based on the selected distribution.
+     */
+    public static double nextDouble() {
+        switch (selectedDistribution) {
+            case UNIFORM:
+                return nextUniform();
+            case NORMAL:
+                return generateNormalInRange();
+            case EXPONENTIAL:
+                return generateExponentialInRange();
+            case BETA:
+                return generateBeta();
+            case CAUCHY:
+                return generateCauchyInRange();
+            case TRIANGULAR:
+                return generateTriangular();
+            case LOGISTIC:
+                return generateLogisticInRange();
+            case WEIBULL:
+                return generateWeibullInRange();
+            default:
+                return nextUniform();
+        }
+    }
+
+    /**
+     * Returns the next random, {@code double} value
+     * between {@code lowerBound} and {@code upperBound} distributed based on the selected distribution.
+     *
+     * @return the next random, {@code double} value
+     * between {@code lowerBound} and {@code upperBound} distributed based on the selected distribution
+     */
+    public static double nextDouble(double lowerBound, double upperBound) {
+        return lowerBound + nextDouble() * (upperBound - lowerBound);
+    }
+
+    /**
+     * Returns the next random, uniformly distributed {@code double} value
+     * between {@code 0.0} (inclusive) and {@code 1.0} (exclusive).
+     *
+     * @return the next random, uniformly distributed {@code double} value
+     * between {@code 0.0} (inclusive) and {@code 1.0} (exclusive)
+     */
+    public static double nextUniform() {
+        return randomGenerators.get(selectedGenerator).nextDouble();
     }
 
     /**
@@ -276,7 +317,7 @@ public class RNG {
      * {@code lowerBound} (inclusive) and {@code upperBound} (exclusive).
      */
     public static int nextInt(int lowerBound, int upperBound) {
-        return lowerBound + randomGenerators.get(selectedGenerator).nextInt(upperBound - lowerBound);
+        return lowerBound + nextInt(upperBound - lowerBound);
     }
 
     /**
@@ -285,29 +326,7 @@ public class RNG {
      * @return the next random, uniformly distributed {@code long} value.
      */
     public static double nextCauchy(double a, double b) {
-        return a + b * Math.tan(Math.PI * (nextFloat() - 0.5));
-    }
-
-    /**
-     * Returns the next random, uniformly distributed {@code double} value
-     * between {@code 0.0} (inclusive) and {@code 1.0} (exclusive).
-     *
-     * @return the next random, uniformly distributed {@code double} value
-     * between {@code 0.0} (inclusive) and {@code 1.0} (exclusive)
-     */
-    public static double nextDouble() {
-        return randomGenerators.get(selectedGenerator).nextDouble();
-    }
-
-    /**
-     * Returns the next random, uniformly distributed {@code double} value
-     * between {@code lowerBound} and {@code upperBound}.
-     *
-     * @return the next random, uniformly distributed {@code double} value
-     * between {@code lowerBound} and {@code upperBound}
-     */
-    public static double nextDouble(double lowerBound, double upperBound) {
-        return lowerBound + randomGenerators.get(selectedGenerator).nextDouble() * (upperBound - lowerBound);
+        return a + b * Math.tan(Math.PI * (nextUniform() - 0.5));
     }
 
     /**
@@ -428,10 +447,10 @@ public class RNG {
      * these is cached for reuse, so the full algorithm is not executed on each
      * activation.</p>
      *
-     * @return  the next pseudorandom, Gaussian ("normally") distributed
+     * @return the next pseudorandom, Gaussian ("normally") distributed
      * {@code double} value with mean {@code 0.0} and
      * standard deviation {@code 1.0} from this random number
-     *  generator's sequence
+     * generator's sequence
      */
     public static double nextGaussian() {
         double nextGaussian = RNG.nextGaussian.get(selectedGenerator);
@@ -442,8 +461,8 @@ public class RNG {
             // Generate two random values using the Box-Muller transform
             double x, y, distanceSquared;
             do {
-                x = 2.0 * nextDouble() - 1.0; // Random value between -1 and 1
-                y = 2.0 * nextDouble() - 1.0; // Random value between -1 and 1
+                x = 2.0 * nextUniform() - 1.0; // Random value between -1 and 1
+                y = 2.0 * nextUniform() - 1.0; // Random value between -1 and 1
                 distanceSquared = x * x + y * y;
             } while (distanceSquared >= 1.0 || distanceSquared == 0.0); // Ensure the generated point is within the unit circle
 
@@ -464,5 +483,81 @@ public class RNG {
      */
     public static double nextGaussian(double mu, double sigma) {
         return mu + sigma * nextGaussian();
+    }
+
+    public static double generateNormalInRange() {
+        // setting the mean and standard deviation so most of the values are in the range [0.0, 1.0]
+        double mean = 0.5;
+        double stdDev = 0.15;
+
+        double generatedValue;
+        do {
+            generatedValue = nextGaussian(mean, stdDev);
+        } while (generatedValue < 0.0 || generatedValue > 1.0);
+
+        return generatedValue;
+    }
+
+    public static int generatePoisson(double lambda) {
+        double L = Math.exp(-lambda);
+        double p = 1.0;
+        int k = 0;
+
+        do {
+            k++;
+            p *= nextUniform();
+        } while (p > L);
+
+        return k - 1;
+    }
+
+    public static double generateExponential(double rate) {
+        return -Math.log(1 - nextUniform()) / rate;
+    }
+
+    public static double generateExponentialInRange() {
+        double rate = 10.0;
+        double randomValue = -Math.log(1 - nextUniform()) / rate;
+
+        // Scale the randomValue to be within [0.0, 1.0]
+        return randomValue / (1 + randomValue);
+    }
+
+    static CauchyDistribution cauchyDistribution = new CauchyDistribution(0.5, 0.05);
+
+    public static double generateCauchyInRange() {
+        double generatedValue;
+        do {
+            generatedValue = cauchyDistribution.sample();
+        } while (generatedValue < 0.0 || generatedValue > 1.0);
+
+        return generatedValue;
+    }
+
+    static LogisticDistribution logisticDistribution = new LogisticDistribution(0.5, 0.1);
+    public static double generateLogisticInRange() {
+        double generatedValue;
+        do {
+            generatedValue = logisticDistribution.sample();
+        } while (generatedValue < 0.0 || generatedValue > 1.0);
+
+        return generatedValue;
+    }
+    static WeibullDistribution weibullDistribution = new WeibullDistribution(0.5, 0.1);
+
+    static double generateWeibullInRange() {
+        return  1 - Math.exp(-Math.pow(0.1 * weibullDistribution.sample(), 0.5));
+    }
+
+    static TriangularDistribution triangularDistribution = new TriangularDistribution(0.0, 0.5, 1.0);
+
+    public static double generateTriangular() {
+        return triangularDistribution.sample();
+    }
+
+    static BetaDistribution betaDistribution = new BetaDistribution(0.5, 0.5);
+
+    public static double generateBeta() {
+        return betaDistribution.sample();
     }
 }
