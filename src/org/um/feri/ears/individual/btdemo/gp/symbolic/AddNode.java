@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 public class AddNode extends OperatorNode {
+
+    public AddNode() {
+        super();
+    }
+
     public AddNode(List<Node> children) {
         super(children);
     }

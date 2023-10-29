@@ -124,7 +124,7 @@ public class GeneticProgrammingExample {
 //            e.printStackTrace();
 //        }
 
-        try {
+        /*try {
             long startTime = System.currentTimeMillis();
             System.out.println("Starting DefaultGpAlgorithm");
             ArrayList<ProgramSolution<Double>> solutions = new ArrayList<>();
@@ -165,14 +165,14 @@ public class GeneticProgrammingExample {
 
             System.out.println("Elapsed time: " + elapsedTime + " s");
             maxSol.getProgram().displayTree("TestBTree", true);
-            /*ProgramSolution<Double> sol = alg.execute(symbolicRegression);
-            System.out.println("Best fitness: " + sol.getEval());
-            System.out.println("AncestorCount: " + sol.getProgram().ancestors().getAncestorCount());
-            System.out.println("Tree Depth: " + sol.getProgram().treeHeight());
-            sol.getProgram().displayTree("TestBTree");*/
+            //ProgramSolution<Double> sol = alg.execute(symbolicRegression);
+            //System.out.println("Best fitness: " + sol.getEval());
+            //System.out.println("AncestorCount: " + sol.getProgram().ancestors().getAncestorCount());
+            //System.out.println("Tree Depth: " + sol.getProgram().treeHeight());
+            //sol.getProgram().displayTree("TestBTree");
         } catch (StopCriterionException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
 //        ArrayList<GPAlgorithm> algorithms = new ArrayList<>();

@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public class MulNode extends OperatorNode {
+
+    public MulNode() {
+        super();
+    }
     public MulNode(List<Node> children) {
         super(children);
     }

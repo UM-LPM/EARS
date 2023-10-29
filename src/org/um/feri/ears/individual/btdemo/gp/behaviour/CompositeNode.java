@@ -2,36 +2,27 @@ package org.um.feri.ears.individual.btdemo.gp.behaviour;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.um.feri.ears.individual.btdemo.gp.Node;
+import org.um.feri.ears.util.Util;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 public class CompositeNode extends BehaviourTreeNode {
-    private List<Node> children;
 
-    public CompositeNode(BehaviourTreeNodeType nodeType){
-        this(nodeType, null);
-    }
-    public CompositeNode(BehaviourTreeNodeType nodeType, List<Node> children){
-        this(nodeType, children, null);
+    public CompositeNode(BehaviourTreeNodeType nodeType, int arity){
+        this(nodeType, null, arity);
     }
 
-    public CompositeNode(BehaviourTreeNodeType nodeType, List<Node> children, List<Property> properties) {
-        super(nodeType, properties);
-        this.children = children;
+    public CompositeNode(BehaviourTreeNodeType nodeType, List<Property> properties, int arity){
+        this(nodeType, properties , arity, null);
     }
 
-    @Override
-    public double evaluate(Map<String, Double> variables) {
-        return -1;
-    }
-
-    @JsonProperty("Children")
-    public void setChildren(List<Node> children) {
-        this.children = new ArrayList<>(children);
-    }
-    @JsonProperty("Children")
-    public List<Node> getChildren() {
-        return children;
+    public CompositeNode(BehaviourTreeNodeType nodeType, List<Property> properties, int arity, List<Node> children) {
+        super(nodeType, properties, arity, children, false);
     }
 }

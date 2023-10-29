@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public class SubNode extends OperatorNode {
+
+    public SubNode() {
+        super();
+    }
     public SubNode(List<Node> children) {
         super(children);
     }

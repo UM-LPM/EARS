@@ -2,9 +2,13 @@ package org.um.feri.ears.individual.btdemo.gp.behaviour;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.um.feri.ears.individual.btdemo.gp.Node;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.um.feri.ears.individual.btdemo.gp.symbolic.OperatorNode;
 
 public abstract class BehaviourTreeNode extends Node {
 
@@ -13,8 +17,20 @@ public abstract class BehaviourTreeNode extends Node {
     protected List<Property> properties;
 
     public BehaviourTreeNode(BehaviourTreeNodeType name, List<Property> properties) {
+        this(name, properties, 0);
+    }
+
+    public BehaviourTreeNode(BehaviourTreeNodeType name, List<Property> properties, int arity) {
+        this(name, properties, arity, null, false);
+    }
+
+    public BehaviourTreeNode(BehaviourTreeNodeType name, List<Property> properties, int arity, List<Node> children, boolean fixedNumberOfChildre) {
+        super(arity, children, fixedNumberOfChildre);
         this.nodeType = name;
-        this.properties = properties;
+        if(properties == null)
+            this.properties = new ArrayList<>();
+        else
+            this.properties = properties;
         this.guid = java.util.UUID.randomUUID();
     }
 
@@ -64,6 +80,22 @@ public abstract class BehaviourTreeNode extends Node {
     @JsonProperty("Properties")
     public void setProperties(List<Property> properties) {
         this.properties = properties;
+    }
+
+    @Override
+    public BehaviourTreeNode clone() {
+        BehaviourTreeNode cloned = (BehaviourTreeNode) super.clone();
+        cloned.guid = UUID.randomUUID();
+        cloned.properties = new ArrayList<>();
+        for (Property child : this.properties) {
+            cloned.properties.add(new Property(child.getName(), child.getMinValue(), child.getMaxValue(), child.getValue()));
+        }
+        return cloned;
+    }
+
+    @Override
+    public double evaluate(Map<String, Double> variables) {
+        return -1;
     }
 
 }
