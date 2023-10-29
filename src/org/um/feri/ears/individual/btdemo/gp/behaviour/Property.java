@@ -2,18 +2,31 @@ package org.um.feri.ears.individual.btdemo.gp.behaviour;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.um.feri.ears.individual.btdemo.gp.Node;
+import org.um.feri.ears.util.Util;
 
-public class Property {
+public class Property implements Cloneable{
     String name;
     int minValue;
     int maxValue;
-    int currentValue;
+    int value;
+
+    public Property( String name, int minValue, int maxValue) {
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        this.value = Util.rnd.nextInt(minValue, maxValue + 1); // +1 because upperValue is exclusive
+        this.name = name;
+    }
 
     public Property( String name, int minValue, int maxValue, int currentValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
-        this.currentValue = currentValue;
+        this.value = currentValue;
         this.name = name;
+    }
+
+    public void setRandomValue(){
+        this.value = Util.rnd.nextInt(minValue, maxValue + 1); // +1 because upperValue is exclusive
     }
 
     @JsonProperty("Name")
@@ -42,12 +55,20 @@ public class Property {
         this.maxValue = maxValue;
     }
     @JsonProperty("Value")
-    public int getCurrentValue() {
-        return currentValue;
+    public int getValue() {
+        return value;
     }
     @JsonProperty("Value")
-    public void setCurrentValue(int currentValue) {
-        this.currentValue = currentValue;
+    public void setValue(int value) {
+        this.value = value;
     }
 
+    @Override
+    public Property clone() {
+        try {
+            return (Property) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // Can't happen
+        }
+    }
 }

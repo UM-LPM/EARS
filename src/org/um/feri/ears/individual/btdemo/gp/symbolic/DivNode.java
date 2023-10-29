@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public class DivNode extends OperatorNode {
+
+    public DivNode() {
+        super();
+    }
     public DivNode(List<Node> children) {
         super(children);
     }
@@ -18,7 +22,8 @@ public class DivNode extends OperatorNode {
             if (divisor != 0) {
                 result /= divisor;
             } else {
-                throw new ArithmeticException("Division by zero");
+                // "Division by zero"
+                return 1;
             }
         }
         return result;

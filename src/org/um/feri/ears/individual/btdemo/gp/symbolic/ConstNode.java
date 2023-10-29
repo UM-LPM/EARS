@@ -1,13 +1,20 @@
 package org.um.feri.ears.individual.btdemo.gp.symbolic;
 
 import org.um.feri.ears.individual.btdemo.gp.Node;
+import org.um.feri.ears.util.Util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ConstNode extends Node {
+
+    public static final double MIN_VALUE = -10;
+    public static final double MAX_VALUE = 10;
+
     private final double value;
+
+    public ConstNode() {
+        this.value = Util.rnd.nextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE;
+    }
 
     public ConstNode(double value) {
         this.value = value;
@@ -17,4 +24,5 @@ public class ConstNode extends Node {
     public double evaluate(Map<String, Double> variables) {
         return value;
     }
+
 }

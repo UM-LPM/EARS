@@ -3,26 +3,35 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.um.feri.ears.individual.btdemo.gp.Node;
+import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
 
-public class Tree {
-    private String name;
-    private RootNode rootNode;
+import java.util.Map;
+
+public abstract class Tree {
+    public enum TreeType{
+        SYMBOLIC,
+        BEHAVIOUR
+    }
+
+    protected String name;
+    protected Node rootNode;
 
     public Tree(String name) {
         this(name,null);
     }
 
-    public Tree(String name, RootNode rootNode) {
+    public Tree(String name, Node rootNode) {
         this.rootNode = rootNode;
         this.name = name;
     }
 
     @JsonProperty("RootNode")
-    public void setRootNode(RootNode rootNode) {
+    public void setRootNode(Node rootNode) {
         this.rootNode = rootNode;
     }
     @JsonProperty("RootNode")
-    public RootNode getRootNode() {
+    public Node getRootNode() {
         return rootNode;
     }
     @JsonProperty("Name")
@@ -44,4 +53,59 @@ public class Tree {
             return null;
         }
     }
+    public int treeHeight() {
+        return rootNode.treeHeight();
+    }
+
+    public int treeSize() {
+        return rootNode.treeSize();
+    }
+
+    public abstract double evaluate(Map<String, Double> variables);
+    public abstract Tree clone();
+
+    public void printTree(){
+        printTree(rootNode, "");
+    }
+
+    public void printTree(Node node, String indent){
+        if (node instanceof ConstNode) {
+            System.out.println(indent + "ConstNode(" + ((ConstNode) node).evaluate(null) + ")");
+        } else if (node instanceof VarNode) {
+            System.out.println(indent + "VarNode(" + ((VarNode) node).getName() + ")");
+        } else if (node instanceof OperatorNode) {
+            if (node instanceof AddNode) {
+                System.out.println(indent + "AddNode");
+            } else if (node instanceof SubNode) {
+                System.out.println(indent + "SubNode");
+            } else if (node instanceof MulNode) {
+                System.out.println(indent + "MulNode");
+            } else if (node instanceof DivNode) {
+                System.out.println(indent + "DivNode");
+            }
+            for (Node child : ((OperatorNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        } else if (node instanceof RootNode) {
+            System.out.println(indent + "RootNode");
+            for (Node child : ((RootNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        } else if (node instanceof ActionNode) {
+            System.out.println(indent + "ActionNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+        } else if (node instanceof ConditionNode) {
+            System.out.println(indent + "ConditionNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+        } else if (node instanceof CompositeNode) {
+            System.out.println(indent + "CompositeNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+            for (Node child : ((CompositeNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        } else if (node instanceof DecoratorNode) {
+            System.out.println(indent + "DecoratorNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+            for (Node child : ((DecoratorNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        }
+    }
+
 }

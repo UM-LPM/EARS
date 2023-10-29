@@ -1,60 +1,310 @@
 package org.um.feri.ears.individual.btdemo.gp;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.um.feri.ears.individual.btdemo.gp.behaviour.*;
 import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
-import org.um.feri.ears.individual.representations.gp.TreeNode;
+import org.um.feri.ears.individual.representations.gp.*;
+import org.um.feri.ears.individual.representations.gp.Tree;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 
-public abstract class Node {
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+
+public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Serializable {
 
     public static int CURRENT_ID = 1;
 
-    private int id;
+    protected int id;
+
+    protected Node parent;
+
+    protected List<Node> children;
+
+    // Defines the number of children this node can have
+    protected int arity;
+
+    // Parameter that defined if children count must be equal to arity
+    protected boolean fixedNumOfChildren;
 
     public Node() {
-        this.id = Node.CURRENT_ID;
-        Node.CURRENT_ID += 1;
+        this(0);
+    }
+
+    public Node(int arity) {
+        this(arity, new ArrayList<>(), false);
+    }
+
+    public Node(int arity, List<Node> children, boolean fixedNumOfChildren) {
+        this.id = Node.CURRENT_ID++;
+        this.arity = arity;
+        this.children = children;
+        this.fixedNumOfChildren = fixedNumOfChildren;
+    }
+
+    @JsonProperty("Children")
+    public List<Node> getChildren() {
+        return children;
+    }
+
+    @JsonProperty("Children")
+    public void setChildren(List<Node> children) {
+        this.children = children;
+    }
+
+    public int getArity() {
+        return arity;
+    }
+
+    public void setArity(int arity) {
+        this.arity = arity;
+    }
+
+    public boolean getFixedNumOfChildren() {
+        return fixedNumOfChildren;
+    }
+
+    @Override
+    public Node clone() {
+        try {
+            Node node = (Node) super.clone();
+            node.id = Node.CURRENT_ID++;
+            node.children = new ArrayList<>();
+            if(hasChildren()){
+                for (Node child : this.children) {
+                    Node cloned = child.clone();
+                    cloned.parent = node;
+                    node.children.add(cloned);
+                }
+            }
+            return node;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // Can't happen
+        }
+    }
+
+    @Override
+    public int treeHeight(){
+        int maxHeight = 0;
+        for (Node child : this.children) {
+            int childHeight = child.treeHeight();
+            maxHeight = Math.max(maxHeight, childHeight);
+        }
+        return maxHeight + 1;
+    }
+
+    @Override
+    public int treeSize(){
+        // Count all nodes from root to leaves
+        int size = 1;
+        for (Node child : this.children) {
+            size += child.treeSize();
+        }
+        return size;
+    }
+
+    @Override
+    public int childCount() {
+        return children != null ? children.size() : 0;
+    }
+
+    @Override
+    public Node childAt(int index) {
+        if (children == null) {
+            throw new ArrayIndexOutOfBoundsException(format(
+                    "Child index is out of bounds: %s", index
+            ));
+        }
+
+        return children.get(index);
+    }
+
+    @Override
+    public Iterator<Node> iterator() {
+        return null;
+    }
+
+    @Override
+    public TreeAncestor2 ancestorAt(int index) {
+        List<TreeAncestor2> nodesToCheck = new ArrayList<>();
+        nodesToCheck.add(new TreeAncestor2(1, this));
+        int currentInd = 0;
+        while(!nodesToCheck.isEmpty()){
+            TreeAncestor2 treeAncestor = nodesToCheck.get(0);
+            Node current = treeAncestor.getTreeNode();
+            for (Iterator<Node> it = current.getChildren().iterator(); it.hasNext();) {
+                Node next = it.next();
+                currentInd++;
+                if(currentInd == index){
+                    return new TreeAncestor2(treeAncestor.getTreeHeightPosition() + 1, next);
+                }
+                nodesToCheck.add(new TreeAncestor2(treeAncestor.getTreeHeightPosition() + 1, next));
+            }
+            nodesToCheck.remove(0);
+        }
+
+        throw new IndexOutOfBoundsException();
+    }
+
+    public Optional<Node> parent() {
+        return Optional.ofNullable(parent);
+    }
+
+    public void setParent(final Node parent) {
+        this.parent = parent;
     }
 
     public abstract double evaluate(Map<String, Double> variables);
 
-    public static void printTree(Node node, String indent) {
-        if (node instanceof ConstNode) {
-            System.out.println(indent + "ConstNode(" + ((ConstNode) node).evaluate(null) + ")");
-        } else if (node instanceof VarNode) {
-            System.out.println(indent + "VarNode(" + ((VarNode) node).getName() + ")");
-        } else if (node instanceof OperatorNode) {
-            if (node instanceof AddNode) {
-                System.out.println(indent + "AddNode");
-            } else if (node instanceof SubNode) {
-                System.out.println(indent + "SubNode");
-            } else if (node instanceof MulNode) {
-                System.out.println(indent + "MulNode");
-            } else if (node instanceof DivNode) {
-                System.out.println(indent + "DivNode");
-            }
-            for (Node child : ((OperatorNode) node).getChildren()) {
-                printTree((Node) child, indent + "  ");
-            }
-        } else if (node instanceof RootNode) {
-            System.out.println(indent + "RootNode");
-            printTree(((RootNode) node).getChild(), indent + "  ");
-        } else if (node instanceof ActionNode) {
-            System.out.println(indent + "ActionNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
-        } else if (node instanceof ConditionNode) {
-            System.out.println(indent + "ConditionNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
-        } else if (node instanceof CompositeNode) {
-            System.out.println(indent + "CompositeNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
-            for (Node child : ((CompositeNode) node).getChildren()) {
-                printTree((Node) child, indent + "  ");
-            }
-        } else if (node instanceof DecoratorNode) {
-            System.out.println(indent + "DecoratorNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
-            printTree(((DecoratorNode) node).getChild(), indent + "  ");
+    //public abstract int getRandomNumberOfAllowedChildren();
+
+    // abstract void addChild(Node children);
+
+    public boolean hasChildren(){
+        return children != null && !children.isEmpty();
+    }
+
+    public Node insert(final int index, final Node child) {
+        requireNonNull(child);
+        if (isAncestor(child)) {
+            throw new IllegalArgumentException("The new child is an ancestor.");
+        }
+
+        if (child.parent != null) {
+            child.parent.remove(child);
+        }
+
+        child.setParent(this);
+        createChildrenIfMissing();
+        children.add(index, child);
+
+        return this;
+    }
+
+    public Node replace(final int index, final Node child) {
+        requireNonNull(child);
+        if (children == null) {
+            throw new ArrayIndexOutOfBoundsException(format(
+                    "Child index is out of bounds: %s", index
+            ));
+        }
+        if (isAncestor(child)) {
+            throw new IllegalArgumentException("The new child is an ancestor.");
+        }
+
+        final Node oldChild = children.set(index, child);
+        assert oldChild != null;
+        assert oldChild.parent == this;
+
+        child.setParent(this);
+
+        return this;
+    }
+
+    public Node replace (final Node currentChild, final Node newChild){
+        requireNonNull(currentChild);
+        requireNonNull(newChild);
+
+        return replace(this.getChildren().indexOf(currentChild), newChild);
+    }
+
+    public Node remove(final int index) {
+        if (children == null) {
+            throw new ArrayIndexOutOfBoundsException(format(
+                    "Child index is out of bounds: %s", index
+            ));
+        }
+
+        final Node child = children.remove(index);
+        assert child.parent == this;
+        child.setParent(null);
+
+        if (children.isEmpty()) {
+            children = null;
+        }
+
+        return this;
+    }
+
+    public void remove(final INode<?> child) {
+        requireNonNull(child);
+
+        if (!isChild(child)) {
+            throw new IllegalArgumentException("The given child is not a child.");
+        }
+        remove(indexOf(child));
+    }
+
+    public void detach(){
+        if (parent != null) {
+            parent.remove(this);
         }
     }
+
+    public Node attach(final Node child) {
+        requireNonNull(child);
+
+        if (child.parent == this) {
+            insert(childCount() - 1, child);
+        } else {
+            insert(childCount(), child);
+        }
+
+        return this;
+    }
+
+    private void createChildrenIfMissing() {
+        if (children == null) {
+            children = new ArrayList<>(2);
+        }
+    }
+
+    public Node.Ancestor ancestors() {
+        Node.Ancestor ancestors = new Node.Ancestor();
+        ancestorCountSub(ancestors);
+        return  ancestors;
+    }
+
+    private void ancestorCountSub(Node.Ancestor ancestors) {
+        ancestors.addAncestors(this.getChildren());
+
+        for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+            Node next = it.next();
+            next.ancestorCountSub(ancestors);
+        }
+    }
+
+    public class Ancestor {
+        protected int ancestorCount;
+        protected List<Node> ancestors;
+
+        public Ancestor() {
+            this.ancestorCount = 0;
+            this.ancestors = new ArrayList<>();
+        }
+
+        public int getAncestorCount() {
+            return ancestorCount;
+        }
+
+        public void setAncestorCount(int ancestorCount) {
+            this.ancestorCount = ancestorCount;
+        }
+
+        public void addAncestors(List<Node> nodes) {
+            this.ancestorCount += nodes.size();
+            this.ancestors.addAll(nodes);
+        }
+
+        public List<Node> getAncestors() {
+            return ancestors;
+        }
+
+        public void setAncestors(List<Node> ancestors) {
+            this.ancestors = ancestors;
+        }
+    }
+
 }

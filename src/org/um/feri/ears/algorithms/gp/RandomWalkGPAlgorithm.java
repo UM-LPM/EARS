@@ -3,16 +3,19 @@ package org.um.feri.ears.algorithms.gp;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.GPAlgorithm;
+import org.um.feri.ears.algorithms.GPAlgorithm2;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.ProgramProblem;
+import org.um.feri.ears.problems.gp.ProgramProblem2;
 import org.um.feri.ears.problems.gp.ProgramSolution;
+import org.um.feri.ears.problems.gp.ProgramSolution2;
 
 import java.util.Collections;
 import java.util.List;
 
-public class RandomWalkGPAlgorithm extends GPAlgorithm {
-    private ProgramSolution<Double> best;
+public class RandomWalkGPAlgorithm extends GPAlgorithm2 {
+    private ProgramSolution2 best;
 
     public RandomWalkGPAlgorithm() {
         ai = new AlgorithmInfo("RW", "Random Walk", "");
@@ -20,9 +23,9 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
     }
 
     @Override
-    public ProgramSolution<Double> execute(Task<ProgramSolution<Double>, ProgramProblem<Double>> task) throws StopCriterionException {
+    public ProgramSolution2 execute(Task<ProgramSolution2, ProgramProblem2> task) throws StopCriterionException {
 
-        ProgramSolution<Double> newSolution;
+        ProgramSolution2 newSolution;
         best = task.getRandomEvaluatedSolution();
 
         while (!task.isStopCriterion()) {
@@ -46,22 +49,22 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
 
 
     @Override
-    public ProgramSolution<Double> executeStep() throws StopCriterionException{
+    public ProgramSolution2 executeStep() throws StopCriterionException{
         return null;
     }
 
     @Override
-    public ProgramSolution<Double> executeGeneration() throws StopCriterionException{
+    public ProgramSolution2 executeGeneration() throws StopCriterionException{
         return null;
     }
 
     @Override
-    public List<ProgramSolution<Double>> getPopulation() {
+    public List<ProgramSolution2> getPopulation() {
         return Collections.singletonList(best);
     }
 
     @Override
-    public ProgramSolution<Double> getBest() {
+    public ProgramSolution2 getBest() {
         return best;
     }
 

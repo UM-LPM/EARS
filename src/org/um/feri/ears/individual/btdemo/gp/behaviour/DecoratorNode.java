@@ -8,36 +8,22 @@ import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+
 public class DecoratorNode extends BehaviourTreeNode {
-    protected Node child;
 
-    public DecoratorNode(BehaviourTreeNodeType nodeType) {
-        this(nodeType, null);
-    }
-    public DecoratorNode(BehaviourTreeNodeType nodeType, Node child) {
-        this(nodeType, child, null);
-    }
-    public DecoratorNode(BehaviourTreeNodeType nodeType, Node child, List<Property> properties) {
-        super(nodeType, properties);
-        this.child = child;
+    public DecoratorNode(BehaviourTreeNodeType nodeType, int arity){
+        this(nodeType, null, arity);
     }
 
-    @Override
-    public double evaluate(Map<String, Double> variables) {
-        return -1;
+    public DecoratorNode(BehaviourTreeNodeType nodeType, List<Property> properties, int arity){
+        this(nodeType, properties , arity, null);
     }
 
-    @JsonIgnore
-    public Node getChild() {
-        return child;
-    }
-    @JsonIgnore
-    public void setChild(Node child) {
-        this.child = child;
+    public DecoratorNode(BehaviourTreeNodeType nodeType, List<Property> properties, int arity, List<Node> children) {
+        super(nodeType, properties, arity, children, true);
     }
 
-    @JsonProperty("Children")
-    public List<Node> getChildArray() {
-        return Collections.singletonList(child);
-    }
+
 }
