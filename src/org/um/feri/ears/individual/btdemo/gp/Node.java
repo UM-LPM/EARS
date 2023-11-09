@@ -1,5 +1,6 @@
 package org.um.feri.ears.individual.btdemo.gp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.um.feri.ears.individual.btdemo.gp.behaviour.*;
 import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
@@ -54,14 +55,17 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         this.children = children;
     }
 
+    @JsonIgnore
     public int getArity() {
         return arity;
     }
 
+    @JsonIgnore
     public void setArity(int arity) {
         this.arity = arity;
     }
 
+    @JsonIgnore
     public boolean getFixedNumOfChildren() {
         return fixedNumOfChildren;
     }

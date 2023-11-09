@@ -46,6 +46,7 @@ public abstract class Tree {
     public String toJsonString() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         try {
             return objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {

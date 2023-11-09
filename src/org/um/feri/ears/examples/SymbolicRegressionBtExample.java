@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.orsoncharts.util.json.parser.ParseException;
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.GPAlgorithm2;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
@@ -13,6 +14,7 @@ import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
 import org.um.feri.ears.individual.btdemo.gp.*;
 import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.MoveForward;
 import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.MoveSide;
+import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.RayHitObject;
 import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.Rotate;
 import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
 import org.um.feri.ears.individual.btdemo.gp.behaviour.*;
@@ -40,10 +42,12 @@ public class SymbolicRegressionBtExample {
     public static void main(String[] args) throws IOException {
         // srExample();
         // btExample();
-        //treeGenEvalSymbolicExample();
-        //treeGenBtExample();
 
-        symbolicRegressionDefaultAlgorithmRunExample();
+        // treeGenEvalSymbolicExample();
+        // treeGenBtExample();
+
+        //symbolicRegressionDefaultAlgorithmRunExample();
+        behaviourTreeDefaultAlgorithmRunExample();
     }
 
     public static void symbolicRegressionDefaultAlgorithmRunExample(){
@@ -134,6 +138,59 @@ public class SymbolicRegressionBtExample {
         }
     }
 
+    public static void behaviourTreeDefaultAlgorithmRunExample(){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                Repeat.class,
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
+        );
+
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                MoveSide.class,
+                Rotate.class
+        );
+
+        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 100, new GPDepthBasedTreePruningOperator2(),
+                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+
+        //GP algorithm execution example
+        Task<ProgramSolution2, ProgramProblem2> soccerTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
+
+
+        GPAlgorithm2 alg = new DefaultGPAlgorithm2(100, 0.95, 0.025, 2);
+
+        try {
+            long startTime = System.currentTimeMillis();
+            System.out.println("Starting DefaultGpAlgorithm");
+            ArrayList<ProgramSolution2> solutions = new ArrayList<>();
+            ProgramSolution2 sol;
+            for (int i = 0; i < 1; i++){
+                sol = alg.execute(soccerTask);
+                solutions.add(sol);
+                System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
+                alg.resetToDefaultsBeforeNewRun();
+            }
+
+            ProgramSolution2 maxSol = solutions.get(0);
+            for (int i = 0; i < solutions.size(); i++){
+                if(solutions.get(i).getEval() < maxSol.getEval())
+                    maxSol = solutions.get(i);
+            }
+
+            System.out.println("=====================================");
+            System.out.println("Best fitness (DefaultGpAlgorithm)  -> " + maxSol.getEval());
+
+            long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
+
+            System.out.println("Elapsed time: " + elapsedTime + " s");
+        } catch (StopCriterionException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void treeGenBtExample(){
         List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
                 Repeat.class,
@@ -143,16 +200,38 @@ public class SymbolicRegressionBtExample {
         );
 
         List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
                 MoveForward.class,
                 MoveSide.class,
                 Rotate.class
         );
 
-        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
+        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
 
-        ProgramSolution2 programSolution2 = sgp2.getRandomSolution();
-        programSolution2.getTree().printTree();
+        //ProgramSolution2 programSolution2 = sgp2.getRandomSolution();
+        //programSolution2.getTree().printTree();
+        //System.out.println(programSolution2.getTree().toJsonString());
+        //sgp2.evaluate(programSolution2);
+        //System.out.println("Fitness: " + programSolution2.getEval());
+
+        //get current time
+        long startTime = System.currentTimeMillis();
+        List<ProgramSolution2> programSolution2s = new ArrayList<>();
+        for (int i = 0; i < 30; i++){
+            programSolution2s.add(sgp2.getRandomSolution());
+        }
+
+        sgp2.bulkEvaluate(programSolution2s);
+
+        for (int i = 0; i < programSolution2s.size(); i++){
+            System.out.println("Fitness (" + i + "): " + programSolution2s.get(i).getEval());
+        }
+        /*System.out.println("FinalFitness: " + sum);
+        System.out.println("Average fitness: " + sum / programSolution2s.size());
+        //calculate elapsed time
+        long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
+        System.out.println("Elapsed time: " + elapsedTime + " s");*/
     }
 
     public static void treeGenEvalSymbolicExample(){
@@ -200,6 +279,7 @@ public class SymbolicRegressionBtExample {
         );
 
         List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
                 MoveForward.class,
                 MoveSide.class,
                 Rotate.class

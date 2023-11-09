@@ -181,7 +181,12 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
         this.expansionOperator.execute(solution, this);
     }
 
-
+    @Override
+    public void bulkEvaluate(List<ProgramSolution<T>> solutions) {
+        for (ProgramSolution<T> solution : solutions) {
+            evaluate(solution);
+        }
+    }
 
 
 

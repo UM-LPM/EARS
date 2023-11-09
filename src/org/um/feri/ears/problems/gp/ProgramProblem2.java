@@ -40,7 +40,6 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
 
     protected GPProgramSolution2 programSolutionGenerator;
 
-
     // Default constructor
     public ProgramProblem2(String name) {
         super(name, 1, 1, 0);
@@ -152,7 +151,7 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
     @Override
     public void makeFeasible(ProgramSolution2 solution){
         expandProgramSolution(solution);
-        pruneProgramSolution(solution);
+        pruneProgramSolution(solution); // TODO fix problem with pruning
     }
     @Override
     public ProgramSolution2 getRandomEvaluatedSolution() {
@@ -174,8 +173,12 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
         this.expansionOperator.execute(solution, this);
     }
 
-
-
+    @Override
+    public void bulkEvaluate(List<ProgramSolution2> solutions) {
+        for (ProgramSolution2 solution : solutions) {
+            evaluate(solution);
+        }
+    }
 
 
 

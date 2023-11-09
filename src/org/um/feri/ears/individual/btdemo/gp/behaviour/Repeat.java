@@ -7,8 +7,8 @@ import java.util.List;
 public class Repeat extends DecoratorNode {
     public Repeat() {
         this(BehaviourTreeNodeType.REPEAT, List.of(
-                new Property("restartOnSuccess",0, 1),
-                new Property("restartOnFailure",0, 1)
+                new Property("restartOnSuccess",0, 2),
+                new Property("restartOnFailure",0, 2)
         ));
     }
 

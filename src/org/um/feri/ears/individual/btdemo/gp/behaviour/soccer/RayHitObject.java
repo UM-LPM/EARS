@@ -11,12 +11,10 @@ public class RayHitObject extends ConditionNode {
     public enum AgentSide {
         Center ,
         Left,
-        Right,
-        NotDefined
+        Right
     }
 
     public enum SoccerGameObject {
-        Empty,
         SoccerBall,
         BlueStriker,
         PurpleStriker,
@@ -27,7 +25,7 @@ public class RayHitObject extends ConditionNode {
     }
 
     public RayHitObject() {
-        this(BehaviourTreeNodeType.MOVE_SIDE, List.of(
+        this(BehaviourTreeNodeType.RAY_HIT_OBJECT, List.of(
                 new Property("targetGameObject",0, SoccerGameObject.values().length),
                 new Property("side",0, AgentSide.values().length)
         ));

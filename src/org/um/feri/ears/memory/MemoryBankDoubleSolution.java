@@ -160,7 +160,7 @@ public class MemoryBankDoubleSolution {
         */
             } else {
                 if (updateStrategy.forceIncEvaluation()) {
-                    task.incrementNumberOfEvaluations(); //no change but we...
+                    task.incrementNumberOfEvaluations(1); //no change but we...
                 }
                 hashMapMemoryHits.put(key, hashMapMemoryHits.get(key) + 1);
             }
