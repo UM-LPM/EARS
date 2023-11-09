@@ -85,4 +85,12 @@ public abstract class NumberProblem<N extends Number> extends Problem<NumberSolu
     public boolean isFirstBetter(ParetoSolution<N> x, ParetoSolution<N> y, QualityIndicator<N> qi) {
         return x.isFirstBetter(y, qi);
     }
+
+    @Override
+    public void bulkEvaluate(List<NumberSolution<N>> solutions) {
+        // TODO Implement proper paralelization method
+        for (NumberSolution<N> s : solutions) {
+            evaluate(s);
+        }
+    }
 }

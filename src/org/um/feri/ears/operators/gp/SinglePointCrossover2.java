@@ -54,12 +54,13 @@ public class SinglePointCrossover2 extends GPCrossover2 {
             Optional<Node> mutationNodeParent1 = crossOverNode1.parent();
             Optional<Node> mutationNodeParent2 = crossOverNode2.parent();
 
+            if (mutationNodeParent1.isEmpty() || mutationNodeParent2.isEmpty()) {
+                throw new RuntimeException("MutationNodeParent1 or mutationNodeParent2 is empty");
+            }
+
             int crossOverNodeIndex1 = mutationNodeParent1.get().indexOf(crossOverNode1);
             int crossOverNodeIndex2 = mutationNodeParent2.get().indexOf(crossOverNode2);
 
-            if (crossOverNode2.parent().isEmpty() || crossOverNode1.parent().isEmpty()) {
-                throw new RuntimeException("Error replacing node");
-            }
             //Switch nodes and it's subtrees
             mutationNodeParent1.get().replace(crossOverNodeIndex1, crossOverNode2);
             mutationNodeParent2.get().replace(crossOverNodeIndex2, crossOverNode1);

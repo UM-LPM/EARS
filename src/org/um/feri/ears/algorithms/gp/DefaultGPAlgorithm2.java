@@ -132,18 +132,11 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
      * Initialize @popSize individuals and evaluate them. Best random generated solution is saved to @best
      */
     private void populationInitialization() throws StopCriterionException {
-        population = new ArrayList<>();
-        ProgramSolution2 sol = new ProgramSolution2(task.getRandomEvaluatedSolution());
-        population.add(sol);
-        best = sol;
-        for (int i = 0; i < popSize; i++) {
-            ProgramSolution2 newSolution = task.getRandomEvaluatedSolution();
-            population.add(newSolution);
+        population = this.task.getRandomEvaluatedSolution(this.popSize);
 
-            if (task.problem.isFirstBetter(newSolution, best))
-                best = new ProgramSolution2(newSolution);
-            if (task.isStopCriterion())
-                break;
+        for(ProgramSolution2 sol : population){
+            if (task.problem.isFirstBetter(sol, best))
+                best = new ProgramSolution2(sol);
         }
     }
 
@@ -162,7 +155,7 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
                 currentPopulation.add(newSolution[0]);
                 currentPopulation.add(newSolution[1]);
             } catch (Exception ex) {
-                throw new StopCriterionException("Crossover error");
+                throw new StopCriterionException(ex.toString());
             }
         }
     }
@@ -179,13 +172,19 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
 
     public void performEvaluation()  throws StopCriterionException {
         population = new ArrayList<>(this.currentPopulation);
-        for (int i = 0; i < this.population.size(); i++) {
+        /*for (int i = 0; i < this.population.size(); i++) {
             this.task.eval(this.population.get(i));
 
             if (task.problem.isFirstBetter(this.population.get(i), best))
                 best = new ProgramSolution2(this.population.get(i));
             if (this.task.isStopCriterion())
                 break;
+        }*/
+
+        this.task.bulkEval(this.population);
+        for(ProgramSolution2 sol : population){
+            if (task.problem.isFirstBetter(sol, best))
+                best = new ProgramSolution2(sol);
         }
 
         this.population = this.currentPopulation;

@@ -278,7 +278,7 @@ public class DummyAlgorithm extends NumberAlgorithm {
     private void updateTask(Task task, EvaluationStorage.Evaluation evaluation) {
         try {
             while (task.getNumberOfEvaluations() < evaluation.evalNum) {
-                task.incrementNumberOfEvaluations();
+                task.incrementNumberOfEvaluations(1);
             }
             while (task.getNumberOfIterations() < evaluation.iteration)
                 task.incrementNumberOfIterations();

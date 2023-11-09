@@ -14,7 +14,7 @@ public class Property implements Cloneable{
     public Property( String name, int minValue, int maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
-        this.value = Util.rnd.nextInt(minValue, maxValue + 1); // +1 because upperValue is exclusive
+        this.value = Util.rnd.nextInt(minValue, maxValue);
         this.name = name;
     }
 

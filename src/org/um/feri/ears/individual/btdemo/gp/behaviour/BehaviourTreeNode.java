@@ -21,7 +21,7 @@ public abstract class BehaviourTreeNode extends Node {
     }
 
     public BehaviourTreeNode(BehaviourTreeNodeType name, List<Property> properties, int arity) {
-        this(name, properties, arity, null, false);
+        this(name, properties, arity, new ArrayList<>(), false);
     }
 
     public BehaviourTreeNode(BehaviourTreeNodeType name, List<Property> properties, int arity, List<Node> children, boolean fixedNumberOfChildre) {
