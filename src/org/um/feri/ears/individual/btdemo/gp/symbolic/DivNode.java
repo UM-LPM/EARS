@@ -8,10 +8,10 @@ import java.util.Map;
 public class DivNode extends OperatorNode {
 
     public DivNode() {
-        super();
+        super("/");
     }
     public DivNode(List<Node> children) {
-        super(children);
+        super(children, "/");
     }
 
     @Override

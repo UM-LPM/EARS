@@ -2,6 +2,9 @@ package org.um.feri.ears.visualization.gp;
 
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
+import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
+import org.um.feri.ears.individual.btdemo.gp.Node;
+import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.MathOp;
 import org.um.feri.ears.individual.representations.gp.Op;
@@ -12,14 +15,17 @@ import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.gp.ProgramProblem;
-import org.um.feri.ears.problems.gp.ProgramSolution;
-import org.um.feri.ears.problems.gp.SymbolicRegressionProblem;
-import org.um.feri.ears.problems.gp.Utils;
+import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.gp.components.GraphPanel;
 import org.um.feri.ears.visualization.gp.components.ImagePanel;
 import org.um.feri.ears.visualization.gp.components.LineGraphPanel;
+
+import org.um.feri.ears.algorithms.GPAlgorithm2;
+import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm2;
+import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution2;
+import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator2;
+import org.um.feri.ears.operators.gp.GPTreeExpansionOperator2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +34,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -44,9 +52,9 @@ public class HomeForm extends JFrame {
     private JPanel currentStatusPanel;
     private JButton runAlgButton;
 
-    private SymbolicRegressionProblem sgp2;
-    private Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegressionTask;
-    private GPAlgorithm gpAlgorithm;
+    private SymbolicRegressionProblem2 sgp2;
+    private Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask;
+    private GPAlgorithm2 gpAlgorithm;
     private Thread algorithmThread;
     String imgPathPrefix;
 
@@ -224,8 +232,8 @@ public class HomeForm extends JFrame {
                 .parallel()
                 .forEach(index -> {
                     final int indexFinal =  index + (this.symbolicRegressionTask.getNumberOfIterations() * this.gpAlgorithm.getPopulation().size());
-                    ProgramSolution<Double> individual = this.gpAlgorithm.getPopulation().get(index);
-                    String file = individual.getProgram().displayTree(imgPathPrefix + "tree" + String.valueOf(indexFinal), false);
+                    ProgramSolution2 individual = this.gpAlgorithm.getPopulation().get(index);
+                    String file = individual.getTree().displayTree(imgPathPrefix + "tree" + String.valueOf(indexFinal), false);
                     ImagePanel imagePanel = new ImagePanel(file);
                     imagePanel.setMinimumSize(new Dimension(100, 100));
                     imagePanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -243,7 +251,7 @@ public class HomeForm extends JFrame {
                     synchronized (algorithmPopulationPanel) {
                         algorithmPopulationPanel.add(imagePanel);
                     }
-        });
+                });
 
 
         // Sequential
@@ -272,7 +280,7 @@ public class HomeForm extends JFrame {
         algorithmPopulationPanel.revalidate();
     }
 
-    public void individualImagePanelMouseClicked(java.awt.event.MouseEvent evt, ProgramSolution<Double> individual, int index) {
+    public void individualImagePanelMouseClicked(java.awt.event.MouseEvent evt, ProgramSolution2 individual, int index) {
         if(individual == null) {
             selectedIndividualImagePanel.setImage(null);
             selectedIndividualID.setText("" );
@@ -284,15 +292,15 @@ public class HomeForm extends JFrame {
             selectedIndividualNumOfTerm.setText("");
         }
         else{
-            String file = individual.getProgram().displayTree(imgPathPrefix + "tree" + String.valueOf(index), false);
+            String file = individual.getTree().displayTree(imgPathPrefix + "tree" + String.valueOf(index), false);
             selectedIndividualImagePanel.setImage(file);
             selectedIndividualID.setText("" + index);
             selectedIndividualFitnes.setText("" + Util.roundDouble(individual.getEval(), 2));
-            selectedIndividualTreeHeightLabel.setText("" + individual.getProgram().treeHeight());
-            selectedIndividualTreeSize.setText("" + individual.getProgram().treeSize());
+            selectedIndividualTreeHeightLabel.setText("" + individual.getTree().treeHeight());
+            selectedIndividualTreeSize.setText("" + individual.getTree().treeSize());
             selectedIndividualIsFeasible.setText("" + this.sgp2.isFeasible(individual));
-            selectedIndividualNumOfFunc.setText("" + individual.getProgram().numberOfFunctions());
-            selectedIndividualNumOfTerm.setText("" + individual.getProgram().numberOfTerminals());
+            selectedIndividualNumOfFunc.setText("" + individual.getTree().numberOfFunctions());
+            selectedIndividualNumOfTerm.setText("" + individual.getTree().numberOfTerminals());
         }
     }
 
@@ -309,45 +317,70 @@ public class HomeForm extends JFrame {
         }
         else{
             this.lastUuid = UUID.randomUUID().toString();
-            String file = this.gpAlgorithm.getBest().getProgram().displayTree(imgPathPrefix + "tree" + this.lastUuid, false);
+            String file = this.gpAlgorithm.getBest().getTree().displayTree(imgPathPrefix + "tree" + this.lastUuid, false);
             bestIndividualImagePanel.setImage(file);
             bestIndividualID.setText("" + this.gpAlgorithm.getBest().getID());
             bestIndividualFitnes.setText("" + Util.roundDouble(this.gpAlgorithm.getBest().getEval(), 2));
-            bestIndividualTreeHeight.setText("" + this.gpAlgorithm.getBest().getProgram().treeHeight());
-            bestIndividualTreeSize.setText("" + this.gpAlgorithm.getBest().getProgram().treeSize());
+            bestIndividualTreeHeight.setText("" + this.gpAlgorithm.getBest().getTree().treeHeight());
+            bestIndividualTreeSize.setText("" + this.gpAlgorithm.getBest().getTree().treeSize());
             bestIndividualIsFeasible.setText("" + this.sgp2.isFeasible(this.gpAlgorithm.getBest()));
-            bestIndividualNumOfFunc.setText("" + this.gpAlgorithm.getBest().getProgram().numberOfFunctions());
-            bestIndividualNumOfTerm.setText("" + this.gpAlgorithm.getBest().getProgram().numberOfTerminals());
+            bestIndividualNumOfFunc.setText("" + this.gpAlgorithm.getBest().getTree().numberOfFunctions());
+            bestIndividualNumOfTerm.setText("" + this.gpAlgorithm.getBest().getTree().numberOfTerminals());
         }
     }
 
     private void initializeData() {
-        // y=x^3 + 2x^2 + 8x + 12
-        sgp2 = new SymbolicRegressionProblem(
-                Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST),
-                Utils.list(Op.define("x", OperationType.VARIABLE)),
-                3,
-                8,
-                200,
-                new GPDepthBasedTreePruningOperator<>(),
-                new GPTreeExpansionOperator<>(),
-                Util.list( new Target().when("x", 0).targetIs(12),
-                        new Target().when("x", 1).targetIs(23),
-                        new Target().when("x", 2).targetIs(44),
-                        new Target().when("x", 3).targetIs(81),
-                        new Target().when("x", 4).targetIs(140),
-                        new Target().when("x", 5).targetIs(227),
-                        new Target().when("x", 6).targetIs(348),
-                        new Target().when("x", 7).targetIs(509),
-                        new Target().when("x", 8).targetIs(716),
-                        new Target().when("x", 9).targetIs(975),
-                        new Target().when("x", 10).targetIs(1292)),
-                new GPRandomProgramSolution<>()
+        java.util.List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                AddNode.class,
+                DivNode.class,
+                MulNode.class,
+                SubNode.class
         );
 
-        this.symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
-        this.gpAlgorithm = new DefaultGPAlgorithm(100, 0.95, 0.025, 2, this.symbolicRegressionTask);
+        java.util.List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                ConstNode.class,
+                VarNode.class
+        );
+
+        VarNode.variables = Arrays.asList("x");
+
+        /*
+        // y=x^3 + 2x^2 + 8x + 12
+        Util.list( new Target().when("x", 0).targetIs(12),
+                new Target().when("x", 1).targetIs(23),
+                new Target().when("x", 2).targetIs(44),
+                new Target().when("x", 3).targetIs(81),
+                new Target().when("x", 4).targetIs(140),
+                new Target().when("x", 5).targetIs(227),
+                new Target().when("x", 6).targetIs(348),
+                new Target().when("x", 7).targetIs(509),
+                new Target().when("x", 8).targetIs(716),
+                new Target().when("x", 9).targetIs(975),
+                new Target().when("x", 10).targetIs(1292)),
+        */
+
+        List<Target> evalData = Util.list( new Target().when("x", 0).targetIs(0),
+                new Target().when("x", 1).targetIs(11),
+                new Target().when("x", 2).targetIs(24),
+                new Target().when("x", 3).targetIs(39),
+                new Target().when("x", 4).targetIs(56),
+                new Target().when("x", 5).targetIs(75),
+                new Target().when("x", 6).targetIs(96),
+                new Target().when("x", 7).targetIs(119),
+                new Target().when("x", 8).targetIs(144),
+                new Target().when("x", 9).targetIs(171),
+                new Target().when("x", 10).targetIs(200));
+
+        SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
+                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
+
+        //GP algorithm execution example
+        Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
+
+
+        this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, null);
         this.gpAlgorithm.setDebug(true);
+
     }
 
     public void clearImages(){

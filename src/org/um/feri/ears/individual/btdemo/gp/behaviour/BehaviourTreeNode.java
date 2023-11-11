@@ -16,17 +16,17 @@ public abstract class BehaviourTreeNode extends Node {
     protected UUID guid;
     protected List<Property> properties;
 
-    public BehaviourTreeNode(BehaviourTreeNodeType name, List<Property> properties) {
-        this(name, properties, 0);
+    public BehaviourTreeNode(BehaviourTreeNodeType nodeType, List<Property> properties) {
+        this(nodeType, properties, 0);
     }
 
     public BehaviourTreeNode(BehaviourTreeNodeType name, List<Property> properties, int arity) {
         this(name, properties, arity, new ArrayList<>(), false);
     }
 
-    public BehaviourTreeNode(BehaviourTreeNodeType name, List<Property> properties, int arity, List<Node> children, boolean fixedNumberOfChildre) {
-        super(arity, children, fixedNumberOfChildre);
-        this.nodeType = name;
+    public BehaviourTreeNode(BehaviourTreeNodeType nodeType, List<Property> properties, int arity, List<Node> children, boolean fixedNumberOfChildre) {
+        super(arity, children, fixedNumberOfChildre, nodeType.getValue());
+        this.nodeType = nodeType;
         if(properties == null)
             this.properties = new ArrayList<>();
         else

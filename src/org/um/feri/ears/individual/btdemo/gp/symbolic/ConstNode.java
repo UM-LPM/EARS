@@ -14,10 +14,12 @@ public class ConstNode extends Node {
 
     public ConstNode() {
         this.value = Util.rnd.nextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE;
+        this.name = String.format("%.4f", value);
     }
 
     public ConstNode(double value) {
         this.value = value;
+        this.name = String.format("%.4f", value);
     }
 
     @Override

@@ -37,11 +37,11 @@ public class SymbolicRegressionBtExample {
         // treeGenEvalSymbolicExample();
         // treeGenBtExample();
 
-        // symbolicRegressionDefaultAlgorithmRunExample("treePopulation.ser");
-        behaviourTreeDefaultAlgorithmRunExample("treePopulation.ser");
+        // symbolicRegressionDefaultAlgorithmRunExample(null);
+        // behaviourTreeDefaultAlgorithmRunExample("treePopulation.ser");
 
         // serializationTest();
-        // deserealizationTest("treePopulation.ser");
+        deserealizationTest("treePopulation.ser");
 
     }
 
@@ -83,6 +83,7 @@ public class SymbolicRegressionBtExample {
 
     public static void deserealizationTest(String file){
         GPAlgorithm2 alg =  GPAlgorithm2.deserializeAlgorithmState(file);
+        alg.getPopulation().get(0).getTree().displayTree("test_bt", true);
         /*List<ProgramSolution2> solutions;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             solutions = (List<ProgramSolution2>) ois.readObject();

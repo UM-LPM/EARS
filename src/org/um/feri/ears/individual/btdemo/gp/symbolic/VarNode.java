@@ -11,18 +11,12 @@ import static java.util.Objects.requireNonNull;
 public class VarNode extends Node {
     public static List<String> variables = Arrays.asList("x", "y", "z");
 
-    private final String name;
-
     public VarNode() {
-        this.name = variables.get(Util.rnd.nextInt(variables.size()));
+        super(0, variables.get(Util.rnd.nextInt(variables.size())));
     }
 
     public VarNode(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+        super(0, name);
     }
 
     @Override

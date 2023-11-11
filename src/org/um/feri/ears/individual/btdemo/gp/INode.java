@@ -26,8 +26,10 @@ public interface INode<T extends INode<T>> extends Self<T>, Iterable<T> {
 
     /*Returns the depth of the INode*/
     int treeHeight();
-
     int treeSize();
+
+    int numberOfFunctions();
+    int numberOfTerminals();
 
     default boolean isAncestor(final INode<?> node) {
         requireNonNull(node);
