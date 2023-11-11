@@ -63,6 +63,14 @@ public abstract class Tree implements Serializable {
         return rootNode.treeSize();
     }
 
+    public int numberOfFunctions(){
+        return rootNode.numberOfFunctions();
+    }
+
+    public int numberOfTerminals(){
+        return rootNode.numberOfTerminals();
+    }
+
     public abstract double evaluate(Map<String, Double> variables);
     public abstract Tree clone();
 
@@ -108,6 +116,10 @@ public abstract class Tree implements Serializable {
                 printTree((Node) child, indent + "  ");
             }
         }
+    }
+
+    public String displayTree(String filename, boolean show){
+        return rootNode.displayTree(filename, show);
     }
 
 }

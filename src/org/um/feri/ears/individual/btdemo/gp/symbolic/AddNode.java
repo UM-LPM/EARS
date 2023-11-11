@@ -8,11 +8,11 @@ import java.util.Map;
 public class AddNode extends OperatorNode {
 
     public AddNode() {
-        super();
+        super("+");
     }
 
     public AddNode(List<Node> children) {
-        super(children);
+        super(children, "+");
     }
 
     @Override

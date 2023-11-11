@@ -98,7 +98,8 @@ public abstract class GPAlgorithm2 extends Algorithm<ProgramSolution2, ProgramSo
         }
 
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            alg.setPopulation((List<ProgramSolution2>) ois.readObject());
+            List<ProgramSolution2> population = (List<ProgramSolution2>) ois.readObject();
+            alg.setPopulation(population);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

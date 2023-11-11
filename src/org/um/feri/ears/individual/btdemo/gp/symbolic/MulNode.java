@@ -8,10 +8,10 @@ import java.util.Map;
 public class MulNode extends OperatorNode {
 
     public MulNode() {
-        super();
+        super("*");
     }
     public MulNode(List<Node> children) {
-        super(children);
+        super(children, "*");
     }
 
     @Override

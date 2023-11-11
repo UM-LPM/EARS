@@ -20,6 +20,8 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
 
     protected int id;
 
+    protected String name;
+
     protected Node parent;
 
     protected List<Node> children;
@@ -31,15 +33,19 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     protected boolean fixedNumOfChildren;
 
     public Node() {
-        this(0);
+        this(0, "");
+    }
+    public Node(String name) {
+        this(0, name);
     }
 
-    public Node(int arity) {
-        this(arity, new ArrayList<>(), false);
+    public Node(int arity, String name) {
+        this(arity, new ArrayList<>(), false, name);
     }
 
-    public Node(int arity, List<Node> children, boolean fixedNumOfChildren) {
+    public Node(int arity, List<Node> children, boolean fixedNumOfChildren, String name) {
         this.id = Node.CURRENT_ID++;
+        this.name = name;
         this.arity = arity;
         this.children = children;
         this.fixedNumOfChildren = fixedNumOfChildren;
@@ -110,6 +116,31 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     }
 
     @Override
+    public int numberOfFunctions(){
+        if(this.arity > 0){
+            int size = 1;
+            for (Node child : this.children) {
+                size += child.numberOfFunctions();
+            }
+            return size;
+        }
+        return 0;
+    }
+
+    @Override
+    public int numberOfTerminals(){
+        int size = 0;
+        if(this.arity > 0){
+            size++;
+        }
+        for (Node child : this.children) {
+            size += child.numberOfTerminals();
+        }
+
+        return size;
+    }
+
+    @Override
     public int childCount() {
         return children != null ? children.size() : 0;
     }
@@ -158,6 +189,10 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
 
     public void setParent(final Node parent) {
         this.parent = parent;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public abstract double evaluate(Map<String, Double> variables);
@@ -279,6 +314,50 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
             next.ancestorCountSub(ancestors);
         }
     }
+
+    /*
+     * Creates .dot file and png image with visual representation of a tree
+     * */
+    public String displayTree(String filename, boolean show){
+        GraphPrinter gp = new GraphPrinter(filename);
+        setTreeNodes(gp);
+        displaySubTree(gp);
+        return gp.print(show);
+    }
+
+    /*
+     * Define nodes
+     * */
+    private void setTreeNodes(GraphPrinter gp) {
+        if(this.parent == null){
+            gp.addln(id + " [label=\"" + this.name +"\", " + this.setNodeStyle() + "]");
+        }
+        for (Node next : children) {
+            gp.addln(next.id + " [label=\"" + next.name + "\", " + next.setNodeStyle() + "]");
+            next.setTreeNodes(gp);
+        }
+    }
+
+    /*
+     * Write node connections to org.um.feri.gpf.GraphPrinter
+     * */
+    private void displaySubTree(GraphPrinter gp){
+        for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+            Node next = it.next();
+            gp.addln(id + " -> " + next.id);
+            next.displaySubTree(gp);
+        }
+    }
+
+    private String setNodeStyle(){
+        String nodeStyle = "";
+
+        //TODO
+        //nodeStyle = "shape=circle";
+
+        return  nodeStyle;
+    }
+
 
     public class Ancestor {
         protected int ancestorCount;
