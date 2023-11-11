@@ -3,7 +3,7 @@ package org.um.feri.ears.individual.representations.gp;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Target {
+public class Target implements java.io.Serializable {
     private Map<String, Double> contextState = new HashMap<String, Double>();
     private double targetValue;
 

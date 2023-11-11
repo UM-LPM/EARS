@@ -1,14 +1,11 @@
 package org.um.feri.ears.examples;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.orsoncharts.util.json.parser.ParseException;
-import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.GPAlgorithm2;
-import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm2;
 import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
 import org.um.feri.ears.individual.btdemo.gp.*;
@@ -18,12 +15,9 @@ import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.RayHitObject;
 import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.Rotate;
 import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
 import org.um.feri.ears.individual.btdemo.gp.behaviour.*;
-import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution2;
 import org.um.feri.ears.individual.representations.gp.Target;
-import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
 import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator2;
-import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
 import org.um.feri.ears.operators.gp.GPTreeExpansionOperator2;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
@@ -31,9 +25,6 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Util;
 
-import java.io.OutputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
@@ -46,11 +37,65 @@ public class SymbolicRegressionBtExample {
         // treeGenEvalSymbolicExample();
         // treeGenBtExample();
 
-        //symbolicRegressionDefaultAlgorithmRunExample();
-        behaviourTreeDefaultAlgorithmRunExample();
+        // symbolicRegressionDefaultAlgorithmRunExample("treePopulation.ser");
+        behaviourTreeDefaultAlgorithmRunExample("treePopulation.ser");
+
+        // serializationTest();
+        // deserealizationTest("treePopulation.ser");
+
     }
 
-    public static void symbolicRegressionDefaultAlgorithmRunExample(){
+    public static void serializationTest(){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                Repeat.class,
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
+        );
+
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                MoveSide.class,
+                Rotate.class
+        );
+
+        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
+                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+
+        List<ProgramSolution2> programSolution2s = new ArrayList<>();
+        for (int i = 0; i < 300; i++){
+            programSolution2s.add(sgp2.getRandomSolution());
+        }
+
+        sgp2.bulkEvaluate(programSolution2s);
+
+        for (int i = 0; i < programSolution2s.size(); i++){
+            System.out.println("Fitness (" + i + "): " + programSolution2s.get(i).getEval());
+        }
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("treePopulation.ser"))) {
+            oos.writeObject(programSolution2s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deserealizationTest(String file){
+        GPAlgorithm2 alg =  GPAlgorithm2.deserializeAlgorithmState(file);
+        /*List<ProgramSolution2> solutions;
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            solutions = (List<ProgramSolution2>) ois.readObject();
+
+            for (int i = 0; i < solutions.size(); i++){
+                System.out.println("Fitness (" + i + "): " + solutions.get(i).getEval());
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+    public static void symbolicRegressionDefaultAlgorithmRunExample(String initialPopulationFilename){
         List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
                 AddNode.class,
                 DivNode.class,
@@ -81,10 +126,10 @@ public class SymbolicRegressionBtExample {
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
 
         //GP algorithm execution example
-        Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
+        Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 500000, 0, 0);
 
 
-        GPAlgorithm2 alg = new DefaultGPAlgorithm2(100, 0.95, 0.025, 2);
+        GPAlgorithm2 alg = new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, initialPopulationFilename);
         RandomWalkGPAlgorithm rndAlg = new RandomWalkGPAlgorithm();
 
         try {
@@ -93,7 +138,7 @@ public class SymbolicRegressionBtExample {
             ArrayList<ProgramSolution2> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
             ProgramSolution2 sol;
-            for (int i = 0; i < 100; i++){
+            for (int i = 0; i < 1; i++){
                 sol = alg.execute(symbolicRegressionTask);
                 solutions.add(sol);
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
@@ -138,7 +183,7 @@ public class SymbolicRegressionBtExample {
         }
     }
 
-    public static void behaviourTreeDefaultAlgorithmRunExample(){
+    public static void behaviourTreeDefaultAlgorithmRunExample(String initialPopulationFilename){
         List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
                 Repeat.class,
                 Sequencer.class,
@@ -153,14 +198,14 @@ public class SymbolicRegressionBtExample {
                 Rotate.class
         );
 
-        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 100, new GPDepthBasedTreePruningOperator2(),
+        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 100, new GPDepthBasedTreePruningOperator2(),
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
 
         //GP algorithm execution example
-        Task<ProgramSolution2, ProgramProblem2> soccerTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
+        Task<ProgramSolution2, ProgramProblem2> soccerTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 40000, 0, 0);
 
 
-        GPAlgorithm2 alg = new DefaultGPAlgorithm2(100, 0.95, 0.025, 2);
+        GPAlgorithm2 alg = new DefaultGPAlgorithm2(80, 0.95, 0.025, 2, initialPopulationFilename);
 
         try {
             long startTime = System.currentTimeMillis();
@@ -182,6 +227,7 @@ public class SymbolicRegressionBtExample {
 
             System.out.println("=====================================");
             System.out.println("Best fitness (DefaultGpAlgorithm)  -> " + maxSol.getEval());
+            System.out.println("Best solution JSON: " + maxSol.getTree().toJsonString());
 
             long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
 
@@ -208,12 +254,6 @@ public class SymbolicRegressionBtExample {
 
         SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
-
-        //ProgramSolution2 programSolution2 = sgp2.getRandomSolution();
-        //programSolution2.getTree().printTree();
-        //System.out.println(programSolution2.getTree().toJsonString());
-        //sgp2.evaluate(programSolution2);
-        //System.out.println("Fitness: " + programSolution2.getEval());
 
         //get current time
         long startTime = System.currentTimeMillis();

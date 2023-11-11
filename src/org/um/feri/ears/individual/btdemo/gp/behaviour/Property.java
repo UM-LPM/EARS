@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.um.feri.ears.individual.btdemo.gp.Node;
 import org.um.feri.ears.util.Util;
 
-public class Property implements Cloneable{
+import java.io.Serializable;
+
+public class Property implements Cloneable, Serializable {
     String name;
     int minValue;
     int maxValue;

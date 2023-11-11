@@ -3,6 +3,8 @@ package org.um.feri.ears.problems;
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.util.Util;
 
+import java.io.Serializable;
+
 public class EvaluationStorage {
 
     public EvaluationStorage(){}
@@ -39,7 +41,7 @@ public class EvaluationStorage {
     public int evaluationsPerRun;
     public Evaluation[][] evaluations;
 
-    public static class Evaluation {
+    public static class Evaluation implements Serializable {
 
         public Evaluation() {}
 

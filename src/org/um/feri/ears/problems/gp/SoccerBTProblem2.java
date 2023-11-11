@@ -61,9 +61,9 @@ public class SoccerBTProblem2 extends ProgramProblem2 {
             }
         }
 
-        try {
-            // Repeat evaluation X times (to avoid connection and other errors)
-            for(int nums = 0; nums < BULK_EVALUATION_REPEATS; nums++) {
+        // Repeat evaluation X times (to avoid connection and other errors)
+        for(int nums = 0; nums < BULK_EVALUATION_REPEATS; nums++) {
+            try {
                 String apiUrl = "http://localhost:5016/api/JsonToSoParser";
                 String response = sendEvaluateRequest(apiUrl, jsonArray.toJSONString());
                 response = response.replace("\"{", "{");
@@ -81,10 +81,15 @@ public class SoccerBTProblem2 extends ProgramProblem2 {
                     }
                     return;
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                //wait for 5 seconds
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -125,6 +130,7 @@ public class SoccerBTProblem2 extends ProgramProblem2 {
     public String sendEvaluateRequest(String apiUrl, String jsonBody) throws Exception {
         URL url = new URL(apiUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(10 * 60 * 1000); // 10 minutes
 
         // Set the request method to POST
         conn.setRequestMethod("POST");
@@ -148,7 +154,10 @@ public class SoccerBTProblem2 extends ProgramProblem2 {
                 }
                 return response.toString();
             }
-        } else {
+        } else if(responseCode == 888){
+            throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
+        }
+        else {
             throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
         }
     }
