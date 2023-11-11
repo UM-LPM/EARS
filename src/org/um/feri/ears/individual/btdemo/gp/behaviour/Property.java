@@ -16,7 +16,7 @@ public class Property implements Cloneable, Serializable {
     public Property( String name, int minValue, int maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
-        this.value = Util.rnd.nextInt(minValue, maxValue);
+        this.value = Util.rnd.nextInt(maxValue - minValue) + minValue;
         this.name = name;
     }
 
@@ -28,7 +28,7 @@ public class Property implements Cloneable, Serializable {
     }
 
     public void setRandomValue(){
-        this.value = Util.rnd.nextInt(minValue, maxValue + 1); // +1 because upperValue is exclusive
+        this.value = Util.rnd.nextInt(maxValue - minValue) + minValue;
     }
 
     @JsonProperty("Name")

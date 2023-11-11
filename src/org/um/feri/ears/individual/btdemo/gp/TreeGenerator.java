@@ -32,7 +32,8 @@ public class TreeGenerator {
         } else {
             // Recursive case: return an internal node
             Node node = generateRandomNode(baseFunctionNodeTypes);
-            for (int i = 0; i < Util.rnd.nextInt(1, node.arity + 1); i++) {
+            int maxNumOfChildren = (Util.rnd.nextInt((node.arity - 1) + 1) + 1);
+            for (int i = 0; i < maxNumOfChildren; i++) {
                 node.insert(i, generateRandomTree(height + 1, maxHeight - 1));
             }
             return node;
