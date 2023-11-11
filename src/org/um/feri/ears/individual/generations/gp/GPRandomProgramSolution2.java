@@ -48,7 +48,7 @@ public class GPRandomProgramSolution2 extends GPProgramSolution2 {
         } else {
             // Recursive case: return a function node
             Node node = generateRandomNode(programProblem.getBaseFunctionNodeTypes());
-            int numOfChildren = node.getFixedNumOfChildren()? node.getArity() : Util.rnd.nextInt(1, node.getArity() + 1);
+            int numOfChildren = node.getFixedNumOfChildren()? node.getArity() : (Util.rnd.nextInt((node.getArity() - 1) + 1) + 1);
             for (int i = 0; i < numOfChildren; i++) {
                 node.insert(i, generateRandomTree(height + 1)); // TODO check!!!
             }

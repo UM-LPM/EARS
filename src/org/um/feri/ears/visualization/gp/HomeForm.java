@@ -371,14 +371,10 @@ public class HomeForm extends JFrame {
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200));
 
-        SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
+        this.sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
-
-        //GP algorithm execution example
-        Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
-
-
-        this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, null);
+        this.symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
+        this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, this.symbolicRegressionTask, null);
         this.gpAlgorithm.setDebug(true);
 
     }
