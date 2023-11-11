@@ -7,9 +7,10 @@ import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.operators.gp.GPOperator;
 import org.um.feri.ears.operators.gp.GPOperator2;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SymbolicRegressionProblem2 extends ProgramProblem2{
+public class SymbolicRegressionProblem2 extends ProgramProblem2 implements Serializable {
 
     private List<Target> evalData;
 

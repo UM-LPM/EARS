@@ -3,9 +3,10 @@ package org.um.feri.ears.problems;
 import com.ctc.wstx.shaded.msv_core.datatype.xsd.Comparator;
 import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
+import java.io.Serializable;
 import java.util.List;
 
-public abstract class Problem<S extends Solution> {
+public abstract class Problem<S extends Solution> implements Serializable {
 
     protected int numberOfObjectives;
     protected int numberOfGlobalOptima;

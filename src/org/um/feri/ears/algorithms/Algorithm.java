@@ -235,4 +235,8 @@ public abstract class Algorithm<R extends Solution, S extends Solution, P extend
     public void increaseAge() {
         this.age = this.age + 1;
     }
+
+    public Task<S, P> getTask() {
+        return task;
+    }
 }

@@ -7,10 +7,7 @@ import org.um.feri.ears.operators.TournamentSelection;
 import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.gp.ProgramProblem;
-import org.um.feri.ears.problems.gp.ProgramProblem2;
-import org.um.feri.ears.problems.gp.ProgramSolution;
-import org.um.feri.ears.problems.gp.ProgramSolution2;
+import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 
@@ -42,15 +39,17 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
 
     private ProgramSolution2 best;
 
+    private String initialAlgorithmStateFilename;
+
     public DefaultGPAlgorithm2() {
-        this(100, 0.90, 0.025, 2, null);
+        this(100, 0.90, 0.025, 2, null, null);
     }
 
-    public DefaultGPAlgorithm2(int popSize, double crossoverProbability, double mutationProbability, int numberOfTournaments) {
-        this(popSize,crossoverProbability,mutationProbability,numberOfTournaments,null);
+    public DefaultGPAlgorithm2(int popSize, double crossoverProbability, double mutationProbability, int numberOfTournaments, String initialAlgorithmStateFilename) {
+        this(popSize,crossoverProbability,mutationProbability,numberOfTournaments,null, initialAlgorithmStateFilename);
     }
 
-    public DefaultGPAlgorithm2(int popSize, double crossoverProbability, double mutationProbability, int numberOfTournaments, Task<ProgramSolution2, ProgramProblem2> task) {
+    public DefaultGPAlgorithm2(int popSize, double crossoverProbability, double mutationProbability, int numberOfTournaments, Task<ProgramSolution2, ProgramProblem2> task, String initialAlgorithmStateFilename) {
         this.popSize = popSize;
         this.crossoverProbability = crossoverProbability;
         this.mutationProbability = mutationProbability;
@@ -71,17 +70,32 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
         this.avgGenFitness = new ArrayList<>();
         this.avgGenTreeHeight = new ArrayList<>();
         this.avgGenTreeSize = new ArrayList<>();
+
+        this.initialAlgorithmStateFilename = initialAlgorithmStateFilename;
     }
 
     @Override
     public ProgramSolution2 execute(Task<ProgramSolution2, ProgramProblem2> task) throws StopCriterionException {
-        // Algorithm initialization
-        algorithmInitialization(task, new ProblemComparator<>(task.problem), null); // TODO add support for selection operator
+        GPAlgorithm2.addInterruptKeyListener();
 
-        // Population initialization and evaluation
-        populationInitialization();
+
+        if(this.initialAlgorithmStateFilename != null) {
+            initializeAlgorithmStateFromFile();
+        }else{
+            // Algorithm initialization
+            algorithmInitialization(task, new ProblemComparator<>(task.problem), null); // TODO add support for selection operator
+
+            // Population initialization and evaluation
+            populationInitialization();
+        }
 
         while (!task.isStopCriterion()) {
+            // Check if application can still run
+            if(!DefaultGPAlgorithm2.CAN_RUN){
+                // Serialize current state
+                GPAlgorithm2.serializeAlgorithmState(this.population, this.task, "treePopulation.ser");
+                break;
+            }
             // Selection and Crossover
             performSelectionAndCrossover();
 
@@ -140,6 +154,22 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
         }
     }
 
+    /**
+     * Load current state of population and task from file
+     */
+    private void initializeAlgorithmStateFromFile() {
+        GPAlgorithm2 alg = GPAlgorithm2.deserializeAlgorithmState(this.initialAlgorithmStateFilename);
+        this.population = alg.getPopulation();
+        this.task = alg.getTask();
+
+        for(ProgramSolution2 sol : population){
+            if (task.problem.isFirstBetter(sol, best))
+                best = new ProgramSolution2(sol);
+        }
+
+        algorithmInitialization(task, new ProblemComparator<>(task.problem), null); // TODO add support for selection operator
+    }
+
     public void performSelectionAndCrossover() throws StopCriterionException {
         ProgramSolution2[] parents = new ProgramSolution2[2];
         this.currentPopulation = new ArrayList<>(population.size());
@@ -172,14 +202,6 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
 
     public void performEvaluation()  throws StopCriterionException {
         population = new ArrayList<>(this.currentPopulation);
-        /*for (int i = 0; i < this.population.size(); i++) {
-            this.task.eval(this.population.get(i));
-
-            if (task.problem.isFirstBetter(this.population.get(i), best))
-                best = new ProgramSolution2(this.population.get(i));
-            if (this.task.isStopCriterion())
-                break;
-        }*/
 
         this.task.bulkEval(this.population);
         for(ProgramSolution2 sol : population){
@@ -264,5 +286,9 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
     @Override
     public List<ProgramSolution2> getPopulation() {
         return population;
+    }
+
+    public void setPopulation(List<ProgramSolution2> population) {
+        this.population = population;
     }
 }

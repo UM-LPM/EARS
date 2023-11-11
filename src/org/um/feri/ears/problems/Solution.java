@@ -1,11 +1,12 @@
 package org.um.feri.ears.problems;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Solution {
+public abstract class Solution implements Serializable {
 
     int numberOfObjectives;
 

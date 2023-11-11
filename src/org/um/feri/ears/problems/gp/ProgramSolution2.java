@@ -4,6 +4,7 @@ import org.um.feri.ears.individual.btdemo.gp.behaviour.Tree;
 import org.um.feri.ears.individual.representations.gp.TreeNode;
 import org.um.feri.ears.problems.Solution;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

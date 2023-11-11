@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.um.feri.ears.individual.btdemo.gp.Node;
 import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public abstract class Tree {
+public abstract class Tree implements Serializable {
     public enum TreeType{
         SYMBOLIC,
         BEHAVIOUR

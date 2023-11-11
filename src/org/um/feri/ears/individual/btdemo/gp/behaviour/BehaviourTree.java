@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -55,15 +56,21 @@ public class BehaviourTree extends Tree {
         if(rootNode instanceof RootNode)
             return super.toJsonString();
         else
-            return insertRootNode().toJsonString();
+            return insertAdditionalNodes().toJsonString();
     }
 
 
-    public BehaviourTree insertRootNode(){
+    public BehaviourTree insertAdditionalNodes(){
         BehaviourTree newTree = this.clone();
         Node oldRoot = newTree.rootNode;
-        newTree.rootNode = new RootNode();
-        newTree.rootNode.insert(0, oldRoot);
+        RootNode rootNodeNew = new RootNode();
+        Repeat repeatNode = new Repeat(BehaviourTreeNodeType.REPEAT, List.of(
+                new Property("restartOnSuccess",0, 2, 1),
+                new Property("restartOnFailure",0, 2, 1)
+        ));
+        rootNodeNew.insert(0, repeatNode);
+        repeatNode.insert(0, oldRoot);
+        newTree.rootNode = rootNodeNew;
         return newTree;
     }
 
