@@ -1,85 +1,125 @@
-/*
- * Java Genetic Algorithm Library (@__identifier__@).
- * Copyright (c) @__year__@ Franz Wilhelmstötter
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Author:
- *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
- */
-package org.um.feri.ears.individual.representations.gp;
+package org.um.feri.ears.individual.representations.gp.behaviour;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.symbolic.*;
 
-import java.util.Optional;
+import java.io.Serializable;
+import java.util.Map;
 
-import static java.util.Objects.requireNonNull;
-
-public interface Tree<V, T extends Tree<V, T>> extends Self<T>, Iterable<T> {
-
-    Op<V> operation();
-    V coeficient();
-
-    /*Return the parent node of this tree node*/
-    Optional<T> parent();
-
-    /*Return the child node with the given index*/
-    T childAt(final int index);
-
-    /*Returns the ancestor node with the given index*/
-    TreeAncestor<T> ancestorAt(final int index);
-
-    /*Returns the number of children this tree consists of*/
-    int childCount();
-
-    /*Returns the depth of the tree*/
-    int treeHeight();
-
-    int treeSize();
-
-    int numberOfFunctions();
-    int numberOfTerminals();
-
-    default boolean isAncestor(final Tree<?, ?> node) {
-        requireNonNull(node);
-
-        Optional<T> ancestor = Optional.of(self());
-        boolean result;
-        do {
-            result = ancestor.filter(a -> a.identical(node)).isPresent();
-        } while (!result &&
-                (ancestor = ancestor.flatMap(Tree::parent)).isPresent());
-
-        return result;
+public abstract class Tree implements Serializable {
+    public enum TreeType{
+        SYMBOLIC,
+        BEHAVIOUR
     }
 
-    default boolean isChild(final Tree<?, ?> node) {
-        requireNonNull(node);
-        return childCount() != 0 &&
-                node.parent().equals(Optional.of(self()));
+    protected String name;
+    protected Node rootNode;
+
+    public Tree(String name) {
+        this(name,null);
     }
 
-    default boolean identical(final Tree<?, ?> other) {
-        return this == other;
+    public Tree(String name, Node rootNode) {
+        this.rootNode = rootNode;
+        this.name = name;
     }
 
-    default int indexOf(final Tree<?, ?> child) {
-        int index = -1;
-        for (int i = 0, n = childCount(); i < n && index == -1; ++i) {
-            if (childAt(i).identical(child)) {
-                index = i;
+    @JsonProperty("RootNode")
+    public void setRootNode(Node rootNode) {
+        this.rootNode = rootNode;
+    }
+    @JsonProperty("RootNode")
+    public Node getRootNode() {
+        return rootNode;
+    }
+    @JsonProperty("Name")
+    public void setName(String name) {
+        this.name = name;
+    }
+    @JsonProperty("Name")
+    public String getName() {
+        return name;
+    }
+
+    public String toJsonString() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        try {
+            return objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public int treeHeight() {
+        return rootNode.treeHeight();
+    }
+
+    public int treeSize() {
+        return rootNode.treeSize();
+    }
+
+    public int numberOfFunctions(){
+        return rootNode.numberOfFunctions();
+    }
+
+    public int numberOfTerminals(){
+        return rootNode.numberOfTerminals();
+    }
+
+    public abstract double evaluate(Map<String, Double> variables);
+    public abstract Tree clone();
+
+    public void printTree(){
+        printTree(rootNode, "");
+    }
+
+    public void printTree(Node node, String indent){
+        if (node instanceof ConstNode) {
+            System.out.println(indent + "ConstNode(" + ((ConstNode) node).evaluate(null) + ")");
+        } else if (node instanceof VarNode) {
+            System.out.println(indent + "VarNode(" + ((VarNode) node).getName() + ")");
+        } else if (node instanceof OperatorNode) {
+            if (node instanceof AddNode) {
+                System.out.println(indent + "AddNode");
+            } else if (node instanceof SubNode) {
+                System.out.println(indent + "SubNode");
+            } else if (node instanceof MulNode) {
+                System.out.println(indent + "MulNode");
+            } else if (node instanceof DivNode) {
+                System.out.println(indent + "DivNode");
+            }
+            for (Node child : ((OperatorNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        } else if (node instanceof RootNode) {
+            System.out.println(indent + "RootNode");
+            for (Node child : ((RootNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        } else if (node instanceof ActionNode) {
+            System.out.println(indent + "ActionNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+        } else if (node instanceof ConditionNode) {
+            System.out.println(indent + "ConditionNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+        } else if (node instanceof CompositeNode) {
+            System.out.println(indent + "CompositeNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+            for (Node child : ((CompositeNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        } else if (node instanceof DecoratorNode) {
+            System.out.println(indent + "DecoratorNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+            for (Node child : ((DecoratorNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
             }
         }
+    }
 
-        return index;
+    public String displayTree(String filename, boolean show){
+        return rootNode.displayTree(filename, show);
     }
 
 }
