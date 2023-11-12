@@ -61,6 +61,11 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm2 {
     }
 
     @Override
+    public void setPopulation(List<ProgramSolution2> population) {
+        best = population.get(0);
+    }
+
+    @Override
     public ProgramSolution2 getBest() {
         return best;
     }

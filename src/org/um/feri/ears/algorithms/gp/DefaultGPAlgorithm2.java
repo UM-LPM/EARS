@@ -288,6 +288,7 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
         return population;
     }
 
+    @Override
     public void setPopulation(List<ProgramSolution2> population) {
         this.population = population;
     }

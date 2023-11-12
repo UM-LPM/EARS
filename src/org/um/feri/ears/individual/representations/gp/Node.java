@@ -125,7 +125,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     @Override
     public int numberOfTerminals(){
         int size = 0;
-        if(this.arity > 0){
+        if(this.arity == 0){
             size++;
         }
         for (Node child : this.children) {
