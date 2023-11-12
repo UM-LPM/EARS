@@ -1,7 +1,5 @@
 package org.um.feri.ears.individual.representations.gp;
 
-import org.um.feri.ears.individual.btdemo.gp.Node;
-
 public class TreeAncestor2 {
     private int treeHeightPosition;
     private Node treeNode;

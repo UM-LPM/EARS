@@ -1,7 +1,6 @@
 package org.um.feri.ears.operators.gp;
 
-import org.um.feri.ears.individual.btdemo.gp.Node;
-import org.um.feri.ears.individual.representations.gp.TreeNode;
+import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.problems.gp.ProgramProblem2;
 import org.um.feri.ears.problems.gp.ProgramSolution2;
 

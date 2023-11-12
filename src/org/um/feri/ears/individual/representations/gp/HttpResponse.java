@@ -1,4 +1,4 @@
-package org.um.feri.ears.individual.btdemo.gp;
+package org.um.feri.ears.individual.representations.gp;
 
 public class HttpResponse {
     public class Eval{

@@ -1,4 +1,4 @@
-package org.um.feri.ears.individual.representations.gp.behaviour;
+package org.um.feri.ears.individual.representations.gp.behaviour.tree;
 
 import java.util.List;
 

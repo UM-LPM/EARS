@@ -1,12 +1,9 @@
 package org.um.feri.ears.problems.gp;
 
-import org.um.feri.ears.individual.btdemo.gp.Node;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.Tree;
-import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
+import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution2;
-import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution2;
-import org.um.feri.ears.individual.representations.gp.Op;
 import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.Problem;
 

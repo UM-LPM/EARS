@@ -15,6 +15,7 @@ public abstract class GPAlgorithm2 extends Algorithm<ProgramSolution2, ProgramSo
 
     public static final String TASK_NAME_PREFIX = "task_";
     public static boolean CAN_RUN = true;
+    public static boolean INTERRUPT_LISTENER_RUNNING = false;
 
     protected ArrayList<Double> bestGenFitness;
     protected ArrayList<Double> avgGenFitness;
@@ -55,6 +56,7 @@ public abstract class GPAlgorithm2 extends Algorithm<ProgramSolution2, ProgramSo
     public static void addInterruptKeyListener(){
         // Create a new Thread that will handle user input
         Thread userInputThread = new Thread(() -> {
+            GPAlgorithm2.INTERRUPT_LISTENER_RUNNING = true;
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 System.out.println("Press E to pause the algorithm:");
@@ -65,10 +67,13 @@ public abstract class GPAlgorithm2 extends Algorithm<ProgramSolution2, ProgramSo
                     break;
                 }
             }
+            GPAlgorithm2.INTERRUPT_LISTENER_RUNNING = false;
         });
 
-        // Start the userInputThread
-        userInputThread.start();
+        if(!GPAlgorithm2.INTERRUPT_LISTENER_RUNNING){
+            // Start the userInputThread
+            userInputThread.start();
+        }
 
     }
 

@@ -1,4 +1,4 @@
-package org.um.feri.ears.individual.representations.gp.symbolic;
+package org.um.feri.ears.individual.representations.gp.symbolic.regression;
 
 import org.um.feri.ears.individual.representations.gp.Node;
 

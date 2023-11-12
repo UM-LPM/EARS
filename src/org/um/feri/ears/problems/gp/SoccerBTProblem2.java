@@ -2,21 +2,15 @@ package org.um.feri.ears.problems.gp;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.orsoncharts.util.json.JSONArray;
-import com.orsoncharts.util.json.JSONObject;
 import com.orsoncharts.util.json.parser.JSONParser;
 import com.orsoncharts.util.json.parser.ParseException;
-import org.um.feri.ears.individual.btdemo.gp.HttpResponse;
-import org.um.feri.ears.individual.btdemo.gp.Node;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.BehaviourTree;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.Tree;
+import org.um.feri.ears.individual.representations.gp.HttpResponse;
+import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution2;
-import org.um.feri.ears.individual.representations.gp.Target;
-import org.um.feri.ears.operators.gp.GPOperator;
 import org.um.feri.ears.operators.gp.GPOperator2;
 
 import java.io.BufferedReader;
@@ -24,7 +18,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

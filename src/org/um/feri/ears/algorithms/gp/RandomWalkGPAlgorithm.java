@@ -2,13 +2,10 @@ package org.um.feri.ears.algorithms.gp;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.GPAlgorithm2;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramProblem2;
-import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.problems.gp.ProgramSolution2;
 
 import java.util.Collections;
