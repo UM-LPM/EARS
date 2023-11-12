@@ -1,8 +1,7 @@
-package org.um.feri.ears.individual.btdemo.gp;
+package org.um.feri.ears.individual.representations.gp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.um.feri.ears.individual.representations.gp.*;
 
 import java.io.Serializable;
 import java.util.*;

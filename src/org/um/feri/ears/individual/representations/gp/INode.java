@@ -1,7 +1,4 @@
-package org.um.feri.ears.individual.btdemo.gp;
-
-import org.um.feri.ears.individual.representations.gp.Self;
-import org.um.feri.ears.individual.representations.gp.TreeAncestor2;
+package org.um.feri.ears.individual.representations.gp;
 
 import java.util.Optional;
 

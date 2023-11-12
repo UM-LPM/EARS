@@ -1,8 +1,8 @@
-package org.um.feri.ears.individual.representations.gp.behaviour.soccer;
+package org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer;
 
-import org.um.feri.ears.individual.representations.gp.behaviour.BehaviourTreeNodeType;
-import org.um.feri.ears.individual.representations.gp.behaviour.ConditionNode;
-import org.um.feri.ears.individual.representations.gp.behaviour.Property;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.BehaviourTreeNodeType;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.ConditionNode;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.Property;
 
 import java.util.List;
 

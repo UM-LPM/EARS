@@ -1,17 +1,8 @@
 package org.um.feri.ears.visualization.gp;
 
-import org.um.feri.ears.algorithms.GPAlgorithm;
-import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
-import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
-import org.um.feri.ears.individual.btdemo.gp.Node;
-import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
-import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
-import org.um.feri.ears.individual.representations.gp.MathOp;
-import org.um.feri.ears.individual.representations.gp.Op;
-import org.um.feri.ears.individual.representations.gp.OperationType;
+import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Target;
-import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
-import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
+import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -19,7 +10,6 @@ import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.gp.components.GraphPanel;
 import org.um.feri.ears.visualization.gp.components.ImagePanel;
-import org.um.feri.ears.visualization.gp.components.LineGraphPanel;
 
 import org.um.feri.ears.algorithms.GPAlgorithm2;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm2;
@@ -36,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.stream.IntStream;
 

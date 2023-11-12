@@ -1,10 +1,9 @@
 package org.um.feri.ears.problems.gp;
 
-import org.um.feri.ears.individual.btdemo.gp.Node;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.Tree;
+import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution2;
 import org.um.feri.ears.individual.representations.gp.Target;
-import org.um.feri.ears.operators.gp.GPOperator;
 import org.um.feri.ears.operators.gp.GPOperator2;
 
 import java.io.Serializable;

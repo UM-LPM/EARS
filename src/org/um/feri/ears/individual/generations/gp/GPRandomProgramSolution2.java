@@ -1,15 +1,10 @@
 package org.um.feri.ears.individual.generations.gp;
 
-import org.um.feri.ears.individual.btdemo.gp.Node;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.BehaviourTree;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.SymbolicRegressionTree;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.Tree;
-import org.um.feri.ears.individual.representations.gp.Op;
-import org.um.feri.ears.individual.representations.gp.OperationType;
-import org.um.feri.ears.individual.representations.gp.TreeNode;
-import org.um.feri.ears.problems.gp.ProgramProblem;
+import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.BehaviourTree;
+import org.um.feri.ears.individual.representations.gp.symbolic.regression.SymbolicRegressionTree;
+import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.problems.gp.ProgramProblem2;
-import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.problems.gp.ProgramSolution2;
 import org.um.feri.ears.util.Util;
 

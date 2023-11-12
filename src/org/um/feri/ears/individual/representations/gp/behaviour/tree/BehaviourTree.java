@@ -1,4 +1,4 @@
-package org.um.feri.ears.individual.representations.gp.behaviour;
+package org.um.feri.ears.individual.representations.gp.behaviour.tree;
 
 import com.google.gson.Gson;
 import org.um.feri.ears.individual.representations.gp.HttpResponse;

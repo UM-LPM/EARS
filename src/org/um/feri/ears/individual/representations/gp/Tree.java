@@ -1,10 +1,10 @@
-package org.um.feri.ears.individual.representations.gp.behaviour;
+package org.um.feri.ears.individual.representations.gp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.um.feri.ears.individual.representations.gp.Node;
-import org.um.feri.ears.individual.representations.gp.symbolic.*;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
+import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
 
 import java.io.Serializable;
 import java.util.Map;

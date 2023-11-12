@@ -1,14 +1,9 @@
-package org.um.feri.ears.individual.btdemo.gp;
+package org.um.feri.ears.individual.representations.gp;
 
-import org.um.feri.ears.individual.btdemo.gp.behaviour.*;
-import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
 import org.um.feri.ears.util.Util;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class TreeGenerator { // TODO remove in the future
     List<Class<? extends Node>> baseFunctionNodeTypes;

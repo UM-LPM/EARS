@@ -8,15 +8,17 @@ import java.util.List;
 import org.um.feri.ears.algorithms.GPAlgorithm2;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm2;
 import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
-import org.um.feri.ears.individual.btdemo.gp.*;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.MoveForward;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.MoveSide;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.RayHitObject;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.soccer.Rotate;
-import org.um.feri.ears.individual.btdemo.gp.symbolic.*;
-import org.um.feri.ears.individual.btdemo.gp.behaviour.*;
+import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.Tree;
+import org.um.feri.ears.individual.representations.gp.TreeGenerator;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveForward;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveSide;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.RayHitObject;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.Rotate;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution2;
 import org.um.feri.ears.individual.representations.gp.Target;
+import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
 import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator2;
 import org.um.feri.ears.operators.gp.GPTreeExpansionOperator2;
 import org.um.feri.ears.problems.StopCriterion;
@@ -29,7 +31,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-public class SymbolicRegressionBtExample {
+public class SymbolicRegressionBtExample { // TODO remove
     public static void main(String[] args) throws IOException {
         // srExample();
         // btExample();
@@ -37,11 +39,11 @@ public class SymbolicRegressionBtExample {
         // treeGenEvalSymbolicExample();
         // treeGenBtExample();
 
-        // symbolicRegressionDefaultAlgorithmRunExample(null);
-        // behaviourTreeDefaultAlgorithmRunExample("treePopulation.ser");
+        symbolicRegressionDefaultAlgorithmRunExample(null);
+        //behaviourTreeDefaultAlgorithmRunExample(null);
 
         // serializationTest();
-        deserealizationTest("treePopulation.ser");
+        // deserealizationTest("treePopulation.ser");
 
     }
 
@@ -84,16 +86,6 @@ public class SymbolicRegressionBtExample {
     public static void deserealizationTest(String file){
         GPAlgorithm2 alg =  GPAlgorithm2.deserializeAlgorithmState(file);
         alg.getPopulation().get(0).getTree().displayTree("test_bt", true);
-        /*List<ProgramSolution2> solutions;
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            solutions = (List<ProgramSolution2>) ois.readObject();
-
-            for (int i = 0; i < solutions.size(); i++){
-                System.out.println("Fitness (" + i + "): " + solutions.get(i).getEval());
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public static void symbolicRegressionDefaultAlgorithmRunExample(String initialPopulationFilename){
@@ -111,7 +103,19 @@ public class SymbolicRegressionBtExample {
 
         VarNode.variables = Arrays.asList("x");
 
-        List<Target> evalData = Util.list( new Target().when("x", 0).targetIs(0),
+        List<Target> evalData = Util.list( new Target().when("x", 0).targetIs(12),
+                new Target().when("x", 1).targetIs(23),
+                new Target().when("x", 2).targetIs(44),
+                new Target().when("x", 3).targetIs(81),
+                new Target().when("x", 4).targetIs(140),
+                new Target().when("x", 5).targetIs(227),
+                new Target().when("x", 6).targetIs(348),
+                new Target().when("x", 7).targetIs(509),
+                new Target().when("x", 8).targetIs(716),
+                new Target().when("x", 9).targetIs(975),
+                new Target().when("x", 10).targetIs(1292));
+
+        List<Target> evalData2 = Util.list( new Target().when("x", 0).targetIs(0),
                 new Target().when("x", 1).targetIs(11),
                 new Target().when("x", 2).targetIs(24),
                 new Target().when("x", 3).targetIs(39),
@@ -123,11 +127,24 @@ public class SymbolicRegressionBtExample {
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200));
 
+        List<Target> evalData3 = Util.list( new Target().when("x", 0).targetIs(-12),
+                new Target().when("x", 1).targetIs(-15),
+                new Target().when("x", 2).targetIs(-4),
+                new Target().when("x", 3).targetIs(27),
+                new Target().when("x", 4).targetIs(100),
+                new Target().when("x", 5).targetIs(203),
+                new Target().when("x", 6).targetIs(340),
+                new Target().when("x", 7).targetIs(515),
+                new Target().when("x", 8).targetIs(723),
+                new Target().when("x", 9).targetIs(995),
+                new Target().when("x", 10).targetIs(1308));
+
+
         SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
 
         //GP algorithm execution example
-        Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 500000, 0, 0);
+        Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
 
 
         GPAlgorithm2 alg = new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, initialPopulationFilename);
@@ -139,7 +156,7 @@ public class SymbolicRegressionBtExample {
             ArrayList<ProgramSolution2> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
             ProgramSolution2 sol;
-            for (int i = 0; i < 1; i++){
+            for (int i = 0; i < 20; i++){
                 sol = alg.execute(symbolicRegressionTask);
                 solutions.add(sol);
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());

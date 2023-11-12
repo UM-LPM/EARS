@@ -1,149 +1,175 @@
 package org.um.feri.ears.examples;
 
-import org.um.feri.ears.algorithms.GPAlgorithm;
-import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.um.feri.ears.algorithms.GPAlgorithm2;
+import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm2;
 import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
-import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
-import org.um.feri.ears.individual.representations.gp.MathOp;
-import org.um.feri.ears.individual.representations.gp.Op;
-import org.um.feri.ears.individual.representations.gp.OperationType;
+import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.Tree;
+import org.um.feri.ears.individual.representations.gp.TreeGenerator;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveForward;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveSide;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.RayHitObject;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.Rotate;
+import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution2;
 import org.um.feri.ears.individual.representations.gp.Target;
-import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
-import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
+import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
+import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator2;
+import org.um.feri.ears.operators.gp.GPTreeExpansionOperator2;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Util;
-import java.io.IOException;
-import java.util.ArrayList;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Map;
 
 public class GeneticProgrammingExample {
     public static void main(String[] args) throws IOException {
+        // srExample();
+        // btExample();
 
-        // y=x^2 + 10x
-        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem(
-                Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST),
-                Utils.list(Op.define("x", OperationType.VARIABLE)),
-                3,
-                8,
-                200,
-                new GPDepthBasedTreePruningOperator<>(),
-                new GPTreeExpansionOperator<>(),
-                Util.list( new Target().when("x", 0).targetIs(0),
-                    new Target().when("x", 1).targetIs(11),
-                    new Target().when("x", 2).targetIs(24),
-                    new Target().when("x", 3).targetIs(39),
-                    new Target().when("x", 4).targetIs(56),
-                    new Target().when("x", 5).targetIs(75),
-                    new Target().when("x", 6).targetIs(96),
-                    new Target().when("x", 7).targetIs(119),
-                    new Target().when("x", 8).targetIs(144),
-                    new Target().when("x", 9).targetIs(171),
-                    new Target().when("x", 10).targetIs(200)),
-                new GPRandomProgramSolution<>()
+        // treeGenEvalSymbolicExample();
+        // treeGenBtExample();
+
+        // symbolicRegressionDefaultAlgorithmRunExample(null);
+        // behaviourTreeDefaultAlgorithmRunExample(null);
+
+        // serializationTest();
+        deserealizationTest("treePopulation.ser");
+
+    }
+
+    public static void serializationTest(){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                Repeat.class,
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
         );
 
-
-        // y=x^3 + 2x^2 + 8x + 12
-        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(
-                Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST),
-                Utils.list(Op.define("x", OperationType.VARIABLE)),
-                3,
-                8,
-                200,
-                new GPDepthBasedTreePruningOperator<>(),
-                new GPTreeExpansionOperator<>(),
-                Util.list( new Target().when("x", 0).targetIs(12),
-                    new Target().when("x", 1).targetIs(23),
-                    new Target().when("x", 2).targetIs(44),
-                    new Target().when("x", 3).targetIs(81),
-                    new Target().when("x", 4).targetIs(140),
-                    new Target().when("x", 5).targetIs(227),
-                    new Target().when("x", 6).targetIs(348),
-                    new Target().when("x", 7).targetIs(509),
-                    new Target().when("x", 8).targetIs(716),
-                    new Target().when("x", 9).targetIs(975),
-                    new Target().when("x", 10).targetIs(1292)),
-                new GPRandomProgramSolution<>()
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                MoveSide.class,
+                Rotate.class
         );
 
-        //y=4x^3 -15x^2 +8x - 12
-        SymbolicRegressionProblem sgp3 = new SymbolicRegressionProblem(
-                Utils.list(MathOp.ADD, MathOp.SUB, MathOp.MUL, MathOp.DIV, MathOp.CONST),
-                Utils.list(Op.define("x", OperationType.VARIABLE)),
-                3,
-                15,
-                200,
-                new GPDepthBasedTreePruningOperator<>(),
-                new GPTreeExpansionOperator<>(),
-                Util.list( new Target().when("x", 0).targetIs(-12),
-                        new Target().when("x", 1).targetIs(-15),
-                        new Target().when("x", 2).targetIs(-4),
-                        new Target().when("x", 3).targetIs(27),
-                        new Target().when("x", 4).targetIs(100),
-                        new Target().when("x", 5).targetIs(203),
-                        new Target().when("x", 6).targetIs(340),
-                        new Target().when("x", 7).targetIs(515),
-                        new Target().when("x", 8).targetIs(723),
-                        new Target().when("x", 9).targetIs(995),
-                        new Target().when("x", 10).targetIs(1308)),
-                new GPRandomProgramSolution<>() // TODO -> this is GROW strategy, change naming
+        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
+                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+
+        List<ProgramSolution2> programSolution2s = new ArrayList<>();
+        for (int i = 0; i < 300; i++){
+            programSolution2s.add(sgp2.getRandomSolution());
+        }
+
+        sgp2.bulkEvaluate(programSolution2s);
+
+        for (int i = 0; i < programSolution2s.size(); i++){
+            System.out.println("Fitness (" + i + "): " + programSolution2s.get(i).getEval());
+        }
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("treePopulation.ser"))) {
+            oos.writeObject(programSolution2s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deserealizationTest(String file){
+        GPAlgorithm2 alg =  GPAlgorithm2.deserializeAlgorithmState(file);
+        alg.getPopulation().get(0).getTree().displayTree("test_bt", true);
+    }
+
+    public static void symbolicRegressionDefaultAlgorithmRunExample(String initialPopulationFilename){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                AddNode.class,
+                DivNode.class,
+                MulNode.class,
+                SubNode.class
         );
+
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                ConstNode.class,
+                VarNode.class
+        );
+
+        VarNode.variables = Arrays.asList("x");
+
+        List<Target> evalData = Util.list( new Target().when("x", 0).targetIs(12),
+                new Target().when("x", 1).targetIs(23),
+                new Target().when("x", 2).targetIs(44),
+                new Target().when("x", 3).targetIs(81),
+                new Target().when("x", 4).targetIs(140),
+                new Target().when("x", 5).targetIs(227),
+                new Target().when("x", 6).targetIs(348),
+                new Target().when("x", 7).targetIs(509),
+                new Target().when("x", 8).targetIs(716),
+                new Target().when("x", 9).targetIs(975),
+                new Target().when("x", 10).targetIs(1292));
+
+        List<Target> evalData2 = Util.list( new Target().when("x", 0).targetIs(0),
+                new Target().when("x", 1).targetIs(11),
+                new Target().when("x", 2).targetIs(24),
+                new Target().when("x", 3).targetIs(39),
+                new Target().when("x", 4).targetIs(56),
+                new Target().when("x", 5).targetIs(75),
+                new Target().when("x", 6).targetIs(96),
+                new Target().when("x", 7).targetIs(119),
+                new Target().when("x", 8).targetIs(144),
+                new Target().when("x", 9).targetIs(171),
+                new Target().when("x", 10).targetIs(200));
+
+        List<Target> evalData3 = Util.list( new Target().when("x", 0).targetIs(-12),
+                new Target().when("x", 1).targetIs(-15),
+                new Target().when("x", 2).targetIs(-4),
+                new Target().when("x", 3).targetIs(27),
+                new Target().when("x", 4).targetIs(100),
+                new Target().when("x", 5).targetIs(203),
+                new Target().when("x", 6).targetIs(340),
+                new Target().when("x", 7).targetIs(515),
+                new Target().when("x", 8).targetIs(723),
+                new Target().when("x", 9).targetIs(995),
+                new Target().when("x", 10).targetIs(1308));
+
+
+        SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
+                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
 
         //GP algorithm execution example
-        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegression = new Task<>(sgp2, StopCriterion.EVALUATIONS, 30000, 0, 0);
+        Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
 
 
-        GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.025, 2);
+        GPAlgorithm2 alg = new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, initialPopulationFilename);
         RandomWalkGPAlgorithm rndAlg = new RandomWalkGPAlgorithm();
 
-//        try {
-//            GPAlgorithm alg2 = new DefaultGPAlgorithm(100, 0.95, 0.025, 2, symbolicRegression);
-//            /*alg2.executeStep();
-//            alg2.executeStep();
-//            alg2.executeStep();
-//            alg2.executeStep();
-//            alg2.executeStep();*/
-//            /*alg2.executeGeneration();
-//            alg2.executeGeneration();
-//            alg2.executeGeneration();*/
-//
-//            for(int i = 0; i < 10; i++){
-//                ProgramSolution<Double> solution = null;
-//                while(solution == null){
-//                    solution = alg2.executeGeneration();
-//                }
-//                System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + solution.getEval());
-//                System.out.println("Number of iterations -> " + symbolicRegression.getNumberOfIterations());
-//                alg2.resetToDefaultsBeforeNewRun();
-//            }
-//            //solution.getProgram().displayTree("TestBTree", true);
-//
-//        } catch (StopCriterionException e) {
-//            e.printStackTrace();
-//        }
-
-        /*try {
+        try {
             long startTime = System.currentTimeMillis();
             System.out.println("Starting DefaultGpAlgorithm");
-            ArrayList<ProgramSolution<Double>> solutions = new ArrayList<>();
+            ArrayList<ProgramSolution2> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
-            ProgramSolution<Double> sol;
+            ProgramSolution2 sol;
             for (int i = 0; i < 20; i++){
-                sol = alg.execute(symbolicRegression);
+                sol = alg.execute(symbolicRegressionTask);
                 solutions.add(sol);
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
                 alg.resetToDefaultsBeforeNewRun();
 
-                sol = rndAlg.execute(symbolicRegression);
+                sol = rndAlg.execute(symbolicRegressionTask);
                 solutionsRnd.add(sol.getEval());
                 System.out.println("Best fitness (RandomWalkAlgorithm) (for i = " + i + ") -> " + sol.getEval());
                 rndAlg.resetToDefaultsBeforeNewRun();
                 alg.resetToDefaultsBeforeNewRun();
             }
 
-            ProgramSolution<Double> maxSol = solutions.get(0);
+            ProgramSolution2 maxSol = solutions.get(0);
             double maxRnd = Double.MAX_VALUE;
             int wins = 0;
             for (int i = 0; i < solutions.size(); i++){
@@ -164,141 +190,215 @@ public class GeneticProgrammingExample {
             long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
 
             System.out.println("Elapsed time: " + elapsedTime + " s");
-            maxSol.getProgram().displayTree("TestBTree", true);
-            //ProgramSolution<Double> sol = alg.execute(symbolicRegression);
-            //System.out.println("Best fitness: " + sol.getEval());
-            //System.out.println("AncestorCount: " + sol.getProgram().ancestors().getAncestorCount());
-            //System.out.println("Tree Depth: " + sol.getProgram().treeHeight());
-            //sol.getProgram().displayTree("TestBTree");
+            //maxSol.getTree().getRootNode().displayTree("TestBTree", true);
+            /*ProgramSolution<Double> sol = alg.execute(symbolicRegression);
+            System.out.println("Best fitness: " + sol.getEval());
+            System.out.println("AncestorCount: " + sol.getProgram().ancestors().getAncestorCount());
+            System.out.println("Tree Depth: " + sol.getProgram().treeHeight());
+            sol.getProgram().displayTree("TestBTree");*/
         } catch (StopCriterionException e) {
             e.printStackTrace();
-        }*/
+        }
+    }
+
+    public static void behaviourTreeDefaultAlgorithmRunExample(String initialPopulationFilename){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                Repeat.class,
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
+        );
+
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                MoveSide.class,
+                Rotate.class
+        );
+
+        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 100, new GPDepthBasedTreePruningOperator2(),
+                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+
+        //GP algorithm execution example
+        Task<ProgramSolution2, ProgramProblem2> soccerTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 40000, 0, 0);
 
 
-//        ArrayList<GPAlgorithm> algorithms = new ArrayList<>();
-//        algorithms.add(new RandomWalkGPAlgorithm());
-//        algorithms.add(new DefaultGPAlgorithm());
-//
-//        SymbolicRegressionBenchmark benchmark = new SymbolicRegressionBenchmark();
-//
-//        benchmark.addAlgorithms(algorithms);  // register the algorithms in the benchmark
-//
-//        benchmark.run(30); //start the tournament with 10 runs/repetitions
+        GPAlgorithm2 alg = new DefaultGPAlgorithm2(80, 0.95, 0.025, 2, initialPopulationFilename);
 
+        try {
+            long startTime = System.currentTimeMillis();
+            System.out.println("Starting DefaultGpAlgorithm");
+            ArrayList<ProgramSolution2> solutions = new ArrayList<>();
+            ProgramSolution2 sol;
+            for (int i = 0; i < 1; i++){
+                sol = alg.execute(soccerTask);
+                solutions.add(sol);
+                System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
+                alg.resetToDefaultsBeforeNewRun();
+            }
 
-//        long startTime = System.currentTimeMillis();
-//        ProgramSolution<Double> ps = sgp3.getRandomSolution();
-////        for (int i =0; i < 100000; i++){
-////            int a = ps.getProgram().treeHeight();
-////        }
-////        System.out.println("Fitness: " + ps.getEval());
-////        System.out.println("AncestorCount: " + ps.getProgram().ancestors().getAncestorCount());
-////        System.out.println("Tree Depth: " + ps.getProgram().treeHeight());
-////        TreeAncestor<Double> ancestor = ps.getProgram().ancestorAt(5);
-////        System.out.println("Ancestor at 5: " + ancestor.getTreeHeightPosition());
-////        System.out.println("Ancestor at 5: " + ancestor.getTreeNode().getOperation().name());
-//
-//        ps.getProgram().displayTree("TestBTree", true);
-//        sgp2.makeFeasible(ps);
-//        ps.getProgram().displayTree("TestBTree", true);
-//        //sgp2.evaluate(ps);
-//        long elapsedTime = (System.currentTimeMillis() - startTime) ;
-//
-//        System.out.println("Elapsed time: " + elapsedTime + " ms");
+            ProgramSolution2 maxSol = solutions.get(0);
+            for (int i = 0; i < solutions.size(); i++){
+                if(solutions.get(i).getEval() < maxSol.getEval())
+                    maxSol = solutions.get(i);
+            }
 
+            System.out.println("=====================================");
+            System.out.println("Best fitness (DefaultGpAlgorithm)  -> " + maxSol.getEval());
+            System.out.println("Best solution JSON: " + maxSol.getTree().toJsonString());
 
+            long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
 
+            System.out.println("Elapsed time: " + elapsedTime + " s");
+        } catch (StopCriterionException e) {
+            e.printStackTrace();
+        }
+    }
 
-        /*// SinglePointCrossover example
-        Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegressionCross = new Task<>(sgp, StopCriterion.EVALUATIONS, 10000, 0, 0);
+    public static void treeGenBtExample(){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                Repeat.class,
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
+        );
 
-        ProgramSolution<Double> ps1 = sgp.getRandomSolution();
-        ProgramSolution<Double> ps2 = sgp.getRandomSolution();
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                MoveSide.class,
+                Rotate.class
+        );
 
-        ps1.getProgram().displayTree("TestBTree");
-        ps2.getProgram().displayTree("TestBTree");
+        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
+                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
 
-        SinglePointCrossover<Double> spc = new SinglePointCrossover<>(0.9);
-        ProgramSolution[] sol = spc.execute(new ProgramSolution[]{ ps1, ps2}, symbolicRegressionCross.problem);
+        //get current time
+        long startTime = System.currentTimeMillis();
+        List<ProgramSolution2> programSolution2s = new ArrayList<>();
+        for (int i = 0; i < 30; i++){
+            programSolution2s.add(sgp2.getRandomSolution());
+        }
 
-        sol[0].getProgram().displayTree("TestBTree");
-        sol[1].getProgram().displayTree("TestBTree");*/
+        sgp2.bulkEvaluate(programSolution2s);
 
-        //SingleTreeNodeMutation example
-        /*Task<ProgramSolution<Double>, ProgramProblem<Double>> symbolicRegressionMut = new Task<>(sgp, StopCriterion.EVALUATIONS, 10000, 0, 0);
+        for (int i = 0; i < programSolution2s.size(); i++){
+            System.out.println("Fitness (" + i + "): " + programSolution2s.get(i).getEval());
+        }
+        /*System.out.println("FinalFitness: " + sum);
+        System.out.println("Average fitness: " + sum / programSolution2s.size());
+        //calculate elapsed time
+        long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
+        System.out.println("Elapsed time: " + elapsedTime + " s");*/
+    }
 
-        ProgramSolution<Double> ps1 = sgp.getRandomSolution();
-        ps1.getProgram().displayTree("TestBTree");
+    public static void treeGenEvalSymbolicExample(){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                AddNode.class,
+                DivNode.class,
+                MulNode.class,
+                SubNode.class
+        );
 
-        SingleTreeNodeMutation<Double> stnm = new SingleTreeNodeMutation<>(1.0);
-        stnm.execute(ps1, symbolicRegressionMut.problem);
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                ConstNode.class,
+                VarNode.class
+        );
 
-        ps1.getProgram().displayTree("TestBTe");*/
+        VarNode.variables = Arrays.asList("x");
 
-        /*
-        // Tree generation example
-        TreeNode<Double> root = new TreeNode<>();
-        root.operation = MathOp.ADD;
+        List<Target> evalData = Util.list( new Target().when("x", 0).targetIs(0),
+                new Target().when("x", 1).targetIs(11),
+                new Target().when("x", 2).targetIs(24),
+                new Target().when("x", 3).targetIs(39),
+                new Target().when("x", 4).targetIs(56),
+                new Target().when("x", 5).targetIs(75),
+                new Target().when("x", 6).targetIs(96),
+                new Target().when("x", 7).targetIs(119),
+                new Target().when("x", 8).targetIs(144),
+                new Target().when("x", 9).targetIs(171),
+                new Target().when("x", 10).targetIs(200));
 
-        TreeNode<Double> left = new TreeNode<>();
-        left.coefficient = 4.0;
-        left.operation = Op.define(left.coefficient.toString(), 0, v-> left.coefficient);
+        SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
+                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
 
-        TreeNode<Double> right = new TreeNode<>();
-        right.operation = Op.define("x", -1, v -> null);
-        //right.operation = MathOp.PI;
-        //right.coeficient = 6.0;
-        //right.operation = Op.define(left.coeficient.toString(), 0, v-> right.coeficient);
+        ProgramSolution2 programSolution2 = sgp2.getRandomSolution();
+        sgp2.evaluate(programSolution2);
+        programSolution2.getTree().printTree();
+        System.out.println(programSolution2.getEval());
+    }
 
-        root.insert(0, left);
-        root.insert(1, right);
+    public static void btExample(){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                Repeat.class,
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
+        );
 
-        ProgramSolution ps = new ProgramSolution();
-        ps.setSolution(root);
-        System.out.println("Fitness: " + sgp.eval(ps));
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                MoveSide.class,
+                Rotate.class
+        );
 
-        ps.getSolution().displayTree("TestBTree");*/
+        TreeGenerator treeGenerator = new TreeGenerator(baseFunctionNodeTypes, baseTerminalNodeTypes, 2);
 
-        /*
-        // Tree copy example
-        ProgramSolution<Double> sol1 = sgp.getRandomSolution();
-        ProgramSolution<Double> sol2 = new ProgramSolution<>(sol1);
+        Tree tree = new BehaviourTree("demo", treeGenerator.generateRandomTree(0, 5));
+        tree.printTree();
+    }
 
-        TreeNode<Double> childNode = new TreeNode<>(MathOp.PI.apply(null));
-        sol2.getProgram().childAt(0).setOperation(Op.define(childNode.getCoefficient().toString(), OperationType.TERMINAL, 0, v -> childNode.getCoefficient()));
+    public static void srExample(){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                AddNode.class,
+                DivNode.class,
+                MulNode.class,
+                SubNode.class
+        );
 
-        sol1.getProgram().displayTree("TestBtTree");
-        sol2.getProgram().displayTree("TestBtTree");*/
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                ConstNode.class,
+                VarNode.class
+        );
 
-        // Test program for prunning
-//        TreeNode<Double> root = new TreeNode<>(MathOp.SUB); // -
-//
-//        root.insert(0, new TreeNode<>(MathOp.ADD)); // +
-//        root.insert(1, new TreeNode<>(MathOp.SUB)); // -
-//
-//        root.childAt(0).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
-//        root.childAt(0).insert(1, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
-//
-//        root.childAt(1).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
-//        root.childAt(1).insert(1, new TreeNode<>(MathOp.ADD)); // x
-//
-//        root.childAt(1).childAt(1).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
-//        root.childAt(1).childAt(1).insert(1, new TreeNode<>(MathOp.ADD)); // +
-//
-//        root.childAt(1).childAt(1).childAt(1).insert(0, new TreeNode<>(MathOp.DIV)); // /
-//        root.childAt(1).childAt(1).childAt(1).insert(1, new TreeNode<>(MathOp.DIV)); // /
-//
-//        root.childAt(1).childAt(1).childAt(1).childAt(0).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
-//        root.childAt(1).childAt(1).childAt(1).childAt(0).insert(1, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
-//
-//        root.childAt(1).childAt(1).childAt(1).childAt(1).insert(0, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
-//        root.childAt(1).childAt(1).childAt(1).childAt(1).insert(1, new TreeNode<>(Op.define("x", OperationType.VARIABLE))); // x
-//
-//        root.displayTree("TestBTree");
-//        ProgramSolution<Double> ps = new ProgramSolution<>(1);
-//        ps.setProgram(root);
-//
-//        sgp2.makeFeasible(ps);
-//        ps.getProgram().displayTree("TestBTree");
+        VarNode.variables = Arrays.asList("x");
+
+        TreeGenerator treeGenerator = new TreeGenerator(baseFunctionNodeTypes, baseTerminalNodeTypes, 2);
+
+        Tree tree = new SymbolicRegressionTree("demo", treeGenerator.generateRandomTree(0, 3));
+        tree.printTree();
+        System.out.println(tree.evaluate(Map.of("x", 1.0)));
+    }
+
+    public static String sendPostRequest(String apiUrl, String jsonBody) throws Exception {
+        URL url = new URL(apiUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        // Set the request method to POST
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        // Write the JSON payload to the request body
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = jsonBody.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        int responseCode = conn.getResponseCode();
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                return response.toString();
+            }
+        } else {
+            throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
+        }
     }
 }
