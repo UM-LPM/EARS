@@ -27,6 +27,8 @@ public abstract class GPAlgorithm2 extends Algorithm<ProgramSolution2, ProgramSo
 
     public abstract List<ProgramSolution2> getPopulation();
 
+    public abstract void setPopulation(List<ProgramSolution2> population);
+
     public abstract ProgramSolution2 getBest();
 
     public ArrayList<Double> getBestGenFitness() {

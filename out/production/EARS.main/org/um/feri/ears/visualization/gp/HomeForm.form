@@ -14,7 +14,7 @@
     </properties>
     <border type="none" title="W"/>
     <children>
-      <grid id="122bc" layout-manager="GridLayoutManager" row-count="1" column-count="12" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="122bc" layout-manager="GridLayoutManager" row-count="1" column-count="14" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="5" left="5" bottom="5" right="5"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -82,7 +82,7 @@
           </grid>
           <component id="8a599" class="javax.swing.JLabel">
             <constraints>
-              <grid row="0" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="13" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
@@ -92,7 +92,7 @@
           </component>
           <component id="a05ab" class="javax.swing.JButton" binding="resetAlgButton">
             <constraints>
-              <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <background color="-12698050"/>
@@ -106,7 +106,7 @@
           </component>
           <component id="154be" class="javax.swing.JButton" binding="nextAlgStepButton">
             <constraints>
-              <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <autoscrolls value="false"/>
@@ -121,7 +121,7 @@
           </component>
           <component id="d9703" class="javax.swing.JButton" binding="nextAlgGenerationButton">
             <constraints>
-              <grid row="0" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <autoscrolls value="false"/>
@@ -136,7 +136,7 @@
           </component>
           <component id="6a840" class="javax.swing.JButton" binding="runAlgButton">
             <constraints>
-              <grid row="0" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <autoscrolls value="false"/>
@@ -151,13 +151,41 @@
           </component>
           <component id="3589b" class="javax.swing.JTextField" binding="runXAlgGensTextField">
             <constraints>
-              <grid row="0" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
+              <grid row="0" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="50" height="-1"/>
                 <maximum-size width="50" height="-1"/>
               </grid>
             </constraints>
             <properties>
               <text value="-1"/>
+            </properties>
+          </component>
+          <component id="e1118" class="javax.swing.JButton" binding="saveCurrentAlgState">
+            <constraints>
+              <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-12698050"/>
+              <contentAreaFilled value="false"/>
+              <font size="14"/>
+              <foreground color="-1"/>
+              <inheritsPopupMenu value="false"/>
+              <margin top="5" left="5" bottom="5" right="5"/>
+              <text value="Save current state"/>
+            </properties>
+          </component>
+          <component id="69bb5" class="javax.swing.JButton" binding="loadCurrentAlgState">
+            <constraints>
+              <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-12698050"/>
+              <contentAreaFilled value="false"/>
+              <font size="14"/>
+              <foreground color="-1"/>
+              <inheritsPopupMenu value="false"/>
+              <margin top="5" left="5" bottom="5" right="5"/>
+              <text value="Load current state"/>
             </properties>
           </component>
         </children>
