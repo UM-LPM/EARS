@@ -1,10 +1,11 @@
 package org.um.feri.ears.algorithms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.um.feri.ears.util.MeanStDev;
 
-public class AlgorithmRunTime {
+public class AlgorithmRunTime implements Serializable {
     private int numberOfRuns;
     private long sumTime;
     private long algorithmOnlySumTime;

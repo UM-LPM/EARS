@@ -1,6 +1,8 @@
 package org.um.feri.ears.algorithms;
 
-public class AlgorithmStepper<T extends Enum<T>> {
+import java.io.Serializable;
+
+public class AlgorithmStepper<T extends Enum<T>> implements Serializable {
     private final T[] values;
     private int currentIndex;
     private boolean includeInitialization;

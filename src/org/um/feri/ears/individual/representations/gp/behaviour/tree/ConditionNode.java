@@ -11,4 +11,10 @@ public class ConditionNode extends BehaviourTreeNode {
         super(nodeType, properties, 0);
     }
 
+    @Override
+    public String setNodeStyle(){
+        String nodeStyle;
+        nodeStyle = "shape=ellipse";
+        return  nodeStyle;
+    }
 }

@@ -46,6 +46,11 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         this.fixedNumOfChildren = fixedNumOfChildren;
     }
 
+    @JsonIgnore
+    public int getId() {
+        return id;
+    }
+
     @JsonProperty("Children")
     public List<Node> getChildren() {
         return children;
@@ -323,12 +328,12 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     /*
      * Define nodes
      * */
-    private void setTreeNodes(GraphPrinter gp) {
-        if(this.parent == null){
-            gp.addln(id + " [label=\"" + this.name +"\", " + this.setNodeStyle() + "]");
-        }
+    public void setTreeNodes(GraphPrinter gp) {
+        gp.addln(id + " [label=\"" + this.name +"\", " + this.setNodeStyle() + "]");
+        //gp.addln(id + " [<label=\"" + this.name +"<BR /><FONT POINT-SIZE=\"10\">"+ "this.propertiesToString()" +"</FONT>>\", " + this.setNodeStyle() + "]");
+        //gp.addln(id + "[label=<"+ this.name +"<BR /><FONT POINT-SIZE=\"10\">" + "this.propertiesToString()" + "</FONT>"+ this.setNodeStyle() +">]");
+
         for (Node next : children) {
-            gp.addln(next.id + " [label=\"" + next.name + "\", " + next.setNodeStyle() + "]");
             next.setTreeNodes(gp);
         }
     }
@@ -336,7 +341,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     /*
      * Write node connections to org.um.feri.gpf.GraphPrinter
      * */
-    private void displaySubTree(GraphPrinter gp){
+    public void displaySubTree(GraphPrinter gp){
         for (Iterator<Node> it = children.iterator(); it.hasNext();) {
             Node next = it.next();
             gp.addln(id + " -> " + next.id);
@@ -344,7 +349,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         }
     }
 
-    private String setNodeStyle(){
+    public String setNodeStyle(){
         String nodeStyle = "";
 
         //TODO

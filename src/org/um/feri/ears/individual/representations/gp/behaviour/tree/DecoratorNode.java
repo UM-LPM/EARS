@@ -21,5 +21,12 @@ public class DecoratorNode extends BehaviourTreeNode {
         super(nodeType, properties, arity, children, true);
     }
 
+    @Override
+    public String setNodeStyle(){
+        String nodeStyle = "";
 
+        nodeStyle = "shape=diamond";
+
+        return  nodeStyle;
+    }
 }

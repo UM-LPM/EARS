@@ -39,11 +39,11 @@ public class GeneticProgrammingExample {
         // treeGenEvalSymbolicExample();
         // treeGenBtExample();
 
-        // symbolicRegressionDefaultAlgorithmRunExample(null);
+        symbolicRegressionDefaultAlgorithmRunExample(null);
         // behaviourTreeDefaultAlgorithmRunExample(null);
 
         // serializationTest();
-        deserealizationTest("treePopulation.ser");
+        // deserealizationTest("gpAlgorithmState.ser");
 
     }
 
@@ -144,7 +144,7 @@ public class GeneticProgrammingExample {
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
 
         //GP algorithm execution example
-        Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
+        Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 500000, 0, 0);
 
 
         GPAlgorithm2 alg = new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, initialPopulationFilename);
@@ -156,10 +156,12 @@ public class GeneticProgrammingExample {
             ArrayList<ProgramSolution2> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
             ProgramSolution2 sol;
-            for (int i = 0; i < 20; i++){
+            for (int i = 0; i < 1; i++){
                 sol = alg.execute(symbolicRegressionTask);
                 solutions.add(sol);
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
+                alg.getPopulation().get(0).getTree().displayTree("test_bt", true);
+
                 alg.resetToDefaultsBeforeNewRun();
 
                 sol = rndAlg.execute(symbolicRegressionTask);

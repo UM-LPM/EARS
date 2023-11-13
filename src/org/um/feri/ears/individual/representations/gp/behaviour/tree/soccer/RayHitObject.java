@@ -10,7 +10,10 @@ public class RayHitObject extends ConditionNode {
     public enum AgentSide {
         Center ,
         Left,
-        Right
+        Right,
+        BackCenter,
+        BackLeft,
+        BackRight
     }
 
     public enum SoccerGameObject {
