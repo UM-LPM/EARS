@@ -1,6 +1,7 @@
 package org.um.feri.ears.individual.representations.gp.behaviour.tree;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.um.feri.ears.individual.representations.gp.GraphPrinter;
 import org.um.feri.ears.individual.representations.gp.Node;
 
 import java.util.ArrayList;
@@ -95,6 +96,26 @@ public abstract class BehaviourTreeNode extends Node {
     @Override
     public double evaluate(Map<String, Double> variables) {
         return -1;
+    }
+
+    @Override
+    public void setTreeNodes(GraphPrinter gp) {
+        if(this.properties.size() > 0)
+            gp.addln(id + "[label=<"+ this.name +"<BR /><FONT POINT-SIZE=\"10\">" + this.propertiesToString() + "</FONT>>, "+ this.setNodeStyle() + "]");
+        else
+            gp.addln(id + " [label=\"" + this.name +"\", " + this.setNodeStyle() + "]");
+
+        for (Node next : children) {
+            next.setTreeNodes(gp);
+        }
+    }
+
+    public String propertiesToString(){
+        StringBuilder propertiesString = new StringBuilder();
+        for(Property property : properties){
+            propertiesString.append(property.toString()).append("<BR />");
+        }
+        return propertiesString.toString();
     }
 
 }

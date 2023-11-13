@@ -79,9 +79,15 @@ public abstract class GPAlgorithm2 extends Algorithm<ProgramSolution2, ProgramSo
 
     }
 
-    public static void serializeAlgorithmState(List<ProgramSolution2> population, Task<ProgramSolution2, ProgramProblem2> task, String filename) {
+    public static void serializeAlgorithmState(GPAlgorithm2 gpAlgorithm2, String filename) {
         System.out.println("Serializing current task and population state");
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
+            oos.writeObject(gpAlgorithm2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /*try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(population);
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,14 +97,19 @@ public abstract class GPAlgorithm2 extends Algorithm<ProgramSolution2, ProgramSo
             oos.writeObject(task);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         GPAlgorithm2.CAN_RUN = true;
     }
 
-    public static DefaultGPAlgorithm2 deserializeAlgorithmState(String filename){
-        DefaultGPAlgorithm2 alg = new DefaultGPAlgorithm2();
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(GPAlgorithm2.TASK_NAME_PREFIX + filename))) {
+    public static GPAlgorithm2 deserializeAlgorithmState(String filename){
+        GPAlgorithm2 alg = new DefaultGPAlgorithm2();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            alg = (GPAlgorithm2) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        /*try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(GPAlgorithm2.TASK_NAME_PREFIX + filename))) {
             alg.task = (Task<ProgramSolution2, ProgramProblem2>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -109,7 +120,7 @@ public abstract class GPAlgorithm2 extends Algorithm<ProgramSolution2, ProgramSo
             alg.setPopulation(population);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
 
         return alg;
     }

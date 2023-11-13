@@ -20,4 +20,13 @@ public class CompositeNode extends BehaviourTreeNode {
     public CompositeNode(BehaviourTreeNodeType nodeType, List<Property> properties, int arity, List<Node> children) {
         super(nodeType, properties, arity, children, false);
     }
+
+    @Override
+    public String setNodeStyle(){
+        String nodeStyle = "";
+
+        nodeStyle = "shape=polygon";
+
+        return  nodeStyle;
+    }
 }

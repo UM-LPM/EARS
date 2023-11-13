@@ -8,11 +8,12 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.Cache;
 import org.um.feri.ears.util.annotation.AnnotationUtil;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-public abstract class Algorithm<R extends Solution, S extends Solution, P extends Problem<S>> {
+public abstract class Algorithm<R extends Solution, S extends Solution, P extends Problem<S>> implements Serializable {
 
     protected Task<S, P> task;
 

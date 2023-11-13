@@ -93,7 +93,7 @@ public class DefaultGPAlgorithm2 extends GPAlgorithm2 {
             // Check if application can still run
             if(!DefaultGPAlgorithm2.CAN_RUN){
                 // Serialize current state
-                GPAlgorithm2.serializeAlgorithmState(this.population, this.task, "treePopulation.ser");
+                GPAlgorithm2.serializeAlgorithmState(this, "gpAlgorithmState.ser");
                 break;
             }
             // Selection and Crossover

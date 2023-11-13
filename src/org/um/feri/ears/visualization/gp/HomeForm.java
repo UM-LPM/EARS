@@ -161,7 +161,7 @@ public class HomeForm extends JFrame {
         saveCurrentAlgState.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GPAlgorithm2.serializeAlgorithmState(gpAlgorithm.getPopulation(), task, "gpAlgorithmState.ser");
+                GPAlgorithm2.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
             }
         });
 
@@ -348,7 +348,7 @@ public class HomeForm extends JFrame {
         }
     }
 
-    private void initializeDataSymbolicRegression() {
+    private void initializeDataSymbolicRegression(String initialStateFile) {
         java.util.List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
                 AddNode.class,
                 DivNode.class,
@@ -390,12 +390,18 @@ public class HomeForm extends JFrame {
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200));
 
-        this.programProblem = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
-        this.task = new Task<>(programProblem, StopCriterion.EVALUATIONS, 10000, 0, 0);
-        this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, this.task, null);
+        if(initialStateFile != null) {
+            this.gpAlgorithm = GPAlgorithm2.deserializeAlgorithmState(initialStateFile);
+            this.task = this.gpAlgorithm.getTask();
+            this.programProblem = this.task.problem;
+        }
+        else {
+            this.programProblem = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
+                    new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
+            this.task = new Task<>(programProblem, StopCriterion.EVALUATIONS, 10000, 0, 0);
+            this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, this.task, null);
+        }
         this.gpAlgorithm.setDebug(true);
-
     }
 
      public void initializeDataBehaviourTree(String initialStateFile){
@@ -414,12 +420,9 @@ public class HomeForm extends JFrame {
          );
 
          if(initialStateFile != null){
-             GPAlgorithm2 gp = GPAlgorithm2.deserializeAlgorithmState(initialStateFile);
-
-             this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, this.task, null);
-             this.task = gp.getTask();
+             this.gpAlgorithm = GPAlgorithm2.deserializeAlgorithmState(initialStateFile);
+             this.task = this.gpAlgorithm.getTask();
              this.programProblem = this.task.problem;
-             this.gpAlgorithm.setPopulation(gp.getPopulation());
          }
          else {
              this.programProblem = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 100, new GPDepthBasedTreePruningOperator2(),

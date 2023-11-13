@@ -123,7 +123,7 @@ public class SoccerBTProblem2 extends ProgramProblem2 {
     public String sendEvaluateRequest(String apiUrl, String jsonBody) throws Exception {
         URL url = new URL(apiUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(10 * 60 * 1000); // 10 minutes
+        conn.setConnectTimeout(15 * 60 * 1000); // 10 minutes
 
         // Set the request method to POST
         conn.setRequestMethod("POST");

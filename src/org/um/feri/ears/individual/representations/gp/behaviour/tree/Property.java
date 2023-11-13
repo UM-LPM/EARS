@@ -65,6 +65,11 @@ public class Property implements Cloneable, Serializable {
     }
 
     @Override
+    public String toString() {
+        return name + ":" + value;
+    }
+
+    @Override
     public Property clone() {
         try {
             return (Property) super.clone();

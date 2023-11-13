@@ -11,4 +11,12 @@ public class ActionNode extends BehaviourTreeNode {
         super(nodeType, properties, 0);
     }
 
+    @Override
+    public String setNodeStyle(){
+        String nodeStyle = "";
+
+        nodeStyle = "shape=parallelogram";
+
+        return  nodeStyle;
+    }
 }
