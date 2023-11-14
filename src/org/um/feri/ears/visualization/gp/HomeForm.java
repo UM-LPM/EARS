@@ -146,6 +146,8 @@ public class HomeForm extends JFrame {
                         for(int i = 0; i < numOfGens; i++){
                             if(gpAlgorithm.executeGeneration() != null)
                                 break;
+                            System.out.println(gpAlgorithm.getBest().getTree().toJsonString());
+                            GPAlgorithm2.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
                         }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(null, "Please enter a valid number of generations to run (-1 for run to the end).", "Error", JOptionPane.ERROR_MESSAGE);
@@ -427,7 +429,7 @@ public class HomeForm extends JFrame {
          else {
              this.programProblem = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 100, new GPDepthBasedTreePruningOperator2(),
                      new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
-             this.task = new Task<>(this.programProblem, StopCriterion.EVALUATIONS, 10000, 0, 0);
+             this.task = new Task<>(this.programProblem, StopCriterion.EVALUATIONS, 500000, 0, 0);
              this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, this.task, null);
          }
          this.gpAlgorithm.setDebug(true);
