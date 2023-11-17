@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,7 +65,7 @@ public class SoccerBTProblem2 extends ProgramProblem2 {
                 response = response.replace("\\", "");
                 Gson gson = new Gson();
                 HttpResponse obj = gson.fromJson(response, HttpResponse.class);
-                System.out.println("Finished with response: " + response);
+                System.out.println(LocalDateTime.now() + "Finished with response: " + response);
 
                 // Verify that request was successful
                 if (Objects.equals(obj.getStatus(), "Success")) {
@@ -84,6 +85,7 @@ public class SoccerBTProblem2 extends ProgramProblem2 {
                 }
             }
         }
+        System.exit(1);
     }
 
     // TODO delete method
