@@ -427,10 +427,10 @@ public class HomeForm extends JFrame {
              this.programProblem = this.task.problem;
          }
          else {
-             this.programProblem = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 100, new GPDepthBasedTreePruningOperator2(),
+             this.programProblem = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 10, 200, new GPDepthBasedTreePruningOperator2(),
                      new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
              this.task = new Task<>(this.programProblem, StopCriterion.EVALUATIONS, 500000, 0, 0);
-             this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, this.task, null);
+             this.gpAlgorithm =  new DefaultGPAlgorithm2(200, 0.95, 0.025, 2, this.task, null);
          }
          this.gpAlgorithm.setDebug(true);
      }
