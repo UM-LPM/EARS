@@ -11,13 +11,12 @@ public class MoveForward extends ActionNode {
     public enum MoveForwardDirection {
         Forward,
         Backward,
-        NoAction,
         Random
     }
 
     public MoveForward() {
         this(BehaviourTreeNodeType.MOVE_FORWARD, List.of(
-                new Property("moveForwardDirection",0, MoveForwardDirection.values().length)
+                new Property("moveForwardDirection",1, MoveForwardDirection.values().length + 1)
         ));
     }
 

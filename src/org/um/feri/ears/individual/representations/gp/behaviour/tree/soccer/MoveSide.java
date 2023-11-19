@@ -10,13 +10,12 @@ public class MoveSide extends ActionNode {
     public enum MoveSideDirection {
         Left,
         Right,
-        NoAction,
         Random
     }
 
     public MoveSide() {
         this(BehaviourTreeNodeType.MOVE_SIDE, List.of(
-                new Property("moveSideDirection",0, MoveSideDirection.values().length)
+                new Property("moveSideDirection",1, MoveSideDirection.values().length + 1)
         ));
     }
 
