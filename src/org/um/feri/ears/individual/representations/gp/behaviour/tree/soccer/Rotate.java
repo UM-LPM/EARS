@@ -10,13 +10,12 @@ public class Rotate extends ActionNode {
     public enum RotateDirection {
         Left,
         Right,
-        NoAction,
         Random
     }
 
     public Rotate() {
         this(BehaviourTreeNodeType.ROTATE, List.of(
-                new Property("rotateDirection",0, RotateDirection.values().length)
+                new Property("rotateDirection",1, RotateDirection.values().length + 1)
         ));
     }
 

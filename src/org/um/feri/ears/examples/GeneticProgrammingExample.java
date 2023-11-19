@@ -39,11 +39,13 @@ public class GeneticProgrammingExample {
         // treeGenEvalSymbolicExample();
         // treeGenBtExample();
 
-        symbolicRegressionDefaultAlgorithmRunExample(null);
+        // symbolicRegressionDefaultAlgorithmRunExample(null);
         // behaviourTreeDefaultAlgorithmRunExample(null);
 
         // serializationTest();
         // deserealizationTest("gpAlgorithmState.ser");
+
+        System.out.println(MoveForward.MoveForwardDirection.Forward);
 
     }
 
