@@ -16,9 +16,9 @@ import static java.lang.Math.*;
  * Normalized:
  * 
  * <pre>
- *               1           -(x-μ)^2 / (2*σ^2)
+ *               1           -(x-mu)^2 / (2*sigma^2)
  * P(x) = --------------- * e
- *        σ * sqrt(2*pi)
+ *        sigma * sqrt(2*pi)
  * </pre>
  * 
  * @see http://mathworld.wolfram.com/NormalDistribution.html
@@ -29,23 +29,23 @@ public class GaussianDistribution {
 	 * The Gaussian representation of a flat line.
 	 **/
 	public static final GaussianDistribution UNIFORM = fromPrecisionMean(0, 0);
-	/** The peak of the Gaussian, μ **/
+	/** The peak of the Gaussian, mu **/
 	private final double mean;
-	/** The width of the Gaussian, σ, where the height drops to max/e **/
+	/** The width of the Gaussian, sigma, where the height drops to max/e **/
 	private final double standardDeviation;
-	/** The square of the standard deviation, σ^2 **/
+	/** The square of the standard deviation, sigma^2 **/
 	private final double variance;
 	// Precision and PrecisionMean are used because they make multiplying and
 	// dividing simpler (see the accompanying math paper for more details)
-	/** 1/σ^2 **/
+	/** 1/sigma^2 **/
 	private final double precision;
-	/** Precision times mean, μ/σ^2 **/
+	/** Precision times mean, mu/sigma^2 **/
 	private final double precisionMean;
 
 	/**
 	 * The normalization constant multiplies the exponential and causes the integral over (-Inf,Inf) to equal 1
 	 * 
-	 * @return 1/sqrt(2*pi*σ)
+	 * @return 1/sqrt(2*pi*sigma)
 	 */
 	public double getNormalizationConstant() {
 		// Great derivation of this is at
@@ -221,7 +221,7 @@ public class GaussianDistribution {
 	@Override
 	public String toString() {
 		// Debug help
-		return String.format("Mean(μ)=%f, Std-Dev(σ)=%f", mean, standardDeviation);
+		return String.format("Mean(mu)=%f, Std-Dev(sigma)=%f", mean, standardDeviation);
 	}
 
 	@Override

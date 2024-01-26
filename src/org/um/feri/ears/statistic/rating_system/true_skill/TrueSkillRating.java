@@ -12,7 +12,7 @@ public class TrueSkillRating extends Rating {
     /**
      * Constructs a TrueSKill rating.
      *
-     * @param mean              the statistical mean value of the rating (also known as μ).
+     * @param mean              the statistical mean value of the rating (also known as mu).
      * @param standardDeviation the number of standardDeviation to subtract from the mean to achieve a conservative rating.
      */
     public TrueSkillRating(double mean, double standardDeviation) {
@@ -44,6 +44,6 @@ public class TrueSkillRating extends Rating {
     }
 
     public String toString() {
-        return String.format("Mean(μ)=%s, Std-Dev(σ)=%s RI=[%s, %s]", Util.df.format(rating), Util.df.format(ratingDeviation), Util.df0.format(getRatingIntervalLower()), Util.df0.format(getRatingIntervalUpper()));
+        return String.format("Mean(mu)=%s, Std-Dev(sigma)=%s RI=[%s, %s]", Util.df.format(rating), Util.df.format(ratingDeviation), Util.df0.format(getRatingIntervalLower()), Util.df0.format(getRatingIntervalUpper()));
     }
 }

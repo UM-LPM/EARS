@@ -21,7 +21,7 @@ public class Rating {
     }
 
     /**
-     * The Rating value in Glicko2 or the statistical mean value of the rating in TrueSkill (also known as μ).
+     * The Rating value in Glicko2 or the statistical mean value of the rating in TrueSkill (also known as mu).
      **/
     public double getRating() {
         return rating;
@@ -36,7 +36,7 @@ public class Rating {
     public double getRatingIntervalUpper() {return rating + 2 * ratingDeviation;}
 
     /**
-     * The Rating deviation in Glicko2 or the standard deviation (the spread) of the rating in TrueSkill (also known as σ).
+     * The Rating deviation in Glicko2 or the standard deviation (the spread) of the rating in TrueSkill (also known as sigma).
      **/
     public double getRatingDeviation() {
         return ratingDeviation;
