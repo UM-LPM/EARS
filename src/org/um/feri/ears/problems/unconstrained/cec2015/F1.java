@@ -4,9 +4,9 @@ import org.um.feri.ears.problems.unconstrained.cec.Functions;
 
 public class F1 extends CEC2015 {
 
-
+    // Bent Cigar
     public F1(int d) {
-        super("F01 Bent Cigar", d, 1);
+        super("F01", d, 1);
     }
 
     @Override

@@ -3,9 +3,9 @@ package org.um.feri.ears.problems.unconstrained.cec2015;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 
 public class F5 extends CEC2015 {
-
+    // Katsuura Function
     public F5(int d) {
-        super("F05 Katsuura Function", d, 5);
+        super("F05", d, 5);
     }
 
     @Override

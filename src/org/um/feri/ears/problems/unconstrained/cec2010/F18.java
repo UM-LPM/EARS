@@ -20,7 +20,7 @@ public class F18 extends CEC2010 {
 
         M = new double[m * m];
 
-        DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, RNG.getAsRandom());
+        DenseMatrix64F A = RandomMatrices.createOrthogonal(m, m, RNG.getSelectedRng());
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < m; j++) {

@@ -3,6 +3,7 @@ package org.um.feri.ears.problems.unconstrained.cec2015;
 import org.um.feri.ears.problems.DoubleProblem;
 
 import org.um.feri.ears.problems.unconstrained.cec2015.input_data.DataReader;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -20,11 +21,11 @@ public abstract class CEC2015 extends DoubleProblem {
     /**
      * Expensive Test functions are only defined for D=10, 30.
      *
-     * @param d        number of dimensions
+     * @param d       number of dimensions
      * @param funcNum Function number 1-15
      */
     public CEC2015(String name, int d, int funcNum) {
-        super(name, d, 1, 1, 0);
+        super("CEC2015" + name, d, 1, 1, 0);
 
         this.funcNum = funcNum;
         if ((funcNum < 1) || (funcNum > 15)) {

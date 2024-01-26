@@ -14,7 +14,7 @@ https://www.sfu.ca/~ssurjano/dixonpr.html
 
 public class DixonPrice extends DoubleProblem {
     public DixonPrice(int d) {
-        super("Dixon_Price", d, 1, 1, 0);
+        super("DixonPrice", d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -10.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 10.0));
 

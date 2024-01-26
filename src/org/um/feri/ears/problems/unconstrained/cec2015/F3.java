@@ -3,9 +3,9 @@ package org.um.feri.ears.problems.unconstrained.cec2015;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 
 public class F3 extends CEC2015 {
-
+    // Weierstrass's Function
     public F3(int d) {
-        super("F03 Weierstrass's Function", d, 3);
+        super("F03", d, 3);
     }
 
     @Override

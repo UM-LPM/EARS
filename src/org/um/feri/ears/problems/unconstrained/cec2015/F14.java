@@ -3,9 +3,9 @@ package org.um.feri.ears.problems.unconstrained.cec2015;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 
 public class F14 extends CEC2015 {
-
+    // Composition Function 2
     public F14(int d) {
-        super("F14 Composition Function 2", d, 14);
+        super("F14", d, 14);
     }
 
     @Override

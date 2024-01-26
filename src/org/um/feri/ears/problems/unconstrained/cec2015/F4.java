@@ -3,9 +3,9 @@ package org.um.feri.ears.problems.unconstrained.cec2015;
 import org.um.feri.ears.problems.unconstrained.cec.Functions;
 
 public class F4 extends CEC2015 {
-
+    // Schwefel's Function
     public F4(int d) {
-        super("F04 Schwefel's Function", d, 4);
+        super("F04", d, 4);
     }
 
     @Override
