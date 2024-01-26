@@ -127,10 +127,10 @@ public class TournamentResults {
         for (Player p : players) sb.append(p.getId()).append(" - ").append(p.getRating(RatingType.GLICKO2)).append("\n");
         sb.append("\nGame results:\n");
         for (Player p : players) sb.append(p).append("\n");
+        Util.writeToFile(fileName+".txt", sb.toString());
         RatingIntervalPlot.saveChartToFile(players, RatingType.GLICKO2, fileName, RatingIntervalPlot.FileType.EPS);
         RatingIntervalPlot.saveChartToFile(players, RatingType.GLICKO2, fileName, RatingIntervalPlot.FileType.PNG);
 
-        Util.writeToFile(fileName+".txt", sb.toString());
     }
 
     /**
