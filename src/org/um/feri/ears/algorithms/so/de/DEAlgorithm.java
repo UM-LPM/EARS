@@ -255,7 +255,7 @@ public class DEAlgorithm extends NumberAlgorithm {
 
                 if (strategy == Strategy.DE_BEST_1_EXP) /* strategy DE0 (not in our paper) */ {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     L = 0;
                     do {
                         tmp[n] = bestit.getValue(n) + F * (pold[r2].getValue(n) - pold[r3].getValue(n));
@@ -270,7 +270,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------as a first guess.---------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_RAND_1_EXP) /* strategy DE1 in the techreport */ {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     L = 0;
                     do {
                         tmp[n] = pold[r1].getValue(n) + F * (pold[r2].getValue(n) - pold[r3].getValue(n));
@@ -285,7 +285,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------should play around with all three control variables.----------------------------*/
                 else if (strategy == Strategy.DE_RAND_TO_BEST_1_EXP) /* similiar to DE2 but generally better */ {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     L = 0;
                     do {
                         tmp[n] = tmp[n] + F * (bestit.getValue(n) - tmp[n]) + F * (pold[r1].getValue(n) - pold[r2].getValue(n));
@@ -297,7 +297,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/best/2/exp is another powerful strategy worth trying--------------------------*/
                 else if (strategy == Strategy.DE_BEST_2_EXP) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     L = 0;
                     do {
                         tmp[n] = bestit.getValue(n) + (pold[r1].getValue(n) + pold[r2].getValue(n) - pold[r3].getValue(n) - pold[r4].getValue(n)) * F;
@@ -308,7 +308,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/rand/2/exp seems to be a robust optimizer for many functions-------------------*/
                 else if (strategy == Strategy.DE_RAND_2_EXP) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     L = 0;
                     do {
                         tmp[n] = pold[r5].getValue(n) + (pold[r1].getValue(n) + pold[r2].getValue(n) - pold[r3].getValue(n) - pold[r4].getValue(n)) * F;
@@ -320,7 +320,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/best/1/bin--------------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_BEST_1_BIN) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((RNG.nextDouble() < CR) || L == (D - 1)) /*
                          * change
@@ -337,7 +337,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/rand/1/bin-------------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_RAND_1_BIN) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((RNG.nextDouble() < CR) || L == (D - 1)) {
                             tmp[n] = pold[r1].getValue(n) + F * (pold[r2].getValue(n) - pold[r3].getValue(n));
@@ -362,7 +362,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
                     tmpF = pold[i].getF();
                     tmpCR = pold[i].getCR();
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     // SELF-ADAPTATION OF CONTROL PARAMETERS
                     if (RNG.nextDouble() < tao1) { // F
                         F = Fl + RNG.nextDouble() * Fu;
@@ -386,7 +386,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/rand-to-best/1/bin-----------------------------------------------------------*/
                 else if (strategy == Strategy.DE_RAND_TO_BEST_1_BIN) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((RNG.nextDouble() < CR) || L == (D - 1)) /*
                          * change
@@ -403,7 +403,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/best/2/bin--------------------------------------------------------------------*/
                 else if (strategy == Strategy.DE_BEST_2_BIN) {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((RNG.nextDouble() < CR) || L == (D - 1)) /*
                          * change
@@ -420,7 +420,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 /*-------DE/rand/2/bin--------------------------------------------------------------------*/
                 else {
                     assignd(D, tmp, Util.toDoubleArray(pold[i].getVariables()));
-                    n = (int) (RNG.nextDouble() * D);
+                    n = RNG.nextInt(D);
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
                         if ((RNG.nextDouble() < CR) || L == (D - 1)) /*
                          * change

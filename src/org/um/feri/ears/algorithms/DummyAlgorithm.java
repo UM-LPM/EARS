@@ -291,6 +291,9 @@ public class DummyAlgorithm extends NumberAlgorithm {
         }
     }
 
+    /**
+     * Returns the number of evaluations for the given problem and run
+     */
     public void resetRunNumbers() {
         positions.replaceAll((k, v) -> 0);
     }

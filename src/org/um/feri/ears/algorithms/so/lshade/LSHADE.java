@@ -353,7 +353,7 @@ public class LSHADE extends NumberAlgorithm {
                     worst_ind = j;
                 }
             }
-            population = ArrayUtils.removeElement(population, worst_ind);
+            ArrayUtils.remove(population, worst_ind);
             popSize--;
         }
     }

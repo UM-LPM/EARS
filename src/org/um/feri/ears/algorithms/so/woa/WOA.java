@@ -149,6 +149,7 @@ public class WOA extends NumberAlgorithm {
     }
 
     private void initPopulation() throws StopCriterionException {
+        population = new ArrayList<>();
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
