@@ -15,6 +15,8 @@ EARS is a free and open-source Java-based framework for ranking, developing and 
 
 ## How to use
 
+The latest release including the .jar file can be downloaded  from the [releases page](https://github.com/UM-LPM/EARS/releases).
+
 ### Intellij
 
 **First Download EARS project**
@@ -24,22 +26,37 @@ EARS is a free and open-source Java-based framework for ranking, developing and 
 * Select the directory where you want to save the project (example: "path to my projects/EARS")
 * Import Gradle project
 
-**Second create new project (select GRADLE) and set EARS Project dependency**
+### Add EARS Project as dependency
 
-*Gradle*
+If you want to add EARS as dependency to your project, you can do it by following these steps:
 
-In file **settings.gradle** add:
+* Create new project (select GRADLE) and set EARS Project dependency
 
-```
+* In file **settings.gradle** add:
+
+Groovy:
+```Groovy
 include ':EARS'
-project(':EARS').projectDir = new File('path to EARS') //example ../EARS
+project(':EARS').projectDir = new File('path to EARS') // example: new File('../my_projects/EARS')  or project.projectDir.path + "/../EARS"
+```
+Kotlin:
+```Kotlin
+include(":EARS")
+project(":EARS").projectDir = File("path to EARS")
 ```
 
-In file  **build.gradle** add:
+* In file  **build.gradle** add:
 
-```
+Groovy:
+```groovy
 dependencies {
     implementation project(':EARS')
+}
+```
+Kotlin:
+```kotlin
+dependencies {
+    implementation(project(":EARS"))
 }
 ```
 
