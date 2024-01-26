@@ -86,11 +86,14 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
                     mut.execute(offSpring[1], task.problem);
                     if (task.isStopCriterion())
                         break;
+
+                    task.problem.makeFeasible(offSpring[0]);
                     task.eval(offSpring[0]);
                     offspringPopulation.add(offSpring[0]);
                     // problem.evaluateConstraints(offSpring[0]);
                     if (task.isStopCriterion())
                         break;
+                    task.problem.makeFeasible(offSpring[1]);
                     task.eval(offSpring[1]);
                     // problem.evaluateConstraints(offSpring[1]);
                     offspringPopulation.add(offSpring[1]);
