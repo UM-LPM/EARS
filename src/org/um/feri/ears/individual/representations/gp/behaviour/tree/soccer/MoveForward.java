@@ -16,7 +16,7 @@ public class MoveForward extends ActionNode {
 
     public MoveForward() {
         this(BehaviourTreeNodeType.MOVE_FORWARD, List.of(
-                new Property("moveForwardDirection",1, MoveForwardDirection.values().length + 1)
+                new Property("shoot",1, MoveForwardDirection.values().length + 1)
         ));
     }
 

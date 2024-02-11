@@ -22,16 +22,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class SoccerBTProblem2 extends ProgramProblem2 {
+public class UnityBTProblem2 extends ProgramProblem2 {
 
     public static final int BULK_EVALUATION_REPEATS = 5;
 
-    public SoccerBTProblem2() {
-        super("SoccerBTProblem");
+    public UnityBTProblem2() {
+        super("UnityBTProblem");
     }
 
-    public SoccerBTProblem2(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeHeight, int maxTreeHeight, int maxTreeNodes, GPOperator2 pruningOperator, GPOperator2 expansionOperator, GPProgramSolution2 programSolutionGenerator) {
-        super("SoccerBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeHeight, maxTreeHeight, maxTreeNodes, pruningOperator, expansionOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS");
+    public UnityBTProblem2(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeHeight, int maxTreeHeight, int maxTreeNodes, GPOperator2 pruningOperator, GPOperator2 expansionOperator, GPProgramSolution2 programSolutionGenerator) {
+        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeHeight, maxTreeHeight, maxTreeNodes, pruningOperator, expansionOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS");
 
     }
 
@@ -125,7 +125,7 @@ public class SoccerBTProblem2 extends ProgramProblem2 {
     public String sendEvaluateRequest(String apiUrl, String jsonBody) throws Exception {
         URL url = new URL(apiUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(15 * 60 * 1000); // 10 minutes
+        conn.setConnectTimeout(100 * 60 * 1000); // 100 minutes
 
         // Set the request method to POST
         conn.setRequestMethod("POST");

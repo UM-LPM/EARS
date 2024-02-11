@@ -7,7 +7,13 @@ import org.um.feri.ears.individual.representations.gp.behaviour.tree.Property;
 import java.util.List;
 
 public class RayHitObject extends ConditionNode {
-    public enum AgentSide {
+    private enum AgentSide {
+        Center ,
+        Left,
+        Right
+    }
+
+    private enum AgentSideExtended {
         Center ,
         Left,
         Right,
@@ -16,19 +22,23 @@ public class RayHitObject extends ConditionNode {
         BackRight
     }
 
-    public enum SoccerGameObject {
-        SoccerBall,
-        BlueStriker,
-        PurpleStriker,
-        GoalNetBlue,
-        GoalNetPurple,
-        Side,
-        WallAngle
+    private enum TargetGameObject {
+        Agent,
+        Wall,
+        Obstacle,
+        Target1,
+        Target2,
+        Target3,
+        Target4,
+        Target5,
+        Target6,
+        Target7,
+        Unknown
     }
 
     public RayHitObject() {
         this(BehaviourTreeNodeType.RAY_HIT_OBJECT, List.of(
-                new Property("targetGameObject",0, SoccerGameObject.values().length),
+                new Property("targetGameObject",0, TargetGameObject.values().length),
                 new Property("side",0, AgentSide.values().length)
         ));
     }

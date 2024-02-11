@@ -48,6 +48,8 @@ dependencies {
     implementation 'net.sf.epsgraphics:epsgraphics:1.2'
     implementation group: 'org.javassist', name: 'javassist', version: '3.24.0-GA'
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.12.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.16.1'
     implementation 'org.jetbrains:annotations:13.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.apache.commons:commons-rng-core:1.4'

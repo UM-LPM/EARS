@@ -64,7 +64,7 @@ public class GeneticProgrammingExample {
                 Rotate.class
         );
 
-        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
+        UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
 
         List<ProgramSolution2> programSolution2s = new ArrayList<>();
@@ -220,7 +220,7 @@ public class GeneticProgrammingExample {
                 Rotate.class
         );
 
-        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 100, new GPDepthBasedTreePruningOperator2(),
+        UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 100, new GPDepthBasedTreePruningOperator2(),
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
 
         //GP algorithm execution example
@@ -274,7 +274,7 @@ public class GeneticProgrammingExample {
                 Rotate.class
         );
 
-        SoccerBTProblem2 sgp2 = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
+        UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
                 new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
 
         //get current time

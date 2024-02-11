@@ -2,14 +2,14 @@ package org.um.feri.ears.individual.representations.gp;
 
 public class HttpResponse {
     public class Eval{
-        private double[] fitness;
+        private double[] PopFitness;
 
         public double[] getFitness() {
-            return fitness;
+            return PopFitness;
         }
 
-        public void setFitness(double[] fitness) {
-            fitness = fitness;
+        public void setFitness(double[] PopFitness) {
+            PopFitness = PopFitness;
         }
     }
     private String status;
