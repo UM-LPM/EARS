@@ -148,7 +148,7 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
     @Override
     public void makeFeasible(ProgramSolution2 solution){
         expandProgramSolution(solution);
-        pruneProgramSolution(solution); // TODO fix problem with pruning
+        pruneProgramSolution(solution); // TODO fix problem with pruning ??
     }
     @Override
     public ProgramSolution2 getRandomEvaluatedSolution() {

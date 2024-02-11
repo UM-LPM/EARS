@@ -9,7 +9,11 @@ public enum BehaviourTreeNodeType {
     MOVE_FORWARD("MoveForward"),
     MOVE_SIDE("MoveSide"),
     ROTATE("Rotate"),
-    RAY_HIT_OBJECT("RayHitObject");
+    RAY_HIT_OBJECT("RayHitObject"),
+    GRID_CELL_CONTAINS_OBJECT("GridCellContainsObject"),
+    SHOOT("Shoot"),
+    PLACE_BOMB("PlaceBomb"),
+    ROTATE_TURRET("RotateTurret");
 
     private final String value;
 

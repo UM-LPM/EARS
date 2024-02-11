@@ -6,6 +6,8 @@ import org.um.feri.ears.individual.representations.gp.behaviour.tree.Inverter;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Repeat;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Selector;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Sequencer;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.robocode.RotateTurret;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.robocode.Shoot;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveForward;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveSide;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.RayHitObject;
@@ -417,8 +419,10 @@ public class HomeForm extends JFrame {
          List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
                  RayHitObject.class,
                  MoveForward.class,
-                 MoveSide.class,
-                 Rotate.class
+                 //MoveSide.class,
+                 Rotate.class,
+                 RotateTurret.class,
+                 Shoot.class
          );
 
          if(initialStateFile != null){
@@ -427,10 +431,10 @@ public class HomeForm extends JFrame {
              this.programProblem = this.task.problem;
          }
          else {
-             this.programProblem = new SoccerBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 12, 200, new GPDepthBasedTreePruningOperator2(),
+             this.programProblem = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 10, 100, new GPDepthBasedTreePruningOperator2(),
                      new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
              this.task = new Task<>(this.programProblem, StopCriterion.EVALUATIONS, 500000, 0, 0);
-             this.gpAlgorithm =  new DefaultGPAlgorithm2(200, 0.90, 0.025, 2, this.task, null);
+             this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.90, 0.025, 4, this.task, null);
          }
          this.gpAlgorithm.setDebug(true);
      }
