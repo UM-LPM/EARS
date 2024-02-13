@@ -11,6 +11,7 @@ import org.um.feri.ears.individual.representations.gp.HttpResponse;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution2;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.BehaviourTree;
 import org.um.feri.ears.operators.gp.GPOperator2;
 
 import java.io.BufferedReader;
@@ -30,8 +31,8 @@ public class UnityBTProblem2 extends ProgramProblem2 {
         super("UnityBTProblem");
     }
 
-    public UnityBTProblem2(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeHeight, int maxTreeHeight, int maxTreeNodes, GPOperator2 pruningOperator, GPOperator2 expansionOperator, GPProgramSolution2 programSolutionGenerator) {
-        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeHeight, maxTreeHeight, maxTreeNodes, pruningOperator, expansionOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS");
+    public UnityBTProblem2(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeHeight, int maxTreeHeight, int maxTreeNodes, GPOperator2 treeDepthPruningOperator, GPOperator2 expansionOperator, GPOperator2 treeSizePruningOperator, GPProgramSolution2 programSolutionGenerator) {
+        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeHeight, maxTreeHeight, maxTreeNodes, treeDepthPruningOperator, expansionOperator, treeSizePruningOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS");
 
     }
 
@@ -48,8 +49,10 @@ public class UnityBTProblem2 extends ProgramProblem2 {
         JSONParser jsonParser = new JSONParser();
 
         for (ProgramSolution2 solution : solutions) {
+            //solution.tree = new BehaviourTree("BAS");
             try {
-                jsonArray.add(jsonParser.parse(solution.tree.toJsonString()));
+                String json = solution.tree.toJsonString();
+                jsonArray.add(jsonParser.parse(json));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }

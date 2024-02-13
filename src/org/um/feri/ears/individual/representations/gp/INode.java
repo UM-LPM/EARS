@@ -1,5 +1,6 @@
 package org.um.feri.ears.individual.representations.gp;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;

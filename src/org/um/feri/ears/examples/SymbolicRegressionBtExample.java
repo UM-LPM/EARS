@@ -21,6 +21,7 @@ import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
 import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator2;
 import org.um.feri.ears.operators.gp.GPTreeExpansionOperator2;
+import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator2;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -63,7 +64,7 @@ public class SymbolicRegressionBtExample { // TODO remove
         );
 
         UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2());
 
         List<ProgramSolution2> programSolution2s = new ArrayList<>();
         for (int i = 0; i < 300; i++){
@@ -141,7 +142,7 @@ public class SymbolicRegressionBtExample { // TODO remove
 
 
         SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
+                new GPTreeExpansionOperator2(),new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2(), evalData);
 
         //GP algorithm execution example
         Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
@@ -217,7 +218,7 @@ public class SymbolicRegressionBtExample { // TODO remove
         );
 
         UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 100, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2());
 
         //GP algorithm execution example
         Task<ProgramSolution2, ProgramProblem2> soccerTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 40000, 0, 0);
@@ -271,7 +272,7 @@ public class SymbolicRegressionBtExample { // TODO remove
         );
 
         UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2());
 
         //get current time
         long startTime = System.currentTimeMillis();
@@ -320,7 +321,7 @@ public class SymbolicRegressionBtExample { // TODO remove
                 new Target().when("x", 10).targetIs(200));
 
         SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2(), evalData);
 
         ProgramSolution2 programSolution2 = sgp2.getRandomSolution();
         sgp2.evaluate(programSolution2);

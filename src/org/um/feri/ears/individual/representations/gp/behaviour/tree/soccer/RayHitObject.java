@@ -38,7 +38,7 @@ public class RayHitObject extends ConditionNode {
 
     public RayHitObject() {
         this(BehaviourTreeNodeType.RAY_HIT_OBJECT, List.of(
-                new Property("targetGameObject",0, TargetGameObject.values().length),
+                new Property("targetGameObject",0, 3), // TODO replace with TargetGameObject.values().length
                 new Property("side",0, AgentSide.values().length)
         ));
     }

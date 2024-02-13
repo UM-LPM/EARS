@@ -13,6 +13,7 @@ import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.Move
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.RayHitObject;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.Rotate;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
+import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator2;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -229,7 +230,7 @@ public class HomeForm extends JFrame {
         this.avgTreeSizeGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeSize());
 
         // Update population list
-        //displayPopulation(updatePopulation);
+        displayPopulation(updatePopulation);
 
         // Update best individual
         updateBestIndividual();
@@ -401,43 +402,43 @@ public class HomeForm extends JFrame {
         }
         else {
             this.programProblem = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
-                    new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
+                    new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2(), evalData);
             this.task = new Task<>(programProblem, StopCriterion.EVALUATIONS, 10000, 0, 0);
             this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, this.task, null);
         }
         this.gpAlgorithm.setDebug(true);
     }
 
-     public void initializeDataBehaviourTree(String initialStateFile){
-         List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
-                 //Repeat.class, // TODO remove comment
-                 Sequencer.class,
-                 Selector.class,
-                 Inverter.class
-         );
+    public void initializeDataBehaviourTree(String initialStateFile){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                //Repeat.class, // TODO remove comment
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
+        );
 
-         List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
-                 RayHitObject.class,
-                 MoveForward.class,
-                 //MoveSide.class,
-                 Rotate.class,
-                 RotateTurret.class,
-                 Shoot.class
-         );
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                //MoveSide.class,
+                Rotate.class,
+                RotateTurret.class,
+                Shoot.class
+        );
 
-         if(initialStateFile != null){
-             this.gpAlgorithm = GPAlgorithm2.deserializeAlgorithmState(initialStateFile);
-             this.task = this.gpAlgorithm.getTask();
-             this.programProblem = this.task.problem;
-         }
-         else {
-             this.programProblem = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 10, 100, new GPDepthBasedTreePruningOperator2(),
-                     new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
-             this.task = new Task<>(this.programProblem, StopCriterion.EVALUATIONS, 500000, 0, 0);
-             this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.90, 0.025, 4, this.task, null);
-         }
-         this.gpAlgorithm.setDebug(true);
-     }
+        if(initialStateFile != null){
+            this.gpAlgorithm = GPAlgorithm2.deserializeAlgorithmState(initialStateFile);
+            this.task = this.gpAlgorithm.getTask();
+            this.programProblem = this.task.problem;
+        }
+        else {
+            this.programProblem = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 100, new GPDepthBasedTreePruningOperator2(),
+                    new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2());
+            this.task = new Task<>(this.programProblem, StopCriterion.EVALUATIONS, 500000, 0, 0);
+            this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.90, 0.025, 4, this.task, null);
+        }
+        this.gpAlgorithm.setDebug(true);
+    }
 
     public void clearImages(){
         try {

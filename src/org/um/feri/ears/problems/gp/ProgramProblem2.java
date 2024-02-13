@@ -30,10 +30,11 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
 
     protected int minTreeHeight;
     protected int maxTreeHeight;
-    protected int maxTreeNodes; // TODO add support for max tree nodes (feasible)
+    protected int maxTreeNodes;
 
-    protected GPOperator2 pruningOperator;
+    protected GPOperator2 treeDepthPruningOperator;
     protected GPOperator2 expansionOperator;
+    protected GPOperator2 treeSizePruningOperator;
 
     protected GPProgramSolution2 programSolutionGenerator;
 
@@ -46,14 +47,15 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
         this.maxTreeHeight = 100;
         this.maxTreeNodes = 1000;
 
-        this.pruningOperator = new GPDepthBasedTreePruningOperator2();
+        this.treeDepthPruningOperator = new GPDepthBasedTreePruningOperator2();
         this.expansionOperator = new GPTreeExpansionOperator2();
         this.programSolutionGenerator = new GPRandomProgramSolution2();
+        this.treeSizePruningOperator = new GPTreeSizePruningOperator2();
         this.solutionTreeType = Tree.TreeType.SYMBOLIC;
     }
 
     // Constructor with all parameters
-    public ProgramProblem2(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeHeight, int maxTreeHeight, int maxTreeNodes, GPOperator2 pruningOperator, GPOperator2 expansionOperator, GPProgramSolution2 programSolutionGenerator, Tree.TreeType treeType, String treeName) {
+    public ProgramProblem2(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeHeight, int maxTreeHeight, int maxTreeNodes, GPOperator2 pruningOperator, GPOperator2 expansionOperator, GPOperator2 treeSizePruningOperator, GPProgramSolution2 programSolutionGenerator, Tree.TreeType treeType, String treeName) {
         super(name, 1, 1, 0);
         setBaseFunctionNodeTypes(baseFunctionNodeTypes);
         setBaseTerminalNodeTypes(baseTerminalNodeTypes);
@@ -64,8 +66,9 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
         this.maxTreeHeight = maxTreeHeight;
         this.maxTreeNodes = maxTreeNodes;
 
-        this.pruningOperator = pruningOperator;
+        this.treeDepthPruningOperator = pruningOperator;
         this.expansionOperator = expansionOperator;
+        this.treeSizePruningOperator = treeSizePruningOperator;
         this.programSolutionGenerator = programSolutionGenerator;
     }
 
@@ -107,12 +110,12 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
         this.minTreeHeight = minTreeHeight;
     }
 
-    public GPOperator2 getPruningOperator() {
-        return pruningOperator;
+    public GPOperator2 getTreeDepthPruningOperator() {
+        return treeDepthPruningOperator;
     }
 
-    public void setPruningOperator(GPOperator2 pruningOperator) {
-        this.pruningOperator = pruningOperator;
+    public void setTreeDepthPruningOperator(GPOperator2 treeDepthPruningOperator) {
+        this.treeDepthPruningOperator = treeDepthPruningOperator;
     }
 
     public GPOperator2 getExpansionOperator() {
@@ -142,13 +145,16 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
     @Override
     public boolean isFeasible(ProgramSolution2 solution){
         int treeHeight = solution.getTree().treeHeight();
-        return treeHeight <= this.getMaxTreeHeight() && treeHeight >= this.getMinTreeHeight();
+        int numOfNodes = solution.getTree().treeSize();
+
+        return treeHeight <= this.getMaxTreeHeight() && treeHeight >= this.getMinTreeHeight() && numOfNodes <= this.getMaxTreeNodes();
     }
 
     @Override
     public void makeFeasible(ProgramSolution2 solution){
         expandProgramSolution(solution);
-        pruneProgramSolution(solution); // TODO fix problem with pruning ??
+        treeDepthProgramSolutionPruning(solution); // TODO fix problem with pruning ??
+        treeSizeProgramSolutionPruning(solution);
     }
     @Override
     public ProgramSolution2 getRandomEvaluatedSolution() {
@@ -162,12 +168,20 @@ public abstract class ProgramProblem2 extends Problem<ProgramSolution2> {
         return this.programSolutionGenerator.generate(this, 1, treeName);
     }
 
-    public void pruneProgramSolution(ProgramSolution2 solution){
-        this.pruningOperator.execute(solution, this);
+    public Node getRandomTerminalNode(){
+        return this.programSolutionGenerator.generateRandomTerminalNode(this);
+    }
+
+    public void treeDepthProgramSolutionPruning(ProgramSolution2 solution){
+        this.treeDepthPruningOperator.execute(solution, this);
     }
 
     public void expandProgramSolution(ProgramSolution2 solution){
         this.expansionOperator.execute(solution, this);
+    }
+
+    public void treeSizeProgramSolutionPruning(ProgramSolution2 solution){
+        this.treeSizePruningOperator.execute(solution, this);
     }
 
     @Override

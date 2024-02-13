@@ -1,13 +1,14 @@
 package org.um.feri.ears.individual.representations.gp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Tree implements Serializable {
     public enum TreeType{
@@ -69,6 +70,48 @@ public abstract class Tree implements Serializable {
 
     public int numberOfTerminals(){
         return rootNode.numberOfTerminals();
+    }
+
+    public List<Node> getFunctionNodes(){
+        //return rootNode.getFunctionNodes();
+        List<Node> nodes = new ArrayList<>();
+
+        Queue<Node> nodesToCheck = new LinkedList<>();
+        nodesToCheck.add(rootNode);
+
+        while(!nodesToCheck.isEmpty()){
+            Node current = nodesToCheck.poll();
+            if(current.arity > 0){
+                nodes.add(current);
+                nodesToCheck.addAll(current.children);
+            }
+        }
+
+        return nodes;
+    }
+
+    public List<Node> getTerminalNodes(){
+        //return rootNode.getTerminalNodes();
+        List<Node> nodes = new ArrayList<>();
+
+        Queue<Node> nodesToCheck = new LinkedList<>();
+        nodesToCheck.add(rootNode);
+
+        while(!nodesToCheck.isEmpty()){
+            Node current = nodesToCheck.poll();
+
+            if(current.arity == 0){
+                nodes.add(current);
+            }
+            if(current.children != null && !current.children.isEmpty()){
+                nodesToCheck.addAll(current.children);
+            }
+        }
+        return nodes;
+    }
+
+    public int numberOfNodes(){
+        return rootNode.numberOfNodes();
     }
 
     public abstract double evaluate(Map<String, Double> variables);

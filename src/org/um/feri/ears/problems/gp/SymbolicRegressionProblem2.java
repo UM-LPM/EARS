@@ -17,8 +17,8 @@ public class SymbolicRegressionProblem2 extends ProgramProblem2 implements Seria
         super("SymbolicRegression");
     }
 
-    public SymbolicRegressionProblem2(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeHeight, int maxTreeHeight, int maxTreeNodes, GPOperator2 pruningOperator, GPOperator2 expansionOperator, GPProgramSolution2 programSolutionGenerator, List<Target> evalData) {
-        super("SymbolicRegression", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeHeight, maxTreeHeight, maxTreeNodes, pruningOperator, expansionOperator, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree");
+    public SymbolicRegressionProblem2(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeHeight, int maxTreeHeight, int maxTreeNodes, GPOperator2 pruningOperator, GPOperator2 expansionOperator, GPOperator2 treeSizePrunningOperator, GPProgramSolution2 programSolutionGenerator, List<Target> evalData) {
+        super("SymbolicRegression", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeHeight, maxTreeHeight, maxTreeNodes, pruningOperator, expansionOperator, treeSizePrunningOperator, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree");
 
         setEvalData(evalData);
     }
