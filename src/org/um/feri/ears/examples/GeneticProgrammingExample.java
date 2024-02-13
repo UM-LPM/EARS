@@ -19,8 +19,11 @@ import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.Rota
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution2;
 import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
+import org.um.feri.ears.operators.Operator;
 import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator2;
+import org.um.feri.ears.operators.gp.GPOperator2;
 import org.um.feri.ears.operators.gp.GPTreeExpansionOperator2;
+import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator2;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -45,7 +48,7 @@ public class GeneticProgrammingExample {
         // serializationTest();
         // deserealizationTest("gpAlgorithmState.ser");
 
-        System.out.println(MoveForward.MoveForwardDirection.Forward);
+        treeSizePruneExample();
 
     }
 
@@ -65,7 +68,7 @@ public class GeneticProgrammingExample {
         );
 
         UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2());
 
         List<ProgramSolution2> programSolution2s = new ArrayList<>();
         for (int i = 0; i < 300; i++){
@@ -143,7 +146,7 @@ public class GeneticProgrammingExample {
 
 
         SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2(), evalData);
 
         //GP algorithm execution example
         Task<ProgramSolution2, ProgramProblem2> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 500000, 0, 0);
@@ -221,7 +224,7 @@ public class GeneticProgrammingExample {
         );
 
         UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 100, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2());
 
         //GP algorithm execution example
         Task<ProgramSolution2, ProgramProblem2> soccerTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 40000, 0, 0);
@@ -275,7 +278,7 @@ public class GeneticProgrammingExample {
         );
 
         UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2());
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2());
 
         //get current time
         long startTime = System.currentTimeMillis();
@@ -324,7 +327,7 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 10).targetIs(200));
 
         SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPRandomProgramSolution2(), evalData);
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2(), evalData);
 
         ProgramSolution2 programSolution2 = sgp2.getRandomSolution();
         sgp2.evaluate(programSolution2);
@@ -373,6 +376,38 @@ public class GeneticProgrammingExample {
         Tree tree = new SymbolicRegressionTree("demo", treeGenerator.generateRandomTree(0, 3));
         tree.printTree();
         System.out.println(tree.evaluate(Map.of("x", 1.0)));
+    }
+
+    public static void treeSizePruneExample(){
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                Repeat.class,
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
+        );
+
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                MoveSide.class,
+                Rotate.class
+        );
+
+        int maxNumOfNodes = 20;
+        GPOperator2 treeSizePruningOperator = new GPTreeSizePruningOperator2();
+
+        UnityBTProblem2 sgp2 = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, maxNumOfNodes, new GPDepthBasedTreePruningOperator2(),
+                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2());
+
+        ProgramSolution2 programSolution2 = sgp2.getRandomSolution();
+
+        programSolution2.getTree().displayTree("test_operator1", true);
+
+        if(programSolution2.getTree().numberOfNodes() > maxNumOfNodes){
+            programSolution2 = treeSizePruningOperator.execute(programSolution2, sgp2);
+        }
+
+        programSolution2.getTree().displayTree("test_operator2", true);
     }
 
     public static String sendPostRequest(String apiUrl, String jsonBody) throws Exception {

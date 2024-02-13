@@ -20,6 +20,10 @@ public class GPRandomProgramSolution2 extends GPProgramSolution2 {
         return getRandomSolution(startHeight, treeName);
     }
 
+    public Node generateRandomTerminalNode(ProgramProblem2 programProblem) {
+        return generateRandomNode(programProblem.getBaseTerminalNodeTypes());
+    }
+
     public ProgramSolution2 getRandomSolution(int startHeight, String treeName) {
         ProgramSolution2 newSolution = new ProgramSolution2(this.programProblem.getNumberOfObjectives());
         Tree tree;
