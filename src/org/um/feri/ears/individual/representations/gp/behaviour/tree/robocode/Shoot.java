@@ -11,7 +11,7 @@ public class Shoot extends ActionNode {
 
     public Shoot() {
         this(BehaviourTreeNodeType.SHOOT, List.of(
-                new Property("rotateDirection",1, 2, 1)
+                new Property("shoot",1, 2, 1)
         ));
     }
 
