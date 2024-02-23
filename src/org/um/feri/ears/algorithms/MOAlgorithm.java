@@ -143,7 +143,8 @@ public abstract class MOAlgorithm<N extends Number, S extends Solution, P extend
             best.saveObjectivesToCSVFile("FUN_" + algName);
         }
         if (displayData) {
-            best.displayAllUnaryQualityIndicators(task.problem.getNumberOfObjectives(), task.problem.getReferenceSetFileName());
+            //if(!task.problem.getReferenceSetFileName().isEmpty())
+            //    best.displayAllUnaryQualityIndicators(task.problem.getNumberOfObjectives(), task.problem.getReferenceSetFileName());
             best.displayData(this.getAlgorithmInfo().getAcronym(), task.getProblemName());
         }
 

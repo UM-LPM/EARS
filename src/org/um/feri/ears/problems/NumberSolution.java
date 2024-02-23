@@ -12,6 +12,10 @@ public class NumberSolution<N extends Number> extends Solution {
 
     protected ArrayList<N> variables;
 
+    public NumberSolution() {
+        super();
+    }
+
     /*
         Constructor for single-objective optimization
      */

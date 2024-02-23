@@ -10,6 +10,7 @@ package org.um.feri.ears.algorithms.moo.nsga2;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.algorithms.StateManager;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
@@ -22,18 +23,17 @@ import org.um.feri.ears.util.Ranking;
 
 /**
  * Implementation of NSGA-II.
- * This implementation of NSGA-II makes use of a QualityIndicator object
- * to obtained the convergence speed of the algorithm. This version is used
- * in the paper:
  * A.J. Nebro, J.J. Durillo, C.A. Coello Coello, F. Luna, E. Alba
  * "A Study of Convergence Speed in Multi-Objective Metaheuristics."
  * To be presented in: PPSN'08. Dortmund. September 2008.
  */
-public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
+public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> implements StateManager {
 
     int populationSize = 100;
-
+    boolean isLoaded = false;
+    boolean reevaluate = false;
     ParetoSolution<N> population;
+    ParetoSolution<N> immutablePopulation;
     ParetoSolution<N> offspringPopulation;
     ParetoSolution<N> union;
 
@@ -59,18 +59,35 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
         Distance<N> distance = new Distance<N>();
         BinaryTournament2<N> bt2 = new BinaryTournament2<N>();
 
-        // Create the initial population
-        NumberSolution<N> newSolution;
-        for (int i = 0; i < populationSize; i++) {
-            if (task.isStopCriterion())
-                return;
-            newSolution = task.getRandomEvaluatedSolution();
-            // problem.evaluateConstraints(newSolution);
-            population.add(newSolution);
+        if (isLoaded && reevaluate) {
+            for (NumberSolution<N> s : population) {
+                task.eval(s);
+            }
+        } else if(!isLoaded) { // Create the initial population
+            NumberSolution<N> newSolution;
+            for (int i = 0; i < populationSize; i++) {
+                if (task.isStopCriterion())
+                    return;
+                newSolution = task.getRandomEvaluatedSolution();
+                // problem.evaluateConstraints(newSolution);
+                population.add(newSolution);
+            }
         }
 
+        immutablePopulation = new ParetoSolution<>(populationSize);
+        for (NumberSolution<N> s : population) {
+            immutablePopulation.add(s);
+        }
+
+        distance.crowdingDistanceAssignment(population, numObj);
+
+        long startTime = System.currentTimeMillis();
         // Generations
         while (!task.isStopCriterion()) {
+
+            System.out.println("Generation: " + task.getNumberOfIterations() + " Time: " + (System.currentTimeMillis() - startTime) + "ms");
+            startTime = System.currentTimeMillis();
+
             // Create the offSpring solutionSet
             offspringPopulation = new ParetoSolution(populationSize);
             NumberSolution<N>[] parents = new NumberSolution[2];
@@ -141,6 +158,8 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
                 }
                 remain = 0;
             }
+
+            immutablePopulation = new ParetoSolution(population);
             task.incrementNumberOfIterations();
         }
 
@@ -150,6 +169,9 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
 
     @Override
     protected void init() {
+
+        if (isLoaded)
+            return;
 
         if (optimalParam) {
             switch (numObj) {
@@ -172,7 +194,8 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
             }
         }
 
-        population = new ParetoSolution<N>(populationSize);
+        population = new ParetoSolution<>(populationSize);
+        immutablePopulation = new ParetoSolution<>(populationSize);
     }
 
     @Override
@@ -180,4 +203,21 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
 
     }
 
+    @Override
+    public void saveState(String fileName) {
+        immutablePopulation.toJson(fileName);
+    }
+
+    @Override
+    public void loadState(String fileName, boolean reevaluate) {
+        try {
+            population = new ParetoSolution<>(populationSize);
+            population.fromJson(fileName);
+            isLoaded = true;
+            this.reevaluate = reevaluate;
+            populationSize = population.size();
+        } catch (Exception e) {
+            System.out.println("Error while loading state: " + e.getMessage());
+        }
+    }
 }

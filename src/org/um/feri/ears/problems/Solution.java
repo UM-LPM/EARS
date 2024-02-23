@@ -49,6 +49,7 @@ public abstract class Solution {
         System.arraycopy(s.objectives, 0, objectives, 0, s.numberOfObjectives);
         parents = new ArrayList<>();
         this.constraintsMet = s.constraintsMet;
+        this.crowdingDistance = s.crowdingDistance;
         if (s.constraints != null) {
             constraints = new double[s.constraints.length];
             System.arraycopy(s.constraints, 0, constraints, 0, constraints.length);

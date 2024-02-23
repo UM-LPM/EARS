@@ -18,6 +18,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Solution;
 import org.um.feri.ears.quality_indicator.IndicatorFactory;
@@ -381,6 +386,25 @@ public class ParetoSolution<N extends Number> extends Solution implements Iterab
         return objectives;
     }
 
+    public void toJson(String filename) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        try {
+            mapper.writeValue(Paths.get(filename).toFile(), solutions);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void fromJson(String filename) throws JsonProcessingException {
+        String json = Util.readFromFile(filename);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        solutions = mapper.readValue(json, new TypeReference<List<NumberSolution<N>>>(){});
+    }
+
     public void loadObjectivesFromFile(String fileName) {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))) {
             solutions.clear();
@@ -447,7 +471,7 @@ public class ParetoSolution<N extends Number> extends Solution implements Iterab
      */
     public void saveVariablesToFile(String fileName) {
 
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(fileName + ".dat"))))) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(fileName))))) {
             if (solutions.size() > 0) {
                 int numberOfVariables = solutions.get(0).getVariables().size();
                 for (NumberSolution<N> solution : solutions) {
