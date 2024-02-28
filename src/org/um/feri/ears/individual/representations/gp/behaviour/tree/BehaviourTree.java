@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.um.feri.ears.individual.representations.gp.HttpResponse;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Tree;
+import org.um.feri.ears.util.Util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,11 +25,10 @@ public class BehaviourTree extends Tree {
 
     @Override
     public double evaluate(Map<String, Double> variables) {
-        // TODO Call API and execute one game and return the score (fitness)
         try {
             String apiUrl = "http://localhost:5016/api/JsonToSoParser";
             String jsonBody = this.toJsonString();
-            String response = sendEvaluateRequest(apiUrl, jsonBody);
+            String response = Util.sendEvaluateRequest(apiUrl, jsonBody, 100 * 60 * 1000);
             response = response.replace("\"{", "{");
             response = response.replace("}\"", "}");
             response = response.replace("\\", "");
@@ -70,36 +70,5 @@ public class BehaviourTree extends Tree {
         repeatNode.insert(0, oldRoot);
         newTree.rootNode = rootNodeNew;
         return newTree;
-    }
-
-    public String sendEvaluateRequest(String apiUrl, String jsonBody) throws Exception {
-        URL url = new URL(apiUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-        // Set the request method to POST
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-
-        // Write the JSON payload to the request body
-        try (OutputStream os = conn.getOutputStream()) {
-            byte[] input = jsonBody.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        }
-
-        int responseCode = conn.getResponseCode();
-
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-                String inputLine;
-                StringBuilder response = new StringBuilder();
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                return response.toString();
-            }
-        } else {
-            throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
-        }
     }
 }

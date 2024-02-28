@@ -12,6 +12,7 @@ import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.operators.gp.GPOperator;
+import org.um.feri.ears.util.Util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -30,8 +31,8 @@ public class UnityBTProblem extends ProgramProblem {
         super("UnityBTProblem");
     }
 
-    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeHeight, int maxTreeNodes, GPOperator treeDepthPruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator) {
-        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeHeight, maxTreeNodes, treeDepthPruningOperator, expansionOperator, treeSizePruningOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS");
+    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeHeight, int maxTreeSize, GPOperator treeDepthPruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator) {
+        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeHeight, maxTreeSize, treeDepthPruningOperator, expansionOperator, treeSizePruningOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS");
 
     }
 
@@ -48,7 +49,6 @@ public class UnityBTProblem extends ProgramProblem {
         JSONParser jsonParser = new JSONParser();
 
         for (ProgramSolution solution : solutions) {
-            //solution.tree = new BehaviourTree("BAS");
             try {
                 String json = solution.tree.toJsonString();
                 jsonArray.add(jsonParser.parse(json));
@@ -61,7 +61,7 @@ public class UnityBTProblem extends ProgramProblem {
         for(int nums = 0; nums < BULK_EVALUATION_REPEATS; nums++) {
             try {
                 String apiUrl = "http://localhost:5016/api/JsonToSoParser";
-                String response = sendEvaluateRequest(apiUrl, jsonArray.toJSONString());
+                String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000);
                 response = response.replace("\"{", "{");
                 response = response.replace("}\"", "}");
                 response = response.replace("\\", "");
@@ -90,7 +90,6 @@ public class UnityBTProblem extends ProgramProblem {
         System.exit(1);
     }
 
-    // TODO delete method
     public void evaluate(List<ProgramSolution> solutions){
         JSONArray jsonArray = new JSONArray();
         JSONParser jsonParser = new JSONParser();
@@ -109,7 +108,7 @@ public class UnityBTProblem extends ProgramProblem {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         try {
             String apiUrl = "http://localhost:5016/api/JsonToSoParser";
-            String response = sendEvaluateRequest(apiUrl, jsonArray.toJSONString());
+            String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000);
             response = response.replace("\"{", "{");
             response = response.replace("}\"", "}");
             response = response.replace("\\", "");
@@ -122,40 +121,5 @@ public class UnityBTProblem extends ProgramProblem {
 
         // Set fitness values after evaluation
         //solution.setObjective(0, eval);
-    }
-
-    public String sendEvaluateRequest(String apiUrl, String jsonBody) throws Exception {
-        URL url = new URL(apiUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(100 * 60 * 1000); // 100 minutes
-
-        // Set the request method to POST
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-
-        // Write the JSON payload to the request body
-        try (OutputStream os = conn.getOutputStream()) {
-            byte[] input = jsonBody.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        }
-
-        int responseCode = conn.getResponseCode();
-
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-                String inputLine;
-                StringBuilder response = new StringBuilder();
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                return response.toString();
-            }
-        } else if(responseCode == 888){
-            throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
-        }
-        else {
-            throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
-        }
     }
 }

@@ -140,46 +140,6 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         return size;
     }
 
-    /*public List<Node> getFunctionNodes(){
-        List<Node> nodes = new ArrayList<>();
-
-        Queue<Node> nodesToCheck = new LinkedList<>();
-        nodesToCheck.add(this);
-
-        while(!nodesToCheck.isEmpty()){
-            Node current = nodesToCheck.poll();
-            if(current.arity > 0){
-                nodes.add(current);
-                nodesToCheck.addAll(current.children);
-            }
-        }
-
-        return nodes;
-    }
-
-    public List<Node> getTerminalNodes(){
-        List<Node> nodes = new ArrayList<>();
-
-        Queue<Node> nodesToCheck = new LinkedList<>();
-        nodesToCheck.add(this);
-
-        while(!nodesToCheck.isEmpty()){
-            Node current = nodesToCheck.poll();
-
-            if(current.arity == 0){
-                nodes.add(current);
-            }
-            if(current.children != null && !current.children.isEmpty()){
-                nodesToCheck.addAll(current.children);
-            }
-        }
-        return nodes;
-    }*/
-
-    public int numberOfNodes(){
-        return 1 + children.stream().mapToInt(Node::numberOfNodes).sum();
-    }
-
     public int childIndex(Node child) {
         if (children == null) {
             throw new ArrayIndexOutOfBoundsException(

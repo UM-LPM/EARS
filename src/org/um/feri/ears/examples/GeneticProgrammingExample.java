@@ -402,7 +402,7 @@ public class GeneticProgrammingExample {
 
         programSolution.getTree().displayTree("test_operator1", true);
 
-        if(programSolution.getTree().numberOfNodes() > maxNumOfNodes){
+        if(programSolution.getTree().treeSize() > maxNumOfNodes){
             programSolution = treeSizePruningOperator.execute(programSolution, sgp2);
         }
 
