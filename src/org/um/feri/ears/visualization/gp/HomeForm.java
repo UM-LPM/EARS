@@ -1,19 +1,20 @@
 package org.um.feri.ears.visualization.gp;
 
+import org.um.feri.ears.algorithms.GPAlgorithm;
+import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
+import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Inverter;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.Repeat;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Selector;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Sequencer;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.robocode.RotateTurret;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.robocode.Shoot;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveForward;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveSide;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.RayHitObject;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.Rotate;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
-import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator2;
+import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -22,16 +23,14 @@ import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.gp.components.GraphPanel;
 import org.um.feri.ears.visualization.gp.components.ImagePanel;
 
-import org.um.feri.ears.algorithms.GPAlgorithm2;
-import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm2;
-import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution2;
-import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator2;
-import org.um.feri.ears.operators.gp.GPTreeExpansionOperator2;
+import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
+import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Externalizable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -52,15 +51,15 @@ public class HomeForm extends JFrame {
     private JPanel currentStatusPanel;
     private JButton runAlgButton;
 
-    private ProgramProblem2 programProblem;
-    private Task<ProgramSolution2, ProgramProblem2> task;
-    private GPAlgorithm2 gpAlgorithm;
+    private ProgramProblem programProblem;
+    private Task<ProgramSolution, ProgramProblem> task;
+    private GPAlgorithm gpAlgorithm;
     private Thread algorithmThread;
     String imgPathPrefix;
 
     // Selected individual parameters
     private ImagePanel selectedIndividualImagePanel;
-    private JLabel selectedIndividualTreeHeightLabel;
+    private JLabel selectedIndividualTreeDepthLabel;
     private JLabel selectedIndividualFitnes;
     private JLabel selectedIndividualTreeSize;
     private JLabel selectedIndividualIsFeasible;
@@ -72,13 +71,13 @@ public class HomeForm extends JFrame {
     private GraphPanel avgFitnessConvergenceGraph;
     private JLabel bestIndividualID;
     private JLabel bestIndividualFitnes;
-    private JLabel bestIndividualTreeHeight;
+    private JLabel bestIndividualTreeDepth;
     private JLabel bestIndividualTreeSize;
     private JLabel bestIndividualIsFeasible;
     private JLabel bestIndividualNumOfFunc;
     private JLabel bestIndividualNumOfTerm;
     private ImagePanel bestIndividualImagePanel;
-    private GraphPanel avgTreeHeightGraphPanel;
+    private GraphPanel avgTreeDepthGraphPanel;
     private GraphPanel avgTreeSizeGraphPanel;
     private JButton saveCurrentAlgState;
     private JButton loadCurrentAlgState;
@@ -150,7 +149,7 @@ public class HomeForm extends JFrame {
                             if(gpAlgorithm.executeGeneration() != null)
                                 break;
                             System.out.println(gpAlgorithm.getBest().getTree().toJsonString());
-                            GPAlgorithm2.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
+                            GPAlgorithm.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
                         }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(null, "Please enter a valid number of generations to run (-1 for run to the end).", "Error", JOptionPane.ERROR_MESSAGE);
@@ -166,14 +165,19 @@ public class HomeForm extends JFrame {
         saveCurrentAlgState.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GPAlgorithm2.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
+                GPAlgorithm.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
             }
         });
 
         loadCurrentAlgState.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                initializeDataBehaviourTree("gpAlgorithmState.ser");
+                try{
+                    initializeDataBehaviourTree("gpAlgorithmState.ser");
+                }
+                catch (Exception ex){
+                    initializeDataBehaviourTree(null);
+                }
                 updateUI(true);
             }
         });
@@ -213,7 +217,7 @@ public class HomeForm extends JFrame {
         // Create fitness convergence line graph
         this.fitnessConvergenceGraph = new GraphPanel(null);
         this.avgFitnessConvergenceGraph = new GraphPanel(null);
-        this.avgTreeHeightGraphPanel = new GraphPanel(null);
+        this.avgTreeDepthGraphPanel = new GraphPanel(null);
         this.avgTreeSizeGraphPanel = new GraphPanel(null);
 
     }
@@ -226,7 +230,7 @@ public class HomeForm extends JFrame {
         // Update convergence graph
         this.fitnessConvergenceGraph.setScores(this.gpAlgorithm.getBestGenFitness());
         this.avgFitnessConvergenceGraph.setScores(this.gpAlgorithm.getAvgGenFitness());
-        this.avgTreeHeightGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeHeight());
+        this.avgTreeDepthGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeDepth());
         this.avgTreeSizeGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeSize());
 
         // Update population list
@@ -256,7 +260,7 @@ public class HomeForm extends JFrame {
                 .parallel()
                 .forEach(index -> {
                     final int indexFinal =  index + (this.task.getNumberOfIterations() * this.gpAlgorithm.getPopulation().size());
-                    ProgramSolution2 individual = this.gpAlgorithm.getPopulation().get(index);
+                    ProgramSolution individual = this.gpAlgorithm.getPopulation().get(index);
                     String file = individual.getTree().displayTree(imgPathPrefix + "tree" + String.valueOf(indexFinal), false);
                     ImagePanel imagePanel = new ImagePanel(file);
                     imagePanel.setMinimumSize(new Dimension(100, 100));
@@ -304,12 +308,12 @@ public class HomeForm extends JFrame {
         algorithmPopulationPanel.revalidate();
     }
 
-    public void individualImagePanelMouseClicked(java.awt.event.MouseEvent evt, ProgramSolution2 individual, int index) {
+    public void individualImagePanelMouseClicked(java.awt.event.MouseEvent evt, ProgramSolution individual, int index) {
         if(individual == null) {
             selectedIndividualImagePanel.setImage(null);
             selectedIndividualID.setText("" );
             selectedIndividualFitnes.setText("");
-            selectedIndividualTreeHeightLabel.setText("");
+            selectedIndividualTreeDepthLabel.setText("");
             selectedIndividualTreeSize.setText("");
             selectedIndividualIsFeasible.setText("");
             selectedIndividualNumOfFunc.setText("");
@@ -320,7 +324,7 @@ public class HomeForm extends JFrame {
             selectedIndividualImagePanel.setImage(file);
             selectedIndividualID.setText("" + index);
             selectedIndividualFitnes.setText("" + Util.roundDouble(individual.getEval(), 2));
-            selectedIndividualTreeHeightLabel.setText("" + individual.getTree().treeHeight());
+            selectedIndividualTreeDepthLabel.setText("" + individual.getTree().treeDepth());
             selectedIndividualTreeSize.setText("" + individual.getTree().treeSize());
             selectedIndividualIsFeasible.setText("" + this.programProblem.isFeasible(individual));
             selectedIndividualNumOfFunc.setText("" + individual.getTree().numberOfFunctions());
@@ -333,7 +337,7 @@ public class HomeForm extends JFrame {
             bestIndividualImagePanel.setImage(null);
             bestIndividualID.setText("" );
             bestIndividualFitnes.setText("");
-            bestIndividualTreeHeight.setText("");
+            bestIndividualTreeDepth.setText("");
             bestIndividualTreeSize.setText("");
             bestIndividualIsFeasible.setText("");
             bestIndividualNumOfFunc.setText("");
@@ -345,7 +349,7 @@ public class HomeForm extends JFrame {
             bestIndividualImagePanel.setImage(file);
             bestIndividualID.setText("" + this.gpAlgorithm.getBest().getID());
             bestIndividualFitnes.setText("" + Util.roundDouble(this.gpAlgorithm.getBest().getEval(), 2));
-            bestIndividualTreeHeight.setText("" + this.gpAlgorithm.getBest().getTree().treeHeight());
+            bestIndividualTreeDepth.setText("" + this.gpAlgorithm.getBest().getTree().treeDepth());
             bestIndividualTreeSize.setText("" + this.gpAlgorithm.getBest().getTree().treeSize());
             bestIndividualIsFeasible.setText("" + this.programProblem.isFeasible(this.gpAlgorithm.getBest()));
             bestIndividualNumOfFunc.setText("" + this.gpAlgorithm.getBest().getTree().numberOfFunctions());
@@ -396,15 +400,15 @@ public class HomeForm extends JFrame {
                 new Target().when("x", 10).targetIs(200));
 
         if(initialStateFile != null) {
-            this.gpAlgorithm = GPAlgorithm2.deserializeAlgorithmState(initialStateFile);
+            this.gpAlgorithm = GPAlgorithm.deserializeAlgorithmState(initialStateFile);
             this.task = this.gpAlgorithm.getTask();
             this.programProblem = this.task.problem;
         }
         else {
-            this.programProblem = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator2(),
-                    new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2(), evalData);
+            this.programProblem = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator(),
+                    new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData);
             this.task = new Task<>(programProblem, StopCriterion.EVALUATIONS, 10000, 0, 0);
-            this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.95, 0.025, 2, this.task, null);
+            this.gpAlgorithm =  new DefaultGPAlgorithm(100, 0.95, 0.025, 2, this.task, null);
         }
         this.gpAlgorithm.setDebug(true);
     }
@@ -427,15 +431,15 @@ public class HomeForm extends JFrame {
         );
 
         if(initialStateFile != null){
-            this.gpAlgorithm = GPAlgorithm2.deserializeAlgorithmState(initialStateFile);
+            this.gpAlgorithm = GPAlgorithm.deserializeAlgorithmState(initialStateFile);
             this.task = this.gpAlgorithm.getTask();
             this.programProblem = this.task.problem;
         }
         else {
-            this.programProblem = new UnityBTProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 100, new GPDepthBasedTreePruningOperator2(),
-                    new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2());
+            this.programProblem = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 12, 100, new GPDepthBasedTreePruningOperator(),
+                    new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution());
             this.task = new Task<>(this.programProblem, StopCriterion.EVALUATIONS, 500000, 0, 0);
-            this.gpAlgorithm =  new DefaultGPAlgorithm2(100, 0.90, 0.025, 4, this.task, null);
+            this.gpAlgorithm =  new DefaultGPAlgorithm(100, 0.90, 0.025, 4, this.task, null);
         }
         this.gpAlgorithm.setDebug(true);
     }

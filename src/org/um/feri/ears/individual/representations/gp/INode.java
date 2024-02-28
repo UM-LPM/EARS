@@ -1,6 +1,5 @@
 package org.um.feri.ears.individual.representations.gp;
 
-import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -15,13 +14,13 @@ public interface INode<T extends INode<T>> extends Self<T>, Iterable<T> {
     T childAt(final int index);
 
     /*Returns the ancestor node with the given index*/
-    TreeAncestor2 ancestorAt(final int index);
+    TreeAncestor ancestorAt(final int index);
 
     /*Returns the number of children this INode consists of*/
     int childCount();
 
     /*Returns the depth of the INode*/
-    int treeHeight();
+    int treeDepth();
     int treeSize();
 
     int numberOfFunctions();

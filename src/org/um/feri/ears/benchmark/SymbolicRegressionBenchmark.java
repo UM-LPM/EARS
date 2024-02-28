@@ -1,13 +1,13 @@
 package org.um.feri.ears.benchmark;
 
-import org.um.feri.ears.algorithms.GPAlgorithm2;
+import org.um.feri.ears.algorithms.GPAlgorithm;
+import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
-import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution2;
 import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
-import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator2;
-import org.um.feri.ears.operators.gp.GPTreeExpansionOperator2;
-import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator2;
+import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
+import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
+import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
@@ -16,7 +16,7 @@ import org.um.feri.ears.util.Util;
 import java.util.Arrays;
 import java.util.List;
 
-public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution2, ProgramSolution2, ProgramProblem2, GPAlgorithm2> {
+public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution, ProgramSolution, ProgramProblem, GPAlgorithm> {
     protected int dimension = 1000; //recommended
 
     public SymbolicRegressionBenchmark() {
@@ -33,7 +33,7 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution2, P
     }
 
     @Override
-    protected void addTask(ProgramProblem2 problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
+    protected void addTask(ProgramProblem problem, StopCriterion stopCriterion, int maxEvaluations, long time, int maxIterations) {
         tasks.add(new Task<>(problem, stopCriterion, maxEvaluations, time, maxIterations));
     }
 
@@ -65,8 +65,8 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution2, P
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200));
 
-        SymbolicRegressionProblem2 sgp = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2(), evalData);
+        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 200, new GPDepthBasedTreePruningOperator(),
+                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData);
 
         List<Target> evalData2 = Util.list( new Target().when("x", 0).targetIs(12),
                 new Target().when("x", 1).targetIs(23),
@@ -81,8 +81,8 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution2, P
                 new Target().when("x", 10).targetIs(1292));
 
 
-        SymbolicRegressionProblem2 sgp2 = new SymbolicRegressionProblem2(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 200, new GPDepthBasedTreePruningOperator2(),
-                new GPTreeExpansionOperator2(), new GPTreeSizePruningOperator2(), new GPRandomProgramSolution2(), evalData2);
+        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 200, new GPDepthBasedTreePruningOperator(),
+                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData2);
 
 
         //addTask(sgp, stopCriterion, maxEvaluations, timeLimit, maxIterations);

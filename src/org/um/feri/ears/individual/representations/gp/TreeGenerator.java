@@ -9,19 +9,19 @@ public class TreeGenerator { // TODO remove in the future
     List<Class<? extends Node>> baseFunctionNodeTypes;
     List<Class<? extends Node>> baseTerminalNodeTypes;
 
-    int minTreeHeight;
+    int minTreeDepth;
 
-    public TreeGenerator(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeHeight) {
+    public TreeGenerator(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth) {
         this.baseFunctionNodeTypes = baseFunctionNodeTypes;
         this.baseTerminalNodeTypes = baseTerminalNodeTypes;
-        this.minTreeHeight = minTreeHeight;
+        this.minTreeDepth = minTreeDepth;
     }
 
     public Node generateRandomTree(int height, int maxHeight) {
         if(baseFunctionNodeTypes.isEmpty() || baseTerminalNodeTypes.isEmpty()) {
             throw new RuntimeException("Cannot generate a tree with no node types");
         }
-        if (maxHeight == 1 || (height >= minTreeHeight && Util.rnd.nextBoolean())) {
+        if (maxHeight == 1 || (height >= minTreeDepth && Util.rnd.nextBoolean())) {
             // Base case: return a leaf node
             return generateRandomNode(baseTerminalNodeTypes);
         } else {
