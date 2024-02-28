@@ -2,17 +2,17 @@ package org.um.feri.ears.algorithms.gp;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
-import org.um.feri.ears.algorithms.GPAlgorithm2;
+import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.problems.gp.ProgramProblem2;
-import org.um.feri.ears.problems.gp.ProgramSolution2;
+import org.um.feri.ears.problems.gp.ProgramProblem;
+import org.um.feri.ears.problems.gp.ProgramSolution;
 
 import java.util.Collections;
 import java.util.List;
 
-public class RandomWalkGPAlgorithm extends GPAlgorithm2 {
-    private ProgramSolution2 best;
+public class RandomWalkGPAlgorithm extends GPAlgorithm {
+    private ProgramSolution best;
 
     public RandomWalkGPAlgorithm() {
         ai = new AlgorithmInfo("RW", "Random Walk", "");
@@ -20,9 +20,9 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm2 {
     }
 
     @Override
-    public ProgramSolution2 execute(Task<ProgramSolution2, ProgramProblem2> task) throws StopCriterionException {
+    public ProgramSolution execute(Task<ProgramSolution, ProgramProblem> task) throws StopCriterionException {
 
-        ProgramSolution2 newSolution;
+        ProgramSolution newSolution;
         best = task.getRandomEvaluatedSolution();
 
         while (!task.isStopCriterion()) {
@@ -46,27 +46,27 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm2 {
 
 
     @Override
-    public ProgramSolution2 executeStep() throws StopCriterionException{
+    public ProgramSolution executeStep() throws StopCriterionException{
         return null;
     }
 
     @Override
-    public ProgramSolution2 executeGeneration() throws StopCriterionException{
+    public ProgramSolution executeGeneration() throws StopCriterionException{
         return null;
     }
 
     @Override
-    public List<ProgramSolution2> getPopulation() {
+    public List<ProgramSolution> getPopulation() {
         return Collections.singletonList(best);
     }
 
     @Override
-    public void setPopulation(List<ProgramSolution2> population) {
+    public void setPopulation(List<ProgramSolution> population) {
         best = population.get(0);
     }
 
     @Override
-    public ProgramSolution2 getBest() {
+    public ProgramSolution getBest() {
         return best;
     }
 

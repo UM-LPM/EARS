@@ -280,7 +280,7 @@
                     </constraints>
                     <properties>
                       <foreground color="-1"/>
-                      <text value="Tree height: "/>
+                      <text value="Tree depth: "/>
                     </properties>
                   </component>
                   <component id="ab17" class="javax.swing.JLabel">
@@ -319,7 +319,7 @@
                       <text value="Num of term:"/>
                     </properties>
                   </component>
-                  <component id="4cca" class="javax.swing.JLabel" binding="selectedIndividualTreeHeightLabel">
+                  <component id="4cca" class="javax.swing.JLabel" binding="selectedIndividualTreeDepthLabel">
                     <constraints>
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -409,7 +409,7 @@
                   <background color="-12698050"/>
                 </properties>
               </component>
-              <component id="82f82" class="org.um.feri.ears.visualization.gp.components.GraphPanel" binding="avgTreeHeightGraphPanel" custom-create="true">
+              <component id="82f82" class="org.um.feri.ears.visualization.gp.components.GraphPanel" binding="avgTreeDepthGraphPanel" custom-create="true">
                 <constraints>
                   <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -515,10 +515,10 @@
                 </constraints>
                 <properties>
                   <foreground color="-1"/>
-                  <text value="Tree height: "/>
+                  <text value="Tree depth: "/>
                 </properties>
               </component>
-              <component id="6b829" class="javax.swing.JLabel" binding="bestIndividualTreeHeight">
+              <component id="6b829" class="javax.swing.JLabel" binding="bestIndividualTreeDepth">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>

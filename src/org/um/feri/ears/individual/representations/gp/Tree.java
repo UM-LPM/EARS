@@ -1,7 +1,6 @@
 package org.um.feri.ears.individual.representations.gp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
@@ -56,8 +55,8 @@ public abstract class Tree implements Serializable {
             return null;
         }
     }
-    public int treeHeight() {
-        return rootNode.treeHeight();
+    public int treeDepth() {
+        return rootNode.treeDepth();
     }
 
     public int treeSize() {

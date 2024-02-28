@@ -96,10 +96,10 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     }
 
     @Override
-    public int treeHeight(){
+    public int treeDepth(){
         int maxHeight = 0;
         for (Node child : this.children) {
-            int childHeight = child.treeHeight();
+            int childHeight = child.treeDepth();
             maxHeight = Math.max(maxHeight, childHeight);
         }
         return maxHeight + 1;
@@ -212,20 +212,20 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     }
 
     @Override
-    public TreeAncestor2 ancestorAt(int index) {
-        List<TreeAncestor2> nodesToCheck = new ArrayList<>();
-        nodesToCheck.add(new TreeAncestor2(1, this));
+    public TreeAncestor ancestorAt(int index) {
+        List<TreeAncestor> nodesToCheck = new ArrayList<>();
+        nodesToCheck.add(new TreeAncestor(1, this));
         int currentInd = 0;
         while(!nodesToCheck.isEmpty()){
-            TreeAncestor2 treeAncestor = nodesToCheck.get(0);
+            TreeAncestor treeAncestor = nodesToCheck.get(0);
             Node current = treeAncestor.getTreeNode();
             for (Iterator<Node> it = current.getChildren().iterator(); it.hasNext();) {
                 Node next = it.next();
                 currentInd++;
                 if(currentInd == index){
-                    return new TreeAncestor2(treeAncestor.getTreeHeightPosition() + 1, next);
+                    return new TreeAncestor(treeAncestor.getTreeDepthPosition() + 1, next);
                 }
-                nodesToCheck.add(new TreeAncestor2(treeAncestor.getTreeHeightPosition() + 1, next));
+                nodesToCheck.add(new TreeAncestor(treeAncestor.getTreeDepthPosition() + 1, next));
             }
             nodesToCheck.remove(0);
         }
