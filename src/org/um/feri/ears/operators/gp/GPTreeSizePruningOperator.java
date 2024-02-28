@@ -23,11 +23,11 @@ public class GPTreeSizePruningOperator extends GPOperator {
     }
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
         do {
-            int numberOfNodes = tProgramSolution.getTree().numberOfNodes();
-            int maxTreeNodes = tProgramProblem.getMaxTreeNodes();
+            int treeSize = tProgramSolution.getTree().treeSize();
+            int maxTreeSize = tProgramProblem.getMaxTreeSize();
 
             // 0. If the tree size is already bellow the maximum number of nodes, return the current solution
-            if(numberOfNodes <= maxTreeNodes){
+            if(treeSize <= maxTreeSize){
                 break;
             }
 
@@ -41,24 +41,24 @@ public class GPTreeSizePruningOperator extends GPOperator {
             // 2.1
             for (int i = 0; i < functionNodes.size(); i++) {
                 // Must substract -1 because the root node is not a descendant of itself and it will be replaced with terminal node
-                descendantsCount[i] = functionNodes.get(i).numberOfNodes() - 1;
+                descendantsCount[i] = functionNodes.get(i).treeSize() - 1;
             }
 
             // 2.2
             int[] treeNodesDiffs = new int[descendantsCount.length];
 
             for (int i = 0; i < descendantsCount.length; i++) {
-                treeNodesDiffs[i] = numberOfNodes - descendantsCount[i];
+                treeNodesDiffs[i] = treeSize - descendantsCount[i];
             }
 
             // 2.3
-            int[] maxTreeNodesDiffs = new int[treeNodesDiffs.length];
+            int[] maxTreeSizeDiffs = new int[treeNodesDiffs.length];
 
             int minDiffIndex = -1;
 
             for (int i = 0; i < treeNodesDiffs.length; i++) {
-                maxTreeNodesDiffs[i] = maxTreeNodes - treeNodesDiffs[i];
-                if ((maxTreeNodesDiffs[i] >= 0 && minDiffIndex < 0) || (maxTreeNodesDiffs[i] >= 0 && maxTreeNodesDiffs[i] < maxTreeNodesDiffs[minDiffIndex])) {
+                maxTreeSizeDiffs[i] = maxTreeSize - treeNodesDiffs[i];
+                if ((maxTreeSizeDiffs[i] >= 0 && minDiffIndex < 0) || (maxTreeSizeDiffs[i] >= 0 && maxTreeSizeDiffs[i] < maxTreeSizeDiffs[minDiffIndex])) {
                     minDiffIndex = i;
                 }
             }
@@ -75,10 +75,10 @@ public class GPTreeSizePruningOperator extends GPOperator {
                     int[] maxTreeNodesDiffs2 = new int[descendantsCount.length];
 
                     minDiffIndex = 0;
-                    maxTreeNodesDiffs2[0] = maxTreeNodes - treeNodesDiffs[0];
+                    maxTreeNodesDiffs2[0] = maxTreeSize - treeNodesDiffs[0];
 
                     for (int i = 1; i < treeNodesDiffs.length; i++) {
-                        maxTreeNodesDiffs2[i] = maxTreeNodes - treeNodesDiffs[i];
+                        maxTreeNodesDiffs2[i] = maxTreeSize - treeNodesDiffs[i];
                         if (maxTreeNodesDiffs2[i] > maxTreeNodesDiffs2[minDiffIndex]) {
                             minDiffIndex = i;
                         }

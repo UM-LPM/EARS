@@ -109,10 +109,6 @@ public abstract class Tree implements Serializable {
         return nodes;
     }
 
-    public int numberOfNodes(){
-        return rootNode.numberOfNodes();
-    }
-
     public abstract double evaluate(Map<String, Double> variables);
     public abstract Tree clone();
 

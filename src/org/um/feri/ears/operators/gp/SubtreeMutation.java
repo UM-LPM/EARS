@@ -47,6 +47,12 @@ public class SubtreeMutation extends GPMutation {
         if(Util.rnd.nextDouble() <= this.mutationProbability) {
             ProgramSolution mutatedSolution = tProgramSolution.copy();
             doMutation(mutatedSolution, problem);
+
+            // Check if new programs are feasible. If not, make them feasible
+            if (!problem.isFeasible(mutatedSolution)) {
+                problem.makeFeasible(mutatedSolution);
+            }
+
             return mutatedSolution;
         }
         else {
