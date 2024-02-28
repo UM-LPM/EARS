@@ -203,15 +203,6 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     public void performEvaluation()  throws StopCriterionException {
         population = new ArrayList<>(this.currentPopulation);
 
-        // TODO implement reevaluation for best solution
-        /*if(this.task.getNumberOfIterations() % 10 == 0){
-            List<ProgramSolution> populationWithBest = new ArrayList<>(this.currentPopulation);
-            populationWithBest.add(best);
-            this.task.bulkEval(populationWithBest);
-        }
-        else
-            this.task.bulkEval(this.population);*/
-
         this.task.bulkEval(this.population);
 
         for(ProgramSolution sol : population){
