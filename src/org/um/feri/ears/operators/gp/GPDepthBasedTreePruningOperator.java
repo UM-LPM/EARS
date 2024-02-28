@@ -13,14 +13,14 @@ public class GPDepthBasedTreePruningOperator extends GPOperator {
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
         this.maxTreeDepth = tProgramProblem.getMaxTreeDepth();
         this.programProblem = tProgramProblem;
-        pruneProgramHeight(tProgramSolution.getTree().getRootNode(), null, 1);
+        pruneProgramDepth(tProgramSolution.getTree().getRootNode(), null, 1);
         return tProgramSolution;
     }
 
-    private void pruneProgramHeight(Node current, Node parent, int currentHeight){
-        if(currentHeight >= this.maxTreeDepth){
+    private void pruneProgramDepth(Node current, Node parent, int currentDepth){
+        if(currentDepth >= this.maxTreeDepth){
             if(current.getArity() > 0){
-                ProgramSolution newSolution = programProblem.getProgramSolutionGenerator().generate(this.programProblem, currentHeight, "");
+                ProgramSolution newSolution = programProblem.getProgramSolutionGenerator().generate(this.programProblem, currentDepth, "");
                 if(parent != null){
                     try {
                         parent.replace(current, newSolution.getTree().getRootNode());
@@ -32,7 +32,7 @@ public class GPDepthBasedTreePruningOperator extends GPOperator {
             }
         }else{
             for (Node child : current.getChildren()) {
-                pruneProgramHeight(child, current, currentHeight + 1);
+                pruneProgramDepth(child, current, currentDepth + 1);
             }
         }
     }

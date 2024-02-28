@@ -11,7 +11,6 @@ import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Tree;
-import org.um.feri.ears.individual.representations.gp.TreeGenerator;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveForward;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveSide;
@@ -329,7 +328,7 @@ public class SymbolicRegressionBtExample { // TODO remove
         System.out.println(programSolution.getEval());
     }
 
-    public static void btExample(){
+    /*public static void btExample(){
         List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
                 Repeat.class,
                 Sequencer.class,
@@ -370,7 +369,7 @@ public class SymbolicRegressionBtExample { // TODO remove
         Tree tree = new SymbolicRegressionTree("demo", treeGenerator.generateRandomTree(0, 3));
         tree.printTree();
         System.out.println(tree.evaluate(Map.of("x", 1.0)));
-    }
+    }*/
 
     public static String sendPostRequest(String apiUrl, String jsonBody) throws Exception {
         URL url = new URL(apiUrl);
