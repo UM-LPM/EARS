@@ -13,19 +13,19 @@ public class GPTreeExpansionOperator extends GPOperator {
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
         this.minTreeDepth = tProgramProblem.getMinTreeDepth();
         this.programProblem = tProgramProblem;
-        expandProgramHeight(tProgramSolution.getTree().getRootNode(), null, 1);
+        expandProgramDepth(tProgramSolution.getTree().getRootNode(), null, 1);
         return tProgramSolution;
     }
 
-    private void expandProgramHeight(Node current, Node parent, int currentHeight){
-        if(currentHeight < this.minTreeDepth){
-            // Create new solution that will exceed minTreeHeight
-            ProgramSolution newSolution = this.programProblem.getProgramSolutionGenerator().generate(this.programProblem,  currentHeight, "");
+    private void expandProgramDepth(Node current, Node parent, int currentDepth){
+        if(currentDepth < this.minTreeDepth){
+            // Create new solution that will exceed minTreeDepth
+            ProgramSolution newSolution = this.programProblem.getProgramSolutionGenerator().generate(this.programProblem,  currentDepth, "");
             if(parent != null){
                 parent.replace(current, newSolution.getTree().getRootNode());
             }
             for (Node child : current.getChildren()) {
-                expandProgramHeight(child, current, currentHeight + 1);
+                expandProgramDepth(child, current, currentDepth + 1);
             }
         }
     }

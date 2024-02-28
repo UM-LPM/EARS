@@ -31,8 +31,8 @@ public class UnityBTProblem extends ProgramProblem {
         super("UnityBTProblem");
     }
 
-    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeHeight, int maxTreeSize, GPOperator treeDepthPruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator) {
-        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeHeight, maxTreeSize, treeDepthPruningOperator, expansionOperator, treeSizePruningOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS");
+    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeDepth, int maxTreeSize, GPOperator treeDepthPruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator) {
+        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeDepth, maxTreeSize, treeDepthPruningOperator, expansionOperator, treeSizePruningOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS");
 
     }
 

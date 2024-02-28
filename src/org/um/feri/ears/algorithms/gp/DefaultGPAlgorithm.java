@@ -256,14 +256,14 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                     }
                     this.avgGenFitness.add(sum / this.population.size());
 
-                    // add current avg tree height to list
-                    double avgHeight = 0;
+                    // add current avg tree depth to list
+                    double avgDepth = 0;
                     for (ProgramSolution sol: this.population) {
-                        avgHeight += sol.getTree().treeDepth();
+                        avgDepth += sol.getTree().treeDepth();
                     }
-                    this.avgGenTreeDepth.add(avgHeight / this.population.size());
+                    this.avgGenTreeDepth.add(avgDepth / this.population.size());
 
-                    // add current avg tree height to list
+                    // add current avg tree size to list
                     double avgSize = 0;
                     for (ProgramSolution sol: this.population) {
                         avgSize += sol.getTree().treeSize();

@@ -97,12 +97,12 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
 
     @Override
     public int treeDepth(){
-        int maxHeight = 0;
+        int maxDepth = 0;
         for (Node child : this.children) {
             int childHeight = child.treeDepth();
-            maxHeight = Math.max(maxHeight, childHeight);
+            maxDepth = Math.max(maxDepth, childHeight);
         }
-        return maxHeight + 1;
+        return maxDepth + 1;
     }
 
     @Override

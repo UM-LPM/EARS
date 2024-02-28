@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public abstract class GPProgramSolution implements Serializable {
 
-    public abstract ProgramSolution generate(ProgramProblem programProblem, int startHeight, String treeName);
+    public abstract ProgramSolution generate(ProgramProblem programProblem, int startDepth, String treeName);
 
     public abstract Node generateRandomTerminalNode(ProgramProblem programProblem);
 }

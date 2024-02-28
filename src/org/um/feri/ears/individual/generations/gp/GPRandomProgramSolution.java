@@ -15,16 +15,16 @@ public class GPRandomProgramSolution extends GPProgramSolution {
 
     private ProgramProblem programProblem;
 
-    public ProgramSolution generate(ProgramProblem programProblem, int startHeight, String treeName) {
+    public ProgramSolution generate(ProgramProblem programProblem, int startDepth, String treeName) {
         this.programProblem = programProblem;
-        return getRandomSolution(startHeight, treeName);
+        return getRandomSolution(startDepth, treeName);
     }
 
     public Node generateRandomTerminalNode(ProgramProblem programProblem) {
         return generateRandomNode(programProblem.getBaseTerminalNodeTypes());
     }
 
-    public ProgramSolution getRandomSolution(int startHeight, String treeName) {
+    public ProgramSolution getRandomSolution(int startDepth, String treeName) {
         ProgramSolution newSolution = new ProgramSolution(this.programProblem.getNumberOfObjectives());
         Tree tree;
         if(programProblem.getSolutionTreeType() == Tree.TreeType.SYMBOLIC)
@@ -32,16 +32,16 @@ public class GPRandomProgramSolution extends GPProgramSolution {
         else
             tree = new BehaviourTree(treeName);
 
-        tree.setRootNode(generateRandomTree(startHeight));
+        tree.setRootNode(generateRandomTree(startDepth));
         newSolution.setTree(tree);
         return newSolution;
     }
 
-    public Node generateRandomTree(int height) {
+    public Node generateRandomTree(int depth) {
         if(programProblem.getBaseFunctionNodeTypes().isEmpty() || programProblem.getBaseTerminalNodeTypes().isEmpty()) {
             throw new RuntimeException("Cannot generate a tree with no node types");
         }
-        if (programProblem.getMaxTreeDepth() == height || (height >= programProblem.getMinTreeDepth() && Util.rnd.nextBoolean())) {
+        if (programProblem.getMaxTreeDepth() == depth || (depth >= programProblem.getMinTreeDepth() && Util.rnd.nextBoolean())) {
             // Base case: return a terminal node
             return generateRandomNode(programProblem.getBaseTerminalNodeTypes());
         } else {
@@ -49,7 +49,7 @@ public class GPRandomProgramSolution extends GPProgramSolution {
             Node node = generateRandomNode(programProblem.getBaseFunctionNodeTypes());
             int numOfChildren = node.getFixedNumOfChildren()? node.getArity() : (Util.rnd.nextInt((node.getArity() - 1) + 1) + 1);
             for (int i = 0; i < numOfChildren; i++) {
-                node.insert(i, generateRandomTree(height + 1)); // TODO check!!!
+                node.insert(i, generateRandomTree(depth + 1)); // TODO check!!!
             }
             return node;
         }
