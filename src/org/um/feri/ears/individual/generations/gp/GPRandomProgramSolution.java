@@ -35,10 +35,6 @@ public class GPRandomProgramSolution extends GPProgramSolution {
         tree.setRootNode(generateRandomTree(startDepth));
         newSolution.setTree(tree);
 
-        // TODO Remove when add support for treeSize check in generator
-        if(!programProblem.isFeasible(newSolution))
-            programProblem.makeFeasible(newSolution);
-
         return newSolution;
     }
 

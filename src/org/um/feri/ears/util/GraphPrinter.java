@@ -1,4 +1,4 @@
-package org.um.feri.ears.individual.representations.gp;
+package org.um.feri.ears.util;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
