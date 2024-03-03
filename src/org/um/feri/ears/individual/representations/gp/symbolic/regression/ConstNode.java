@@ -2,6 +2,7 @@ package org.um.feri.ears.individual.representations.gp.symbolic.regression;
 
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.*;
 
@@ -13,7 +14,7 @@ public class ConstNode extends Node {
     private final double value;
 
     public ConstNode() {
-        this.value = Util.rnd.nextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE;
+        this.value = RNG.nextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE;
         this.name = String.format("%.4f", value);
     }
 

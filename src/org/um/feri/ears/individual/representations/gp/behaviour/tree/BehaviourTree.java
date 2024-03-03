@@ -25,20 +25,6 @@ public class BehaviourTree extends Tree {
 
     @Override
     public double evaluate(Map<String, Double> variables) {
-        try {
-            String apiUrl = "http://localhost:5016/api/JsonToSoParser";
-            String jsonBody = this.toJsonString();
-            String response = Util.sendEvaluateRequest(apiUrl, jsonBody, 100 * 60 * 1000);
-            response = response.replace("\"{", "{");
-            response = response.replace("}\"", "}");
-            response = response.replace("\\", "");
-            Gson gson = new Gson();
-            HttpResponse obj = gson.fromJson(response, HttpResponse.class);
-            //return obj.getObject().getFitness();
-            return Double.MAX_VALUE;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return -1;
     }
 

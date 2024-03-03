@@ -43,9 +43,9 @@ public class ApacheRandomGenerator extends RandomGenerator {
         return rng.nextLong();
     }
 
-    @Override
-    public long nextLong(long n) {
-        return rng.nextLong(n);
+    //@Override
+    public long nextLong(long bound) {
+        return rng.nextLong(bound);
     }
 
     @Override

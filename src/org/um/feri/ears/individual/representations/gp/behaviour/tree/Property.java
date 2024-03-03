@@ -3,6 +3,7 @@ package org.um.feri.ears.individual.representations.gp.behaviour.tree;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.io.Serializable;
 
@@ -15,7 +16,7 @@ public class Property implements Cloneable, Serializable {
     public Property( String name, int minValue, int maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
-        this.value = Util.rnd.nextInt(maxValue - minValue) + minValue;
+        this.value = RNG.nextInt(maxValue - minValue) + minValue;
         this.name = name;
     }
 
@@ -27,7 +28,7 @@ public class Property implements Cloneable, Serializable {
     }
 
     public void setRandomValue(){
-        this.value = Util.rnd.nextInt(maxValue - minValue) + minValue;
+        this.value = RNG.nextInt(maxValue - minValue) + minValue;
     }
 
     @JsonProperty("Name")

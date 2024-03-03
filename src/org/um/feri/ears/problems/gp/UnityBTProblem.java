@@ -87,36 +87,6 @@ public class UnityBTProblem extends ProgramProblem {
     }
 
     public void evaluate(List<ProgramSolution> solutions){
-        // TODO Update/Delete ????
-        JSONArray jsonArray = new JSONArray();
-        JSONParser jsonParser = new JSONParser();
-
-        for (ProgramSolution solution : solutions) {
-            try {
-                jsonArray.add(jsonParser.parse(solution.tree.toJsonString()));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        // Convert solutions to jsonStringArray
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        try {
-            String apiUrl = "http://localhost:5016/api/JsonToSoParser";
-            String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000);
-            response = response.replace("\"{", "{");
-            response = response.replace("}\"", "}");
-            response = response.replace("\\", "");
-            Gson gson = new Gson();
-            //HttpResponse obj = gson.fromJson(response, HttpResponse.class);
-            System.out.println("Finished with response: " + response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Set fitness values after evaluation
-        //solution.setObjective(0, eval);
+        bulkEvaluate(solutions);
     }
 }

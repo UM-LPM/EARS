@@ -5,6 +5,7 @@ import org.um.feri.ears.individual.representations.gp.TreeAncestor;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class SubtreeMutation extends GPMutation {
 
     private void doMutation(ProgramSolution solution, ProgramProblem problem) {
         int childCount = solution.getTree().getRootNode().ancestors().getAncestorCount();
-        int crossPoint = Util.rnd.nextInt(childCount + 1);
+        int crossPoint = RNG.nextInt(childCount + 1);
 
         // If root node is selected, whole program is randomly generated
         if (crossPoint == 0) {
@@ -44,7 +45,7 @@ public class SubtreeMutation extends GPMutation {
 
     @Override
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem problem) {
-        if(Util.rnd.nextDouble() <= this.mutationProbability) {
+        if(RNG.nextDouble() <= this.mutationProbability) {
             ProgramSolution mutatedSolution = tProgramSolution.copy();
             doMutation(mutatedSolution, problem);
 

@@ -86,18 +86,6 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
             e.printStackTrace();
         }
 
-        /*try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-            oos.writeObject(population);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(GPAlgorithm.TASK_NAME_PREFIX + filename))) {
-            oos.writeObject(task);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
         GPAlgorithm.CAN_RUN = true;
     }
 
@@ -108,19 +96,6 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        /*try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(GPAlgorithm.TASK_NAME_PREFIX + filename))) {
-            alg.task = (Task<ProgramSolution, ProgramProblem>) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            List<ProgramSolution> population = (List<ProgramSolution>) ois.readObject();
-            alg.setPopulation(population);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
-
         return alg;
     }
 }

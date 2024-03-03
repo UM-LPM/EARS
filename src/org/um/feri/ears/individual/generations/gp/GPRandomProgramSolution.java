@@ -7,6 +7,7 @@ import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -42,13 +43,13 @@ public class GPRandomProgramSolution extends GPProgramSolution {
         if(programProblem.getBaseFunctionNodeTypes().isEmpty() || programProblem.getBaseTerminalNodeTypes().isEmpty()) {
             throw new RuntimeException("Cannot generate a tree with no node types");
         }
-        if (programProblem.getMaxTreeDepth() == depth || (depth >= programProblem.getMinTreeDepth() && Util.rnd.nextBoolean())) {
+        if (programProblem.getMaxTreeDepth() == depth || (depth >= programProblem.getMinTreeDepth() && RNG.nextBoolean())) {
             // Base case: return a terminal node
             return generateRandomNode(programProblem.getBaseTerminalNodeTypes());
         } else {
             // Recursive case: return a function node
             Node node = generateRandomNode(programProblem.getBaseFunctionNodeTypes());
-            int numOfChildren = node.getFixedNumOfChildren()? node.getArity() : (Util.rnd.nextInt((node.getArity() - 1) + 1) + 1);
+            int numOfChildren = node.getFixedNumOfChildren()? node.getArity() : (RNG.nextInt((node.getArity() - 1) + 1) + 1);
             for (int i = 0; i < numOfChildren; i++) {
                 node.insert(i, generateRandomTree(depth + 1)); // TODO check!!!
             }
@@ -57,7 +58,7 @@ public class GPRandomProgramSolution extends GPProgramSolution {
     }
 
     private Node generateRandomNode(List<Class<? extends Node>> nodeTypes) {
-        int index = Util.rnd.nextInt(nodeTypes.size());
+        int index = RNG.nextInt(nodeTypes.size());
         try {
             // Create a new instance from base constructor of the randomly chosen Node type
             return nodeTypes.get(index).getDeclaredConstructor().newInstance();

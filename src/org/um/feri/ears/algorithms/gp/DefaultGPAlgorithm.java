@@ -1,6 +1,7 @@
 package org.um.feri.ears.algorithms.gp;
 
 
+import org.eclipse.swt.program.Program;
 import org.um.feri.ears.algorithms.*;
 import org.um.feri.ears.operators.Selection;
 import org.um.feri.ears.operators.TournamentSelection;
