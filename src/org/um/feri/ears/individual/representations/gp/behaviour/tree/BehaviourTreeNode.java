@@ -1,7 +1,7 @@
 package org.um.feri.ears.individual.representations.gp.behaviour.tree;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.um.feri.ears.individual.representations.gp.GraphPrinter;
+import org.um.feri.ears.util.GraphPrinter;
 import org.um.feri.ears.individual.representations.gp.Node;
 
 import java.util.ArrayList;

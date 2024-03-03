@@ -1,20 +1,18 @@
 package org.um.feri.ears.individual.representations.gp;
 
+import java.util.HashMap;
+
 public class HttpResponse {
-    public class Eval{
-        private double[] PopFitness;
+    public class PopFitness{
+        private FitnessIndividual[] PopFitness;
 
-        public double[] getFitness() {
+        public FitnessIndividual[] getFitnesses() {
             return PopFitness;
-        }
-
-        public void setFitness(double[] PopFitness) {
-            PopFitness = PopFitness;
         }
     }
     private String status;
     private String message;
-    private Eval object;
+    private PopFitness object;
 
     public String getStatus() {
         return status;
@@ -32,11 +30,11 @@ public class HttpResponse {
         this.message = message;
     }
 
-    public Eval getObject() {
+    public PopFitness getObject() {
         return object;
     }
 
-    public void setObject(Eval object) {
+    public void setObject(PopFitness object) {
         this.object = object;
     }
 }

@@ -165,7 +165,12 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
 
     @Override
     public ProgramSolution getRandomSolution() {
-        return this.programSolutionGenerator.generate(this, 1, treeName);
+        ProgramSolution solution = this.programSolutionGenerator.generate(this, 1, treeName);
+
+        if(!isFeasible(solution))
+            makeFeasible(solution);
+
+        return solution;
     }
 
     public Node getRandomTerminalNode(){

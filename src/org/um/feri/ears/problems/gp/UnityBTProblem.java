@@ -14,11 +14,6 @@ import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.operators.gp.GPOperator;
 import org.um.feri.ears.util.Util;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -73,7 +68,8 @@ public class UnityBTProblem extends ProgramProblem {
                 if (Objects.equals(obj.getStatus(), "Success")) {
                     // Set fitness values after evaluation
                     for (int i = 0; i < solutions.size(); i++) {
-                        solutions.get(i).setObjective(0, obj.getObject().getFitness()[i]);
+                        solutions.get(i).setObjective(0, obj.getObject().getFitnesses()[i].FinalFitnessStats);
+                        solutions.get(i).setFitnesses(obj.getObject().getFitnesses()[i].Fitnesses);
                     }
                     return;
                 }
@@ -91,6 +87,7 @@ public class UnityBTProblem extends ProgramProblem {
     }
 
     public void evaluate(List<ProgramSolution> solutions){
+        // TODO Update/Delete ????
         JSONArray jsonArray = new JSONArray();
         JSONParser jsonParser = new JSONParser();
 
