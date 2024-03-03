@@ -2,11 +2,12 @@ package org.um.feri.ears.problems;
 
 import org.um.feri.ears.visualization.graphing.recording.GraphDataRecorder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Task<S extends Solution, P extends Problem<S>> {
+public class Task<S extends Solution, P extends Problem<S>> implements Serializable {
 
     public static final class Accessor { private Accessor() {} }
     private static final Accessor ACCESSOR_INSTANCE = new Accessor();
@@ -125,6 +126,26 @@ public class Task<S extends Solution, P extends Problem<S>> {
     }
 
     /**
+     * Generates X random evaluated solutions.
+     *
+     * @param numOfSolutions to be generated
+     * @return X random evaluated solutions.
+     * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
+     *                                To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
+     */
+    public List<S> getRandomEvaluatedSolution(int numOfSolutions) throws StopCriterionException {
+        // Generate numOfSolutions random solutions and bulk evaluate them
+        List<S> solutions = new ArrayList<>();
+        for (int i = 0; i < numOfSolutions; i++) {
+            solutions.add(problem.getRandomSolution());
+        }
+
+        bulkEval(solutions);
+
+        return solutions;
+    }
+
+    /**
      * Evaluates the given solution
      *
      * @param solution to be evaluated
@@ -183,8 +204,49 @@ public class Task<S extends Solution, P extends Problem<S>> {
         }
     }
 
+
+    /**
+     * Evaluates array of given solutions
+     *
+     * @param solutions to be evaluated
+     * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
+     *                                To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
+     */
+    public void bulkEval(List<S> solutions) throws StopCriterionException {
+        switch (stopCriterion) {
+            case EVALUATIONS:
+                performEvaluations(solutions);
+                break;
+            case ITERATIONS:
+                if (isStop)
+                    throw new StopCriterionException("Max iterations");
+                performEvaluations(solutions);
+                break;
+            case GLOBAL_OPTIMUM_OR_EVALUATIONS:
+                if (isGlobal)
+                    throw new StopCriterionException("Global optimum already found");
+                performEvaluations(solutions);
+                break;
+            case CPU_TIME:
+                if (!isStop) {
+                    hasCpuTimeExceeded(); // if CPU time is exceed allow last eval
+                    performEvaluations(solutions);
+                } else {
+                    throw new StopCriterionException("CPU Time");
+                }
+                break;
+            case STAGNATION:
+                if (isStop)
+                    throw new StopCriterionException("Solution stagnation");
+                performEvaluations(solutions);
+                break;
+        }
+
+        // TODO add ancestors logging?
+    }
+
     private void performEvaluation(S solution) throws StopCriterionException {
-        incrementNumberOfEvaluations();
+        incrementNumberOfEvaluations(1);
         long start = System.nanoTime();
         problem.evaluate(solution);
         if(problem.numberOfConstraints > 0)
@@ -196,6 +258,29 @@ public class Task<S extends Solution, P extends Problem<S>> {
         if (bestSolution != null && isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
             evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTimeNs, bestSolution.getEval()));
     }
+
+    private void performEvaluations(List<S> solutions) throws StopCriterionException {
+        incrementNumberOfEvaluations(solutions.size());
+        long start = System.nanoTime();
+        problem.bulkEvaluate(solutions);
+        if(problem.numberOfConstraints > 0) {
+            // TODO Implement bulkEvaluateConstraints(solutions) method
+        }
+
+        for (S solution : solutions) {
+            checkImprovement(solution);
+        }
+        evaluationTimeNs += System.nanoTime() - start;
+
+        for (S solution : solutions) {
+            checkIfGlobalReached(solution);
+            GraphDataRecorder.AddRecord(solution, this.getProblemName());
+            if (bestSolution != null && isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
+                evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTimeNs, bestSolution.getEval()));
+        }
+    }
+
+
 
     /**
      * Checks if the current {@code solution} is better than the current best solution. If there is no improvement after
@@ -280,10 +365,10 @@ public class Task<S extends Solution, P extends Problem<S>> {
      *
      * @throws StopCriterionException if the number of evaluations exceeds the maximum number of evaluations .
      */
-    public void incrementNumberOfEvaluations() throws StopCriterionException {
-        if (numberOfEvaluations >= maxEvaluations && stopCriterion == StopCriterion.EVALUATIONS)
+    public void incrementNumberOfEvaluations(int incrementValue) throws StopCriterionException {
+        if ((numberOfEvaluations + incrementValue) > maxEvaluations && stopCriterion == StopCriterion.EVALUATIONS)
             throw new StopCriterionException("Max evaluations");
-        numberOfEvaluations++;
+        numberOfEvaluations += incrementValue;
         if (numberOfEvaluations >= maxEvaluations && (stopCriterion == StopCriterion.EVALUATIONS || stopCriterion == StopCriterion.GLOBAL_OPTIMUM_OR_EVALUATIONS))
             isStop = true;
     }

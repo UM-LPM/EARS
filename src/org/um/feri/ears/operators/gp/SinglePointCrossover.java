@@ -5,6 +5,7 @@ import org.um.feri.ears.individual.representations.gp.TreeAncestor;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class SinglePointCrossover extends GPCrossover {
             return null;
         }
 
-        if(Util.rnd.nextDouble() <= this.crossoverProbability) {
+        if(RNG.nextDouble() <= this.crossoverProbability) {
             ProgramSolution parent1;
             ProgramSolution parent2;
             // Perform crossover so long that it's inside boundaries
@@ -39,8 +40,8 @@ public class SinglePointCrossover extends GPCrossover {
             int childCount1 = parent1.getTree().getRootNode().ancestors().getAncestorCount();
             int childCount2 = parent2.getTree().getRootNode().ancestors().getAncestorCount();
 
-            int crossoverIndex1 = Util.rnd.nextInt(childCount1) + 1;
-            int crossoverIndex2 = Util.rnd.nextInt(childCount2) + 1;
+            int crossoverIndex1 = RNG.nextInt(childCount1) + 1;
+            int crossoverIndex2 = RNG.nextInt(childCount2) + 1;
 
             // Select nodes at random indexes
             TreeAncestor crossOverNodeTreeAncestor1 = parent1.getTree().getRootNode().ancestorAt(crossoverIndex1);

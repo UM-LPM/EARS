@@ -2,6 +2,7 @@ package org.um.feri.ears.individual.representations.gp.symbolic.regression;
 
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ public class VarNode extends Node {
     public static List<String> variables = Arrays.asList("x", "y", "z");
 
     public VarNode() {
-        super(0, variables.get(Util.rnd.nextInt(variables.size())));
+        super(0, variables.get(RNG.nextInt(variables.size())));
     }
 
     public VarNode(String name) {
