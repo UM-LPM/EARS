@@ -18,7 +18,6 @@
 /build/
 TestBTe.*
 TestBTree.*
-/src/org/um/feri/ears/visualization/gp/images/
 
 ## Java
 
@@ -146,4 +145,3 @@ Thumbs.db
 !/ios-moe/xcode/*.xcodeproj/xcshareddata
 !/ios-moe/xcode/*.xcodeproj/project.pbxproj
 /ios-moe/xcode/native/
-out/production/EARS.main/org/um/feri/ears/visualization/gp/images/*
