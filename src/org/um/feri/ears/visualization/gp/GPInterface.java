@@ -30,7 +30,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Externalizable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -39,7 +38,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-public class HomeForm extends JFrame {
+public class GPInterface extends JFrame {
 
     private JPanel contentPane;
     private JLabel genNumLabel;
@@ -83,7 +82,7 @@ public class HomeForm extends JFrame {
     private JButton loadCurrentAlgState;
 
     private String lastUuid;
-    public HomeForm() {
+    public GPInterface() {
         super("EARS GP (Debug)");
         setContentPane(contentPane);
 
@@ -284,11 +283,11 @@ public class HomeForm extends JFrame {
 
         // Sequential
         /*for (ProgramSolution<Double> individual : this.gpAlgorithm.getPopulation()) {
-            String file = individual.getProgram().displayTree(imgPathPrefix + "tree" + String.valueOf(HomeForm.individualCounter), false);
+            String file = individual.getProgram().displayTree(imgPathPrefix + "tree" + String.valueOf(GPInterface.individualCounter), false);
             ImagePanel imagePanel = new ImagePanel(file);
             imagePanel.setMinimumSize(new Dimension(100,100));
             // Add click event on imagePanel
-            final int index = HomeForm.individualCounter;
+            final int index = GPInterface.individualCounter;
             imagePanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     individualImagePanelMouseClicked(evt, individual, index);
@@ -302,7 +301,7 @@ public class HomeForm extends JFrame {
                 }
             });
             algorithmPopulationPanel.add(imagePanel);
-            HomeForm.individualCounter += 1;
+            GPInterface.individualCounter += 1;
         }*/
 
         algorithmPopulationPanel.revalidate();
@@ -462,7 +461,7 @@ public class HomeForm extends JFrame {
         }
     }
     public static void main(String[] args) {
-        HomeForm form = new HomeForm();
+        GPInterface form = new GPInterface();
         form.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         form.setSize(1400, 1000);
         form.setVisible(true);
