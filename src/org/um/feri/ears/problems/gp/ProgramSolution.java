@@ -7,6 +7,7 @@ import org.um.feri.ears.problems.Solution;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProgramSolution extends Solution {
 
@@ -24,6 +25,8 @@ public class ProgramSolution extends Solution {
         super(s);
         tree = s.tree.clone();
         parents = new ArrayList<>();
+        Fitnesses = new HashMap<>();
+        Fitnesses.putAll(s.Fitnesses);
     }
 
     @Override
@@ -47,5 +50,23 @@ public class ProgramSolution extends Solution {
         this.Fitnesses = values;
     }
 
+    public Map<String, Float> getFitnessesCombined(){
+        HashMap<String, Float> fitnessesCombined = new HashMap<>();
 
+        if(Fitnesses == null)
+            return fitnessesCombined;
+
+        for (Map.Entry<String, Fitness> entry : Fitnesses.entrySet()) {
+            for(Map.Entry<String, Float> entry2 : entry.getValue().GetIndividualFitnessValues().entrySet()){
+                if(fitnessesCombined.containsKey(entry2.getKey())){
+                    fitnessesCombined.put(entry2.getKey(), fitnessesCombined.get(entry2.getKey()) + entry2.getValue());
+                }
+                else {
+                    fitnessesCombined.put(entry2.getKey(), entry2.getValue());
+                }
+            }
+        }
+
+        return fitnessesCombined;
+    }
 }
