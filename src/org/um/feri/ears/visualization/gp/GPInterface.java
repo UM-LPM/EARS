@@ -21,6 +21,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.gp.components.GraphPanel;
+import org.um.feri.ears.visualization.gp.components.HorizontalHistogramPanel;
 import org.um.feri.ears.visualization.gp.components.ImagePanel;
 
 import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
@@ -80,11 +81,14 @@ public class GPInterface extends JFrame {
     private GraphPanel avgTreeSizeGraphPanel;
     private JButton saveCurrentAlgState;
     private JButton loadCurrentAlgState;
+    private JTabbedPane tabbPane;
+    private HorizontalHistogramPanel bestIndividualHorizontalHistogramPanel;
+    private HorizontalHistogramPanel selectedIndividualHorizontalHistogramPanel;
 
     private String lastUuid;
     public GPInterface() {
         super("EARS GP (Debug)");
-        setContentPane(contentPane);
+        setContentPane(tabbPane);
 
         imgPathPrefix = "src/org/um/feri/ears/visualization/gp/images/";
         clearImages();
@@ -219,6 +223,8 @@ public class GPInterface extends JFrame {
         this.avgTreeDepthGraphPanel = new GraphPanel(null);
         this.avgTreeSizeGraphPanel = new GraphPanel(null);
 
+        bestIndividualHorizontalHistogramPanel = new HorizontalHistogramPanel();
+        selectedIndividualHorizontalHistogramPanel = new HorizontalHistogramPanel();
     }
 
     public void updateUI(boolean updatePopulation) {
@@ -328,6 +334,8 @@ public class GPInterface extends JFrame {
             selectedIndividualIsFeasible.setText("" + this.programProblem.isFeasible(individual));
             selectedIndividualNumOfFunc.setText("" + individual.getTree().numberOfFunctions());
             selectedIndividualNumOfTerm.setText("" + individual.getTree().numberOfTerminals());
+
+            selectedIndividualHorizontalHistogramPanel.setData(individual.getFitnessesCombined());
         }
     }
 
@@ -353,6 +361,9 @@ public class GPInterface extends JFrame {
             bestIndividualIsFeasible.setText("" + this.programProblem.isFeasible(this.gpAlgorithm.getBest()));
             bestIndividualNumOfFunc.setText("" + this.gpAlgorithm.getBest().getTree().numberOfFunctions());
             bestIndividualNumOfTerm.setText("" + this.gpAlgorithm.getBest().getTree().numberOfTerminals());
+
+            // Display fitness values histogram
+            bestIndividualHorizontalHistogramPanel.setData(this.gpAlgorithm.getBest().getFitnessesCombined());
         }
     }
 
