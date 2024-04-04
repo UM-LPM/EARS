@@ -1,7 +1,6 @@
 package org.um.feri.ears.algorithms.gp;
 
 
-import org.eclipse.swt.program.Program;
 import org.um.feri.ears.algorithms.*;
 import org.um.feri.ears.operators.Selection;
 import org.um.feri.ears.operators.TournamentSelection;
@@ -16,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultGPAlgorithm extends GPAlgorithm {
+
+    private static final long serialVersionUID = -1275148524824281908L;
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -67,10 +68,11 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         this.algorithmStepper = new AlgorithmStepper<>(GPAlgorithmStep.class, true);
 
         this.task = task;
-        this.bestGenFitness = new ArrayList<>();
-        this.avgGenFitness = new ArrayList<>();
-        this.avgGenTreeDepth = new ArrayList<>();
-        this.avgGenTreeSize = new ArrayList<>();
+        this.bestOverallFitnesses = new ArrayList<>();
+        this.avgGenFitnesses = new ArrayList<>();
+        this.avgGenTreeDepths = new ArrayList<>();
+        this.avgGenTreeSizes = new ArrayList<>();
+        this.bestGenFitnesses = new ArrayList<>();
 
         this.initialAlgorithmStateFilename = initialAlgorithmStateFilename;
     }
@@ -131,10 +133,11 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
 
         this.best = null;
         this.population = new ArrayList<>();
-        this.bestGenFitness = new ArrayList<>();
-        this.avgGenFitness = new ArrayList<>();
-        this.avgGenTreeDepth = new ArrayList<>();
-        this.avgGenTreeSize = new ArrayList<>();
+        this.bestOverallFitnesses = new ArrayList<>();
+        this.avgGenFitnesses = new ArrayList<>();
+        this.avgGenTreeDepths = new ArrayList<>();
+        this.avgGenTreeSizes = new ArrayList<>();
+        this.bestGenFitnesses = new ArrayList<>();
     }
 
     public void algorithmInitialization(Task<ProgramSolution, ProgramProblem> task, ProblemComparator<ProgramSolution> comparator, Selection<ProgramSolution, ProgramProblem> selectionOperator) {
@@ -201,17 +204,24 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         }
     }
 
-    public void performEvaluation()  throws StopCriterionException {
+    public ProgramSolution performEvaluation()  throws StopCriterionException {
+        ProgramSolution currentGenBest = null;
         population = new ArrayList<>(this.currentPopulation);
 
         this.task.bulkEval(this.population);
 
+        currentGenBest = new ProgramSolution(this.population.get(0));
         for(ProgramSolution sol : population){
             if (task.problem.isFirstBetter(sol, best))
                 best = new ProgramSolution(sol);
+
+            if (task.problem.isFirstBetter(sol, currentGenBest))
+                currentGenBest = new ProgramSolution(sol);
         }
 
         this.population = this.currentPopulation;
+
+        return currentGenBest;
     }
 
     @Override
@@ -239,28 +249,30 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 performMutation();
                 break;
             case EVALUATION:
-                performEvaluation();
+                ProgramSolution currentGenBest = performEvaluation();
+                this.bestGenFitnesses.add(currentGenBest.getEval());
                 if(this.isDebug()){
-                    this.bestGenFitness.add(this.best.getEval());
+                    this.bestOverallFitnesses.add(this.best.getEval());
                     double sum = 0;
                     for (ProgramSolution sol: this.population) {
                         sum += sol.getEval();
                     }
-                    this.avgGenFitness.add(sum / this.population.size());
+                    this.avgGenFitnesses.add(sum / this.population.size());
 
                     // add current avg tree depth to list
                     double avgDepth = 0;
                     for (ProgramSolution sol: this.population) {
                         avgDepth += sol.getTree().treeDepth();
                     }
-                    this.avgGenTreeDepth.add(avgDepth / this.population.size());
+                    this.avgGenTreeDepths.add(avgDepth / this.population.size());
 
                     // add current avg tree size to list
                     double avgSize = 0;
                     for (ProgramSolution sol: this.population) {
                         avgSize += sol.getTree().treeSize();
                     }
-                    this.avgGenTreeSize.add(avgSize / this.population.size());
+                    this.avgGenTreeSizes.add(avgSize / this.population.size());
+
                 }
                 break;
             default:
@@ -293,5 +305,45 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     @Override
     public void setPopulation(List<ProgramSolution> population) {
         this.population = population;
+    }
+
+    @Override
+    public void setPopSize(int popSize) {
+        this.popSize = popSize;
+    }
+
+    @Override
+    public int getPopSize() {
+        return popSize;
+    }
+
+    @Override
+    public void setCrossoverProbability(double crossoverProbability) {
+        this.crossoverProbability = crossoverProbability;
+    }
+
+    @Override
+    public double getCrossoverProbability() {
+        return crossoverProbability;
+    }
+
+    @Override
+    public void setMutationProbability(double mutationProbability) {
+        this.mutationProbability = mutationProbability;
+    }
+
+    @Override
+    public double getMutationProbability() {
+        return mutationProbability;
+    }
+
+    @Override
+    public void setNumberOfTournaments(int numberOfTournaments) {
+        this.numberOfTournaments = numberOfTournaments;
+    }
+
+    @Override
+    public int getNumberOfTournaments() {
+        return numberOfTournaments;
     }
 }

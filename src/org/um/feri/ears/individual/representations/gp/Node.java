@@ -202,6 +202,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         this.parent = parent;
     }
 
+    @JsonProperty("Name")
     public String getName() {
         return name;
     }

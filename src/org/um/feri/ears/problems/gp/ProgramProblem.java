@@ -186,6 +186,9 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     }
 
     public void treeSizeProgramSolutionPruning(ProgramSolution solution){
+        if(treeSizePruningOperator == null)
+            return;
+
         this.treeSizePruningOperator.execute(solution, this);
     }
 

@@ -3,6 +3,7 @@ package org.um.feri.ears.util;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -247,6 +248,8 @@ public class Util {
     }
 
     public static String sendEvaluateRequest(String apiUrl, String jsonBody, int timeout) throws Exception {
+        InputStream jsonBodyStream = new ByteArrayInputStream(jsonBody.getBytes(StandardCharsets.UTF_8));
+
         URL url = new URL(apiUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setConnectTimeout(timeout);
@@ -254,12 +257,16 @@ public class Util {
         // Set the request method to POST
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
+        conn.setChunkedStreamingMode(0); // Enable chunked transfer encoding
         conn.setDoOutput(true);
 
         // Write the JSON payload to the request body
         try (OutputStream os = conn.getOutputStream()) {
-            byte[] input = jsonBody.getBytes("utf-8");
-            os.write(input, 0, input.length);
+            byte[] buffer = new byte[8192]; // 8KB buffer
+            int bytesRead;
+            while ((bytesRead = jsonBodyStream.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
         }
 
         int responseCode = conn.getResponseCode();
@@ -273,10 +280,9 @@ public class Util {
                 }
                 return response.toString();
             }
-        } else if(responseCode == 888){
+        } else if (responseCode == 888) {
             throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
-        }
-        else {
+        } else {
             throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
         }
     }

@@ -12,14 +12,18 @@ import java.util.Scanner;
 
 public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolution, ProgramProblem> {
 
+    public static final long serialVersionUID = -7440978397322072640L;
+
     public static final String TASK_NAME_PREFIX = "task_";
     public static boolean CAN_RUN = true;
     public static boolean INTERRUPT_LISTENER_RUNNING = false;
 
-    protected ArrayList<Double> bestGenFitness;
-    protected ArrayList<Double> avgGenFitness;
-    protected ArrayList<Double> avgGenTreeDepth;
-    protected ArrayList<Double> avgGenTreeSize;
+    protected ArrayList<Double> bestOverallFitnesses;
+    protected ArrayList<Double> avgGenFitnesses;
+    protected ArrayList<Double> avgGenTreeDepths;
+    protected ArrayList<Double> avgGenTreeSizes;
+    protected ArrayList<Double> bestGenFitnesses;
+
     public abstract ProgramSolution executeStep() throws StopCriterionException;
 
     public abstract ProgramSolution executeGeneration() throws StopCriterionException;
@@ -30,29 +34,38 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
 
     public abstract ProgramSolution getBest();
 
-    public ArrayList<Double> getBestGenFitness() {
-        return bestGenFitness;
+    public ArrayList<Double> getBestOverallFitnesses() {
+        return bestOverallFitnesses;
     }
 
-    public void setBestGenFitness(ArrayList<Double> bestGenFitness) {
-        this.bestGenFitness = bestGenFitness;
+    public void setBestOverallFitnesses(ArrayList<Double> bestOverallFitnesses) {
+        this.bestOverallFitnesses = bestOverallFitnesses;
     }
 
-    public ArrayList<Double> getAvgGenFitness() {
-        return avgGenFitness;
+    public ArrayList<Double> getAvgGenFitnesses() {
+        return avgGenFitnesses;
     }
 
-    public void setAvgGenFitness(ArrayList<Double> avgGenFitness) {
-        this.avgGenFitness = avgGenFitness;
+    public void setAvgGenFitnesses(ArrayList<Double> avgGenFitnesses) {
+        this.avgGenFitnesses = avgGenFitnesses;
     }
 
-    public ArrayList<Double> getAvgGenTreeDepth() {
-        return avgGenTreeDepth;
+    public ArrayList<Double> getAvgGenTreeDepths() {
+        return avgGenTreeDepths;
     }
 
-    public ArrayList<Double> getAvgGenTreeSize() {
-        return avgGenTreeSize;
+    public ArrayList<Double> getAvgGenTreeSizes() {
+        return avgGenTreeSizes;
     }
+
+    public ArrayList<Double> getBestGenFitnesses() {
+        return bestGenFitnesses;
+    }
+
+    public void setBestGenFitnesses(ArrayList<Double> bestGenFitnesses) {
+        this.bestGenFitnesses = bestGenFitnesses;
+    }
+
 
     public static void addInterruptKeyListener(){
         // Create a new Thread that will handle user input
@@ -98,4 +111,37 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
         }
         return alg;
     }
+
+    public void setPopSize(int popSize) {
+        return;
+    }
+
+    public int getPopSize() {
+        return -1;
+    }
+
+    public void setCrossoverProbability(double crossoverProbability) {
+        return;
+    }
+
+    public double getCrossoverProbability() {
+        return -1;
+    }
+
+    public void setMutationProbability(double mutationProbability) {
+        return;
+    }
+
+    public double getMutationProbability() {
+        return -1;
+    }
+
+    public void setNumberOfTournaments(int numberOfTournaments) {
+        return;
+    }
+
+    public int getNumberOfTournaments() {
+        return -1;
+    }
+
 }
