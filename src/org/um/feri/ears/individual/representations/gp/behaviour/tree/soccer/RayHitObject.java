@@ -26,20 +26,20 @@ public class RayHitObject extends ConditionNode {
         Agent,
         Wall,
         Obstacle,
-        Target1,
-        Target2,
-        Target3,
-        Target4,
-        Target5,
-        Target6,
-        Target7,
-        Unknown
+        Object1,
+        Object2,
+        Object3,
+        Object4,
+        Object5,
+        Object6,
+        Object7
     }
 
     public RayHitObject() {
         this(BehaviourTreeNodeType.RAY_HIT_OBJECT, List.of(
-                new Property("targetGameObject",0, 3), // TODO replace with TargetGameObject.values().length
-                new Property("side",0, AgentSide.values().length)
+                new Property("targetGameObject",1, 4), // TODO replace with TargetGameObject.values().length // TODO change 1 back to 0
+                new Property("side",0, AgentSide.values().length),
+                new Property("rayIndex",0, 15) // Number of rays (check in Unity)
         ));
     }
 
