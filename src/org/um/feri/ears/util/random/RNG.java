@@ -320,6 +320,18 @@ public class RNG {
         return lowerBound + nextInt(upperBound - lowerBound);
     }
 
+    public static long nextLong() {
+        return randomGenerators.get(selectedGenerator).nextLong();
+    }
+
+    public static long nextLong(long upperBound) {
+        return randomGenerators.get(selectedGenerator).nextLong(upperBound);
+    }
+
+    public static long nextLong(long lowerBound, long upperBound) {
+        return lowerBound + nextLong(upperBound - lowerBound);
+    }
+
     /**
      * Returns the next random, uniformly distributed {@code long} value.
      *

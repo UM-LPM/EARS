@@ -22,9 +22,6 @@ public abstract class CEC2010 extends DoubleProblem {
         shortName = "F" + funcNum;
         benchmarkName = "CEC2010";
 
-        if (d <= 50)
-            System.err.println("The number of diemnsions must be larger than 50!");
-
         //Search Range
         if (funcNum == 1 | funcNum == 4 | funcNum == 7 | funcNum == 8 | funcNum == 9 | funcNum == 12 |
                 funcNum == 13 | funcNum == 14 | funcNum == 17 | funcNum == 18 | funcNum == 19 | funcNum == 20) {
