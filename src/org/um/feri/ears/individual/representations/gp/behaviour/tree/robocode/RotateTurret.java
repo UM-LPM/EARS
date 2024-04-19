@@ -10,8 +10,8 @@ import java.util.List;
 public class RotateTurret extends ActionNode {
     private enum RotateDirection {
         Left,
-        Right,
-        Random
+        Right//,
+        //Random
     }
 
     public RotateTurret() {

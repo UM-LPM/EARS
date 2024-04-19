@@ -9,8 +9,8 @@ import java.util.List;
 public class Rotate extends ActionNode {
     public enum RotateDirection {
         Left,
-        Right,
-        Random
+        Right//,
+        //Random
     }
 
     public Rotate() {

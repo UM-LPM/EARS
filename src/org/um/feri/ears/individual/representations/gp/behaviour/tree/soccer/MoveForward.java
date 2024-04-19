@@ -10,8 +10,8 @@ import java.util.List;
 public class MoveForward extends ActionNode {
     public enum MoveForwardDirection {
         Forward,
-        Backward,
-        Random
+        Backward//,
+        //Random
     }
 
     public MoveForward() {

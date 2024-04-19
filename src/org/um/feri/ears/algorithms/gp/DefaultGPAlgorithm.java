@@ -276,7 +276,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 }
                 break;
             default:
-                throw new StopCriterionException("Unknown algorithm step");
+                System.out.println("Unknown algorithm step, skipping...");
         }
         if(this.algorithmStepper.isLastStep()){
             this.task.incrementNumberOfIterations();
