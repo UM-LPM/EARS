@@ -1,4 +1,5 @@
 package org.um.feri.ears.individual.representations.gp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,6 +72,7 @@ public abstract class Tree implements Serializable {
         return rootNode.numberOfTerminals();
     }
 
+    @JsonIgnore
     public List<Node> getFunctionNodes(){
         //return rootNode.getFunctionNodes();
         List<Node> nodes = new ArrayList<>();
@@ -89,6 +91,7 @@ public abstract class Tree implements Serializable {
         return nodes;
     }
 
+    @JsonIgnore
     public List<Node> getTerminalNodes(){
         //return rootNode.getTerminalNodes();
         List<Node> nodes = new ArrayList<>();

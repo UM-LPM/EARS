@@ -125,15 +125,19 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
     }
 
     public double getCrossoverProbability() {
-        return -1;
+        return 0;
     }
 
     public void setMutationProbability(double mutationProbability) {
         return;
     }
 
+    public void setElitismProbability(double elitismProbability) {
+        return;
+    }
+
     public double getMutationProbability() {
-        return -1;
+        return 0;
     }
 
     public void setNumberOfTournaments(int numberOfTournaments) {
@@ -141,7 +145,10 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
     }
 
     public int getNumberOfTournaments() {
-        return -1;
+        return 0;
     }
 
+    public double getElitismProbability() {
+        return 0;
+    }
 }

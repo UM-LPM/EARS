@@ -248,7 +248,17 @@ public class Util {
     }
 
     public static String sendEvaluateRequest(String apiUrl, String jsonBody, int timeout) throws Exception {
-        InputStream jsonBodyStream = new ByteArrayInputStream(jsonBody.getBytes(StandardCharsets.UTF_8));
+        // Write the JSON to file
+        File jsonFile = new File("C:\\Users\\marko\\UnityProjects\\GeneralTrainingEnvironmentForMAS\\WebAPI\\RequestData\\jsonBody.json");
+        if (jsonFile.exists()) {
+            jsonFile.delete();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(jsonFile))) {
+            writer.write(jsonBody);
+        }
+
+        //InputStream jsonBodyStream = new ByteArrayInputStream(jsonBody.getBytes(StandardCharsets.UTF_8));
 
         URL url = new URL(apiUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -261,13 +271,13 @@ public class Util {
         conn.setDoOutput(true);
 
         // Write the JSON payload to the request body
-        try (OutputStream os = conn.getOutputStream()) {
+        /*try (OutputStream os = conn.getOutputStream()) {
             byte[] buffer = new byte[8192]; // 8KB buffer
             int bytesRead;
             while ((bytesRead = jsonBodyStream.read(buffer)) != -1) {
                 os.write(buffer, 0, bytesRead);
             }
-        }
+        }*/
 
         int responseCode = conn.getResponseCode();
 

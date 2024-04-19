@@ -9,8 +9,8 @@ import java.util.List;
 public class MoveSide extends ActionNode {
     public enum MoveSideDirection {
         Left,
-        Right,
-        Random
+        Right//,
+        //Random
     }
 
     public MoveSide() {

@@ -2,14 +2,13 @@ package org.um.feri.ears.visualization.gp;
 
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
+import org.um.feri.ears.algorithms.gp.ElitismGPAlgorithm;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Inverter;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Selector;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Sequencer;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.robocode.RotateTurret;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.robocode.Shoot;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.MoveForward;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.RayHitObject;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.Rotate;
@@ -35,6 +34,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -67,8 +67,7 @@ public class GPInterface extends JFrame {
     private JLabel selectedIndividualNumOfTerm;
     private JLabel selectedIndividualID;
     private JTextField runXAlgGensTextField;
-    private GraphPanel fitnessConvergenceGraph;
-    private GraphPanel avgFitnessConvergenceGraph;
+
     private JLabel bestIndividualID;
     private JLabel bestIndividualFitnes;
     private JLabel bestIndividualTreeDepth;
@@ -77,13 +76,30 @@ public class GPInterface extends JFrame {
     private JLabel bestIndividualNumOfFunc;
     private JLabel bestIndividualNumOfTerm;
     private ImagePanel bestIndividualImagePanel;
+    private GraphPanel overalBestFitnessGraphPanel;
+    private GraphPanel avgFitnessConvergenceGraph;
     private GraphPanel avgTreeDepthGraphPanel;
     private GraphPanel avgTreeSizeGraphPanel;
+    private GraphPanel bestGenerationFitnessGraphPanel;
     private JButton saveCurrentAlgState;
     private JButton loadCurrentAlgState;
     private JTabbedPane tabbPane;
     private HorizontalHistogramPanel bestIndividualHorizontalHistogramPanel;
     private HorizontalHistogramPanel selectedIndividualHorizontalHistogramPanel;
+    private JTextField saveGPAlgorithmStatsFilename;
+
+    // GP Algorithm parameters
+    private JTextField populationSizeTextField;
+    private JTextField maxTreeSizeTextField;
+    private JTextField maxTreeDepthTextField;
+    private JTextField minTreeDepthTextField;
+    private JTextField mutationProbTextField;
+    private JTextField crossoverProbTextField;
+    private JTextField numOfTurnamentsTextField;
+    private JTextField bestIndividualJsonTextField;
+    private JTextField problemNameTextField;
+    private JTextField elitismProbTextField;
+
 
     private String lastUuid;
     public GPInterface() {
@@ -91,15 +107,24 @@ public class GPInterface extends JFrame {
         setContentPane(tabbPane);
 
         imgPathPrefix = "src/org/um/feri/ears/visualization/gp/images/";
+
         clearImages();
 
         // Initialize data for gp algorithm
         //initializeDataSymbolicRegression(null);
-        initializeDataBehaviourTree(null);
+        initializeGpAlgorithmStateBehaviourTree(null);
 
+        updateGPAlgorithmParamsUI();
         updateUI(false);
 
-        // Action buttons
+        saveGPAlgorithmStatsFilename.setText(this.programProblem.getName() + "_" + this.gpAlgorithm.getPopSize() + "_" + this.gpAlgorithm.getCrossoverProbability() + "_" + this.gpAlgorithm.getElitismProbability() + "_" + this.gpAlgorithm.getMutationProbability() + "_" + this.gpAlgorithm.getNumberOfTournaments() + "_" + this.programProblem.getMinTreeDepth() + "_" + this.programProblem.getMaxTreeDepth() + "_" + this.programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+
+        addButtonListeners();
+        addGPAlgorithmParamsListeners();
+
+    }
+
+    private void addButtonListeners(){
         resetAlgButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -151,8 +176,18 @@ public class GPInterface extends JFrame {
                         for(int i = 0; i < numOfGens; i++){
                             if(gpAlgorithm.executeGeneration() != null)
                                 break;
-                            System.out.println(gpAlgorithm.getBest().getTree().toJsonString());
-                            GPAlgorithm.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
+                            // Print current gpAlgorithm statistics to console
+                            System.out.println("Generation: " + task.getNumberOfIterations() + ", Best Fitness: " + gpAlgorithm.getBest().getEval() + ", Avg Fitness: " + gpAlgorithm.getAvgGenFitnesses().get(gpAlgorithm.getAvgGenFitnesses().size() - 1) + ", Avg Tree Depth: " + gpAlgorithm.getAvgGenTreeDepths().get(gpAlgorithm.getAvgGenTreeDepths().size() - 1) + ", Avg Tree Size: " + gpAlgorithm.getAvgGenTreeSizes().get(gpAlgorithm.getAvgGenTreeSizes().size() - 1));
+                            System.out.println("Best Individual: " + gpAlgorithm.getBest().getTree().toJsonString());
+
+                            if(saveGPAlgorithmStatsFilename.getText().length() == 0){
+                                // Serialize algorithm state
+                                GPAlgorithm.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
+                            }
+                            else{
+                                // Serialize algorithm state
+                                GPAlgorithm.serializeAlgorithmState(gpAlgorithm, saveGPAlgorithmStatsFilename.getText());
+                            }
                         }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(null, "Please enter a valid number of generations to run (-1 for run to the end).", "Error", JOptionPane.ERROR_MESSAGE);
@@ -168,7 +203,15 @@ public class GPInterface extends JFrame {
         saveCurrentAlgState.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GPAlgorithm.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
+                if(saveGPAlgorithmStatsFilename.getText().length() == 0){
+                    JOptionPane.showMessageDialog(null, "Please enter a valid filename.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                else{
+                    // Serialize algorithm state
+                    GPAlgorithm.serializeAlgorithmState(gpAlgorithm, saveGPAlgorithmStatsFilename.getText());
+                }
+                //GPAlgorithm.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
             }
         });
 
@@ -176,14 +219,157 @@ public class GPInterface extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    initializeDataBehaviourTree("gpAlgorithmState.ser");
+
+                    String gpDataFile = selectGPDataFile();
+
+                    //initializeDataBehaviourTree("gpAlgorithmState.ser");
+                    initializeGpAlgorithmStateBehaviourTree(gpDataFile);
+                    saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
                 }
                 catch (Exception ex){
-                    initializeDataBehaviourTree(null);
+                    initializeGpAlgorithmStateBehaviourTree(null);
                 }
+
+                updateGPAlgorithmParamsUI();
                 updateUI(true);
             }
         });
+    }
+
+    private void addGPAlgorithmParamsListeners(){
+        populationSizeTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int populationSize = Integer.parseInt(populationSizeTextField.getText());
+                    gpAlgorithm.setPopSize(populationSize);
+                    saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for population size.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        crossoverProbTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double crossoverProb = Double.parseDouble(crossoverProbTextField.getText());
+                    gpAlgorithm.setCrossoverProbability(crossoverProb);
+                    saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for crossover probability.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        mutationProbTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double mutationProb = Double.parseDouble(mutationProbTextField.getText());
+                    gpAlgorithm.setMutationProbability(mutationProb);
+                    saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for mutation probability.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        numOfTurnamentsTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int numOfTurnaments = Integer.parseInt(numOfTurnamentsTextField.getText());
+                    gpAlgorithm.setNumberOfTournaments(numOfTurnaments);
+                    saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for number of tournaments.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        minTreeDepthTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int minTreeDepth = Integer.parseInt(minTreeDepthTextField.getText());
+                    programProblem.setMinTreeDepth(minTreeDepth);
+                    saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for minimum tree depth.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        maxTreeDepthTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int maxTreeDepth = Integer.parseInt(maxTreeDepthTextField.getText());
+                    programProblem.setMaxTreeDepth(maxTreeDepth);
+                    saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for maximum tree depth.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        maxTreeSizeTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int maxTreeSize = Integer.parseInt(maxTreeSizeTextField.getText());
+                    programProblem.setMaxTreeSize(maxTreeSize);
+                    saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for maximum tree size.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        problemNameTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                programProblem.setName(problemNameTextField.getText());
+                saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+            }
+        });
+
+        elitismProbTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double elitismProb = Double.parseDouble(elitismProbTextField.getText());
+                    ((ElitismGPAlgorithm)gpAlgorithm).setElitismProbability(elitismProb);
+                    saveGPAlgorithmStatsFilename.setText(programProblem.getName() + "_" + gpAlgorithm.getPopSize() + "_" + gpAlgorithm.getCrossoverProbability() + "_" + gpAlgorithm.getElitismProbability() + "_" + gpAlgorithm.getMutationProbability() + "_" + gpAlgorithm.getNumberOfTournaments() + "_" + programProblem.getMinTreeDepth() + "_" + programProblem.getMaxTreeDepth() + "_" + programProblem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for elitism probability.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+
+    String selectGPDataFile(){
+        Frame frame = new Frame("File Dialog Example");
+
+        // Create a FileDialog with frame as its parent component
+        FileDialog fileDialog = new FileDialog(frame, "Select File");
+
+        // Set the mode of the file dialog to load file
+        fileDialog.setMode(FileDialog.LOAD);
+
+        // Show the file dialog
+        fileDialog.setVisible(true);
+
+        // Get the selected file and directory
+        String directory = fileDialog.getDirectory();
+        String file = fileDialog.getFile();
+
+        // Dispose the frame
+        frame.dispose();
+
+        return directory + file;
     }
 
     private void createUIComponents() {
@@ -217,11 +403,12 @@ public class GPInterface extends JFrame {
         });
 
 
-        // Create fitness convergence line graph
-        this.fitnessConvergenceGraph = new GraphPanel(null);
+        // Initialize graphs
+        this.overalBestFitnessGraphPanel = new GraphPanel(null);
         this.avgFitnessConvergenceGraph = new GraphPanel(null);
         this.avgTreeDepthGraphPanel = new GraphPanel(null);
         this.avgTreeSizeGraphPanel = new GraphPanel(null);
+        this.bestGenerationFitnessGraphPanel = new GraphPanel(null);
 
         bestIndividualHorizontalHistogramPanel = new HorizontalHistogramPanel();
         selectedIndividualHorizontalHistogramPanel = new HorizontalHistogramPanel();
@@ -232,18 +419,34 @@ public class GPInterface extends JFrame {
         genNumLabel.setText("" + task.getNumberOfIterations());
         fitnesEvalNumLabel.setText("" + task.getNumberOfEvaluations());
 
-        // Update convergence graph
-        this.fitnessConvergenceGraph.setScores(this.gpAlgorithm.getBestGenFitness());
-        this.avgFitnessConvergenceGraph.setScores(this.gpAlgorithm.getAvgGenFitness());
-        this.avgTreeDepthGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeDepth());
-        this.avgTreeSizeGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeSize());
+        // Update graphs
+        this.overalBestFitnessGraphPanel.setScores(this.gpAlgorithm.getBestOverallFitnesses());
+        this.avgFitnessConvergenceGraph.setScores(this.gpAlgorithm.getAvgGenFitnesses());
+        this.avgTreeDepthGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeDepths());
+        this.avgTreeSizeGraphPanel.setScores(this.gpAlgorithm.getAvgGenTreeSizes());
+        this.bestGenerationFitnessGraphPanel.setScores(this.gpAlgorithm.getBestGenFitnesses());
 
         // Update population list
-        displayPopulation(updatePopulation);
+        //displayPopulation(updatePopulation);
 
         // Update best individual
         updateBestIndividual();
 
+    }
+
+    public void updateGPAlgorithmParamsUI(){
+        populationSizeTextField.setText("" + gpAlgorithm.getPopSize());
+        maxTreeSizeTextField.setText("" + programProblem.getMaxTreeSize());
+        maxTreeDepthTextField.setText("" + programProblem.getMaxTreeDepth());
+        minTreeDepthTextField.setText("" + programProblem.getMinTreeDepth());
+        mutationProbTextField.setText("" + gpAlgorithm.getMutationProbability());
+        crossoverProbTextField.setText("" + gpAlgorithm.getCrossoverProbability());
+        numOfTurnamentsTextField.setText("" + gpAlgorithm.getNumberOfTournaments());
+        elitismProbTextField.setText("" + gpAlgorithm.getElitismProbability());
+        if(gpAlgorithm.getBest() != null)
+            bestIndividualJsonTextField.setText(gpAlgorithm.getBest().getTree().toJsonString());
+
+        problemNameTextField.setText(programProblem.getName());
     }
 
     public void displayPopulation(boolean updatePopulation){
@@ -367,7 +570,7 @@ public class GPInterface extends JFrame {
         }
     }
 
-    private void initializeDataSymbolicRegression(String initialStateFile) {
+    private void initializeGpAlgorithmStateSymbolicRegression(String initialStateFile) {
         java.util.List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
                 AddNode.class,
                 DivNode.class,
@@ -415,15 +618,17 @@ public class GPInterface extends JFrame {
             this.programProblem = this.task.problem;
         }
         else {
-            this.programProblem = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 200, new GPDepthBasedTreePruningOperator(),
+            this.programProblem = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 12, 100, new GPDepthBasedTreePruningOperator(),
                     new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData);
             this.task = new Task<>(programProblem, StopCriterion.EVALUATIONS, 10000, 0, 0);
-            this.gpAlgorithm =  new DefaultGPAlgorithm(100, 0.95, 0.025, 2, this.task, null);
+
+            this.gpAlgorithm =  new DefaultGPAlgorithm(300, 0.90, 0.1, 2, this.task, null);
+            //this.gpAlgorithm =  new ElitismGPAlgorithm(100, 0.8,0.05, 0.1, 4, this.task, null); // Collector_conf_4
         }
         this.gpAlgorithm.setDebug(true);
     }
 
-    public void initializeDataBehaviourTree(String initialStateFile){
+    public void initializeGpAlgorithmStateBehaviourTree(String initialStateFile){
         List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
                 //Repeat.class, // TODO remove comment
                 Sequencer.class,
@@ -435,9 +640,9 @@ public class GPInterface extends JFrame {
                 RayHitObject.class,
                 MoveForward.class,
                 //MoveSide.class,
-                Rotate.class,
-                RotateTurret.class,
-                Shoot.class
+                Rotate.class//,
+                //RotateTurret.class,
+                //Shoot.class
         );
 
         if(initialStateFile != null){
@@ -447,9 +652,13 @@ public class GPInterface extends JFrame {
         }
         else {
             this.programProblem = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 12, 100, new GPDepthBasedTreePruningOperator(),
-                    new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution());
+                    new GPTreeExpansionOperator(), null, new GPRandomProgramSolution());
+            this.programProblem.setName(problemNameTextField.getText());
+
             this.task = new Task<>(this.programProblem, StopCriterion.EVALUATIONS, 500000, 0, 0);
-            this.gpAlgorithm =  new DefaultGPAlgorithm(100, 0.90, 0.025, 4, this.task, null);
+
+            //this.gpAlgorithm =  new DefaultGPAlgorithm(300, 0.9, 0.1, 4, this.task, null); // Collector_conf_4
+            this.gpAlgorithm =  new ElitismGPAlgorithm(100, 0.9,0.05, 0.1, 4, this.task, null); // Collector_conf_4
         }
         this.gpAlgorithm.setDebug(true);
     }
@@ -471,6 +680,21 @@ public class GPInterface extends JFrame {
             e.printStackTrace();
         }
     }
+
+    public String getFormattedDate() {
+        // Get current date
+        LocalDate date = LocalDate.now();
+        // Create a new string builder
+        // Append the day
+        String formattedDate = String.format("%02d", date.getDayOfMonth()) +
+                // Append the month
+                String.format("%02d", date.getMonthValue()) +
+                // Append the year
+                date.getYear();
+        
+        return formattedDate;
+    }
+    
     public static void main(String[] args) {
         GPInterface form = new GPInterface();
         form.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
