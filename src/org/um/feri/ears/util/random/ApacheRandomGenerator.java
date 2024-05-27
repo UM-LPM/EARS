@@ -2,7 +2,6 @@ package org.um.feri.ears.util.random;
 
 import org.apache.commons.rng.UniformRandomProvider;
 import org.apache.commons.rng.simple.RandomSource;
-
 import java.util.Random;
 
 
@@ -38,12 +37,12 @@ public class ApacheRandomGenerator extends RandomGenerator {
         return rng.nextInt(n);
     }
 
-    @Override
+    //@Override
     public long nextLong() {
         return rng.nextLong();
     }
 
-    @Override
+    //@Override
     public long nextLong(long n) {
         return rng.nextLong(n);
     }
