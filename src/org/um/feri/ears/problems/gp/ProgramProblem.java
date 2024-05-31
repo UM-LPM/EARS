@@ -38,6 +38,9 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
 
     protected GPProgramSolution programSolutionGenerator;
 
+    protected String[] evalEnvInstanceURIs;
+    protected String jsonBodyDestFolderPath;
+
     // Default constructor
     public ProgramProblem(String name) {
         super(name, 1, 1, 0);
@@ -55,7 +58,7 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     }
 
     // Constructor with all parameters
-    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeDepth, int maxTreeSize, GPOperator pruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName) {
+    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeDepth, int maxTreeSize, GPOperator pruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName, String[] evalEnvInstanceURIs) {
         super(name, 1, 1, 0);
         setBaseFunctionNodeTypes(baseFunctionNodeTypes);
         setBaseTerminalNodeTypes(baseTerminalNodeTypes);
@@ -70,6 +73,8 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.expansionOperator = expansionOperator;
         this.treeSizePruningOperator = treeSizePruningOperator;
         this.programSolutionGenerator = programSolutionGenerator;
+
+        this.evalEnvInstanceURIs = evalEnvInstanceURIs;
     }
 
 
@@ -140,6 +145,22 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
 
     public void setProgramSolutionGenerator(GPProgramSolution programSolutionGenerator) {
         this.programSolutionGenerator = programSolutionGenerator;
+    }
+
+    public void setEvalEnvInstanceURIs(String[] evalEnvInstanceURIs) {
+        this.evalEnvInstanceURIs = evalEnvInstanceURIs;
+    }
+
+    public String[] getEvalEnvInstanceURIs() {
+        return evalEnvInstanceURIs;
+    }
+
+    public void setJsonBodyDestFolderPath(String jsonBodyDestFolderPath){
+        this.jsonBodyDestFolderPath = jsonBodyDestFolderPath;
+    }
+
+    public String getJsonBodyDestFolderPath(){
+        return jsonBodyDestFolderPath;
     }
 
     @Override

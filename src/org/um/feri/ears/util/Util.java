@@ -247,9 +247,11 @@ public class Util {
         return Arrays.stream(array).boxed().collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static String sendEvaluateRequest(String apiUrl, String jsonBody, int timeout) throws Exception {
+    public static String sendEvaluateRequest(String apiUrl, String jsonBody, int timeout, String[] evalEnvInstanceURIs, String jsonBodyDestFolderPath) throws Exception {
         // Write the JSON to file
-        File jsonFile = new File("C:\\Users\\marko\\UnityProjects\\GeneralTrainingEnvironmentForMAS\\WebAPI\\RequestData\\jsonBody.json");
+        //File jsonFile = new File("C:\\Users\\marko\\UnityProjects\\GeneralTrainingEnvironmentForMAS\\WebAPI\\RequestData\\jsonBody.json");
+        File jsonFile = new File(jsonBodyDestFolderPath);
+
         if (jsonFile.exists()) {
             jsonFile.delete();
         }
@@ -257,8 +259,6 @@ public class Util {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(jsonFile))) {
             writer.write(jsonBody);
         }
-
-        //InputStream jsonBodyStream = new ByteArrayInputStream(jsonBody.getBytes(StandardCharsets.UTF_8));
 
         URL url = new URL(apiUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -271,20 +271,28 @@ public class Util {
         conn.setDoOutput(true);
 
         // Write the JSON payload to the request body
-        /*try (OutputStream os = conn.getOutputStream()) {
+        //String jsonRequestBody = "[\"http://localhost:4444\",\"http://localhost:4445\"]";
+        //String jsonRequestBody = "[\"http://localhost:4444\",\"http://localhost:4445\",\"http://localhost:4446\"]";
+        //String jsonRequestBody = "[\"http://localhost:4444\"]";
+
+        // Convert evalEnvInstanceURIs to JSON
+        Gson gson = new Gson();
+        String jsonRequestBody = gson.toJson(evalEnvInstanceURIs);
+
+        InputStream jsonBodyStream = new ByteArrayInputStream(jsonRequestBody.getBytes(StandardCharsets.UTF_8));
+        try (OutputStream os = conn.getOutputStream()) {
             byte[] buffer = new byte[8192]; // 8KB buffer
             int bytesRead;
             while ((bytesRead = jsonBodyStream.read(buffer)) != -1) {
                 os.write(buffer, 0, bytesRead);
             }
-        }*/
+        }
 
         int responseCode = conn.getResponseCode();
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-                String inputLine;
-                StringBuilder response = new StringBuilder();
+                String inputLine;StringBuilder response = new StringBuilder();
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }

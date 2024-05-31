@@ -3,16 +3,16 @@ package org.um.feri.ears.individual.representations.gp;
 import java.util.HashMap;
 
 public class HttpResponse {
-    public class PopFitness{
-        private FitnessIndividual[] PopFitness;
+    public class HttpServerResponse{
+        private FitnessIndividual[] popFitness;
 
         public FitnessIndividual[] getFitnesses() {
-            return PopFitness;
+            return popFitness;
         }
     }
     private String status;
     private String message;
-    private PopFitness object;
+    private HttpServerResponse object;
 
     public String getStatus() {
         return status;
@@ -30,11 +30,11 @@ public class HttpResponse {
         this.message = message;
     }
 
-    public PopFitness getObject() {
+    public HttpServerResponse getObject() {
         return object;
     }
 
-    public void setObject(PopFitness object) {
+    public void setObject(HttpServerResponse object) {
         this.object = object;
     }
 }

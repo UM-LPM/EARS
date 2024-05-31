@@ -27,8 +27,7 @@ public class UnityBTProblem extends ProgramProblem {
     }
 
     public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeDepth, int maxTreeSize, GPOperator treeDepthPruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator) {
-        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeDepth, maxTreeSize, treeDepthPruningOperator, expansionOperator, treeSizePruningOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS");
-
+        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeDepth, maxTreeSize, treeDepthPruningOperator, expansionOperator, treeSizePruningOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new String[]{});
     }
 
     @Override
@@ -56,10 +55,10 @@ public class UnityBTProblem extends ProgramProblem {
         for(int nums = 0; nums < BULK_EVALUATION_REPEATS; nums++) {
             try {
                 String apiUrl = "http://localhost:5016/api/JsonToSoParser";
-                String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000);
-                response = response.replace("\"{", "{");
-                response = response.replace("}\"", "}");
-                response = response.replace("\\", "");
+                String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000, getEvalEnvInstanceURIs(), getJsonBodyDestFolderPath());
+                //response = response.replace("\"{", "{");
+                //response = response.replace("}\"", "}");
+                //response = response.replace("\\", "");
                 Gson gson = new Gson();
                 HttpResponse obj = gson.fromJson(response, HttpResponse.class);
                 System.out.println(LocalDateTime.now() + "Finished with response: " + response);
@@ -68,8 +67,8 @@ public class UnityBTProblem extends ProgramProblem {
                 if (Objects.equals(obj.getStatus(), "Success")) {
                     // Set fitness values after evaluation
                     for (int i = 0; i < solutions.size(); i++) {
-                        solutions.get(i).setObjective(0, obj.getObject().getFitnesses()[i].FinalFitnessStats);
-                        solutions.get(i).setFitnesses(obj.getObject().getFitnesses()[i].Fitnesses);
+                        solutions.get(i).setObjective(0, obj.getObject().getFitnesses()[i].finalFitnessStats);
+                        solutions.get(i).setFitnesses(obj.getObject().getFitnesses()[i].fitnesses);
                     }
                     return;
                 }
