@@ -118,17 +118,26 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
                 break;
             }
 
+            // Initialize the population of current generationn
+            this.currentPopulation = new ArrayList<>(this.population.size());
+
             // Elitism phase
             // Sort population by fitness
             this.population.sort(this.comparator);
 
             // Copy eliteCount best individuals to the next generation
-            this.parentPopulation = new ArrayList<>(population.size());
+            this.parentPopulation = new ArrayList<>();
 
-            for (int i = 0; i < this.eliteCount; i++) {
-                this.parentPopulation.add(new ProgramSolution(population.get(i)));
+            int eliteCountMod = this.eliteCount;
+
+            if(this.best.getObjective(0) <= this.population.get(0).getObjective(0)){
+                this.currentPopulation.add(new ProgramSolution(this.best));
+                eliteCountMod--;
             }
 
+            for (int i = 0; i < eliteCountMod; i++) {
+                this.currentPopulation.add(new ProgramSolution(population.get(i)));
+            }
 
             // Selection
             //performSelectionAndCrossover(this.offspringCount);
@@ -138,10 +147,11 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
             performCrossover();
 
             // Mutation
-            performMutation(this.eliteCount);
+            performMutation();
 
             // Evaluate
-            performEvaluation();
+            ProgramSolution currentGenBest = performEvaluation();
+            this.bestGenFitnesses.add(currentGenBest.getEval());
 
             // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
             // TODO
@@ -244,8 +254,6 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
     }
 
     public void performCrossover() throws StopCriterionException {
-        this.currentPopulation = new ArrayList<>(this.parentPopulation.size());
-
         // Shuffle parentSolutions
         Collections.shuffle(this.parentPopulation);
 
@@ -265,8 +273,8 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
         }
     }
 
-    public void performMutation(int eliteCount)  throws StopCriterionException {
-        for (int i = eliteCount; i < currentPopulation.size(); i++) {
+    public void performMutation()  throws StopCriterionException {
+        for (int i = this.eliteCount; i < currentPopulation.size(); i++) {
             try {
                 currentPopulation.set(i, this.mutationOperator.execute(currentPopulation.get(i), task.problem));
             } catch (Exception ex) {
@@ -290,7 +298,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
                 currentGenBest = new ProgramSolution(sol);
         }
 
-        this.population = this.currentPopulation;
+        //this.population = this.currentPopulation;
 
         return currentGenBest;
     }
@@ -314,14 +322,25 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
                 populationInitialization();
                 break;
             case ELITISM:
+                // Initialize the population of current generation
+                this.currentPopulation = new ArrayList<>(this.population.size());
+
+                // Elitism phase
                 // Sort population by fitness
                 this.population.sort(this.comparator);
 
                 // Copy eliteCount best individuals to the next generation
-                this.parentPopulation = new ArrayList<>(population.size());
+                this.parentPopulation = new ArrayList<>();
 
-                for (int i = 0; i < this.eliteCount; i++) {
-                    this.parentPopulation.add(new ProgramSolution(population.get(i)));
+                int eliteCountMod = this.eliteCount;
+
+                if(this.best.getObjective(0) <= this.population.get(0).getObjective(0)){
+                    this.currentPopulation.add(new ProgramSolution(this.best));
+                    eliteCountMod--;
+                }
+
+                for (int i = 0; i < eliteCountMod; i++) {
+                    this.currentPopulation.add(new ProgramSolution(population.get(i)));
                 }
                 break;
             case SELECTION_AND_CROSSOVER:
@@ -331,7 +350,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
                 //performSelectionAndCrossover(this.offspringCount);
                 break;
             case MUTATION:
-                performMutation(this.eliteCount);
+                performMutation();
                 break;
             case EVALUATION:
                 ProgramSolution currentGenBest = performEvaluation();
@@ -446,6 +465,8 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
 
     void setElitismParams(){
         this.eliteCount = (int) Math.round(this.elitismProbability * this.popSize);
+        if((this.eliteCount % 2) != 0)
+            this.eliteCount++; // Because of crossover operator we need to have even number of elite individuals
         this.offspringCount = this.popSize - this.eliteCount;
     }
 }
