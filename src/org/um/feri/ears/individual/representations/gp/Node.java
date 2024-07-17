@@ -288,6 +288,11 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         remove(indexOf(child));
     }
 
+    public void removeAncestorAt(int index){
+        TreeAncestor treeAncestor = ancestorAt(index);
+        treeAncestor.getTreeNode().detach();
+    }
+
     public void detach(){
         if (parent != null) {
             parent.remove(this);

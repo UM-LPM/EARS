@@ -304,4 +304,14 @@ public class Util {
             throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
         }
     }
+
+    public static void appendExceptionToLogFile(Exception exception, String filePath){
+        try (FileWriter fw = new FileWriter(filePath, true);
+             BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write("ERROR:" + exception.toString());
+            bw.newLine(); // Adds a new line after appending the content
+        } catch (IOException e) {
+            System.out.println("Error appending to file: " + e.getMessage());
+        }
+    }
 }

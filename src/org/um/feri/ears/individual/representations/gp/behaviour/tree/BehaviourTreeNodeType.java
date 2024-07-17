@@ -13,7 +13,10 @@ public enum BehaviourTreeNodeType {
     GRID_CELL_CONTAINS_OBJECT("GridCellContainsObject"),
     SHOOT("Shoot"),
     PLACE_BOMB("PlaceBomb"),
-    ROTATE_TURRET("RotateTurret");
+    ROTATE_TURRET("RotateTurret"),
+    HEALTH_LEVEL_BELLOW("HealthLevelBellow"),
+    SHIELD_LEVEL_BELLOW("ShieldLevelBellow"),
+    AMMO_LEVEL_BELLOW("AmmoLevelBellow");
 
     private final String value;
 

@@ -13,6 +13,7 @@ import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.operators.gp.GPOperator;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.visualization.gp.GPInterface;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,8 +27,8 @@ public class UnityBTProblem extends ProgramProblem {
         super("UnityBTProblem");
     }
 
-    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeDepth, int maxTreeSize, GPOperator treeDepthPruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator) {
-        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeDepth, maxTreeSize, treeDepthPruningOperator, expansionOperator, treeSizePruningOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new String[]{});
+    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, GPOperator treeDepthPruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator) {
+        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, treeDepthPruningOperator, expansionOperator, treeSizePruningOperator, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new String[]{});
     }
 
     @Override
@@ -56,9 +57,7 @@ public class UnityBTProblem extends ProgramProblem {
             try {
                 String apiUrl = "http://localhost:5016/api/JsonToSoParser";
                 String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000, getEvalEnvInstanceURIs(), getJsonBodyDestFolderPath());
-                //response = response.replace("\"{", "{");
-                //response = response.replace("}\"", "}");
-                //response = response.replace("\\", "");
+
                 Gson gson = new Gson();
                 HttpResponse obj = gson.fromJson(response, HttpResponse.class);
                 System.out.println(LocalDateTime.now() + "Finished with response: " + response);
@@ -74,6 +73,14 @@ public class UnityBTProblem extends ProgramProblem {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                // Save exception to log file
+                Util.appendExceptionToLogFile(e, "ErrorReport.txt");
+
+                // Restart Unity instances
+                if(GPInterface.Instance != null){
+                    GPInterface.Instance.restartUnityInstances();
+                }
+
                 //wait for 5 seconds
                 try {
                     Thread.sleep(5000);

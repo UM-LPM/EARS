@@ -5,9 +5,14 @@ import java.util.HashMap;
 public class HttpResponse {
     public class HttpServerResponse{
         private FitnessIndividual[] popFitness;
+        private int[][] btsNodeCallFrequencies;
 
         public FitnessIndividual[] getFitnesses() {
             return popFitness;
+        }
+
+        public int[][] getBtsNodeCallFrequencies() {
+            return btsNodeCallFrequencies;
         }
     }
     private String status;

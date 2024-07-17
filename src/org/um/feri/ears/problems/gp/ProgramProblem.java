@@ -1,16 +1,21 @@
 package org.um.feri.ears.problems.gp;
 
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
+import org.um.feri.ears.individual.generations.gp.GPRampedHalfAndHalf;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.Problem;
-
+import org.um.feri.ears.util.Configuration;
+import org.um.feri.ears.util.random.RNG;
+import org.um.feri.ears.individual.representations.gp.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ProgramProblem extends Problem<ProgramSolution> {
+
+    public static final long serialVersionUID = 2857391887500457501L;
 
     /**
      * List of base function nodes which can be used during when generating tree individuals
@@ -29,7 +34,9 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     protected String treeName; // TODO add support for multiple treeNames in the future
 
     protected int minTreeDepth;
-    protected int maxTreeDepth;
+    protected int maxTreeStartDepth;
+
+    protected int maxTreeEndDepth;
     protected int maxTreeSize;
 
     protected GPOperator treeDepthPruningOperator;
@@ -47,7 +54,8 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.baseFunctionNodeTypes = new ArrayList<>();
         this.baseTerminalNodeTypes = new ArrayList<>();
         this.minTreeDepth = 2;
-        this.maxTreeDepth = 100;
+        this.maxTreeStartDepth = 10;
+        this.maxTreeEndDepth = 100;
         this.maxTreeSize = 1000;
 
         this.treeDepthPruningOperator = new GPDepthBasedTreePruningOperator();
@@ -58,7 +66,7 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     }
 
     // Constructor with all parameters
-    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeDepth, int maxTreeSize, GPOperator pruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName, String[] evalEnvInstanceURIs) {
+    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, GPOperator pruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName, String[] evalEnvInstanceURIs) {
         super(name, 1, 1, 0);
         setBaseFunctionNodeTypes(baseFunctionNodeTypes);
         setBaseTerminalNodeTypes(baseTerminalNodeTypes);
@@ -66,7 +74,8 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.treeName = treeName;
 
         this.minTreeDepth = minTreeDepth;
-        this.maxTreeDepth = maxTreeDepth;
+        this.maxTreeStartDepth = maxTreeStartDepth;
+        this.maxTreeEndDepth = maxTreeEndDepth;
         this.maxTreeSize = maxTreeSize;
 
         this.treeDepthPruningOperator = pruningOperator;
@@ -86,6 +95,18 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.baseFunctionNodeTypes = baseFunctionNodeTypes;
     }
 
+    public void setBaseFunctionNodeTypesFromStringList(List<String> baseFunctionNodeTypes) {
+        this.baseFunctionNodeTypes = new ArrayList<>();
+        String packagePrefix = "org.um.feri.ears.individual.representations.gp.behaviour.tree.";
+        for (String nodeType : baseFunctionNodeTypes) {
+            try {
+                this.baseFunctionNodeTypes.add((Class<? extends Node>) Class.forName(packagePrefix + nodeType.trim()));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public List<Class<? extends Node>> getBaseTerminalNodeTypes() {
         return baseTerminalNodeTypes;
     }
@@ -94,18 +115,47 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.baseTerminalNodeTypes = baseTerminalNodeTypes;
     }
 
+    public void setBaseTerminalNodeTypesFromStringList(List<String> baseTerminalNodeTypes) {
+        this.baseTerminalNodeTypes = new ArrayList<>();
+        String packagePrefix = "org.um.feri.ears.individual.representations.gp.behaviour.tree.";
+        for (String nodeType : baseTerminalNodeTypes) {
+            try {
+                this.baseTerminalNodeTypes.add((Class<? extends Node>) Class.forName(packagePrefix + nodeType.trim()));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Class<? extends  Node> getRandomNodeType(){
+        ArrayList<Class<? extends  Node>> nodeTypes = new ArrayList<>();
+        nodeTypes.addAll(baseFunctionNodeTypes);
+        nodeTypes.addAll(baseTerminalNodeTypes);
+
+        return nodeTypes.get(RNG.nextInt(nodeTypes.size()));
+    }
+
     public Tree.TreeType getSolutionTreeType() {
         return solutionTreeType;
     }
 
-    public int getMaxTreeDepth() {
-        return maxTreeDepth;
+    public int getMaxTreeStartDepth() {
+        return maxTreeStartDepth;
+    }
+
+    public int getMaxTreeEndDepth() {
+        return maxTreeEndDepth;
     }
 
 
-    public void setMaxTreeDepth(int maxTreeDepth) {
-        this.maxTreeDepth = maxTreeDepth;
+    public void setMaxTreeStartDepth(int maxTreeStartDepth) {
+        this.maxTreeStartDepth = maxTreeStartDepth;
     }
+
+    public void setMaxTreeEndDepth(int maxTreeEndDepth) {
+        this.maxTreeEndDepth = maxTreeEndDepth;
+    }
+
 
     public int getMinTreeDepth() {
         return minTreeDepth;
@@ -147,6 +197,16 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.programSolutionGenerator = programSolutionGenerator;
     }
 
+    public void setProgramSolutionGenerator(Configuration.InitPopGeneratorMethod initPopGeneratorMethod) {
+        if(initPopGeneratorMethod == Configuration.InitPopGeneratorMethod.Random){
+            this.programSolutionGenerator = new GPRandomProgramSolution();
+        }
+        else if(initPopGeneratorMethod == Configuration.InitPopGeneratorMethod.RampedHalfAndHalfMethod){
+            this.programSolutionGenerator = new GPRampedHalfAndHalf();
+        }
+    }
+
+
     public void setEvalEnvInstanceURIs(String[] evalEnvInstanceURIs) {
         this.evalEnvInstanceURIs = evalEnvInstanceURIs;
     }
@@ -168,7 +228,8 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         int treeDepth = solution.getTree().treeDepth();
         int treeSize = solution.getTree().treeSize();
 
-        return treeDepth <= this.getMaxTreeDepth() && treeDepth >= this.getMinTreeDepth() && treeSize <= this.getMaxTreeSize();
+        // TODO add support for treeSize feasibility ???
+        return treeDepth <= this.getMaxTreeEndDepth() && treeDepth >= this.getMinTreeDepth(); // && treeSize <= this.getMaxTreeSize();
     }
 
     @Override
@@ -189,7 +250,8 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         ProgramSolution solution = this.programSolutionGenerator.generate(this, 1, treeName);
 
         if(!isFeasible(solution))
-            makeFeasible(solution);
+            System.out.println("Solution is not feasible");
+            //makeFeasible(solution);
 
         return solution;
     }

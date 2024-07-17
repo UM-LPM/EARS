@@ -6,6 +6,13 @@ import org.um.feri.ears.problems.gp.ProgramSolution;
 
 import java.util.List;
 
+/**
+ * This class implements the tree size pruning operator for Genetic Programming.
+ * The operator is used to prune the tree to the maximum number of nodes.
+ * The operator can be used in two modes:
+ * 1. NEW_SOLUTION - If the tree size is above the maximum number of nodes, the whole tree is replaced with a new one
+ * 2. CLOSEST_TO_MAX_TREE_NODES - If the tree size is above the maximum number of nodes, the node that has the most appropriate number of descendants is replaced with a terminal node
+ */
 public class GPTreeSizePruningOperator extends GPOperator {
     public enum OperatorType {
         NEW_SOLUTION,

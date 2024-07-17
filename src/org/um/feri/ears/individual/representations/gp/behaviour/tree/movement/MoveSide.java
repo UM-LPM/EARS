@@ -1,4 +1,4 @@
-package org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer;
+package org.um.feri.ears.individual.representations.gp.behaviour.tree.movement;
 
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.ActionNode;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.BehaviourTreeNodeType;
