@@ -4,25 +4,25 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class Fitness implements Serializable {
-    public float Value;
-    public HashMap<String, Float> IndividualValues;
+    public float value;
+    public HashMap<String, Float> individualValues;
 
 
     public Fitness() {
-        this.Value = 0f;
-        this.IndividualValues = new HashMap<>();
+        this.value = 0f;
+        this.individualValues = new HashMap<>();
     }
 
     public Fitness(float startValue) {
-        this.Value = startValue;
-        this.IndividualValues = new HashMap<>();
+        this.value = startValue;
+        this.individualValues = new HashMap<>();
     }
 
     public float GetFitness() {
-        return Value;
+        return value;
     }
 
     public HashMap<String, Float> GetIndividualFitnessValues() {
-        return IndividualValues;
+        return individualValues;
     }
 }

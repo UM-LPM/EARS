@@ -65,7 +65,7 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution, Pr
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200));
 
-        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 200, new GPDepthBasedTreePruningOperator(),
+        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 8, 200, new GPDepthBasedTreePruningOperator(),
                 new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData);
 
         List<Target> evalData2 = Util.list( new Target().when("x", 0).targetIs(12),
@@ -81,7 +81,7 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution, Pr
                 new Target().when("x", 10).targetIs(1292));
 
 
-        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 200, new GPDepthBasedTreePruningOperator(),
+        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 8, 200, new GPDepthBasedTreePruningOperator(),
                 new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData2);
 
 

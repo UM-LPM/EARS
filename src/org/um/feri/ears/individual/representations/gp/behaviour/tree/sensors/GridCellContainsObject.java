@@ -1,9 +1,8 @@
-package org.um.feri.ears.individual.representations.gp.behaviour.tree.bomberman;
+package org.um.feri.ears.individual.representations.gp.behaviour.tree.sensors;
 
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.BehaviourTreeNodeType;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.ConditionNode;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Property;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.soccer.RayHitObject;
 
 import java.util.List;
 
