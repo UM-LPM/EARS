@@ -15,7 +15,7 @@ import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.Mo
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.sensors.RayHitObject;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.Rotate;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
-import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator;
+import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -24,9 +24,6 @@ import org.um.feri.ears.util.*;
 import org.um.feri.ears.visualization.gp.components.GraphPanel;
 import org.um.feri.ears.visualization.gp.components.HorizontalHistogramPanel;
 import org.um.feri.ears.visualization.gp.components.ImagePanel;
-
-import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
-import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -698,8 +695,8 @@ public class GPInterface extends JFrame {
             this.programProblem = this.task.problem;
         }
         else {
-            this.programProblem = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 12, 12, 100, new GPDepthBasedTreePruningOperator(),
-                    new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData);
+            this.programProblem = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 12, 12, 100, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                    new GPOperator[]{}, new GPRandomProgramSolution(), evalData);
             this.task = new Task<>(programProblem, StopCriterion.EVALUATIONS, 10000, 0, 0);
 
             this.gpAlgorithm =  new DefaultGPAlgorithm(300, 0.90, 0.1, 2, this.task, null);
@@ -737,8 +734,8 @@ public class GPInterface extends JFrame {
             this.programProblem = this.task.problem;
         }
         else {
-            this.programProblem = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 5, 10, 10, 100, new GPDepthBasedTreePruningOperator(),
-                    new GPTreeExpansionOperator(), null, new GPRampedHalfAndHalf());
+            this.programProblem = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 5, 10, 10, 100, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                    new GPOperator[]{}, new GPRampedHalfAndHalf());
             this.programProblem.setName(problemNameTextField.getText());
 
             this.task = new Task<>(this.programProblem, StopCriterion.EVALUATIONS, 500000, 0, 0);
@@ -941,6 +938,11 @@ public class GPInterface extends JFrame {
         programProblem.setBaseFunctionNodeTypesFromStringList(Arrays.asList(earsConfiguration.Functions.split(",")));
         // Terminals
         programProblem.setBaseTerminalNodeTypesFromStringList(Arrays.asList(earsConfiguration.Terminals.split(",")));
+
+        // FeasibilityControlOperators
+        programProblem.setFeasibilityControlOperatorsFromStringArray(earsConfiguration.FeasibilityControlOperators);
+        // BloatControlOperators
+        programProblem.setBloatControlOperatorsFromStringArray(earsConfiguration.BloatControlOperators);
 
         return generations;
     }

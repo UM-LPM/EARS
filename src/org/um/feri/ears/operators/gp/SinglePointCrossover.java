@@ -65,12 +65,9 @@ public class SinglePointCrossover extends GPCrossover {
             mutationNodeParent2.get().replace(crossOverNodeIndex2, crossOverNode1);
 
             // Check if new programs are feasible. If not, make them feasible
-            if (!problem.isFeasible(parent1)) {
-                problem.makeFeasible(parent1);
-            }
-            if (!problem.isFeasible(parent2)) {
-                problem.makeFeasible(parent2);
-            }
+            problem.makeFeasible(parent1);
+            problem.makeFeasible(parent2);
+
             //} while (!problem.isFeasible(parent1) || !problem.isFeasible(parent2));
 
             return new ProgramSolution[]{parent1, parent2};

@@ -13,7 +13,7 @@ import java.util.List;
  * 1. NEW_SOLUTION - If the tree size is above the maximum number of nodes, the whole tree is replaced with a new one
  * 2. CLOSEST_TO_MAX_TREE_NODES - If the tree size is above the maximum number of nodes, the node that has the most appropriate number of descendants is replaced with a terminal node
  */
-public class GPTreeSizePruningOperator extends GPOperator {
+public class GPTreeSizePruningOperator extends FeasibilityGPOperator {
     public enum OperatorType {
         NEW_SOLUTION,
         CLOSEST_TO_MAX_TREE_NODES
@@ -28,6 +28,13 @@ public class GPTreeSizePruningOperator extends GPOperator {
     public GPTreeSizePruningOperator(OperatorType operatorType) {
         this.operatorType = operatorType;
     }
+
+    @Override
+    public boolean isSolutionFeasible(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
+        return tProgramSolution.getTree().treeSize() <= tProgramProblem.getMaxTreeSize();
+    }
+
+    @Override
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
         do {
             int treeSize = tProgramSolution.getTree().treeSize();

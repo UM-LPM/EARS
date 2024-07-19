@@ -12,9 +12,17 @@ public class EARSConfiguration {
     public float MutationProb;
     public int NumOfTournaments;
     public int MinTreeDepth;
-    public int MaxTreeDepth;
+    public int MaxTreeStartDepth;
+    public int MaxTreeEndDepth;
     public int MaxTreeSize;
     public float ElitismProb;
+    public int SeqSelNumOfChildren;
+    public String InitPopGeneratorMethod;
+    public String Functions;
+    public String Terminals;
+    public String[] FeasibilityControlOperators;
+    public String[] BloatControlOperators;
+
 
         /*public ProblemType problem;
         public AlgorithmType algorithm;
@@ -22,20 +30,5 @@ public class EARSConfiguration {
         public MutationOperatorType mutationOperator;
         public SelectionOperatorType selectionOperator;
         public InitPopGeneratorMethod initPopGeneratorMethod;
-        public BloatControlMethod[] bloatControlMethods;
-
-        public String problemName; // FileName
-        public int populationSize;
-        public int maxEvaluations;
-        public int maxGenerations;
-        public int crossoverProbability;
-        public int mutationProbability;
-        public int tournamentSize;
-        public int minTreeDepth;
-        public int maxTreeDepth;
-        public int maxTreeSize;
-        public double elitismProbability;
-        public String evalEnvInstanceURIs;
-        public String jsonBodyDestFolderPath;
-        public String imagePath;*/
+        public BloatControlMethod[] bloatControlMethods;*/
 }
