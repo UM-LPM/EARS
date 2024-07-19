@@ -208,7 +208,7 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     @Override
     public boolean isFeasible(ProgramSolution solution){
         for(FeasibilityGPOperator operator : feasibilityControlOperators){
-            if(!operator.isSolutionFeasible(solution, this)){
+            if(operator != null && !operator.isSolutionFeasible(solution, this)){
                 return false;
             }
         }
@@ -263,7 +263,6 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.feasibilityControlOperators = new FeasibilityGPOperator[feasibilityControlOperatorsString.length];
         String packagePrefix = "org.um.feri.ears.operators.gp.";
         Gson gson = new Gson();
-        this.feasibilityControlOperators = new FeasibilityGPOperator[feasibilityControlOperatorsString.length];
 
         for (int i = 0; i < feasibilityControlOperatorsString.length; i++) {
             try {
@@ -276,10 +275,9 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     }
 
     public void setBloatControlOperatorsFromStringArray(String[] bloatControlOperatorsString){
-        this.feasibilityControlOperators = new FeasibilityGPOperator[bloatControlOperatorsString.length];
+        this.bloatControlOperators = new GPOperator[bloatControlOperatorsString.length];
         String packagePrefix = "org.um.feri.ears.operators.gp.";
         Gson gson = new Gson();
-        this.bloatControlOperators = new GPOperator[bloatControlOperatorsString.length];
 
         for (int i = 0; i < bloatControlOperatorsString.length; i++) {
             try {
