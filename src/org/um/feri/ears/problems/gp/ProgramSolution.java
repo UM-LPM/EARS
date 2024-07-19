@@ -17,6 +17,8 @@ public class ProgramSolution extends Solution {
 
     public HashMap<String, Fitness> Fitnesses; // Detailed fitness values for analysis
 
+    public int[] NodeCallFrequencyCount;
+
     public ProgramSolution(int numberOfObjectives) {
         super(numberOfObjectives);
     }
@@ -68,5 +70,13 @@ public class ProgramSolution extends Solution {
         }
 
         return fitnessesCombined;
+    }
+
+    public void setNodeCallFrequencyCount(int[] nodeCallFrequencyCount){
+        this.NodeCallFrequencyCount = nodeCallFrequencyCount;
+    }
+
+    public int[] getNodeCallFrequencyCount(){
+        return NodeCallFrequencyCount;
     }
 }

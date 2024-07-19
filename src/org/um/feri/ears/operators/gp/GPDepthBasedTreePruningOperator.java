@@ -8,10 +8,15 @@ import org.um.feri.ears.problems.gp.ProgramSolution;
  * This class implements the depth based tree pruning operator for Genetic Programming.
  * The operator is used to prune the tree to the maximum allowed depth.
  */
-public class GPDepthBasedTreePruningOperator extends GPOperator {
+public class GPDepthBasedTreePruningOperator extends FeasibilityGPOperator {
 
     private int maxTreeDepth;
     private ProgramProblem programProblem;
+
+    @Override
+    public boolean isSolutionFeasible(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
+        return tProgramSolution.getTree().treeDepth() >= tProgramProblem.getMinTreeDepth() && tProgramSolution.getTree().treeDepth() <= tProgramProblem.getMaxTreeEndDepth();
+    }
 
     @Override
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {

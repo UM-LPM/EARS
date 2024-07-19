@@ -4,6 +4,7 @@ import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Target;
+import org.um.feri.ears.operators.gp.FeasibilityGPOperator;
 import org.um.feri.ears.operators.gp.GPOperator;
 
 import java.io.Serializable;
@@ -17,8 +18,8 @@ public class SymbolicRegressionProblem extends ProgramProblem implements Seriali
         super("SymbolicRegression");
     }
 
-    public SymbolicRegressionProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, GPOperator pruningOperator, GPOperator expansionOperator, GPOperator treeSizePrunningOperator, GPProgramSolution programSolutionGenerator, List<Target> evalData) {
-        super("SymbolicRegression", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, pruningOperator, expansionOperator, treeSizePrunningOperator, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree", new String[]{});
+    public SymbolicRegressionProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, List<Target> evalData) {
+        super("SymbolicRegression", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree", new String[]{});
 
         setEvalData(evalData);
     }

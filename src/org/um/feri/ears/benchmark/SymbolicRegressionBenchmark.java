@@ -5,9 +5,7 @@ import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
-import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
-import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
-import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator;
+import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
@@ -65,8 +63,8 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution, Pr
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200));
 
-        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 8, 200, new GPDepthBasedTreePruningOperator(),
-                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData);
+        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution(), evalData);
 
         List<Target> evalData2 = Util.list( new Target().when("x", 0).targetIs(12),
                 new Target().when("x", 1).targetIs(23),
@@ -81,8 +79,8 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution, Pr
                 new Target().when("x", 10).targetIs(1292));
 
 
-        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 8, 200, new GPDepthBasedTreePruningOperator(),
-                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData2);
+        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution(), evalData2);
 
 
         //addTask(sgp, stopCriterion, maxEvaluations, timeLimit, maxIterations);

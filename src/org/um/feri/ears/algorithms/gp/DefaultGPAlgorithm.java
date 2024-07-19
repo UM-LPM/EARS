@@ -109,7 +109,10 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
             performEvaluation();
 
             // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-            // TODO
+            // TODO implement reevaluation (Can be placed before the performEvaluation method)???
+            /*for (ProgramSolution solution : this.population) {
+                this.task.problem.executeBloatedControlOperators(solution);
+            }*/
 
             // Check stop criterion and increment number of iterations
             if (this.task.isStopCriterion())

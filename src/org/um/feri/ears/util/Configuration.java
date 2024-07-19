@@ -18,6 +18,7 @@ public class Configuration {
     public String ImagePath;
     public String UnityGameFile;
     public String UnityExeLocation;
+    public String UnityConfigDestFilePath;
     public List<RunConfiguration> Configurations;
 
     public static Configuration deserialize(String filePath){
@@ -42,42 +43,41 @@ public class Configuration {
             e.printStackTrace();
         }
     }
-}
 
+    enum ProblemType {
+        SymbolicRegressionProblem,
+        UnityBTProblem
+    }
 
-enum ProblemType {
-    SymbolicRegressionProblem,
-    UnityBTProblem
-}
+    enum CrossoverOperatorType {
+        OnePointCrossover,
+        TwoPointCrossover,
+        NpointCrossover,
+    }
 
-enum CrossoverOperatorType {
-    OnePointCrossover,
-    TwoPointCrossover,
-    NpointCrossover,
-}
+    public enum MutationOperatorType {
+        SubtreeMutation,
+        SingleNodeMutation,
+        HoistMutation,
+    }
 
-enum MutationOperatorType {
-    SubtreeMutation,
-    SingleNodeMutation,
-    HoistMutation,
-}
+    public enum SelectionOperatorType {
+        TournamentSelection,
+        RouletteWheelSelection,
+        RankSelection,
+    }
 
-enum SelectionOperatorType {
-    TournamentSelection,
-    RouletteWheelSelection,
-    RankSelection,
-}
+    public enum InitPopGeneratorMethod {
+        Random,
+        RampedHalfAndHalfMethod,
+        FullMethod, // TODO ???
+        GrowMethod, // TODO ???
+    }
 
-enum InitPopGeneratorMethod {
-    Random,
-    RampedHalfAndHalfMethod,
-    FullMethod, // TODO ???
-    GrowMethod, // TODO ???
-}
-
-enum BloatControlMethod {
-    DepthLimit,
-    SizeLimit,
-    DepthAndSizeLimit,
-    None
+    public enum BloatControlMethod {
+        DepthLimit,
+        SizeLimit,
+        DepthAndSizeLimit,
+        None
+    }
 }

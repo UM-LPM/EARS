@@ -4,10 +4,15 @@ import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 
-public class GPTreeExpansionOperator extends GPOperator {
+public class GPTreeExpansionOperator extends FeasibilityGPOperator {
 
     private int minTreeDepth;
     private ProgramProblem programProblem;
+
+    @Override
+    public boolean isSolutionFeasible(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
+        return true;
+    }
 
     @Override
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {

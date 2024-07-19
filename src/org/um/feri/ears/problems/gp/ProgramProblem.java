@@ -1,5 +1,6 @@
 package org.um.feri.ears.problems.gp;
 
+import com.google.gson.Gson;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.individual.generations.gp.GPRampedHalfAndHalf;
 import org.um.feri.ears.individual.representations.gp.Node;
@@ -39,14 +40,13 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     protected int maxTreeEndDepth;
     protected int maxTreeSize;
 
-    protected GPOperator treeDepthPruningOperator;
-    protected GPOperator expansionOperator;
-    protected GPOperator treeSizePruningOperator;
-
     protected GPProgramSolution programSolutionGenerator;
 
     protected String[] evalEnvInstanceURIs;
     protected String jsonBodyDestFolderPath;
+
+    protected FeasibilityGPOperator[] feasibilityControlOperators;
+    protected GPOperator[] bloatControlOperators;
 
     // Default constructor
     public ProgramProblem(String name) {
@@ -58,15 +58,14 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.maxTreeEndDepth = 100;
         this.maxTreeSize = 1000;
 
-        this.treeDepthPruningOperator = new GPDepthBasedTreePruningOperator();
-        this.expansionOperator = new GPTreeExpansionOperator();
+        this.feasibilityControlOperators = new FeasibilityGPOperator[]{};
+        this.bloatControlOperators = new GPOperator[]{};
         this.programSolutionGenerator = new GPRandomProgramSolution();
-        this.treeSizePruningOperator = new GPTreeSizePruningOperator();
         this.solutionTreeType = Tree.TreeType.SYMBOLIC;
     }
 
     // Constructor with all parameters
-    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, GPOperator pruningOperator, GPOperator expansionOperator, GPOperator treeSizePruningOperator, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName, String[] evalEnvInstanceURIs) {
+    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName, String[] evalEnvInstanceURIs) {
         super(name, 1, 1, 0);
         setBaseFunctionNodeTypes(baseFunctionNodeTypes);
         setBaseTerminalNodeTypes(baseTerminalNodeTypes);
@@ -78,9 +77,8 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.maxTreeEndDepth = maxTreeEndDepth;
         this.maxTreeSize = maxTreeSize;
 
-        this.treeDepthPruningOperator = pruningOperator;
-        this.expansionOperator = expansionOperator;
-        this.treeSizePruningOperator = treeSizePruningOperator;
+        this.feasibilityControlOperators = feasibilityControlOperators;
+        this.bloatControlOperators = bloatControlOperators;
         this.programSolutionGenerator = programSolutionGenerator;
 
         this.evalEnvInstanceURIs = evalEnvInstanceURIs;
@@ -165,22 +163,6 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.minTreeDepth = minTreeDepth;
     }
 
-    public GPOperator getTreeDepthPruningOperator() {
-        return treeDepthPruningOperator;
-    }
-
-    public void setTreeDepthPruningOperator(GPOperator treeDepthPruningOperator) {
-        this.treeDepthPruningOperator = treeDepthPruningOperator;
-    }
-
-    public GPOperator getExpansionOperator() {
-        return expansionOperator;
-    }
-
-    public void setExpansionOperator(GPOperator expansionOperator) {
-        this.expansionOperator = expansionOperator;
-    }
-
     public int getMaxTreeSize() {
         return maxTreeSize;
     }
@@ -225,18 +207,22 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
 
     @Override
     public boolean isFeasible(ProgramSolution solution){
-        int treeDepth = solution.getTree().treeDepth();
-        int treeSize = solution.getTree().treeSize();
-
-        // TODO add support for treeSize feasibility ???
-        return treeDepth <= this.getMaxTreeEndDepth() && treeDepth >= this.getMinTreeDepth(); // && treeSize <= this.getMaxTreeSize();
+        for(FeasibilityGPOperator operator : feasibilityControlOperators){
+            if(!operator.isSolutionFeasible(solution, this)){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public void makeFeasible(ProgramSolution solution){
-        expandProgramSolution(solution);
-        treeDepthProgramSolutionPruning(solution);
-        treeSizeProgramSolutionPruning(solution);
+        for(FeasibilityGPOperator operator : feasibilityControlOperators){
+            // For each operator, check if the solution is feasible, if not, execute the operator
+            if(operator != null && !operator.isSolutionFeasible(solution, this)){
+                operator.execute(solution, this);
+            }
+        }
     }
     @Override
     public ProgramSolution getRandomEvaluatedSolution() {
@@ -249,9 +235,8 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     public ProgramSolution getRandomSolution() {
         ProgramSolution solution = this.programSolutionGenerator.generate(this, 1, treeName);
 
-        if(!isFeasible(solution))
-            System.out.println("Solution is not feasible");
-            //makeFeasible(solution);
+        // Checks if the generated solution is feasible for all feasibility control operators. If not, make it feasible
+        makeFeasible(solution);
 
         return solution;
     }
@@ -260,25 +245,49 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         return this.programSolutionGenerator.generateRandomTerminalNode(this);
     }
 
-    public void treeDepthProgramSolutionPruning(ProgramSolution solution){
-        this.treeDepthPruningOperator.execute(solution, this);
-    }
-
-    public void expandProgramSolution(ProgramSolution solution){
-        this.expansionOperator.execute(solution, this);
-    }
-
-    public void treeSizeProgramSolutionPruning(ProgramSolution solution){
-        if(treeSizePruningOperator == null)
-            return;
-
-        this.treeSizePruningOperator.execute(solution, this);
-    }
-
     @Override
     public void bulkEvaluate(List<ProgramSolution> solutions) {
         for (ProgramSolution solution : solutions) {
             evaluate(solution);
+        }
+    }
+
+    public void executeBloatedControlOperators(ProgramSolution solution){
+        for(GPOperator operator : bloatControlOperators){
+            if(operator != null)
+                operator.execute(solution, this);
+        }
+    }
+
+    public void setFeasibilityControlOperatorsFromStringArray(String[] feasibilityControlOperatorsString){
+        this.feasibilityControlOperators = new FeasibilityGPOperator[feasibilityControlOperatorsString.length];
+        String packagePrefix = "org.um.feri.ears.operators.gp.";
+        Gson gson = new Gson();
+        this.feasibilityControlOperators = new FeasibilityGPOperator[feasibilityControlOperatorsString.length];
+
+        for (int i = 0; i < feasibilityControlOperatorsString.length; i++) {
+            try {
+                String[] operatorParts = feasibilityControlOperatorsString[i].split("-");
+                this.feasibilityControlOperators[i] = (FeasibilityGPOperator) gson.fromJson(operatorParts[1], Class.forName(packagePrefix + operatorParts[0].trim()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setBloatControlOperatorsFromStringArray(String[] bloatControlOperatorsString){
+        this.feasibilityControlOperators = new FeasibilityGPOperator[bloatControlOperatorsString.length];
+        String packagePrefix = "org.um.feri.ears.operators.gp.";
+        Gson gson = new Gson();
+        this.bloatControlOperators = new GPOperator[bloatControlOperatorsString.length];
+
+        for (int i = 0; i < bloatControlOperatorsString.length; i++) {
+            try {
+                String[] operatorParts = bloatControlOperatorsString[i].split("-");
+                this.bloatControlOperators[i] = (GPOperator) gson.fromJson(operatorParts[1], Class.forName(packagePrefix + operatorParts[0].trim()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -17,10 +17,7 @@ import org.um.feri.ears.individual.representations.gp.behaviour.tree.sensors.Ray
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.Rotate;
 import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
-import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
-import org.um.feri.ears.operators.gp.GPOperator;
-import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
-import org.um.feri.ears.operators.gp.GPTreeSizePruningOperator;
+import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
@@ -63,8 +60,8 @@ public class GeneticProgrammingExample {
                 Rotate.class
         );
 
-        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5,5, 200, new GPDepthBasedTreePruningOperator(),
-                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution());
+        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5,5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution());
 
         List<ProgramSolution> programSolutions = new ArrayList<>();
         for (int i = 0; i < 300; i++){
@@ -141,8 +138,8 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 10).targetIs(1308));
 
 
-        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, 200, new GPDepthBasedTreePruningOperator(),
-                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData);
+        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution(), evalData);
 
         //GP algorithm execution example
         Task<ProgramSolution, ProgramProblem> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 500000, 0, 0);
@@ -219,8 +216,8 @@ public class GeneticProgrammingExample {
                 Rotate.class
         );
 
-        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, 100, new GPDepthBasedTreePruningOperator(),
-                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution());
+        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, 100, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution());
 
         //GP algorithm execution example
         Task<ProgramSolution, ProgramProblem> soccerTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 40000, 0, 0);
@@ -273,8 +270,8 @@ public class GeneticProgrammingExample {
                 Rotate.class
         );
 
-        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 5, 200, new GPDepthBasedTreePruningOperator(),
-                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution());
+        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution());
 
         //get current time
         long startTime = System.currentTimeMillis();
@@ -322,8 +319,8 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200));
 
-        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, 200, new GPDepthBasedTreePruningOperator(),
-                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution(), evalData);
+        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution(), evalData);
 
         ProgramSolution programSolution = sgp2.getRandomSolution();
         sgp2.evaluate(programSolution);
@@ -392,8 +389,8 @@ public class GeneticProgrammingExample {
         int maxNumOfNodes = 20;
         GPOperator treeSizePruningOperator = new GPTreeSizePruningOperator();
 
-        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, maxNumOfNodes, new GPDepthBasedTreePruningOperator(),
-                new GPTreeExpansionOperator(), new GPTreeSizePruningOperator(), new GPRandomProgramSolution());
+        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, maxNumOfNodes, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution());
 
         ProgramSolution programSolution = sgp2.getRandomSolution();
 
