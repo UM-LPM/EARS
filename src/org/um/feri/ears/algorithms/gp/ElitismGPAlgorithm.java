@@ -149,15 +149,17 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
             // Mutation
             performMutation();
 
-            // Evaluate
+            // Evaluate (Needs to be done before the bloat control methods are executed)
             ProgramSolution currentGenBest = performEvaluation();
-            this.bestGenFitnesses.add(currentGenBest.getEval());
 
             // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-            // TODO implement reevaluation (Can be placed before the performEvaluation method)???
-            /*for (ProgramSolution solution : this.population) {
+            for (ProgramSolution solution : this.population) {
                 this.task.problem.executeBloatedControlOperators(solution);
-            }*/
+            }
+
+            // Reevaluate population
+            currentGenBest = performEvaluation();
+            this.bestGenFitnesses.add(currentGenBest.getEval());
 
             // Check stop criterion and increment number of iterations
             if (this.task.isStopCriterion())
@@ -381,6 +383,17 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
                     this.avgGenTreeSizes.add(avgSize / this.population.size());
 
                 }
+
+                // TODO Move this to the individual step
+                // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
+                for (ProgramSolution solution : this.population) {
+                    this.task.problem.executeBloatedControlOperators(solution);
+                }
+
+                // Reevaluate population
+                currentGenBest = performEvaluation();
+                this.bestGenFitnesses.add(currentGenBest.getEval());
+
                 break;
             default:
                 System.out.println("Unknown algorithm step, skipping...");
