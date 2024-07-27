@@ -115,8 +115,12 @@ public abstract class Tree implements Serializable {
     public abstract double evaluate(Map<String, Double> variables);
     public abstract Tree clone();
 
-    public void removeAncestorAt(int index){
-        rootNode.removeAncestorAt(index);
+    public void removeAncestorAt(int index, boolean removeEmptyParent){
+        rootNode.removeAncestorAt(index, removeEmptyParent);
+    }
+
+    public void removeEmptyNodes(){
+        rootNode.removeEmptyNodes();
     }
 
     public void printTree(){

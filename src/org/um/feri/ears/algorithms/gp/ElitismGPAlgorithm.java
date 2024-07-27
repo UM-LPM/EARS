@@ -153,12 +153,14 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
             ProgramSolution currentGenBest = performEvaluation();
 
             // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-            for (ProgramSolution solution : this.population) {
-                this.task.problem.executeBloatedControlOperators(solution);
-            }
+            if(this.task.problem.getBloatControlOperators().length > 0) {
+                for (ProgramSolution solution : this.population) {
+                    this.task.problem.executeBloatedControlOperators(solution);
+                }
 
-            // Reevaluate population
-            currentGenBest = performEvaluation();
+                // Reevaluate population
+                currentGenBest = performEvaluation();
+            }
             this.bestGenFitnesses.add(currentGenBest.getEval());
 
             // Check stop criterion and increment number of iterations
@@ -384,14 +386,15 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
 
                 }
 
-                // TODO Move this to the individual step
                 // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-                for (ProgramSolution solution : this.population) {
-                    this.task.problem.executeBloatedControlOperators(solution);
-                }
+                if(this.task.problem.getBloatControlOperators().length > 0) {
+                    for (ProgramSolution solution : this.population) {
+                        this.task.problem.executeBloatedControlOperators(solution);
+                    }
 
-                // Reevaluate population
-                currentGenBest = performEvaluation();
+                    // Reevaluate population
+                    currentGenBest = performEvaluation();
+                }
                 this.bestGenFitnesses.add(currentGenBest.getEval());
 
                 break;

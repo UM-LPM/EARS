@@ -224,7 +224,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         }
 
         if (child.parent != null) {
-            child.parent.remove(child);
+            child.parent.remove(child, false);
         }
 
         child.setParent(this);
@@ -261,7 +261,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         return replace(this.getChildren().indexOf(currentChild), newChild);
     }
 
-    public Node remove(final int index) {
+    public Node remove(final int index, boolean removeEmptyParent) {
         if (children == null) {
             throw new ArrayIndexOutOfBoundsException(format(
                     "Child index is out of bounds: %s", index
@@ -274,28 +274,35 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
 
         if (children.isEmpty()) {
             children = null;
+            if(removeEmptyParent){
+                detach(true);
+            }
         }
 
         return this;
     }
 
-    public void remove(final INode<?> child) {
+    public void remove(final INode<?> child, boolean removeEmptyParent) {
         requireNonNull(child);
 
         if (!isChild(child)) {
             throw new IllegalArgumentException("The given child is not a child.");
         }
-        remove(indexOf(child));
+        remove(indexOf(child), removeEmptyParent);
     }
 
-    public void removeAncestorAt(int index){
+    public void removeAncestorAt(int index, boolean removeEmptyParent){
         TreeAncestor treeAncestor = ancestorAt(index);
-        treeAncestor.getTreeNode().detach();
+        treeAncestor.getTreeNode().detach(removeEmptyParent);
     }
 
-    public void detach(){
+    /***
+     * Removes the the node from the tree
+     * @param removeEmptyParent if true, the parent is detached if the parent node has no children after this node is removed
+     */
+    public void detach(boolean removeEmptyParent){
         if (parent != null) {
-            parent.remove(this);
+            parent.remove(this,removeEmptyParent);
         }
     }
 
@@ -309,6 +316,18 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         }
 
         return this;
+    }
+
+    public void removeEmptyNodes(){
+        if(this.children != null){
+            for(int i = 0; i < children.size(); i++){
+                Node child = children.get(i);
+                child.removeEmptyNodes();
+            }
+        }
+        if(this.children == null || this.children.isEmpty() && this.arity > 0){
+            this.detach(true);
+        }
     }
 
     private void createChildrenIfMissing() {

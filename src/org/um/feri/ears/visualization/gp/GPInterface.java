@@ -488,7 +488,7 @@ public class GPInterface extends JFrame {
         this.bestGenerationFitnessGraphPanel.setScores(this.gpAlgorithm.getBestGenFitnesses());
 
         // Update population list
-        //displayPopulation(updatePopulation);
+        displayPopulation(updatePopulation);
 
         // Update best individual
         updateBestIndividual();
@@ -839,6 +839,8 @@ public class GPInterface extends JFrame {
     }
 
     public void restartUnityInstances(){
+        return; // TODO Uncomment
+        /*
         // 1. Close all running GeneralTrainingPlatformForMAS instances
         try {
             Runtime.getRuntime().exec("taskkill /F /IM " + Instance.configuration.UnityGameFile);
@@ -863,7 +865,7 @@ public class GPInterface extends JFrame {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void loadDefaultConfiguration(){

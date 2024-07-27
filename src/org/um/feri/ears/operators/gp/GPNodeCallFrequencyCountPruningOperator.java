@@ -41,8 +41,8 @@ public class GPNodeCallFrequencyCountPruningOperator extends GPOperator {
         // 3. Prune the tree based on the threshold and the frequency of node calls (Remove all above the threshold)
         // Start from the end of the array to avoid index shifting
         for (int i = nodeCallFrequencyCount.length - 1; i >= 0; i--) {
-            if (nodeCallFrequencyCount[i] < threshold && RNG.nextDouble() <= this.pruneProbability) {
-                tProgramSolution.getTree().removeAncestorAt(i);
+            if (nodeCallFrequencyCount[i] < threshold && RNG.nextDouble() < this.pruneProbability) {
+                tProgramSolution.getTree().removeAncestorAt(i, true);
             }
         }
 
