@@ -1,7 +1,7 @@
 { 
 	"EvalEnvInstanceURIs": "http://localhost:4444/",
 	"JsonBodyDestFilePath": "C:\\Users\\marko\\UnityProjects\\GeneralTrainingEnvironmentForMAS\\WebAPI\\RequestData\\jsonBody.json",
-	"ImagePath": "C:\\Users\\marko\\Documents\\FERI\\Projekti\\EARS\\out\\Artifacts\\images\\",
+	"ImagePath": "C:\\Users\\marko\\Documents\\FERI\\Projekti\\EARS\\out\\artifacts\\EARS_jar\\images\\",
 	"UnityGameFile": "GeneralTrainingPlatformForMAS.exe",
 	"UnityExeLocation": "C:\\Users\\marko\\UnityProjects\\GeneralTrainingEnvironmentForMAS\\Builds\\",
 	"UnityConfigDestFilePath": "C:\\Users\\marko\\UnityProjects\\GeneralTrainingEnvironmentForMAS\\Builds\\GeneralTrainingPlatformForMAS_Data\\conf.json",
@@ -27,7 +27,7 @@
 				"Functions": "Sequencer,Selector,Inverter",
 				"Terminals": "sensors.RayHitObject,movement.MoveForward,movement.Rotate,robostrike.RotateTurret,robostrike.Shoot,robostrike.HealthLevelBellow,robostrike.ShieldLevelBellow,robostrike.AmmoLevelBellow",
 			"FeasibilityControlOperators": ["GPTreeExpansionOperator-{}","GPDepthBasedTreePruningOperator-{}"],
-			"BloatControlOperators": ["GPNodeCallFrequencyCountPruningOperator-{\"pruneThreshold\": 5}"]
+			"BloatControlOperators": ["GPNodeCallFrequencyCountPruningOperator-{\"pruneThreshold\": 5, \"pruneProbability\": 0.1}"]
 			},
 			"UnityConfiguration": {
 				"AutoStart": true,
@@ -93,12 +93,13 @@
 				{ 
 					"MissileHitAgent": -5,
 					"AgentHitByRocket": 5,
-					"MissileMissedAgent": 1,
+					"MissileMissedAgent": 0.5,
 					"SurvivalBonus": -50,
 					"LastSurvivalBonus": -30,
 					"DeathPenalty": 20,
 					"AgentDestroyedBonus": -25,
-					"AgentMovedBonus": -2,
+					"AgentExploredSector": -0.5,
+					"AgentReExploredSector": -0.05,
 					"AgentAimingOpponent": -1,
 					"AgentFiredMissile": -1,
 					"AgentNearWall": 1,

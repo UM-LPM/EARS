@@ -245,6 +245,9 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         return this.programSolutionGenerator.generateRandomTerminalNode(this);
     }
 
+    public GPOperator[] getBloatControlOperators() {
+        return bloatControlOperators;
+    }
     @Override
     public void bulkEvaluate(List<ProgramSolution> solutions) {
         for (ProgramSolution solution : solutions) {
