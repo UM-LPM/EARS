@@ -36,7 +36,7 @@ public class PSO extends NumberAlgorithm {
     private NumberSolution<Double> gBest; //global best
 
     public PSO() {
-        this(10);
+        this(30);
     }
 
     public PSO(int popSize) {
