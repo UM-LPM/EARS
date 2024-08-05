@@ -57,7 +57,8 @@ public class RNG {
         APACHE_XO_RO_SHI_RO_1024_SS("XoRoShiRo1024StarStar"),
         APACHE_PCG_XSH_RR_32_OS("PcgXshRr32Os"),
         APACHE_PCG_XSH_RS_32_OS("PcgXshRs32Os"),
-        APACHE_PCG_RXS_M_XS_64_OS("PcgRxsMXs64Os");
+        APACHE_PCG_RXS_M_XS_64_OS("PcgRxsMXs64Os"),
+        PREDEFINED_RANDOM("PredefinedRandom");
 
         public final String name;
         RngType(String name) {
@@ -90,7 +91,7 @@ public class RNG {
     private static final HashMap<RngType, RandomGenerator> randomGenerators = new HashMap<>();
     private static ConcurrentHashMap<RngType, Double> nextGaussian = new ConcurrentHashMap<>();
 
-    private static RngType selectedGenerator = RngType.APACHE_MT_64; // the default selected random generator
+    private static RngType selectedGenerator = RngType.APACHE_MT; // the default selected random generator
     private static DistributionType selectedDistribution = DistributionType.UNIFORM; // the default selected distribution
 
     static {
@@ -232,6 +233,8 @@ public class RNG {
                 return new ApachePcgXshRs32Os(seed);
             case APACHE_PCG_RXS_M_XS_64_OS:
                 return new ApachePcgRxsMXs64Os(seed);
+            case PREDEFINED_RANDOM:
+                return new PredefinedRandom();
             default:
                 return new ApacheJdk(seed);
         }

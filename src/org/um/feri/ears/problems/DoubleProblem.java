@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.um.feri.ears.util.BoundaryControl;
 import org.um.feri.ears.util.random.RNG;
 
 import javax.annotation.CheckReturnValue;
@@ -18,6 +19,10 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
         setFeasible(solution.getVariables());
     }
 
+    public void makeFeasible(NumberSolution<Double> solution, BoundaryControl.BoundaryControlMethod bcm) {
+        BoundaryControl.applyBoundaryControl(solution.getVariables(), lowerLimit, upperLimit, bcm);
+    }
+
     @Override
     public boolean isFeasible(NumberSolution<Double> solution) {
         return isFeasible(solution.getVariables());
@@ -27,8 +32,8 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
     public NumberSolution<Double> getRandomSolution() {
 
         List<Double> x = new ArrayList<>();
-        for (int j = 0; j < numberOfDimensions; j++) {
-            x.add(RNG.nextDouble(lowerLimit.get(j), upperLimit.get(j)));
+        for (int i = 0; i < numberOfDimensions; i++) {
+            x.add(RNG.nextDouble(lowerLimit.get(i), upperLimit.get(i)));
         }
 
         return new NumberSolution<>(numberOfObjectives, x);
