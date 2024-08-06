@@ -83,7 +83,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
             Node node = (Node) super.clone();
             node.id = Node.CURRENT_ID++;
             node.children = new ArrayList<>();
-            if(hasChildren()){
+            if(children != null && !children.isEmpty()){
                 for (Node child : this.children) {
                     Node cloned = child.clone();
                     cloned.parent = node;
@@ -99,9 +99,11 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     @Override
     public int treeDepth(){
         int maxDepth = 0;
-        for (Node child : this.children) {
-            int childHeight = child.treeDepth();
-            maxDepth = Math.max(maxDepth, childHeight);
+        if(arity > 0) {
+            for (Node child : this.children) {
+                int childHeight = child.treeDepth();
+                maxDepth = Math.max(maxDepth, childHeight);
+            }
         }
         return maxDepth + 1;
     }
@@ -110,8 +112,10 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     public int treeSize(){
         // Count all nodes from root to leaves
         int size = 1;
-        for (Node child : this.children) {
-            size += child.treeSize();
+        if(arity > 0) {
+            for (Node child : this.children) {
+                size += child.treeSize();
+            }
         }
         return size;
     }
@@ -134,8 +138,10 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         if(this.arity == 0){
             size++;
         }
-        for (Node child : this.children) {
-            size += child.numberOfTerminals();
+        else{
+            for (Node child : this.children) {
+                size += child.numberOfTerminals();
+            }
         }
 
         return size;
@@ -180,13 +186,15 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         while(!nodesToCheck.isEmpty()){
             TreeAncestor treeAncestor = nodesToCheck.get(0);
             Node current = treeAncestor.getTreeNode();
-            for (Iterator<Node> it = current.getChildren().iterator(); it.hasNext();) {
-                Node next = it.next();
-                currentInd++;
-                if(currentInd == index){
-                    return new TreeAncestor(treeAncestor.getTreeDepthPosition() + 1, next);
+            if(current.arity > 0){
+                for (Iterator<Node> it = current.getChildren().iterator(); it.hasNext();) {
+                    Node next = it.next();
+                    currentInd++;
+                    if(currentInd == index){
+                        return new TreeAncestor(treeAncestor.getTreeDepthPosition() + 1, next);
+                    }
+                    nodesToCheck.add(new TreeAncestor(treeAncestor.getTreeDepthPosition() + 1, next));
                 }
-                nodesToCheck.add(new TreeAncestor(treeAncestor.getTreeDepthPosition() + 1, next));
             }
             nodesToCheck.remove(0);
         }
@@ -214,7 +222,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     // abstract void addChild(Node children);
 
     public boolean hasChildren(){
-        return children != null && !children.isEmpty();
+        return arity > 0 && children != null && !children.isEmpty();
     }
 
     public Node insert(final int index, final Node child) {
@@ -319,7 +327,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     }
 
     public void removeEmptyNodes(){
-        if(this.children != null){
+        if(this.children != null && arity > 0){
             for(int i = 0; i < children.size(); i++){
                 Node child = children.get(i);
                 child.removeEmptyNodes();
@@ -345,9 +353,11 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     private void ancestorCountSub(Node.Ancestor ancestors) {
         ancestors.addAncestors(this.getChildren());
 
-        for (Iterator<Node> it = children.iterator(); it.hasNext();) {
-            Node next = it.next();
-            next.ancestorCountSub(ancestors);
+        if(arity > 0){
+            for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+                Node next = it.next();
+                next.ancestorCountSub(ancestors);
+            }
         }
     }
 

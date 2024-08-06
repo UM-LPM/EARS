@@ -10,6 +10,10 @@ import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
 import java.io.Serializable;
 import java.util.*;
 
+/****************************************************************************************
+ * This class represents a tree structure used in Genetic Programming.
+ * The tree is used to represent a solution to a problem.
+ ****************************************************************************************/
 public abstract class Tree implements Serializable {
     public enum TreeType{
         SYMBOLIC,
@@ -17,6 +21,7 @@ public abstract class Tree implements Serializable {
     }
 
     protected String name;
+
     protected Node rootNode;
 
     public Tree(String name) {

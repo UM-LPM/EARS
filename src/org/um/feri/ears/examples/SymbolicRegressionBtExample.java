@@ -13,6 +13,8 @@ import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.MoveForward;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.MoveSide;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.robostrike.RotateTurret;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.robostrike.Shoot;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.sensors.RayHitObject;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.Rotate;
 import org.um.feri.ears.individual.representations.gp.Target;
@@ -35,12 +37,13 @@ public class SymbolicRegressionBtExample { // TODO remove
         // treeGenEvalSymbolicExample();
         // treeGenBtExample();
 
-        symbolicRegressionDefaultAlgorithmRunExample(null);
+        //symbolicRegressionDefaultAlgorithmRunExample(null);
         //behaviourTreeDefaultAlgorithmRunExample(null);
 
         // serializationTest();
         // deserealizationTest("treePopulation.ser");
 
+        goalBtNodeExample();
     }
 
     public static void serializationTest(){
@@ -396,5 +399,67 @@ public class SymbolicRegressionBtExample { // TODO remove
         } else {
             throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
         }
+    }
+
+    public static void goalBtNodeExample(){
+        //sol.getProgram().displayTree("TestBTree");
+
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                //Repeat.class,
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
+        );
+
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                Rotate.class,
+                Shoot.class,
+                RotateTurret.class
+        );
+
+        List<Class<? extends Node>> baseTerminalNodeTypes2 = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                Rotate.class,
+                Shoot.class,
+                RotateTurret.class,
+                GoalNode.class
+        );
+
+        GPRandomProgramSolution randomProgramSolution = new GPRandomProgramSolution();
+        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 4, 5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, randomProgramSolution);
+
+        List<ProgramSolution> programSolutions = new ArrayList<>();
+
+        programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
+
+        List<GoalNodeDefinition> goalNodeDefinitions = new ArrayList<>(); // Define goal nodes
+        goalNodeDefinitions.add(new GoalNodeDefinition("GoalNode1", programSolutions.get(0).getTree().getRootNode()));
+        randomProgramSolution.setGoalNodeDefinitions(goalNodeDefinitions);
+
+        sgp2.setBaseTerminalNodeTypes(baseTerminalNodeTypes2);
+
+        programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
+
+        programSolutions.get(0).getTree().displayTree("TestBTree1", false);
+        programSolutions.get(1).getTree().displayTree("TestBTree2", false);
+
+        // Test GP Operators with GoalNode
+        // Mutation operator
+
+        // Crossover operator
+        GPSinglePointCrossover gpspc = new GPSinglePointCrossover(0.9);
+        ProgramSolution[] crossoverSolutions = gpspc.execute(new ProgramSolution[]{programSolutions.get(0), programSolutions.get(1)}, sgp2);
+
+        crossoverSolutions[0].getTree().displayTree("TestBTree3", false);
+        crossoverSolutions[1].getTree().displayTree("TestBTree4", false);
+
+        // Expansion operator
+        // Depth based operator
+        // Tree size pruning operator
+        // Node call frequency operator
     }
 }

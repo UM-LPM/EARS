@@ -2,6 +2,8 @@ package org.um.feri.ears.individual.generations.gp;
 
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.BehaviourTree;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.GoalNode;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.GoalNodeDefinition;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.SymbolicRegressionTree;
 import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.problems.gp.ProgramProblem;
@@ -11,6 +13,7 @@ import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GPRandomProgramSolution extends GPProgramSolution {
@@ -18,6 +21,17 @@ public class GPRandomProgramSolution extends GPProgramSolution {
     public static final long serialVersionUID = 7095521811400218978L;
 
     private ProgramProblem programProblem;
+
+    private List<GoalNodeDefinition> goalNodeDefinitions;
+
+    public GPRandomProgramSolution() {
+        super();
+        this.goalNodeDefinitions = new ArrayList<>();
+    }
+
+    public GPRandomProgramSolution(List<GoalNodeDefinition> goalNodeDefinitions){
+        this.goalNodeDefinitions = goalNodeDefinitions;
+    }
 
     public ProgramSolution generate(ProgramProblem programProblem, int startDepth, String treeName) {
         this.programProblem = programProblem;
@@ -95,7 +109,7 @@ public class GPRandomProgramSolution extends GPProgramSolution {
         int index = RNG.nextInt(nodeTypes.size());
         try {
             // Create a new instance from base constructor of the randomly chosen Node type
-            return nodeTypes.get(index).getDeclaredConstructor().newInstance();
+            return assignGoalToGoalNode(nodeTypes.get(index).getDeclaredConstructor().newInstance());
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -104,10 +118,31 @@ public class GPRandomProgramSolution extends GPProgramSolution {
     private Node generateRandomNode(Class<? extends Node> nodeType) {
         try {
             // Create a new instance from base constructor of the randomly chosen Node type
-            return nodeType.getDeclaredConstructor().newInstance();
+            return assignGoalToGoalNode(nodeType.getDeclaredConstructor().newInstance());
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Assigns a random GoalNodeDefinition to a GoalNode (If passed Node is not a GoalNode, it will be returned as is)
+     * @param node Node to assign GoalNodeDefinition to
+     * @return Modified Node
+     */
+    private Node assignGoalToGoalNode(Node node) {
+        if(node instanceof GoalNode goalNode){
+            if(goalNodeDefinitions.isEmpty()){
+                throw new RuntimeException("GoalNodeDefinitions are empty");
+            }
+            // Select a random GoalNodeDefinition and set it to GoalNode
+            GoalNodeDefinition goalNodeDefinition = goalNodeDefinitions.get(RNG.nextInt(goalNodeDefinitions.size()));
+            goalNode.setGoal(goalNodeDefinition.getGoalName(), goalNodeDefinition.getGoalNodeBehaviour().clone());
+        }
+        return node;
+    }
+
+    public void setGoalNodeDefinitions(List<GoalNodeDefinition> goalNodeDefinitions) {
+        this.goalNodeDefinitions = goalNodeDefinitions;
     }
 
 }

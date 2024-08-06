@@ -1,9 +1,6 @@
 package org.um.feri.ears.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.um.feri.ears.algorithms.GPAlgorithm;
-import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
-import org.um.feri.ears.problems.gp.ProgramProblem;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -20,6 +17,7 @@ public class Configuration {
     public String UnityExeLocation;
     public String UnityConfigDestFilePath;
     public List<RunConfiguration> Configurations;
+    public List<GoalNodeConfigDefinition> GoalNodeDefinitions;
 
     public static Configuration deserialize(String filePath){
         ObjectMapper objectMapper = new ObjectMapper();

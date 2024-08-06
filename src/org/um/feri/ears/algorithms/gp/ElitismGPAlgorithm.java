@@ -8,8 +8,8 @@ import org.um.feri.ears.operators.Selection;
 import org.um.feri.ears.operators.TournamentSelection;
 import org.um.feri.ears.operators.gp.GPCrossover;
 import org.um.feri.ears.operators.gp.GPMutation;
-import org.um.feri.ears.operators.gp.SinglePointCrossover;
-import org.um.feri.ears.operators.gp.SubtreeMutation;
+import org.um.feri.ears.operators.gp.GPSinglePointCrossover;
+import org.um.feri.ears.operators.gp.GPSubtreeMutation;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.ProgramProblem;
@@ -75,8 +75,8 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
         // Calculate number of elite individuals and offspring
         setElitismParams();
 
-        this.crossoverOperator = new SinglePointCrossover(this.crossoverProbability);
-        this.mutationOperator = new SubtreeMutation(this.mutationProbability);
+        this.crossoverOperator = new GPSinglePointCrossover(this.crossoverProbability);
+        this.mutationOperator = new GPSubtreeMutation(this.mutationProbability);
 
         au = new Author("marko", "marko.smid2@um.si");
         ai = new AlgorithmInfo("EGP", "Elitism GP Algorithm",

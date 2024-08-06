@@ -21,6 +21,7 @@ public class ProgramSolution extends Solution {
 
     public ProgramSolution(int numberOfObjectives) {
         super(numberOfObjectives);
+        this.Fitnesses = new HashMap<>();
     }
 
     public ProgramSolution(ProgramSolution s) {
