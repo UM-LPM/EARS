@@ -4,16 +4,15 @@ import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.TreeAncestor;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.Optional;
 
-public class SubtreeMutation extends GPMutation {
+public class GPSubtreeMutation extends GPMutation {
 
     private Double mutationProbability = 0.5;
 
-    public SubtreeMutation(Double mutationProbability){
+    public GPSubtreeMutation(Double mutationProbability){
         this.mutationProbability = mutationProbability;
     }
 

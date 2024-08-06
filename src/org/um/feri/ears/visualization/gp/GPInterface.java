@@ -488,7 +488,7 @@ public class GPInterface extends JFrame {
         this.bestGenerationFitnessGraphPanel.setScores(this.gpAlgorithm.getBestGenFitnesses());
 
         // Update population list
-        displayPopulation(updatePopulation);
+        //displayPopulation(updatePopulation);
 
         // Update best individual
         updateBestIndividual();
@@ -784,6 +784,32 @@ public class GPInterface extends JFrame {
             configuration = Configuration.deserialize(configFile);
         }
 
+        // Define BT for Goal Nodes and add them to terminal set
+        for(int i = 0; i < configuration.GoalNodeDefinitions.size(); i++){
+            RunConfiguration runConfiguration = configuration.GoalNodeDefinitions.get(i).RunConfiguration;
+            System.out.println("Run configuration (Goal node): " + runConfiguration.Name);
+
+            // 1. Set EARS configuration
+            int generations = setEARSConfiguration(runConfiguration);
+
+            // 2. Save Unity configuration
+            Configuration.serializeUnityConfig(runConfiguration, configuration.UnityConfigDestFilePath);
+
+            // 3 Start Unity Instances
+            restartUnityInstances();
+
+            // 6. Run algorithm
+            runGPAlgorithm(generations);
+
+            // 7. // TODO (Apply some bloat methods ??)
+
+            // 8 Create goal node and define its behavior with gpAlgorithm runs best solution
+            // TODO
+
+            System.out.println("Run configuration (Goal node): " + runConfiguration.Name + " done");
+        }
+
+        // Run final configurations with meta nodes
         for (int i = 0; i < configuration.Configurations.size(); i++) {
             RunConfiguration runConfiguration = configuration.Configurations.get(i);
             System.out.println("Run configuration: " + i + " (" + runConfiguration.Name + ")");
@@ -839,8 +865,6 @@ public class GPInterface extends JFrame {
     }
 
     public void restartUnityInstances(){
-        return; // TODO Uncomment
-        /*
         // 1. Close all running GeneralTrainingPlatformForMAS instances
         try {
             Runtime.getRuntime().exec("taskkill /F /IM " + Instance.configuration.UnityGameFile);
@@ -865,7 +889,7 @@ public class GPInterface extends JFrame {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private void loadDefaultConfiguration(){

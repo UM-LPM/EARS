@@ -57,8 +57,8 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         this.mutationProbability = mutationProbability;
         this.numberOfTournaments = numberOfTournaments;
 
-        this.crossoverOperator = new SinglePointCrossover(this.crossoverProbability);
-        this.mutationOperator = new SubtreeMutation(this.mutationProbability);
+        this.crossoverOperator = new GPSinglePointCrossover(this.crossoverProbability);
+        this.mutationOperator = new GPSubtreeMutation(this.mutationProbability);
 
         au = new Author("marko", "marko.smid2@um.si");
         ai = new AlgorithmInfo("DGP", "Default GP Algorithm",

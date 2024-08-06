@@ -4,16 +4,15 @@ import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.TreeAncestor;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.Optional;
 
-public class SinglePointCrossover extends GPCrossover {
+public class GPSinglePointCrossover extends GPCrossover {
 
     private Double crossoverProbability = 0.9;
 
-    public SinglePointCrossover(Double crossoverProbability){
+    public GPSinglePointCrossover(Double crossoverProbability){
         this.crossoverProbability = crossoverProbability;
     }
 
@@ -29,6 +28,7 @@ public class SinglePointCrossover extends GPCrossover {
         }
 
         if(RNG.nextDouble() <= this.crossoverProbability) {
+            System.out.println("Performing crossover");
             ProgramSolution parent1;
             ProgramSolution parent2;
             // Perform crossover so long that it's inside boundaries
@@ -59,6 +59,9 @@ public class SinglePointCrossover extends GPCrossover {
 
             int crossOverNodeIndex1 = mutationNodeParent1.get().indexOf(crossOverNode1);
             int crossOverNodeIndex2 = mutationNodeParent2.get().indexOf(crossOverNode2);
+
+            System.out.println("Crossover node index 1: " + crossoverIndex1);
+            System.out.println("Crossover node index 2: " + crossoverIndex2);
 
             //Switch nodes and it's subtrees
             mutationNodeParent1.get().replace(crossOverNodeIndex1, crossOverNode2);
