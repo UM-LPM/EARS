@@ -44,6 +44,7 @@ public class GPTreeSizePruningOperator extends FeasibilityGPOperator {
             if(treeSize <= maxTreeSize){
                 break;
             }
+            System.out.println("Performing tree size pruning");
 
             // 1. Get the list of function nodes
             List<Node> functionNodes = tProgramSolution.getTree().getFunctionNodes();

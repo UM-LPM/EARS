@@ -25,6 +25,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.random.RNG;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -428,38 +429,81 @@ public class SymbolicRegressionBtExample { // TODO remove
                 GoalNode.class
         );
 
-        GPRandomProgramSolution randomProgramSolution = new GPRandomProgramSolution();
-        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 4, 5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, randomProgramSolution);
+        for (int i =0; i < 1; i++) {
 
-        List<ProgramSolution> programSolutions = new ArrayList<>();
+            GPRandomProgramSolution randomProgramSolution = new GPRandomProgramSolution();
+            UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 4, 5, 15, new FeasibilityGPOperator[]{new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                    new GPOperator[]{}, randomProgramSolution);
 
-        programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
+            List<ProgramSolution> programSolutions = new ArrayList<>();
 
-        List<GoalNodeDefinition> goalNodeDefinitions = new ArrayList<>(); // Define goal nodes
-        goalNodeDefinitions.add(new GoalNodeDefinition("GoalNode1", programSolutions.get(0).getTree().getRootNode()));
-        randomProgramSolution.setGoalNodeDefinitions(goalNodeDefinitions);
+            programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
 
-        sgp2.setBaseTerminalNodeTypes(baseTerminalNodeTypes2);
+            List<GoalNodeDefinition> goalNodeDefinitions = new ArrayList<>(); // Define goal nodes
+            goalNodeDefinitions.add(new GoalNodeDefinition("GoalNode1", programSolutions.get(0).getTree().getRootNode()));
+            randomProgramSolution.setGoalNodeDefinitions(goalNodeDefinitions);
 
-        programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
+            sgp2.setBaseTerminalNodeTypes(baseTerminalNodeTypes2);
 
-        programSolutions.get(0).getTree().displayTree("TestBTree1", false);
-        programSolutions.get(1).getTree().displayTree("TestBTree2", false);
+            programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
 
-        // Test GP Operators with GoalNode
-        // Mutation operator
+            programSolutions.get(0).getTree().displayTree("TestBTree1", false);
+            programSolutions.get(1).getTree().displayTree("TestBTree2", false);
 
-        // Crossover operator
-        GPSinglePointCrossover gpspc = new GPSinglePointCrossover(0.9);
-        ProgramSolution[] crossoverSolutions = gpspc.execute(new ProgramSolution[]{programSolutions.get(0), programSolutions.get(1)}, sgp2);
+            // Test GP Operators with GoalNode
+            // Mutation operator
+            if(false) {
+                System.out.println("GPSubtreeMutation execution");
+                GPSubtreeMutation gpsm = new GPSubtreeMutation(1.0);
+                ProgramSolution mutationSolution = gpsm.execute(programSolutions.get(1), sgp2);
 
-        crossoverSolutions[0].getTree().displayTree("TestBTree3", false);
-        crossoverSolutions[1].getTree().displayTree("TestBTree4", false);
+                mutationSolution.getTree().displayTree("TestBTree3", false);
+            }
 
-        // Expansion operator
-        // Depth based operator
-        // Tree size pruning operator
-        // Node call frequency operator
+            // Crossover operator
+            if(false) {
+                System.out.println("GPSinglePointCrossover execution");
+                GPSinglePointCrossover gpspc = new GPSinglePointCrossover(1.0);
+                ProgramSolution[] crossoverSolutions = gpspc.execute(new ProgramSolution[]{programSolutions.get(0), programSolutions.get(1)}, sgp2);
+
+                crossoverSolutions[0].getTree().displayTree("TestBTree3", false);
+                crossoverSolutions[1].getTree().displayTree("TestBTree4", false);
+            }
+
+            // Expansion operator
+            // Tested in the previous examples of Crossover & Mutation
+            // Depth based operator
+            // Tested in the previous examples of Crossover & Mutation
+
+            // Tree size pruning operator
+            if(false) {
+                System.out.println("GPTreeSizePruningOperator execution");
+                GPTreeSizePruningOperator gpspo = new GPTreeSizePruningOperator(GPTreeSizePruningOperator.OperatorType.CLOSEST_TO_MAX_TREE_NODES);
+                ProgramSolution pruningSolution = gpspo.execute(programSolutions.get(1), sgp2);
+
+                pruningSolution.getTree().displayTree("TestBTree3", false);
+            }
+            // Node call frequency operator
+            if(true) {
+                System.out.println("NodeCallFrequencyCountPruningOperator execution");
+                int treeSize = programSolutions.get(1).getTree().treeSize();
+                int[] nodeCallFrequency = new int[treeSize];
+                nodeCallFrequency[0] = 100;
+                nodeCallFrequency[1] = 100;
+                nodeCallFrequency[2] = 100;
+                //nodeCallFrequency[3] = 100;
+                //nodeCallFrequency[4] = 100;
+                for (int j = 3; j < treeSize; j++) {
+                    nodeCallFrequency[j] = (25 + (treeSize - j)) * 2;
+                    //System.out.println("Node call frequency (" + j + "): " + nodeCallFrequency[j]);
+                }
+
+                programSolutions.get(1).setNodeCallFrequencyCount(nodeCallFrequency);
+                GPNodeCallFrequencyCountPruningOperator gpnf = new GPNodeCallFrequencyCountPruningOperator(60,0.5);
+                ProgramSolution nodeCallFrequencySolution = gpnf.execute(programSolutions.get(1), sgp2);
+
+                nodeCallFrequencySolution.getTree().displayTree("TestBTree3", false);
+            }
+        }
     }
 }
