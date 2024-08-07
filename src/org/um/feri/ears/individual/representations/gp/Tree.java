@@ -61,8 +61,12 @@ public abstract class Tree implements Serializable {
             return null;
         }
     }
-    public int treeDepth() {
-        return rootNode.treeDepth();
+    public int treeMaxDepth() {
+        return rootNode.treeMaxDepth();
+    }
+
+    public int treeMinDepth() {
+        return rootNode.treeMinDepth();
     }
 
     public int treeSize() {
@@ -124,8 +128,8 @@ public abstract class Tree implements Serializable {
         rootNode.removeAncestorAt(index, removeEmptyParent);
     }
 
-    public void removeEmptyNodes(){
-        rootNode.removeEmptyNodes();
+    public void removeInvalidNodes(){
+        rootNode.removeInvalidNodes();
     }
 
     public void printTree(){

@@ -97,15 +97,46 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     }
 
     @Override
-    public int treeDepth(){
+    public int treeMaxDepth(){
         int maxDepth = 0;
         if(arity > 0) {
             for (Node child : this.children) {
-                int childHeight = child.treeDepth();
+                int childHeight = child.treeMaxDepth();
                 maxDepth = Math.max(maxDepth, childHeight);
             }
         }
         return maxDepth + 1;
+    }
+
+    @Override
+    public int treeMinDepth(){
+        // Returns the minimum end depth (Terminals) of the tree
+        if(arity == 0){
+            return 1;
+        }
+
+        return treeMinDepthHelper(this, 1);
+        // TODO
+        /*int minDepth = 0;
+        if(arity > 0) {
+            for (Node child : this.children) {
+                int childHeight = child.treeMinDepth();
+                minDepth = Math.min(minDepth, childHeight);
+            }
+        }
+        return minDepth + 1;*/
+    }
+
+    private int treeMinDepthHelper(Node node, int depth) {
+        if (node.arity == 0) {
+            return depth;
+        }
+
+        int minDepth = Integer.MAX_VALUE;
+        for (Node child : node.children) {
+            minDepth = Math.min(minDepth, treeMinDepthHelper(child, depth + 1));
+        }
+        return minDepth;
     }
 
     @Override
@@ -281,10 +312,9 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         child.setParent(null);
 
         if (children.isEmpty()) {
-            children = null;
-            if(removeEmptyParent){
+            //children = null;
+            if(removeEmptyParent)
                 detach(true);
-            }
         }
 
         return this;
@@ -326,16 +356,39 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         return this;
     }
 
-    public void removeEmptyNodes(){
-        if(this.children != null && arity > 0){
+    public void removeInvalidNodes(){
+        // Use an iterator to safely remove elements while iterating
+        if (arity > 0 && children != null) {
+            Iterator<Node> iterator = children.iterator();
+            while (iterator.hasNext()) {
+                Node child = iterator.next();
+                child.removeInvalidNodes(); // Recursively clean up child nodes
+                if (child.arity > 0 && (child.children == null || child.children.isEmpty())) {
+                    System.out.println("Removing invalid node: ");
+                    iterator.remove(); // Remove the child if it has an arity > 0 but no children
+                }
+            }
+        }
+
+        /*if(arity > 0){
+            for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+                Node next = it.next();
+                next.removeEmptyNodes();
+            }
+        }
+        if(arity > 0 && children.isEmpty()){
+            detach(false);
+        }*/
+
+        /*if(arity > 0 && children != null){
             for(int i = 0; i < children.size(); i++){
                 Node child = children.get(i);
                 child.removeEmptyNodes();
             }
         }
-        if(this.children == null || this.children.isEmpty() && this.arity > 0){
-            this.detach(true);
-        }
+        else if((this.children == null || this.children.isEmpty()) && this.arity > 0){
+            detach(false);
+        }*/
     }
 
     private void createChildrenIfMissing() {
@@ -351,9 +404,9 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     }
 
     private void ancestorCountSub(Node.Ancestor ancestors) {
-        ancestors.addAncestors(this.getChildren());
-
         if(arity > 0){
+            ancestors.addAncestors(this.getChildren());
+
             for (Iterator<Node> it = children.iterator(); it.hasNext();) {
                 Node next = it.next();
                 next.ancestorCountSub(ancestors);

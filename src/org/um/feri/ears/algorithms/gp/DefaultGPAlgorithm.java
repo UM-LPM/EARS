@@ -265,7 +265,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                     // add current avg tree depth to list
                     double avgDepth = 0;
                     for (ProgramSolution sol: this.population) {
-                        avgDepth += sol.getTree().treeDepth();
+                        avgDepth += sol.getTree().treeMaxDepth();
                     }
                     this.avgGenTreeDepths.add(avgDepth / this.population.size());
 

@@ -42,9 +42,11 @@ public class GPNodeCallFrequencyCountPruningOperator extends GPOperator {
         // Start from the end of the array to avoid index shifting
         for (int i = nodeCallFrequencyCount.length - 1; i >= 0; i--) {
             if (nodeCallFrequencyCount[i] < threshold && RNG.nextDouble() < this.pruneProbability) {
-                tProgramSolution.getTree().removeAncestorAt(i, true);
+                tProgramSolution.getTree().removeAncestorAt(i, false);
             }
         }
+
+        tProgramSolution.getTree().removeInvalidNodes();
 
         return tProgramSolution;
     }

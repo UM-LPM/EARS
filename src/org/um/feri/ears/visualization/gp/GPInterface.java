@@ -609,7 +609,7 @@ public class GPInterface extends JFrame {
             selectedIndividualImagePanel.setImage(file);
             selectedIndividualID.setText("" + index);
             selectedIndividualFitnes.setText("" + Util.roundDouble(individual.getEval(), 2));
-            selectedIndividualTreeDepthLabel.setText("" + individual.getTree().treeDepth());
+            selectedIndividualTreeDepthLabel.setText("" + individual.getTree().treeMaxDepth());
             selectedIndividualTreeSize.setText("" + individual.getTree().treeSize());
             selectedIndividualIsFeasible.setText("" + this.programProblem.isFeasible(individual));
             selectedIndividualNumOfFunc.setText("" + individual.getTree().numberOfFunctions());
@@ -636,7 +636,7 @@ public class GPInterface extends JFrame {
             bestIndividualImagePanel.setImage(file);
             bestIndividualID.setText("" + this.gpAlgorithm.getBest().getID());
             bestIndividualFitnes.setText("" + Util.roundDouble(this.gpAlgorithm.getBest().getEval(), 2));
-            bestIndividualTreeDepth.setText("" + this.gpAlgorithm.getBest().getTree().treeDepth());
+            bestIndividualTreeDepth.setText("" + this.gpAlgorithm.getBest().getTree().treeMaxDepth());
             bestIndividualTreeSize.setText("" + this.gpAlgorithm.getBest().getTree().treeSize());
             bestIndividualIsFeasible.setText("" + this.programProblem.isFeasible(this.gpAlgorithm.getBest()));
             bestIndividualNumOfFunc.setText("" + this.gpAlgorithm.getBest().getTree().numberOfFunctions());

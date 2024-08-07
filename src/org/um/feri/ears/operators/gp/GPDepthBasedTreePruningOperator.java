@@ -15,7 +15,8 @@ public class GPDepthBasedTreePruningOperator extends FeasibilityGPOperator {
 
     @Override
     public boolean isSolutionFeasible(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
-        return tProgramSolution.getTree().treeDepth() >= tProgramProblem.getMinTreeDepth() && tProgramSolution.getTree().treeDepth() <= tProgramProblem.getMaxTreeEndDepth();
+        //System.out.println("Tree max depth: " + tProgramSolution.getTree().treeMaxDepth());
+        return tProgramSolution.getTree().treeMaxDepth() <= tProgramProblem.getMaxTreeEndDepth();
     }
 
     @Override
@@ -40,8 +41,10 @@ public class GPDepthBasedTreePruningOperator extends FeasibilityGPOperator {
 
             }
         }else{
-            for (Node child : current.getChildren()) {
-                pruneProgramDepth(child, current, currentDepth + 1);
+            if(current.getArity() > 0) {
+                for (Node child : current.getChildren()) {
+                    pruneProgramDepth(child, current, currentDepth + 1);
+                }
             }
         }
     }
