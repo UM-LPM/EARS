@@ -2,7 +2,7 @@ package org.um.feri.ears.util;
 
 public class EARSConfiguration {
 
-    public AlgorithmType AlgorithmType;
+    public GPAlgorithmType AlgorithmType;
     public String ProblemName;
     public int FitnessEvaluations;
     public int Generations;
@@ -25,7 +25,7 @@ public class EARSConfiguration {
 
 
         /*public ProblemType problem;
-        public AlgorithmType algorithm;
+        public GPAlgorithmType algorithm;
         public CrossoverOperatorType crossoverOperator;
         public MutationOperatorType mutationOperator;
         public SelectionOperatorType selectionOperator;

@@ -25,7 +25,6 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Util;
-import org.um.feri.ears.util.random.RNG;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -426,7 +425,7 @@ public class SymbolicRegressionBtExample { // TODO remove
                 Rotate.class,
                 Shoot.class,
                 RotateTurret.class,
-                GoalNode.class
+                EncapsulatedNode.class
         );
 
         for (int i =0; i < 1; i++) {
@@ -439,9 +438,9 @@ public class SymbolicRegressionBtExample { // TODO remove
 
             programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
 
-            List<GoalNodeDefinition> goalNodeDefinitions = new ArrayList<>(); // Define goal nodes
-            goalNodeDefinitions.add(new GoalNodeDefinition("GoalNode1", programSolutions.get(0).getTree().getRootNode()));
-            randomProgramSolution.setGoalNodeDefinitions(goalNodeDefinitions);
+            List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions = new ArrayList<>(); // Define goal nodes
+            encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition("GoalNode1", programSolutions.get(0).getTree().getRootNode()));
+            randomProgramSolution.setGoalNodeDefinitions(encapsulatedNodeDefinitions);
 
             sgp2.setBaseTerminalNodeTypes(baseTerminalNodeTypes2);
 
@@ -450,7 +449,7 @@ public class SymbolicRegressionBtExample { // TODO remove
             programSolutions.get(0).getTree().displayTree("TestBTree1", false);
             programSolutions.get(1).getTree().displayTree("TestBTree2", false);
 
-            // Test GP Operators with GoalNode
+            // Test GP Operators with EncapsulatedNode
             // Mutation operator
             if(false) {
                 System.out.println("GPSubtreeMutation execution");
@@ -484,7 +483,7 @@ public class SymbolicRegressionBtExample { // TODO remove
                 pruningSolution.getTree().displayTree("TestBTree3", false);
             }
             // Node call frequency operator
-            if(true) {
+            if(false) {
                 System.out.println("NodeCallFrequencyCountPruningOperator execution");
                 int treeSize = programSolutions.get(1).getTree().treeSize();
                 int[] nodeCallFrequency = new int[treeSize];

@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.orsoncharts.util.json.JSONArray;
 import com.orsoncharts.util.json.parser.JSONParser;
 import com.orsoncharts.util.json.parser.ParseException;
+import org.um.feri.ears.algorithms.gp.GPAlgorithmExecutor;
 import org.um.feri.ears.individual.representations.gp.HttpResponse;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Tree;
@@ -28,6 +29,9 @@ public class UnityBTProblem extends ProgramProblem {
         super("UnityBTProblem");
     }
 
+    public UnityBTProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator) {
+        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new String[]{});
+    }
     public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator) {
         super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new String[]{});
     }
@@ -79,8 +83,8 @@ public class UnityBTProblem extends ProgramProblem {
                 Util.appendExceptionToLogFile(e, "ErrorReport.txt");
 
                 // Restart Unity instances
-                if(GPInterface.Instance != null){
-                    GPInterface.Instance.restartUnityInstances();
+                if(GPAlgorithmExecutor.Instance != null){
+                    GPAlgorithmExecutor.Instance.restartUnityInstances();
                 }
 
                 //wait for 5 seconds

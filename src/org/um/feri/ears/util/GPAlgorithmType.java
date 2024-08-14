@@ -1,6 +1,6 @@
 package org.um.feri.ears.util;
 
-public enum AlgorithmType {
+public enum GPAlgorithmType {
     DGP,  // Default Genetic Programming
     EGP // Elitism Genetic Programming
 }
