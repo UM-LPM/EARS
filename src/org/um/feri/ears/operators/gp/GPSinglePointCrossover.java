@@ -2,7 +2,6 @@ package org.um.feri.ears.operators.gp;
 
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.TreeAncestor;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.GoalNode;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.random.RNG;

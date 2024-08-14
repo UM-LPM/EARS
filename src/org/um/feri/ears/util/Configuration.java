@@ -17,7 +17,7 @@ public class Configuration {
     public String UnityExeLocation;
     public String UnityConfigDestFilePath;
     public List<RunConfiguration> Configurations;
-    public List<GoalNodeConfigDefinition> GoalNodeDefinitions;
+    public List<EncapsulatedNodeConfigDefinition> EncapsulatedNodeDefinitions;
 
     public static Configuration deserialize(String filePath){
         ObjectMapper objectMapper = new ObjectMapper();

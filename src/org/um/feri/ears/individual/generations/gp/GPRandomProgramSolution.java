@@ -2,14 +2,13 @@ package org.um.feri.ears.individual.generations.gp;
 
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.BehaviourTree;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.GoalNode;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.GoalNodeDefinition;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNode;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNodeDefinition;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.SymbolicRegressionTree;
 import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.Configuration;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.random.RNG;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,15 +21,15 @@ public class GPRandomProgramSolution extends GPProgramSolution {
 
     private ProgramProblem programProblem;
 
-    private List<GoalNodeDefinition> goalNodeDefinitions;
+    private List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions;
 
     public GPRandomProgramSolution() {
         super();
-        this.goalNodeDefinitions = new ArrayList<>();
+        this.encapsulatedNodeDefinitions = new ArrayList<>();
     }
 
-    public GPRandomProgramSolution(List<GoalNodeDefinition> goalNodeDefinitions){
-        this.goalNodeDefinitions = goalNodeDefinitions;
+    public GPRandomProgramSolution(List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions){
+        this.encapsulatedNodeDefinitions = encapsulatedNodeDefinitions;
     }
 
     public ProgramSolution generate(ProgramProblem programProblem, int startDepth, String treeName) {
@@ -109,7 +108,7 @@ public class GPRandomProgramSolution extends GPProgramSolution {
         int index = RNG.nextInt(nodeTypes.size());
         try {
             // Create a new instance from base constructor of the randomly chosen Node type
-            return assignGoalToGoalNode(nodeTypes.get(index).getDeclaredConstructor().newInstance());
+            return assignEncapsulatedNodeToEncapsulatedNode(nodeTypes.get(index).getDeclaredConstructor().newInstance());
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -118,31 +117,31 @@ public class GPRandomProgramSolution extends GPProgramSolution {
     private Node generateRandomNode(Class<? extends Node> nodeType) {
         try {
             // Create a new instance from base constructor of the randomly chosen Node type
-            return assignGoalToGoalNode(nodeType.getDeclaredConstructor().newInstance());
+            return assignEncapsulatedNodeToEncapsulatedNode(nodeType.getDeclaredConstructor().newInstance());
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * Assigns a random GoalNodeDefinition to a GoalNode (If passed Node is not a GoalNode, it will be returned as is)
-     * @param node Node to assign GoalNodeDefinition to
+     * Assigns a random EncapsulatedNodeDefinition to a EncapsulatedNode (If passed Node is not a EncapsulatedNode, it will be returned as is)
+     * @param node Node to assign EncapsulatedNodeDefinition to
      * @return Modified Node
      */
-    private Node assignGoalToGoalNode(Node node) {
-        if(node instanceof GoalNode goalNode){
-            if(goalNodeDefinitions.isEmpty()){
-                throw new RuntimeException("GoalNodeDefinitions are empty");
+    private Node assignEncapsulatedNodeToEncapsulatedNode(Node node) {
+        if(node instanceof EncapsulatedNode encapsulatedNode){
+            if(encapsulatedNodeDefinitions.isEmpty()){
+                throw new RuntimeException("EncapsulatedNodeDefinitions are empty");
             }
-            // Select a random GoalNodeDefinition and set it to GoalNode
-            GoalNodeDefinition goalNodeDefinition = goalNodeDefinitions.get(RNG.nextInt(goalNodeDefinitions.size()));
-            goalNode.setGoal(goalNodeDefinition.getGoalName(), goalNodeDefinition.getGoalNodeBehaviour().clone());
+            // Select a random EncapsulatedNodeDefinition and set it to EncapsulatedNode
+            EncapsulatedNodeDefinition encapsulatedNodeDefinition = encapsulatedNodeDefinitions.get(RNG.nextInt(encapsulatedNodeDefinitions.size()));
+            encapsulatedNode.setEncapsulatedNode(encapsulatedNodeDefinition.getEncapsulatedNodeName(), encapsulatedNodeDefinition.getGoalNodeBehaviour().clone());
         }
         return node;
     }
 
-    public void setGoalNodeDefinitions(List<GoalNodeDefinition> goalNodeDefinitions) {
-        this.goalNodeDefinitions = goalNodeDefinitions;
+    public void setGoalNodeDefinitions(List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions) {
+        this.encapsulatedNodeDefinitions = encapsulatedNodeDefinitions;
     }
 
 }
