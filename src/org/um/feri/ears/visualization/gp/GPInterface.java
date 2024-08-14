@@ -132,7 +132,7 @@ public class GPInterface extends JFrame {
         updateGPAlgorithmParamsUI();
         updateUI(false);
 
-        saveGPAlgorithmStatsFilename.setText(gpAlgorithmExecutor.getProgramProblem().getName() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getPopSize() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getCrossoverProbability() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getElitismProbability() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getMutationProbability() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getNumberOfTournaments() + "_" + gpAlgorithmExecutor.getProgramProblem().getMinTreeDepth() + "_" + gpAlgorithmExecutor.getProgramProblem().getMaxTreeStartDepth() + "_" + gpAlgorithmExecutor.getProgramProblem().getMaxTreeEndDepth() + "_" + gpAlgorithmExecutor.getProgramProblem().getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser" );
+        setSaveGPAlgorithmStatsFilename();
 
         addButtonListeners();
         addGPAlgorithmParamsListeners();
@@ -734,20 +734,6 @@ public class GPInterface extends JFrame {
         }
     }
 
-    public String getFormattedDate() {
-        // Get current date
-        LocalDate date = LocalDate.now();
-        // Create a new string builder
-        // Append the day
-        String formattedDate = String.format("%02d", date.getDayOfMonth()) +
-                // Append the month
-                String.format("%02d", date.getMonthValue()) +
-                // Append the year
-                date.getYear();
-        
-        return formattedDate;
-    }
-
     public void runConfigurations(){
         this.gpAlgorithmExecutor.runConfigurations(configurationFileTextField.getText(), saveGPAlgorithmStatsFilename.getText());
     }
@@ -782,7 +768,7 @@ public class GPInterface extends JFrame {
     }
 
     public void setSaveGPAlgorithmStatsFilename(){
-        saveGPAlgorithmStatsFilename.setText(gpAlgorithmExecutor.getProgramProblem().getName() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getPopSize() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getCrossoverProbability() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getElitismProbability() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getMutationProbability() + "_" + gpAlgorithmExecutor.getGpAlgorithm().getNumberOfTournaments() + "_" + gpAlgorithmExecutor.getProgramProblem().getMinTreeDepth() + "_" + gpAlgorithmExecutor.getProgramProblem().getMaxTreeStartDepth() + "_" + gpAlgorithmExecutor.getProgramProblem().getMaxTreeEndDepth() + "_" + gpAlgorithmExecutor.getProgramProblem().getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser");
+        gpAlgorithmExecutor.getDefaultGPAlgorithmStateFilename();
     }
     
     public static void main(String[] args) {

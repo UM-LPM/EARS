@@ -21,6 +21,7 @@ import org.um.feri.ears.util.*;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -90,7 +91,7 @@ public class GPAlgorithmExecutor {
         this.gpAlgorithm.setDebug(debugMode);
     }
 
-    private int setEARSConfiguration(RunConfiguration runConfiguration){
+    public int setEARSConfiguration(RunConfiguration runConfiguration){
         EARSConfiguration earsConfiguration = runConfiguration.EARSConfiguration;
         int generations = 0;
         ProgramProblem programProblem = this.gpAlgorithm.getTask().problem;
@@ -168,33 +169,6 @@ public class GPAlgorithmExecutor {
             configuration = Configuration.deserialize(configurationFile);
         }
 
-        // TODO START Move this part to new class of type GPAlgorithm (GP algorithm with predefined encapsulated node definitions (fitness))
-        // Define BT for Goal Nodes and add them to terminal set
-        for(int i = 0; i < configuration.EncapsulatedNodeDefinitions.size(); i++){
-            RunConfiguration runConfiguration = configuration.EncapsulatedNodeDefinitions.get(i).RunConfiguration;
-            System.out.println("Run configuration (Encapsulated node): " + runConfiguration.Name);
-
-            // 1. Set EARS configuration
-            int generations = setEARSConfiguration(runConfiguration);
-
-            // 2. Save Unity configuration
-            Configuration.serializeUnityConfig(runConfiguration, configuration.UnityConfigDestFilePath);
-
-            // 3 Start Unity Instances
-            restartUnityInstances();
-
-            // 6. Run algorithm
-            runGPAlgorithm(generations, saveGPAlgorithmStateFilename);
-
-            // 7. // TODO (Apply some bloat methods ??)
-
-            // 8 Create encapsulated node and define its behavior with gpAlgorithm runs best solution
-            // TODO
-
-            System.out.println("Run configuration (Encapsulated node): " + runConfiguration.Name + " done");
-        }
-        // TODO END
-
         // Run final configurations with meta nodes
         for (int i = 0; i < configuration.Configurations.size(); i++) {
             RunConfiguration runConfiguration = configuration.Configurations.get(i);
@@ -216,7 +190,6 @@ public class GPAlgorithmExecutor {
         }
     }
 
-    // TODO Move this part to new Class GPAlgorithmExecutor
     public void runGPAlgorithm(int numOfGens, String saveGPAlgorithmStateFilename) {
         try {
             try {
@@ -233,7 +206,7 @@ public class GPAlgorithmExecutor {
 
                     if (saveGPAlgorithmStateFilename == null || saveGPAlgorithmStateFilename.length() == 0) {
                         // Serialize algorithm state
-                        GPAlgorithm.serializeAlgorithmState(gpAlgorithm, "gpAlgorithmState.ser");
+                        GPAlgorithm.serializeAlgorithmState(gpAlgorithm, getDefaultGPAlgorithmStateFilename());
                     } else {
                         // Serialize algorithm state
                         GPAlgorithm.serializeAlgorithmState(gpAlgorithm, saveGPAlgorithmStateFilename);
@@ -309,6 +282,24 @@ public class GPAlgorithmExecutor {
 
     public ProgramProblem getProgramProblem() {
         return this.gpAlgorithm.getTask().problem;
+    }
+
+    public String getDefaultGPAlgorithmStateFilename(){
+        return getProgramProblem().getName() + "_" + getGpAlgorithm().getPopSize() + "_" + getGpAlgorithm().getCrossoverProbability() + "_" + getGpAlgorithm().getElitismProbability() + "_" + getGpAlgorithm().getMutationProbability() + "_" + getGpAlgorithm().getNumberOfTournaments() + "_" + getProgramProblem().getMinTreeDepth() + "_" + getProgramProblem().getMaxTreeStartDepth() + "_" + getProgramProblem().getMaxTreeEndDepth() + "_" + getProgramProblem().getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser";
+    }
+
+    public String getFormattedDate() {
+        // Get current date
+        LocalDate date = LocalDate.now();
+        // Create a new string builder
+        // Append the day
+        String formattedDate = String.format("%02d", date.getDayOfMonth()) +
+                // Append the month
+                String.format("%02d", date.getMonthValue()) +
+                // Append the year
+                date.getYear();
+
+        return formattedDate;
     }
 
 }
