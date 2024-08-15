@@ -4,6 +4,9 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.AlgorithmStepper;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.GPAlgorithm;
+import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNode;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNodeDefinition;
 import org.um.feri.ears.operators.Selection;
 import org.um.feri.ears.operators.TournamentSelection;
 import org.um.feri.ears.operators.gp.GPCrossover;
@@ -59,19 +62,18 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     private int eliteCount;
     private int offspringCount;
 
-    private GPAlgorithmExecutor gpAlgorithmExecutor;
+    List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions;
 
 
-    public PredefinedEncapsNodesGPAlgorithm(GPAlgorithmExecutor gpAlgorithmExecutor) {
-        this(gpAlgorithmExecutor, 100, 0.90, 0.05, 0.025, 2, null, null);
+    public PredefinedEncapsNodesGPAlgorithm() {
+        this(100, 0.90, 0.05, 0.025, 2, null, null);
     }
 
-    public PredefinedEncapsNodesGPAlgorithm(GPAlgorithmExecutor gpAlgorithmExecutor, int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, String initialAlgorithmStateFilename) {
-        this(gpAlgorithmExecutor, popSize,crossoverProbability, elitismProbability,mutationProbability,numberOfTournaments, null, initialAlgorithmStateFilename);
+    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, String initialAlgorithmStateFilename) {
+        this(popSize,crossoverProbability, elitismProbability,mutationProbability,numberOfTournaments, null, initialAlgorithmStateFilename);
     }
 
-    public PredefinedEncapsNodesGPAlgorithm(GPAlgorithmExecutor gpAlgorithmExecutor, int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, Task<ProgramSolution,  ProgramProblem> task, String initialAlgorithmStateFilename) {
-        this.gpAlgorithmExecutor = gpAlgorithmExecutor;
+    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, Task<ProgramSolution,  ProgramProblem> task, String initialAlgorithmStateFilename) {
         this.popSize = popSize;
         this.crossoverProbability = crossoverProbability;
         this.elitismProbability = elitismProbability;
@@ -99,114 +101,243 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         this.bestGenFitnesses = new ArrayList<>();
 
         this.initialAlgorithmStateFilename = initialAlgorithmStateFilename;
+        this.encapsulatedNodeDefinitions = new ArrayList<>();
     }
 
     @Override
     public ProgramSolution execute(Task<ProgramSolution, ProgramProblem> task) throws StopCriterionException {
-        GPAlgorithm.addInterruptKeyListener();
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration,  String saveGPAlgorithmStateFilename) throws StopCriterionException {
+        // TODO Implement this
 
         // 1. Run evolution for predefined encapsulated node definitions to find corresponding behavior trees
-        // TODO START Move this part to new class of type PredefinedEncapsNodesGPAlgorithm (GP algorithm with predefined encapsulated node definitions (fitness))
-        // Define BT for Goal Nodes and add them to terminal set
-        for(int i = 0; i < gpAlgorithmExecutor.getConfiguration().EncapsulatedNodeDefinitions.size(); i++){
-            RunConfiguration runConfiguration = gpAlgorithmExecutor.getConfiguration().EncapsulatedNodeDefinitions.get(i).RunConfiguration;
-            System.out.println("Run configuration (Encapsulated node): " + runConfiguration.Name);
+        encapsulatedNodeDefinitions.clear();
+        if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0) {
+            for (int i = 0; i < runConfiguration.EncapsulatedNodeDefinitions.size(); i++) {
+                EncapsulatedNodeConfigDefinition encapsNodeConfigDef = runConfiguration.EncapsulatedNodeDefinitions.get(i);
+                RunConfiguration encapsNodeRunConf = encapsNodeConfigDef.RunConfiguration;
+                System.out.println("Run configuration (Encapsulated node): " + encapsNodeRunConf.Name);
 
-            // 1. Set EARS configuration
-            int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
+                // Set EARS configuration
+                int generations = gpAlgorithmExecutor.setEARSConfiguration(encapsNodeRunConf);
 
-            // 2. Save Unity configuration
-            Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+                // Save Unity configuration
+                Configuration.serializeUnityConfig(encapsNodeRunConf, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
-            // 3 Start Unity Instances
-            gpAlgorithmExecutor.restartUnityInstances();
+                // Start Unity Instances
+                gpAlgorithmExecutor.restartUnityInstances();
 
-            // 6. Run algorithm
-            gpAlgorithmExecutor.runGPAlgorithm(generations, null);
+                // Run algorithm for X generations
+                execute(generations, saveGPAlgorithmStateFilename);
 
-            // 7. // TODO (Apply some bloat methods ??)
+                // Apply some prunning/bloat methods to shrink final size
+                // TODO TODO TODO TODO
 
-            // 8 Create encapsulated node and define its behavior with gpAlgorithm runs best solution
-            // TODO
+                // Create encapsulated node and define its behavior with gpAlgorithm runs best solution
+                createEncapsulatedNode(encapsNodeConfigDef);
 
-            System.out.println("Run configuration (Encapsulated node): " + runConfiguration.Name + " done");
-        }
-        // TODO END
+                System.out.println("Run configuration (Encapsulated node): " + encapsNodeRunConf.Name + " done");
+            }
 
-        if(this.initialAlgorithmStateFilename != null) {
-            initializeAlgorithmStateFromFile();
-        }else{
-            // Algorithm initialization
-            algorithmInitialization(task, new ProblemComparator<>(task.problem), null); // TODO add support for selection operator
-
-            // Population initialization and evaluation
-            populationInitialization();
+            // 2. Extend terminal set with encapsulated node
+            gpAlgorithmExecutor.getProgramProblem().getBaseTerminalNodeTypes().add(EncapsulatedNode.class);
+            gpAlgorithmExecutor.getProgramProblem().getProgramSolutionGenerator().addEncapsulatedNodeDefinition(encapsulatedNodeDefinitions);
         }
 
-        while (!task.isStopCriterion()) {
-            // Check if application can still run
-            if(!ElitismGPAlgorithm.CAN_RUN){
-                // Serialize current state
-                GPAlgorithm.serializeAlgorithmState(this, "gpAlgorithmState.ser");
+        // 3. Run GP algorithm with extended terminal set
+        System.out.println("Run configuration: (" + runConfiguration.Name + ")");
+
+        // Set EARS configuration
+        int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
+
+        // Save Unity configuration
+        Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+
+        // Start Unity Instances
+        gpAlgorithmExecutor.restartUnityInstances();
+
+        // Run algorithm for X generations
+        execute(generations, saveGPAlgorithmStateFilename);
+
+        System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
+
+        // 3. Return best solution
+        return this.best;
+    }
+
+
+    @Override
+    public ProgramSolution executeStep() throws StopCriterionException {
+        if (this.task.isStopCriterion()){
+            return this.best;
+        }
+
+        switch (this.algorithmStepper.getCurrentValue()){
+            case INITIALIZATION:
+                if(this.task == null)
+                    throw new StopCriterionException("Algorithm task not set");;
+                algorithmInitialization(this.task, new ProblemComparator<>(this.task.problem), null);
+                populationInitialization();
                 break;
-            }
+            case ELITISM:
+                // Initialize the population of current generation
+                this.currentPopulation = new ArrayList<>(this.population.size());
 
-            // Initialize the population of current generationn
-            this.currentPopulation = new ArrayList<>(this.population.size());
+                // Elitism phase
+                // Sort population by fitness
+                this.population.sort(this.comparator);
 
-            // Elitism phase
-            // Sort population by fitness
-            this.population.sort(this.comparator);
+                // Copy eliteCount best individuals to the next generation
+                this.parentPopulation = new ArrayList<>();
 
-            // Copy eliteCount best individuals to the next generation
-            this.parentPopulation = new ArrayList<>();
+                int eliteCountMod = this.eliteCount;
 
-            int eliteCountMod = this.eliteCount;
-
-            if(this.best.getObjective(0) <= this.population.get(0).getObjective(0)){
-                this.currentPopulation.add(new ProgramSolution(this.best));
-                eliteCountMod--;
-            }
-
-            for (int i = 0; i < eliteCountMod; i++) {
-                this.currentPopulation.add(new ProgramSolution(population.get(i)));
-            }
-
-            // Selection
-            //performSelectionAndCrossover(this.offspringCount);
-            parentPopulation.addAll(performselection(this.offspringCount));
-
-            // Crossover
-            performCrossover();
-
-            // Mutation
-            performMutation();
-
-            // Evaluate (Needs to be done before the bloat control methods are executed)
-            ProgramSolution currentGenBest = performEvaluation();
-
-            // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-            if(this.task.problem.getBloatControlOperators().length > 0) {
-                for (ProgramSolution solution : this.population) {
-                    this.task.problem.executeBloatedControlOperators(solution);
+                if(this.best.getObjective(0) <= this.population.get(0).getObjective(0)){
+                    this.currentPopulation.add(new ProgramSolution(this.best));
+                    eliteCountMod--;
                 }
 
-                // Reevaluate population
-                currentGenBest = performEvaluation();
-            }
-            this.bestGenFitnesses.add(currentGenBest.getEval());
-
-            // Check stop criterion and increment number of iterations
-            if (this.task.isStopCriterion())
+                for (int i = 0; i < eliteCountMod; i++) {
+                    this.currentPopulation.add(new ProgramSolution(population.get(i)));
+                }
                 break;
+            case SELECTION_AND_CROSSOVER:
+                this.parentPopulation.addAll(performselection(this.offspringCount));
+                performCrossover();
 
+                break;
+            case MUTATION:
+                performMutation();
+                break;
+            case EVALUATION:
+                ProgramSolution currentGenBest = performEvaluation();
+                this.bestGenFitnesses.add(currentGenBest.getEval());
+                if(this.isDebug()){
+                    this.bestOverallFitnesses.add(this.best.getEval());
+                    double sum = 0;
+                    for (ProgramSolution sol: this.population) {
+                        sum += sol.getEval();
+                    }
+                    this.avgGenFitnesses.add(sum / this.population.size());
+
+                    // add current avg tree depth to list
+                    double avgDepth = 0;
+                    for (ProgramSolution sol: this.population) {
+                        avgDepth += sol.getTree().treeMaxDepth();
+                    }
+                    this.avgGenTreeDepths.add(avgDepth / this.population.size());
+
+                    // add current avg tree size to list
+                    double avgSize = 0;
+                    for (ProgramSolution sol: this.population) {
+                        avgSize += sol.getTree().treeSize();
+                    }
+                    this.avgGenTreeSizes.add(avgSize / this.population.size());
+
+                }
+
+                // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
+                if(this.task.problem.getBloatControlOperators().length > 0) {
+                    for (ProgramSolution solution : this.population) {
+                        this.task.problem.executeBloatedControlOperators(solution);
+                    }
+
+                    // Reevaluate population
+                    currentGenBest = performEvaluation();
+                }
+                this.bestGenFitnesses.add(currentGenBest.getEval());
+
+                break;
+            default:
+                System.out.println("Unknown algorithm step, skipping...");
+        }
+        if(this.algorithmStepper.isLastStep()){
             this.task.incrementNumberOfIterations();
         }
-        //this.population.sort(this.comparator);
-        //System.out.println("Best solution (Pop): " + this.population.get(0).getEval());
-        //System.out.println("Best solution (Task): " + this.task.bestSolution.getEval());
-        //return this.population.get(0);
-        return this.best;
+        this.algorithmStepper.stepForward();
+        return null;
+    }
+
+    @Override
+    public ProgramSolution executeGeneration() throws StopCriterionException {
+        int currentGeneration = this.task.getNumberOfIterations();
+        while(!this.task.isStopCriterion() && this.task.getNumberOfIterations() == currentGeneration){
+            executeStep();
+        }
+        if(this.task.isStopCriterion()){
+            return this.best;
+        }
+        return null;
+    }
+
+    @Override
+    public ProgramSolution getBest() {
+        return best;
+    }
+
+    @Override
+    public List<ProgramSolution> getPopulation() {
+        return population;
+    }
+
+    @Override
+    public void setPopulation(List<ProgramSolution> population) {
+        this.population = population;
+    }
+
+    @Override
+    public void setPopSize(int popSize) {
+        this.popSize = popSize;
+        setElitismParams();
+    }
+
+    @Override
+    public int getPopSize() {
+        return popSize;
+    }
+
+    @Override
+    public void setCrossoverProbability(double crossoverProbability) {
+        this.crossoverProbability = crossoverProbability;
+    }
+
+    @Override
+    public void setElitismProbability(double elitismProbability) {
+        this.elitismProbability = elitismProbability;
+        setElitismParams();
+    }
+
+    @Override
+    public double getCrossoverProbability() {
+        return crossoverProbability;
+    }
+
+    @Override
+    public void setMutationProbability(double mutationProbability) {
+        this.mutationProbability = mutationProbability;
+    }
+
+    @Override
+    public double getMutationProbability() {
+        return mutationProbability;
+    }
+
+    @Override
+    public void setNumberOfTournaments(int numberOfTournaments) {
+        this.numberOfTournaments = numberOfTournaments;
+    }
+
+    @Override
+    public int getNumberOfTournaments() {
+        return numberOfTournaments;
+    }
+
+    @Override
+    public double getElitismProbability() {
+        return elitismProbability;
     }
 
     @Override
@@ -319,182 +450,21 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         return currentGenBest;
     }
 
-    @Override
-    public ProgramSolution getBest() {
-        return best;
-    }
-
-    @Override
-    public ProgramSolution executeStep() throws StopCriterionException {
-        if (this.task.isStopCriterion()){
-            return this.best;
-        }
-
-        switch (this.algorithmStepper.getCurrentValue()){
-            case INITIALIZATION:
-                if(this.task == null)
-                    throw new StopCriterionException("Algorithm task not set");;
-                algorithmInitialization(this.task, new ProblemComparator<>(this.task.problem), null);
-                populationInitialization();
-                break;
-            case ELITISM:
-                // Initialize the population of current generation
-                this.currentPopulation = new ArrayList<>(this.population.size());
-
-                // Elitism phase
-                // Sort population by fitness
-                this.population.sort(this.comparator);
-
-                // Copy eliteCount best individuals to the next generation
-                this.parentPopulation = new ArrayList<>();
-
-                int eliteCountMod = this.eliteCount;
-
-                if(this.best.getObjective(0) <= this.population.get(0).getObjective(0)){
-                    this.currentPopulation.add(new ProgramSolution(this.best));
-                    eliteCountMod--;
-                }
-
-                for (int i = 0; i < eliteCountMod; i++) {
-                    this.currentPopulation.add(new ProgramSolution(population.get(i)));
-                }
-                break;
-            case SELECTION_AND_CROSSOVER:
-                this.parentPopulation.addAll(performselection(this.offspringCount));
-                performCrossover();
-
-                //performSelectionAndCrossover(this.offspringCount);
-                break;
-            case MUTATION:
-                performMutation();
-                break;
-            case EVALUATION:
-                ProgramSolution currentGenBest = performEvaluation();
-                this.bestGenFitnesses.add(currentGenBest.getEval());
-                if(this.isDebug()){
-                    this.bestOverallFitnesses.add(this.best.getEval());
-                    double sum = 0;
-                    for (ProgramSolution sol: this.population) {
-                        sum += sol.getEval();
-                    }
-                    this.avgGenFitnesses.add(sum / this.population.size());
-
-                    // add current avg tree depth to list
-                    double avgDepth = 0;
-                    for (ProgramSolution sol: this.population) {
-                        avgDepth += sol.getTree().treeMaxDepth();
-                    }
-                    this.avgGenTreeDepths.add(avgDepth / this.population.size());
-
-                    // add current avg tree size to list
-                    double avgSize = 0;
-                    for (ProgramSolution sol: this.population) {
-                        avgSize += sol.getTree().treeSize();
-                    }
-                    this.avgGenTreeSizes.add(avgSize / this.population.size());
-
-                }
-
-                // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-                if(this.task.problem.getBloatControlOperators().length > 0) {
-                    for (ProgramSolution solution : this.population) {
-                        this.task.problem.executeBloatedControlOperators(solution);
-                    }
-
-                    // Reevaluate population
-                    currentGenBest = performEvaluation();
-                }
-                this.bestGenFitnesses.add(currentGenBest.getEval());
-
-                break;
-            default:
-                System.out.println("Unknown algorithm step, skipping...");
-        }
-        if(this.algorithmStepper.isLastStep()){
-            this.task.incrementNumberOfIterations();
-        }
-        this.algorithmStepper.stepForward();
-        return null;
-    }
-
-    @Override
-    public ProgramSolution executeGeneration() throws StopCriterionException {
-        int currentGeneration = this.task.getNumberOfIterations();
-        while(!this.task.isStopCriterion() && this.task.getNumberOfIterations() == currentGeneration){
-            executeStep();
-        }
-        if(this.task.isStopCriterion()){
-            return this.best;
-        }
-        return null;
-    }
-
-    @Override
-    public List<ProgramSolution> getPopulation() {
-        return population;
-    }
-
-    @Override
-    public void setPopulation(List<ProgramSolution> population) {
-        this.population = population;
-    }
-
-    @Override
-    public void setPopSize(int popSize) {
-        this.popSize = popSize;
-        setElitismParams();
-    }
-
-    @Override
-    public int getPopSize() {
-        return popSize;
-    }
-
-    @Override
-    public void setCrossoverProbability(double crossoverProbability) {
-        this.crossoverProbability = crossoverProbability;
-    }
-
-    @Override
-    public void setElitismProbability(double elitismProbability) {
-        this.elitismProbability = elitismProbability;
-        setElitismParams();
-    }
-
-    @Override
-    public double getCrossoverProbability() {
-        return crossoverProbability;
-    }
-
-    @Override
-    public void setMutationProbability(double mutationProbability) {
-        this.mutationProbability = mutationProbability;
-    }
-
-    @Override
-    public double getMutationProbability() {
-        return mutationProbability;
-    }
-
-    @Override
-    public void setNumberOfTournaments(int numberOfTournaments) {
-        this.numberOfTournaments = numberOfTournaments;
-    }
-
-    @Override
-    public int getNumberOfTournaments() {
-        return numberOfTournaments;
-    }
-
-    @Override
-    public double getElitismProbability() {
-        return elitismProbability;
-    }
-
-    void setElitismParams(){
+    public void setElitismParams(){
         this.eliteCount = (int) Math.round(this.elitismProbability * this.popSize);
         if((this.eliteCount % 2) != 0)
             this.eliteCount++; // Because of crossover operator we need to have even number of elite individuals
         this.offspringCount = this.popSize - this.eliteCount;
+    }
+
+    private void createEncapsulatedNode(EncapsulatedNodeConfigDefinition encapsNodeConfigDef) {
+        int encapsulatedNodeFrequency = encapsNodeConfigDef.EncapsulatedNodeFrequency;
+
+        // Sort population by fitness
+        this.population.sort(this.comparator);
+
+        for (int i = 0; i < encapsulatedNodeFrequency; i++){
+            encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition(encapsNodeConfigDef.EncapsulatedNodeName, this.population.get(i).getTree().getRootNode().clone()));
+        }
     }
 }

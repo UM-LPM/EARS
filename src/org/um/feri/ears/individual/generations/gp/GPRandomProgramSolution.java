@@ -21,11 +21,9 @@ public class GPRandomProgramSolution extends GPProgramSolution {
 
     private ProgramProblem programProblem;
 
-    private List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions;
 
     public GPRandomProgramSolution() {
         super();
-        this.encapsulatedNodeDefinitions = new ArrayList<>();
     }
 
     public GPRandomProgramSolution(List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions){
@@ -86,22 +84,6 @@ public class GPRandomProgramSolution extends GPProgramSolution {
 
             return newNode;
         }
-
-        /*if(programProblem.getBaseFunctionNodeTypes().isEmpty() || programProblem.getBaseTerminalNodeTypes().isEmpty()) {
-            throw new RuntimeException("Cannot generate a tree with no node types");
-        }
-        if (programProblem.getMaxTreeDepth() == depth || (depth >= programProblem.getMinTreeDepth() && RNG.nextBoolean())) {
-            // Base case: return a terminal node
-            return generateRandomNode(programProblem.getBaseTerminalNodeTypes());
-        } else {
-            // Recursive case: return a function node
-            Node node = generateRandomNode(programProblem.getBaseFunctionNodeTypes());
-            int numOfChildren = node.getFixedNumOfChildren()? node.getArity() : (RNG.nextInt((node.getArity() - 1) + 1) + 1);
-            for (int i = 0; i < numOfChildren; i++) {
-                node.insert(i, generateRandomTree(depth + 1)); // TODO check!!!
-            }
-            return node;
-        }*/
     }
 
     private Node generateRandomNode(List<Class<? extends Node>> nodeTypes) {
@@ -122,26 +104,4 @@ public class GPRandomProgramSolution extends GPProgramSolution {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * Assigns a random EncapsulatedNodeDefinition to a EncapsulatedNode (If passed Node is not a EncapsulatedNode, it will be returned as is)
-     * @param node Node to assign EncapsulatedNodeDefinition to
-     * @return Modified Node
-     */
-    private Node assignEncapsulatedNodeToEncapsulatedNode(Node node) {
-        if(node instanceof EncapsulatedNode encapsulatedNode){
-            if(encapsulatedNodeDefinitions.isEmpty()){
-                throw new RuntimeException("EncapsulatedNodeDefinitions are empty");
-            }
-            // Select a random EncapsulatedNodeDefinition and set it to EncapsulatedNode
-            EncapsulatedNodeDefinition encapsulatedNodeDefinition = encapsulatedNodeDefinitions.get(RNG.nextInt(encapsulatedNodeDefinitions.size()));
-            encapsulatedNode.setEncapsulatedNode(encapsulatedNodeDefinition.getEncapsulatedNodeName(), encapsulatedNodeDefinition.getGoalNodeBehaviour().clone());
-        }
-        return node;
-    }
-
-    public void setGoalNodeDefinitions(List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions) {
-        this.encapsulatedNodeDefinitions = encapsulatedNodeDefinitions;
-    }
-
 }

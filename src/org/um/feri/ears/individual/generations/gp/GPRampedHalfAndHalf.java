@@ -59,7 +59,6 @@ public class GPRampedHalfAndHalf extends GPProgramSolution {
     }
 
     public Node generateRampedTreeFull(int depth, int finalDepth) {
-        // TODO Test this !!!!
         if(programProblem.getBaseFunctionNodeTypes().isEmpty() || programProblem.getBaseTerminalNodeTypes().isEmpty()) {
             throw new RuntimeException("Cannot generate a tree with no node types");
         }
@@ -80,7 +79,6 @@ public class GPRampedHalfAndHalf extends GPProgramSolution {
     }
 
     public Node generateRampedTreeGrow(int depth, int finalDepth) {
-        // TODO Test this !!!!
         if(programProblem.getBaseFunctionNodeTypes().isEmpty() || programProblem.getBaseTerminalNodeTypes().isEmpty()) {
             throw new RuntimeException("Cannot generate a tree with no node types");
         }
@@ -121,7 +119,8 @@ public class GPRampedHalfAndHalf extends GPProgramSolution {
     private Node generateRandomNode(Class<? extends Node> nodeType) {
         try {
             // Create a new instance from base constructor of the randomly chosen Node type
-            return nodeType.getDeclaredConstructor().newInstance();
+            //return nodeType.getDeclaredConstructor().newInstance();
+            return assignEncapsulatedNodeToEncapsulatedNode(nodeType.getDeclaredConstructor().newInstance());
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }

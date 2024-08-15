@@ -189,7 +189,7 @@ public class GPInterface extends JFrame {
             else {
                 try {
                     int numOfGens = Integer.parseInt(runXAlgGensTextField.getText());
-                    gpAlgorithmExecutor.runGPAlgorithm(numOfGens, saveGPAlgorithmStatsFilename.getText());
+                    gpAlgorithmExecutor.execute(numOfGens, saveGPAlgorithmStatsFilename.getText());
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Please enter a valid number of generations to run (-1 for run to the end).", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -656,66 +656,6 @@ public class GPInterface extends JFrame {
         }
     }
 
-    // TODO Move this part to new Class GPAlgorithmExecutor
-    /*private void initializeGpAlgorithmStateSymbolicRegression(String initialStateFile) {
-        java.util.List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
-                AddNode.class,
-                DivNode.class,
-                MulNode.class,
-                SubNode.class
-        );
-
-        java.util.List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
-                ConstNode.class,
-                VarNode.class
-        );
-
-        VarNode.variables = Arrays.asList("x");
-
-
-        // y=x^3 + 2x^2 + 8x + 12
-        //Util.list( new Target().when("x", 0).targetIs(12),
-        //        new Target().when("x", 1).targetIs(23),
-        //        new Target().when("x", 2).targetIs(44),
-        //        new Target().when("x", 3).targetIs(81),
-        //        new Target().when("x", 4).targetIs(140),
-        //        new Target().when("x", 5).targetIs(227),
-        //        new Target().when("x", 6).targetIs(348),
-        //        new Target().when("x", 7).targetIs(509),
-        //        new Target().when("x", 8).targetIs(716),
-        //        new Target().when("x", 9).targetIs(975),
-        //        new Target().when("x", 10).targetIs(1292)),
-
-
-        List<Target> evalData = Util.list( new Target().when("x", 0).targetIs(0),
-                new Target().when("x", 1).targetIs(11),
-                new Target().when("x", 2).targetIs(24),
-                new Target().when("x", 3).targetIs(39),
-                new Target().when("x", 4).targetIs(56),
-                new Target().when("x", 5).targetIs(75),
-                new Target().when("x", 6).targetIs(96),
-                new Target().when("x", 7).targetIs(119),
-                new Target().when("x", 8).targetIs(144),
-                new Target().when("x", 9).targetIs(171),
-                new Target().when("x", 10).targetIs(200));
-
-        if(initialStateFile != null) {
-            this.gpAlgorithm = GPAlgorithm.deserializeAlgorithmState(initialStateFile);
-            this.task = this.gpAlgorithm.getTask();
-            this.programProblem = this.task.problem;
-        }
-        else {
-            this.programProblem = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 12, 12, 100, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                    new GPOperator[]{}, new GPRandomProgramSolution(), evalData);
-            this.task = new Task<>(programProblem, StopCriterion.EVALUATIONS, 10000, 0, 0);
-
-            this.gpAlgorithm =  new DefaultGPAlgorithm(300, 0.90, 0.1, 2, this.task, null);
-            //this.gpAlgorithm =  new ElitismGPAlgorithm(100, 0.8,0.05, 0.1, 4, this.task, null); // Collector_conf_4
-        }
-        this.gpAlgorithm.setDebug(true);
-    }*/
-
-
     public void clearImages(){
         try {
             Files.walk(Paths.get(this.imgPathPrefix))
@@ -736,6 +676,7 @@ public class GPInterface extends JFrame {
 
     public void runConfigurations(){
         this.gpAlgorithmExecutor.runConfigurations(configurationFileTextField.getText(), saveGPAlgorithmStatsFilename.getText());
+        updateUI(false);
     }
 
     public void initializeGPAlgorithmExecutor(){
@@ -768,7 +709,7 @@ public class GPInterface extends JFrame {
     }
 
     public void setSaveGPAlgorithmStatsFilename(){
-        gpAlgorithmExecutor.getDefaultGPAlgorithmStateFilename();
+        saveGPAlgorithmStatsFilename.setText(gpAlgorithmExecutor.getDefaultGPAlgorithmStateFilename());
     }
     
     public static void main(String[] args) {

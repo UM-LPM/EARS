@@ -14,6 +14,8 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
+import org.um.feri.ears.util.Configuration;
+import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 
@@ -177,6 +179,28 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
     }
 
     @Override
+    public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration, String saveGPAlgorithmStateFilename) throws StopCriterionException {
+        System.out.println("Run configuration: (" + runConfiguration.Name + ")");
+
+        // Set EARS configuration
+        int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
+
+        // Save Unity configuration
+        Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+
+        // Start Unity Instances
+        gpAlgorithmExecutor.restartUnityInstances();
+
+        // Run algorithm for X generations
+        execute(generations, saveGPAlgorithmStateFilename);
+
+        System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
+
+        // 3. Return best solution
+        return this.best;
+    }
+
+    @Override
     public void resetToDefaultsBeforeNewRun() {
         this.algorithmStepper.reset();
         if(this.task != null){
@@ -225,31 +249,6 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
 
         algorithmInitialization(task, new ProblemComparator<>(task.problem), null); // TODO add support for selection operator
     }
-
-    /*public void performSelectionAndCrossover(int offspringCount) throws StopCriterionException {
-        ProgramSolution[] parents = new ProgramSolution[2];
-        // Selection and Crossover
-        for (int i = 0; i < offspringCount / 2; i++) {
-            parents[0] = this.selectionOperator.execute(population, task.problem);
-            parents[1] = this.selectionOperator.execute(population, task.problem);
-
-            //selectedIndividuals.add(parents[0]);
-            //selectedIndividuals.add(parents[1]);
-            try {
-                ProgramSolution[] newSolution = this.crossoverOperator.execute(parents, task.problem);
-                currentPopulation.add(newSolution[0]);
-
-                // Additional check if start pop is set to odd number
-                if(currentPopulation.size() == this.popSize)
-                    break;
-
-                currentPopulation.add(newSolution[1]);
-            } catch (Exception ex) {
-                throw new StopCriterionException(ex.toString());
-            }
-        }
-    }*/
-
     public List<ProgramSolution> performselection(int parentCount){
         List<ProgramSolution> parentSolutions = new ArrayList<>();
         // Execute selection operator to get all parents

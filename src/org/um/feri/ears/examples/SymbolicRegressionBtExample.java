@@ -440,7 +440,7 @@ public class SymbolicRegressionBtExample { // TODO remove
 
             List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions = new ArrayList<>(); // Define goal nodes
             encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition("GoalNode1", programSolutions.get(0).getTree().getRootNode()));
-            randomProgramSolution.setGoalNodeDefinitions(encapsulatedNodeDefinitions);
+            randomProgramSolution.setEncapsulatedNodeDefinitions(encapsulatedNodeDefinitions);
 
             sgp2.setBaseTerminalNodeTypes(baseTerminalNodeTypes2);
 

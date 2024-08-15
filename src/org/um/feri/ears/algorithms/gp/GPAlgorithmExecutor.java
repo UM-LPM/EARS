@@ -62,7 +62,8 @@ public class GPAlgorithmExecutor {
         ProgramProblem programProblem = null;
         if(evalData != null && evalData.size() > 0){
             // Symbolic regression problem
-            programProblem = new SymbolicRegressionProblem(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityGPOperators, bloatControlOperators, programSolutionGenerator, evalData);
+            // TODO Add support for Symbolic regression
+            //programProblem = new SymbolicRegressionProblem(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityGPOperators, bloatControlOperators, programSolutionGenerator, evalData);
         }
         else{
             // Behavior tree problem
@@ -169,8 +170,17 @@ public class GPAlgorithmExecutor {
             configuration = Configuration.deserialize(configurationFile);
         }
 
+        try {
+            for (int i = 0; i < configuration.Configurations.size(); i++) {
+                gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename);
+            }
+        } catch (StopCriterionException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        // TODO Remove this
         // Run final configurations with meta nodes
-        for (int i = 0; i < configuration.Configurations.size(); i++) {
+        /*for (int i = 0; i < configuration.Configurations.size(); i++) {
             RunConfiguration runConfiguration = configuration.Configurations.get(i);
             System.out.println("Run configuration: " + i + " (" + runConfiguration.Name + ")");
 
@@ -187,40 +197,11 @@ public class GPAlgorithmExecutor {
             runGPAlgorithm(generations, saveGPAlgorithmStateFilename);
 
             System.out.println("Run configuration: " + i + " (" + runConfiguration.Name + ") done");
-        }
+        }*/
     }
 
-    public void runGPAlgorithm(int numOfGens, String saveGPAlgorithmStateFilename) {
-        try {
-            try {
-                if (numOfGens <= 0)
-                    numOfGens = Integer.MAX_VALUE;
-
-                for (int i = 0; i < numOfGens; i++) {
-                    ProgramSolution sol = gpAlgorithm.executeGeneration();
-                    // Print current gpAlgorithm statistics to console
-                    if(this.gpAlgorithm.isDebug()){
-                        System.out.println("Generation: " + gpAlgorithm.getTask().getNumberOfIterations() + ", Best Fitness: " + gpAlgorithm.getBest().getEval() + ", Avg Fitness: " + gpAlgorithm.getAvgGenFitnesses().get(gpAlgorithm.getAvgGenFitnesses().size() - 1) + ", Avg Tree Depth: " + gpAlgorithm.getAvgGenTreeDepths().get(gpAlgorithm.getAvgGenTreeDepths().size() - 1) + ", Avg Tree Size: " + gpAlgorithm.getAvgGenTreeSizes().get(gpAlgorithm.getAvgGenTreeSizes().size() - 1));
-                        System.out.println("Best Individual: " + gpAlgorithm.getBest().getTree().toJsonString());
-                    }
-
-                    if (saveGPAlgorithmStateFilename == null || saveGPAlgorithmStateFilename.length() == 0) {
-                        // Serialize algorithm state
-                        GPAlgorithm.serializeAlgorithmState(gpAlgorithm, getDefaultGPAlgorithmStateFilename());
-                    } else {
-                        // Serialize algorithm state
-                        GPAlgorithm.serializeAlgorithmState(gpAlgorithm, saveGPAlgorithmStateFilename);
-                    }
-                    if (sol != null)
-                        break;
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Please enter a valid number of generations to run (-1 for run to the end).", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        } catch (StopCriterionException ex) {
-            throw new RuntimeException(ex);
-        }
+    public void execute(int numOfGens, String saveGPAlgorithmStateFilename) {
+        gpAlgorithm.execute(numOfGens, saveGPAlgorithmStateFilename);
     }
 
     public void restartUnityInstances(){
@@ -285,7 +266,7 @@ public class GPAlgorithmExecutor {
     }
 
     public String getDefaultGPAlgorithmStateFilename(){
-        return getProgramProblem().getName() + "_" + getGpAlgorithm().getPopSize() + "_" + getGpAlgorithm().getCrossoverProbability() + "_" + getGpAlgorithm().getElitismProbability() + "_" + getGpAlgorithm().getMutationProbability() + "_" + getGpAlgorithm().getNumberOfTournaments() + "_" + getProgramProblem().getMinTreeDepth() + "_" + getProgramProblem().getMaxTreeStartDepth() + "_" + getProgramProblem().getMaxTreeEndDepth() + "_" + getProgramProblem().getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser";
+        return gpAlgorithm.getDefaultGPAlgorithmStateFilename();
     }
 
     public String getFormattedDate() {
