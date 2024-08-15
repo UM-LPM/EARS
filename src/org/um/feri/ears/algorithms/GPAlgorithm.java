@@ -1,11 +1,15 @@
 package org.um.feri.ears.algorithms;
 
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
+import org.um.feri.ears.algorithms.gp.GPAlgorithmExecutor;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
+import org.um.feri.ears.util.RunConfiguration;
 
+import javax.swing.*;
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,6 +31,8 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
     public abstract ProgramSolution executeStep() throws StopCriterionException;
 
     public abstract ProgramSolution executeGeneration() throws StopCriterionException;
+
+    public abstract ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration, String saveGPAlgorithmStateFilename) throws StopCriterionException;
 
     public abstract List<ProgramSolution> getPopulation();
 
@@ -89,6 +95,57 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
             userInputThread.start();
         }
 
+    }
+
+    public void execute(int numOfGens, String saveGPAlgorithmStateFilename) {
+        try {
+            try {
+                if (numOfGens <= 0)
+                    numOfGens = Integer.MAX_VALUE;
+
+                for (int i = 0; i < numOfGens; i++) {
+                    ProgramSolution sol = executeGeneration();
+                    // Print current gpAlgorithm statistics to console
+                    if(isDebug()){
+                        System.out.println("Generation: " + getTask().getNumberOfIterations() + ", Best Fitness: " + getBest().getEval() + ", Avg Fitness: " + getAvgGenFitnesses().get(getAvgGenFitnesses().size() - 1) + ", Avg Tree Depth: " + getAvgGenTreeDepths().get(getAvgGenTreeDepths().size() - 1) + ", Avg Tree Size: " + getAvgGenTreeSizes().get(getAvgGenTreeSizes().size() - 1));
+                        System.out.println("Best Individual: " + getBest().getTree().toJsonString());
+                    }
+
+                    if (saveGPAlgorithmStateFilename == null || saveGPAlgorithmStateFilename.length() == 0) {
+                        // Serialize algorithm state
+                        GPAlgorithm.serializeAlgorithmState(this, getDefaultGPAlgorithmStateFilename());
+                    } else {
+                        // Serialize algorithm state
+                        GPAlgorithm.serializeAlgorithmState(this, saveGPAlgorithmStateFilename);
+                    }
+                    if (sol != null)
+                        break;
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Please enter a valid number of generations to run (-1 for run to the end).", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (StopCriterionException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public String getDefaultGPAlgorithmStateFilename(){
+        return task.problem.getName() + "_" + getPopSize() + "_" + getCrossoverProbability() + "_" + getElitismProbability() + "_" + getMutationProbability() + "_" + getNumberOfTournaments() + "_" + task.problem.getMinTreeDepth() + "_" + task.problem.getMaxTreeStartDepth() + "_" + task.problem.getMaxTreeEndDepth() + "_" + task.problem.getMaxTreeSize() + "_gpAlgorithmState_" + getFormattedDate() + ".ser";
+    }
+
+    public String getFormattedDate() {
+        // Get current date
+        LocalDate date = LocalDate.now();
+        // Create a new string builder
+        // Append the day
+        String formattedDate = String.format("%02d", date.getDayOfMonth()) +
+                // Append the month
+                String.format("%02d", date.getMonthValue()) +
+                // Append the year
+                date.getYear();
+
+        return formattedDate;
     }
 
     public static void serializeAlgorithmState(GPAlgorithm gpAlgorithm, String filename) {

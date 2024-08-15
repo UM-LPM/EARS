@@ -8,6 +8,8 @@ import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
+import org.um.feri.ears.util.Configuration;
+import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 
@@ -298,6 +300,28 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
             return this.best;
         }
         return null;
+    }
+
+    @Override
+    public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration, String saveGPAlgorithmStateFilename) throws StopCriterionException {
+        System.out.println("Run configuration: (" + runConfiguration.Name + ")");
+
+        // Set EARS configuration
+        int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
+
+        // Save Unity configuration
+        Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+
+        // Start Unity Instances
+        gpAlgorithmExecutor.restartUnityInstances();
+
+        // Run algorithm for X generations
+        execute(generations, saveGPAlgorithmStateFilename);
+
+        System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
+
+        // 3. Return best solution
+        return this.best;
     }
 
     @Override
