@@ -2,6 +2,7 @@ package org.um.feri.ears.individual.representations.gp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.util.GraphPrinter;
 
 import java.io.Serializable;
@@ -356,39 +357,28 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         return this;
     }
 
-    public void removeInvalidNodes(){
+    public void removeInvalidNodes(ProgramProblem tProgramProblem, int currentDepth){
         // Use an iterator to safely remove elements while iterating
         if (arity > 0 && children != null) {
+            currentDepth++;
             Iterator<Node> iterator = children.iterator();
             while (iterator.hasNext()) {
                 Node child = iterator.next();
-                child.removeInvalidNodes(); // Recursively clean up child nodes
+                child.removeInvalidNodes(tProgramProblem, currentDepth); // Recursively clean up child nodes
+
                 if (child.arity > 0 && (child.children == null || child.children.isEmpty())) {
-                    System.out.println("Removing invalid node: ");
-                    iterator.remove(); // Remove the child if it has an arity > 0 but no children
+                    if(currentDepth == tProgramProblem.getMinTreeDepth()){
+                        //System.out.println("Replacing node: " + name + " with a random terminal node");
+                        Node newNode = tProgramProblem.getProgramSolutionGenerator().generateRandomTerminalNode(tProgramProblem);
+                        replace(child, newNode);
+                    }
+                    else {
+                        //System.out.println("Removing invalid node: " + name);
+                        iterator.remove();
+                    }
                 }
             }
         }
-
-        /*if(arity > 0){
-            for (Iterator<Node> it = children.iterator(); it.hasNext();) {
-                Node next = it.next();
-                next.removeEmptyNodes();
-            }
-        }
-        if(arity > 0 && children.isEmpty()){
-            detach(false);
-        }*/
-
-        /*if(arity > 0 && children != null){
-            for(int i = 0; i < children.size(); i++){
-                Node child = children.get(i);
-                child.removeEmptyNodes();
-            }
-        }
-        else if((this.children == null || this.children.isEmpty()) && this.arity > 0){
-            detach(false);
-        }*/
     }
 
     private void createChildrenIfMissing() {

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
+import org.um.feri.ears.algorithms.gp.PredefinedEncapsNodesGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
@@ -425,7 +426,7 @@ public class SymbolicRegressionBtExample { // TODO remove
                 Rotate.class,
                 Shoot.class,
                 RotateTurret.class,
-                EncapsulatedNode.class
+                Encapsulator.class
         );
 
         for (int i =0; i < 1; i++) {
@@ -449,14 +450,22 @@ public class SymbolicRegressionBtExample { // TODO remove
             programSolutions.get(0).getTree().displayTree("TestBTree1", false);
             programSolutions.get(1).getTree().displayTree("TestBTree2", false);
 
-            // Test GP Operators with EncapsulatedNode
+            // Test GP Operators with Encapsulator
             // Mutation operator
-            if(false) {
+            if(true) {
                 System.out.println("GPSubtreeMutation execution");
                 GPSubtreeMutation gpsm = new GPSubtreeMutation(1.0);
                 ProgramSolution mutationSolution = gpsm.execute(programSolutions.get(1), sgp2);
 
                 mutationSolution.getTree().displayTree("TestBTree3", false);
+
+
+                /*Task<ProgramSolution, ProgramProblem> task = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
+                PredefinedEncapsNodesGPAlgorithm alg = new PredefinedEncapsNodesGPAlgorithm(100, 0.95, 0.025, 2, 4, task, null);
+                alg.setPopulation(new ArrayList<>(List.of(programSolutions.get(1), mutationSolution)));
+                GPAlgorithm.serializeAlgorithmState(alg, "gpAlgorithmTest.ser");*/
+
+                System.out.println(mutationSolution.getTree().toJsonString());
             }
 
             // Crossover operator
@@ -498,7 +507,7 @@ public class SymbolicRegressionBtExample { // TODO remove
                 }
 
                 programSolutions.get(1).setNodeCallFrequencyCount(nodeCallFrequency);
-                GPNodeCallFrequencyCountPruningOperator gpnf = new GPNodeCallFrequencyCountPruningOperator(60,0.5);
+                GPNodeCallFrequencyCountPruningOperator gpnf = new GPNodeCallFrequencyCountPruningOperator(65,0.5);
                 ProgramSolution nodeCallFrequencySolution = gpnf.execute(programSolutions.get(1), sgp2);
 
                 nodeCallFrequencySolution.getTree().displayTree("TestBTree3", false);

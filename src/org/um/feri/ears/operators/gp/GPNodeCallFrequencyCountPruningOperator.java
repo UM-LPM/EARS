@@ -46,7 +46,7 @@ public class GPNodeCallFrequencyCountPruningOperator extends GPOperator {
             }
         }
 
-        tProgramSolution.getTree().removeInvalidNodes();
+        tProgramSolution.getTree().removeInvalidNodes(tProgramProblem);
 
         return tProgramSolution;
     }

@@ -4,8 +4,7 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.AlgorithmStepper;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.GPAlgorithm;
-import org.um.feri.ears.individual.representations.gp.Node;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNode;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.Encapsulator;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNodeDefinition;
 import org.um.feri.ears.operators.Selection;
 import org.um.feri.ears.operators.TournamentSelection;
@@ -20,6 +19,7 @@ import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.Configuration;
 import org.um.feri.ears.util.EncapsulatedNodeConfigDefinition;
 import org.um.feri.ears.util.RunConfiguration;
+import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 
@@ -63,7 +63,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     private int offspringCount;
 
     List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions;
-
 
     public PredefinedEncapsNodesGPAlgorithm() {
         this(100, 0.90, 0.05, 0.025, 2, null, null);
@@ -111,7 +110,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     @Override
     public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration,  String saveGPAlgorithmStateFilename) throws StopCriterionException {
-        // TODO Implement this
 
         // 1. Run evolution for predefined encapsulated node definitions to find corresponding behavior trees
         encapsulatedNodeDefinitions.clear();
@@ -128,10 +126,10 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 Configuration.serializeUnityConfig(encapsNodeRunConf, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
                 // Start Unity Instances
-                gpAlgorithmExecutor.restartUnityInstances();
+                gpAlgorithmExecutor.restartUnityInstances(true);
 
                 // Run algorithm for X generations
-                execute(generations, saveGPAlgorithmStateFilename);
+                execute(generations, null);
 
                 // Apply some prunning/bloat methods to shrink final size
                 // TODO TODO TODO TODO
@@ -141,10 +139,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
                 System.out.println("Run configuration (Encapsulated node): " + encapsNodeRunConf.Name + " done");
             }
-
-            // 2. Extend terminal set with encapsulated node
-            gpAlgorithmExecutor.getProgramProblem().getBaseTerminalNodeTypes().add(EncapsulatedNode.class);
-            gpAlgorithmExecutor.getProgramProblem().getProgramSolutionGenerator().addEncapsulatedNodeDefinition(encapsulatedNodeDefinitions);
         }
 
         // 3. Run GP algorithm with extended terminal set
@@ -153,14 +147,20 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Set EARS configuration
         int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
 
+        if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0) {
+            // 2. Extend terminal set with encapsulated node
+            task.problem.getBaseTerminalNodeTypes().add(Encapsulator.class);
+            task.problem.getProgramSolutionGenerator().addEncapsulatedNodeDefinition(encapsulatedNodeDefinitions);
+        }
+
         // Save Unity configuration
         Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
         // Start Unity Instances
-        gpAlgorithmExecutor.restartUnityInstances();
+        gpAlgorithmExecutor.restartUnityInstances(true);
 
         // Run algorithm for X generations
-        execute(generations, saveGPAlgorithmStateFilename);
+        execute(generations, null);
 
         System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
 
@@ -279,6 +279,11 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     }
 
     @Override
+    public ProblemComparator<ProgramSolution> getComparator() {
+        return comparator;
+    }
+
+    @Override
     public List<ProgramSolution> getPopulation() {
         return population;
     }
@@ -301,12 +306,12 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     @Override
     public void setCrossoverProbability(double crossoverProbability) {
-        this.crossoverProbability = crossoverProbability;
+        this.crossoverProbability = Util.roundDouble(crossoverProbability,3);
     }
 
     @Override
     public void setElitismProbability(double elitismProbability) {
-        this.elitismProbability = elitismProbability;
+        this.elitismProbability = Util.roundDouble(elitismProbability,3);
         setElitismParams();
     }
 
@@ -317,7 +322,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     @Override
     public void setMutationProbability(double mutationProbability) {
-        this.mutationProbability = mutationProbability;
+        this.mutationProbability = Util.roundDouble(mutationProbability,3);
     }
 
     @Override
@@ -463,6 +468,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Sort population by fitness
         this.population.sort(this.comparator);
 
+        // Create encapsulated node definitions
         for (int i = 0; i < encapsulatedNodeFrequency; i++){
             encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition(encapsNodeConfigDef.EncapsulatedNodeName, this.population.get(i).getTree().getRootNode().clone()));
         }

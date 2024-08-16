@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
+import org.um.feri.ears.problems.gp.ProgramProblem;
+import org.um.feri.ears.problems.gp.ProgramSolution;
 
 import java.io.Serializable;
 import java.util.*;
@@ -128,8 +130,8 @@ public abstract class Tree implements Serializable {
         rootNode.removeAncestorAt(index, removeEmptyParent);
     }
 
-    public void removeInvalidNodes(){
-        rootNode.removeInvalidNodes();
+    public void removeInvalidNodes(ProgramProblem tProgramProblem){
+        rootNode.removeInvalidNodes(tProgramProblem, 1);
     }
 
     public void printTree(){

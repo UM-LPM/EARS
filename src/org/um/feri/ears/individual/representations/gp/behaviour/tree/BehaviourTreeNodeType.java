@@ -6,7 +6,7 @@ public enum BehaviourTreeNodeType {
     SELECTOR("Selector"),
     SEQUENCER("Sequencer"),
     INVERTER("Inverter"),
-    ENCAPSULATED_NODE("EncapsulatedNode"),
+    ENCAPSULATED_NODE("Encapsulator"),
     MOVE_FORWARD("MoveForward"),
     MOVE_SIDE("MoveSide"),
     ROTATE("Rotate"),

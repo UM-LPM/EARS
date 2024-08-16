@@ -1,13 +1,11 @@
 package org.um.feri.ears.visualization.gp;
 
 import org.um.feri.ears.algorithms.GPAlgorithm;
-import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.ElitismGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.GPAlgorithmExecutor;
 import org.um.feri.ears.individual.generations.gp.GPRampedHalfAndHalf;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
-import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Inverter;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Selector;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Sequencer;
@@ -15,11 +13,8 @@ import org.um.feri.ears.individual.representations.gp.behaviour.tree.robostrike.
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.MoveForward;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.sensors.RayHitObject;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.Rotate;
-import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
 import org.um.feri.ears.operators.gp.*;
-import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
-import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.*;
 import org.um.feri.ears.visualization.gp.components.GraphPanel;
@@ -31,11 +26,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.time.LocalDate;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -103,6 +95,7 @@ public class GPInterface extends JFrame {
     private JTextField seqSelNumOfChildrenTextField;
     private JTextField functionsTextField;
     private JTextField terminalsTextField;
+    private JCheckBox displayPopulationCheckBox;
 
     private String lastUuid;
 
@@ -130,7 +123,7 @@ public class GPInterface extends JFrame {
         initializeGPAlgorithmExecutor();
 
         updateGPAlgorithmParamsUI();
-        updateUI(false);
+        updateUI();
 
         setSaveGPAlgorithmStatsFilename();
 
@@ -158,7 +151,7 @@ public class GPInterface extends JFrame {
                 public void run() {
                     // Reset algorithm
                     gpAlgorithmExecutor.getGpAlgorithm().resetToDefaultsBeforeNewRun();
-                    updateUI(true);
+                    updateUI();
                     individualImagePanelMouseClicked(null, null, -1);
                 }
             });
@@ -168,7 +161,7 @@ public class GPInterface extends JFrame {
             // Run one step
             try {
                 gpAlgorithmExecutor.getGpAlgorithm().executeStep();
-                updateUI(true);
+                updateUI();
             } catch (StopCriterionException ex) {
                 throw new RuntimeException(ex);
             }
@@ -177,7 +170,7 @@ public class GPInterface extends JFrame {
             // Run one generation
             try {
                 gpAlgorithmExecutor.getGpAlgorithm().executeGeneration();
-                updateUI(true);
+                updateUI();
             } catch (StopCriterionException ex) {
                 throw new RuntimeException(ex);
             }
@@ -187,12 +180,13 @@ public class GPInterface extends JFrame {
                 runConfigurations();
             }
             else {
-                try {
+                JOptionPane.showMessageDialog(null, "Load configuration first", "Error", JOptionPane.ERROR_MESSAGE);
+                /*try {
                     int numOfGens = Integer.parseInt(runXAlgGensTextField.getText());
                     gpAlgorithmExecutor.execute(numOfGens, saveGPAlgorithmStatsFilename.getText());
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Please enter a valid number of generations to run (-1 for run to the end).", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                }*/
             }
         });
 
@@ -222,7 +216,7 @@ public class GPInterface extends JFrame {
             }
 
             updateGPAlgorithmParamsUI();
-            updateUI(true);
+            updateUI();
         });
     }
 
@@ -382,6 +376,7 @@ public class GPInterface extends JFrame {
                     // Update UI with configuration values (load fist configuration)
                     gpAlgorithmExecutor.loadDefaultConfiguration();
                     updateGPAlgorithmParamsUI();
+                    updateUI();
                 }
                 catch (Exception ex){
                     JOptionPane.showMessageDialog(null, "Error loading configuration file.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -476,7 +471,7 @@ public class GPInterface extends JFrame {
         selectedIndividualHorizontalHistogramPanel = new HorizontalHistogramPanel();
     }
 
-    public void updateUI(boolean updatePopulation) {
+    public void updateUI() {
         // Update generation number
         genNumLabel.setText("" + gpAlgorithmExecutor.getTask().getNumberOfIterations());
         fitnesEvalNumLabel.setText("" + gpAlgorithmExecutor.getTask().getNumberOfEvaluations());
@@ -489,10 +484,13 @@ public class GPInterface extends JFrame {
         this.bestGenerationFitnessGraphPanel.setScores(gpAlgorithmExecutor.getGpAlgorithm().getBestGenFitnesses());
 
         // Update population list
-        //displayPopulation(updatePopulation);
+        displayPopulation(displayPopulationCheckBox.isSelected());
 
         // Update best individual
         updateBestIndividual();
+
+        // Clear selected individual
+        clearSelectedIndividualUI();
 
     }
 
@@ -604,14 +602,7 @@ public class GPInterface extends JFrame {
 
     public void individualImagePanelMouseClicked(java.awt.event.MouseEvent evt, ProgramSolution individual, int index) {
         if(individual == null) {
-            selectedIndividualImagePanel.setImage(null);
-            selectedIndividualID.setText("" );
-            selectedIndividualFitnes.setText("");
-            selectedIndividualTreeDepthLabel.setText("");
-            selectedIndividualTreeSize.setText("");
-            selectedIndividualIsFeasible.setText("");
-            selectedIndividualNumOfFunc.setText("");
-            selectedIndividualNumOfTerm.setText("");
+            clearSelectedIndividualUI();
         }
         else{
             String file = individual.getTree().displayTree(imgPathPrefix + "tree" + String.valueOf(index), false);
@@ -628,6 +619,18 @@ public class GPInterface extends JFrame {
         }
     }
 
+    public void clearSelectedIndividualUI(){
+        selectedIndividualImagePanel.setImage(null);
+        selectedIndividualID.setText("" );
+        selectedIndividualFitnes.setText("");
+        selectedIndividualTreeDepthLabel.setText("");
+        selectedIndividualTreeSize.setText("");
+        selectedIndividualIsFeasible.setText("");
+        selectedIndividualNumOfFunc.setText("");
+        selectedIndividualNumOfTerm.setText("");
+        selectedIndividualHorizontalHistogramPanel.setData(new HashMap<>());
+    }
+
     public void updateBestIndividual(){
         if(gpAlgorithmExecutor.getGpAlgorithm().getBest() == null) {
             bestIndividualImagePanel.setImage(null);
@@ -638,6 +641,7 @@ public class GPInterface extends JFrame {
             bestIndividualIsFeasible.setText("");
             bestIndividualNumOfFunc.setText("");
             bestIndividualNumOfTerm.setText("");
+            bestIndividualHorizontalHistogramPanel.setData(new HashMap<>());
         }
         else{
             this.lastUuid = UUID.randomUUID().toString();
@@ -676,7 +680,7 @@ public class GPInterface extends JFrame {
 
     public void runConfigurations(){
         this.gpAlgorithmExecutor.runConfigurations(configurationFileTextField.getText(), saveGPAlgorithmStatsFilename.getText());
-        updateUI(false);
+        updateUI();
     }
 
     public void initializeGPAlgorithmExecutor(){
