@@ -6,6 +6,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.RunConfiguration;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 
 import javax.swing.*;
 import java.io.*;
@@ -39,6 +40,8 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
     public abstract void setPopulation(List<ProgramSolution> population);
 
     public abstract ProgramSolution getBest();
+
+    public abstract ProblemComparator<ProgramSolution> getComparator();
 
     public ArrayList<Double> getBestOverallFitnesses() {
         return bestOverallFitnesses;

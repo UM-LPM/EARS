@@ -7,28 +7,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class EncapsulatedNode extends BehaviourTreeNode {
+public class Encapsulator extends DecoratorNode {
 
-    private String encapsulatedNodName;
+    private String encapsulatedNodeName;
 
-    public EncapsulatedNode(){
+    public Encapsulator(){
         this(BehaviourTreeNodeType.ENCAPSULATED_NODE, "None");
     }
 
-    public EncapsulatedNode(String encapsulatedNodName){
+    public Encapsulator(String encapsulatedNodName){
         this(BehaviourTreeNodeType.ENCAPSULATED_NODE, encapsulatedNodName);
     }
-    public EncapsulatedNode(BehaviourTreeNodeType nodeType, String encapsulatedNodName){
-        this(nodeType, null, 0, encapsulatedNodName);
+    public Encapsulator(BehaviourTreeNodeType nodeType, String encapsulatedNodeName){
+        this(nodeType, null, 0, encapsulatedNodeName);
     }
 
-    public EncapsulatedNode(BehaviourTreeNodeType nodeType, List<Property> properties, int arity, String encapsulatedNodName){
-        this(nodeType, properties , arity, new ArrayList<>(), encapsulatedNodName);
+    public Encapsulator(BehaviourTreeNodeType nodeType, List<Property> properties, int arity, String encapsulatedNodeName){
+        this(nodeType, properties , arity, new ArrayList<>(), encapsulatedNodeName);
     }
 
-    public EncapsulatedNode(BehaviourTreeNodeType nodeType, List<Property> properties, int arity, List<Node> children, String encapsulatedNodName) {
-        super(nodeType, properties, arity, children, true);
-        this.encapsulatedNodName = encapsulatedNodName;
+    public Encapsulator(BehaviourTreeNodeType nodeType, List<Property> properties, int arity, List<Node> children, String encapsulatedNodeName) {
+        super(nodeType, properties, arity, children);
+        this.encapsulatedNodeName = encapsulatedNodeName;
     }
 
 
@@ -48,16 +48,15 @@ public class EncapsulatedNode extends BehaviourTreeNode {
 
     @Override
     public void setTreeNodes(GraphPrinter gp) {
-        gp.addln(id + "[label=<"+ this.name +"<BR /><FONT POINT-SIZE=\"10\">" + this.encapsulatedNodName + "</FONT>>, "+ this.setNodeStyle() + "]");
+        gp.addln(id + "[label=<"+ this.name +"<BR /><FONT POINT-SIZE=\"10\">" + this.encapsulatedNodeName + "</FONT>>, "+ this.setNodeStyle() + "]");
 
-        // TODO Remove this after testing
         for (Node next : children) {
             next.setTreeNodes(gp);
         }
     }
 
     public void setEncapsulatedNode(String encapsulatedNodeName, Node encapsulatedNodeBehaviour){
-        this.encapsulatedNodName = encapsulatedNodeName;
+        this.encapsulatedNodeName = encapsulatedNodeName;
         this.children.clear();
         this.children.add(encapsulatedNodeBehaviour);
     }

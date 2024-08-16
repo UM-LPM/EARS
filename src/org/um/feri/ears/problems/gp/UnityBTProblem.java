@@ -84,7 +84,7 @@ public class UnityBTProblem extends ProgramProblem {
 
                 // Restart Unity instances
                 if(GPAlgorithmExecutor.Instance != null){
-                    GPAlgorithmExecutor.Instance.restartUnityInstances();
+                    GPAlgorithmExecutor.Instance.restartUnityInstances(true);
                 }
 
                 //wait for 5 seconds

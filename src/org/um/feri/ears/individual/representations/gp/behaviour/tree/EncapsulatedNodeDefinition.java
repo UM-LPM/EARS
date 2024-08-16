@@ -2,7 +2,9 @@ package org.um.feri.ears.individual.representations.gp.behaviour.tree;
 
 import org.um.feri.ears.individual.representations.gp.Node;
 
-public class EncapsulatedNodeDefinition {
+import java.io.Serializable;
+
+public class EncapsulatedNodeDefinition implements Serializable {
     private String encapsulatedNodeName;
     private Node encapsulatedNodeBehaviour;
 

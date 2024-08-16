@@ -1,8 +1,7 @@
 package org.um.feri.ears.individual.generations.gp;
 
-import org.um.feri.ears.algorithms.gp.GPAlgorithmExecutor;
 import org.um.feri.ears.individual.representations.gp.Node;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNode;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.Encapsulator;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNodeDefinition;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
@@ -42,18 +41,18 @@ public abstract class GPProgramSolution implements Serializable {
     }
 
     /**
-     * Assigns a random EncapsulatedNodeDefinition to a EncapsulatedNode (If passed Node is not a EncapsulatedNode, it will be returned as is)
+     * Assigns a random EncapsulatedNodeDefinition to a Encapsulator (If passed Node is not a Encapsulator, it will be returned as is)
      * @param node Node to assign EncapsulatedNodeDefinition to
      * @return Modified Node
      */
     public Node assignEncapsulatedNodeToEncapsulatedNode(Node node) {
-        if(node instanceof EncapsulatedNode encapsulatedNode){
+        if(node instanceof Encapsulator encapsulator){
             if(encapsulatedNodeDefinitions.isEmpty()){
                 throw new RuntimeException("EncapsulatedNodeDefinitions are empty");
             }
-            // Select a random EncapsulatedNodeDefinition and set it to EncapsulatedNode
+            // Select a random EncapsulatedNodeDefinition and set it to Encapsulator
             EncapsulatedNodeDefinition encapsulatedNodeDefinition = encapsulatedNodeDefinitions.get(RNG.nextInt(encapsulatedNodeDefinitions.size()));
-            encapsulatedNode.setEncapsulatedNode(encapsulatedNodeDefinition.getEncapsulatedNodeName(), encapsulatedNodeDefinition.getGoalNodeBehaviour().clone());
+            encapsulator.setEncapsulatedNode(encapsulatedNodeDefinition.getEncapsulatedNodeName(), encapsulatedNodeDefinition.getGoalNodeBehaviour().clone());
         }
         return node;
     }

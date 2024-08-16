@@ -2,7 +2,6 @@ package org.um.feri.ears.individual.generations.gp;
 
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.BehaviourTree;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNode;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNodeDefinition;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.SymbolicRegressionTree;
 import org.um.feri.ears.individual.representations.gp.Tree;
@@ -12,7 +11,6 @@ import org.um.feri.ears.util.Configuration;
 import org.um.feri.ears.util.random.RNG;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GPRandomProgramSolution extends GPProgramSolution {
@@ -86,7 +84,7 @@ public class GPRandomProgramSolution extends GPProgramSolution {
         }
     }
 
-    private Node generateRandomNode(List<Class<? extends Node>> nodeTypes) {
+    public Node generateRandomNode(List<Class<? extends Node>> nodeTypes) {
         int index = RNG.nextInt(nodeTypes.size());
         try {
             // Create a new instance from base constructor of the randomly chosen Node type
@@ -96,7 +94,7 @@ public class GPRandomProgramSolution extends GPProgramSolution {
         }
     }
 
-    private Node generateRandomNode(Class<? extends Node> nodeType) {
+    public Node generateRandomNode(Class<? extends Node> nodeType) {
         try {
             // Create a new instance from base constructor of the randomly chosen Node type
             return assignEncapsulatedNodeToEncapsulatedNode(nodeType.getDeclaredConstructor().newInstance());

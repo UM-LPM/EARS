@@ -10,6 +10,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Configuration;
 import org.um.feri.ears.util.RunConfiguration;
+import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 
@@ -235,6 +236,11 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     }
 
     @Override
+    public ProblemComparator<ProgramSolution> getComparator() {
+        return comparator;
+    }
+
+    @Override
     public ProgramSolution executeStep() throws StopCriterionException {
         if (this.task.isStopCriterion()){
             return this.best;
@@ -313,7 +319,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
         // Start Unity Instances
-        gpAlgorithmExecutor.restartUnityInstances();
+        gpAlgorithmExecutor.restartUnityInstances(true);
 
         // Run algorithm for X generations
         execute(generations, saveGPAlgorithmStateFilename);
@@ -346,7 +352,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
 
     @Override
     public void setCrossoverProbability(double crossoverProbability) {
-        this.crossoverProbability = crossoverProbability;
+        this.crossoverProbability = Util.roundDouble(crossoverProbability,3);
     }
 
     @Override
@@ -356,7 +362,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
 
     @Override
     public void setMutationProbability(double mutationProbability) {
-        this.mutationProbability = mutationProbability;
+        this.mutationProbability = Util.roundDouble(mutationProbability,3);
     }
 
     @Override

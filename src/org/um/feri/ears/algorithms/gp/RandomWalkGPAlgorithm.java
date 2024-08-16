@@ -9,6 +9,7 @@ import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.Configuration;
 import org.um.feri.ears.util.RunConfiguration;
+import org.um.feri.ears.util.comparator.ProblemComparator;
 
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +50,7 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
         Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
         // Start Unity Instances
-        gpAlgorithmExecutor.restartUnityInstances();
+        gpAlgorithmExecutor.restartUnityInstances(true);
 
         // Run algorithm for X generations
         execute(generations, saveGPAlgorithmStateFilename);
@@ -94,5 +95,8 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
         return best;
     }
 
-
+    @Override
+    public ProblemComparator<ProgramSolution> getComparator() {
+        return null;
+    }
 }
