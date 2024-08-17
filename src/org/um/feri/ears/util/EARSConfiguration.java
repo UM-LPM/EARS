@@ -1,8 +1,13 @@
 package org.um.feri.ears.util;
 
+import org.um.feri.ears.individual.representations.gp.Target;
+
+import java.util.List;
+
 public class EARSConfiguration {
 
     public GPAlgorithmType AlgorithmType;
+    public GPProblemType ProblemType;
     public String ProblemName;
     public int FitnessEvaluations;
     public int Generations;
@@ -22,6 +27,7 @@ public class EARSConfiguration {
     public String Terminals;
     public String[] FeasibilityControlOperators;
     public String[] BloatControlOperators;
+    public Target[] EvalData;
 
 
         /*public ProblemType problem;
