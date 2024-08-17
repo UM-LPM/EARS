@@ -240,4 +240,8 @@ public abstract class Algorithm<R extends Solution, S extends Solution, P extend
     public Task<S, P> getTask() {
         return task;
     }
+
+    public void setTask(Task<S, P> task) {
+        this.task = task;
+    }
 }

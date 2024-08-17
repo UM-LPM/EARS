@@ -26,7 +26,7 @@ public class UnityBTProblem extends ProgramProblem {
     public static final int BULK_EVALUATION_REPEATS = 5;
 
     public UnityBTProblem() {
-        super("UnityBTProblem");
+        super("UnityBTProblem", Tree.TreeType.BEHAVIOUR);
     }
 
     public UnityBTProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator) {

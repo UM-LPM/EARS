@@ -34,8 +34,6 @@ public class GPAlgorithmExecutor {
     private GPAlgorithm gpAlgorithm;
     private Configuration configuration;
 
-    List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions;
-
     // Constructors
     public GPAlgorithmExecutor() {
         if(Instance != null)
@@ -43,7 +41,6 @@ public class GPAlgorithmExecutor {
             throw new RuntimeException("GPAlgorithmExecutor already initialized");
         }
         Instance = this;
-        encapsulatedNodeDefinitions = new ArrayList<>();
     }
 
     public GPAlgorithmExecutor(GPAlgorithm gpAlgorithm) {
@@ -107,7 +104,7 @@ public class GPAlgorithmExecutor {
     public int setEARSConfiguration(RunConfiguration runConfiguration){
         EARSConfiguration earsConfiguration = runConfiguration.EARSConfiguration;
         int generations = 0;
-        ProgramProblem programProblem = this.gpAlgorithm.getTask().problem;
+        ProgramProblem programProblem = new UnityBTProblem();
         Task<ProgramSolution, ProgramProblem> task = new Task<>(programProblem, StopCriterion.EVALUATIONS, 0, 0, 0);
 
         if(earsConfiguration.FitnessEvaluations > 0){
@@ -120,16 +117,21 @@ public class GPAlgorithmExecutor {
         }
 
         // GPAlgorithmType
-        if(earsConfiguration.AlgorithmType == GPAlgorithmType.DGP){
-            this.gpAlgorithm =  new DefaultGPAlgorithm(100, 0.9, 0.1, 4, task, null); // Collector_conf_4
+        // If algorithm is already initialized, set only the task
+        if(this.gpAlgorithm == null) {
+            if (earsConfiguration.AlgorithmType == GPAlgorithmType.DGP) {
+                this.gpAlgorithm = new DefaultGPAlgorithm(100, 0.9, 0.1, 4, task, null);
+            } else if (earsConfiguration.AlgorithmType == GPAlgorithmType.EGP) {
+                this.gpAlgorithm = new ElitismGPAlgorithm(100, 0.9, 0.05, 0.1, 4, task, null);
+            } else if (earsConfiguration.AlgorithmType == GPAlgorithmType.PENGP) {
+                this.gpAlgorithm = new PredefinedEncapsNodesGPAlgorithm(100, 0.9, 0.05, 0.1, 4, task, null);
+            }
+            this.gpAlgorithm.setDebug(true);
+        }else{
+            // set task for the algorithm
+            this.gpAlgorithm.setTask(task);
         }
-        else if(earsConfiguration.AlgorithmType == GPAlgorithmType.EGP){
-            this.gpAlgorithm =  new ElitismGPAlgorithm(100, 0.9,0.05, 0.1, 4, task, null); // Collector_conf_4
-        }
-        else if(earsConfiguration.AlgorithmType == GPAlgorithmType.PENGP){
-            this.gpAlgorithm =  new PredefinedEncapsNodesGPAlgorithm(100, 0.9,0.05, 0.1, 4, task, null); // Collector_conf_4
-        }
-        this.gpAlgorithm.setDebug(true);
+
         // ProblemName
         programProblem.setName(earsConfiguration.ProblemName);
         // PopSize
@@ -187,81 +189,11 @@ public class GPAlgorithmExecutor {
 
         try {
             for (int i = 0; i < configuration.Configurations.size(); i++) {
-                //gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename);
-                executeRunConfiguration(configuration.Configurations.get(i), saveGPAlgorithmStateFilename);
+                gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename);
                 restartUnityInstances(false);
             }
         } catch (StopCriterionException ex) {
             throw new RuntimeException(ex);
-        }
-    }
-
-    public void executeRunConfiguration(RunConfiguration runConfiguration,  String saveGPAlgorithmStateFilename) throws StopCriterionException {
-
-        // 1. Run evolution for predefined encapsulated node definitions to find corresponding behavior trees
-        encapsulatedNodeDefinitions.clear();
-        if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0) {
-            for (int i = 0; i < runConfiguration.EncapsulatedNodeDefinitions.size(); i++) {
-                EncapsulatedNodeConfigDefinition encapsNodeConfigDef = runConfiguration.EncapsulatedNodeDefinitions.get(i);
-                RunConfiguration encapsNodeRunConf = encapsNodeConfigDef.RunConfiguration;
-                System.out.println("Run configuration (Encapsulated node): " + encapsNodeRunConf.Name);
-
-                // Set EARS configuration
-                int generations = setEARSConfiguration(encapsNodeRunConf);
-
-                // Save Unity configuration
-                Configuration.serializeUnityConfig(encapsNodeRunConf, getConfiguration().UnityConfigDestFilePath);
-
-                // Start Unity Instances
-                restartUnityInstances(true);
-
-                // Run algorithm for X generations
-                execute(generations, saveGPAlgorithmStateFilename);
-
-                // Apply some prunning/bloat methods to shrink final size
-                // TODO TODO TODO TODO
-
-                // Create encapsulated node and define its behavior with gpAlgorithm runs best solution
-                createEncapsulatedNode(encapsNodeConfigDef);
-
-                System.out.println("Run configuration (Encapsulated node): " + encapsNodeRunConf.Name + " done");
-            }
-        }
-
-        // 3. Run GP algorithm with extended terminal set
-        System.out.println("Run configuration: (" + runConfiguration.Name + ")");
-
-        // Set EARS configuration
-        int generations = setEARSConfiguration(runConfiguration);
-
-        if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0) {
-            // 2. Extend terminal set with encapsulated node
-            getProgramProblem().getBaseTerminalNodeTypes().add(Encapsulator.class);
-            getProgramProblem().getProgramSolutionGenerator().addEncapsulatedNodeDefinition(encapsulatedNodeDefinitions);
-        }
-
-        // Save Unity configuration
-        Configuration.serializeUnityConfig(runConfiguration, getConfiguration().UnityConfigDestFilePath);
-
-        // Start Unity Instances
-        restartUnityInstances(true);
-
-        // Run algorithm for X generations
-        execute(generations, saveGPAlgorithmStateFilename);
-
-        System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
-
-    }
-
-    private void createEncapsulatedNode(EncapsulatedNodeConfigDefinition encapsNodeConfigDef) {
-        int encapsulatedNodeFrequency = encapsNodeConfigDef.EncapsulatedNodeFrequency;
-
-        // Sort population by fitness
-        gpAlgorithm.getPopulation().sort(gpAlgorithm.getComparator());
-
-        // Create encapsulated node definitions
-        for (int i = 0; i < encapsulatedNodeFrequency; i++){
-            encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition(encapsNodeConfigDef.EncapsulatedNodeName, gpAlgorithm.getPopulation().get(i).getTree().getRootNode().clone()));
         }
     }
 

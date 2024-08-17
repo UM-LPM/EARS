@@ -15,7 +15,7 @@ public class SymbolicRegressionProblem extends ProgramProblem implements Seriali
     private List<Target> evalData;
 
     public SymbolicRegressionProblem() {
-        super("SymbolicRegression");
+        super("SymbolicRegression", Tree.TreeType.SYMBOLIC);
     }
 
     public SymbolicRegressionProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, List<Target> evalData) {
