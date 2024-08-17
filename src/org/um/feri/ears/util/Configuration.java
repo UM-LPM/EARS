@@ -18,11 +18,22 @@ public class Configuration {
     public String UnityConfigDestFilePath;
     public List<RunConfiguration> Configurations;
 
-    public static Configuration deserialize(String filePath){
+    public static Configuration deserializeFromFile(String filePath){
         ObjectMapper objectMapper = new ObjectMapper();
         Configuration configuration = null;
         try {
             configuration = objectMapper.readValue(new File(filePath), Configuration.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return configuration;
+    }
+
+    public static Configuration deserializeFromJson(String json){
+        ObjectMapper objectMapper = new ObjectMapper();
+        Configuration configuration = null;
+        try {
+            configuration = objectMapper.readValue(json, Configuration.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

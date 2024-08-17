@@ -1,5 +1,6 @@
 package org.um.feri.ears.visualization.gp;
 
+import javafx.scene.input.KeyCode;
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.gp.ElitismGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.GPAlgorithmExecutor;
@@ -97,15 +98,14 @@ public class GPInterface extends JFrame {
     private JTextField terminalsTextField;
     private JCheckBox displayPopulationCheckBox;
     private JCheckBox useDefaultFileNameCheckBox;
+    private JTextArea jsonConfigTextArea;
+    private GraphPanel multiRunBestIndividualGraphPanel;
+    private GraphPanel multiRunBestAvgGraphPanel;
 
     private String lastUuid;
 
     public GPAlgorithmExecutor gpAlgorithmExecutor;
 
-    //public Configuration configuration;
-    //private ProgramProblem programProblem;
-    //private Task<ProgramSolution, ProgramProblem> task;
-    //private GPAlgorithm gpAlgorithm;
     private Thread algorithmThread;
     String imgPathPrefix;
 
@@ -130,7 +130,6 @@ public class GPInterface extends JFrame {
 
         addButtonListeners();
         addGPAlgorithmParamsListeners();
-        addGeneralListeners();
 
         evalEnvInstanceURIsTextField.setText("http://localhost:4444/");
 
@@ -368,22 +367,7 @@ public class GPInterface extends JFrame {
         });
 
         configurationFileTextField.addActionListener(e -> {
-            if(configurationFileTextField.getText().length() > 0){
-                try{
-                    String configFile = configurationFileTextField.getText();
-                    gpAlgorithmExecutor.setConfiguration(Configuration.deserialize(configFile));
-                    JOptionPane.showMessageDialog(null, "Configuration file loaded.", "Operation successful", JOptionPane.INFORMATION_MESSAGE);
-
-                    // Update UI with configuration values (load fist configuration)
-                    gpAlgorithmExecutor.setGpAlgorithm(null);
-                    gpAlgorithmExecutor.loadDefaultConfiguration();
-                    updateGPAlgorithmParamsUI();
-                    updateUI();
-                }
-                catch (Exception ex){
-                    JOptionPane.showMessageDialog(null, "Error loading configuration file.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
+            loadConfiguration(true);
         });
 
         functionsTextField.addActionListener(e -> {
@@ -403,10 +387,45 @@ public class GPInterface extends JFrame {
                 gpAlgorithmExecutor.getProgramProblem().setBaseTerminalNodeTypesFromStringList(List.of());
             }
         });
+
+        jsonConfigTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                // Load configuration if ctrl + s is pressed
+                if (evt.isControlDown() && evt.getKeyCode() == java.awt.event.KeyEvent.VK_S)
+                    loadConfiguration(false);
+            }
+        });
     }
 
-    private void addGeneralListeners(){
+    public void loadConfiguration(boolean loadFromFile){
+        try {
+            if (loadFromFile) {
+                if (configurationFileTextField.getText().length() > 0) {
 
+                    String configFile = configurationFileTextField.getText();
+                    gpAlgorithmExecutor.setConfiguration(Configuration.deserializeFromFile(configFile));
+
+                    // Read file from configFile and set jsonConfigTextArea
+                    jsonConfigTextArea.setText(new String(Files.readAllBytes(Paths.get(configFile))));
+                }
+                else{
+                    return;
+                }
+            } else {
+                gpAlgorithmExecutor.setConfiguration(Configuration.deserializeFromJson(jsonConfigTextArea.getText()));
+            }
+
+            JOptionPane.showMessageDialog(null, "Configuration file loaded.", "Operation successful", JOptionPane.INFORMATION_MESSAGE);
+            // Update UI with configuration values (load fist configuration only for display purposes)
+            gpAlgorithmExecutor.setGpAlgorithm(null);
+            gpAlgorithmExecutor.loadDefaultConfiguration();
+
+            updateGPAlgorithmParamsUI();
+            updateUI();
+        }
+        catch (Exception ex){
+            JOptionPane.showMessageDialog(null, "Error loading configuration file. \n" + ex, "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     String selectGPDataFile(){
@@ -469,6 +488,9 @@ public class GPInterface extends JFrame {
         this.avgTreeSizeGraphPanel = new GraphPanel(null);
         this.bestGenerationFitnessGraphPanel = new GraphPanel(null);
 
+        this.multiRunBestIndividualGraphPanel = new GraphPanel(null);
+        this.multiRunBestAvgGraphPanel = new GraphPanel(null);
+
         bestIndividualHorizontalHistogramPanel = new HorizontalHistogramPanel();
         selectedIndividualHorizontalHistogramPanel = new HorizontalHistogramPanel();
     }
@@ -494,6 +516,11 @@ public class GPInterface extends JFrame {
         // Clear selected individual
         clearSelectedIndividualUI();
 
+        // Update multiRun graphs (GPAlgorithmExecutor.gpAlgorithmRunStats)
+        if(gpAlgorithmExecutor != null && gpAlgorithmExecutor.getGpAlgorithmRunStats() != null){
+            this.multiRunBestIndividualGraphPanel.setScores(GPAlgorithmRunStats.getBestRunFitnesses(gpAlgorithmExecutor.getGpAlgorithmRunStats()));
+            this.multiRunBestAvgGraphPanel.setScores(GPAlgorithmRunStats.getBestRunAvgFitnesses(gpAlgorithmExecutor.getGpAlgorithmRunStats()));
+        }
     }
 
     public void updateGPAlgorithmParamsUI(){
