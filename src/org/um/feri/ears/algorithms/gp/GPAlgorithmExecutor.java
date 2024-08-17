@@ -6,8 +6,6 @@ import org.um.feri.ears.individual.generations.gp.GPRampedHalfAndHalf;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Target;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNodeDefinition;
-import org.um.feri.ears.individual.representations.gp.behaviour.tree.Encapsulator;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Selector;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Sequencer;
 import org.um.feri.ears.operators.gp.FeasibilityGPOperator;
@@ -21,7 +19,6 @@ import org.um.feri.ears.problems.gp.SymbolicRegressionProblem;
 import org.um.feri.ears.problems.gp.UnityBTProblem;
 import org.um.feri.ears.util.*;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,9 +27,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class GPAlgorithmExecutor {
+
+    public static final long serialVersionUID = -4197237531018661888L;
     public static GPAlgorithmExecutor Instance;
     private GPAlgorithm gpAlgorithm;
     private Configuration configuration;
+
+    private ArrayList<GPAlgorithmRunStats> gpAlgorithmRunStats;
 
     // Constructors
     public GPAlgorithmExecutor() {
@@ -41,6 +42,7 @@ public class GPAlgorithmExecutor {
             throw new RuntimeException("GPAlgorithmExecutor already initialized");
         }
         Instance = this;
+        this.gpAlgorithmRunStats = new ArrayList<>();
     }
 
     public GPAlgorithmExecutor(GPAlgorithm gpAlgorithm) {
@@ -142,7 +144,7 @@ public class GPAlgorithmExecutor {
         this.gpAlgorithm.setMutationProbability(earsConfiguration.MutationProb);
         // ElitisProb
         if(this.gpAlgorithm instanceof ElitismGPAlgorithm)
-            ((ElitismGPAlgorithm)this.gpAlgorithm).setElitismProbability(earsConfiguration.ElitismProb);
+            this.gpAlgorithm.setElitismProbability(earsConfiguration.ElitismProb);
         // NumOfTournaments
         this.gpAlgorithm.setNumberOfTournaments(earsConfiguration.NumOfTournaments);
         // MinTreeDepth
@@ -189,12 +191,17 @@ public class GPAlgorithmExecutor {
 
     public void runConfigurations(String configurationFile, String saveGPAlgorithmStateFilename){
         if(configuration == null && configurationFile != null){
-            configuration = Configuration.deserialize(configurationFile);
+            configuration = Configuration.deserializeFromFile(configurationFile);
         }
 
         try {
             for (int i = 0; i < configuration.Configurations.size(); i++) {
-                gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename);
+                //configuration.Configurations.get(i).NumberOfReruns
+                for (int j = 0; j < configuration.Configurations.get(i).NumberOfReruns; j++) {
+                    gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename);
+                    gpAlgorithmRunStats.add(gpAlgorithm.getStats());
+                }
+
                 restartUnityInstances(false);
             }
         } catch (StopCriterionException ex) {
@@ -276,18 +283,10 @@ public class GPAlgorithmExecutor {
         return gpAlgorithm.getDefaultGPAlgorithmStateFilename();
     }
 
-    public String getFormattedDate() {
-        // Get current date
-        LocalDate date = LocalDate.now();
-        // Create a new string builder
-        // Append the day
-        String formattedDate = String.format("%02d", date.getDayOfMonth()) +
-                // Append the month
-                String.format("%02d", date.getMonthValue()) +
-                // Append the year
-                date.getYear();
-
-        return formattedDate;
+    public ArrayList<GPAlgorithmRunStats> getGpAlgorithmRunStats() {
+        return gpAlgorithmRunStats;
     }
+
+
 
 }

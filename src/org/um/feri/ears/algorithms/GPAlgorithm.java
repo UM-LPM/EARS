@@ -5,6 +5,7 @@ import org.um.feri.ears.algorithms.gp.GPAlgorithmExecutor;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
+import org.um.feri.ears.util.GPAlgorithmRunStats;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 
@@ -210,5 +211,9 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
 
     public double getElitismProbability() {
         return 0;
+    }
+
+    public GPAlgorithmRunStats getStats(){
+        return new GPAlgorithmRunStats(bestOverallFitnesses, avgGenFitnesses, avgGenTreeDepths, avgGenTreeSizes, bestGenFitnesses);
     }
 }

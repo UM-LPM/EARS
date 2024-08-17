@@ -1,5 +1,6 @@
 package org.um.feri.ears.algorithms.gp;
 
+import com.google.gson.Gson;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.AlgorithmStepper;
 import org.um.feri.ears.algorithms.Author;
@@ -8,10 +9,7 @@ import org.um.feri.ears.individual.representations.gp.behaviour.tree.Encapsulato
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.EncapsulatedNodeDefinition;
 import org.um.feri.ears.operators.Selection;
 import org.um.feri.ears.operators.TournamentSelection;
-import org.um.feri.ears.operators.gp.GPCrossover;
-import org.um.feri.ears.operators.gp.GPMutation;
-import org.um.feri.ears.operators.gp.GPSinglePointCrossover;
-import org.um.feri.ears.operators.gp.GPSubtreeMutation;
+import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.ProgramProblem;
@@ -63,6 +61,11 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     private int offspringCount;
 
     List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions;
+
+    /**
+     * Pruning operators used after the evolution of encapsulated node
+     */
+    private GPOperator[] pruningOperators;
 
     public PredefinedEncapsNodesGPAlgorithm() {
         this(100, 0.90, 0.05, 0.025, 2, null, null);
@@ -116,11 +119,22 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0) {
             for (int i = 0; i < runConfiguration.EncapsulatedNodeDefinitions.size(); i++) {
                 EncapsulatedNodeConfigDefinition encapsNodeConfigDef = runConfiguration.EncapsulatedNodeDefinitions.get(i);
+
                 RunConfiguration encapsNodeRunConf = encapsNodeConfigDef.RunConfiguration;
                 System.out.println("Run configuration (Encapsulated node): " + encapsNodeRunConf.Name);
 
                 // Set EARS configuration
                 int generations = gpAlgorithmExecutor.setEARSConfiguration(encapsNodeRunConf);
+
+                // Set Pruning operators for encapsulated node
+                setPruningOperatorsFromStringArray(encapsNodeConfigDef.PruningOperators);
+
+                // Add encapsulated nodes to terminal set immediately
+                if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0 && encapsNodeConfigDef.AddToTerminalSetImmediately) {
+                    // 2. Extend terminal set with encapsulated node
+                    task.problem.getBaseTerminalNodeTypes().add(Encapsulator.class);
+                    task.problem.getProgramSolutionGenerator().addEncapsulatedNodeDefinition(encapsulatedNodeDefinitions);
+                }
 
                 // Save Unity configuration
                 Configuration.serializeUnityConfig(encapsNodeRunConf, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
@@ -149,6 +163,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Set EARS configuration
         int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
 
+        // Add encapsulated nodes to terminal set
         if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0) {
             // 2. Extend terminal set with encapsulated node
             task.problem.getBaseTerminalNodeTypes().add(Encapsulator.class);
@@ -165,6 +180,8 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         execute(generations, null);
 
         System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
+
+        resetToDefaultsBeforeNewRun();
 
         // 3. Return best solution
         return this.best;
@@ -472,7 +489,26 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         // Create encapsulated node definitions
         for (int i = 0; i < encapsulatedNodeFrequency; i++){
-            encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition(encapsNodeConfigDef.EncapsulatedNodeName, this.population.get(i).getTree().getRootNode().clone()));
+            ProgramSolution solution = new ProgramSolution(this.population.get(i));
+            for (int j = 1; j < pruningOperators.length; j++) {
+                pruningOperators[j].execute(solution, this.task.problem);
+            }
+            encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition(encapsNodeConfigDef.EncapsulatedNodeName, solution.getTree().getRootNode().clone()));
+        }
+    }
+
+    public void setPruningOperatorsFromStringArray(String[] pruningOperatorsString){
+        this.pruningOperators = new GPOperator[pruningOperatorsString.length];
+        String packagePrefix = "org.um.feri.ears.operators.gp.";
+        Gson gson = new Gson();
+
+        for (int i = 0; i < pruningOperatorsString.length; i++) {
+            try {
+                String[] operatorParts = pruningOperatorsString[i].split("-");
+                this.pruningOperators[i] = (GPOperator) gson.fromJson(operatorParts[1], Class.forName(packagePrefix + operatorParts[0].trim()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
