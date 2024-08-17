@@ -104,7 +104,7 @@ public class GPAlgorithmExecutor {
     public int setEARSConfiguration(RunConfiguration runConfiguration){
         EARSConfiguration earsConfiguration = runConfiguration.EARSConfiguration;
         int generations = 0;
-        ProgramProblem programProblem = new UnityBTProblem();
+        ProgramProblem programProblem = runConfiguration.EARSConfiguration.ProblemType == GPProblemType.SYMBOLIC? new SymbolicRegressionProblem() : new UnityBTProblem();
         Task<ProgramSolution, ProgramProblem> task = new Task<>(programProblem, StopCriterion.EVALUATIONS, 0, 0, 0);
 
         if(earsConfiguration.FitnessEvaluations > 0){
@@ -178,6 +178,11 @@ public class GPAlgorithmExecutor {
         programProblem.setFeasibilityControlOperatorsFromStringArray(earsConfiguration.FeasibilityControlOperators);
         // BloatControlOperators
         programProblem.setBloatControlOperatorsFromStringArray(earsConfiguration.BloatControlOperators);
+
+        // EvalData (For symbolic regression only)
+        if(programProblem instanceof SymbolicRegressionProblem){
+            ((SymbolicRegressionProblem)programProblem).setEvalData(Arrays.asList(earsConfiguration.EvalData));
+        }
 
         return generations;
     }
