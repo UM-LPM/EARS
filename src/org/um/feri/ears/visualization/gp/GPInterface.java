@@ -96,6 +96,7 @@ public class GPInterface extends JFrame {
     private JTextField functionsTextField;
     private JTextField terminalsTextField;
     private JCheckBox displayPopulationCheckBox;
+    private JCheckBox useDefaultFileNameCheckBox;
 
     private String lastUuid;
 
@@ -374,6 +375,7 @@ public class GPInterface extends JFrame {
                     JOptionPane.showMessageDialog(null, "Configuration file loaded.", "Operation successful", JOptionPane.INFORMATION_MESSAGE);
 
                     // Update UI with configuration values (load fist configuration)
+                    gpAlgorithmExecutor.setGpAlgorithm(null);
                     gpAlgorithmExecutor.loadDefaultConfiguration();
                     updateGPAlgorithmParamsUI();
                     updateUI();
@@ -679,7 +681,7 @@ public class GPInterface extends JFrame {
     }
 
     public void runConfigurations(){
-        this.gpAlgorithmExecutor.runConfigurations(configurationFileTextField.getText(), saveGPAlgorithmStatsFilename.getText());
+        this.gpAlgorithmExecutor.runConfigurations(configurationFileTextField.getText(), useDefaultFileNameCheckBox.isSelected() ? null : saveGPAlgorithmStatsFilename.getText());
         updateUI();
     }
 

@@ -138,6 +138,8 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 createEncapsulatedNode(encapsNodeConfigDef);
 
                 System.out.println("Run configuration (Encapsulated node): " + encapsNodeRunConf.Name + " done");
+
+                resetToDefaultsBeforeNewRun();
             }
         }
 

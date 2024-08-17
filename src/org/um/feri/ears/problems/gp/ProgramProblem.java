@@ -48,20 +48,8 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     protected FeasibilityGPOperator[] feasibilityControlOperators;
     protected GPOperator[] bloatControlOperators;
 
-    // Default constructor
-    public ProgramProblem(String name) {
-        super(name, 1, 1, 0);
-        this.baseFunctionNodeTypes = new ArrayList<>();
-        this.baseTerminalNodeTypes = new ArrayList<>();
-        this.minTreeDepth = 2;
-        this.maxTreeStartDepth = 10;
-        this.maxTreeEndDepth = 100;
-        this.maxTreeSize = 1000;
-
-        this.feasibilityControlOperators = new FeasibilityGPOperator[]{};
-        this.bloatControlOperators = new GPOperator[]{};
-        this.programSolutionGenerator = new GPRandomProgramSolution();
-        this.solutionTreeType = Tree.TreeType.SYMBOLIC;
+    public ProgramProblem(String name, Tree.TreeType treeType){
+        this(name, new ArrayList<>(), new ArrayList<>(), 2, 5, 10, 100, new FeasibilityGPOperator[]{}, new GPOperator[]{}, new GPRandomProgramSolution(), treeType, "BtTree", new String[]{});
     }
 
     // Constructor with all parameters
