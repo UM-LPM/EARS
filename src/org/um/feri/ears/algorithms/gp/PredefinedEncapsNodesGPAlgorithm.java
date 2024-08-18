@@ -113,9 +113,11 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     @Override
     public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration,  String saveGPAlgorithmStateFilename) throws StopCriterionException {
+        // Clear encapsulated node definitions & reset to defaults
+        encapsulatedNodeDefinitions.clear();
+        resetToDefaultsBeforeNewRun();
 
         // 1. Run evolution for predefined encapsulated node definitions to find corresponding behavior trees
-        encapsulatedNodeDefinitions.clear();
         if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0) {
             for (int i = 0; i < runConfiguration.EncapsulatedNodeDefinitions.size(); i++) {
                 EncapsulatedNodeConfigDefinition encapsNodeConfigDef = runConfiguration.EncapsulatedNodeDefinitions.get(i);
@@ -130,7 +132,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 setPruningOperatorsFromStringArray(encapsNodeConfigDef.PruningOperators);
 
                 // Add encapsulated nodes to terminal set immediately
-                if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0 && encapsNodeConfigDef.AddToTerminalSetImmediately) {
+                if(encapsulatedNodeDefinitions.size() > 0 && runConfiguration.EncapsulatedNodeDefinitions.get(i - 1).AddToTerminalSetImmediately) {
                     // 2. Extend terminal set with encapsulated node
                     task.problem.getBaseTerminalNodeTypes().add(Encapsulator.class);
                     task.problem.getProgramSolutionGenerator().addEncapsulatedNodeDefinition(encapsulatedNodeDefinitions);
@@ -164,7 +166,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
 
         // Add encapsulated nodes to terminal set
-        if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0) {
+        if(encapsulatedNodeDefinitions.size() > 0) {
             // 2. Extend terminal set with encapsulated node
             task.problem.getBaseTerminalNodeTypes().add(Encapsulator.class);
             task.problem.getProgramSolutionGenerator().addEncapsulatedNodeDefinition(encapsulatedNodeDefinitions);
@@ -180,8 +182,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         execute(generations, null);
 
         System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
-
-        resetToDefaultsBeforeNewRun();
 
         // 3. Return best solution
         return this.best;
@@ -490,7 +490,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Create encapsulated node definitions
         for (int i = 0; i < encapsulatedNodeFrequency; i++){
             ProgramSolution solution = new ProgramSolution(this.population.get(i));
-            for (int j = 1; j < pruningOperators.length; j++) {
+            for (int j = 0; j < pruningOperators.length; j++) {
                 pruningOperators[j].execute(solution, this.task.problem);
             }
             encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition(encapsNodeConfigDef.EncapsulatedNodeName, solution.getTree().getRootNode().clone()));
