@@ -194,9 +194,9 @@ public class GPAlgorithmExecutor {
             configuration = Configuration.deserializeFromFile(configurationFile);
         }
 
+        gpAlgorithmRunStats.clear();
         try {
             for (int i = 0; i < configuration.Configurations.size(); i++) {
-                //configuration.Configurations.get(i).NumberOfReruns
                 for (int j = 0; j < configuration.Configurations.get(i).NumberOfReruns; j++) {
                     gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename);
                     gpAlgorithmRunStats.add(gpAlgorithm.getStats());

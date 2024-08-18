@@ -30,6 +30,7 @@ public class ProgramSolution extends Solution {
         parents = new ArrayList<>();
         Fitnesses = new HashMap<>();
         Fitnesses.putAll(s.Fitnesses);
+        NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone();
     }
 
     @Override
