@@ -2,9 +2,10 @@ package org.um.feri.ears.util;
 
 import org.um.feri.ears.individual.representations.gp.Target;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class EARSConfiguration {
+public class EARSConfiguration implements Serializable {
 
     public GPAlgorithmType AlgorithmType;
     public GPProblemType ProblemType;

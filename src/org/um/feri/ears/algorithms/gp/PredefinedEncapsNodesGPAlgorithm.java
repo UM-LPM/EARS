@@ -55,8 +55,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     private ProgramSolution best;
 
-    private String initialAlgorithmStateFilename;
-
     private int eliteCount;
     private int offspringCount;
 
@@ -68,14 +66,14 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     private GPOperator[] pruningOperators;
 
     public PredefinedEncapsNodesGPAlgorithm() {
-        this(100, 0.90, 0.05, 0.025, 2, null, null);
+        this(100, 0.90, 0.05, 0.025, 2, null);
     }
 
-    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, String initialAlgorithmStateFilename) {
-        this(popSize,crossoverProbability, elitismProbability,mutationProbability,numberOfTournaments, null, initialAlgorithmStateFilename);
+    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments) {
+        this(popSize,crossoverProbability, elitismProbability,mutationProbability,numberOfTournaments, null);
     }
 
-    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, Task<ProgramSolution,  ProgramProblem> task, String initialAlgorithmStateFilename) {
+    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, Task<ProgramSolution,  ProgramProblem> task) {
         this.popSize = popSize;
         this.crossoverProbability = crossoverProbability;
         this.elitismProbability = elitismProbability;
@@ -102,7 +100,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         this.avgGenTreeSizes = new ArrayList<>();
         this.bestGenFitnesses = new ArrayList<>();
 
-        this.initialAlgorithmStateFilename = initialAlgorithmStateFilename;
         this.encapsulatedNodeDefinitions = new ArrayList<>();
     }
 
@@ -146,9 +143,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
                 // Run algorithm for X generations
                 execute(generations, null);
-
-                // Apply some prunning/bloat methods to shrink final size
-                // TODO TODO TODO TODO
 
                 // Create encapsulated node and define its behavior with gpAlgorithm runs best solution
                 createEncapsulatedNode(encapsNodeConfigDef);
@@ -233,7 +227,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 break;
             case EVALUATION:
                 ProgramSolution currentGenBest = performEvaluation();
-                this.bestGenFitnesses.add(currentGenBest.getEval());
                 if(this.isDebug()){
                     this.bestOverallFitnesses.add(this.best.getEval());
                     double sum = 0;
@@ -267,7 +260,9 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                     // Reevaluate population
                     currentGenBest = performEvaluation();
                 }
-                this.bestGenFitnesses.add(currentGenBest.getEval());
+
+                if(this.isDebug())
+                    this.bestGenFitnesses.add(currentGenBest.getEval());
 
                 break;
             default:
@@ -398,22 +393,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         }
     }
 
-    /**
-     * Load current state of population and task from file
-     */
-    private void initializeAlgorithmStateFromFile() {
-        GPAlgorithm alg = GPAlgorithm.deserializeAlgorithmState(this.initialAlgorithmStateFilename);
-        this.population = alg.getPopulation();
-        this.task = alg.getTask();
-
-        for(ProgramSolution sol : population){
-            if (task.problem.isFirstBetter(sol, best))
-                best = new ProgramSolution(sol);
-        }
-
-        algorithmInitialization(task, new ProblemComparator<>(task.problem), null); // TODO add support for selection operator
-    }
-
     public List<ProgramSolution> performselection(int parentCount){
         List<ProgramSolution> parentSolutions = new ArrayList<>();
         // Execute selection operator to get all parents
@@ -481,6 +460,11 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         this.offspringCount = this.popSize - this.eliteCount;
     }
 
+    /**
+     * Creates encapsulated node definitions based on the best individuals from the population. The number of encapsulated nodes is defined in the configuration.
+     * Before creating encapsulated node, the best individuals are pruned with pruning operators.
+     * @param encapsNodeConfigDef Encapsulated node configuration definition
+     */
     private void createEncapsulatedNode(EncapsulatedNodeConfigDefinition encapsNodeConfigDef) {
         int encapsulatedNodeFrequency = encapsNodeConfigDef.EncapsulatedNodeFrequency;
 
@@ -490,6 +474,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Create encapsulated node definitions
         for (int i = 0; i < encapsulatedNodeFrequency; i++){
             ProgramSolution solution = new ProgramSolution(this.population.get(i));
+            // Prune tree with pruning operators
             for (int j = 0; j < pruningOperators.length; j++) {
                 pruningOperators[j].execute(solution, this.task.problem);
             }
@@ -497,6 +482,10 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         }
     }
 
+    /**
+     * Sets pruning operators from string array
+     * @param pruningOperatorsString Array of pruning operators in json format
+     */
     public void setPruningOperatorsFromStringArray(String[] pruningOperatorsString){
         this.pruningOperators = new GPOperator[pruningOperatorsString.length];
         String packagePrefix = "org.um.feri.ears.operators.gp.";

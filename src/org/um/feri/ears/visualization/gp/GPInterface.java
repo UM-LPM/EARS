@@ -203,20 +203,31 @@ public class GPInterface extends JFrame {
         });
 
         loadCurrentAlgState.addActionListener(e -> {
+            String gpDataFile = selectGPDataFile();
+
             try{
-
-                String gpDataFile = selectGPDataFile();
-
-                //initializeDataBehaviourTree("gpAlgorithmState.ser");
                 gpAlgorithmExecutor.initializeGpAlgorithmStateFromFile(gpDataFile);
                 setSaveGPAlgorithmStatsFilename();
+
+                updateGPAlgorithmParamsUI();
+                updateUI();
+
+                return;
             }
             catch (Exception ex){
-                throw new RuntimeException(ex);
+                System.out.println("Error loading gp algorithm state from file: " + ex.getMessage() + "\n Trying to load gp algorithm executor state");
             }
 
-            updateGPAlgorithmParamsUI();
-            updateUI();
+            try {
+                this.gpAlgorithmExecutor = GPAlgorithmExecutor.deserializeGPAlgorithmExecutorState(gpDataFile);
+                setSaveGPAlgorithmStatsFilename();
+
+                updateGPAlgorithmParamsUI();
+                updateUI();
+
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         });
     }
 
@@ -713,7 +724,7 @@ public class GPInterface extends JFrame {
     }
 
     public void initializeGPAlgorithmExecutor(){
-        this.gpAlgorithmExecutor = new GPAlgorithmExecutor();
+        this.gpAlgorithmExecutor = new GPAlgorithmExecutor(true);
 
         List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
                 //Repeat.class, // TODO Use this?

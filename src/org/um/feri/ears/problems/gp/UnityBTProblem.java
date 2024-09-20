@@ -89,7 +89,7 @@ public class UnityBTProblem extends ProgramProblem {
 
                 //wait for 5 seconds
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }

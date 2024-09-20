@@ -1,8 +1,9 @@
 package org.um.feri.ears.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GPAlgorithmRunStats {
+public class GPAlgorithmRunStats implements Serializable {
 
     protected ArrayList<Double> bestOverallFitnesses;
     protected ArrayList<Double> avgGenFitnesses;
