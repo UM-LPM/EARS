@@ -19,14 +19,13 @@ import org.um.feri.ears.problems.gp.SymbolicRegressionProblem;
 import org.um.feri.ears.problems.gp.UnityBTProblem;
 import org.um.feri.ears.util.*;
 
-import java.io.IOException;
-import java.time.LocalDate;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class GPAlgorithmExecutor {
+public class GPAlgorithmExecutor implements Serializable {
 
     public static final long serialVersionUID = -4197237531018661888L;
     public static GPAlgorithmExecutor Instance;
@@ -36,12 +35,14 @@ public class GPAlgorithmExecutor {
     private ArrayList<GPAlgorithmRunStats> gpAlgorithmRunStats;
 
     // Constructors
-    public GPAlgorithmExecutor() {
-        if(Instance != null)
-        {
-            throw new RuntimeException("GPAlgorithmExecutor already initialized");
+    public GPAlgorithmExecutor(boolean createInstance) {
+        if(createInstance) {
+            if (Instance != null) {
+                throw new RuntimeException("GPAlgorithmExecutor already initialized");
+            }
+            Instance = this;
         }
-        Instance = this;
+
         this.gpAlgorithmRunStats = new ArrayList<>();
     }
 
@@ -94,7 +95,7 @@ public class GPAlgorithmExecutor {
             if(gpAlgorithmArgs.length != 5){
                 throw new IllegalArgumentException("gpAlgorithmArgs must have 5 values");
             }
-            this.gpAlgorithm = new PredefinedEncapsNodesGPAlgorithm((int)gpAlgorithmArgs[0], (double)gpAlgorithmArgs[1], (double)gpAlgorithmArgs[2], (double)gpAlgorithmArgs[3], (int)gpAlgorithmArgs[4], task, null);
+            this.gpAlgorithm = new PredefinedEncapsNodesGPAlgorithm((int)gpAlgorithmArgs[0], (double)gpAlgorithmArgs[1], (double)gpAlgorithmArgs[2], (double)gpAlgorithmArgs[3], (int)gpAlgorithmArgs[4], task);
         }
         else {
             throw new IllegalArgumentException("gpAlgorithmClass not supported");
@@ -126,7 +127,7 @@ public class GPAlgorithmExecutor {
             } else if (earsConfiguration.AlgorithmType == GPAlgorithmType.EGP) {
                 this.gpAlgorithm = new ElitismGPAlgorithm(100, 0.9, 0.05, 0.1, 4, task, null);
             } else if (earsConfiguration.AlgorithmType == GPAlgorithmType.PENGP) {
-                this.gpAlgorithm = new PredefinedEncapsNodesGPAlgorithm(100, 0.9, 0.05, 0.1, 4, task, null);
+                this.gpAlgorithm = new PredefinedEncapsNodesGPAlgorithm(100, 0.9, 0.05, 0.1, 4, task);
             }
             this.gpAlgorithm.setDebug(true);
         }else{
@@ -200,10 +201,16 @@ public class GPAlgorithmExecutor {
                 for (int j = 0; j < configuration.Configurations.get(i).NumberOfReruns; j++) {
                     gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename);
                     gpAlgorithmRunStats.add(gpAlgorithm.getStats());
-                }
 
+                    // Save final GPAlgorithm run state to file for each configuration
+                    GPAlgorithm.serializeAlgorithmState(gpAlgorithm, i + "_" + j + "_RunConfigurationGPAlgorithm.ser" );
+
+                    // Save current GPAlgorithmExecutor state to file
+                    serializeGPAlgorithmExecutorState(this, "GPAlgorithmExecutor.ser");
+                }
                 restartUnityInstances(false);
             }
+
         } catch (StopCriterionException ex) {
             throw new RuntimeException(ex);
         }
@@ -287,6 +294,25 @@ public class GPAlgorithmExecutor {
         return gpAlgorithmRunStats;
     }
 
+    public static void serializeGPAlgorithmExecutorState(GPAlgorithmExecutor gpAlgorithmExecutor, String filename) {
+        System.out.println("Serializing current gpAlgorithmExecutor");
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
+            oos.writeObject(gpAlgorithmExecutor);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        GPAlgorithm.CAN_RUN = true;
+    }
+
+    public static GPAlgorithmExecutor deserializeGPAlgorithmExecutorState(String filename){
+        GPAlgorithmExecutor algExecutor = new GPAlgorithmExecutor(false);
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            algExecutor = (GPAlgorithmExecutor) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return algExecutor;
+    }
 
 }

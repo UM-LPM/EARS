@@ -2,7 +2,9 @@ package org.um.feri.ears.util;
 
 import org.um.feri.ears.operators.gp.GPOperator;
 
-public class EncapsulatedNodeConfigDefinition {
+import java.io.Serializable;
+
+public class EncapsulatedNodeConfigDefinition implements Serializable {
     /**
      * Name of the encapsulated node
      */

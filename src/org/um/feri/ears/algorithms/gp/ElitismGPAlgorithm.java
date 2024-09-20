@@ -366,7 +366,6 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
                 break;
             case EVALUATION:
                 ProgramSolution currentGenBest = performEvaluation();
-                this.bestGenFitnesses.add(currentGenBest.getEval());
                 if(this.isDebug()){
                     this.bestOverallFitnesses.add(this.best.getEval());
                     double sum = 0;
@@ -400,7 +399,9 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
                     // Reevaluate population
                     currentGenBest = performEvaluation();
                 }
-                this.bestGenFitnesses.add(currentGenBest.getEval());
+
+                if(this.isDebug())
+                    this.bestGenFitnesses.add(currentGenBest.getEval());
 
                 break;
             default:
