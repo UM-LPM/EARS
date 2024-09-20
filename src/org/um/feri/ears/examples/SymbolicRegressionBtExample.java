@@ -30,8 +30,10 @@ import org.um.feri.ears.util.Util;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class SymbolicRegressionBtExample { // TODO remove
+public class SymbolicRegressionBtExample {
     public static void main(String[] args) throws IOException {
+        // Uncomment the following lines to run the examples
+
         // srExample();
         // btExample();
 
@@ -44,7 +46,7 @@ public class SymbolicRegressionBtExample { // TODO remove
         // serializationTest();
         // deserealizationTest("treePopulation.ser");
 
-        goalBtNodeExample();
+        // goalBtNodeExample();
     }
 
     public static void serializationTest(){
