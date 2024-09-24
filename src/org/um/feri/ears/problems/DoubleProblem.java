@@ -119,6 +119,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
 
     //TODO replace with accessor pattern
     @Override
+    @Deprecated
     public void evaluate(NumberSolution<Double> solution) {
         solution.setObjective(0, eval(solution.getVariables()));
     }

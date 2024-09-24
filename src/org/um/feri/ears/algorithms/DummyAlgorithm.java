@@ -22,6 +22,8 @@ public class DummyAlgorithm extends NumberAlgorithm {
     String nameInFile;
     public static boolean readFromJson = true;
 
+    static final int MAX_RESULTS_PER_FILE = 100; //this represents the number of results (lines) in a file. It should be set to the lowest possible number to improve memory management
+
     public DummyAlgorithm(String algorithmName) {
         this(algorithmName, algorithmName, "D:/Results/");
     }
@@ -56,7 +58,7 @@ public class DummyAlgorithm extends NumberAlgorithm {
                 fileName = file.getName();
                 if (fileName.toLowerCase().indexOf(name.toLowerCase() + "_") == 0) {
                     problemName = fileName.substring(name.length() + 1, fileName.length() - 4);
-                    double[] resultArray = new double[10000];
+                    double[] resultArray = new double[MAX_RESULTS_PER_FILE];
                     int index = 0;
                     try (BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
                         String line = br.readLine();
@@ -71,8 +73,8 @@ public class DummyAlgorithm extends NumberAlgorithm {
                             resultArray[index] = Double.parseDouble(line);
                             line = br.readLine();
                             index++;
-                            if (index >= 10000) {
-                                System.err.println("The file " + fileName + " has more than 10000 results. Skipping to end of file.");
+                            if (index >= MAX_RESULTS_PER_FILE) {
+                                System.err.println("The file " + fileName + " has more than " + MAX_RESULTS_PER_FILE + " results. Skipping to end of file.");
                                 break;
                             }
                         }
