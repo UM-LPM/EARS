@@ -20,6 +20,7 @@ import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -194,6 +195,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                     throw new StopCriterionException("Algorithm task not set");;
                 algorithmInitialization(this.task, new ProblemComparator<>(this.task.problem), null);
                 populationInitialization();
+
                 break;
             case ELITISM:
                 // Initialize the population of current generation
@@ -218,33 +220,38 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 }
                 break;
             case SELECTION_AND_CROSSOVER:
+                // Selection phase
                 this.parentPopulation.addAll(performselection(this.offspringCount));
+
+                // Crossover phase
                 performCrossover();
 
                 break;
             case MUTATION:
                 performMutation();
+
                 break;
             case EVALUATION:
                 ProgramSolution currentGenBest = performEvaluation();
-                if(this.isDebug()){
+
+                if (this.isDebug()) {
                     this.bestOverallFitnesses.add(this.best.getEval());
                     double sum = 0;
-                    for (ProgramSolution sol: this.population) {
+                    for (ProgramSolution sol : this.population) {
                         sum += sol.getEval();
                     }
                     this.avgGenFitnesses.add(sum / this.population.size());
 
                     // add current avg tree depth to list
                     double avgDepth = 0;
-                    for (ProgramSolution sol: this.population) {
+                    for (ProgramSolution sol : this.population) {
                         avgDepth += sol.getTree().treeMaxDepth();
                     }
                     this.avgGenTreeDepths.add(avgDepth / this.population.size());
 
                     // add current avg tree size to list
                     double avgSize = 0;
-                    for (ProgramSolution sol: this.population) {
+                    for (ProgramSolution sol : this.population) {
                         avgSize += sol.getTree().treeSize();
                     }
                     this.avgGenTreeSizes.add(avgSize / this.population.size());
@@ -252,16 +259,20 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 }
 
                 // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-                if(this.task.problem.getBloatControlOperators().length > 0) {
+                if (this.task.problem.getBloatControlOperators().length > 0) {
                     for (ProgramSolution solution : this.population) {
                         this.task.problem.executeBloatedControlOperators(solution);
+                    }
+
+                    if (this.task.isStopCriterion()) {
+                        return this.best;
                     }
 
                     // Reevaluate population
                     currentGenBest = performEvaluation();
                 }
 
-                if(this.isDebug())
+                if (this.isDebug())
                     this.bestGenFitnesses.add(currentGenBest.getEval());
 
                 break;
@@ -397,7 +408,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         List<ProgramSolution> parentSolutions = new ArrayList<>();
         // Execute selection operator to get all parents
         for (int i = 0; i < parentCount; i++) {
-            parentSolutions.add(this.selectionOperator.execute(population, task.problem));
+            parentSolutions.add(new ProgramSolution(this.selectionOperator.execute(population, task.problem)));
         }
 
         return parentSolutions;
@@ -405,7 +416,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     public void performCrossover() throws StopCriterionException {
         // Shuffle parentSolutions
-        Collections.shuffle(this.parentPopulation);
+        RNG.shuffle(this.parentPopulation);
 
         ProgramSolution[] parents = new ProgramSolution[2];
         // Selection and Crossover

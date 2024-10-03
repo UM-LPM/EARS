@@ -6,6 +6,5 @@ public enum GPAlgorithmStep {
     SELECTION_AND_CROSSOVER,
     //CROSSOVER,
     MUTATION,
-    // BLOAT_CONTROL, // TODO Add in the future + other methods
     EVALUATION,
 }

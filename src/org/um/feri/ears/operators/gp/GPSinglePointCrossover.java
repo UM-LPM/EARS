@@ -27,14 +27,11 @@ public class GPSinglePointCrossover extends GPCrossover {
             return null;
         }
 
+        ProgramSolution parent1 = programSolutions[0];
+        ProgramSolution parent2 = programSolutions[1];
+
         if(RNG.nextDouble() <= this.crossoverProbability) {
             //System.out.println("Performing crossover");
-            ProgramSolution parent1;
-            ProgramSolution parent2;
-            // Perform crossover so long that it's inside boundaries
-            //do {
-            parent1 = programSolutions[0].copy();
-            parent2 = programSolutions[1].copy();
 
             // Get lengths of both parents and select random crossover points
             int childCount1 = parent1.getTree().getRootNode().ancestors().getAncestorCount();
@@ -63,7 +60,6 @@ public class GPSinglePointCrossover extends GPCrossover {
             int crossOverNodeIndex1 = mutationNodeParent1.get().indexOf(crossOverNode1);
             int crossOverNodeIndex2 = mutationNodeParent2.get().indexOf(crossOverNode2);
 
-
             //Switch nodes and it's subtrees
             mutationNodeParent1.get().replace(crossOverNodeIndex1, crossOverNode2);
             mutationNodeParent2.get().replace(crossOverNodeIndex2, crossOverNode1);
@@ -72,10 +68,7 @@ public class GPSinglePointCrossover extends GPCrossover {
             problem.makeFeasible(parent1);
             problem.makeFeasible(parent2);
 
-            //} while (!problem.isFeasible(parent1) || !problem.isFeasible(parent2));
-
-            return new ProgramSolution[]{parent1, parent2};
         }
-        return programSolutions;
+        return new ProgramSolution[]{parent1, parent2};
     }
 }

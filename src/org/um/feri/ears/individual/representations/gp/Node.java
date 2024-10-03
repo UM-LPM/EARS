@@ -112,20 +112,11 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     @Override
     public int treeMinDepth(){
         // Returns the minimum end depth (Terminals) of the tree
-        if(arity == 0){
+        if(arity == 0 || children.isEmpty()){
             return 1;
         }
 
         return treeMinDepthHelper(this, 1);
-        // TODO
-        /*int minDepth = 0;
-        if(arity > 0) {
-            for (Node child : this.children) {
-                int childHeight = child.treeMinDepth();
-                minDepth = Math.min(minDepth, childHeight);
-            }
-        }
-        return minDepth + 1;*/
     }
 
     private int treeMinDepthHelper(Node node, int depth) {
@@ -358,10 +349,17 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     }
 
     public void removeInvalidNodes(ProgramProblem tProgramProblem, int currentDepth){
-        // Use an iterator to safely remove elements while iterating
         if (arity > 0 && children != null) {
             currentDepth++;
             Iterator<Node> iterator = children.iterator();
+            // If rootNode doesn't have children, add a random terminal node
+            if(!iterator.hasNext() && currentDepth == 2){
+                //System.out.println("Adding random terminal to as a child to root node.");
+                Node newNode = tProgramProblem.getProgramSolutionGenerator().generateRandomTerminalNode(tProgramProblem);
+                children.add(newNode);
+                return;
+            }
+
             while (iterator.hasNext()) {
                 Node child = iterator.next();
                 child.removeInvalidNodes(tProgramProblem, currentDepth); // Recursively clean up child nodes

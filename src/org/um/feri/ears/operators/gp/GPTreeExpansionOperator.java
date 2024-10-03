@@ -11,7 +11,6 @@ public class GPTreeExpansionOperator extends FeasibilityGPOperator {
 
     @Override
     public boolean isSolutionFeasible(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
-        //System.out.println("Tree min depth: " + tProgramSolution.getTree().treeMinDepth());
         return tProgramSolution.getTree().treeMinDepth() >= tProgramProblem.getMinTreeDepth();
     }
 
@@ -26,9 +25,13 @@ public class GPTreeExpansionOperator extends FeasibilityGPOperator {
     private void expandProgramDepth(Node current, Node parent, int currentDepth){
         if(currentDepth < this.minTreeDepth){
             // Create new solution that will exceed minTreeDepth
-            ProgramSolution newSolution = this.programProblem.getProgramSolutionGenerator().generate(this.programProblem,  currentDepth, "");
             if(parent != null){
+                ProgramSolution newSolution = this.programProblem.getProgramSolutionGenerator().generate(this.programProblem,  currentDepth, "");
                 parent.replace(current, newSolution.getTree().getRootNode());
+            }
+            else if (current.getArity() > 0 && current.getChildren().isEmpty()){
+                ProgramSolution newSolution = this.programProblem.getProgramSolutionGenerator().generate(this.programProblem,  currentDepth + 1, "");
+                current.getChildren().add(newSolution.getTree().getRootNode());
             }
 
             if(current.getArity() > 0){

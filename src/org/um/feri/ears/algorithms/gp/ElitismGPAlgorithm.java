@@ -19,6 +19,7 @@ import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -254,7 +255,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
         List<ProgramSolution> parentSolutions = new ArrayList<>();
         // Execute selection operator to get all parents
         for (int i = 0; i < parentCount; i++) {
-            parentSolutions.add(this.selectionOperator.execute(population, task.problem));
+            parentSolutions.add(new ProgramSolution(this.selectionOperator.execute(population, task.problem)));
         }
 
         return parentSolutions;
@@ -262,7 +263,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
 
     public void performCrossover() throws StopCriterionException {
         // Shuffle parentSolutions
-        Collections.shuffle(this.parentPopulation);
+        RNG.shuffle(this.parentPopulation);
 
         ProgramSolution[] parents = new ProgramSolution[2];
         // Selection and Crossover
