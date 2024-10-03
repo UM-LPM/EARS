@@ -30,7 +30,7 @@ public class SymbolicRegressionProblem extends ProgramProblem implements Seriali
         setEvalData(evalData);
     }
 
-    public List<?> getEvalData() {
+    public List<Target> getEvalData() {
         return evalData;
     }
 

@@ -83,7 +83,7 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
 
     public void setBaseFunctionNodeTypesFromStringList(List<String> baseFunctionNodeTypes) {
         this.baseFunctionNodeTypes = new ArrayList<>();
-        String packagePrefix = "org.um.feri.ears.individual.representations.gp.behaviour.tree.";
+        String packagePrefix = "org.um.feri.ears.individual.representations.gp.";
         for (String nodeType : baseFunctionNodeTypes) {
             try {
                 this.baseFunctionNodeTypes.add((Class<? extends Node>) Class.forName(packagePrefix + nodeType.trim()));
@@ -103,7 +103,7 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
 
     public void setBaseTerminalNodeTypesFromStringList(List<String> baseTerminalNodeTypes) {
         this.baseTerminalNodeTypes = new ArrayList<>();
-        String packagePrefix = "org.um.feri.ears.individual.representations.gp.behaviour.tree.";
+        String packagePrefix = "org.um.feri.ears.individual.representations.gp.";
         for (String nodeType : baseTerminalNodeTypes) {
             try {
                 this.baseTerminalNodeTypes.add((Class<? extends Node>) Class.forName(packagePrefix + nodeType.trim()));

@@ -8,6 +8,7 @@ import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Selector;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Sequencer;
+import org.um.feri.ears.individual.representations.gp.symbolic.regression.VarNode;
 import org.um.feri.ears.operators.gp.FeasibilityGPOperator;
 import org.um.feri.ears.operators.gp.GPOperator;
 import org.um.feri.ears.problems.StopCriterion;
@@ -185,6 +186,19 @@ public class GPAlgorithmExecutor implements Serializable {
         // EvalData (For symbolic regression only)
         if(programProblem instanceof SymbolicRegressionProblem){
             ((SymbolicRegressionProblem)programProblem).setEvalData(Arrays.asList(earsConfiguration.EvalData));
+
+            // find unique indexes in the evalData contextState
+            List<String> uniqueIndexes = new ArrayList<>();
+            for (Target target : ((SymbolicRegressionProblem) programProblem).getEvalData()) {
+                for (String key : target.getContextState().keySet()) {
+                    if (!uniqueIndexes.contains(key)) {
+                        uniqueIndexes.add(key);
+                    }
+                }
+            }
+
+            // Set unique indexes to VarNode
+            VarNode.variables = uniqueIndexes;
         }
 
         return generations;
