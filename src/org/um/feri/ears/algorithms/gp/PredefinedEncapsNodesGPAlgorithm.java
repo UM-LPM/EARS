@@ -133,11 +133,13 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                     task.problem.getProgramSolutionGenerator().addEncapsulatedNodeDefinition(encapsulatedNodeDefinitions);
                 }
 
-                // Save Unity configuration
-                Configuration.serializeUnityConfig(encapsNodeRunConf, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+                if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
+                    // Save Unity configuration
+                    Configuration.serializeUnityConfig(encapsNodeRunConf, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
-                // Start Unity Instances
-                gpAlgorithmExecutor.restartUnityInstances(true);
+                    // Start Unity Instances
+                    gpAlgorithmExecutor.restartUnityInstances(true);
+                }
 
                 // Run algorithm for X generations
                 execute(generations, null);
@@ -233,29 +235,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
             case EVALUATION:
                 ProgramSolution currentGenBest = performEvaluation();
 
-                if (this.isDebug()) {
-                    this.bestOverallFitnesses.add(this.best.getEval());
-                    double sum = 0;
-                    for (ProgramSolution sol : this.population) {
-                        sum += sol.getEval();
-                    }
-                    this.avgGenFitnesses.add(sum / this.population.size());
-
-                    // add current avg tree depth to list
-                    double avgDepth = 0;
-                    for (ProgramSolution sol : this.population) {
-                        avgDepth += sol.getTree().treeMaxDepth();
-                    }
-                    this.avgGenTreeDepths.add(avgDepth / this.population.size());
-
-                    // add current avg tree size to list
-                    double avgSize = 0;
-                    for (ProgramSolution sol : this.population) {
-                        avgSize += sol.getTree().treeSize();
-                    }
-                    this.avgGenTreeSizes.add(avgSize / this.population.size());
-
-                }
+                updateStatistics();
 
                 // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
                 if (this.task.problem.getBloatControlOperators().length > 0) {
@@ -447,6 +427,12 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         ProgramSolution currentGenBest = null;
         population = new ArrayList<>(this.currentPopulation);
 
+        // If the number of evaluations is greater than the maximum number of evaluations, we need to remove the last individuals
+        if(this.task.getNumberOfEvaluations() + this.population.size() >= this.task.getMaxEvaluations()){
+            int evals = this.task.getMaxEvaluations() - this.task.getNumberOfEvaluations();
+            population = new ArrayList<>(this.population.subList(0, evals));
+        }
+
         this.task.bulkEval(this.population);
 
         currentGenBest = new ProgramSolution(this.population.get(0));
@@ -457,8 +443,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
             if (task.problem.isFirstBetter(sol, currentGenBest))
                 currentGenBest = new ProgramSolution(sol);
         }
-
-        //this.population = this.currentPopulation;
 
         return currentGenBest;
     }
@@ -508,6 +492,32 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void updateStatistics(){
+        if (this.isDebug()) {
+            this.bestOverallFitnesses.add(this.best.getEval());
+            double sum = 0;
+            for (ProgramSolution sol : this.population) {
+                sum += sol.getEval();
+            }
+            this.avgGenFitnesses.add(sum / this.population.size());
+
+            // add current avg tree depth to list
+            double avgDepth = 0;
+            for (ProgramSolution sol : this.population) {
+                avgDepth += sol.getTree().treeMaxDepth();
+            }
+            this.avgGenTreeDepths.add(avgDepth / this.population.size());
+
+            // add current avg tree size to list
+            double avgSize = 0;
+            for (ProgramSolution sol : this.population) {
+                avgSize += sol.getTree().treeSize();
+            }
+            this.avgGenTreeSizes.add(avgSize / this.population.size());
+
         }
     }
 }

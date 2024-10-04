@@ -15,6 +15,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.Configuration;
+import org.um.feri.ears.util.GPProblemType;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
@@ -156,16 +157,25 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
             // Evaluate (Needs to be done before the bloat control methods are executed)
             ProgramSolution currentGenBest = performEvaluation();
 
+            // Update statistics
+            updateStatistics();
+
             // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-            if(this.task.problem.getBloatControlOperators().length > 0) {
+            if (this.task.problem.getBloatControlOperators().length > 0) {
                 for (ProgramSolution solution : this.population) {
                     this.task.problem.executeBloatedControlOperators(solution);
+                }
+
+                if (this.task.isStopCriterion()) {
+                    return this.best;
                 }
 
                 // Reevaluate population
                 currentGenBest = performEvaluation();
             }
-            this.bestGenFitnesses.add(currentGenBest.getEval());
+
+            if (this.isDebug())
+                this.bestGenFitnesses.add(currentGenBest.getEval());
 
             // Check stop criterion and increment number of iterations
             if (this.task.isStopCriterion())
@@ -187,11 +197,13 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
         // Set EARS configuration
         int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
 
-        // Save Unity configuration
-        Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+        if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
+            // Save Unity configuration
+            Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
-        // Start Unity Instances
-        gpAlgorithmExecutor.restartUnityInstances(true);
+            // Start Unity Instances
+            gpAlgorithmExecutor.restartUnityInstances(true);
+        }
 
         // Run algorithm for X generations
         execute(generations, saveGPAlgorithmStateFilename);
@@ -295,6 +307,12 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
         ProgramSolution currentGenBest = null;
         population = new ArrayList<>(this.currentPopulation);
 
+        // If the number of evaluations is greater than the maximum number of evaluations, we need to remove the last individuals
+        if(this.task.getNumberOfEvaluations() + this.population.size() >= this.task.getMaxEvaluations()){
+            int evals = this.task.getMaxEvaluations() - this.task.getNumberOfEvaluations();
+            population = new ArrayList<>(this.population.subList(0, evals));
+        }
+
         this.task.bulkEval(this.population);
 
         currentGenBest = new ProgramSolution(this.population.get(0));
@@ -305,8 +323,6 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
             if (task.problem.isFirstBetter(sol, currentGenBest))
                 currentGenBest = new ProgramSolution(sol);
         }
-
-        //this.population = this.currentPopulation;
 
         return currentGenBest;
     }
@@ -367,41 +383,25 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
                 break;
             case EVALUATION:
                 ProgramSolution currentGenBest = performEvaluation();
-                if(this.isDebug()){
-                    this.bestOverallFitnesses.add(this.best.getEval());
-                    double sum = 0;
-                    for (ProgramSolution sol: this.population) {
-                        sum += sol.getEval();
-                    }
-                    this.avgGenFitnesses.add(sum / this.population.size());
 
-                    // add current avg tree depth to list
-                    double avgDepth = 0;
-                    for (ProgramSolution sol: this.population) {
-                        avgDepth += sol.getTree().treeMaxDepth();
-                    }
-                    this.avgGenTreeDepths.add(avgDepth / this.population.size());
-
-                    // add current avg tree size to list
-                    double avgSize = 0;
-                    for (ProgramSolution sol: this.population) {
-                        avgSize += sol.getTree().treeSize();
-                    }
-                    this.avgGenTreeSizes.add(avgSize / this.population.size());
-
-                }
+                // Update statistics
+                updateStatistics();
 
                 // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-                if(this.task.problem.getBloatControlOperators().length > 0) {
+                if (this.task.problem.getBloatControlOperators().length > 0) {
                     for (ProgramSolution solution : this.population) {
                         this.task.problem.executeBloatedControlOperators(solution);
+                    }
+
+                    if (this.task.isStopCriterion()) {
+                        return this.best;
                     }
 
                     // Reevaluate population
                     currentGenBest = performEvaluation();
                 }
 
-                if(this.isDebug())
+                if (this.isDebug())
                     this.bestGenFitnesses.add(currentGenBest.getEval());
 
                 break;
@@ -489,10 +489,36 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
         return elitismProbability;
     }
 
-    void setElitismParams(){
+    public void setElitismParams(){
         this.eliteCount = (int) Math.round(this.elitismProbability * this.popSize);
         if((this.eliteCount % 2) != 0)
             this.eliteCount++; // Because of crossover operator we need to have even number of elite individuals
         this.offspringCount = this.popSize - this.eliteCount;
+    }
+
+    public void updateStatistics(){
+        if (this.isDebug()) {
+            this.bestOverallFitnesses.add(this.best.getEval());
+            double sum = 0;
+            for (ProgramSolution sol : this.population) {
+                sum += sol.getEval();
+            }
+            this.avgGenFitnesses.add(sum / this.population.size());
+
+            // add current avg tree depth to list
+            double avgDepth = 0;
+            for (ProgramSolution sol : this.population) {
+                avgDepth += sol.getTree().treeMaxDepth();
+            }
+            this.avgGenTreeDepths.add(avgDepth / this.population.size());
+
+            // add current avg tree size to list
+            double avgSize = 0;
+            for (ProgramSolution sol : this.population) {
+                avgSize += sol.getTree().treeSize();
+            }
+            this.avgGenTreeSizes.add(avgSize / this.population.size());
+
+        }
     }
 }

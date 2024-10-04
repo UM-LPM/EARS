@@ -9,10 +9,12 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.Configuration;
+import org.um.feri.ears.util.GPProblemType;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
+import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     private int numberOfTournaments;
 
     private List<ProgramSolution> population;
+    private List<ProgramSolution> parentPopulation;
     private List<ProgramSolution> currentPopulation;
 
     private ProblemComparator<ProgramSolution> comparator;
@@ -102,20 +105,39 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 GPAlgorithm.serializeAlgorithmState(this, "gpAlgorithmState.ser");
                 break;
             }
-            // Selection and Crossover
-            performSelectionAndCrossover();
+
+            // Selection
+            this.parentPopulation = new ArrayList<>();
+            parentPopulation.addAll(performselection(this.popSize));
+
+            // Crossover
+            performCrossover();
 
             // Mutation
             performMutation();
 
             // Evaluate
-            performEvaluation();
+            ProgramSolution currentGenBest = performEvaluation();
+
+            // Update statistics
+            updateStatistics();
 
             // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-            // TODO implement reevaluation (Can be placed before the performEvaluation method)???
-            /*for (ProgramSolution solution : this.population) {
-                this.task.problem.executeBloatedControlOperators(solution);
-            }*/
+            if (this.task.problem.getBloatControlOperators().length > 0) {
+                for (ProgramSolution solution : this.population) {
+                    this.task.problem.executeBloatedControlOperators(solution);
+                }
+
+                if (this.task.isStopCriterion()) {
+                    return this.best;
+                }
+
+                // Reevaluate population
+                currentGenBest = performEvaluation();
+            }
+
+            if (this.isDebug())
+                this.bestGenFitnesses.add(currentGenBest.getEval());
 
             // Check stop criterion and increment number of iterations
             if (this.task.isStopCriterion())
@@ -180,20 +202,30 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         algorithmInitialization(task, new ProblemComparator<>(task.problem), null); // TODO add support for selection operator
     }
 
-    public void performSelectionAndCrossover() throws StopCriterionException {
-        ProgramSolution[] parents = new ProgramSolution[2];
-        this.currentPopulation = new ArrayList<>(population.size());
-        // Selection and Crossover
-        for (int i = 0; i < this.popSize / 2; i++) {
-            parents[0] = this.selectionOperator.execute(population, task.problem);
-            parents[1] = this.selectionOperator.execute(population, task.problem);
+    public List<ProgramSolution> performselection(int parentCount){
+        List<ProgramSolution> parentSolutions = new ArrayList<>();
+        // Execute selection operator to get all parents
+        for (int i = 0; i < parentCount; i++) {
+            parentSolutions.add(new ProgramSolution(this.selectionOperator.execute(population, task.problem)));
+        }
 
-            //selectedIndividuals.add(parents[0]);
-            //selectedIndividuals.add(parents[1]);
+        return parentSolutions;
+    }
+
+    public void performCrossover() throws StopCriterionException {
+        // Shuffle parentSolutions
+        RNG.shuffle(this.parentPopulation);
+
+        ProgramSolution[] parents = new ProgramSolution[2];
+        // Selection and Crossover
+        for (int i = 0; i < this.parentPopulation.size(); i += 2) {
+            parents[0] = this.parentPopulation.get(i);
+            parents[1] = this.parentPopulation.get(i + 1);
             try {
                 ProgramSolution[] newSolution = this.crossoverOperator.execute(parents, task.problem);
                 currentPopulation.add(newSolution[0]);
                 currentPopulation.add(newSolution[1]);
+
             } catch (Exception ex) {
                 throw new StopCriterionException(ex.toString());
             }
@@ -214,6 +246,12 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         ProgramSolution currentGenBest = null;
         population = new ArrayList<>(this.currentPopulation);
 
+        // If the number of evaluations is greater than the maximum number of evaluations, we need to remove the last individuals
+        if(this.task.getNumberOfEvaluations() + this.population.size() >= this.task.getMaxEvaluations()){
+            int evals = this.task.getMaxEvaluations() - this.task.getNumberOfEvaluations();
+            population = new ArrayList<>(this.population.subList(0, evals));
+        }
+
         this.task.bulkEval(this.population);
 
         currentGenBest = new ProgramSolution(this.population.get(0));
@@ -224,8 +262,6 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
             if (task.problem.isFirstBetter(sol, currentGenBest))
                 currentGenBest = new ProgramSolution(sol);
         }
-
-        this.population = this.currentPopulation;
 
         return currentGenBest;
     }
@@ -253,38 +289,45 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 algorithmInitialization(this.task, new ProblemComparator<>(this.task.problem), null);
                 populationInitialization();
                 break;
+
             case SELECTION_AND_CROSSOVER:
-                performSelectionAndCrossover();
+                // Selection
+                this.parentPopulation = new ArrayList<>();
+                this.currentPopulation = new ArrayList<>(this.popSize);
+
+                parentPopulation.addAll(performselection(this.popSize));
+
+                // Crossover
+                performCrossover();
+
                 break;
             case MUTATION:
                 performMutation();
+
                 break;
             case EVALUATION:
                 ProgramSolution currentGenBest = performEvaluation();
-                this.bestGenFitnesses.add(currentGenBest.getEval());
-                if(this.isDebug()){
-                    this.bestOverallFitnesses.add(this.best.getEval());
-                    double sum = 0;
-                    for (ProgramSolution sol: this.population) {
-                        sum += sol.getEval();
-                    }
-                    this.avgGenFitnesses.add(sum / this.population.size());
 
-                    // add current avg tree depth to list
-                    double avgDepth = 0;
-                    for (ProgramSolution sol: this.population) {
-                        avgDepth += sol.getTree().treeMaxDepth();
-                    }
-                    this.avgGenTreeDepths.add(avgDepth / this.population.size());
+                // Update statistics
+                updateStatistics();
 
-                    // add current avg tree size to list
-                    double avgSize = 0;
-                    for (ProgramSolution sol: this.population) {
-                        avgSize += sol.getTree().treeSize();
+                // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
+                if (this.task.problem.getBloatControlOperators().length > 0) {
+                    for (ProgramSolution solution : this.population) {
+                        this.task.problem.executeBloatedControlOperators(solution);
                     }
-                    this.avgGenTreeSizes.add(avgSize / this.population.size());
 
+                    if (this.task.isStopCriterion()) {
+                        return this.best;
+                    }
+
+                    // Reevaluate population
+                    currentGenBest = performEvaluation();
                 }
+
+                if (this.isDebug())
+                    this.bestGenFitnesses.add(currentGenBest.getEval());
+
                 break;
             default:
                 System.out.println("Unknown algorithm step, skipping...");
@@ -315,11 +358,13 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         // Set EARS configuration
         int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
 
-        // Save Unity configuration
-        Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+        if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
+            // Save Unity configuration
+            Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
-        // Start Unity Instances
-        gpAlgorithmExecutor.restartUnityInstances(true);
+            // Start Unity Instances
+            gpAlgorithmExecutor.restartUnityInstances(true);
+        }
 
         // Run algorithm for X generations
         execute(generations, saveGPAlgorithmStateFilename);
@@ -378,5 +423,31 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
     @Override
     public int getNumberOfTournaments() {
         return numberOfTournaments;
+    }
+
+    public void updateStatistics(){
+        if (this.isDebug()) {
+            this.bestOverallFitnesses.add(this.best.getEval());
+            double sum = 0;
+            for (ProgramSolution sol : this.population) {
+                sum += sol.getEval();
+            }
+            this.avgGenFitnesses.add(sum / this.population.size());
+
+            // add current avg tree depth to list
+            double avgDepth = 0;
+            for (ProgramSolution sol : this.population) {
+                avgDepth += sol.getTree().treeMaxDepth();
+            }
+            this.avgGenTreeDepths.add(avgDepth / this.population.size());
+
+            // add current avg tree size to list
+            double avgSize = 0;
+            for (ProgramSolution sol : this.population) {
+                avgSize += sol.getTree().treeSize();
+            }
+            this.avgGenTreeSizes.add(avgSize / this.population.size());
+
+        }
     }
 }
