@@ -329,10 +329,10 @@ public class GPInterface extends JFrame {
 
         evalEnvInstanceURIsTextField.addActionListener(e -> {
             if(evalEnvInstanceURIsTextField.getText().length() > 0){
-                gpAlgorithmExecutor.getProgramProblem().setEvalEnvInstanceURIs(evalEnvInstanceURIsTextField.getText().split(","));
+                gpAlgorithmExecutor.getProgramProblem().getRequestBodyParams().setEvalEnvInstanceURIs(evalEnvInstanceURIsTextField.getText().split(","));
             }
             else{
-                gpAlgorithmExecutor.getProgramProblem().setEvalEnvInstanceURIs(new String[]{});
+                gpAlgorithmExecutor.getProgramProblem().getRequestBodyParams().setEvalEnvInstanceURIs(new String[]{});
             }
         });
 
@@ -551,7 +551,7 @@ public class GPInterface extends JFrame {
         seqSelNumOfChildrenTextField.setText("" + Sequencer.MAX_CHILDREN);
         imagePathTextField.setText(imgPathPrefix);
         jsonBodyDestFolderPathTextField.setText(gpAlgorithmExecutor.getProgramProblem().getJsonBodyDestFolderPath());
-        evalEnvInstanceURIsTextField.setText(Arrays.stream(gpAlgorithmExecutor.getProgramProblem().getEvalEnvInstanceURIs()).map(Object::toString).reduce((a, b) -> a + "," + b).orElse(""));
+        evalEnvInstanceURIsTextField.setText(Arrays.stream(gpAlgorithmExecutor.getProgramProblem().getRequestBodyParams().getEvalEnvInstanceURIs()).map(Object::toString).reduce((a, b) -> a + "," + b).orElse(""));
 
         individualGenMethodComboBox.setSelectedItem(gpAlgorithmExecutor.getProgramProblem().getProgramSolutionGenerator().getInitPopGeneratorMethod().toString());
 

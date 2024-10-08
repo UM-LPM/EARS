@@ -9,6 +9,7 @@ import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.Configuration;
+import org.um.feri.ears.util.RequestBodyParams;
 import org.um.feri.ears.util.random.RNG;
 import org.um.feri.ears.individual.representations.gp.*;
 import java.util.ArrayList;
@@ -28,9 +29,6 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
      */
     List<Class<? extends Node>> baseTerminalNodeTypes;
 
-    //protected List<Op> simpleFunctions;
-    //protected List<Op> complexFunctions;
-
     protected Tree.TreeType solutionTreeType;
     protected String treeName; // TODO add support for multiple treeNames in the future
 
@@ -42,18 +40,19 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
 
     protected GPProgramSolution programSolutionGenerator;
 
-    protected String[] evalEnvInstanceURIs;
+    protected  RequestBodyParams requestBodyParams;
+
     protected String jsonBodyDestFolderPath;
 
     protected FeasibilityGPOperator[] feasibilityControlOperators;
     protected GPOperator[] bloatControlOperators;
 
     public ProgramProblem(String name, Tree.TreeType treeType){
-        this(name, new ArrayList<>(), new ArrayList<>(), 2, 5, 10, 100, new FeasibilityGPOperator[]{}, new GPOperator[]{}, new GPRandomProgramSolution(), treeType, "BtTree", new String[]{});
+        this(name, new ArrayList<>(), new ArrayList<>(), 2, 5, 10, 100, new FeasibilityGPOperator[]{}, new GPOperator[]{}, new GPRandomProgramSolution(), treeType, "BtTree", new RequestBodyParams());
     }
 
     // Constructor with all parameters
-    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName, String[] evalEnvInstanceURIs) {
+    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName, RequestBodyParams requestBodyParams) {
         super(name, 1, 1, 0);
         setBaseFunctionNodeTypes(baseFunctionNodeTypes);
         setBaseTerminalNodeTypes(baseTerminalNodeTypes);
@@ -69,7 +68,7 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.bloatControlOperators = bloatControlOperators;
         this.programSolutionGenerator = programSolutionGenerator;
 
-        this.evalEnvInstanceURIs = evalEnvInstanceURIs;
+        this.requestBodyParams = requestBodyParams;
     }
 
 
@@ -176,13 +175,12 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         }
     }
 
-
-    public void setEvalEnvInstanceURIs(String[] evalEnvInstanceURIs) {
-        this.evalEnvInstanceURIs = evalEnvInstanceURIs;
+    public void setRequestBodyParams(RequestBodyParams requestBodyParams){
+        this.requestBodyParams = requestBodyParams;
     }
 
-    public String[] getEvalEnvInstanceURIs() {
-        return evalEnvInstanceURIs;
+    public RequestBodyParams getRequestBodyParams(){
+        return requestBodyParams;
     }
 
     public void setJsonBodyDestFolderPath(String jsonBodyDestFolderPath){

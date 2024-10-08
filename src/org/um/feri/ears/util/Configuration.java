@@ -10,7 +10,9 @@ import java.util.List;
 
 public class Configuration implements Serializable{
 
+    public String CoordinatorURI;
     public String EvalEnvInstanceURIs;
+    public String DestinationFilePath;
     public String JsonBodyDestFilePath;
     public String ImagePath;
     public String UnityGameFile;

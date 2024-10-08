@@ -164,8 +164,12 @@ public class GPAlgorithmExecutor implements Serializable {
         else if(Objects.equals(earsConfiguration.InitPopGeneratorMethod, Configuration.InitPopGeneratorMethod.RampedHalfAndHalfMethod.toString())){
             programProblem.setProgramSolutionGenerator(new GPRampedHalfAndHalf());
         }
-        // EvalEnvInstanceURIs
-        programProblem.setEvalEnvInstanceURIs(configuration.EvalEnvInstanceURIs.split(","));
+
+        // RequestBodyParams
+        RequestBodyParams requestBodyParams = new RequestBodyParams(configuration.CoordinatorURI, configuration.EvalEnvInstanceURIs.split(","),
+                configuration.JsonBodyDestFilePath, configuration.DestinationFilePath);
+
+        programProblem.setRequestBodyParams(requestBodyParams);
         // JsonBodyDestFolderPath
         programProblem.setJsonBodyDestFolderPath(configuration.JsonBodyDestFilePath);
 

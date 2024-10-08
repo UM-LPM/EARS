@@ -247,7 +247,7 @@ public class Util {
         return Arrays.stream(array).boxed().collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static String sendEvaluateRequest(String apiUrl, String jsonBody, int timeout, String[] evalEnvInstanceURIs, String jsonBodyDestFolderPath) throws Exception {
+    public static String sendEvaluateRequest(String apiUrl, String jsonBody, int timeout, RequestBodyParams requestBodyParams, String jsonBodyDestFolderPath) throws Exception {
         // Write the JSON to file
         //File jsonFile = new File("C:\\Users\\marko\\UnityProjects\\GeneralTrainingEnvironmentForMAS\\WebAPI\\RequestData\\jsonBody.json");
         File jsonFile = new File(jsonBodyDestFolderPath);
@@ -270,14 +270,9 @@ public class Util {
         conn.setChunkedStreamingMode(0); // Enable chunked transfer encoding
         conn.setDoOutput(true);
 
-        // Write the JSON payload to the request body
-        //String jsonRequestBody = "[\"http://localhost:4444\",\"http://localhost:4445\"]";
-        //String jsonRequestBody = "[\"http://localhost:4444\",\"http://localhost:4445\",\"http://localhost:4446\"]";
-        //String jsonRequestBody = "[\"http://localhost:4444\"]";
-
         // Convert evalEnvInstanceURIs to JSON
         Gson gson = new Gson();
-        String jsonRequestBody = gson.toJson(evalEnvInstanceURIs);
+        String jsonRequestBody = gson.toJson(requestBodyParams);
 
         InputStream jsonBodyStream = new ByteArrayInputStream(jsonRequestBody.getBytes(StandardCharsets.UTF_8));
         try (OutputStream os = conn.getOutputStream()) {

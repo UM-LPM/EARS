@@ -14,6 +14,7 @@ import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.operators.gp.FeasibilityGPOperator;
 import org.um.feri.ears.operators.gp.GPOperator;
+import org.um.feri.ears.util.RequestBodyParams;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.gp.GPInterface;
 
@@ -30,10 +31,10 @@ public class UnityBTProblem extends ProgramProblem {
     }
 
     public UnityBTProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator) {
-        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new String[]{});
+        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
     }
     public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator) {
-        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new String[]{});
+        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
     }
 
     @Override
@@ -61,7 +62,7 @@ public class UnityBTProblem extends ProgramProblem {
         for(int nums = 0; nums < BULK_EVALUATION_REPEATS; nums++) {
             try {
                 String apiUrl = "http://localhost:5016/api/JsonToSoParser";
-                String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000, getEvalEnvInstanceURIs(), getJsonBodyDestFolderPath());
+                String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000, getRequestBodyParams(), getJsonBodyDestFolderPath());
 
                 Gson gson = new Gson();
                 HttpResponse obj = gson.fromJson(response, HttpResponse.class);
