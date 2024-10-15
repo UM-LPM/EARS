@@ -18,28 +18,32 @@ public class GPTreeExpansionOperator extends FeasibilityGPOperator {
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
         this.minTreeDepth = tProgramProblem.getMinTreeDepth();
         this.programProblem = tProgramProblem;
-        expandProgramDepth(tProgramSolution.getTree().getRootNode(), null, 1);
+        tProgramSolution.setIsDirty(expandProgramDepth(tProgramSolution.getTree().getRootNode(), null, 1));
         return tProgramSolution;
     }
 
-    private void expandProgramDepth(Node current, Node parent, int currentDepth){
+    private boolean expandProgramDepth(Node current, Node parent, int currentDepth){
+        boolean expanded = false;
         if(currentDepth < this.minTreeDepth){
             // Create new solution that will exceed minTreeDepth
             if(parent != null){
                 ProgramSolution newSolution = this.programProblem.getProgramSolutionGenerator().generate(this.programProblem,  currentDepth, "");
                 parent.replace(current, newSolution.getTree().getRootNode());
+                expanded = true;
             }
             else if (current.getArity() > 0 && current.getChildren().isEmpty()){
                 ProgramSolution newSolution = this.programProblem.getProgramSolutionGenerator().generate(this.programProblem,  currentDepth + 1, "");
                 current.getChildren().add(newSolution.getTree().getRootNode());
+                expanded = true;
             }
 
             if(current.getArity() > 0){
                 for (Node child : current.getChildren()) {
-                    expandProgramDepth(child, current, currentDepth + 1);
+                    expanded = expandProgramDepth(child, current, currentDepth + 1);
                 }
             }
         }
+        return expanded;
     }
 
 }
