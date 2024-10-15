@@ -16,16 +16,20 @@ public class ProgramSolution extends Solution {
 
     protected Tree tree;
 
-    public List<ProgramSolution> parents;
+    protected List<ProgramSolution> parents;
 
-    public HashMap<String, Fitness> Fitnesses; // Detailed fitness values for analysis
+    protected HashMap<String, Fitness> Fitnesses; // Detailed fitness values for analysis
+    protected double ratingStandardDeviation; // Standard deviation of the rating when rating is used as fitness
 
-    public int[] NodeCallFrequencyCount;
+    protected int[] NodeCallFrequencyCount;
+
+    protected boolean isDirty; // Flag to indicate if the solution has been modified (GPOperators, etc.)
 
     public ProgramSolution(int numberOfObjectives) {
         super(numberOfObjectives);
         this.Fitnesses = new HashMap<>();
         this.NodeCallFrequencyCount = new int[]{};
+        this.isDirty = false;
     }
 
     public ProgramSolution(ProgramSolution s) {
@@ -35,6 +39,8 @@ public class ProgramSolution extends Solution {
         Fitnesses = new HashMap<>();
         Fitnesses.putAll(s.Fitnesses);
         NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone();
+        isDirty = s.isDirty;
+        ratingStandardDeviation = s.ratingStandardDeviation;
     }
 
     @Override
@@ -185,5 +191,25 @@ public class ProgramSolution extends Solution {
 
     public int[] getNodeCallFrequencyCount(){
         return NodeCallFrequencyCount;
+    }
+
+    public void resetIsDirty(){
+        isDirty = false;
+    }
+
+    public void setIsDirty(boolean isDirty){
+        this.isDirty = isDirty;
+    }
+
+    public boolean isDirty(){
+        return isDirty;
+    }
+
+    public void setRatingStandardDeviation(double ratingStandardDeviation) {
+        this.ratingStandardDeviation = ratingStandardDeviation;
+    }
+
+    public double getRatingStandardDeviation() {
+        return ratingStandardDeviation;
     }
 }

@@ -1,6 +1,9 @@
 package org.um.feri.ears.util;
 
+import org.um.feri.ears.problems.gp.ProgramSolution;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class RequestBodyParams implements Serializable
 {
@@ -8,19 +11,23 @@ public class RequestBodyParams implements Serializable
     protected String[] EvalEnvInstanceURIs;
     protected String SourceFilePath;
     protected String DestinationFilePath;
+    protected RatingSystemRating[] LastEvalPopRatings;
 
-    public RequestBodyParams(){
-        this.CoordinatorURI = "http://localhost:0000";
-        this.EvalEnvInstanceURIs = new String[]{"http://localhost:1111"};
-        this.SourceFilePath = "";
-        this.DestinationFilePath = "";
+    public RequestBodyParams()
+    {
+        this("", new String[]{}, "", "", new RatingSystemRating[]{});
     }
 
     public RequestBodyParams(String coordinatorURI, String[] evalEnvInstanceURIs, String sourceFilePath, String destinationFilePath){
+        this(coordinatorURI, evalEnvInstanceURIs, sourceFilePath, destinationFilePath, new RatingSystemRating[]{});
+    }
+
+    public RequestBodyParams(String coordinatorURI, String[] evalEnvInstanceURIs, String sourceFilePath, String destinationFilePath, RatingSystemRating[] lastEvalPopRatings){
         this.CoordinatorURI = coordinatorURI;
         this.EvalEnvInstanceURIs = evalEnvInstanceURIs;
         this.SourceFilePath = sourceFilePath;
         this.DestinationFilePath = destinationFilePath;
+        this.LastEvalPopRatings = lastEvalPopRatings;
     }
 
     public String getCoordinatorURI() {
@@ -53,5 +60,24 @@ public class RequestBodyParams implements Serializable
 
     public void setDestinationFilePath(String destinationFilePath) {
         DestinationFilePath = destinationFilePath;
+    }
+
+    public RatingSystemRating[] getLastEvalPopRatings() {
+        return LastEvalPopRatings;
+    }
+
+    public void setLastEvalPopRatings(RatingSystemRating[] lastEvalPopRatings) {
+        LastEvalPopRatings = lastEvalPopRatings;
+    }
+
+    public void setLastEvalPopRatings(List<ProgramSolution> solutions) {
+        RatingSystemRating[] lastEvalPopRatings = new RatingSystemRating[solutions.size()];
+        for (int i = 0; i < solutions.size(); i++) {
+            if(!solutions.get(i).isDirty())
+                lastEvalPopRatings[i] = new RatingSystemRating(solutions.get(i).getObjective(0), solutions.get(i).getRatingStandardDeviation());
+            else
+                lastEvalPopRatings[i] = new RatingSystemRating();
+        }
+        this.LastEvalPopRatings = lastEvalPopRatings;
     }
 }

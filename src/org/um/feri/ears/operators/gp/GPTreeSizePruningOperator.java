@@ -44,7 +44,7 @@ public class GPTreeSizePruningOperator extends FeasibilityGPOperator {
             if(treeSize <= maxTreeSize){
                 break;
             }
-            System.out.println("Performing tree size pruning");
+            //System.out.println("Performing tree size pruning");
 
             // 1. Get the list of function nodes
             List<Node> functionNodes = tProgramSolution.getTree().getFunctionNodes();
@@ -82,6 +82,7 @@ public class GPTreeSizePruningOperator extends FeasibilityGPOperator {
             if(minDiffIndex == -1 && operatorType == OperatorType.NEW_SOLUTION){
                 // 3. b) Replace the whole tree with a new one
                 tProgramSolution = tProgramProblem.getRandomSolution();
+                tProgramSolution.setIsDirty(true);
                 break;
             }
             else {
@@ -105,7 +106,7 @@ public class GPTreeSizePruningOperator extends FeasibilityGPOperator {
                 Node parent = functionNodes.get(minDiffIndex).parent().get();
                 int childIndex = parent.childIndex(functionNodes.get(minDiffIndex));
                 parent.replace(childIndex, tProgramProblem.getRandomTerminalNode());
-
+                tProgramSolution.setIsDirty(true);
             }
 
         } while (true);

@@ -32,6 +32,7 @@ public class GPSinglePointCrossover extends GPCrossover {
 
         if(RNG.nextDouble() <= this.crossoverProbability) {
             //System.out.println("Performing crossover");
+            parent1.setIsDirty(true);
 
             // Get lengths of both parents and select random crossover points
             int childCount1 = parent1.getTree().getRootNode().ancestors().getAncestorCount();

@@ -27,25 +27,28 @@ public class GPDepthBasedTreePruningOperator extends FeasibilityGPOperator {
         return tProgramSolution;
     }
 
-    private void pruneProgramDepth(Node current, Node parent, int currentDepth){
+    private boolean pruneProgramDepth(Node current, Node parent, int currentDepth){
+        boolean pruned = false;
         if(currentDepth >= this.maxTreeDepth){
             if(current.getArity() > 0){
                 ProgramSolution newSolution = programProblem.getProgramSolutionGenerator().generate(this.programProblem, currentDepth, "");
                 if(parent != null){
                     try {
                         parent.replace(current, newSolution.getTree().getRootNode());
+                        pruned = true;
                     } catch (Exception e) {
                         throw new RuntimeException("Error replacing node");
                     }
                 }
-
             }
         }else{
             if(current.getArity() > 0) {
                 for (Node child : current.getChildren()) {
-                    pruneProgramDepth(child, current, currentDepth + 1);
+                    pruned = pruneProgramDepth(child, current, currentDepth + 1);
                 }
             }
         }
+
+        return pruned;
     }
 }

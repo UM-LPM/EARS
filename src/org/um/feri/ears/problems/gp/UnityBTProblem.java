@@ -62,7 +62,10 @@ public class UnityBTProblem extends ProgramProblem {
         for(int nums = 0; nums < BULK_EVALUATION_REPEATS; nums++) {
             try {
                 String apiUrl = "http://localhost:5016/api/JsonToSoParser";
-                String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000, getRequestBodyParams(), getJsonBodyDestFolderPath());
+                RequestBodyParams requestBodyParams = getRequestBodyParams();
+                requestBodyParams.setLastEvalPopRatings(solutions);
+
+                String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000, requestBodyParams, getJsonBodyDestFolderPath());
 
                 Gson gson = new Gson();
                 HttpResponse obj = gson.fromJson(response, HttpResponse.class);
@@ -74,7 +77,10 @@ public class UnityBTProblem extends ProgramProblem {
                     for (int i = 0; i < solutions.size(); i++) {
                         solutions.get(i).setObjective(0, obj.getObject().getFitnesses()[i].finalFitnessStats);
                         solutions.get(i).setFitnesses(obj.getObject().getFitnesses()[i].fitnesses);
-                        solutions.get(i).setNodeCallFrequencyCount(obj.getObject().getBtsNodeCallFrequencies()[i]);
+                        solutions.get(i).setRatingStandardDeviation(obj.getObject().getFitnesses()[i].standardDeviation);
+                        //solutions.get(i).setNodeCallFrequencyCount(obj.getObject().getBtsNodeCallFrequencies()[i]); // TODO fix this
+
+                        solutions.get(i).resetIsDirty();
                     }
                     return;
                 }
