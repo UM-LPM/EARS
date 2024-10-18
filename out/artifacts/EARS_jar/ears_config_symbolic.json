@@ -1,0 +1,53 @@
+{ 
+	"CoordinatorURI": "",
+	"EvalEnvInstanceURIs": "",
+	"DestinationFilePath": "",
+	"JsonBodyDestFilePath": "",
+	"ImagePath": "",
+	"UnityGameFile": "",
+	"UnityExeLocation": "",
+	"UnityConfigDestFilePath": "",
+	"Configurations": [
+		{
+			"Name": "Config1",
+			"NumberOfReruns": 1,
+			"EARSConfiguration": {
+				"AlgorithmType": 2,
+				"ProblemType": 0,
+				"ProblemName": "Symbolic_Regression_Test_1",
+				"FitnessEvaluations": 20300,
+				"Generations": 0,
+				"PopSize": 200,
+				"CrossoverProb": 0.75,
+				"MutationProb": 0.2,
+				"NumOfTournaments": 6,
+				"MinTreeDepth": 4,
+				"MaxTreeStartDepth": 7,
+				"MaxTreeEndDepth": 10,
+				"MaxTreeSize": 100,
+				"ElitismProb":  0.05,
+				"SeqSelNumOfChildren": 3,
+				"InitPopGeneratorMethod": "Random",
+				"Functions": "symbolic.regression.AddNode,symbolic.regression.DivNode,symbolic.regression.MulNode,symbolic.regression.SubNode",
+				"Terminals": "symbolic.regression.ConstNode,symbolic.regression.VarNode",
+				"FeasibilityControlOperators": ["GPTreeExpansionOperator-{}","GPDepthBasedTreePruningOperator-{}"],
+				"BloatControlOperators": [],
+				"EvalData": [
+					{ "contextState": { "x": 0}, "targetValue": 12 },
+					{ "contextState": { "x": 1}, "targetValue": 23 },
+					{ "contextState": { "x": 2}, "targetValue": 44 },
+					{ "contextState": { "x": 3}, "targetValue": 81 },
+					{ "contextState": { "x": 4}, "targetValue": 140 },
+					{ "contextState": { "x": 5},"targetValue": 227 },
+					{ "contextState": { "x": 6},"targetValue": 348 },
+					{ "contextState": { "x": 7}, "targetValue": 509 },
+					{ "contextState": { "x": 8}, "targetValue": 716 },
+					{ "contextState": { "x": 9}, "targetValue": 975 },
+					{ "contextState": { "x": 10}, "targetValue": 1292 }
+				]
+			},
+			"EncapsulatedNodeDefinitions": [ ],
+			"UnityConfiguration": { }
+		}
+	]
+}
