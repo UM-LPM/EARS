@@ -25,6 +25,7 @@ package org.um.feri.ears.util.comparator;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.Solution;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -32,7 +33,7 @@ import java.util.Comparator;
  * <code>Solution</code> objects) based on the overall constraint violation of
  * the solutions, as in NSGA-II.
  */
-public class OverallConstraintViolationComparator implements Comparator<Solution> {
+public class OverallConstraintViolationComparator implements Comparator<Solution>, Serializable {
 
     /**
      * Compares two solutions.

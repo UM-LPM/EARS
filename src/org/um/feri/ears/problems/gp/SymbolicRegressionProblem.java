@@ -1,17 +1,37 @@
 package org.um.feri.ears.problems.gp;
 
-import java.util.List;
-import java.util.Map;
+import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.Tree;
+import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
+import org.um.feri.ears.individual.representations.gp.Target;
+import org.um.feri.ears.operators.gp.FeasibilityGPOperator;
+import org.um.feri.ears.operators.gp.GPOperator;
+import org.um.feri.ears.util.RequestBodyParams;
 
-public class SymbolicRegressionProblem extends ProgramProblem<Double>{
+import java.io.Serializable;
+import java.util.List;
+
+public class SymbolicRegressionProblem extends ProgramProblem implements Serializable {
 
     private List<Target> evalData;
 
     public SymbolicRegressionProblem() {
-        super("SymbolicRegression");
+        super("SymbolicRegression", Tree.TreeType.SYMBOLIC);
     }
 
-    public List<?> getEvalData() {
+    public SymbolicRegressionProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, List<Target> evalData) {
+        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree", new RequestBodyParams());
+
+        setEvalData(evalData);
+    }
+
+    public SymbolicRegressionProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, List<Target> evalData) {
+        super("SymbolicRegression", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree", new RequestBodyParams());
+
+        setEvalData(evalData);
+    }
+
+    public List<Target> getEvalData() {
         return evalData;
     }
 
@@ -20,44 +40,16 @@ public class SymbolicRegressionProblem extends ProgramProblem<Double>{
     }
 
     @Override
-    public void evaluate(ProgramSolution<Double> solution) {
+    public void evaluate(ProgramSolution solution) {
         double eval = 0;
-        //Za vse vrednosti iz evalData pridobim vrednost
+        // For each value from evalData evaluate the solution
         for(Target t: evalData) {
-            //System.out.println(t.getContextState().get(this.baseTerminals.get(0)));
-            double val = evaluateSubTree(solution.program, t.getContextState());
+            double val = solution.tree.evaluate( t.getContextState());
             eval += Math.pow(t.getTargetValue() - val, 2);
-            //System.out.println("TargetValue: " + t.getTargetValue() + ", " + "ActualValue: " + val);
         }
 
-        eval = Math.sqrt((eval / evalData.size()));
+        eval = eval / evalData.size();
 
         solution.setObjective(0, eval);
-        //System.out.println("Current Fitness: " + eval);
-    }
-
-    private double evaluateSubTree(TreeNode<Double> node, Map<String, Double> contextState) {
-
-        if(!node.getOperation().isTerminal()){
-            if(node.getOperation().isVariable()){
-                Double val = contextState.get(node.getOperation().name());
-                if(node.getOperation().isVariable() && val != null)
-                    return val;
-                else
-                    throw new IllegalArgumentException("Operation not acceptable");
-            }
-            else {
-                Double[] evaluatedSubTrees = new Double[node.childCount()];
-                int i = 0;
-                for (TreeNode<Double> next : node.getChildren()) {
-                    evaluatedSubTrees[i] = (evaluateSubTree(next, contextState));
-                    i++;
-                }
-                return node.getOperation().apply(evaluatedSubTrees);
-            }
-        }
-        else  {
-            return node.getOperation().apply(new Double[]{node.getCoefficient()});
-        }
     }
 }
