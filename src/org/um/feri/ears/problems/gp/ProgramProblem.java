@@ -111,7 +111,13 @@ public abstract class ProgramProblem<T> extends Problem<ProgramSolution<T>> {
         ProgramSolution<T> newSolution = new ProgramSolution<>(numberOfObjectives);
 
         // First we select one from baseFunctions, otherwise the tree would stop here (we also exclude functions that are actually constants)
-        List<Op<T>> filteredOperations = this.baseFunctions.stream().filter(x -> (!x.isVariable() && !x.isTerminal() && !x.isConstant() || !isRoot)).toList(); //File > Settings > Build, Execution, Deployment > Compiler > Java Compiler: Ensure that the Project bytecode version is set to 16.
+        //List<Op<T>> filteredOperations = this.baseFunctions.stream().filter(x -> (!x.isVariable() && !x.isTerminal() && !x.isConstant() || !isRoot)).toList(); //File > Settings > Build, Execution, Deployment > Compiler > Java Compiler: Ensure that the Project bytecode version is set to 16.
+        List<Op<T>> filteredOperations = new ArrayList<>();
+        for (Op<T> op : this.baseFunctions) {
+            if ((!op.isVariable() && !op.isTerminal() && !op.isConstant()) || !isRoot) {
+                filteredOperations.add(op);
+            }
+        }
 
         Op<T> op = filteredOperations.get(RNG.nextInt(filteredOperations.size()));
         TreeNode<T> rootNode = new TreeNode<>(op);
