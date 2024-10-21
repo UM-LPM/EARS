@@ -3,6 +3,8 @@ plugins {
     id 'java-library'
     id 'eclipse'
     id 'idea'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.beryx.jlink' version '2.25.0'
 }
 
 idea {
@@ -16,8 +18,8 @@ repositories {
 }
 
 //compatibility for reflection support
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 16
+targetCompatibility = 16
 
 dependencies {
     implementation fileTree(dir: 'lib', include: ['*.jar'])
@@ -46,6 +48,8 @@ dependencies {
     implementation 'net.sf.epsgraphics:epsgraphics:1.2'
     implementation group: 'org.javassist', name: 'javassist', version: '3.24.0-GA'
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.12.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.16.1'
     implementation 'org.jetbrains:annotations:13.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.apache.commons:commons-rng-core:1.4'
@@ -86,3 +90,15 @@ configurations {
     jar.archiveFileName = 'ears.jar'
 }
 
+javafx {
+    version = '17.0.7'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+jlink {
+    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'app'
+    }
+}

@@ -1,11 +1,12 @@
 package org.um.feri.ears.util.comparator;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.problems.Solution;
 
-public class ProblemComparator<S extends Solution> implements Comparator<S>{
+public class ProblemComparator<S extends Solution> implements Comparator<S>, Serializable {
 	
 	Problem<S> problem;
 	
