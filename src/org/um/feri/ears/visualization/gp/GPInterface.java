@@ -1,6 +1,5 @@
 package org.um.feri.ears.visualization.gp;
 
-import javafx.scene.input.KeyCode;
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.gp.ElitismGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.GPAlgorithmExecutor;
