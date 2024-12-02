@@ -30,17 +30,17 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
     protected boolean fixedNumOfChildren;
 
     public Node() {
-        this(0, "");
+        this("", 0);
     }
     public Node(String name) {
-        this(0, name);
+        this(name, 0);
     }
 
-    public Node(int arity, String name) {
-        this(arity, new ArrayList<>(), false, name);
+    public Node(String name, int arity) {
+        this(name, arity, new ArrayList<>(), false);
     }
 
-    public Node(int arity, List<Node> children, boolean fixedNumOfChildren, String name) {
+    public Node(String name, int arity, List<Node> children, boolean fixedNumOfChildren) {
         this.id = Node.CURRENT_ID++;
         this.name = name;
         this.arity = arity;

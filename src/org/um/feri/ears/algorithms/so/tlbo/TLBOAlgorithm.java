@@ -104,7 +104,6 @@ public class TLBOAlgorithm extends NumberAlgorithm {
                     tmp3 = Util.toDoubleArray(population[j].getVariables());
 
                     tmp3[pos] = RNG.nextDouble(lowerLimit.get(pos), upperLimit.get(pos));
-                    StopCriterionException.id = " 3";
 
                     NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(tmp3));
                     task.eval(newSolution);

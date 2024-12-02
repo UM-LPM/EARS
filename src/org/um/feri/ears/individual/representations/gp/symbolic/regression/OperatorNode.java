@@ -11,11 +11,15 @@ import static java.util.Objects.requireNonNull;
 public abstract class OperatorNode extends Node {
 
     public OperatorNode(String name) {
-        super(2, new ArrayList<>(), true, name);
+        this(name,2);
     }
 
-    public OperatorNode(List<Node> children, String name) {
-        super(2, children, true, name);
+    public OperatorNode(String name, int arity) {
+        this(name, arity, new ArrayList<>());
+    }
+
+    public OperatorNode(String name, int arity, List<Node> children) {
+        super(name, arity, children, true);
     }
 }
 

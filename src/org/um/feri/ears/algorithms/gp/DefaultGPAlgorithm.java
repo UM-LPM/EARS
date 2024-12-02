@@ -106,6 +106,8 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
                 break;
             }
 
+            currentPopulation = new ArrayList<>(this.population.size());
+
             // Selection
             this.parentPopulation = new ArrayList<>();
             parentPopulation.addAll(performselection(this.popSize));
@@ -285,7 +287,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
         switch (this.algorithmStepper.getCurrentValue()){
             case INITIALIZATION:
                 if(this.task == null)
-                    throw new StopCriterionException("Algorithm task not set");;
+                    throw new StopCriterionException("Algorithm task not set");
                 algorithmInitialization(this.task, new ProblemComparator<>(this.task.problem), null);
                 populationInitialization();
                 break;

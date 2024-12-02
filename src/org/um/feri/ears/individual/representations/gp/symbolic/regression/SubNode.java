@@ -11,7 +11,7 @@ public class SubNode extends OperatorNode {
         super("-");
     }
     public SubNode(List<Node> children) {
-        super(children, "-");
+        super("-", 2, children);
     }
 
     @Override

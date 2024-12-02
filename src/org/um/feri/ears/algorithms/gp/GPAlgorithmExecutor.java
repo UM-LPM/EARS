@@ -189,7 +189,7 @@ public class GPAlgorithmExecutor implements Serializable {
 
         // EvalData (For symbolic regression only)
         if(programProblem instanceof SymbolicRegressionProblem){
-            ((SymbolicRegressionProblem)programProblem).setEvalData(Arrays.asList(earsConfiguration.EvalData));
+            ((SymbolicRegressionProblem)programProblem).setEvaluationSet(Arrays.asList(earsConfiguration.EvalData));
 
             // find unique indexes in the evalData contextState
             List<String> uniqueIndexes = new ArrayList<>();

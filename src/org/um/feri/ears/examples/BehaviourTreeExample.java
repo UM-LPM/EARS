@@ -7,12 +7,15 @@ import java.util.List;
 
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
+import org.um.feri.ears.algorithms.gp.PredefinedEncapsNodesGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.MoveForward;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.MoveSide;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.robostrike.RotateTurret;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.robostrike.Shoot;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.sensors.RayHitObject;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.Rotate;
 import org.um.feri.ears.individual.representations.gp.Target;
@@ -22,27 +25,29 @@ import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
+import org.um.feri.ears.util.SolutionUtils;
 import org.um.feri.ears.util.Util;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GeneticProgrammingExample {
+public class BehaviourTreeExample {
     public static void main(String[] args) throws IOException {
+        // Uncomment the following lines to run the examples
+
         // srExample();
         // btExample();
 
         // treeGenEvalSymbolicExample();
         // treeGenBtExample();
 
-        // symbolicRegressionDefaultAlgorithmRunExample(null);
-        // behaviourTreeDefaultAlgorithmRunExample(null);
+        symbolicRegressionDefaultAlgorithmRunExample(null);
+        //behaviourTreeDefaultAlgorithmRunExample(null);
 
         // serializationTest();
-        // deserealizationTest("gpAlgorithmState.ser");
+        // deserealizationTest("treePopulation.ser");
 
-        treeSizePruneExample();
-
+        // goalBtNodeExample();
     }
 
     public static void serializationTest(){
@@ -60,7 +65,7 @@ public class GeneticProgrammingExample {
                 Rotate.class
         );
 
-        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5,5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
                 new GPOperator[]{}, new GPRandomProgramSolution());
 
         List<ProgramSolution> programSolutions = new ArrayList<>();
@@ -142,7 +147,7 @@ public class GeneticProgrammingExample {
                 new GPOperator[]{}, new GPRandomProgramSolution());
 
         //GP algorithm execution example
-        Task<ProgramSolution, ProgramProblem> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 500000, 0, 0);
+        Task<ProgramSolution, ProgramProblem> symbolicRegressionTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
 
 
         GPAlgorithm alg = new DefaultGPAlgorithm(100, 0.95, 0.025, 2, initialPopulationFilename);
@@ -154,12 +159,10 @@ public class GeneticProgrammingExample {
             ArrayList<ProgramSolution> solutions = new ArrayList<>();
             ArrayList<Double> solutionsRnd = new ArrayList<>();
             ProgramSolution sol;
-            for (int i = 0; i < 1; i++){
+            for (int i = 0; i < 20; i++){
                 sol = alg.execute(symbolicRegressionTask);
                 solutions.add(sol);
                 System.out.println("Best fitness (DefaultGpAlgorithm) (for i = " + i + ") -> " + sol.getEval());
-                alg.getPopulation().get(0).getTree().displayTree("test_bt", true);
-
                 alg.resetToDefaultsBeforeNewRun();
 
                 sol = rndAlg.execute(symbolicRegressionTask);
@@ -319,7 +322,7 @@ public class GeneticProgrammingExample {
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200));
 
-        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, evalData, 3, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, evalData, 3, 8, 8, 200,new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
                 new GPOperator[]{}, new GPRandomProgramSolution());
 
         ProgramSolution programSolution = sgp2.getRandomSolution();
@@ -371,38 +374,6 @@ public class GeneticProgrammingExample {
         System.out.println(tree.evaluate(Map.of("x", 1.0)));
     }*/
 
-    public static void treeSizePruneExample(){
-        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
-                Repeat.class,
-                Sequencer.class,
-                Selector.class,
-                Inverter.class
-        );
-
-        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
-                RayHitObject.class,
-                MoveForward.class,
-                MoveSide.class,
-                Rotate.class
-        );
-
-        int maxNumOfNodes = 20;
-        GPOperator treeSizePruningOperator = new GPTreeSizePruningOperator();
-
-        UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, maxNumOfNodes, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, new GPRandomProgramSolution());
-
-        ProgramSolution programSolution = sgp2.getRandomSolution();
-
-        programSolution.getTree().displayTree("test_operator1", true);
-
-        if(programSolution.getTree().treeSize() > maxNumOfNodes){
-            programSolution = treeSizePruningOperator.execute(programSolution, sgp2);
-        }
-
-        programSolution.getTree().displayTree("test_operator2", true);
-    }
-
     public static String sendPostRequest(String apiUrl, String jsonBody) throws Exception {
         URL url = new URL(apiUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -431,6 +402,119 @@ public class GeneticProgrammingExample {
             }
         } else {
             throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
+        }
+    }
+
+    public static void goalBtNodeExample(){
+        //sol.getProgram().displayTree("TestBTree");
+
+        List<Class<? extends Node>> baseFunctionNodeTypes = Arrays.asList(
+                //Repeat.class,
+                Sequencer.class,
+                Selector.class,
+                Inverter.class
+        );
+
+        List<Class<? extends Node>> baseTerminalNodeTypes = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                Rotate.class,
+                Shoot.class,
+                RotateTurret.class
+        );
+
+        List<Class<? extends Node>> baseTerminalNodeTypes2 = Arrays.asList(
+                RayHitObject.class,
+                MoveForward.class,
+                Rotate.class,
+                Shoot.class,
+                RotateTurret.class,
+                Encapsulator.class
+        );
+
+        for (int i =0; i < 1; i++) {
+
+            GPRandomProgramSolution randomProgramSolution = new GPRandomProgramSolution();
+            UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 4, 5, 15, new FeasibilityGPOperator[]{new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                    new GPOperator[]{}, randomProgramSolution);
+
+            List<ProgramSolution> programSolutions = new ArrayList<>();
+
+            programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
+
+            List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions = new ArrayList<>(); // Define goal nodes
+            encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition("GoalNode1", programSolutions.get(0).getTree().getRootNode()));
+            randomProgramSolution.setEncapsulatedNodeDefinitions(encapsulatedNodeDefinitions);
+
+            sgp2.setBaseTerminalNodeTypes(baseTerminalNodeTypes2);
+
+            programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
+
+            programSolutions.get(0).getTree().displayTree("TestBTree1", false);
+            programSolutions.get(1).getTree().displayTree("TestBTree2", false);
+
+            // Test GP Operators with Encapsulator
+            // Mutation operator
+            if(true) {
+                System.out.println("GPSubtreeMutation execution");
+                GPSubtreeMutation gpsm = new GPSubtreeMutation(1.0);
+                ProgramSolution mutationSolution = gpsm.execute(programSolutions.get(1), sgp2);
+
+                mutationSolution.getTree().displayTree("TestBTree3", false);
+
+
+                /*Task<ProgramSolution, ProgramProblem> task = new Task<>(sgp2, StopCriterion.EVALUATIONS, 10000, 0, 0);
+                PredefinedEncapsNodesGPAlgorithm alg = new PredefinedEncapsNodesGPAlgorithm(100, 0.95, 0.025, 2, 4, task, null);
+                alg.setPopulation(new ArrayList<>(List.of(programSolutions.get(1), mutationSolution)));
+                GPAlgorithm.serializeAlgorithmState(alg, "gpAlgorithmTest.ser");*/
+
+                System.out.println(mutationSolution.getTree().toJsonString());
+            }
+
+            // Crossover operator
+            if(false) {
+                System.out.println("GPSinglePointCrossover execution");
+                GPSinglePointCrossover gpspc = new GPSinglePointCrossover(1.0);
+                ProgramSolution[] crossoverSolutions = gpspc.execute(new ProgramSolution[]{programSolutions.get(0), programSolutions.get(1)}, sgp2);
+
+                crossoverSolutions[0].getTree().displayTree("TestBTree3", false);
+                crossoverSolutions[1].getTree().displayTree("TestBTree4", false);
+            }
+
+            // Expansion operator
+            // Tested in the previous examples of Crossover & Mutation
+            // Depth based operator
+            // Tested in the previous examples of Crossover & Mutation
+
+            // Tree size pruning operator
+            if(false) {
+                System.out.println("GPTreeSizePruningOperator execution");
+                GPTreeSizePruningOperator gpspo = new GPTreeSizePruningOperator(GPTreeSizePruningOperator.OperatorType.CLOSEST_TO_MAX_TREE_NODES);
+                ProgramSolution pruningSolution = gpspo.execute(programSolutions.get(1), sgp2);
+
+                pruningSolution.getTree().displayTree("TestBTree3", false);
+            }
+            // Node call frequency operator
+            if(false) {
+                System.out.println("NodeCallFrequencyCountPruningOperator execution");
+                int treeSize = programSolutions.get(1).getTree().treeSize();
+                int[] nodeCallFrequency = new int[treeSize];
+                nodeCallFrequency[0] = 100;
+                nodeCallFrequency[1] = 100;
+                nodeCallFrequency[2] = 100;
+                //nodeCallFrequency[3] = 100;
+                //nodeCallFrequency[4] = 100;
+                for (int j = 3; j < treeSize; j++) {
+                    nodeCallFrequency[j] = (25 + (treeSize - j)) * 2;
+                    //System.out.println("Node call frequency (" + j + "): " + nodeCallFrequency[j]);
+                }
+
+                programSolutions.get(1).setNodeCallFrequencyCount(nodeCallFrequency);
+                GPNodeCallFrequencyCountPruningOperator gpnf = new GPNodeCallFrequencyCountPruningOperator(65,0.5);
+                ProgramSolution nodeCallFrequencySolution = gpnf.execute(programSolutions.get(1), sgp2);
+
+                nodeCallFrequencySolution.getTree().displayTree("TestBTree3", false);
+            }
         }
     }
 }

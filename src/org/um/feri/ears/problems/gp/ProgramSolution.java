@@ -1,7 +1,10 @@
 package org.um.feri.ears.problems.gp;
 
 import org.um.feri.ears.individual.representations.gp.Fitness;
+import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Tree;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
+import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
 import org.um.feri.ears.problems.Solution;
 
 import java.util.ArrayList;
@@ -45,6 +48,107 @@ public class ProgramSolution extends Solution {
 
     public Tree getTree() {
         return tree;
+    }
+
+    @Override
+    public String toString() {
+        //TODO add treeType to tree and add check
+        return buildEquation(tree.getRootNode());
+    }
+
+    private String buildEquation(Node node) {
+        if (node instanceof ConstNode) {
+            return String.valueOf(node.evaluate(null));
+        } else if (node instanceof VarNode) {
+            return node.getName();
+        } else if (node instanceof OperatorNode) {
+            String operator = "";
+            List<Node> children = node.getChildren();
+
+            switch (node.getArity()) {
+                case 1:
+                    if (node instanceof SqrtNode) {
+                        return "sqrt(" + buildEquation(children.get(0)) + ")";
+                    } else if (node instanceof CosNode) {
+                        return "cos(" + buildEquation(children.get(0)) + ")";
+                    } else if (node instanceof SinNode) {
+                        return "sin(" + buildEquation(children.get(0)) + ")";
+                    } else if (node instanceof TanNode) {
+                        return "tan(" + buildEquation(children.get(0)) + ")";
+                    } else if (node instanceof TanhNode) {
+                        return "tanh(" + buildEquation(children.get(0)) + ")";
+                    } else if (node instanceof LogNode) {
+                        return "log(" + buildEquation(children.get(0)) + ")";
+                    } else if (node instanceof Log10Node) {
+                        return "log10(" + buildEquation(children.get(0)) + ")";
+                    } else if (node instanceof AbsNode) {
+                        return "abs(" + buildEquation(children.get(0)) + ")";
+                    }
+                    break;
+                case 2:
+                    if (node instanceof AddNode) {
+                        operator = "+";
+                    } else if (node instanceof SubNode) {
+                        operator = "-";
+                    } else if (node instanceof MulNode) {
+                        operator = "*";
+                    } else if (node instanceof DivNode) {
+                        operator = "/";
+                    } else if (node instanceof PowNode) {
+                        operator = "^";
+                    } else if (node instanceof ModNode) {
+                        operator = "%";
+                    }
+                    String left = buildEquation(children.get(0));
+                    String right = buildEquation(children.get(1));
+                    return "(" + left + " " + operator + " " + right + ")";
+            }
+        }
+        return "";
+    }
+
+    public void printTree() {
+        printTree(tree.getRootNode(), "");
+    }
+
+    public void printTree(Node node, String indent) {
+        if (node instanceof ConstNode) {
+            System.out.println(indent + "ConstNode(" + ((ConstNode) node).evaluate(null) + ")");
+        } else if (node instanceof VarNode) {
+            System.out.println(indent + "VarNode(" + ((VarNode) node).getName() + ")");
+        } else if (node instanceof OperatorNode) {
+            if (node instanceof AddNode) {
+                System.out.println(indent + "AddNode");
+            } else if (node instanceof SubNode) {
+                System.out.println(indent + "SubNode");
+            } else if (node instanceof MulNode) {
+                System.out.println(indent + "MulNode");
+            } else if (node instanceof DivNode) {
+                System.out.println(indent + "DivNode");
+            }
+            for (Node child : ((OperatorNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        } else if (node instanceof RootNode) {
+            System.out.println(indent + "RootNode");
+            for (Node child : ((RootNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        } else if (node instanceof ActionNode) {
+            System.out.println(indent + "ActionNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+        } else if (node instanceof ConditionNode) {
+            System.out.println(indent + "ConditionNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+        } else if (node instanceof CompositeNode) {
+            System.out.println(indent + "CompositeNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+            for (Node child : ((CompositeNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        } else if (node instanceof DecoratorNode) {
+            System.out.println(indent + "DecoratorNode(" + ((BehaviourTreeNode) node).getNodeTypeString() + ")");
+            for (Node child : ((DecoratorNode) node).getChildren()) {
+                printTree((Node) child, indent + "  ");
+            }
+        }
     }
 
     public HashMap<String, Fitness> getFitnesses(){

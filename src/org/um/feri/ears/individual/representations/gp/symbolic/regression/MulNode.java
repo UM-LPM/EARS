@@ -11,7 +11,7 @@ public class MulNode extends OperatorNode {
         super("*");
     }
     public MulNode(List<Node> children) {
-        super(children, "*");
+        super("*", 2, children);
     }
 
     @Override

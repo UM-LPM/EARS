@@ -12,7 +12,7 @@ public class AddNode extends OperatorNode {
     }
 
     public AddNode(List<Node> children) {
-        super(children, "+");
+        super("+", 2, children);
     }
 
     @Override

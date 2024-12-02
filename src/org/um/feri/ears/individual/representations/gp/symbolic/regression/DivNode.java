@@ -11,20 +11,14 @@ public class DivNode extends OperatorNode {
         super("/");
     }
     public DivNode(List<Node> children) {
-        super(children, "/");
+        super("/", 2, children);
     }
 
     @Override
     public double evaluate(Map<String, Double> variables) {
-        double result = children.get(0).evaluate(variables);
-        for (int i = 1; i < children.size(); i++) {
-            double divisor = children.get(i).evaluate(variables);
-            if (divisor != 0) {
-                result /= divisor;
-            } else {
-                // "Division by zero"
-                return 1;
-            }
+        Double result = children.get(0).evaluate(variables) / children.get(1).evaluate(variables);
+        if (Double.isNaN(result) || Double.isInfinite(result)) {
+            return 1;
         }
         return result;
     }

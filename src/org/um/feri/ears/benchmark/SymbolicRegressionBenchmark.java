@@ -63,8 +63,8 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution, Pr
                 new Target().when("x", 9).targetIs(171),
                 new Target().when("x", 10).targetIs(200));
 
-        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, new GPRandomProgramSolution(), evalData);
+        SymbolicRegressionProblem sgp = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, evalData, 2, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution());
 
         List<Target> evalData2 = Util.list( new Target().when("x", 0).targetIs(12),
                 new Target().when("x", 1).targetIs(23),
@@ -79,8 +79,8 @@ public class SymbolicRegressionBenchmark extends SOBenchmark<ProgramSolution, Pr
                 new Target().when("x", 10).targetIs(1292));
 
 
-        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 2, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, new GPRandomProgramSolution(), evalData2);
+        SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, evalData2, 2, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
+                new GPOperator[]{}, new GPRandomProgramSolution());
 
 
         //addTask(sgp, stopCriterion, maxEvaluations, timeLimit, maxIterations);

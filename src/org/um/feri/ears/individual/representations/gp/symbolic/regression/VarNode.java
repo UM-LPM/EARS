@@ -13,11 +13,11 @@ public class VarNode extends Node {
     public static List<String> variables = Arrays.asList("x", "y", "z");
 
     public VarNode() {
-        super(0, variables.get(RNG.nextInt(variables.size())));
+        super(variables.get(RNG.nextInt(variables.size())), 0);
     }
 
     public VarNode(String name) {
-        super(0, name);
+        super(name, 0);
     }
 
     @Override
