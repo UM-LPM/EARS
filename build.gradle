@@ -5,7 +5,7 @@ plugins {
     id 'idea'
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.beryx.jlink' version '2.25.0'
-    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.jvm' version '2.1.0'
 }
 
 idea {
@@ -17,10 +17,6 @@ idea {
 repositories {
     mavenCentral()
 }
-
-//compatibility for reflection support
-sourceCompatibility = 16
-targetCompatibility = 16
 
 dependencies {
     implementation fileTree(dir: 'lib', include: ['*.jar'])
@@ -104,13 +100,26 @@ jlink {
         name = 'app'
     }
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 compileTestKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
