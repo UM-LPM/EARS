@@ -56,6 +56,7 @@ public class GNDO extends NumberAlgorithm {
             // Evaluate all solutions
             for (int index = 0; index < popSize; index++) {
                 NumberSolution<Double> current = population.get(index);
+                if (task.isStopCriterion()) break;
                 task.eval(current);
                 fitness[index] = current.getEval();
                 if (task.problem.isFirstBetter(current, bestSolution)) {
@@ -168,6 +169,7 @@ public class GNDO extends NumberAlgorithm {
                 BoundaryControl.clamp(newSolution, task.problem.getLowerLimit(), task.problem.getUpperLimit());
 
                 NumberSolution<Double> sol = new NumberSolution<Double>(newSolution);
+                if (task.isStopCriterion()) break;
                 task.eval(sol);
                 if (task.problem.isFirstBetter(sol, population.get(index))) {
                     population.set(index, sol);
