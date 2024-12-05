@@ -1,5 +1,6 @@
 package org.um.feri.ears.problems;
 
+import org.um.feri.ears.util.Point;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
@@ -73,6 +74,10 @@ public class NumberSolution<N extends Number> extends Solution {
 
     public ArrayList<N> getVariables() {
         return variables;
+    }
+
+    public Point<N> getVariablesAsPoint() {
+        return new Point<N>(variables);
     }
 
     public int numberOfVariables() {
