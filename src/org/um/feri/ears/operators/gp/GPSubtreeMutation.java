@@ -46,7 +46,10 @@ public class GPSubtreeMutation extends GPMutation {
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem problem) {
         if(RNG.nextDouble() <= this.mutationProbability) {
             ProgramSolution mutatedSolution = tProgramSolution.copy();
+
             mutatedSolution.setIsDirty(true);
+            mutatedSolution.increaseChangesCount();
+
             doMutation(mutatedSolution, problem);
 
             // Check if new programs are feasible. If not, make them feasible (makeFeasible does all that)

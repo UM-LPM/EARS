@@ -108,6 +108,8 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
 
             // Selection
             this.parentPopulation = new ArrayList<>();
+            this.currentPopulation = new ArrayList<>(this.popSize);
+
             parentPopulation.addAll(performselection(this.popSize));
 
             // Crossover
