@@ -25,11 +25,14 @@ public class ProgramSolution extends Solution {
 
     protected boolean isDirty; // Flag to indicate if the solution has been modified (GPOperators, etc.)
 
+    protected int changesCount; // Number of changes made to the solution
+
     public ProgramSolution(int numberOfObjectives) {
         super(numberOfObjectives);
         this.Fitnesses = new HashMap<>();
         this.NodeCallFrequencyCount = new int[]{};
         this.isDirty = false;
+        this.changesCount = 0;
     }
 
     public ProgramSolution(ProgramSolution s) {
@@ -41,6 +44,7 @@ public class ProgramSolution extends Solution {
         NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone();
         isDirty = s.isDirty;
         ratingStandardDeviation = s.ratingStandardDeviation;
+        changesCount = s.changesCount;
     }
 
     @Override
@@ -211,5 +215,9 @@ public class ProgramSolution extends Solution {
 
     public double getRatingStandardDeviation() {
         return ratingStandardDeviation;
+    }
+
+    public void increaseChangesCount(){
+        changesCount++;
     }
 }
