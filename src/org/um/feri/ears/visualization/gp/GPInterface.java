@@ -531,6 +531,9 @@ public class GPInterface extends JFrame {
             this.multiRunBestIndividualGraphPanel.setScores(GPAlgorithmRunStats.getBestRunFitnesses(gpAlgorithmExecutor.getGpAlgorithmRunStats()));
             this.multiRunBestAvgGraphPanel.setScores(GPAlgorithmRunStats.getBestRunAvgFitnesses(gpAlgorithmExecutor.getGpAlgorithmRunStats()));
         }
+
+        if(gpAlgorithmExecutor != null && gpAlgorithmExecutor.getGpAlgorithm().getBest() != null)
+            this.bestIndividualJsonTextField.setText(gpAlgorithmExecutor.getGpAlgorithm().getBest().getTree().toJsonString());
     }
 
     public void updateGPAlgorithmParamsUI(){
@@ -748,7 +751,7 @@ public class GPInterface extends JFrame {
         );
 
         this.gpAlgorithmExecutor.initializeGpAlgorithmState("UnityBTProblem",baseFunctionNodeTypes, baseTerminalNodeTypes, null, 5, 7, 10, 100, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, new GPRandomProgramSolution(), 500000, false, ElitismGPAlgorithm.class, 100, 0.75, 0.05, 0.07, 4);
+                new GPOperator[]{}, GPProblemEvaluatorType.Simple, new GPRandomProgramSolution(), 500000, false, ElitismGPAlgorithm.class, 100, 0.75, 0.05, 0.07, 4);
     }
 
     public void setSaveGPAlgorithmStatsFilename(){

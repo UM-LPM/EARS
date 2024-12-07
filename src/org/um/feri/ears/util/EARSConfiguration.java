@@ -3,10 +3,8 @@ package org.um.feri.ears.util;
 import org.um.feri.ears.individual.representations.gp.Target;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class EARSConfiguration implements Serializable {
-
     public GPAlgorithmType AlgorithmType;
     public GPProblemType ProblemType;
     public String ProblemName;
@@ -29,13 +27,5 @@ public class EARSConfiguration implements Serializable {
     public String[] FeasibilityControlOperators;
     public String[] BloatControlOperators;
     public Target[] EvalData;
-
-
-        /*public ProblemType problem;
-        public GPAlgorithmType algorithm;
-        public CrossoverOperatorType crossoverOperator;
-        public MutationOperatorType mutationOperator;
-        public SelectionOperatorType selectionOperator;
-        public InitPopGeneratorMethod initPopGeneratorMethod;
-        public BloatControlMethod[] bloatControlMethods;*/
+    public GPProblemEvaluatorType ProblemEvaluatorType;
 }

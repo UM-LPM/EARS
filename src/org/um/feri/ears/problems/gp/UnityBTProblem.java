@@ -14,6 +14,7 @@ import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.operators.gp.FeasibilityGPOperator;
 import org.um.feri.ears.operators.gp.GPOperator;
+import org.um.feri.ears.util.GPProblemEvaluatorType;
 import org.um.feri.ears.util.RequestBodyParams;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.gp.GPInterface;
@@ -30,11 +31,11 @@ public class UnityBTProblem extends ProgramProblem {
         super("UnityBTProblem", Tree.TreeType.BEHAVIOUR);
     }
 
-    public UnityBTProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator) {
-        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
+    public UnityBTProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProblemEvaluatorType problemEvaluatorType, GPProgramSolution programSolutionGenerator) {
+        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, problemEvaluatorType, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
     }
-    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator) {
-        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
+    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProblemEvaluatorType problemEvaluatorType, GPProgramSolution programSolutionGenerator) {
+        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, problemEvaluatorType, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
     }
 
     @Override
@@ -63,7 +64,9 @@ public class UnityBTProblem extends ProgramProblem {
             try {
                 String apiUrl = "http://localhost:5016/api/JsonToSoParser";
                 RequestBodyParams requestBodyParams = getRequestBodyParams();
-                requestBodyParams.setLastEvalPopRatings(solutions);
+                if(problemEvaluatorType == GPProblemEvaluatorType.Complex){
+                    requestBodyParams.setLastEvalIndividualFitnesses(solutions);
+                }
 
                 String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000, requestBodyParams, getJsonBodyDestFolderPath());
 
@@ -75,10 +78,10 @@ public class UnityBTProblem extends ProgramProblem {
                 if (Objects.equals(obj.getStatus(), "Success")) {
                     // Set fitness values after evaluation
                     for (int i = 0; i < solutions.size(); i++) {
-                        solutions.get(i).setObjective(0, obj.getObject().getFitnesses()[i].finalFitnessStats);
-                        solutions.get(i).setFitnesses(obj.getObject().getFitnesses()[i].fitnesses);
-                        solutions.get(i).setRatingStandardDeviation(obj.getObject().getFitnesses()[i].standardDeviation);
-                        //solutions.get(i).setNodeCallFrequencyCount(obj.getObject().getBtsNodeCallFrequencies()[i]); // TODO fix this
+                        solutions.get(i).setObjective(0, obj.getObject().getFitnesses()[i].value);
+                        solutions.get(i).setFitness(obj.getObject().getFitnesses()[i]);
+
+                        //solutions.get(i).setNodeCallFrequencyCount(obj.getObject().getBtsNodeCallFrequencies()[i]); // Remove this when moved to FinalIndividualFitness
 
                         solutions.get(i).resetIsDirty();
                     }

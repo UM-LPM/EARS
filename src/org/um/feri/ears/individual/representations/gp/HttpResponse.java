@@ -1,23 +1,19 @@
 package org.um.feri.ears.individual.representations.gp;
 
-import java.util.HashMap;
+import java.io.Serializable;
 
-public class HttpResponse {
-    public class HttpServerResponse{
-        private FitnessIndividual[] popFitness;
-        private int[][] btsNodeCallFrequencies;
+public class HttpResponse  implements Serializable {
+    public class CoordinatorEvaluationResult {
 
-        public FitnessIndividual[] getFitnesses() {
-            return popFitness;
-        }
+        private FinalIndividualFitness[] individualFitnesses;
 
-        public int[][] getBtsNodeCallFrequencies() {
-            return btsNodeCallFrequencies;
+        public FinalIndividualFitness[] getFitnesses() {
+            return individualFitnesses;
         }
     }
     private String status;
     private String message;
-    private HttpServerResponse object;
+    private CoordinatorEvaluationResult object;
 
     public String getStatus() {
         return status;
@@ -35,11 +31,11 @@ public class HttpResponse {
         this.message = message;
     }
 
-    public HttpServerResponse getObject() {
+    public CoordinatorEvaluationResult getObject() {
         return object;
     }
 
-    public void setObject(HttpServerResponse object) {
+    public void setObject(CoordinatorEvaluationResult object) {
         this.object = object;
     }
 }

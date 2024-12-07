@@ -7,14 +7,14 @@ import java.util.Random;
 
 public class HorizontalHistogramPanel extends JPanel {
 
-    private Map<String, Float> data;
+    private Map<String, Double> data;
     private Color[] barColors;
 
     public HorizontalHistogramPanel() {
         this.data = new HashMap<>();
     }
 
-    public HorizontalHistogramPanel(Map<String, Float> data) {
+    public HorizontalHistogramPanel(Map<String, Double> data) {
         this.data = data;
         this.barColors = generateRandomColors(data.size()); // Generate random colors for each bar
     }
@@ -26,14 +26,14 @@ public class HorizontalHistogramPanel extends JPanel {
         if(data.isEmpty())
             return;
 
-        float maxValue = getMaxValue();
+        double maxValue = getMaxValue();
         int barHeight = (getHeight()) / data.size(); // Deducting space for x-axis
         int labelXOffset = 5; // Offset for labels
 
         // Draw x-axis values
         int i = 0;
-        for (Map.Entry<String, Float> entry : data.entrySet()) {
-            float value = Math.abs(entry.getValue());
+        for (Map.Entry<String, Double> entry : data.entrySet()) {
+            double value = Math.abs(entry.getValue());
             int barWidth = (int) (value / maxValue * (getWidth() - 50));
             int x = labelXOffset; // Start from the left side
             int y = i * barHeight;
@@ -57,9 +57,9 @@ public class HorizontalHistogramPanel extends JPanel {
         }
     }
 
-    private float getMaxValue() {
-        float maxValue = Float.MIN_VALUE;
-        for (float value : data.values()) {
+    private double getMaxValue() {
+        double maxValue = Float.MIN_VALUE;
+        for (double value : data.values()) {
             if (Math.abs(value) > maxValue) {
                 maxValue = Math.abs(value);
             }
@@ -77,7 +77,7 @@ public class HorizontalHistogramPanel extends JPanel {
         return colors;
     }
 
-    public void setData(Map<String, Float> data) {
+    public void setData(Map<String, Double> data) {
         this.data = data;
         this.barColors = generateRandomColors(data.size());
         repaint();
