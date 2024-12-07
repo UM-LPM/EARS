@@ -9,6 +9,7 @@ import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.operators.gp.*;
 import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.Configuration;
+import org.um.feri.ears.util.GPProblemEvaluatorType;
 import org.um.feri.ears.util.RequestBodyParams;
 import org.um.feri.ears.util.random.RNG;
 import org.um.feri.ears.individual.representations.gp.*;
@@ -47,12 +48,14 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
     protected FeasibilityGPOperator[] feasibilityControlOperators;
     protected GPOperator[] bloatControlOperators;
 
+    protected GPProblemEvaluatorType problemEvaluatorType;
+
     public ProgramProblem(String name, Tree.TreeType treeType){
-        this(name, new ArrayList<>(), new ArrayList<>(), 2, 5, 10, 100, new FeasibilityGPOperator[]{}, new GPOperator[]{}, new GPRandomProgramSolution(), treeType, "BtTree", new RequestBodyParams());
+        this(name, new ArrayList<>(), new ArrayList<>(), 2, 5, 10, 100, new FeasibilityGPOperator[]{}, new GPOperator[]{}, GPProblemEvaluatorType.Simple, new GPRandomProgramSolution(), treeType, "BtTree", new RequestBodyParams());
     }
 
     // Constructor with all parameters
-    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName, RequestBodyParams requestBodyParams) {
+    public ProgramProblem(String name, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProblemEvaluatorType problemEvaluatorType, GPProgramSolution programSolutionGenerator, Tree.TreeType treeType, String treeName, RequestBodyParams requestBodyParams) {
         super(name, 1, 1, 0);
         setBaseFunctionNodeTypes(baseFunctionNodeTypes);
         setBaseTerminalNodeTypes(baseTerminalNodeTypes);
@@ -67,6 +70,7 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         this.feasibilityControlOperators = feasibilityControlOperators;
         this.bloatControlOperators = bloatControlOperators;
         this.programSolutionGenerator = programSolutionGenerator;
+        this.problemEvaluatorType = problemEvaluatorType;
 
         this.requestBodyParams = requestBodyParams;
     }
@@ -276,6 +280,14 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setProblemEvaluatorType(GPProblemEvaluatorType problemEvaluatorType){
+        this.problemEvaluatorType = problemEvaluatorType;
+    }
+
+    public GPProblemEvaluatorType getProblemEvaluatorType(){
+        return problemEvaluatorType;
     }
 
 

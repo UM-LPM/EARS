@@ -1,6 +1,7 @@
 package org.um.feri.ears.problems.gp;
 
-import org.um.feri.ears.individual.representations.gp.Fitness;
+import org.um.feri.ears.individual.representations.gp.FinalIndividualFitness;
+import org.um.feri.ears.individual.representations.gp.IndividualMatchResult;
 import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.problems.Solution;
 
@@ -15,10 +16,9 @@ public class ProgramSolution extends Solution {
 
     protected List<ProgramSolution> parents;
 
-    protected HashMap<String, Fitness> Fitnesses; // Detailed fitness values for analysis
-    protected double ratingStandardDeviation; // Standard deviation of the rating when rating is used as fitness
+    protected FinalIndividualFitness Fitness;
 
-    protected int[] NodeCallFrequencyCount;
+    protected int[] NodeCallFrequencyCount; // TODO Remove this when moved to FinalIndividualFitness
 
     protected boolean isDirty; // Flag to indicate if the solution has been modified (GPOperators, etc.)
 
@@ -26,7 +26,7 @@ public class ProgramSolution extends Solution {
 
     public ProgramSolution(int numberOfObjectives) {
         super(numberOfObjectives);
-        this.Fitnesses = new HashMap<>();
+        this.Fitness = new FinalIndividualFitness();
         this.NodeCallFrequencyCount = new int[]{};
         this.isDirty = false;
         this.changesCount = 0;
@@ -36,11 +36,9 @@ public class ProgramSolution extends Solution {
         super(s);
         tree = s.tree.clone();
         parents = new ArrayList<>();
-        Fitnesses = new HashMap<>();
-        Fitnesses.putAll(s.Fitnesses);
-        NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone();
+        Fitness = new FinalIndividualFitness(s.Fitness);
+        NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone(); // TODO Remove this when moved to FinalIndividualFitness
         isDirty = s.isDirty;
-        ratingStandardDeviation = s.ratingStandardDeviation;
         changesCount = s.changesCount;
     }
 
@@ -57,27 +55,24 @@ public class ProgramSolution extends Solution {
         return tree;
     }
 
-    public HashMap<String, Fitness> getFitnesses(){
-        return Fitnesses;
+    public FinalIndividualFitness getFitness(){
+        return Fitness;
     }
 
-    public void setFitnesses(HashMap<String, Fitness> values){
-        this.Fitnesses = values;
+    public void setFitness(FinalIndividualFitness fitness){
+        this.Fitness = fitness;
     }
 
-    public Map<String, Float> getFitnessesCombined(){
-        HashMap<String, Float> fitnessesCombined = new HashMap<>();
+    public Map<String, Double> getFitnessesCombined(){
+        HashMap<String, Double> fitnessesCombined = new HashMap<>();
 
-        if(Fitnesses == null)
-            return fitnessesCombined;
-
-        for (Map.Entry<String, Fitness> entry : Fitnesses.entrySet()) {
-            for(Map.Entry<String, Float> entry2 : entry.getValue().GetIndividualFitnessValues().entrySet()){
-                if(fitnessesCombined.containsKey(entry2.getKey())){
-                    fitnessesCombined.put(entry2.getKey(), fitnessesCombined.get(entry2.getKey()) + entry2.getValue());
+        for(IndividualMatchResult individualMatchResult : Fitness.getIndividualMatchResults()){
+            for(Map.Entry<String, Double> entry : individualMatchResult.individualValues.entrySet()){
+                if(fitnessesCombined.containsKey(entry.getKey())){
+                    fitnessesCombined.put(entry.getKey(), fitnessesCombined.get(entry.getKey()) + entry.getValue());
                 }
                 else {
-                    fitnessesCombined.put(entry2.getKey(), entry2.getValue());
+                    fitnessesCombined.put(entry.getKey(), entry.getValue());
                 }
             }
         }
@@ -85,10 +80,12 @@ public class ProgramSolution extends Solution {
         return fitnessesCombined;
     }
 
+    // TODO Remove this (when moved to FinalIndividualFitness)
     public void setNodeCallFrequencyCount(int[] nodeCallFrequencyCount){
         this.NodeCallFrequencyCount = nodeCallFrequencyCount;
     }
 
+    // TODO Remove this (when moved to FinalIndividualFitness)
     public int[] getNodeCallFrequencyCount(){
         return NodeCallFrequencyCount;
     }
@@ -103,14 +100,6 @@ public class ProgramSolution extends Solution {
 
     public boolean isDirty(){
         return isDirty;
-    }
-
-    public void setRatingStandardDeviation(double ratingStandardDeviation) {
-        this.ratingStandardDeviation = ratingStandardDeviation;
-    }
-
-    public double getRatingStandardDeviation() {
-        return ratingStandardDeviation;
     }
 
     public void increaseChangesCount(){

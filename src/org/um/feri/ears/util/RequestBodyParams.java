@@ -1,5 +1,6 @@
 package org.um.feri.ears.util;
 
+import org.um.feri.ears.individual.representations.gp.IndividualFitness;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 
 import java.io.Serializable;
@@ -11,23 +12,23 @@ public class RequestBodyParams implements Serializable
     protected String[] EvalEnvInstanceURIs;
     protected String SourceFilePath;
     protected String DestinationFilePath;
-    protected RatingSystemRating[] LastEvalPopRatings;
+    protected IndividualFitness[] LastEvalIndividualFitnesses;
 
     public RequestBodyParams()
     {
-        this("", new String[]{}, "", "", new RatingSystemRating[]{});
+        this("", new String[]{}, "", "", null);
     }
 
     public RequestBodyParams(String coordinatorURI, String[] evalEnvInstanceURIs, String sourceFilePath, String destinationFilePath){
-        this(coordinatorURI, evalEnvInstanceURIs, sourceFilePath, destinationFilePath, new RatingSystemRating[]{});
+        this(coordinatorURI, evalEnvInstanceURIs, sourceFilePath, destinationFilePath, null);
     }
 
-    public RequestBodyParams(String coordinatorURI, String[] evalEnvInstanceURIs, String sourceFilePath, String destinationFilePath, RatingSystemRating[] lastEvalPopRatings){
+    public RequestBodyParams(String coordinatorURI, String[] evalEnvInstanceURIs, String sourceFilePath, String destinationFilePath, IndividualFitness[] lastEvalPopRatings){
         this.CoordinatorURI = coordinatorURI;
         this.EvalEnvInstanceURIs = evalEnvInstanceURIs;
         this.SourceFilePath = sourceFilePath;
         this.DestinationFilePath = destinationFilePath;
-        this.LastEvalPopRatings = lastEvalPopRatings;
+        this.LastEvalIndividualFitnesses = lastEvalPopRatings;
     }
 
     public String getCoordinatorURI() {
@@ -62,22 +63,27 @@ public class RequestBodyParams implements Serializable
         DestinationFilePath = destinationFilePath;
     }
 
-    public RatingSystemRating[] getLastEvalPopRatings() {
-        return LastEvalPopRatings;
+    public IndividualFitness[] getLastEvalIndividualFitnesses() {
+        return LastEvalIndividualFitnesses;
     }
 
-    public void setLastEvalPopRatings(RatingSystemRating[] lastEvalPopRatings) {
-        LastEvalPopRatings = lastEvalPopRatings;
+    public void setLastEvalIndividualFitnesses(IndividualFitness[] lastEvalIndividualFitnesses) {
+        LastEvalIndividualFitnesses = lastEvalIndividualFitnesses;
     }
 
-    public void setLastEvalPopRatings(List<ProgramSolution> solutions) {
-        RatingSystemRating[] lastEvalPopRatings = new RatingSystemRating[solutions.size()];
+    public void setLastEvalIndividualFitnesses(List<ProgramSolution> solutions) {
+        if(solutions == null || solutions.size() == 0 || solutions.get(0).getFitness().individualID == -1)
+        {
+            return;
+        }
+
+        IndividualFitness[] lastEvalIndividualFitnesses = new IndividualFitness[solutions.size()];
         for (int i = 0; i < solutions.size(); i++) {
             if(!solutions.get(i).isDirty())
-                lastEvalPopRatings[i] = new RatingSystemRating(solutions.get(i).getObjective(0), solutions.get(i).getRatingStandardDeviation());
+                lastEvalIndividualFitnesses[i] = new IndividualFitness(i, solutions.get(i).getFitness().getAdditionalValues());
             else
-                lastEvalPopRatings[i] = new RatingSystemRating();
+                lastEvalIndividualFitnesses[i] = new IndividualFitness(i);
         }
-        this.LastEvalPopRatings = lastEvalPopRatings;
+        this.LastEvalIndividualFitnesses = lastEvalIndividualFitnesses;
     }
 }

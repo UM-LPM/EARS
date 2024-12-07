@@ -6,6 +6,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class Configuration implements Serializable{
@@ -47,8 +48,8 @@ public class Configuration implements Serializable{
         String serializedJson = "";
         try {
             serializedJson = objectMapper.writeValueAsString(configuration.UnityConfiguration);
-            // Save json to file
-            Files.write(Paths.get(filePath), serializedJson.getBytes(StandardCharsets.UTF_8));
+            // Save json to file (if file does not exist, it will be created)
+            Files.writeString(Paths.get(filePath), serializedJson, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
             e.printStackTrace();
         }
