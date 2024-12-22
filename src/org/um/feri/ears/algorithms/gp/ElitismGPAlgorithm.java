@@ -20,10 +20,11 @@ import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ElitismGPAlgorithm extends GPAlgorithm {
@@ -191,7 +192,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
     }
 
     @Override
-    public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration, String saveGPAlgorithmStateFilename) throws StopCriterionException {
+    public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration, String saveGPAlgorithmStateFilename, GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) throws StopCriterionException {
         System.out.println("Run configuration: (" + runConfiguration.Name + ")");
 
         // Set EARS configuration
@@ -206,7 +207,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
         }
 
         // Run algorithm for X generations
-        execute(generations, saveGPAlgorithmStateFilename);
+        execute(generations, saveGPAlgorithmStateFilename, "Main_run", multiConfigurationsProgressData);
 
         System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
 

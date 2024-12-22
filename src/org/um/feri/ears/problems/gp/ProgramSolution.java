@@ -105,4 +105,8 @@ public class ProgramSolution extends Solution {
     public void increaseChangesCount(){
         changesCount++;
     }
+
+    public int getChangesCount(){
+        return changesCount;
+    }
 }

@@ -8,6 +8,8 @@ import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.GPAlgorithmRunStats;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.comparator.ProblemComparator;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 
 import javax.swing.*;
 import java.io.*;
@@ -34,7 +36,7 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
 
     public abstract ProgramSolution executeGeneration() throws StopCriterionException;
 
-    public abstract ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration, String saveGPAlgorithmStateFilename) throws StopCriterionException;
+    public abstract ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration, String saveGPAlgorithmStateFilename, GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) throws StopCriterionException;
 
     public abstract List<ProgramSolution> getPopulation();
 
@@ -101,7 +103,7 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
 
     }
 
-    public void execute(int numOfGens, String saveGPAlgorithmStateFilename) {
+    public void execute(int numOfGens, String saveGPAlgorithmStateFilename, String executionPhaseName, GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) {
         try {
             try {
                 if (numOfGens <= 0)
@@ -109,6 +111,13 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
 
                 for (int i = 0; i < numOfGens; i++) {
                     ProgramSolution sol = executeGeneration();
+
+                    // Update GP Algorithm progress data run
+                    if(multiConfigurationsProgressData != null){
+                        multiConfigurationsProgressData.addGenProgressData(i + 1, executionPhaseName, this);
+                        multiConfigurationsProgressData.saveProgressData();
+                    }
+
                     // Print current gpAlgorithm statistics to console
                     if(isDebug()){
                         System.out.println("Generation: " + getTask().getNumberOfIterations() + ", Best Fitness: " + getBest().getEval() + ", Avg Fitness: " + getAvgGenFitnesses().get(getAvgGenFitnesses().size() - 1) + ", Avg Tree Depth: " + getAvgGenTreeDepths().get(getAvgGenTreeDepths().size() - 1) + ", Avg Tree Size: " + getAvgGenTreeSizes().get(getAvgGenTreeSizes().size() - 1));

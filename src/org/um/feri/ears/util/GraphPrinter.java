@@ -105,4 +105,9 @@ public class GraphPrinter {
             System.err.println("ERROR: " + ex.toString());
         }
     }
+
+    @Override
+    public String toString() {
+        return graphBuilder.toString();
+    }
 }
