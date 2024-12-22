@@ -2,6 +2,7 @@ package org.um.feri.ears.individual.representations.gp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.NotImplementedException;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.util.GraphPrinter;
 
@@ -168,6 +169,29 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         }
 
         return size;
+    }
+
+    @Override
+    public HashMap<String, Integer> nodeCounts() {
+        HashMap<String, Integer> nodeCounts = new HashMap<>();
+
+        nodeCounts.put(this.name, 1);
+
+        if(arity > 0){
+            for (Node child : this.children) {
+                HashMap<String, Integer> childNodeCounts = child.nodeCounts();
+                for (Map.Entry<String, Integer> entry : childNodeCounts.entrySet()) {
+                    if(nodeCounts.containsKey(entry.getKey())){
+                        nodeCounts.put(entry.getKey(), nodeCounts.get(entry.getKey()) + entry.getValue());
+                    }
+                    else{
+                        nodeCounts.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+        }
+
+        return nodeCounts;
     }
 
     public int childIndex(Node child) {
@@ -410,6 +434,16 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
         setTreeNodes(gp);
         displaySubTree(gp);
         return gp.print(show);
+    }
+
+    public String toDotString(){
+        GraphPrinter gp = new GraphPrinter();
+        gp.addln("digraph G {");
+        setTreeNodes(gp);
+        displaySubTree(gp);
+        gp.addln("}");
+
+        return gp.toString();
     }
 
     /*

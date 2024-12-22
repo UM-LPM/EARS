@@ -10,6 +10,8 @@ import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.Configuration;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.comparator.ProblemComparator;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +42,7 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
     }
 
     @Override
-    public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration, String saveGPAlgorithmStateFilename) throws StopCriterionException {
+    public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration, String saveGPAlgorithmStateFilename, GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) throws StopCriterionException {
         System.out.println("Run configuration: (" + runConfiguration.Name + ")");
 
         // Set EARS configuration
@@ -53,7 +55,7 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
         gpAlgorithmExecutor.restartUnityInstances(true);
 
         // Run algorithm for X generations
-        execute(generations, saveGPAlgorithmStateFilename);
+        execute(generations, saveGPAlgorithmStateFilename, "Main_run", multiConfigurationsProgressData);
 
         System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
 

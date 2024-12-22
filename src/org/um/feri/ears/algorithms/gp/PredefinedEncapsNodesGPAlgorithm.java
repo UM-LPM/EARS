@@ -17,10 +17,11 @@ import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.*;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
@@ -107,7 +108,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     }
 
     @Override
-    public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration,  String saveGPAlgorithmStateFilename) throws StopCriterionException {
+    public ProgramSolution execute(GPAlgorithmExecutor gpAlgorithmExecutor, RunConfiguration runConfiguration,  String saveGPAlgorithmStateFilename, GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) throws StopCriterionException {
         // Clear encapsulated node definitions & reset to defaults
         encapsulatedNodeDefinitions.clear();
         resetToDefaultsBeforeNewRun();
@@ -142,7 +143,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 }
 
                 // Run algorithm for X generations
-                execute(generations, null);
+                execute(generations, null, "Encapsulation_phase_" + encapsNodeConfigDef.EncapsulatedNodeName, multiConfigurationsProgressData);
 
                 // Create encapsulated node and define its behavior with gpAlgorithm runs best solution
                 createEncapsulatedNode(encapsNodeConfigDef);
@@ -175,7 +176,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         }
 
         // Run algorithm for X generations
-        execute(generations, null);
+        execute(generations, null, "Main_phase", multiConfigurationsProgressData);
 
         System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
 

@@ -19,6 +19,7 @@ public class Configuration implements Serializable{
     public String UnityGameFile;
     public String UnityExeLocation;
     public String UnityConfigDestFilePath;
+    public String MultiConfigurationPrograssDataFilePath;
     public List<RunConfiguration> Configurations;
 
     public static Configuration deserializeFromFile(String filePath){

@@ -87,6 +87,10 @@ public abstract class Tree implements Serializable {
         return rootNode.numberOfTerminals();
     }
 
+    public HashMap<String, Integer> getNodeCounts(){
+        return rootNode.nodeCounts();
+    }
+
     @JsonIgnore
     public List<Node> getFunctionNodes() {
         //return rootNode.getFunctionNodes();
@@ -141,6 +145,10 @@ public abstract class Tree implements Serializable {
 
     public String displayTree(String filename, boolean show) {
         return rootNode.displayTree(filename, show);
+    }
+
+    public String toDotString(){
+        return rootNode.toDotString();
     }
 
 }

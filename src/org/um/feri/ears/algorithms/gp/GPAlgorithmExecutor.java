@@ -19,6 +19,9 @@ import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.problems.gp.SymbolicRegressionProblem;
 import org.um.feri.ears.problems.gp.UnityBTProblem;
 import org.um.feri.ears.util.*;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiRunProgressData;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -217,10 +220,14 @@ public class GPAlgorithmExecutor implements Serializable {
         }
 
         gpAlgorithmRunStats.clear();
+        GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData = new GPAlgorithmMultiConfigurationsProgressData(configuration.MultiConfigurationPrograssDataFilePath);
         try {
             for (int i = 0; i < configuration.Configurations.size(); i++) {
+                multiConfigurationsProgressData.addMultiConfigurationProgressData(new GPAlgorithmMultiRunProgressData());
                 for (int j = 0; j < configuration.Configurations.get(i).NumberOfReruns; j++) {
-                    gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename);
+                    multiConfigurationsProgressData.getMultiConfigurationProgressData().get(i).addMultiRunProgressData(new GPAlgorithmRunProgressData());
+
+                    gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename, multiConfigurationsProgressData);
                     gpAlgorithmRunStats.add(gpAlgorithm.getStats());
 
                     // Save final GPAlgorithm run state to file for each configuration
@@ -228,17 +235,15 @@ public class GPAlgorithmExecutor implements Serializable {
 
                     // Save current GPAlgorithmExecutor state to file
                     serializeGPAlgorithmExecutorState(this, "GPAlgorithmExecutor.ser");
+
                 }
                 restartUnityInstances(false);
             }
 
+
         } catch (StopCriterionException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    public void execute(int numOfGens, String saveGPAlgorithmStateFilename) {
-        gpAlgorithm.execute(numOfGens, saveGPAlgorithmStateFilename);
     }
 
     /**

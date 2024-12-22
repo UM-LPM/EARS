@@ -1,12 +1,16 @@
 package org.um.feri.ears.util.gp_stats;
 
+import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.individual.representations.gp.FinalIndividualFitness;
+import org.um.feri.ears.individual.representations.gp.Tree;
+import org.um.feri.ears.problems.gp.ProgramSolution;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class GPProgramSolutionSimple implements Serializable {
 
-    private int individualId;
+    private long individualId;
     private double[] objectives;
     private FinalIndividualFitness finalIndividualFitness;
     private int changesCount; // Number of changes made to the solution
@@ -17,19 +21,35 @@ public class GPProgramSolutionSimple implements Serializable {
 
     private String treeDotString;
 
-    public GPProgramSolutionSimple(int individualId, double[] objectives, FinalIndividualFitness finalIndividualFitness, int changesCount, int treeSize, int treeDepth, int terminalNodes, int functionNodes, String treeDotString) {
+    private HashMap<String, Integer> nodeCounts; // { "Sequencer": 24, "Selector": 12, "MoveForward": 5, ... }
+
+    public GPProgramSolutionSimple(ProgramSolution programSolution){
+        this.individualId = programSolution.getID();
+        this.objectives = programSolution.getObjectives();
+        this.finalIndividualFitness = programSolution.getFitness();
+        this.changesCount = programSolution.getChangesCount();
+        this.treeSize = programSolution.getTree().treeSize();
+        this.treeDepth = programSolution.getTree().treeMaxDepth();
+        this.terminalNodes = programSolution.getTree().getTerminalNodes().size();
+        this.functionNodes = programSolution.getTree().getFunctionNodes().size();
+
+        this.treeDotString = programSolution.getTree().toDotString();
+        this.nodeCounts = programSolution.getTree().getNodeCounts();
+    }
+
+    public GPProgramSolutionSimple(long individualId, double[] objectives, FinalIndividualFitness finalIndividualFitness, int changesCount, Tree tree) {
         this.individualId = individualId;
         this.objectives = objectives;
         this.finalIndividualFitness = finalIndividualFitness;
         this.changesCount = changesCount;
-        this.treeSize = treeSize;
-        this.treeDepth = treeDepth;
-        this.terminalNodes = terminalNodes;
-        this.functionNodes = functionNodes;
-        this.treeDotString = treeDotString;
+        this.treeSize = tree.treeSize();
+        this.treeDepth = tree.treeMaxDepth();
+        this.terminalNodes = tree.getTerminalNodes().size();
+        this.functionNodes = tree.getFunctionNodes().size();
+        this.treeDotString = tree.toDotString();
     }
 
-    public int getIndividualId() {
+    public long getIndividualId() {
         return individualId;
     }
 

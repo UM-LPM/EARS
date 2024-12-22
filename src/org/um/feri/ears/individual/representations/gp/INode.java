@@ -1,5 +1,6 @@
 package org.um.feri.ears.individual.representations.gp;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -29,6 +30,9 @@ public interface INode<T extends INode<T>> extends Self<T>, Iterable<T> {
     int numberOfFunctions();
     /**Returns the number of terminal nodes in a tree*/
     int numberOfTerminals();
+
+    /**Return the node counts for each unique node type*/
+    HashMap<String, Integer> nodeCounts();
 
     /**Validates if the given node is an ancestor of this node*/
     default boolean isAncestor(final INode<?> node) {
