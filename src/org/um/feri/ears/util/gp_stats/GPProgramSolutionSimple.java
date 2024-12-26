@@ -33,7 +33,8 @@ public class GPProgramSolutionSimple implements Serializable {
         this.terminalNodes = programSolution.getTree().getTerminalNodes().size();
         this.functionNodes = programSolution.getTree().getFunctionNodes().size();
 
-        this.treeDotString = programSolution.getTree().toDotString();
+        //this.treeDotString = programSolution.getTree().toDotString();
+        this.treeDotString = ""; // TODO Remove this
         this.nodeCounts = programSolution.getTree().getNodeCounts();
     }
 
@@ -83,6 +84,10 @@ public class GPProgramSolutionSimple implements Serializable {
 
     public String getTreeDotString() {
         return treeDotString;
+    }
+
+    public HashMap<String, Integer> getNodeCounts() {
+        return nodeCounts;
     }
 
 }

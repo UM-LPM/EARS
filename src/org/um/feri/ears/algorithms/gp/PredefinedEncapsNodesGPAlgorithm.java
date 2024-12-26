@@ -250,10 +250,10 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
                     // Reevaluate population
                     currentGenBest = performEvaluation();
+                }
 
-                    if(this.task.problem.getProblemEvaluatorType() == GPProblemEvaluatorType.Complex){
-                        this.best = new ProgramSolution(currentGenBest);
-                    }
+                if(this.task.problem.getProblemEvaluatorType() == GPProblemEvaluatorType.Complex){
+                    this.best = new ProgramSolution(currentGenBest);
                 }
 
                 if (this.isDebug())

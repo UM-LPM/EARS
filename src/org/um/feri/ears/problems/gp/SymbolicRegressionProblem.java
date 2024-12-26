@@ -9,6 +9,7 @@ import org.um.feri.ears.operators.gp.FeasibilityGPOperator;
 import org.um.feri.ears.operators.gp.GPDepthBasedTreePruningOperator;
 import org.um.feri.ears.operators.gp.GPOperator;
 import org.um.feri.ears.util.GPProblemEvaluatorType;
+import org.um.feri.ears.util.LastEvalIndividualFitnessesRatingCompositionType;
 import org.um.feri.ears.operators.gp.GPTreeExpansionOperator;
 import org.um.feri.ears.util.RequestBodyParams;
 
@@ -24,13 +25,13 @@ public class SymbolicRegressionProblem extends ProgramProblem implements Seriali
     }
 
     public SymbolicRegressionProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, List<Target> evalData) {
-        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, GPProblemEvaluatorType.Simple, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree", new RequestBodyParams());
+        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree", new RequestBodyParams());
 
         setEvaluationSet(evaluationSet);
     }
 
     public SymbolicRegressionProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProgramSolution programSolutionGenerator, List<Target> evalData) {
-        super("SymbolicRegression", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, GPProblemEvaluatorType.Simple, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree", new RequestBodyParams());
+        super("SymbolicRegression", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, programSolutionGenerator, Tree.TreeType.SYMBOLIC, "SymbolicRegressionTree", new RequestBodyParams());
 
         setEvaluationSet(evaluationSet);
     }

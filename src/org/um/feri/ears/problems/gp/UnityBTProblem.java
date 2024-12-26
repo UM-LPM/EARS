@@ -15,11 +15,13 @@ import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.operators.gp.FeasibilityGPOperator;
 import org.um.feri.ears.operators.gp.GPOperator;
 import org.um.feri.ears.util.GPProblemEvaluatorType;
+import org.um.feri.ears.util.LastEvalIndividualFitnessesRatingCompositionType;
 import org.um.feri.ears.util.RequestBodyParams;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.visualization.gp.GPInterface;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,11 +33,11 @@ public class UnityBTProblem extends ProgramProblem {
         super("UnityBTProblem", Tree.TreeType.BEHAVIOUR);
     }
 
-    public UnityBTProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProblemEvaluatorType problemEvaluatorType, GPProgramSolution programSolutionGenerator) {
-        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, problemEvaluatorType, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
+    public UnityBTProblem(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProblemEvaluatorType problemEvaluatorType, LastEvalIndividualFitnessesRatingCompositionType lastEvalIndividualFitnessesRatingCompositionType, GPProgramSolution programSolutionGenerator) {
+        super(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, problemEvaluatorType, lastEvalIndividualFitnessesRatingCompositionType, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
     }
-    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProblemEvaluatorType problemEvaluatorType, GPProgramSolution programSolutionGenerator) {
-        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, problemEvaluatorType, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
+    public UnityBTProblem(List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityControlOperators, GPOperator[] bloatControlOperators, GPProblemEvaluatorType problemEvaluatorType, LastEvalIndividualFitnessesRatingCompositionType lastEvalIndividualFitnessesRatingCompositionType, GPProgramSolution programSolutionGenerator) {
+        super("UnityBTProblem", baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityControlOperators, bloatControlOperators, problemEvaluatorType, lastEvalIndividualFitnessesRatingCompositionType, programSolutionGenerator, Tree.TreeType.BEHAVIOUR, "BAS", new RequestBodyParams());
     }
 
     @Override
@@ -64,8 +66,10 @@ public class UnityBTProblem extends ProgramProblem {
             try {
                 String apiUrl = "http://localhost:5016/api/JsonToSoParser";
                 RequestBodyParams requestBodyParams = getRequestBodyParams();
+
+
                 if(problemEvaluatorType == GPProblemEvaluatorType.Complex){
-                    requestBodyParams.setLastEvalIndividualFitnesses(solutions);
+                    requestBodyParams.setLastEvalIndividualFitnesses(solutions, lastEvalIndividualFitnessesRatingCompositionType);
                 }
 
                 String response = Util.sendEvaluateRequest(apiUrl, jsonArray.toJSONString(), 100 * 60 * 1000, requestBodyParams, getJsonBodyDestFolderPath());

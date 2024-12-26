@@ -28,4 +28,5 @@ public class EARSConfiguration implements Serializable {
     public String[] BloatControlOperators;
     public Target[] EvalData;
     public GPProblemEvaluatorType ProblemEvaluatorType;
+    public LastEvalIndividualFitnessesRatingCompositionType LastEvalIndividualFitnessesRatingCompositionType;
 }
