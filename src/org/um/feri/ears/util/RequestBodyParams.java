@@ -71,19 +71,41 @@ public class RequestBodyParams implements Serializable
         LastEvalIndividualFitnesses = lastEvalIndividualFitnesses;
     }
 
-    public void setLastEvalIndividualFitnesses(List<ProgramSolution> solutions) {
+    public void setLastEvalIndividualFitnesses(List<ProgramSolution> solutions, LastEvalIndividualFitnessesRatingCompositionType lastEvalIndividualFitnessesRatingCompositionType) {
         if(solutions == null || solutions.size() == 0 || solutions.get(0).getFitness().individualID == -1)
         {
             return;
         }
 
         IndividualFitness[] lastEvalIndividualFitnesses = new IndividualFitness[solutions.size()];
+
         for (int i = 0; i < solutions.size(); i++) {
-            if(!solutions.get(i).isDirty())
-                lastEvalIndividualFitnesses[i] = new IndividualFitness(i, solutions.get(i).getFitness().getAdditionalValues());
-            else
-                lastEvalIndividualFitnesses[i] = new IndividualFitness(i);
+            switch (lastEvalIndividualFitnessesRatingCompositionType){
+                case Default:
+                    lastEvalIndividualFitnesses[i] = new IndividualFitness(i);
+                    break;
+                case Mean:
+                    lastEvalIndividualFitnesses[i] = new IndividualFitness(i, solutions.get(i).getFitness().getAdditionalValues().get("Rating"), 8.33);
+                    break;
+                case RatingUnchanged:
+                    if(!solutions.get(i).isDirty())
+                        lastEvalIndividualFitnesses[i] = new IndividualFitness(i, solutions.get(i).getFitness().getAdditionalValues());
+                    else
+                        lastEvalIndividualFitnesses[i] = new IndividualFitness(i);
+                    break;
+                case RatingAll:
+                    lastEvalIndividualFitnesses[i] = new IndividualFitness(i, solutions.get(i).getFitness().getAdditionalValues());
+                    break;
+                case GradualDecrease:
+                    throw new IllegalArgumentException("GradualDecrease not implemented");
+                default:
+                    throw new IllegalArgumentException("Unknown LastEvalIndividualFitnessesRatingCompositionType");
+            }
         }
         this.LastEvalIndividualFitnesses = lastEvalIndividualFitnesses;
+    }
+
+    public void resetLastEvalIndividualFitnesses() {
+        this.LastEvalIndividualFitnesses = null;
     }
 }

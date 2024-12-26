@@ -68,7 +68,7 @@ public class GPAlgorithmExecutor implements Serializable {
         }
     }
 
-    public void initializeGpAlgorithmState(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, List<Target> evalData, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityGPOperators, GPOperator[] bloatControlOperators, GPProblemEvaluatorType problemEvaluatorType, GPProgramSolution programSolutionGenerator, int maxEvaluations, boolean debugMode, Class<? extends GPAlgorithm> gpAlgorithmClass, Object ...gpAlgorithmArgs){
+    public void initializeGpAlgorithmState(String problemName, List<Class<? extends Node>> baseFunctionNodeTypes, List<Class<? extends Node>> baseTerminalNodeTypes, List<Target> evalData, int minTreeDepth, int maxTreeStartDepth, int maxTreeEndDepth, int maxTreeSize, FeasibilityGPOperator[] feasibilityGPOperators, GPOperator[] bloatControlOperators, GPProblemEvaluatorType problemEvaluatorType, LastEvalIndividualFitnessesRatingCompositionType lastEvalIndividualFitnessesRatingCompositionType, GPProgramSolution programSolutionGenerator, int maxEvaluations, boolean debugMode, Class<? extends GPAlgorithm> gpAlgorithmClass, Object ...gpAlgorithmArgs){
         ProgramProblem programProblem = null;
         if(evalData != null && evalData.size() > 0){
             // Symbolic regression problem
@@ -77,7 +77,7 @@ public class GPAlgorithmExecutor implements Serializable {
         }
         else{
             // Behavior tree problem
-            programProblem = new UnityBTProblem(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityGPOperators, bloatControlOperators, problemEvaluatorType, programSolutionGenerator);
+            programProblem = new UnityBTProblem(problemName, baseFunctionNodeTypes, baseTerminalNodeTypes, minTreeDepth, maxTreeStartDepth, maxTreeEndDepth, maxTreeSize, feasibilityGPOperators, bloatControlOperators, problemEvaluatorType, lastEvalIndividualFitnessesRatingCompositionType, programSolutionGenerator);
         }
 
         Task<ProgramSolution, ProgramProblem> task = new Task<>(programProblem, StopCriterion.EVALUATIONS, maxEvaluations, 0, 0);
@@ -192,6 +192,9 @@ public class GPAlgorithmExecutor implements Serializable {
 
         // ProblemEvaluatorType
         programProblem.setProblemEvaluatorType(earsConfiguration.ProblemEvaluatorType);
+
+        // LastEvalIndividualFitnessesRatingCompositionType
+        programProblem.setLastEvalIndividualFitnessesRatingCompositionType(earsConfiguration.LastEvalIndividualFitnessesRatingCompositionType);
 
         // EvalData (For symbolic regression only)
         if(programProblem instanceof SymbolicRegressionProblem){

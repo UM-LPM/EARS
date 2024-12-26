@@ -18,6 +18,14 @@ public class IndividualFitness implements Serializable
         }});
     }
 
+    public IndividualFitness(int individualID, double value, double stdDeviation)
+    {
+        this(individualID, new HashMap<>(){{
+            put("Rating", value);
+            put("StdDeviation", stdDeviation);
+        }});
+    }
+
     public IndividualFitness(int individualID, HashMap<String, Double> additionalValues)
     {
         this.IndividualID = individualID;

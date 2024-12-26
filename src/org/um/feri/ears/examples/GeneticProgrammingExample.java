@@ -23,6 +23,7 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
 import org.um.feri.ears.util.GPProblemEvaluatorType;
+import org.um.feri.ears.util.LastEvalIndividualFitnessesRatingCompositionType;
 import org.um.feri.ears.util.Util;
 
 import java.net.HttpURLConnection;
@@ -62,7 +63,7 @@ public class GeneticProgrammingExample {
         );
 
         UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5,5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, GPProblemEvaluatorType.Simple, new GPRandomProgramSolution());
+                new GPOperator[]{}, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, new GPRandomProgramSolution());
 
         List<ProgramSolution> programSolutions = new ArrayList<>();
         for (int i = 0; i < 300; i++){
@@ -218,7 +219,7 @@ public class GeneticProgrammingExample {
         );
 
         UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, 100, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, GPProblemEvaluatorType.Simple, new GPRandomProgramSolution());
+                new GPOperator[]{}, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, new GPRandomProgramSolution());
 
         //GP algorithm execution example
         Task<ProgramSolution, ProgramProblem> soccerTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 40000, 0, 0);
@@ -272,7 +273,7 @@ public class GeneticProgrammingExample {
         );
 
         UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, GPProblemEvaluatorType.Simple, new GPRandomProgramSolution());
+                new GPOperator[]{}, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, new GPRandomProgramSolution());
 
         //get current time
         long startTime = System.currentTimeMillis();
@@ -391,7 +392,7 @@ public class GeneticProgrammingExample {
         GPOperator treeSizePruningOperator = new GPTreeSizePruningOperator();
 
         UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, maxNumOfNodes, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, GPProblemEvaluatorType.Simple, new GPRandomProgramSolution());
+                new GPOperator[]{}, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, new GPRandomProgramSolution());
 
         ProgramSolution programSolution = sgp2.getRandomSolution();
 
