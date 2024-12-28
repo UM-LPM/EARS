@@ -10,6 +10,7 @@ public class FinalIndividualFitness implements Serializable {
     public double value;
 
     public List<IndividualMatchResult> individualMatchResults;
+    public IndividualMatchResult avgMatchResult;
     public HashMap<String, Double> additionalValues;
 
     public FinalIndividualFitness(){
@@ -24,9 +25,12 @@ public class FinalIndividualFitness implements Serializable {
         this.value = fitness.value;
 
         this.individualMatchResults = new ArrayList<>();
-        for (IndividualMatchResult imr : fitness.individualMatchResults) {
+        // TODO Is this required ?
+        /*for (IndividualMatchResult imr : fitness.individualMatchResults) {
             this.individualMatchResults.add(new IndividualMatchResult(imr));
-        }
+        }*/
+
+        this.avgMatchResult = new IndividualMatchResult(fitness.avgMatchResult);
 
         this.additionalValues = new HashMap<>();
         this.additionalValues.putAll(fitness.additionalValues);
@@ -46,4 +50,10 @@ public class FinalIndividualFitness implements Serializable {
             return additionalValues.get(key);
         else throw new IllegalArgumentException("Key not found in additionalValues");
     }
+
+    public IndividualMatchResult getAvgMatchResult() {
+        return avgMatchResult;
+    }
+
+
 }
