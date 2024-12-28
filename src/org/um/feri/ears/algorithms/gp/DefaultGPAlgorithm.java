@@ -454,4 +454,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
 
         }
     }
+
+    @Override
+    public void setHallOfFameSize(int hallOfFameSize) {    }
 }

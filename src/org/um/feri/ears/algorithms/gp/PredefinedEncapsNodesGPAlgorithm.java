@@ -18,7 +18,6 @@ import org.um.feri.ears.util.*;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
-import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
@@ -42,6 +41,9 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     @AlgorithmParameter(name = "number of tournaments")
     private int numberOfTournaments;
 
+    @AlgorithmParameter(name = "hall of fame size")
+    private int hallOfFameSize;
+
     private List<ProgramSolution> population;
     private List<ProgramSolution> currentPopulation;
     private List<ProgramSolution> parentPopulation;
@@ -64,15 +66,17 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
      */
     private GPOperator[] pruningOperators;
 
+    private List<ProgramSolution> hallOfFame;
+
     public PredefinedEncapsNodesGPAlgorithm() {
-        this(100, 0.90, 0.05, 0.025, 2, null);
+        this(100, 0.90, 0.05, 0.025, 2, 0, null);
     }
 
     public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments) {
-        this(popSize,crossoverProbability, elitismProbability,mutationProbability,numberOfTournaments, null);
+        this(popSize,crossoverProbability, elitismProbability,mutationProbability,numberOfTournaments, 0, null);
     }
 
-    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, Task<ProgramSolution,  ProgramProblem> task) {
+    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, int hallOfFameSize, Task<ProgramSolution,ProgramProblem> task) {
         this.popSize = popSize;
         this.crossoverProbability = crossoverProbability;
         this.elitismProbability = elitismProbability;
@@ -100,6 +104,9 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         this.bestGenFitnesses = new ArrayList<>();
 
         this.encapsulatedNodeDefinitions = new ArrayList<>();
+
+        this.hallOfFameSize = hallOfFameSize;
+        this.hallOfFame = new ArrayList<>();
     }
 
     @Override
@@ -368,6 +375,9 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         this.avgGenTreeDepths = new ArrayList<>();
         this.avgGenTreeSizes = new ArrayList<>();
         this.bestGenFitnesses = new ArrayList<>();
+
+        this.encapsulatedNodeDefinitions.clear();
+        this.hallOfFame = new ArrayList<>();
     }
 
     public void algorithmInitialization(Task<ProgramSolution, ProgramProblem> task, ProblemComparator<ProgramSolution> comparator, Selection<ProgramSolution, ProgramProblem> selectionOperator) {
@@ -432,6 +442,11 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         ProgramSolution currentGenBest = null;
         population = new ArrayList<>(this.currentPopulation);
 
+        // Add hall of fame to population
+        if (this.hallOfFameSize > 0 && hallOfFame != null) {
+            this.population.addAll(hallOfFame);
+        }
+
         // If the number of evaluations is greater than the maximum number of evaluations, we need to remove the last individuals
         if(this.task.getNumberOfEvaluations() + this.population.size() >= this.task.getMaxEvaluations()){
             int evals = this.task.getMaxEvaluations() - this.task.getNumberOfEvaluations();
@@ -441,12 +456,28 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         this.task.bulkEval(this.population);
 
         currentGenBest = new ProgramSolution(this.population.get(0));
-        for(ProgramSolution sol : population){
-            if (task.problem.isFirstBetter(sol, best))
-                best = new ProgramSolution(sol);
+        int hallOfFameSizeCurrent = (this.hallOfFameSize > 0 && this.hallOfFame != null) ? this.hallOfFame.size() : 0;
+        for (int i = 0; i < this.population.size() - hallOfFameSizeCurrent; i++) {
+            if (task.problem.isFirstBetter(this.population.get(i), currentGenBest))
+                currentGenBest = new ProgramSolution(this.population.get(i));
 
-            if (task.problem.isFirstBetter(sol, currentGenBest))
-                currentGenBest = new ProgramSolution(sol);
+            if (task.problem.isFirstBetter(this.population.get(i), best))
+                best = new ProgramSolution(this.population.get(i));
+        }
+
+        // Add best solution to hall of fame
+        if (this.hallOfFameSize > 0 && this.hallOfFame != null) {
+            // Remove the first element if the hall of fame is full
+            if (this.hallOfFame.size() >= this.hallOfFameSize) {
+                this.hallOfFame.remove(0);
+            }
+
+            this.hallOfFame.add(new ProgramSolution(currentGenBest));
+        }
+
+        // Remove the hall of fame from the population
+        if (this.hallOfFameSize > 0 && this.hallOfFame != null) {
+            this.population = new ArrayList<>(this.population.subList(0, this.population.size() - hallOfFameSizeCurrent));
         }
 
         return currentGenBest;
@@ -524,5 +555,10 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
             this.avgGenTreeSizes.add(avgSize / this.population.size());
 
         }
+    }
+
+    @Override
+    public void setHallOfFameSize(int hallOfFameSize) {
+        this.hallOfFameSize = hallOfFameSize;
     }
 }

@@ -101,4 +101,7 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
     public ProblemComparator<ProgramSolution> getComparator() {
         return null;
     }
+
+    @Override
+    public void setHallOfFameSize(int hallOfFameSize) {    }
 }
