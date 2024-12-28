@@ -26,14 +26,14 @@ public class GPProgramSolutionSimple implements Serializable {
     public GPProgramSolutionSimple(ProgramSolution programSolution){
         this.individualId = programSolution.getID();
         this.objectives = programSolution.getObjectives();
-        this.finalIndividualFitness = programSolution.getFitness();
+        this.finalIndividualFitness = new FinalIndividualFitness(programSolution.getFitness());
         this.changesCount = programSolution.getChangesCount();
         this.treeSize = programSolution.getTree().treeSize();
         this.treeDepth = programSolution.getTree().treeMaxDepth();
         this.terminalNodes = programSolution.getTree().getTerminalNodes().size();
         this.functionNodes = programSolution.getTree().getFunctionNodes().size();
 
-        //this.treeDotString = programSolution.getTree().toDotString();
+        //this.treeDotString = programSolution.getTree().toDotString(); // TODO Is this required ?
         this.treeDotString = ""; // TODO Remove this
         this.nodeCounts = programSolution.getTree().getNodeCounts();
     }

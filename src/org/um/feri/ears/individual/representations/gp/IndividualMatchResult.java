@@ -17,7 +17,10 @@ public class IndividualMatchResult implements Serializable {
     }
 
     public IndividualMatchResult(IndividualMatchResult imr){
-        this.opponentsIDs = imr.opponentsIDs.clone();
+        if(imr.opponentsIDs != null && imr.opponentsIDs.length > 0)
+            this.opponentsIDs = imr.opponentsIDs.clone();
+        else
+            this.opponentsIDs = new int[]{};
         this.matchName = imr.matchName;
         this.value = imr.value;
         this.individualValues = new HashMap<>();
