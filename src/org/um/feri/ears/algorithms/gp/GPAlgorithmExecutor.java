@@ -96,10 +96,10 @@ public class GPAlgorithmExecutor implements Serializable {
             this.gpAlgorithm = new ElitismGPAlgorithm((int)gpAlgorithmArgs[0], (double)gpAlgorithmArgs[1], (double)gpAlgorithmArgs[2], (double)gpAlgorithmArgs[3], (int)gpAlgorithmArgs[4], task, null);
         }
         else if (gpAlgorithmClass == PredefinedEncapsNodesGPAlgorithm.class){
-            if(gpAlgorithmArgs.length != 5){
+            if(gpAlgorithmArgs.length != 6){
                 throw new IllegalArgumentException("gpAlgorithmArgs must have 5 values");
             }
-            this.gpAlgorithm = new PredefinedEncapsNodesGPAlgorithm((int)gpAlgorithmArgs[0], (double)gpAlgorithmArgs[1], (double)gpAlgorithmArgs[2], (double)gpAlgorithmArgs[3], (int)gpAlgorithmArgs[4], task);
+            this.gpAlgorithm = new PredefinedEncapsNodesGPAlgorithm((int)gpAlgorithmArgs[0], (double)gpAlgorithmArgs[1], (double)gpAlgorithmArgs[2], (double)gpAlgorithmArgs[3], (int)gpAlgorithmArgs[4], (int)gpAlgorithmArgs[5], task);
         }
         else {
             throw new IllegalArgumentException("gpAlgorithmClass not supported");
@@ -131,7 +131,7 @@ public class GPAlgorithmExecutor implements Serializable {
             } else if (earsConfiguration.AlgorithmType == GPAlgorithmType.EGP) {
                 this.gpAlgorithm = new ElitismGPAlgorithm(100, 0.9, 0.05, 0.1, 4, task, null);
             } else if (earsConfiguration.AlgorithmType == GPAlgorithmType.PENGP) {
-                this.gpAlgorithm = new PredefinedEncapsNodesGPAlgorithm(100, 0.9, 0.05, 0.1, 4, task);
+                this.gpAlgorithm = new PredefinedEncapsNodesGPAlgorithm(100, 0.9, 0.05, 0.1, 4, 0, task);
             }
             this.gpAlgorithm.setDebug(true);
         }else{
@@ -195,6 +195,9 @@ public class GPAlgorithmExecutor implements Serializable {
 
         // LastEvalIndividualFitnessesRatingCompositionType
         programProblem.setLastEvalIndividualFitnessesRatingCompositionType(earsConfiguration.LastEvalIndividualFitnessesRatingCompositionType);
+
+        // Hall of Fame
+        this.gpAlgorithm.setHallOfFameSize(earsConfiguration.HallOfFameSize);
 
         // EvalData (For symbolic regression only)
         if(programProblem instanceof SymbolicRegressionProblem){

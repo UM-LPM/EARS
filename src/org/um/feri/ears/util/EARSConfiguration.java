@@ -29,4 +29,5 @@ public class EARSConfiguration implements Serializable {
     public Target[] EvalData;
     public GPProblemEvaluatorType ProblemEvaluatorType;
     public LastEvalIndividualFitnessesRatingCompositionType LastEvalIndividualFitnessesRatingCompositionType;
+    public int HallOfFameSize;
 }

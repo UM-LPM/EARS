@@ -46,6 +46,8 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
 
     public abstract ProblemComparator<ProgramSolution> getComparator();
 
+    public abstract void setHallOfFameSize(int hallOfFameSize);
+
     public ArrayList<Double> getBestOverallFitnesses() {
         return bestOverallFitnesses;
     }
