@@ -85,7 +85,7 @@ public class RequestBodyParams implements Serializable
                     lastEvalIndividualFitnesses[i] = new IndividualFitness(i);
                     break;
                 case Mean:
-                    lastEvalIndividualFitnesses[i] = new IndividualFitness(i, solutions.get(i).getFitness().getAdditionalValues().get("Rating"), 8.33);
+                    lastEvalIndividualFitnesses[i] = new IndividualFitness(i, solutions.get(i).getFitness().getAdditionalValues().get("Rating"), Double.MAX_VALUE);
                     break;
                 case RatingUnchanged:
                     if(!solutions.get(i).isDirty())
