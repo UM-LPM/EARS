@@ -68,6 +68,8 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     private List<ProgramSolution> hallOfFame;
 
+    private List<ProgramSolution> bestGenIndividual; // Used for convergence graph calculation
+
     public PredefinedEncapsNodesGPAlgorithm() {
         this(100, 0.90, 0.05, 0.025, 2, 0, null);
     }
@@ -107,6 +109,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         this.hallOfFameSize = hallOfFameSize;
         this.hallOfFame = new ArrayList<>();
+        this.bestGenIndividual = new ArrayList<>();
     }
 
     @Override
@@ -243,40 +246,52 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
             case EVALUATION:
                 ProgramSolution currentGenBest = performEvaluation();
 
-                if(currentGenBest == null){
+                if(currentGenBest != null){
+
+                    // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
+                    if (this.task.problem.getBloatControlOperators().length > 0) {
+                        for (ProgramSolution solution : this.population) {
+                            this.task.problem.executeBloatedControlOperators(solution);
+                        }
+
+                        if (this.task.isStopCriterion()) {
+                            return this.best;
+                        }
+
+                        // Reevaluate population
+                        ProgramSolution currentGenBestBloatControl = performEvaluation();
+
+                        if(currentGenBestBloatControl != null){
+                            // Evaluation was successful - update current best solution
+                            currentGenBest = currentGenBestBloatControl;
+                        }
+                    }
+
+                    if(this.task.problem.getProblemEvaluatorType() == GPProblemEvaluatorType.Complex){
+                        this.best = new ProgramSolution(currentGenBest);
+                    }
+
+                    // Add the best solution to the Hall of Fame
+                    if (this.hallOfFameSize > 0 && this.hallOfFame != null) {
+                        // Remove the first element if the Hall of Fame is full
+                        if (this.hallOfFame.size() >= this.hallOfFameSize) {
+                            this.hallOfFame.remove(0);
+                        }
+
+                        this.hallOfFame.add(new ProgramSolution(currentGenBest));
+                    }
+
+                    // Add best solution to bestGenIndividual
+                    bestGenIndividual.add(new ProgramSolution(currentGenBest));
+
+                    // Update statistics
+                    if (this.isDebug())
+                        this.bestGenFitnesses.add(currentGenBest.getEval());
+                    updateStatistics();
+                }
+                else {
                     return this.best;
                 }
-
-                if(this.task.problem.getProblemEvaluatorType() == GPProblemEvaluatorType.Complex){
-                    this.best = new ProgramSolution(currentGenBest);
-                }
-
-                updateStatistics();
-
-                // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
-                if (this.task.problem.getBloatControlOperators().length > 0) {
-                    for (ProgramSolution solution : this.population) {
-                        this.task.problem.executeBloatedControlOperators(solution);
-                    }
-
-                    if (this.task.isStopCriterion()) {
-                        return this.best;
-                    }
-
-                    // Reevaluate population
-                    currentGenBest = performEvaluation();
-
-                    if(currentGenBest == null){
-                        return this.best;
-                    }
-                }
-
-                if(this.task.problem.getProblemEvaluatorType() == GPProblemEvaluatorType.Complex){
-                    this.best = new ProgramSolution(currentGenBest);
-                }
-
-                if (this.isDebug())
-                    this.bestGenFitnesses.add(currentGenBest.getEval());
 
                 break;
             default:
@@ -390,6 +405,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         this.encapsulatedNodeDefinitions.clear();
         this.hallOfFame = new ArrayList<>();
+        this.bestGenIndividual = new ArrayList<>();
     }
 
     public void algorithmInitialization(Task<ProgramSolution, ProgramProblem> task, ProblemComparator<ProgramSolution> comparator, Selection<ProgramSolution, ProgramProblem> selectionOperator) {
@@ -471,7 +487,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
             // Partial evaluation with Complex problem evaluator type are not permited!
             if(this.task.problem.getProblemEvaluatorType() == GPProblemEvaluatorType.Complex){
-                this.task.incrementNumberOfEvaluations(evals);
+                this.task.incrementNumberOfEvaluations(evals); // Increment number of evaluations to the maximum
                 return null;
             }
 
@@ -488,16 +504,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
             if (task.problem.isFirstBetter(this.population.get(i), best))
                 best = new ProgramSolution(this.population.get(i));
-        }
-
-        // Add best solution to hall of fame
-        if (this.hallOfFameSize > 0 && this.hallOfFame != null) {
-            // Remove the first element if the hall of fame is full
-            if (this.hallOfFame.size() >= this.hallOfFameSize) {
-                this.hallOfFame.remove(0);
-            }
-
-            this.hallOfFame.add(new ProgramSolution(currentGenBest));
         }
 
         // Remove the hall of fame from the population
