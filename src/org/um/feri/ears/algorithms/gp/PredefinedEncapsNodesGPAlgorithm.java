@@ -243,6 +243,14 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
             case EVALUATION:
                 ProgramSolution currentGenBest = performEvaluation();
 
+                if(currentGenBest == null){
+                    return this.best;
+                }
+
+                if(this.task.problem.getProblemEvaluatorType() == GPProblemEvaluatorType.Complex){
+                    this.best = new ProgramSolution(currentGenBest);
+                }
+
                 updateStatistics();
 
                 // Bloat control - Remove all redundant nodes (needs to be evaluated again after methods are executed)
@@ -257,6 +265,10 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
                     // Reevaluate population
                     currentGenBest = performEvaluation();
+
+                    if(currentGenBest == null){
+                        return this.best;
+                    }
                 }
 
                 if(this.task.problem.getProblemEvaluatorType() == GPProblemEvaluatorType.Complex){
@@ -415,6 +427,12 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         ProgramSolution[] parents = new ProgramSolution[2];
         // Selection and Crossover
         for (int i = 0; i < this.parentPopulation.size(); i += 2) {
+            if(i + 1 >= this.parentPopulation.size())
+            {
+                currentPopulation.add(this.parentPopulation.get(i));
+                break;
+            }
+
             parents[0] = this.parentPopulation.get(i);
             parents[1] = this.parentPopulation.get(i + 1);
             try {
@@ -448,8 +466,15 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         }
 
         // If the number of evaluations is greater than the maximum number of evaluations, we need to remove the last individuals
-        if(this.task.getNumberOfEvaluations() + this.population.size() >= this.task.getMaxEvaluations()){
+        if(this.task.getNumberOfEvaluations() + this.population.size() > this.task.getMaxEvaluations()){
             int evals = this.task.getMaxEvaluations() - this.task.getNumberOfEvaluations();
+
+            // Partial evaluation with Complex problem evaluator type are not permited!
+            if(this.task.problem.getProblemEvaluatorType() == GPProblemEvaluatorType.Complex){
+                this.task.incrementNumberOfEvaluations(evals);
+                return null;
+            }
+
             population = new ArrayList<>(this.population.subList(0, evals));
         }
 

@@ -38,7 +38,7 @@ public class ProgramSolution extends Solution {
         super(s);
         tree = s.tree.clone();
         parents = new ArrayList<>();
-        Fitness = new FinalIndividualFitness(s.Fitness);
+        Fitness = new FinalIndividualFitness(s.Fitness, true);
         NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone(); // TODO Remove this when moved to FinalIndividualFitness
         isDirty = s.isDirty;
         changesCount = s.changesCount;
@@ -183,6 +183,10 @@ public class ProgramSolution extends Solution {
         }
 
         return fitnessesCombined;
+    }
+
+    public Map<String, Double> getAvgMatchFitnessResult(){
+        return Fitness.getAvgMatchResult().individualValues;
     }
 
     // TODO Remove this (when moved to FinalIndividualFitness)

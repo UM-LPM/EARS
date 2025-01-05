@@ -281,6 +281,12 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
         ProgramSolution[] parents = new ProgramSolution[2];
         // Selection and Crossover
         for (int i = 0; i < this.parentPopulation.size(); i += 2) {
+            if(i + 1 >= this.parentPopulation.size())
+            {
+                currentPopulation.add(this.parentPopulation.get(i));
+                break;
+            }
+
             parents[0] = this.parentPopulation.get(i);
             parents[1] = this.parentPopulation.get(i + 1);
             try {

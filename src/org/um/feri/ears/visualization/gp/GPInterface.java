@@ -657,7 +657,7 @@ public class GPInterface extends JFrame {
             selectedIndividualNumOfFunc.setText("" + individual.getTree().numberOfFunctions());
             selectedIndividualNumOfTerm.setText("" + individual.getTree().numberOfTerminals());
 
-            selectedIndividualHorizontalHistogramPanel.setData(individual.getFitnessesCombined());
+            selectedIndividualHorizontalHistogramPanel.setData(individual.getAvgMatchFitnessResult());
         }
     }
 
@@ -698,7 +698,7 @@ public class GPInterface extends JFrame {
             bestIndividualNumOfTerm.setText("" + gpAlgorithmExecutor.getGpAlgorithm().getBest().getTree().numberOfTerminals());
 
             // Display fitness values histogram
-            bestIndividualHorizontalHistogramPanel.setData(gpAlgorithmExecutor.getGpAlgorithm().getBest().getFitnessesCombined());
+            bestIndividualHorizontalHistogramPanel.setData(gpAlgorithmExecutor.getGpAlgorithm().getBest().getAvgMatchFitnessResult());
         }
     }
 

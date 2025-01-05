@@ -20,15 +20,15 @@ public class FinalIndividualFitness implements Serializable {
         this.additionalValues = new HashMap<>();
     }
 
-    public FinalIndividualFitness(FinalIndividualFitness fitness){
+    public FinalIndividualFitness(FinalIndividualFitness fitness, boolean setIndividualMatchResults){
         this.individualID = fitness.individualID;
         this.value = fitness.value;
 
         this.individualMatchResults = new ArrayList<>();
-        // TODO Is this required ?
-        /*for (IndividualMatchResult imr : fitness.individualMatchResults) {
-            this.individualMatchResults.add(new IndividualMatchResult(imr));
-        }*/
+        if(setIndividualMatchResults)
+            for (IndividualMatchResult imr : fitness.individualMatchResults) {
+                this.individualMatchResults.add(new IndividualMatchResult(imr));
+            }
 
         this.avgMatchResult = new IndividualMatchResult(fitness.avgMatchResult);
 

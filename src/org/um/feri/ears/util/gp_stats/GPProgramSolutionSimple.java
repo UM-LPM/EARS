@@ -26,7 +26,7 @@ public class GPProgramSolutionSimple implements Serializable {
     public GPProgramSolutionSimple(ProgramSolution programSolution){
         this.individualId = programSolution.getID();
         this.objectives = programSolution.getObjectives();
-        this.finalIndividualFitness = new FinalIndividualFitness(programSolution.getFitness());
+        this.finalIndividualFitness = new FinalIndividualFitness(programSolution.getFitness(), false);
         this.changesCount = programSolution.getChangesCount();
         this.treeSize = programSolution.getTree().treeSize();
         this.treeDepth = programSolution.getTree().treeMaxDepth();
