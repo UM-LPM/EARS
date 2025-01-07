@@ -2,6 +2,7 @@ package org.um.feri.ears.problems.gp;
 
 import org.um.feri.ears.individual.representations.gp.FinalIndividualFitness;
 import org.um.feri.ears.individual.representations.gp.IndividualMatchResult;
+import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.*;
@@ -57,8 +58,10 @@ public class ProgramSolution extends Solution {
         return tree;
     }
 
-    public FinalIndividualFitness getFitness(){
+    public FinalIndividualFitness getFitness() {
         return Fitness;
+    }
+
     @Override
     public String toString() {
         //TODO add treeType to tree and add check
@@ -158,10 +161,6 @@ public class ProgramSolution extends Solution {
                 printTree((Node) child, indent + "  ");
             }
         }
-    }
-
-    public HashMap<String, Fitness> getFitnesses(){
-        return Fitnesses;
     }
 
     public void setFitness(FinalIndividualFitness fitness){

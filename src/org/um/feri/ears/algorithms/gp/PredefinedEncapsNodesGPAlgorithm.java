@@ -14,11 +14,15 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
+import org.um.feri.ears.statistic.rating_system.Player;
+import org.um.feri.ears.statistic.rating_system.RatingType;
+import org.um.feri.ears.statistic.rating_system.true_skill.TrueSkillRating;
 import org.um.feri.ears.util.*;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
 import org.um.feri.ears.util.random.RNG;
+import org.um.feri.ears.visualization.rating.RatingIntervalPlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +72,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     private List<ProgramSolution> hallOfFame;
 
-    private List<ProgramSolution> bestGenIndividual; // Used for convergence graph calculation
+    private List<ProgramSolution> bestGenIndividuals; // Used for convergence graph calculation
 
     public PredefinedEncapsNodesGPAlgorithm() {
         this(100, 0.90, 0.05, 0.025, 2, 0, null);
@@ -109,7 +113,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         this.hallOfFameSize = hallOfFameSize;
         this.hallOfFame = new ArrayList<>();
-        this.bestGenIndividual = new ArrayList<>();
+        this.bestGenIndividuals = new ArrayList<>();
     }
 
     @Override
@@ -187,6 +191,11 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         // Run algorithm for X generations
         execute(generations, null, "Main_phase", multiConfigurationsProgressData);
+
+        // Build Convergence Graph
+        if(runConfiguration.EARSConfiguration.BuildConvergenceGraph) {
+            buildConvergenceGraph(multiConfigurationsProgressData, true);
+        }
 
         System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
 
@@ -282,7 +291,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                     }
 
                     // Add best solution to bestGenIndividual
-                    bestGenIndividual.add(new ProgramSolution(currentGenBest));
+                    bestGenIndividuals.add(new ProgramSolution(currentGenBest));
 
                     // Update statistics
                     if (this.isDebug())
@@ -405,7 +414,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         this.encapsulatedNodeDefinitions.clear();
         this.hallOfFame = new ArrayList<>();
-        this.bestGenIndividual = new ArrayList<>();
+        this.bestGenIndividuals = new ArrayList<>();
     }
 
     public void algorithmInitialization(Task<ProgramSolution, ProgramProblem> task, ProblemComparator<ProgramSolution> comparator, Selection<ProgramSolution, ProgramProblem> selectionOperator) {
@@ -584,7 +593,37 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 avgSize += sol.getTree().treeSize();
             }
             this.avgGenTreeSizes.add(avgSize / this.population.size());
+        }
+    }
 
+    public void buildConvergenceGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData, boolean displayGraph) {
+        // Reset IDs
+        for(int i = 0; i < this.bestGenIndividuals.size(); i++){
+            this.bestGenIndividuals.get(i).setID(i);
+        }
+
+        // Evaluate all individuals
+        this.task.problem.bulkEvaluate(bestGenIndividuals);
+
+        // Add individuals to the progressData
+        if(multiConfigurationsProgressData != null) {
+            multiConfigurationsProgressData.addConvergenceGraphData(bestGenIndividuals);
+            multiConfigurationsProgressData.saveProgressData();
+        }
+
+
+        if(displayGraph) {
+            ArrayList<Player> players = new ArrayList<>();
+            for (ProgramSolution solution : bestGenIndividuals) {
+                Player player = new Player(String.valueOf(solution.getID()));
+                double mean = -solution.getFitness().getAdditionalValue("Rating");
+                double stdDeviation = solution.getFitness().getAdditionalValue("StdDeviation");
+                player.setFreeForAllTrueSkill(new TrueSkillRating(mean, stdDeviation));
+
+                players.add(player);
+            }
+
+            RatingIntervalPlot.displayChart(players, RatingType.TRUE_SKILL_FREE_FOR_ALL, "TrueSkill Free-For-All");
         }
     }
 

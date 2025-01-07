@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.um.feri.ears.algorithms.GPAlgorithm;
+import org.um.feri.ears.problems.gp.ProgramSolution;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -46,6 +47,14 @@ public class GPAlgorithmMultiConfigurationsProgressData implements Serializable 
                 .getMultiRunProgressData().get(multiConfigurationProgressData
                         .get(multiConfigurationProgressData.size() -1).getMultiRunProgressData().size() -1)
                 .addProgressDataGen(generation, executionPhaseName, gpAlgorithm);
+    }
+
+    public void addConvergenceGraphData(List<ProgramSolution> solutions) {
+        multiConfigurationProgressData
+                .get(multiConfigurationProgressData.size() -1)
+                .getMultiRunProgressData().get(multiConfigurationProgressData
+                        .get(multiConfigurationProgressData.size() -1).getMultiRunProgressData().size() -1)
+                .addConvergenceGraphData(solutions);
     }
 
     public void saveProgressData(){

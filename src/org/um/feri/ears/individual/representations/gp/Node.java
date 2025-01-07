@@ -177,7 +177,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
 
         nodeCounts.put(this.name, 1);
 
-        if(arity > 0){
+        if(arity > 0){ // TODO Fix: This doesn't work for Encapsulator nodes (their arity is 0)
             for (Node child : this.children) {
                 HashMap<String, Integer> childNodeCounts = child.nodeCounts();
                 for (Map.Entry<String, Integer> entry : childNodeCounts.entrySet()) {

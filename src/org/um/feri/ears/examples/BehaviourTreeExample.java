@@ -9,8 +9,10 @@ import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.PredefinedEncapsNodesGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
+import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
+import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.*;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.MoveForward;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.movement.MoveSide;
@@ -25,8 +27,7 @@ import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
-import org.um.feri.ears.util.SolutionUtils;
-import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.*;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -66,7 +67,7 @@ public class BehaviourTreeExample {
         );
 
         UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, new GPRandomProgramSolution());
+                new GPOperator[]{}, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, new GPRandomProgramSolution());
 
         List<ProgramSolution> programSolutions = new ArrayList<>();
         for (int i = 0; i < 300; i++){
@@ -220,7 +221,7 @@ public class BehaviourTreeExample {
         );
 
         UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, 100, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, new GPRandomProgramSolution());
+                new GPOperator[]{}, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, new GPRandomProgramSolution());
 
         //GP algorithm execution example
         Task<ProgramSolution, ProgramProblem> soccerTask = new Task<>(sgp2, StopCriterion.EVALUATIONS, 40000, 0, 0);
@@ -274,7 +275,7 @@ public class BehaviourTreeExample {
         );
 
         UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 5, 5, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                new GPOperator[]{}, new GPRandomProgramSolution());
+                new GPOperator[]{}, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, new GPRandomProgramSolution());
 
         //get current time
         long startTime = System.currentTimeMillis();
@@ -436,7 +437,7 @@ public class BehaviourTreeExample {
 
             GPRandomProgramSolution randomProgramSolution = new GPRandomProgramSolution();
             UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 4, 5, 15, new FeasibilityGPOperator[]{new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
-                    new GPOperator[]{}, randomProgramSolution);
+                    new GPOperator[]{}, GPProblemEvaluatorType.Simple, LastEvalIndividualFitnessesRatingCompositionType.Default, randomProgramSolution);
 
             List<ProgramSolution> programSolutions = new ArrayList<>();
 

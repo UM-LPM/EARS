@@ -133,6 +133,9 @@ public abstract class Solution implements Serializable {
     public long getID() {
         return ID;
     }
+    public void setID(long ID) {
+        this.ID = ID;
+    }
 
     public long getTimeStamp() {
         return timeStamp;
