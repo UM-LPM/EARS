@@ -1,15 +1,13 @@
 package org.um.feri.ears.util.gp_stats;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+// TODO Remove unused imports
+//import com.fasterxml.jackson.annotation.JsonInclude;
+//import com.fasterxml.jackson.core.JsonProcessingException;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +30,14 @@ public class GPAlgorithmMultiConfigurationsProgressData implements Serializable 
 
     public void addMultiConfigurationProgressData(GPAlgorithmMultiRunProgressData progressData) {
         this.multiConfigurationProgressData.add(progressData);
+    }
+
+    public String getMultiConfigurationPrograssDataFilePath() {
+        return multiConfigurationPrograssDataFilePath;
+    }
+
+    public void setMultiConfigurationPrograssDataFilePath(String multiConfigurationPrograssDataFilePath) {
+        this.multiConfigurationPrograssDataFilePath = multiConfigurationPrograssDataFilePath;
     }
 
     public void resetMultiConfigurationProgressData() {
@@ -57,7 +63,8 @@ public class GPAlgorithmMultiConfigurationsProgressData implements Serializable 
                 .addConvergenceGraphData(solutions);
     }
 
-    public void saveProgressData(){
+    // TODO Remove this
+    /*public void saveProgressData(){
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
@@ -67,5 +74,26 @@ public class GPAlgorithmMultiConfigurationsProgressData implements Serializable 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }*/
+
+    public static void serializeState(GPAlgorithmMultiConfigurationsProgressData progressData) {
+        System.out.println("Serializing current task and population state");
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(progressData.multiConfigurationPrograssDataFilePath))) {
+            oos.writeObject(progressData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        GPAlgorithm.CAN_RUN = true;
+    }
+
+    public static GPAlgorithmMultiConfigurationsProgressData deserializeState(String filename){
+        GPAlgorithmMultiConfigurationsProgressData progressData = new GPAlgorithmMultiConfigurationsProgressData(filename);
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(progressData.multiConfigurationPrograssDataFilePath))) {
+            progressData = (GPAlgorithmMultiConfigurationsProgressData) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return progressData;
     }
 }

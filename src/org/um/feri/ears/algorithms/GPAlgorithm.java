@@ -9,6 +9,7 @@ import org.um.feri.ears.util.GPAlgorithmRunStats;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
+import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiRunProgressData;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 
 import javax.swing.*;
@@ -117,7 +118,7 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
                     // Update GP Algorithm progress data run
                     if(multiConfigurationsProgressData != null){
                         multiConfigurationsProgressData.addGenProgressData(i + 1, executionPhaseName, this);
-                        multiConfigurationsProgressData.saveProgressData();
+                        GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
                     }
 
                     // Print current gpAlgorithm statistics to console
