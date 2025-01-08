@@ -608,6 +608,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Add individuals to the progressData
         if(multiConfigurationsProgressData != null) {
             multiConfigurationsProgressData.addConvergenceGraphData(bestGenIndividuals);
+            multiConfigurationsProgressData.saveProgressData(); // For testing purposes only
             GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
         }
 

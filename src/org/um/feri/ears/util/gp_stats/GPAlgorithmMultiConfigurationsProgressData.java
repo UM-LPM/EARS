@@ -1,9 +1,8 @@
 package org.um.feri.ears.util.gp_stats;
 
-// TODO Remove unused imports
-//import com.fasterxml.jackson.annotation.JsonInclude;
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 
@@ -63,18 +62,17 @@ public class GPAlgorithmMultiConfigurationsProgressData implements Serializable 
                 .addConvergenceGraphData(solutions);
     }
 
-    // TODO Remove this
-    /*public void saveProgressData(){
+    public void saveProgressData(){
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(multiConfigurationPrograssDataFilePath))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(multiConfigurationPrograssDataFilePath.replace(".ser", ".json")))) {
             writer.write(objectMapper.writeValueAsString(this));
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
     public static void serializeState(GPAlgorithmMultiConfigurationsProgressData progressData) {
         System.out.println("Serializing current task and population state");
