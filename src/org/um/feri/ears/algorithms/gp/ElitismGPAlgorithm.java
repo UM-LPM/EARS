@@ -200,7 +200,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
 
         if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
             // Save Unity configuration
-            Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+            Configuration.serializeUnityConfig(runConfiguration.UnityConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
             // Start Unity Instances
             gpAlgorithmExecutor.restartUnityInstances(true);

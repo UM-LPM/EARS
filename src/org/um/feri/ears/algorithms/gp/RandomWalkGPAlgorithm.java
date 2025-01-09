@@ -8,6 +8,7 @@ import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.Configuration;
+import org.um.feri.ears.util.GPProblemType;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
@@ -48,11 +49,13 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
         // Set EARS configuration
         int generations = gpAlgorithmExecutor.setEARSConfiguration(runConfiguration);
 
-        // Save Unity configuration
-        Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+        if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
+            // Save Unity configuration
+            Configuration.serializeUnityConfig(runConfiguration.UnityConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
-        // Start Unity Instances
-        gpAlgorithmExecutor.restartUnityInstances(true);
+            // Start Unity Instances
+            gpAlgorithmExecutor.restartUnityInstances(true);
+        }
 
         // Run algorithm for X generations
         execute(generations, saveGPAlgorithmStateFilename, "Main_run", multiConfigurationsProgressData);

@@ -150,7 +150,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
                 if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
                     // Save Unity configuration
-                    Configuration.serializeUnityConfig(encapsNodeRunConf, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+                    Configuration.serializeUnityConfig(encapsNodeRunConf.UnityConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
                     // Start Unity Instances
                     gpAlgorithmExecutor.restartUnityInstances(true);
@@ -183,7 +183,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR){
             // Save Unity configuration
-            Configuration.serializeUnityConfig(runConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+            Configuration.serializeUnityConfig(runConfiguration.UnityConfiguration, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
             // Start Unity Instances
             gpAlgorithmExecutor.restartUnityInstances(true);
@@ -192,9 +192,22 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Run algorithm for X generations
         execute(generations, null, "Main_phase", multiConfigurationsProgressData);
 
-        // Build Convergence Graph
-        if(runConfiguration.EARSConfiguration.BuildConvergenceGraph) {
-            buildConvergenceGraph(multiConfigurationsProgressData, true);
+        if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
+            // Build Convergence Graph
+            if (runConfiguration.EARSConfiguration.BuildMasterTournament) {
+                buildMasterTournamentGraph(multiConfigurationsProgressData, true);
+            }
+
+            // Update Unity configuration
+            Configuration.serializeUnityConfig(runConfiguration.UnityConfigurationConvergenceGraph, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+
+            // Restart Unity Instances
+            gpAlgorithmExecutor.restartUnityInstances(true);
+
+            // Build Convergence Graph
+            if (runConfiguration.EARSConfiguration.BuildConvergenceGraph) {
+                buildConvergenceGraph(multiConfigurationsProgressData, true);
+            }
         }
 
         System.out.println("Run configuration: (" + runConfiguration.Name + ") done");
@@ -596,7 +609,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         }
     }
 
-    public void buildConvergenceGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData, boolean displayGraph) {
+    public void buildMasterTournamentGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData, boolean displayGraph) {
         // Reset IDs
         for(int i = 0; i < this.bestGenIndividuals.size(); i++){
             this.bestGenIndividuals.get(i).setID(i);
@@ -607,12 +620,12 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         // Add individuals to the progressData
         if(multiConfigurationsProgressData != null) {
-            multiConfigurationsProgressData.addConvergenceGraphData(bestGenIndividuals);
+            multiConfigurationsProgressData.addMasterTournamentGraphData(bestGenIndividuals);
             multiConfigurationsProgressData.saveProgressData(); // For testing purposes only
             GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
         }
 
-
+        // TODO Remove this in the future
         if(displayGraph) {
             ArrayList<Player> players = new ArrayList<>();
             for (ProgramSolution solution : bestGenIndividuals) {
@@ -626,6 +639,38 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
             RatingIntervalPlot.displayChart(players, RatingType.TRUE_SKILL_FREE_FOR_ALL, "TrueSkill Free-For-All");
         }
+    }
+
+    public void buildConvergenceGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData, boolean displayGraph) {
+        // Reset IDs
+        for(int i = 0; i < this.bestGenIndividuals.size(); i++){
+            this.bestGenIndividuals.get(i).setID(i);
+        }
+
+        // Evaluate all individuals
+        this.task.problem.bulkEvaluate(bestGenIndividuals);
+
+        // Add individuals to the progressData
+        if(multiConfigurationsProgressData != null) {
+            multiConfigurationsProgressData.addConvergenceGraphData(bestGenIndividuals.get(bestGenIndividuals.size() - 1));
+            multiConfigurationsProgressData.saveProgressData(); // For testing purposes only
+            GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
+        }
+
+        // TODO Remove this in the future: Display results??
+        /*if(displayGraph) {
+            ArrayList<Player> players = new ArrayList<>();
+            for (ProgramSolution solution : bestGenIndividuals) {
+                Player player = new Player(String.valueOf(solution.getID()));
+                double mean = -solution.getFitness().getAdditionalValue("Rating");
+                double stdDeviation = solution.getFitness().getAdditionalValue("StdDeviation");
+                player.setFreeForAllTrueSkill(new TrueSkillRating(mean, stdDeviation));
+
+                players.add(player);
+            }
+
+            RatingIntervalPlot.displayChart(players, RatingType.TRUE_SKILL_FREE_FOR_ALL, "TrueSkill Free-For-All");
+        }*/
     }
 
     @Override

@@ -23,10 +23,10 @@ public class GPProgramSolutionSimple implements Serializable {
 
     private HashMap<String, Integer> nodeCounts; // { "Sequencer": 24, "Selector": 12, "MoveForward": 5, ... }
 
-    public GPProgramSolutionSimple(ProgramSolution programSolution){
+    public GPProgramSolutionSimple(ProgramSolution programSolution, boolean setIndividualMatchResults) {
         this.individualId = programSolution.getID();
         this.objectives = programSolution.getObjectives();
-        this.finalIndividualFitness = new FinalIndividualFitness(programSolution.getFitness(), false);
+        this.finalIndividualFitness = new FinalIndividualFitness(programSolution.getFitness(), setIndividualMatchResults);
         this.changesCount = programSolution.getChangesCount();
         this.treeSize = programSolution.getTree().treeSize();
         this.treeDepth = programSolution.getTree().treeMaxDepth();

@@ -44,11 +44,11 @@ public class Configuration implements Serializable{
         return configuration;
     }
 
-    public static void serializeUnityConfig(RunConfiguration configuration, String filePath){
+    public static void serializeUnityConfig(Object unityConfiguration, String filePath){
         ObjectMapper objectMapper = new ObjectMapper();
         String serializedJson = "";
         try {
-            serializedJson = objectMapper.writeValueAsString(configuration.UnityConfiguration);
+            serializedJson = objectMapper.writeValueAsString(unityConfiguration);
             // Save json to file (if file does not exist, it will be created)
             Files.writeString(Paths.get(filePath), serializedJson, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {

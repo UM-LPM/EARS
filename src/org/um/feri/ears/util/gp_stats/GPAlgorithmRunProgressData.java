@@ -10,11 +10,11 @@ import java.util.List;
 public class GPAlgorithmRunProgressData implements Serializable {
     private List<GPAlgorithmGenProgressData> genProgressData;
 
-    private List<GPProgramSolutionSimple> convergenceGraphData;
+    private List<GPProgramSolutionSimple> masterTournamentGraphData;
+    private GPProgramSolutionSimple convergenceGraphData;
 
     public GPAlgorithmRunProgressData() {
         genProgressData = new ArrayList<>();
-        convergenceGraphData = new ArrayList<>();
     }
 
     public List<GPAlgorithmGenProgressData> getGensProgressData() {
@@ -25,11 +25,19 @@ public class GPAlgorithmRunProgressData implements Serializable {
         this.genProgressData = genProgressData;
     }
 
-    public List<GPProgramSolutionSimple> getConvergenceGraphData() {
+    public List<GPProgramSolutionSimple> getMasterTournamentGraphData() {
+        return masterTournamentGraphData;
+    }
+
+    public void setMasterTournamentGraphData(List<GPProgramSolutionSimple> masterTournamentGraphData) {
+        this.masterTournamentGraphData = masterTournamentGraphData;
+    }
+
+    public GPProgramSolutionSimple getConvergenceGraphData() {
         return convergenceGraphData;
     }
 
-    public void setConvergenceGraphData(List<GPProgramSolutionSimple> convergenceGraphData) {
+    public void setConvergenceGraphData(GPProgramSolutionSimple convergenceGraphData) {
         this.convergenceGraphData = convergenceGraphData;
     }
 
@@ -39,20 +47,25 @@ public class GPAlgorithmRunProgressData implements Serializable {
 
         for(int i = 0; i < progressDataGen.getPopulation().size(); i++){
             gpAlgorithmGenProgressData.addProgramSolutionSimple(
-                    new GPProgramSolutionSimple(progressDataGen.getPopulation().get(i)));
+                    new GPProgramSolutionSimple(progressDataGen.getPopulation().get(i), false));
         }
 
         genProgressData.add(gpAlgorithmGenProgressData);
     }
 
-    public void addConvergenceGraphData(List<ProgramSolution> solutions) {
-        if(convergenceGraphData == null) {
-            convergenceGraphData = new ArrayList<>();
+    public void addMasterTournamentGraphData(List<ProgramSolution> solutions) {
+        if(masterTournamentGraphData == null) {
+            masterTournamentGraphData = new ArrayList<>();
         }
 
         for(int i = 0; i < solutions.size(); i++){
-            convergenceGraphData.add(
-                    new GPProgramSolutionSimple(solutions.get(i)));
+            masterTournamentGraphData.add(
+                    new GPProgramSolutionSimple(solutions.get(i), false));
         }
+    }
+
+    public void addConvergenceGraphData(ProgramSolution solution) {
+        // solution contains matches result with all best gen individuals
+        convergenceGraphData = new GPProgramSolutionSimple(solution, true);
     }
 }

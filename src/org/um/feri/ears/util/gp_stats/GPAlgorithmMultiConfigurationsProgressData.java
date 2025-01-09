@@ -54,12 +54,20 @@ public class GPAlgorithmMultiConfigurationsProgressData implements Serializable 
                 .addProgressDataGen(generation, executionPhaseName, gpAlgorithm);
     }
 
-    public void addConvergenceGraphData(List<ProgramSolution> solutions) {
+    public void addMasterTournamentGraphData(List<ProgramSolution> solutions) {
         multiConfigurationProgressData
                 .get(multiConfigurationProgressData.size() -1)
                 .getMultiRunProgressData().get(multiConfigurationProgressData
                         .get(multiConfigurationProgressData.size() -1).getMultiRunProgressData().size() -1)
-                .addConvergenceGraphData(solutions);
+                .addMasterTournamentGraphData(solutions);
+    }
+
+    public void addConvergenceGraphData(ProgramSolution solution) {
+        multiConfigurationProgressData
+                .get(multiConfigurationProgressData.size() -1)
+                .getMultiRunProgressData().get(multiConfigurationProgressData
+                        .get(multiConfigurationProgressData.size() -1).getMultiRunProgressData().size() -1)
+                .addConvergenceGraphData(solution);
     }
 
     public void saveProgressData(){
