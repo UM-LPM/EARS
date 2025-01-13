@@ -45,6 +45,12 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
 
     public abstract ProgramSolution getBest();
 
+    public abstract List<ProgramSolution> getBestGenSolutions();
+
+    public abstract List<ProgramSolution> getBestGenSolutionsConvergenceGraph();
+
+    public abstract List<ProgramSolution> getBestGenSolutionsMasterTournament();
+
     public abstract ProblemComparator<ProgramSolution> getComparator();
 
     public abstract void setHallOfFameSize(int hallOfFameSize);
@@ -227,6 +233,6 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
     }
 
     public GPAlgorithmRunStats getStats(){
-        return new GPAlgorithmRunStats(bestOverallFitnesses, avgGenFitnesses, avgGenTreeDepths, avgGenTreeSizes, bestGenFitnesses);
+        return new GPAlgorithmRunStats(getBestGenSolutions(), getBestGenSolutionsConvergenceGraph(), getBestGenSolutionsMasterTournament(), bestOverallFitnesses, avgGenFitnesses, avgGenTreeDepths, avgGenTreeSizes, bestGenFitnesses);
     }
 }

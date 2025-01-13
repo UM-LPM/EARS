@@ -1,6 +1,7 @@
 package org.um.feri.ears.algorithms.gp;
 
 import com.google.gson.Gson;
+import org.eclipse.swt.program.Program;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.AlgorithmStepper;
 import org.um.feri.ears.algorithms.Author;
@@ -14,15 +15,11 @@ import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
-import org.um.feri.ears.statistic.rating_system.Player;
-import org.um.feri.ears.statistic.rating_system.RatingType;
-import org.um.feri.ears.statistic.rating_system.true_skill.TrueSkillRating;
 import org.um.feri.ears.util.*;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
 import org.um.feri.ears.util.random.RNG;
-import org.um.feri.ears.visualization.rating.RatingIntervalPlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +69,9 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     private List<ProgramSolution> hallOfFame;
 
-    private List<ProgramSolution> bestGenIndividuals; // Used for convergence graph calculation
+    private List<ProgramSolution> bestGenSolutions; // Used for master and convergence graph calculation
+    private List<ProgramSolution> bestGenSolutionsConvergenceGraph; // Results for convergence graph
+    private List<ProgramSolution> bestGenSolutionsMasterTournament; // Results for master tournament graph
 
     public PredefinedEncapsNodesGPAlgorithm() {
         this(100, 0.90, 0.05, 0.025, 2, 0, null);
@@ -113,7 +112,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         this.hallOfFameSize = hallOfFameSize;
         this.hallOfFame = new ArrayList<>();
-        this.bestGenIndividuals = new ArrayList<>();
+        this.bestGenSolutions = new ArrayList<>();
     }
 
     @Override
@@ -128,7 +127,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         resetToDefaultsBeforeNewRun();
 
         // 1. Run evolution for predefined encapsulated node definitions to find corresponding behavior trees
-        if(runConfiguration.EncapsulatedNodeDefinitions.size() > 0) {
+        if(!runConfiguration.EncapsulatedNodeDefinitions.isEmpty()) {
             for (int i = 0; i < runConfiguration.EncapsulatedNodeDefinitions.size(); i++) {
                 EncapsulatedNodeConfigDefinition encapsNodeConfigDef = runConfiguration.EncapsulatedNodeDefinitions.get(i);
 
@@ -142,7 +141,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 setPruningOperatorsFromStringArray(encapsNodeConfigDef.PruningOperators);
 
                 // Add encapsulated nodes to terminal set immediately
-                if(encapsulatedNodeDefinitions.size() > 0 && runConfiguration.EncapsulatedNodeDefinitions.get(i - 1).AddToTerminalSetImmediately) {
+                if(!encapsulatedNodeDefinitions.isEmpty() && runConfiguration.EncapsulatedNodeDefinitions.get(i - 1).AddToTerminalSetImmediately) {
                     // 2. Extend terminal set with encapsulated node
                     task.problem.getBaseTerminalNodeTypes().add(Encapsulator.class);
                     task.problem.getProgramSolutionGenerator().addEncapsulatedNodeDefinition(encapsulatedNodeDefinitions);
@@ -195,7 +194,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
             // Build Convergence Graph
             if (runConfiguration.EARSConfiguration.BuildMasterTournament) {
-                buildMasterTournamentGraph(multiConfigurationsProgressData, true);
+                buildMasterTournamentGraph(multiConfigurationsProgressData);
             }
 
             // Update Unity configuration
@@ -206,7 +205,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
             // Build Convergence Graph
             if (runConfiguration.EARSConfiguration.BuildConvergenceGraph) {
-                buildConvergenceGraph(multiConfigurationsProgressData, true);
+                buildConvergenceGraph(multiConfigurationsProgressData);
             }
         }
 
@@ -304,7 +303,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                     }
 
                     // Add best solution to bestGenIndividual
-                    bestGenIndividuals.add(new ProgramSolution(currentGenBest));
+                    bestGenSolutions.add(new ProgramSolution(currentGenBest));
 
                     // Update statistics
                     if (this.isDebug())
@@ -427,7 +426,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
         this.encapsulatedNodeDefinitions.clear();
         this.hallOfFame = new ArrayList<>();
-        this.bestGenIndividuals = new ArrayList<>();
+        this.bestGenSolutions = new ArrayList<>();
     }
 
     public void algorithmInitialization(Task<ProgramSolution, ProgramProblem> task, ProblemComparator<ProgramSolution> comparator, Selection<ProgramSolution, ProgramProblem> selectionOperator) {
@@ -609,72 +608,69 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         }
     }
 
-    public void buildMasterTournamentGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData, boolean displayGraph) {
+    public void buildMasterTournamentGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) {
+        // Copy bestGenSolutions to bestGenSolutionsMasterTournament
+        bestGenSolutionsMasterTournament = new ArrayList<>();
+        for (ProgramSolution bestGenSolution : this.bestGenSolutions) {
+            bestGenSolutionsMasterTournament.add(new ProgramSolution(bestGenSolution));
+        }
+
         // Reset IDs
-        for(int i = 0; i < this.bestGenIndividuals.size(); i++){
-            this.bestGenIndividuals.get(i).setID(i);
+        for(int i = 0; i < this.bestGenSolutionsMasterTournament.size(); i++){
+            this.bestGenSolutionsMasterTournament.get(i).setID(i);
         }
 
         // Evaluate all individuals
-        this.task.problem.bulkEvaluate(bestGenIndividuals);
+        this.task.problem.bulkEvaluate(bestGenSolutionsMasterTournament);
 
         // Add individuals to the progressData
         if(multiConfigurationsProgressData != null) {
-            multiConfigurationsProgressData.addMasterTournamentGraphData(bestGenIndividuals);
+            multiConfigurationsProgressData.addMasterTournamentGraphData(bestGenSolutionsMasterTournament);
             multiConfigurationsProgressData.saveProgressData(); // For testing purposes only
             GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
-        }
-
-        // TODO Remove this in the future
-        if(displayGraph) {
-            ArrayList<Player> players = new ArrayList<>();
-            for (ProgramSolution solution : bestGenIndividuals) {
-                Player player = new Player(String.valueOf(solution.getID()));
-                double mean = -solution.getFitness().getAdditionalValue("Rating");
-                double stdDeviation = solution.getFitness().getAdditionalValue("StdDeviation");
-                player.setFreeForAllTrueSkill(new TrueSkillRating(mean, stdDeviation));
-
-                players.add(player);
-            }
-
-            RatingIntervalPlot.displayChart(players, RatingType.TRUE_SKILL_FREE_FOR_ALL, "TrueSkill Free-For-All");
         }
     }
 
-    public void buildConvergenceGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData, boolean displayGraph) {
+    public void buildConvergenceGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) {
+        // Copy bestGenSolutions to bestGenSolutionsConvergenceGraph
+        bestGenSolutionsConvergenceGraph = new ArrayList<>();
+        for (ProgramSolution bestGenSolution : this.bestGenSolutions) {
+            bestGenSolutionsConvergenceGraph.add(new ProgramSolution(bestGenSolution));
+        }
+
         // Reset IDs
-        for(int i = 0; i < this.bestGenIndividuals.size(); i++){
-            this.bestGenIndividuals.get(i).setID(i);
+        for(int i = 0; i < this.bestGenSolutionsConvergenceGraph.size(); i++){
+            this.bestGenSolutionsConvergenceGraph.get(i).setID(i);
         }
 
         // Evaluate all individuals
-        this.task.problem.bulkEvaluate(bestGenIndividuals);
+        this.task.problem.bulkEvaluate(bestGenSolutionsConvergenceGraph);
 
         // Add individuals to the progressData
         if(multiConfigurationsProgressData != null) {
-            multiConfigurationsProgressData.addConvergenceGraphData(bestGenIndividuals.get(bestGenIndividuals.size() - 1));
+            multiConfigurationsProgressData.addConvergenceGraphData(bestGenSolutionsConvergenceGraph.get(bestGenSolutionsConvergenceGraph.size() - 1));
             multiConfigurationsProgressData.saveProgressData(); // For testing purposes only
             GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
         }
-
-        // TODO Remove this in the future: Display results??
-        /*if(displayGraph) {
-            ArrayList<Player> players = new ArrayList<>();
-            for (ProgramSolution solution : bestGenIndividuals) {
-                Player player = new Player(String.valueOf(solution.getID()));
-                double mean = -solution.getFitness().getAdditionalValue("Rating");
-                double stdDeviation = solution.getFitness().getAdditionalValue("StdDeviation");
-                player.setFreeForAllTrueSkill(new TrueSkillRating(mean, stdDeviation));
-
-                players.add(player);
-            }
-
-            RatingIntervalPlot.displayChart(players, RatingType.TRUE_SKILL_FREE_FOR_ALL, "TrueSkill Free-For-All");
-        }*/
     }
 
     @Override
     public void setHallOfFameSize(int hallOfFameSize) {
         this.hallOfFameSize = hallOfFameSize;
+    }
+
+    @Override
+    public List<ProgramSolution> getBestGenSolutions() {
+        return bestGenSolutions;
+    }
+
+    @Override
+    public List<ProgramSolution> getBestGenSolutionsConvergenceGraph() {
+        return bestGenSolutionsConvergenceGraph;
+    }
+
+    @Override
+    public List<ProgramSolution> getBestGenSolutionsMasterTournament() {
+        return bestGenSolutionsMasterTournament;
     }
 }

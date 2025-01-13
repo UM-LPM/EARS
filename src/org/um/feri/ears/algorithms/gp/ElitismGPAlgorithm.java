@@ -531,4 +531,19 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
 
     @Override
     public void setHallOfFameSize(int hallOfFameSize) {    }
+
+    @Override
+    public List<ProgramSolution> getBestGenSolutions() {
+        return null;
+    }
+
+    @Override
+    public List<ProgramSolution> getBestGenSolutionsConvergenceGraph() {
+        return null;
+    }
+
+    @Override
+    public List<ProgramSolution> getBestGenSolutionsMasterTournament() {
+        return null;
+    }
 }

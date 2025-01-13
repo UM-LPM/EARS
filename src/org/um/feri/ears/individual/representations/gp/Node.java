@@ -3,6 +3,7 @@ package org.um.feri.ears.individual.representations.gp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.NotImplementedException;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.Encapsulator;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.util.GraphPrinter;
 
@@ -177,7 +178,7 @@ public abstract class Node implements INode<Node>, Iterable<Node>, Cloneable, Se
 
         nodeCounts.put(this.name, 1);
 
-        if(arity > 0){ // TODO Fix: This doesn't work for Encapsulator nodes (their arity is 0)
+        if(arity > 0 || this instanceof Encapsulator){ // Encapsulator is an exception
             for (Node child : this.children) {
                 HashMap<String, Integer> childNodeCounts = child.nodeCounts();
                 for (Map.Entry<String, Integer> entry : childNodeCounts.entrySet()) {

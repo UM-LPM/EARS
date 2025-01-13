@@ -24,10 +24,7 @@ import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiRunProgressData;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class GPAlgorithmExecutor implements Serializable {
 
@@ -245,8 +242,6 @@ public class GPAlgorithmExecutor implements Serializable {
                 }
                 restartUnityInstances(false);
             }
-
-
         } catch (StopCriterionException ex) {
             throw new RuntimeException(ex);
         }
@@ -345,6 +340,15 @@ public class GPAlgorithmExecutor implements Serializable {
             e.printStackTrace();
         }
         return algExecutor;
+    }
+
+    public List<ProgramSolution> getBestRunSolutions() {
+        List<ProgramSolution> gestRunSolutions = new ArrayList<>();
+        for (GPAlgorithmRunStats gpAlgorithmRunStat : gpAlgorithmRunStats) {
+            gestRunSolutions.add(gpAlgorithmRunStat.getBestRunSolution());
+        }
+
+        return gestRunSolutions;
     }
 
 }

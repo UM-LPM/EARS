@@ -1,9 +1,16 @@
 package org.um.feri.ears.util;
 
+import org.um.feri.ears.problems.gp.ProgramSolution;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GPAlgorithmRunStats implements Serializable {
+
+    protected List<ProgramSolution> bestGenSolutions;
+    protected List<ProgramSolution> bestGenSolutionsConvergenceGraph;
+    protected List<ProgramSolution> bestGenSolutionsMasterTournament;
 
     protected ArrayList<Double> bestOverallFitnesses;
     protected ArrayList<Double> avgGenFitnesses;
@@ -19,7 +26,10 @@ public class GPAlgorithmRunStats implements Serializable {
         bestGenFitnesses = new ArrayList<>();
     }
 
-    public GPAlgorithmRunStats(ArrayList<Double> bestOverallFitnesses, ArrayList<Double> avgGenFitnesses, ArrayList<Double> avgGenTreeDepths, ArrayList<Double> avgGenTreeSizes, ArrayList<Double> bestGenFitnesses) {
+    public GPAlgorithmRunStats(List<ProgramSolution> bestGenSolutions, List<ProgramSolution> bestGenSolutionsConvergenceGraph, List<ProgramSolution> bestGenSolutionsMasterTournament, ArrayList<Double> bestOverallFitnesses, ArrayList<Double> avgGenFitnesses, ArrayList<Double> avgGenTreeDepths, ArrayList<Double> avgGenTreeSizes, ArrayList<Double> bestGenFitnesses) {
+        this.bestGenSolutions = bestGenSolutions;
+        this.bestGenSolutionsConvergenceGraph = bestGenSolutionsConvergenceGraph;
+        this.bestGenSolutionsMasterTournament = bestGenSolutionsMasterTournament;
         this.bestOverallFitnesses = bestOverallFitnesses;
         this.avgGenFitnesses = avgGenFitnesses;
         this.avgGenTreeDepths = avgGenTreeDepths;
@@ -97,5 +107,9 @@ public class GPAlgorithmRunStats implements Serializable {
         }
 
         return bestRunAvgFitnesses;
+    }
+
+    public ProgramSolution getBestRunSolution() {
+        return bestGenSolutions.get(bestGenSolutions.size() - 1);
     }
 }
