@@ -4,6 +4,7 @@ import org.um.feri.ears.individual.representations.gp.IndividualFitness;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 public class RequestBodyParams implements Serializable
@@ -85,7 +86,10 @@ public class RequestBodyParams implements Serializable
                     lastEvalIndividualFitnesses[i] = new IndividualFitness(i);
                     break;
                 case Mean:
-                    lastEvalIndividualFitnesses[i] = new IndividualFitness(i, solutions.get(i).getFitness().getAdditionalValues().get("Rating"), Double.MAX_VALUE);
+                    int finalI = i;
+                    lastEvalIndividualFitnesses[i] = new IndividualFitness(i, new HashMap<>(){{
+                        put("Rating", solutions.get(finalI).getFitness().getAdditionalValues().get("Rating"));
+                    }});
                     break;
                 case RatingUnchanged:
                     if(!solutions.get(i).isDirty())

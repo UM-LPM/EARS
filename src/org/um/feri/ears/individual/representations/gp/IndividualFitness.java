@@ -12,18 +12,7 @@ public class IndividualFitness implements Serializable
 
     public IndividualFitness(int individualID)
     {
-        this(individualID, new HashMap<>(){{
-            put("Rating", Double.MAX_VALUE);
-            put("StdDeviation", Double.MAX_VALUE);
-        }});
-    }
-
-    public IndividualFitness(int individualID, double value, double stdDeviation)
-    {
-        this(individualID, new HashMap<>(){{
-            put("Rating", value);
-            put("StdDeviation", stdDeviation);
-        }});
+        this(individualID, null);
     }
 
     public IndividualFitness(int individualID, HashMap<String, Double> additionalValues)
