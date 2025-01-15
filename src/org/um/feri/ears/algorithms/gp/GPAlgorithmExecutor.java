@@ -22,6 +22,7 @@ import org.um.feri.ears.util.*;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiRunProgressData;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
+import org.um.feri.ears.util.random.RNG;
 
 import java.io.*;
 import java.util.*;
@@ -226,7 +227,17 @@ public class GPAlgorithmExecutor implements Serializable {
         gpAlgorithmConfigurationsRunStats.clear();
         multiConfigurationsProgressData = new GPAlgorithmMultiConfigurationsProgressData(configuration.MultiConfigurationPrograssDataFilePath);
         try {
+            // Set initial seed
+            if(configuration.InitialSeed > 0){
+                RNG.setSeed(configuration.InitialSeed); // TODO Check if this is ok
+            }
+
             for (int i = 0; i < configuration.Configurations.size(); i++) {
+                // Set initial seed
+                if(configuration.ResetSeedForEachConfiguration){
+                    RNG.setSeed(configuration.InitialSeed);
+                }
+
                 GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats = new GPAlgorithmConfigurationRunStats();
                 multiConfigurationsProgressData.addMultiConfigurationProgressData(new GPAlgorithmMultiRunProgressData());
 
@@ -241,7 +252,6 @@ public class GPAlgorithmExecutor implements Serializable {
 
                     // Save current GPAlgorithmExecutor state to file
                     serializeGPAlgorithmExecutorState(this, "GPAlgorithmExecutor.ser");
-
                 }
                 gpAlgorithmConfigurationsRunStats.add(gpAlgorithmConfigurationRunStats);
                 restartUnityInstances(false);
@@ -249,6 +259,13 @@ public class GPAlgorithmExecutor implements Serializable {
 
             if(configuration.ExecuteFinalMasterTournaments){
                executeFinalTournaments();
+
+               multiConfigurationsProgressData.saveProgressData();
+                GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
+
+               // Save current GPAlgorithmExecutor state to file
+               serializeGPAlgorithmExecutorState(this, "GPAlgorithmExecutor.ser");
+               restartUnityInstances(false);
             }
         } catch (StopCriterionException ex) {
             throw new RuntimeException(ex);
@@ -284,6 +301,11 @@ public class GPAlgorithmExecutor implements Serializable {
             List<ProgramSolution> masterTournamentIndividuals = new ArrayList<>();
             for (int j = 0; j < gpAlgorithmConfigurationsRunStats.get(i).getGpAlgorithmRunStats().size(); j++) {
                 masterTournamentIndividuals.add(new ProgramSolution(gpAlgorithmConfigurationsRunStats.get(i).getGpAlgorithmRunStats().get(j).getBestRunSolution()));
+            }
+
+            // Restart masterTournamentIndividuals ids
+            for (int j = 0; j < masterTournamentIndividuals.size(); j++) {
+                masterTournamentIndividuals.get(j).setID(j);
             }
 
             // 2.2 Execute master tournament
@@ -420,6 +442,14 @@ public class GPAlgorithmExecutor implements Serializable {
         }
 
         return gestRunSolutions;
+    }
+
+    public GPAlgorithmMultiConfigurationsProgressData getMultiConfigurationsProgressData() {
+        return multiConfigurationsProgressData;
+    }
+
+    public void setMultiConfigurationsProgressData(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) {
+        this.multiConfigurationsProgressData = multiConfigurationsProgressData;
     }
 
 }

@@ -620,9 +620,10 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
             bestGenSolutionsMasterTournament.add(new ProgramSolution(bestGenSolution));
         }
 
-        // Reset IDs
+        // Reset IDs and Additional data
         for(int i = 0; i < this.bestGenSolutionsMasterTournament.size(); i++){
             this.bestGenSolutionsMasterTournament.get(i).setID(i);
+            this.bestGenSolutionsMasterTournament.get(i).getFitness().resetAdditionalData(); // set to null
         }
 
         // Evaluate all individuals
@@ -646,6 +647,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Reset IDs
         for(int i = 0; i < this.bestGenSolutionsConvergenceGraph.size(); i++){
             this.bestGenSolutionsConvergenceGraph.get(i).setID(i);
+            this.bestGenSolutionsConvergenceGraph.get(i).getFitness().resetAdditionalData(); // set to null
         }
 
         // Evaluate all individuals

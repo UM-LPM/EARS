@@ -55,5 +55,7 @@ public class FinalIndividualFitness implements Serializable {
         return avgMatchResult;
     }
 
-
+    public void resetAdditionalData(){
+        this.additionalValues = null;
+    }
 }
