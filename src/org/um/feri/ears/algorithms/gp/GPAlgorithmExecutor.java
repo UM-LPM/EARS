@@ -33,7 +33,8 @@ public class GPAlgorithmExecutor implements Serializable {
     private GPAlgorithm gpAlgorithm;
     private Configuration configuration;
 
-    private ArrayList<GPAlgorithmRunStats> gpAlgorithmRunStats;
+    private GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData;
+    private ArrayList<GPAlgorithmConfigurationRunStats> gpAlgorithmConfigurationsRunStats;
 
     // Constructors
     public GPAlgorithmExecutor(boolean createInstance) {
@@ -44,7 +45,7 @@ public class GPAlgorithmExecutor implements Serializable {
             Instance = this;
         }
 
-        this.gpAlgorithmRunStats = new ArrayList<>();
+        this.gpAlgorithmConfigurationsRunStats = new ArrayList<>();
     }
 
     public GPAlgorithmExecutor(GPAlgorithm gpAlgorithm) {
@@ -222,16 +223,18 @@ public class GPAlgorithmExecutor implements Serializable {
             configuration = Configuration.deserializeFromFile(configurationFile);
         }
 
-        gpAlgorithmRunStats.clear();
-        GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData = new GPAlgorithmMultiConfigurationsProgressData(configuration.MultiConfigurationPrograssDataFilePath);
+        gpAlgorithmConfigurationsRunStats.clear();
+        multiConfigurationsProgressData = new GPAlgorithmMultiConfigurationsProgressData(configuration.MultiConfigurationPrograssDataFilePath);
         try {
             for (int i = 0; i < configuration.Configurations.size(); i++) {
+                GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats = new GPAlgorithmConfigurationRunStats();
                 multiConfigurationsProgressData.addMultiConfigurationProgressData(new GPAlgorithmMultiRunProgressData());
+
                 for (int j = 0; j < configuration.Configurations.get(i).NumberOfReruns; j++) {
                     multiConfigurationsProgressData.getMultiConfigurationProgressData().get(i).addMultiRunProgressData(new GPAlgorithmRunProgressData());
 
                     gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename, multiConfigurationsProgressData);
-                    gpAlgorithmRunStats.add(gpAlgorithm.getStats());
+                    gpAlgorithmConfigurationRunStats.addGpAlgorithmRunStats(gpAlgorithm.getStats());
 
                     // Save final GPAlgorithm run state to file for each configuration
                     GPAlgorithm.serializeAlgorithmState(gpAlgorithm, i + "_" + j + "_RunConfigurationGPAlgorithm.ser" );
@@ -240,11 +243,79 @@ public class GPAlgorithmExecutor implements Serializable {
                     serializeGPAlgorithmExecutorState(this, "GPAlgorithmExecutor.ser");
 
                 }
+                gpAlgorithmConfigurationsRunStats.add(gpAlgorithmConfigurationRunStats);
                 restartUnityInstances(false);
+            }
+
+            if(configuration.ExecuteFinalMasterTournaments){
+               executeFinalTournaments();
             }
         } catch (StopCriterionException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public void executeFinalTournaments() {
+        // Execute final master tournaments
+
+        // 1. Execute configuration master master tournament for each configuration
+        // Should this be named Great Master tournament?
+
+        // 1.1 Prepare configuration master tournament individuals
+        if(configuration.FinalMasterTournamentsConfiguration == null){
+            throw new IllegalArgumentException("ExecuteFinalMasterTournaments is null");
+        }
+
+        // EARS Configuration
+        setEARSConfiguration(configuration.FinalMasterTournamentsConfiguration);
+
+        // Set Unity configuration & start Unity instances
+        if(configuration.FinalMasterTournamentsConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR){
+            // Save Unity configuration
+            Configuration.serializeUnityConfig(configuration.FinalMasterTournamentsConfiguration.UnityConfiguration, getConfiguration().UnityConfigDestFilePath);
+
+            // Start Unity Instances
+            restartUnityInstances(true);
+        }
+
+        // 2 Execute master tournament for each configuration
+        for (int i = 0; i < gpAlgorithmConfigurationsRunStats.size(); i++) {
+            // 2.1 Prepare master tournament individuals
+            List<ProgramSolution> masterTournamentIndividuals = new ArrayList<>();
+            for (int j = 0; j < gpAlgorithmConfigurationsRunStats.get(i).getGpAlgorithmRunStats().size(); j++) {
+                masterTournamentIndividuals.add(new ProgramSolution(gpAlgorithmConfigurationsRunStats.get(i).getGpAlgorithmRunStats().get(j).getBestRunSolution()));
+            }
+
+            // 2.2 Execute master tournament
+            this.gpAlgorithm.getTask().problem.bulkEvaluate(masterTournamentIndividuals);
+
+            // 2.3 Save master master tournament results
+            multiConfigurationsProgressData.getMultiConfigurationProgressData().get(i).setMasterMasterTournamentGraphData(masterTournamentIndividuals);
+        }
+
+        // Set Unity configuration & start Unity instances
+        if(configuration.FinalMasterTournamentsConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR){
+            // Unity configuration stays the same so no need to save it again
+            // Start Unity Instances
+            restartUnityInstances(true);
+        }
+
+        // 3. Execute final master tournament for all configurations
+        List<ProgramSolution> finalMasterTournamentIndividuals = new ArrayList<>();
+        // 3.1 Prepare final master tournament individuals (all best solutions from all configurations and all runs)
+        for (GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats : gpAlgorithmConfigurationsRunStats) {
+            for (GPAlgorithmRunStats gpAlgorithmRunStats : gpAlgorithmConfigurationRunStats.getGpAlgorithmRunStats()) {
+                finalMasterTournamentIndividuals.add(new ProgramSolution(gpAlgorithmRunStats.getBestRunSolution()));
+            }
+        }
+
+        // 3.2 Execute final master tournament
+        this.gpAlgorithm.getTask().problem.bulkEvaluate(finalMasterTournamentIndividuals);
+
+        // 3.3 Save final master tournament results
+        multiConfigurationsProgressData.setFinalMasterTournamentGraphData(finalMasterTournamentIndividuals);
+
+
     }
 
     /**
@@ -317,8 +388,8 @@ public class GPAlgorithmExecutor implements Serializable {
         return gpAlgorithm.getDefaultGPAlgorithmStateFilename();
     }
 
-    public ArrayList<GPAlgorithmRunStats> getGpAlgorithmRunStats() {
-        return gpAlgorithmRunStats;
+    public ArrayList<GPAlgorithmConfigurationRunStats> getGpAlgorithmRunStats() {
+        return gpAlgorithmConfigurationsRunStats;
     }
 
     public static void serializeGPAlgorithmExecutorState(GPAlgorithmExecutor gpAlgorithmExecutor, String filename) {
@@ -342,10 +413,10 @@ public class GPAlgorithmExecutor implements Serializable {
         return algExecutor;
     }
 
-    public List<ProgramSolution> getBestRunSolutions() {
+    public List<ProgramSolution> getBestConfigurationsRunSolutions() {
         List<ProgramSolution> gestRunSolutions = new ArrayList<>();
-        for (GPAlgorithmRunStats gpAlgorithmRunStat : gpAlgorithmRunStats) {
-            gestRunSolutions.add(gpAlgorithmRunStat.getBestRunSolution());
+        for (GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats : gpAlgorithmConfigurationsRunStats) {
+            gestRunSolutions.add(gpAlgorithmConfigurationRunStats.getBestRunSolution());
         }
 
         return gestRunSolutions;

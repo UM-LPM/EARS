@@ -9,8 +9,6 @@ import org.um.feri.ears.util.GPAlgorithmRunStats;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
-import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiRunProgressData;
-import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 
 import javax.swing.*;
 import java.io.*;

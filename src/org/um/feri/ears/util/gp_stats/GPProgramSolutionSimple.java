@@ -1,6 +1,5 @@
 package org.um.feri.ears.util.gp_stats;
 
-import org.um.feri.ears.individual.generations.gp.GPProgramSolution;
 import org.um.feri.ears.individual.representations.gp.FinalIndividualFitness;
 import org.um.feri.ears.individual.representations.gp.Tree;
 import org.um.feri.ears.problems.gp.ProgramSolution;

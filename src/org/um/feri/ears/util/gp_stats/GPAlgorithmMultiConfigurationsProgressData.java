@@ -1,7 +1,6 @@
 package org.um.feri.ears.util.gp_stats;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.problems.gp.ProgramSolution;
@@ -11,8 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GPAlgorithmMultiConfigurationsProgressData implements Serializable {
-    private String multiConfigurationPrograssDataFilePath;
-    private List<GPAlgorithmMultiRunProgressData> multiConfigurationProgressData;
+    protected String multiConfigurationPrograssDataFilePath;
+    protected List<GPAlgorithmMultiRunProgressData> multiConfigurationProgressData;
+
+    protected List<GPProgramSolutionSimple> finalMasterTournamentGraphData;
 
     public GPAlgorithmMultiConfigurationsProgressData(String multiConfigurationPrograssDataFilePath) {
         this.multiConfigurationProgressData = new ArrayList<>();
@@ -37,6 +38,17 @@ public class GPAlgorithmMultiConfigurationsProgressData implements Serializable 
 
     public void setMultiConfigurationPrograssDataFilePath(String multiConfigurationPrograssDataFilePath) {
         this.multiConfigurationPrograssDataFilePath = multiConfigurationPrograssDataFilePath;
+    }
+
+    public List<GPProgramSolutionSimple> getFinalMasterTournamentGraphData() {
+        return finalMasterTournamentGraphData;
+    }
+
+    public void setFinalMasterTournamentGraphData(List<ProgramSolution> finalMasterTournamentGraphData) {
+        this.finalMasterTournamentGraphData = new ArrayList<>();
+        for (ProgramSolution solution : finalMasterTournamentGraphData) {
+            this.finalMasterTournamentGraphData.add(new GPProgramSolutionSimple(solution, true));
+        }
     }
 
     public void resetMultiConfigurationProgressData() {

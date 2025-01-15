@@ -20,7 +20,9 @@ public class Configuration implements Serializable{
     public String UnityExeLocation;
     public String UnityConfigDestFilePath;
     public String MultiConfigurationPrograssDataFilePath;
+    public boolean ExecuteFinalMasterTournaments;
     public List<RunConfiguration> Configurations;
+    public RunConfiguration FinalMasterTournamentsConfiguration;
 
     public static Configuration deserializeFromFile(String filePath){
         ObjectMapper objectMapper = new ObjectMapper();

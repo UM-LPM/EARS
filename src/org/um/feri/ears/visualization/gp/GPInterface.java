@@ -528,8 +528,11 @@ public class GPInterface extends JFrame {
 
         // Update multiRun graphs (GPAlgorithmExecutor.gpAlgorithmRunStats)
         if(gpAlgorithmExecutor != null && gpAlgorithmExecutor.getGpAlgorithmRunStats() != null){
-            this.multiRunBestIndividualGraphPanel.setScores(GPAlgorithmRunStats.getBestRunFitnesses(gpAlgorithmExecutor.getGpAlgorithmRunStats()));
-            this.multiRunBestAvgGraphPanel.setScores(GPAlgorithmRunStats.getBestRunAvgFitnesses(gpAlgorithmExecutor.getGpAlgorithmRunStats()));
+            // TODO update this to display multiple configurations
+            if(!gpAlgorithmExecutor.getGpAlgorithmRunStats().isEmpty()) {
+                this.multiRunBestIndividualGraphPanel.setScores(GPAlgorithmRunStats.getBestRunFitnesses(gpAlgorithmExecutor.getGpAlgorithmRunStats().get(0).getGpAlgorithmRunStats()));
+                this.multiRunBestAvgGraphPanel.setScores(GPAlgorithmRunStats.getBestRunAvgFitnesses(gpAlgorithmExecutor.getGpAlgorithmRunStats().get(0).getGpAlgorithmRunStats()));
+            }
         }
 
         if(gpAlgorithmExecutor != null && gpAlgorithmExecutor.getGpAlgorithm().getBest() != null)

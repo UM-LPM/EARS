@@ -1,7 +1,6 @@
 package org.um.feri.ears.algorithms.gp;
 
 import com.google.gson.Gson;
-import org.eclipse.swt.program.Program;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.AlgorithmStepper;
 import org.um.feri.ears.algorithms.Author;
@@ -192,7 +191,13 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         execute(generations, null, "Main_phase", multiConfigurationsProgressData);
 
         if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
-            // Build Convergence Graph
+            // Update Unity configuration
+            Configuration.serializeUnityConfig(runConfiguration.UnityConfigurationMasterTournamentGraph, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+
+            // Restart Unity Instances
+            gpAlgorithmExecutor.restartUnityInstances(true);
+
+            // Build Master Tournament Graph
             if (runConfiguration.EARSConfiguration.BuildMasterTournament) {
                 buildMasterTournamentGraph(multiConfigurationsProgressData);
             }
