@@ -10,6 +10,6 @@ public class F12 extends CEC2015 {
 
     @Override
     public double eval(double[] x) {
-        return Functions.hf06(x, numberOfDimensions, OShift, M, SS, 1, 1) + 100.0 * funcNum;
+        return Functions.hf06(x, numberOfDimensions, oShift, M, SS, 1, 1) + 100.0 * funcNum;
     }
 }

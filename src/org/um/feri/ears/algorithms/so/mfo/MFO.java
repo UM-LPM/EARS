@@ -4,7 +4,6 @@ import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.problems.*;
-import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class MFO extends NumberAlgorithm {
         population = new ArrayList<>();
 
         for (int i = 0; i < popSize; i++) {
-            population.add(task.getRandomEvaluatedSolution());
+            population.add(task.generateRandomEvaluatedSolution());
             if (task.isStopCriterion())
                 break;
         }
@@ -54,6 +53,8 @@ public class MFO extends NumberAlgorithm {
         this.task = task;
         initPopulation();
 
+        throw new UnsupportedOperationException("Algorithm MFO is not implemented yet.");
+/*
         population.sort(new ProblemComparator<>(task.problem));
 
         bestFlame = new NumberSolution<>(population.get(0));
@@ -73,7 +74,7 @@ public class MFO extends NumberAlgorithm {
             task.incrementNumberOfIterations();
         }
 
-        return bestFlame;
+        return bestFlame;*/
     }
 
 

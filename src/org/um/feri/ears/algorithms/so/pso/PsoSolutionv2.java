@@ -4,7 +4,6 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ public class PsoSolutionv2 extends NumberSolution<Double> {
     public List<Double> velocity;
 
     public PsoSolutionv2(Task<NumberSolution<Double>, DoubleProblem> t) throws StopCriterionException {
-        super(t.getRandomEvaluatedSolution());
+        super(t.generateRandomEvaluatedSolution());
         velocity = new ArrayList<>(t.problem.getNumberOfDimensions());
         for (int i = 0; i < t.problem.getNumberOfDimensions(); i++) {
             velocity.add(0.0);

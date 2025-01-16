@@ -99,8 +99,8 @@ public class MemoryBankDoubleSolution {
 
     }
 
-    public NumberSolution<Double> getRandomSolution(TaskWithMemory task) throws StopCriterionException {
-        double[] d = task.problem.getRandomVariables();
+    public NumberSolution<Double> generateRandomSolution(TaskWithMemory task) throws StopCriterionException {
+        double[] d = task.problem.generateRandomVariables();
         return eval(task, d);
     }
     /*

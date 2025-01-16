@@ -179,7 +179,7 @@ public class FWA extends NumberAlgorithm {
                 }
                 //set position of the spark
                 // Check bounds
-                task.problem.setFeasible(tmpPos);
+                task.problem.makeFeasible(tmpPos);
                 // Evaluate new solution
                 if (task.isStopCriterion())
                     break;
@@ -235,7 +235,7 @@ public class FWA extends NumberAlgorithm {
             }
             //set position of the spark
             // Check bounds
-            task.problem.setFeasible(tmpPos);
+            task.problem.makeFeasible(tmpPos);
             // Evaluate new solution
             if (task.isStopCriterion())
                 break;
@@ -381,13 +381,13 @@ public class FWA extends NumberAlgorithm {
 
     private void initPopulation() throws StopCriterionException {
         fireworks = new NumberSolution[popSize];
-        fireworks[0] = task.getRandomEvaluatedSolution();
+        fireworks[0] = task.generateRandomEvaluatedSolution();
         bestSpark = new NumberSolution<>(fireworks[0]);
 
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            NumberSolution<Double> newSolution = task.getRandomEvaluatedSolution();
+            NumberSolution<Double> newSolution = task.generateRandomEvaluatedSolution();
             fireworks[i] = newSolution;
             if (task.problem.isFirstBetter(newSolution, bestSpark)) {
                 bestSpark = new NumberSolution<>(newSolution);

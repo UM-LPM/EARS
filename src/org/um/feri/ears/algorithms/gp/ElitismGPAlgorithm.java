@@ -23,7 +23,6 @@ import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.random.RNG;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ElitismGPAlgorithm extends GPAlgorithm {
@@ -240,7 +239,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
      * Initialize @popSize individuals and evaluate them. Best random generated solution is saved to @best
      */
     private void populationInitialization() throws StopCriterionException {
-        population = this.task.getRandomEvaluatedSolution(this.popSize);
+        population = this.task.generateRandomEvaluatedSolution(this.popSize);
 
         for(ProgramSolution sol : population){
             if (task.problem.isFirstBetter(sol, best))

@@ -8,11 +8,11 @@ import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 
-public class RandomWalkAlgorithm extends NumberAlgorithm { // needs to extend NumberAlgorithm
+public class RandomSearch extends NumberAlgorithm { // needs to extend NumberAlgorithm
     private NumberSolution<Double> best; // used to save global best solution
 
-    public RandomWalkAlgorithm() {
-        ai = new AlgorithmInfo("RW", "Random Walk", "");
+    public RandomSearch() {
+        ai = new AlgorithmInfo("RS", "Random Search", "");
         au = new Author("Matej", "matej.crepinsek@um.si");
     }
 
@@ -21,11 +21,11 @@ public class RandomWalkAlgorithm extends NumberAlgorithm { // needs to extend Nu
         // the task object holds information about the stopping criterion
         // and information about the problem (number of dimensions, number of constraints, upper and lower bounds...)
         NumberSolution<Double> newSolution;
-        best = task.getRandomEvaluatedSolution();  // generate new random solution (number of evaluations is incremented automatically)
+        best = task.generateRandomEvaluatedSolution();  // generate new random solution (number of evaluations is incremented automatically)
         // to evaluate a custom solution or an array use task.eval(mySolution)
         while (!task.isStopCriterion()) { // run until the stopping criterion is not reached
 
-            newSolution = task.getRandomEvaluatedSolution();
+            newSolution = task.generateRandomEvaluatedSolution();
             if (task.problem.isFirstBetter(newSolution, best)) { // use method isFirstBetter to check which solution is better (it checks constraints and considers the type of the problem (minimization or maximization))
                 best = newSolution;
             }

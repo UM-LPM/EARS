@@ -124,10 +124,10 @@ public class TLBOAlgorithm extends NumberAlgorithm {
         population = new NumberSolution[popSize];
         lowerLimit = task.problem.getLowerLimit();
         upperLimit = task.problem.getUpperLimit();
-        NumberSolution<Double> best = task.getRandomEvaluatedSolution();
+        NumberSolution<Double> best = task.generateRandomEvaluatedSolution();
         population[0] = best;
         for (int i = 1; i < popSize; i++) {
-            population[i] = task.getRandomEvaluatedSolution();
+            population[i] = task.generateRandomEvaluatedSolution();
             if (task.problem.isFirstBetter(population[i], best))
                 best = population[i];
 
@@ -182,7 +182,7 @@ public class TLBOAlgorithm extends NumberAlgorithm {
                     break; // in loop after incEval
                 tmpX = Util.toDoubleArray(population[i].getVariables());
                 for (int n = 0; n < dimensions; n++) {
-                    popTmp[i][n] = task.problem.setFeasible(tmpX[n] + difMean[n], n);
+                    popTmp[i][n] = task.problem.makeFeasible(tmpX[n] + difMean[n], n);
                 }
                 NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(popTmp[i]));
                 task.eval(newSolution);
@@ -221,11 +221,11 @@ public class TLBOAlgorithm extends NumberAlgorithm {
                 tmpIsland = new double[dimensions];
                 if (task.problem.isFirstBetter(population[i_first], population[ii])) {
                     for (int n = 0; n < dimensions; n++) {
-                        tmpIsland[n] = task.problem.setFeasible(tmpX[n] + rand * (tmpX[n] - tmpY[n]), n);
+                        tmpIsland[n] = task.problem.makeFeasible(tmpX[n] + rand * (tmpX[n] - tmpY[n]), n);
                     }
                 } else {
                     for (int n = 0; n < dimensions; n++) {
-                        tmpIsland[n] = task.problem.setFeasible(tmpX[n] + rand * (tmpY[n] - tmpX[n]), n);
+                        tmpIsland[n] = task.problem.makeFeasible(tmpX[n] + rand * (tmpY[n] - tmpX[n]), n);
                     }
                 }
                 if (test)

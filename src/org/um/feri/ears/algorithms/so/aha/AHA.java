@@ -43,13 +43,13 @@ public class AHA extends NumberAlgorithm {
 
     private void initPopulation() throws StopCriterionException {
         population = new ArrayList<>();
-        population.add(task.getRandomEvaluatedSolution());
+        population.add(task.generateRandomEvaluatedSolution());
         best = population.get(0);
 
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population.add(task.getRandomEvaluatedSolution());
+            population.add(task.generateRandomEvaluatedSolution());
             if (task.problem.isFirstBetter(population.get(i), best)) {
                 best = population.get(i);
             }

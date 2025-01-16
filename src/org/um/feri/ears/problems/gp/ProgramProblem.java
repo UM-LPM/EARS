@@ -11,7 +11,7 @@ import org.um.feri.ears.problems.Problem;
 import org.um.feri.ears.util.Configuration;
 import org.um.feri.ears.util.RequestBodyParams;
 import org.um.feri.ears.util.random.RNG;
-import org.um.feri.ears.individual.representations.gp.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +112,7 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         }
     }
 
-    public Class<? extends  Node> getRandomNodeType(){
+    public Class<? extends  Node> selectRandomNodeType(){
         ArrayList<Class<? extends  Node>> nodeTypes = new ArrayList<>();
         nodeTypes.addAll(baseFunctionNodeTypes);
         nodeTypes.addAll(baseTerminalNodeTypes);
@@ -211,14 +211,14 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         }
     }
     @Override
-    public ProgramSolution getRandomEvaluatedSolution() {
-        ProgramSolution solution = getRandomSolution();
+    public ProgramSolution generateRandomEvaluatedSolution() {
+        ProgramSolution solution = generateRandomSolution();
         evaluate(solution);
         return solution;
     }
 
     @Override
-    public ProgramSolution getRandomSolution() {
+    public ProgramSolution generateRandomSolution() {
         ProgramSolution solution = this.programSolutionGenerator.generate(this, 1, treeName);
 
         // Checks if the generated solution is feasible for all feasibility control operators. If not, make it feasible
@@ -227,7 +227,7 @@ public abstract class ProgramProblem extends Problem<ProgramSolution> {
         return solution;
     }
 
-    public Node getRandomTerminalNode(){
+    public Node selectRandomTerminalNode(){
         return this.programSolutionGenerator.generateRandomTerminalNode(this);
     }
 

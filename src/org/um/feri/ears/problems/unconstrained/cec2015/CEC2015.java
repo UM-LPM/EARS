@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public abstract class CEC2015 extends DoubleProblem {
 
-    protected double[] OShift;
+    protected double[] oShift;
     protected double[] M;
     protected double[] y;
     protected double[] z;
@@ -59,11 +59,11 @@ public abstract class CEC2015 extends DoubleProblem {
         M = DataReader.readRotation(funcNum, d, cf_num);
 
         /* Load shift_data************************************************** */
-        OShift = DataReader.readShiftData(funcNum, d, cf_num);
+        oShift = DataReader.readShiftData(funcNum, d, cf_num);
 
         /* Load Shuffle_data****************************************** */
         SS = DataReader.readShuffleData(funcNum, d);
-        decisionSpaceOptima[0] = OShift;
+        decisionSpaceOptima[0] = oShift;
         objectiveSpaceOptima[0] = funcNum * 100;
     }
 }

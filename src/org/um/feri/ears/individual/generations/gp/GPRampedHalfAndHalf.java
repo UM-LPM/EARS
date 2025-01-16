@@ -89,7 +89,7 @@ public class GPRampedHalfAndHalf extends GPProgramSolution {
         else{
             Node newNode;
             if(depth >= programProblem.getMinTreeDepth())
-                newNode = generateRandomNode(programProblem.getRandomNodeType());
+                newNode = generateRandomNode(programProblem.selectRandomNodeType());
             else
                 newNode = generateRandomNode(programProblem.getBaseFunctionNodeTypes());
 

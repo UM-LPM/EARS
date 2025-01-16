@@ -118,9 +118,9 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
      * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
      *                                To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
      */
-    public S getRandomEvaluatedSolution() throws StopCriterionException {
+    public S generateRandomEvaluatedSolution() throws StopCriterionException {
 
-        S tmpSolution = problem.getRandomSolution();
+        S tmpSolution = problem.generateRandomSolution();
         eval(tmpSolution);
         return tmpSolution;
     }
@@ -133,11 +133,11 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
      * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
      *                                To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
      */
-    public List<S> getRandomEvaluatedSolution(int numOfSolutions) throws StopCriterionException {
+    public List<S> generateRandomEvaluatedSolution(int numOfSolutions) throws StopCriterionException {
         // Generate numOfSolutions random solutions and bulk evaluate them
         List<S> solutions = new ArrayList<>();
         for (int i = 0; i < numOfSolutions; i++) {
-            solutions.add(problem.getRandomSolution());
+            solutions.add(problem.generateRandomSolution());
         }
 
         bulkEval(solutions);

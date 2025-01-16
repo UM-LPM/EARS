@@ -26,11 +26,11 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
     public ProgramSolution execute(Task<ProgramSolution, ProgramProblem> task) throws StopCriterionException {
 
         ProgramSolution newSolution;
-        best = task.getRandomEvaluatedSolution();
+        best = task.generateRandomEvaluatedSolution();
 
         while (!task.isStopCriterion()) {
 
-            newSolution = task.getRandomEvaluatedSolution();
+            newSolution = task.generateRandomEvaluatedSolution();
             if (task.problem.isFirstBetter(newSolution, best)) {
                 best = newSolution;
             }

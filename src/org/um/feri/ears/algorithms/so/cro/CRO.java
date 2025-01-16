@@ -154,7 +154,7 @@ public class CRO extends NumberAlgorithm {
 		// At inizialiazation populate only part of the coral reef (rho)
 		int quantity = (int) (rho * n * m);
 		coralReef = new ArrayList<>(n * m);
-		CoralSolution newCoral = new CoralSolution(task.getRandomEvaluatedSolution());
+		CoralSolution newCoral = new CoralSolution(task.generateRandomEvaluatedSolution());
 		Coordinate co = new Coordinate(RNG.nextInt(0, n), RNG.nextInt(0, m));
 		newCoral.setCoralPosition(co);
 		coralReef.add(newCoral);
@@ -162,7 +162,7 @@ public class CRO extends NumberAlgorithm {
 		for (int i = 1; i < quantity; i++) {
 			if(task.isStopCriterion())
 				break;
-			newCoral = new CoralSolution(task.getRandomEvaluatedSolution());
+			newCoral = new CoralSolution(task.generateRandomEvaluatedSolution());
 			co = new Coordinate(RNG.nextInt(0, n), RNG.nextInt(0, m));
 			while(getCoralFromPosition(co) != null)
 			{

@@ -91,7 +91,7 @@ import org.um.feri.ears.util.random.RNG;
  * strategy, s20 + Brest ** H*O*C*E
  ***********************************************************/
 
-public class DEAlgorithm extends NumberAlgorithm {
+public class DE extends NumberAlgorithm {
 
     public enum Strategy {
         DE_BEST_1_EXP("DE/best/1/exp"),
@@ -150,19 +150,19 @@ public class DEAlgorithm extends NumberAlgorithm {
     private double F, memF, CR, memCR; /* control variables of DE */
     private DESolution best, bestit, bestI;// best, best iteration, best I
 
-    public DEAlgorithm() {
+    public DE() {
         this(Strategy.DE_RAND_1_BIN, 30, Finit, CRinit);
     }
 
-    public DEAlgorithm(Strategy strategy) {
+    public DE(Strategy strategy) {
         this(strategy, 30, Finit, CRinit);
     }
 
-    public DEAlgorithm(Strategy strategy, int popSize) {
+    public DE(Strategy strategy, int popSize) {
         this(strategy, popSize, Finit, CRinit);
     }
 
-    public DEAlgorithm(Strategy strategy, int popSize, double F, double CR) {
+    public DE(Strategy strategy, int popSize, double F, double CR) {
         this.strategy = strategy;
         memF = F;
         memCR = CR;
@@ -194,7 +194,7 @@ public class DEAlgorithm extends NumberAlgorithm {
         c = new DESolution[popSize];
         d = new DESolution[popSize];
         for (i = 0; i < popSize; i++) {
-            c[i] = new DESolution(task.getRandomEvaluatedSolution(), Finit, CRinit);
+            c[i] = new DESolution(task.generateRandomEvaluatedSolution(), Finit, CRinit);
             // System.out.println(i+". "+c[i]);
         }
         
@@ -436,7 +436,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                 }
                 // CM???
                 for (int kk = 0; kk < D; kk++) {
-                    tmp[kk] = task.problem.setFeasible(tmp[kk], kk);
+                    tmp[kk] = task.problem.makeFeasible(tmp[kk], kk);
                 }
                 NumberSolution<Double> br = new NumberSolution<>(Util.toDoubleArrayList(tmp));
                 task.eval(br);
@@ -492,7 +492,7 @@ public class DEAlgorithm extends NumberAlgorithm {
             if (strategy == Strategy.JDE_RAND_1_BIN) { //self adaptive no need for CR and F parameter
                 int[] paramCombinations = {25, 50, 15, 75, 100, 10, 30, 40};
                 for (int i = 0; (i < paramCombinations.length) && (counter < maxCombinations); i++) {
-                    alternative.add(new DEAlgorithm(strategy, paramCombinations[i]));
+                    alternative.add(new DE(strategy, paramCombinations[i]));
                     counter++;
 
                 }
@@ -503,7 +503,7 @@ public class DEAlgorithm extends NumberAlgorithm {
                         {10, 0.5, 0.9}, {50, 0.5, 0.9}, {25, 0.5, 0.8}, {25, 0.5, 0.9}};
 
                 for (int i = 0; (i < paramCombinations.length) && (counter < maxCombinations); i++) {
-                    alternative.add(new DEAlgorithm(strategy, (int) paramCombinations[i][0], paramCombinations[i][1], paramCombinations[i][2]));
+                    alternative.add(new DE(strategy, (int) paramCombinations[i][0], paramCombinations[i][1], paramCombinations[i][2]));
                     counter++;
 
                 }

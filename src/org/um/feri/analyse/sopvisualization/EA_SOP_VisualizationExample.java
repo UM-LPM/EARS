@@ -2,10 +2,10 @@ package org.um.feri.analyse.sopvisualization;
 
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.abc.ABC;
-import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.de.DE;
 import org.um.feri.ears.algorithms.so.ff.FireflyAlgorithm;
 import org.um.feri.ears.algorithms.so.gwo.GWO;
-import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
+import org.um.feri.ears.algorithms.so.random.RandomSearch;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.Griewank;
 import org.um.feri.ears.problems.unconstrained.Schwefel226;
@@ -45,10 +45,10 @@ public class EA_SOP_VisualizationExample {
     }
 
     public static void run4Task(Task<NumberSolution<Double>, DoubleProblem> task) {
-        run(new RandomWalkAlgorithm(), task.clone());
+        run(new RandomSearch(), task.clone());
         run(new GWO(), task.clone());
         run(new ABC(), task.clone());
-        run(new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN), task.clone());
+        run(new DE(DE.Strategy.JDE_RAND_1_BIN), task.clone());
         run(new FireflyAlgorithm(), task.clone());
     }
 

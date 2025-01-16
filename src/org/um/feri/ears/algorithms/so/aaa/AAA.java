@@ -90,7 +90,7 @@ public class AAA extends NumberAlgorithm {
                         newColony[dim3] = newColony[dim3] + (population[neighbor].getValue(dim3) - newColony[dim3]) * (shearForce - population[i].getFriction()) * Math.cos(Math.toRadians(degree));
                     }
 
-                    task.problem.setFeasible(newColony);
+                    task.problem.makeFeasible(newColony);
 
                     if (task.isStopCriterion())
                         break;
@@ -241,12 +241,12 @@ public class AAA extends NumberAlgorithm {
     private void initPopulation() throws StopCriterionException {
         population = new Alga[popSize];
 
-        best = task.getRandomEvaluatedSolution();
+        best = task.generateRandomEvaluatedSolution();
         population[0] = new Alga(best);
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population[i] = new Alga(task.getRandomEvaluatedSolution());
+            population[i] = new Alga(task.generateRandomEvaluatedSolution());
             if (task.problem.isFirstBetter(population[i], best)) {
                 best = new NumberSolution(population[i]);
             }

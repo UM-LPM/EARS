@@ -33,7 +33,7 @@ public class DEexample extends NumberAlgorithm {
         NumberSolution<Double> tmp;
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion()) break;
-            tmp = task.getRandomEvaluatedSolution();
+            tmp = task.generateRandomEvaluatedSolution();
             if (i == 0) best = tmp;
             else if (task.problem.isFirstBetter(tmp, best)) best = tmp;
             pop.add(tmp);
@@ -62,7 +62,7 @@ public class DEexample extends NumberAlgorithm {
                 double[] x = new double[task.problem.getNumberOfDimensions()];
                 for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                     if ((RNG.nextDouble() < CR) || (j == R)) {
-                        x[j] = task.problem.setFeasible(pop.get(a).getValue(j) + F * (pop.get(b).getValue(j) - pop.get(c).getValue(j)), j);
+                        x[j] = task.problem.makeFeasible(pop.get(a).getValue(j) + F * (pop.get(b).getValue(j) - pop.get(c).getValue(j)), j);
                     } else x[j] = pop.get(i).getValue(j);
                 }
 

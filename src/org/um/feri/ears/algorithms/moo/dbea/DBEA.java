@@ -243,7 +243,7 @@ public class DBEA<N extends Number, P extends Problem<NumberSolution<N>>> extend
 
             if (task.isStopCriterion())
                 return;
-            NumberSolution<N> newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
+            NumberSolution<N> newSolution = new NumberSolution<N>(task.generateRandomEvaluatedSolution());
 
             population.add(newSolution);
         }

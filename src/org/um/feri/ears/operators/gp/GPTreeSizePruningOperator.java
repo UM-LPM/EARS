@@ -81,7 +81,7 @@ public class GPTreeSizePruningOperator extends FeasibilityGPOperator {
             // 2.4
             if(minDiffIndex == -1 && operatorType == OperatorType.NEW_SOLUTION){
                 // 3. b) Replace the whole tree with a new one
-                tProgramSolution = tProgramProblem.getRandomSolution();
+                tProgramSolution = tProgramProblem.generateRandomSolution();
                 break;
             }
             else {
@@ -104,7 +104,7 @@ public class GPTreeSizePruningOperator extends FeasibilityGPOperator {
                 // Parent is always present because we are not replacing the root node
                 Node parent = functionNodes.get(minDiffIndex).parent().get();
                 int childIndex = parent.childIndex(functionNodes.get(minDiffIndex));
-                parent.replace(childIndex, tProgramProblem.getRandomTerminalNode());
+                parent.replace(childIndex, tProgramProblem.selectRandomTerminalNode());
 
             }
 

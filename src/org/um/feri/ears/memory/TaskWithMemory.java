@@ -64,8 +64,8 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
     }
 
     @Override
-    public NumberSolution<Double> getRandomEvaluatedSolution() throws StopCriterionException {
-        return mb.getRandomSolution(this);
+    public NumberSolution<Double> generateRandomEvaluatedSolution() throws StopCriterionException {
+        return mb.generateRandomSolution(this);
     }
 
     @Override

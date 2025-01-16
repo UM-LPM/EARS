@@ -325,7 +325,7 @@ public class ICA extends NumberAlgorithm {
                 break;
 
             if (i < numOfRevolvingColonies) {
-                empire.colonies[R[i]] = task.getRandomEvaluatedSolution();
+                empire.colonies[R[i]] = task.generateRandomEvaluatedSolution();
             } else {
                 task.eval(empire.colonies[R[i]]);
             }
@@ -371,7 +371,7 @@ public class ICA extends NumberAlgorithm {
             for (int j = 0; j < task.problem.getNumberOfDimensions(); j++) {
                 //TODO 2 * beta -> matlab samo beta = 1.5
                 newColony.add(empire.colonies[i].getValue(j) + 2 * assimilationCoefficient * RNG.nextDouble() * (empire.imperialist.getValue(j) - empire.colonies[i].getValue(j)));
-                newColony.set(j, task.problem.setFeasible(newColony.get(j), j));
+                newColony.set(j, task.problem.makeFeasible(newColony.get(j), j));
             }
             empire.colonies[i].setVariables(newColony);
         }
@@ -438,7 +438,7 @@ public class ICA extends NumberAlgorithm {
         // If an empire has no colony, give it one
         for (EmpireSolution empire : empiresList) {
             if (empire.colonies.length == 0) {
-                empire.colonies = new NumberSolution[]{task.getRandomEvaluatedSolution()};
+                empire.colonies = new NumberSolution[]{task.generateRandomEvaluatedSolution()};
             }
         }
 
@@ -455,7 +455,7 @@ public class ICA extends NumberAlgorithm {
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            NumberSolution<Double> newSolution = task.getRandomEvaluatedSolution();
+            NumberSolution<Double> newSolution = task.generateRandomEvaluatedSolution();
             initialCountries[i] = newSolution;
         }
         Arrays.sort(initialCountries, new ProblemComparator<>(task.problem));

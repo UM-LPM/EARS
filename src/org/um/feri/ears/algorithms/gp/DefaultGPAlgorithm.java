@@ -180,7 +180,7 @@ public class DefaultGPAlgorithm extends GPAlgorithm {
      * Initialize @popSize individuals and evaluate them. Best random generated solution is saved to @best
      */
     private void populationInitialization() throws StopCriterionException {
-        population = this.task.getRandomEvaluatedSolution(this.popSize);
+        population = this.task.generateRandomEvaluatedSolution(this.popSize);
 
         for(ProgramSolution sol : population){
             if (task.problem.isFirstBetter(sol, best))

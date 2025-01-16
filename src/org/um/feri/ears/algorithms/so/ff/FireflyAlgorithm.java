@@ -86,13 +86,13 @@ public class FireflyAlgorithm extends NumberAlgorithm {
 
     public void initPopulation() throws StopCriterionException {
         population = new ArrayList<>();
-        FireflySolution firefly = new FireflySolution(task.getRandomEvaluatedSolution());
+        FireflySolution firefly = new FireflySolution(task.generateRandomEvaluatedSolution());
         firefly.setAttractiveness(1.0);
         firefly.setIntensity(1.0);
         population.add(firefly);
         best = firefly;
         for (int i = 0; i < popSize - 1; i++) {
-            FireflySolution newFirefly = new FireflySolution(task.getRandomEvaluatedSolution());
+            FireflySolution newFirefly = new FireflySolution(task.generateRandomEvaluatedSolution());
             newFirefly.setAttractiveness(1.0);
             newFirefly.setIntensity(1.0);
             population.add(newFirefly);
@@ -188,7 +188,7 @@ public class FireflyAlgorithm extends NumberAlgorithm {
                         //matlab's nso (ffa_tmp in C++) is from ns, which is updated result of ffa.
                         ffa_i.set(k,ffa_i.get(k) * (1.0 - beta) + ffa_j.get(k) * beta + tmpf);
                     }
-                    task.problem.setFeasible(ffa_i); //check scope out of bound or not
+                    task.problem.makeFeasible(ffa_i); //check scope out of bound or not
                     population.get(i).setVariables(ffa_i); //update solution i
 
                 }

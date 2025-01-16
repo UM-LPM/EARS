@@ -74,7 +74,7 @@ public class ABC extends NumberAlgorithm {
             if (population.get(i).trials >= limit) {
                 if (task.isStopCriterion())
                     return;
-                ABCSolution newBee = new ABCSolution(task.getRandomEvaluatedSolution());
+                ABCSolution newBee = new ABCSolution(task.generateRandomEvaluatedSolution());
                 population.set(i, newBee);
             }
         }*/
@@ -87,7 +87,7 @@ public class ABC extends NumberAlgorithm {
         if(population.get(maxtrialindex).trials >= limit) {
             if (task.isStopCriterion())
                 return;
-            ABCSolution newBee = new ABCSolution(task.getRandomEvaluatedSolution());
+            ABCSolution newBee = new ABCSolution(task.generateRandomEvaluatedSolution());
             population.set(maxtrialindex, newBee);
         }
 
@@ -124,7 +124,7 @@ public class ABC extends NumberAlgorithm {
                 phi = RNG.nextDouble(-1, 1);
 
                 newValue = population.get(i).getValue(param2change) + (population.get(i).getValue(param2change) - population.get(neighbour).getValue(param2change)) * phi;
-                newValue = task.problem.setFeasible(newValue, param2change);
+                newValue = task.problem.makeFeasible(newValue, param2change);
 
                 ABCSolution newBee = new ABCSolution(population.get(i));
                 newBee.setValue(param2change, newValue);
@@ -183,7 +183,7 @@ public class ABC extends NumberAlgorithm {
             phi = RNG.nextDouble(-1, 1);
 
             newValue = population.get(i).getValue(param2change) + (population.get(i).getValue(param2change) - population.get(neighbour).getValue(param2change)) * phi;
-            newValue = task.problem.setFeasible(newValue, param2change);
+            newValue = task.problem.makeFeasible(newValue, param2change);
 
             ABCSolution newBee = new ABCSolution(population.get(i));
             newBee.setValue(param2change, newValue);
@@ -204,11 +204,11 @@ public class ABC extends NumberAlgorithm {
 
     private void initPopulation() throws StopCriterionException {
         population = new ArrayList<>();
-        ABCSolution bee = new ABCSolution(task.getRandomEvaluatedSolution());
+        ABCSolution bee = new ABCSolution(task.generateRandomEvaluatedSolution());
         population.add(bee);
         best = new ABCSolution(bee);
         for (int i = 0; i < foodNumber - 1; i++) {
-            ABCSolution newBee = new ABCSolution(task.getRandomEvaluatedSolution());
+            ABCSolution newBee = new ABCSolution(task.generateRandomEvaluatedSolution());
             population.add(newBee);
             if (task.problem.isFirstBetter(newBee, best))
                 best = new ABCSolution(newBee);

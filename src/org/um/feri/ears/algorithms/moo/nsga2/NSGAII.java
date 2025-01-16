@@ -68,7 +68,7 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
             for (int i = 0; i < populationSize; i++) {
                 if (task.isStopCriterion())
                     return;
-                newSolution = task.getRandomEvaluatedSolution();
+                newSolution = task.generateRandomEvaluatedSolution();
                 // problem.evaluateConstraints(newSolution);
                 population.add(newSolution);
             }

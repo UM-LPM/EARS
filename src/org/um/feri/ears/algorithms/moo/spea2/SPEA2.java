@@ -93,7 +93,7 @@ public class SPEA2<N extends Number, P extends NumberProblem<N>> extends MOAlgor
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            NumberSolution<N> newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
+            NumberSolution<N> newSolution = new NumberSolution<N>(task.generateRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);;
             population.add(newSolution);
         }

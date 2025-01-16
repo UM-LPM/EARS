@@ -94,7 +94,7 @@ public class FPA extends NumberAlgorithm {
                 }
 
                 // Check bounds
-                task.problem.setFeasible(candidate);
+                task.problem.makeFeasible(candidate);
 
                 // Evaluate new solution
                 if (task.isStopCriterion())
@@ -146,7 +146,7 @@ public class FPA extends NumberAlgorithm {
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            NumberSolution<Double> newSolution = task.getRandomEvaluatedSolution();
+            NumberSolution<Double> newSolution = task.generateRandomEvaluatedSolution();
             population.add(newSolution);
         }
 

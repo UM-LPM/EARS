@@ -27,7 +27,7 @@ public class GPSubtreeMutation extends GPMutation {
 
         // If root node is selected, whole program is randomly generated
         if (crossPoint == 0) {
-            solution.getTree().setRootNode(problem.getRandomSolution().getTree().getRootNode());
+            solution.getTree().setRootNode(problem.generateRandomSolution().getTree().getRootNode());
             return;
         }
 

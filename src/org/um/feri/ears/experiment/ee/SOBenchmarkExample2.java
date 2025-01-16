@@ -1,8 +1,8 @@
 package org.um.feri.ears.experiment.ee;
 
 import org.um.feri.analyse.sopvisualization.AncestorUtil;
-import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
-import org.um.feri.ears.algorithms.so.jade.JADE;
+import org.um.feri.ears.algorithms.so.de.DE;
+import org.um.feri.ears.algorithms.so.de.jade.JADE;
 import org.um.feri.ears.algorithms.so.pso.PSO;
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.StopCriterion;
@@ -18,7 +18,7 @@ public class SOBenchmarkExample2 {
         int[] dimmensions = {50};
         PSO psoLogging = new PSO();
         JADE jadeLogging = new JADE();
-        DEAlgorithm deLogging = new DEAlgorithm(DEAlgorithm.Strategy.DE_BEST_1_BIN);
+        DE deLogging = new DE(DE.Strategy.DE_BEST_1_BIN);
 
         for (int i = 0; i < dimmensions.length; ++i) {
             problems[0] = new Sphere(dimmensions[i]);

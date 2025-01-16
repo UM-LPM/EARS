@@ -231,7 +231,7 @@ public class MOCRSTuning<N extends Number> {
                 cp.upper_bound = nweUpperBound;
             }
 
-            newValue[i] = setFeasible(newValue[i], i);
+            newValue[i] = makeFeasible(newValue[i], i);
 
             newName += controlParameters.get(i).name + "(" + newValue[i] + ")";
             params.put(cp.name, newValue[i]);
@@ -246,7 +246,7 @@ public class MOCRSTuning<N extends Number> {
         return first.getEval() > second.getEval();
     }
 
-    private double setFeasible(double value, int index) {
+    private double makeFeasible(double value, int index) {
 
         ControlParameter cp = controlParameters.get(index);
         return cp.correctValue(value);

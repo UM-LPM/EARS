@@ -16,7 +16,7 @@ public class Agent extends NumberSolution<Double> {
     private double[] forces;
 
     public Agent(Task<NumberSolution<Double>, DoubleProblem> t, int id) throws StopCriterionException {
-        super(t.getRandomEvaluatedSolution());
+        super(t.generateRandomEvaluatedSolution());
         velocities = new double[t.problem.getNumberOfDimensions()];
         forces = new double[t.problem.getNumberOfDimensions()];
     }

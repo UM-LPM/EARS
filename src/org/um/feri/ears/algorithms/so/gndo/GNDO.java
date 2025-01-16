@@ -51,7 +51,6 @@ public class GNDO extends NumberAlgorithm {
         double[] fitness = new double[popSize];
         NumberSolution<Double> bestSolution = population.get(0);
 
-        int iter = 1;
         while (!task.isStopCriterion()) {
             // Evaluate all solutions
             for (int index = 0; index < popSize; index++) {
@@ -179,11 +178,6 @@ public class GNDO extends NumberAlgorithm {
                     }
                 }
             }
-
-            // To compare the iteration cost with the MATLAB version
-            System.out.println("Iteration " + iter + ": Best Cost = " + bestFitness);
-            iter++;
-            
             task.incrementNumberOfIterations();
         }
 

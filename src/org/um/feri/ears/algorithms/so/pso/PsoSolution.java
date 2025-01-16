@@ -11,7 +11,7 @@ public class PsoSolution extends NumberSolution<Double> {
     public double[] velocity;
 
     public PsoSolution(Task<NumberSolution<Double>, DoubleProblem> t) throws StopCriterionException {
-        super(t.getRandomEvaluatedSolution());
+        super(t.generateRandomEvaluatedSolution());
         velocity = new double[t.problem.getNumberOfDimensions()];
         double l;
         double r;

@@ -326,7 +326,7 @@ public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>> extends MOA
 
             if (task.isStopCriterion())
                 return;
-            NumberSolution<N> newSolution = new NumberSolution<N>(task.problem.getRandomEvaluatedSolution());
+            NumberSolution<N> newSolution = new NumberSolution<N>(task.problem.generateRandomEvaluatedSolution());
 
             population.add(newSolution);
             savedValues[i] = new NumberSolution<N>(newSolution);
@@ -338,7 +338,7 @@ public class MOEAD_DRA<N extends Number, P extends NumberProblem<N>> extends MOA
             z[i] = 1.0e+30;
             if (task.isStopCriterion())
                 return;
-            indArray[i] = new NumberSolution<N>(task.problem.getRandomEvaluatedSolution());
+            indArray[i] = new NumberSolution<N>(task.problem.generateRandomEvaluatedSolution());
         }
 
         for (int i = 0; i < populationSize; i++) {

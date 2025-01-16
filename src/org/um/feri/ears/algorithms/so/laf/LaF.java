@@ -88,13 +88,13 @@ public class LaF extends NumberAlgorithm {
         leaders = new ArrayList<>();
         followers = new ArrayList<>();
         for (int i = 0; i < popSize; i++) {
-            NumberSolution<Double> newLeader = new NumberSolution<>(task.getRandomEvaluatedSolution());
+            NumberSolution<Double> newLeader = new NumberSolution<>(task.generateRandomEvaluatedSolution());
             leaders.add(newLeader);
             if (task.isStopCriterion())
                 break;
         }
         for (int i = 0; i < popSize; i++) {
-            NumberSolution<Double> newFollower = new NumberSolution<>(task.getRandomEvaluatedSolution());
+            NumberSolution<Double> newFollower = new NumberSolution<>(task.generateRandomEvaluatedSolution());
             followers.add(newFollower);
             if (task.isStopCriterion())
                 break;
@@ -125,7 +125,7 @@ public class LaF extends NumberAlgorithm {
             result[i] = follower.getValue(i) + maxSteps[i] * rand * gap[i];
         }
 
-        task.problem.setFeasible(result); //fixes upper and lower bound
+        task.problem.makeFeasible(result); //fixes upper and lower bound
 
         NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(result));
         task.eval(newSolution);

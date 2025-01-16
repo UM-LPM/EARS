@@ -1,4 +1,4 @@
-package org.um.feri.ears.algorithms.so.jade;
+package org.um.feri.ears.algorithms.so.de.jade;
 
 import org.um.feri.ears.problems.NumberSolution;
 

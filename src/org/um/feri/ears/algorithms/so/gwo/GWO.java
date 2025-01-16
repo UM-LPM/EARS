@@ -93,7 +93,7 @@ public class GWO extends NumberAlgorithm {
 
                     newPosition[i] = (x1 + x2 + x3) / 3; // Equation (3.7)
                 }
-                task.problem.setFeasible(newPosition);
+                task.problem.makeFeasible(newPosition);
 
                 if (task.isStopCriterion())
                     break;
@@ -114,7 +114,7 @@ public class GWO extends NumberAlgorithm {
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population.add(task.getRandomEvaluatedSolution());
+            population.add(task.generateRandomEvaluatedSolution());
         }
         updateABD();
     }

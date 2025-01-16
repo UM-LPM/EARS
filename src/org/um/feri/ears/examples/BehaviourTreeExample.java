@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.um.feri.ears.algorithms.GPAlgorithm;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
-import org.um.feri.ears.algorithms.gp.PredefinedEncapsNodesGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.RandomWalkGPAlgorithm;
 import org.um.feri.ears.individual.generations.gp.GPRandomProgramSolution;
 import org.um.feri.ears.individual.representations.gp.Node;
@@ -25,7 +24,6 @@ import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.gp.*;
-import org.um.feri.ears.util.SolutionUtils;
 import org.um.feri.ears.util.Util;
 
 import java.net.HttpURLConnection;
@@ -70,7 +68,7 @@ public class BehaviourTreeExample {
 
         List<ProgramSolution> programSolutions = new ArrayList<>();
         for (int i = 0; i < 300; i++){
-            programSolutions.add(sgp2.getRandomSolution());
+            programSolutions.add(sgp2.generateRandomSolution());
         }
 
         sgp2.bulkEvaluate(programSolutions);
@@ -280,7 +278,7 @@ public class BehaviourTreeExample {
         long startTime = System.currentTimeMillis();
         List<ProgramSolution> programSolutions = new ArrayList<>();
         for (int i = 0; i < 30; i++){
-            programSolutions.add(sgp2.getRandomSolution());
+            programSolutions.add(sgp2.generateRandomSolution());
         }
 
         sgp2.bulkEvaluate(programSolutions);
@@ -325,7 +323,7 @@ public class BehaviourTreeExample {
         SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, evalData, 3, 8, 8, 200,new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
                 new GPOperator[]{}, new GPRandomProgramSolution());
 
-        ProgramSolution programSolution = sgp2.getRandomSolution();
+        ProgramSolution programSolution = sgp2.generateRandomSolution();
         sgp2.evaluate(programSolution);
         System.out.println(programSolution);
         System.out.println(programSolution.getEval());
@@ -440,7 +438,7 @@ public class BehaviourTreeExample {
 
             List<ProgramSolution> programSolutions = new ArrayList<>();
 
-            programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
+            programSolutions.add(sgp2.generateRandomSolution()); // Generate program solution
 
             List<EncapsulatedNodeDefinition> encapsulatedNodeDefinitions = new ArrayList<>(); // Define goal nodes
             encapsulatedNodeDefinitions.add(new EncapsulatedNodeDefinition("GoalNode1", programSolutions.get(0).getTree().getRootNode()));
@@ -448,7 +446,7 @@ public class BehaviourTreeExample {
 
             sgp2.setBaseTerminalNodeTypes(baseTerminalNodeTypes2);
 
-            programSolutions.add(sgp2.getRandomSolution()); // Generate program solution
+            programSolutions.add(sgp2.generateRandomSolution()); // Generate program solution
 
             programSolutions.get(0).getTree().displayTree("TestBTree1", false);
             programSolutions.get(1).getTree().displayTree("TestBTree2", false);

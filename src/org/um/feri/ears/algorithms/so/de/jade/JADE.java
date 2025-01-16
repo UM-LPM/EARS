@@ -1,4 +1,4 @@
-package org.um.feri.ears.algorithms.so.jade;
+package org.um.feri.ears.algorithms.so.de.jade;
 
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
@@ -96,7 +96,7 @@ public class JADE extends NumberAlgorithm {
     private void initPopulation() throws StopCriterionException {
         popX = new JADESolution[popSize];
         for (int i = 0; i < popSize; i++) {
-            popX[i] = new JADESolution(task.getRandomEvaluatedSolution(), 0.5, 0.5);
+            popX[i] = new JADESolution(task.generateRandomEvaluatedSolution(), 0.5, 0.5);
             updateEliteAndGlobalBest(popX[i]);
             if (task.isStopCriterion())
                 break;
@@ -152,7 +152,7 @@ public class JADE extends NumberAlgorithm {
                 pBest = RNG.nextInt(eliteSize);
                 for (int d = 0; d < D; d++) {
                     if ((RNG.nextDouble() < popX[i].CR) || (d == jRand)) {
-                        tmp[d] = task.problem.setFeasible(
+                        tmp[d] = task.problem.makeFeasible(
                                         tmp[d]
                                                 + popX[i].F
                                                 * (elite.get(pBest).getValue(d) - tmp[d])

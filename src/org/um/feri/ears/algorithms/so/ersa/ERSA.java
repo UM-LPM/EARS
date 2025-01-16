@@ -45,7 +45,7 @@ public class ERSA extends NumberAlgorithm {
         Streamer() throws StopCriterionException {
             // create an initial random evaluated solution in the feasible region
             try {
-                Fn0 = task.getRandomEvaluatedSolution();
+                Fn0 = task.generateRandomEvaluatedSolution();
             } catch (StopCriterionException e) {
                 throw e;
             }

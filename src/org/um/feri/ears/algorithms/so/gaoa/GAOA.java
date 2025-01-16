@@ -5,7 +5,6 @@ import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.problems.*;
-import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.random.RNG;
 
@@ -213,7 +212,7 @@ public class GAOA extends NumberAlgorithm {
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            NumberSolution<Double> newSolution = task.getRandomEvaluatedSolution();
+            NumberSolution<Double> newSolution = task.generateRandomEvaluatedSolution();
             population.add(newSolution);
 
             if (i > 0 && task.problem.isFirstBetter(newSolution, best))

@@ -1,10 +1,10 @@
 package org.um.feri.ears.experiment.ee;
 
-import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.de.DE;
 import org.um.feri.ears.algorithms.so.hc.HillClimbing;
-import org.um.feri.ears.algorithms.so.jDElscop.jDElscop;
-import org.um.feri.ears.algorithms.so.jade.JADE;
-import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
+import org.um.feri.ears.algorithms.so.de.jDElscop.jDElscop;
+import org.um.feri.ears.algorithms.so.de.jade.JADE;
+import org.um.feri.ears.algorithms.so.random.RandomSearch;
 import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.Task;
@@ -23,10 +23,10 @@ public class SoCEC2014Benchmark {
         	dimm = 2;
         }
         
-        RandomWalkAlgorithm randomLog = new RandomWalkAlgorithm();
+        RandomSearch randomLog = new RandomSearch();
         HillClimbing hillClimb = new HillClimbing(HillClimbing.HillClimbingStrategy.STEEPEST_ASCENT,0.001);
         JADE jadeLogging = new JADE();
-        DEAlgorithm deLogging = new DEAlgorithm(DEAlgorithm.Strategy.DE_BEST_1_BIN);
+        DE deLogging = new DE(DE.Strategy.DE_BEST_1_BIN);
         jDElscop jDElscopLog = new jDElscop();
         TLBOAlgorithm TLBOLog = new TLBOAlgorithm();
         

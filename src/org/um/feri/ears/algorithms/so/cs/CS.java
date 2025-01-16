@@ -102,7 +102,7 @@ public class CS extends NumberAlgorithm {
                     stepsize = RNG.nextDouble() * (nest.get(per1[i]).getValue(j) - (nest.get(per2[i]).getValue(j)));
                     newSolution[j] = nest.get(i).getValue(j) + stepsize;
                 }
-                task.problem.setFeasible(newSolution);
+                task.problem.makeFeasible(newSolution);
                 if (task.isStopCriterion())
                     break;
 
@@ -147,7 +147,7 @@ public class CS extends NumberAlgorithm {
                 newSolution[j] = s.getValue(j) + stepsize * RNG.nextDouble();
             }
 
-            task.problem.setFeasible(newSolution);
+            task.problem.makeFeasible(newSolution);
             if (task.isStopCriterion())
                 break;
 
@@ -163,7 +163,7 @@ public class CS extends NumberAlgorithm {
         nest = new ArrayList<>();
 
         for (int i = 0; i < popSize; i++) {
-            nest.add(task.getRandomEvaluatedSolution());
+            nest.add(task.generateRandomEvaluatedSolution());
             if (task.isStopCriterion())
                 break;
         }

@@ -18,13 +18,23 @@ class RFOA(popSize: Int = 10) : NumberAlgorithm() {
     @AlgorithmParameter(name = "population size")
     private var popSize = 0
 
-    private lateinit var foxes: ArrayList<NumberSolution<Double>> // population
-    private lateinit var best: NumberSolution<Double> // best global solution
+    private lateinit var foxes: ArrayList<NumberSolution<Double>>
+    private lateinit var best: NumberSolution<Double>
 
     init {
         this.popSize = popSize
-        ai = AlgorithmInfo("RFOA", "Red Fox Optimization Algorithm", "Dawid Połap, Marcin Woźniak")
         au = Author("Zan", "zan.bedrac@student.um.si")
+        ai = AlgorithmInfo(
+            "RFOA", "Red Fox Optimization Algorithm",
+            "@article{polap2017red,"
+                    + "  title={Red fox optimization algorithm},"
+                    + "  author={Połap, Dawid and Woźniak, Marcin},"
+                    + "  journal={Expert Systems with Applications},"
+                    + "  volume={96},"
+                    + "  pages={1--13},"
+                    + "  year={2018},"
+                    + "  publisher={Elsevier}}"
+        )
     }
 
     @Throws(StopCriterionException::class)
@@ -50,7 +60,7 @@ class RFOA(popSize: Int = 10) : NumberAlgorithm() {
         foxes = ArrayList(popSize)
 
         for (i in 0 until popSize) {
-            val fox = task.getRandomEvaluatedSolution()
+            val fox = task.generateRandomEvaluatedSolution()
             foxes.add(fox)
             updateBestFox(fox)
             if (task.isStopCriterion()) return
@@ -66,15 +76,15 @@ class RFOA(popSize: Int = 10) : NumberAlgorithm() {
 
         for (i in fromIndex until popSize) {
             val center = calculateHabitatCenter()
-            val κ = RNG.nextDouble()
+            val kappa = RNG.nextDouble()
 
             for (d in 0 until task.problem.numberOfDimensions) {
                 if (task.isStopCriterion()) return
 
                 val (lower, upper) = task.problem.getLowerLimit()[d] to task.problem.getUpperLimit()[d]
-                val newValue = if (κ >= 0.45) RNG.nextDouble(lower, upper) else κ * center[d]
+                val newValue = if (kappa >= 0.45) RNG.nextDouble(lower, upper) else kappa * center[d]
 
-                val solution = task.problem.setFeasible(newValue, d)
+                val solution = task.problem.makeFeasible(newValue, d)
                 foxes[i].setValue(d, solution)
             }
             if(task.isStopCriterion()) return
@@ -90,15 +100,15 @@ class RFOA(popSize: Int = 10) : NumberAlgorithm() {
         val bestFox = best.copy()
 
         for (i in 0 until popSize) {
-            val α = RNG.nextDouble(0.0, SolutionUtils.calculateEuclideanDistance(foxes[i], bestFox))
+            val alpha = RNG.nextDouble(0.0, SolutionUtils.calculateEuclideanDistance(foxes[i], bestFox))
 
             for (d in 0 until task.problem.numberOfDimensions) {
                 if (task.isStopCriterion()) return
 
                 val direction = if (bestFox.getValue(d) - foxes[i].getValue(d) < 0) -1.0 else 1.0
-                val newValue = foxes[i].getValue(d) + α * direction
+                val newValue = foxes[i].getValue(d) + alpha * direction
 
-                val solution = task.problem.setFeasible(newValue, d)
+                val solution = task.problem.makeFeasible(newValue, d)
                 foxes[i].setValue(d, solution)
             }
 
@@ -114,8 +124,8 @@ class RFOA(popSize: Int = 10) : NumberAlgorithm() {
      *
      * For each fox:
      * - Randomly select a fox from the population with a probability of 25 %.
-     * - Generate a random angle φ (max. 360 ° -> 2π) for each dimension.
-     * - Calculate the radius r using the formula: r = a * sin(φ) / φ.
+     * - Generate a random angle phi (max. 360 -> 2pi) for each dimension.
+     * - Calculate the radius r using the formula: r = a * sin(phi) / phi.
      */
     private fun localHabitat() {
         var a = RNG.nextDouble(0.0, 0.2)
@@ -123,21 +133,21 @@ class RFOA(popSize: Int = 10) : NumberAlgorithm() {
         for (i in foxes.indices) {
             if (RNG.nextDouble() <= 0.75) continue
 
-            val φ = DoubleArray(task.problem.numberOfDimensions) { RNG.nextDouble(0.0, 2 * Math.PI) }
-            val r = if (φ[0] != 0.0) a * sin(φ[0]) / φ[0] else RNG.nextDouble()
+            val phi = DoubleArray(task.problem.numberOfDimensions) { RNG.nextDouble(0.0, 2 * Math.PI) }
+            val r = if (phi[0] != 0.0) a * sin(phi[0]) / phi[0] else RNG.nextDouble()
 
             for (d in 0 until task.problem.numberOfDimensions) {
                 if (task.isStopCriterion()) return
 
                 val (lower, upper) = task.problem.getLowerLimit()[d] to task.problem.getUpperLimit()[d]
-                val angle = if (d == 0) cos(φ[d]) else sin(φ[d])
+                val angle = if (d == 0) cos(phi[d]) else sin(phi[d])
 
                 for (k in 0 until d + 1) {
                     a = foxes[i].getValue(d) + a * r * angle
                     val b = foxes[i].getValue(d) - a * r * angle
 
                     val newValue = if (a in lower..upper) a else b
-                    val solution = task.problem.setFeasible(newValue, d)
+                    val solution = task.problem.makeFeasible(newValue, d)
                     foxes[i].setValue(d, solution)
                 }
             }

@@ -1,4 +1,4 @@
-package org.um.feri.ears.algorithms.so.SGC;
+package org.um.feri.ears.algorithms.so.sgc;
 
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
@@ -44,7 +44,7 @@ public class StochasticGradientDescent extends NumberAlgorithm {
     public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
 
-        currentSolution = task.getRandomEvaluatedSolution();
+        currentSolution = task.generateRandomEvaluatedSolution();
 
         while (!task.isStopCriterion()) {
             ArrayList<Double> variables = currentSolution.getVariables();

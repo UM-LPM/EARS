@@ -57,7 +57,7 @@ public abstract class MOBenchmark<N extends Number> extends Benchmark<ParetoSolu
 
     protected abstract void addTask(StopCriterion stopCriterion, int maxEvaluations, long allowedTime, int maxIterations, NumberProblem<N> problem);
 
-    protected IndicatorName getRandomIndicator() {
+    protected IndicatorName selectRandomIndicator() {
         if (indicatorWeights != null) {
             double rand = RNG.nextDouble();
             for (int i = 0; i < indicatorWeights.length; i++) {
@@ -84,7 +84,7 @@ public abstract class MOBenchmark<N extends Number> extends Benchmark<ParetoSolu
                         first = results.get(i);
                         for (int j = i + 1; j < results.size(); j++) {
                             second = results.get(j);
-                            indicatorName = getRandomIndicator();
+                            indicatorName = selectRandomIndicator();
                             qi = IndicatorFactory.createIndicator(indicatorName, t.problem.getNumberOfObjectives(), t.problem.getReferenceSetFileName());
 
                             try {

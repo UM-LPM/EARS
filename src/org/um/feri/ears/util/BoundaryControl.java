@@ -1,6 +1,5 @@
 package org.um.feri.ears.util;
 
-import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.unconstrained.Rastrigin;
 import org.um.feri.ears.util.random.RNG;
@@ -41,7 +40,7 @@ public class BoundaryControl {
         System.out.println("Solution tests:");
         Rastrigin rastrigin = new Rastrigin(2);
 
-        NumberSolution<Double> solution = rastrigin.getRandomSolution();
+        NumberSolution<Double> solution = rastrigin.generateRandomSolution();
 
         solution.getVariables().set(0, 6.5);
         solution.getVariables().set(1, -6.5);

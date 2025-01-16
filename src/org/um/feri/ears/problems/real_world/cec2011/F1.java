@@ -41,7 +41,7 @@ public class F1 extends DoubleProblem {
     }
 
     @Override
-    public double[] getRandomVariables() {
+    public double[] generateRandomVariables() {
         //initialization range=[0,6.35]
         double[] var = new double[numberOfDimensions];
         for (int j = 0; j < numberOfDimensions; j++) {
@@ -51,8 +51,8 @@ public class F1 extends DoubleProblem {
     }
 
     @Override
-    public NumberSolution<Double> getRandomEvaluatedSolution() {
-        double[] var = getRandomVariables();
+    public NumberSolution<Double> generateRandomEvaluatedSolution() {
+        double[] var = generateRandomVariables();
         return new NumberSolution<>(Util.toDoubleArrayList(var), eval(var));
     }
 }

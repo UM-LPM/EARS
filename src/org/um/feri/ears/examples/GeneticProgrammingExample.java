@@ -65,7 +65,7 @@ public class GeneticProgrammingExample {
 
         List<ProgramSolution> programSolutions = new ArrayList<>();
         for (int i = 0; i < 300; i++){
-            programSolutions.add(sgp2.getRandomSolution());
+            programSolutions.add(sgp2.generateRandomSolution());
         }
 
         sgp2.bulkEvaluate(programSolutions);
@@ -277,7 +277,7 @@ public class GeneticProgrammingExample {
         long startTime = System.currentTimeMillis();
         List<ProgramSolution> programSolutions = new ArrayList<>();
         for (int i = 0; i < 30; i++){
-            programSolutions.add(sgp2.getRandomSolution());
+            programSolutions.add(sgp2.generateRandomSolution());
         }
 
         sgp2.bulkEvaluate(programSolutions);
@@ -322,7 +322,7 @@ public class GeneticProgrammingExample {
         SymbolicRegressionProblem sgp2 = new SymbolicRegressionProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, evalData, 3, 8, 8, 200, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
                 new GPOperator[]{}, new GPRandomProgramSolution());
 
-        ProgramSolution programSolution = sgp2.getRandomSolution();
+        ProgramSolution programSolution = sgp2.generateRandomSolution();
         sgp2.evaluate(programSolution);
         System.out.println(programSolution);
         System.out.println(programSolution.getEval());
@@ -392,7 +392,7 @@ public class GeneticProgrammingExample {
         UnityBTProblem sgp2 = new UnityBTProblem(baseFunctionNodeTypes, baseTerminalNodeTypes, 3, 8, 8, maxNumOfNodes, new FeasibilityGPOperator[]{ new GPTreeExpansionOperator(), new GPDepthBasedTreePruningOperator()},
                 new GPOperator[]{}, new GPRandomProgramSolution());
 
-        ProgramSolution programSolution = sgp2.getRandomSolution();
+        ProgramSolution programSolution = sgp2.generateRandomSolution();
 
         programSolution.getTree().displayTree("test_operator1", true);
 

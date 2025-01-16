@@ -110,7 +110,7 @@ public class BFO extends NumberAlgorithm {
             rootProduct += Math.pow(di[i], 2);
         }
         for (int i = 0; i < xn.length; i++) {
-            xn[i] = task.problem.setFeasible(cb[i] + b.c * (di[i] / Math.sqrt(rootProduct)), i);
+            xn[i] = task.problem.makeFeasible(cb[i] + b.c * (di[i] / Math.sqrt(rootProduct)), i);
         }
 
         NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(xn));
@@ -129,7 +129,7 @@ public class BFO extends NumberAlgorithm {
             while (m < Ns) {
                 m++;
                 for (int i = 0; i < xn.length; i++) {
-                    xn[i] = task.problem.setFeasible(xn[i] + bx.c * (di[i] / Math.sqrt(rootProduct)), i);
+                    xn[i] = task.problem.makeFeasible(xn[i] + bx.c * (di[i] / Math.sqrt(rootProduct)), i);
                 }
 
                 newSolution = new NumberSolution<>(Util.toDoubleArrayList(xn));

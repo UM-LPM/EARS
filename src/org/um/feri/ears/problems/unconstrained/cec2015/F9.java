@@ -10,6 +10,6 @@ public class F9 extends CEC2015 {
 
     @Override
     public double eval(double[] x) {
-        return Functions.escaffer6_func(x, numberOfDimensions, OShift, M, 1, 1) + 100.0 * funcNum;
+        return Functions.escaffer6_func(x, numberOfDimensions, oShift, M, 1, 1) + 100.0 * funcNum;
     }
 }

@@ -92,7 +92,7 @@ public class DEMO<N extends Number, P extends NumberProblem<N>> extends MOAlgori
         for (int i = 0; i < populationSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
+            newSolution = new NumberSolution<N>(task.generateRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             population.add(newSolution);
         }

@@ -10,6 +10,6 @@ public class F8 extends CEC2015 {
 
     @Override
     public double eval(double[] x) {
-        return Functions.grie_rosen_func(x, numberOfDimensions, OShift, M, 1, 1) + 100.0 * funcNum;
+        return Functions.grie_rosen_func(x, numberOfDimensions, oShift, M, 1, 1) + 100.0 * funcNum;
     }
 }

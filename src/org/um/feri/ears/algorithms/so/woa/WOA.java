@@ -126,7 +126,7 @@ public class WOA extends NumberAlgorithm {
                     }
                 }
 
-                task.problem.setFeasible(newPosition);
+                task.problem.makeFeasible(newPosition);
 
                 if (task.isStopCriterion())
                     break;
@@ -153,7 +153,7 @@ public class WOA extends NumberAlgorithm {
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population.add(task.getRandomEvaluatedSolution());
+            population.add(task.generateRandomEvaluatedSolution());
         }
     }
 

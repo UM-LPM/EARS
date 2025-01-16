@@ -62,7 +62,7 @@ public abstract class Problem<S extends Solution> implements Serializable {
      */
     public abstract boolean isFeasible(S solution);
 
-    public abstract S getRandomSolution();
+    public abstract S generateRandomSolution();
 
     public boolean isFirstBetter(S solution1, S solution2)  {
         return Comparator.LESS == solutionDominanceComparator.compare(solution1,solution2);
@@ -88,8 +88,8 @@ public abstract class Problem<S extends Solution> implements Serializable {
      *
      * @return a random evaluated solution.
      */
-    public S getRandomEvaluatedSolution() {
-        S solution = getRandomSolution();
+    public S generateRandomEvaluatedSolution() {
+        S solution = generateRandomSolution();
         evaluate(solution);
         return solution;
     }

@@ -57,7 +57,7 @@ public class ES1p1sAlgorithm extends NumberAlgorithm {
         resetToDefaultsBeforeNewRun(); //usually no need for this call
         this.task = task;
         NumberSolution<Double> ii;
-        one = task.getRandomEvaluatedSolution();
+        one = task.generateRandomEvaluatedSolution();
         int everyK = 0; //recalculate variance
         double succ = 0;
         double[] oneplus;
@@ -90,7 +90,7 @@ public class ES1p1sAlgorithm extends NumberAlgorithm {
 
     private void mutate(double[] oneplus, double varianceOne) {
         for (int i = 0; i < oneplus.length; i++) {
-            oneplus[i] = task.problem.setFeasible(oneplus[i] + getGaussian(0, varianceOne), i);
+            oneplus[i] = task.problem.makeFeasible(oneplus[i] + getGaussian(0, varianceOne), i);
         }
 
     }

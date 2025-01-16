@@ -1,4 +1,4 @@
-package org.um.feri.ears.algorithms.so.lshade;
+package org.um.feri.ears.algorithms.so.de.lshade;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.um.feri.ears.algorithms.NumberAlgorithm;
@@ -331,12 +331,12 @@ public class LSHADE extends NumberAlgorithm {
     private void initPopulation() throws StopCriterionException {
         population = new NumberSolution[popSize];
         offspringPopulation = new NumberSolution[popSize];
-        best = task.getRandomEvaluatedSolution();
+        best = task.generateRandomEvaluatedSolution();
         population[0] = new NumberSolution<>(best);
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population[i] = task.getRandomEvaluatedSolution();
+            population[i] = task.generateRandomEvaluatedSolution();
             if (task.problem.isFirstBetter(population[i], best)) {
                 best = new NumberSolution<>(population[i]);
             }

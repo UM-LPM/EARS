@@ -13,7 +13,7 @@ public abstract class CombinatorialProblem extends NumberProblem<Integer> {
     }
 
     @Override
-    public NumberSolution<Integer> getRandomSolution() {
+    public NumberSolution<Integer> generateRandomSolution() {
 
         List<Integer> var = new ArrayList<>(numberOfDimensions);
 
