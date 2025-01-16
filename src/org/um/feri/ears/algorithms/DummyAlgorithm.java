@@ -70,6 +70,10 @@ public class DummyAlgorithm extends NumberAlgorithm {
                                 line = br.readLine();
                                 continue;
                             }
+                            if(line.isBlank())
+                                break;
+
+                            line = line.replace(",", ".");
                             resultArray[index] = Double.parseDouble(line);
                             line = br.readLine();
                             index++;
@@ -81,6 +85,7 @@ public class DummyAlgorithm extends NumberAlgorithm {
                         results.put(problemName.toLowerCase(), resultArray);
                         positions.put(problemName.toLowerCase(), 0);
                     } catch (Exception e) {
+                        System.out.println("Error in file: " + file.getAbsolutePath() + " " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
