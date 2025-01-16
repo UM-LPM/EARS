@@ -86,27 +86,34 @@ public class TournamentResults {
         allGames.add(newGame);
     }
 
-    public void displayResults(boolean showRatingCharts) {
+    public void displayResults(boolean displayAdvancedStats, boolean displayRatingCharts) {
 
         players.sort(new RatingComparator(RatingType.TRUE_SKILL_ONE_ON_ONE));
-        System.out.println("TrueSkill One-On-One rating:");
-        for (Player p : players) System.out.println(p.getId() + " - " + p.getRating(RatingType.TRUE_SKILL_ONE_ON_ONE));
-        if (showRatingCharts)
+        if(displayAdvancedStats) {
+            System.out.println("TrueSkill One-On-One rating:");
+            for (Player p : players)
+                System.out.println(p.getId() + " - " + p.getRating(RatingType.TRUE_SKILL_ONE_ON_ONE));
+        }
+        if (displayRatingCharts)
             RatingIntervalPlot.displayChart(players, RatingType.TRUE_SKILL_ONE_ON_ONE, "TrueSkill One-On-One");
 
         players.sort(new RatingComparator(RatingType.TRUE_SKILL_FREE_FOR_ALL));
-        System.out.println("\nTrueSkill Free-For-All rating:");
-        for (Player p : players)
-            System.out.println(p.getId() + " - " + p.getRating(RatingType.TRUE_SKILL_FREE_FOR_ALL));
-        if (showRatingCharts)
+        if(displayAdvancedStats) {
+            System.out.println("\nTrueSkill Free-For-All rating:");
+            for (Player p : players)
+                System.out.println(p.getId() + " - " + p.getRating(RatingType.TRUE_SKILL_FREE_FOR_ALL));
+        }
+        if (displayRatingCharts)
             RatingIntervalPlot.displayChart(players, RatingType.TRUE_SKILL_FREE_FOR_ALL, "TrueSkill Free-For-All");
 
         players.sort(new RatingComparator(RatingType.GLICKO2));
-        System.out.println("\nGlicko2 rating:");
-        for (Player p : players) System.out.println(p.getId() + " - " + p.getRating(RatingType.GLICKO2));
-        System.out.println("\nGame results:");
-        for (Player p : players) System.out.println(p);
-        if (showRatingCharts)
+        if(displayAdvancedStats) {
+            System.out.println("\nGlicko2 rating:");
+            for (Player p : players) System.out.println(p.getId() + " - " + p.getRating(RatingType.GLICKO2));
+            System.out.println("\nGame results:");
+            for (Player p : players) System.out.println(p);
+        }
+        if (displayRatingCharts)
             RatingIntervalPlot.displayChart(players, RatingType.GLICKO2, "Rating Interval");
     }
 
