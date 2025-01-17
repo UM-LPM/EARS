@@ -9,11 +9,13 @@ import java.util.List;
 
 public class GPAlgorithmConfigurationRunStats implements Serializable {
     protected ArrayList<GPAlgorithmRunStats> gpAlgorithmRunStats;
+    protected String configurationName;
 
     protected List<GPProgramSolutionSimple> masterTournamentGraphData;
 
-    public GPAlgorithmConfigurationRunStats() {
+    public GPAlgorithmConfigurationRunStats(String configurationName) {
         this.gpAlgorithmRunStats = new ArrayList<>();
+        this.configurationName = configurationName;
     }
 
     public ArrayList<GPAlgorithmRunStats> getGpAlgorithmRunStats() {
@@ -38,5 +40,13 @@ public class GPAlgorithmConfigurationRunStats implements Serializable {
 
     public void setMasterTournamentGraphData(List<GPProgramSolutionSimple> masterTournamentGraphData) {
         this.masterTournamentGraphData = masterTournamentGraphData;
+    }
+
+    public String getConfigurationName() {
+        return configurationName;
+    }
+
+    public void setConfigurationName(String configurationName) {
+        this.configurationName = configurationName;
     }
 }

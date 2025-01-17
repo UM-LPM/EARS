@@ -26,6 +26,7 @@ public class ProgramSolution extends Solution {
     protected boolean isDirty; // Flag to indicate if the solution has been modified (GPOperators, etc.)
 
     protected int changesCount; // Number of changes made to the solution
+    protected String configurationName;
 
     public ProgramSolution(int numberOfObjectives) {
         super(numberOfObjectives);
@@ -43,6 +44,17 @@ public class ProgramSolution extends Solution {
         NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone(); // TODO Remove this when moved to FinalIndividualFitness
         isDirty = s.isDirty;
         changesCount = s.changesCount;
+    }
+
+    public ProgramSolution(ProgramSolution s, String configurationName) {
+        super(s);
+        tree = s.tree.clone();
+        parents = new ArrayList<>();
+        Fitness = new FinalIndividualFitness(s.Fitness, true);
+        NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone(); // TODO Remove this when moved to FinalIndividualFitness
+        isDirty = s.isDirty;
+        changesCount = s.changesCount;
+        this.configurationName = configurationName;
     }
 
     @Override
@@ -216,5 +228,13 @@ public class ProgramSolution extends Solution {
 
     public int getChangesCount(){
         return changesCount;
+    }
+
+    public String getConfigurationName(){
+        return this.configurationName;
+    }
+
+    public void setConfigurationName(String configurationName){
+        this.configurationName = configurationName;
     }
 }

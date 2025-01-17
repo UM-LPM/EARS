@@ -238,7 +238,7 @@ public class GPAlgorithmExecutor implements Serializable {
                     RNG.setSeed(configuration.InitialSeed);
                 }
 
-                GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats = new GPAlgorithmConfigurationRunStats();
+                GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats = new GPAlgorithmConfigurationRunStats(configuration.Configurations.get(i).Name);
                 multiConfigurationsProgressData.addMultiConfigurationProgressData(new GPAlgorithmMultiRunProgressData());
 
                 for (int j = 0; j < configuration.Configurations.get(i).NumberOfReruns; j++) {
@@ -261,7 +261,7 @@ public class GPAlgorithmExecutor implements Serializable {
                executeFinalTournaments();
 
                multiConfigurationsProgressData.saveProgressData();
-                GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
+               GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
 
                // Save current GPAlgorithmExecutor state to file
                serializeGPAlgorithmExecutorState(this, "GPAlgorithmExecutor.ser");
@@ -300,7 +300,7 @@ public class GPAlgorithmExecutor implements Serializable {
             // 2.1 Prepare master tournament individuals
             List<ProgramSolution> masterTournamentIndividuals = new ArrayList<>();
             for (int j = 0; j < gpAlgorithmConfigurationsRunStats.get(i).getGpAlgorithmRunStats().size(); j++) {
-                masterTournamentIndividuals.add(new ProgramSolution(gpAlgorithmConfigurationsRunStats.get(i).getGpAlgorithmRunStats().get(j).getBestRunSolution()));
+                masterTournamentIndividuals.add(new ProgramSolution(gpAlgorithmConfigurationsRunStats.get(i).getGpAlgorithmRunStats().get(j).getBestRunSolution(), gpAlgorithmConfigurationsRunStats.get(i).getConfigurationName()));
             }
 
             // Restart masterTournamentIndividuals ids
@@ -327,8 +327,13 @@ public class GPAlgorithmExecutor implements Serializable {
         // 3.1 Prepare final master tournament individuals (all best solutions from all configurations and all runs)
         for (GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats : gpAlgorithmConfigurationsRunStats) {
             for (GPAlgorithmRunStats gpAlgorithmRunStats : gpAlgorithmConfigurationRunStats.getGpAlgorithmRunStats()) {
-                finalMasterTournamentIndividuals.add(new ProgramSolution(gpAlgorithmRunStats.getBestRunSolution()));
+                finalMasterTournamentIndividuals.add(new ProgramSolution(gpAlgorithmRunStats.getBestRunSolution(), gpAlgorithmConfigurationRunStats.getConfigurationName()));
             }
+        }
+
+        // Restart finalMasterTournamentIndividuals ids
+        for (int j = 0; j < finalMasterTournamentIndividuals.size(); j++) {
+            finalMasterTournamentIndividuals.get(j).setID(j);
         }
 
         // 3.2 Execute final master tournament
@@ -336,8 +341,6 @@ public class GPAlgorithmExecutor implements Serializable {
 
         // 3.3 Save final master tournament results
         multiConfigurationsProgressData.setFinalMasterTournamentGraphData(finalMasterTournamentIndividuals);
-
-
     }
 
     /**

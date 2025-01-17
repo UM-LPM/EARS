@@ -9,18 +9,21 @@ import java.util.HashMap;
 
 public class GPProgramSolutionSimple implements Serializable {
 
-    private long individualId;
-    private double[] objectives;
-    private FinalIndividualFitness finalIndividualFitness;
-    private int changesCount; // Number of changes made to the solution
-    private int treeSize;
-    private int treeDepth;
-    private int terminalNodes;
-    private int functionNodes;
+    public static final long serialVersionUID = 4802911306124645524L;
 
-    private String treeDotString;
+    protected long individualId;
+    protected double[] objectives;
+    protected FinalIndividualFitness finalIndividualFitness;
+    protected int changesCount; // Number of changes made to the solution
+    protected int treeSize;
+    protected int treeDepth;
+    protected int terminalNodes;
+    protected int functionNodes;
 
-    private HashMap<String, Integer> nodeCounts; // { "Sequencer": 24, "Selector": 12, "MoveForward": 5, ... }
+    protected String treeDotString;
+
+    protected HashMap<String, Integer> nodeCounts; // { "Sequencer": 24, "Selector": 12, "MoveForward": 5, ... }
+    protected String configurationName;
 
     public GPProgramSolutionSimple(ProgramSolution programSolution, boolean setIndividualMatchResults) {
         this.individualId = programSolution.getID();
@@ -35,6 +38,7 @@ public class GPProgramSolutionSimple implements Serializable {
         //this.treeDotString = programSolution.getTree().toDotString(); // TODO Is this required ?
         this.treeDotString = ""; // TODO Remove this
         this.nodeCounts = programSolution.getTree().getNodeCounts();
+        this.configurationName = programSolution.getConfigurationName();
     }
 
     public GPProgramSolutionSimple(long individualId, double[] objectives, FinalIndividualFitness finalIndividualFitness, int changesCount, Tree tree) {
@@ -87,6 +91,14 @@ public class GPProgramSolutionSimple implements Serializable {
 
     public HashMap<String, Integer> getNodeCounts() {
         return nodeCounts;
+    }
+
+    public String getConfigurationName() {
+        return configurationName;
+    }
+
+    public void setConfigurationName(String configurationName) {
+        this.configurationName = configurationName;
     }
 
 }
