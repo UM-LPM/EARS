@@ -150,7 +150,7 @@ import org.um.feri.ears.algorithms.so.abc.ABC;
 import org.um.feri.ears.algorithms.so.gwo.GWO;
 import org.um.feri.ears.algorithms.so.de.jade.JADE;
 import org.um.feri.ears.algorithms.so.random.RandomSearch;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.tlbo.TLBO;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
 import org.um.feri.ears.util.random.RNG;

@@ -7,7 +7,7 @@ import org.um.feri.ears.algorithms.so.de.jade.JADE;
 import org.um.feri.ears.algorithms.so.pso.PSO;
 import org.um.feri.ears.algorithms.so.random.RandomSearch;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.tlbo.TLBO;
 import org.um.feri.ears.benchmark.Benchmark;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class BenchmarkEEExecute {
     	players.add(new RandomSearch());
     	players.add(new RandomWalkAMAlgorithm());
     	players.add(new ES1p1sAlgorithm());  
-    	players.add(new TLBOAlgorithm());  
+    	players.add(new TLBO());
     	players.add(new JADE());
     	players.add(new PSO());
     	for (DE.Strategy strategy: DE.Strategy.values())

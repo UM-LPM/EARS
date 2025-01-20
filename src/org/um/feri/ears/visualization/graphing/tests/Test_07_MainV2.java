@@ -3,7 +3,7 @@ package org.um.feri.ears.visualization.graphing.tests;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomWalkAMAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomSearch;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.tlbo.TLBO;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkRunnerBestAlgSettings;
 import org.um.feri.ears.benchmark.RPUOed2Benchmark;
@@ -24,7 +24,7 @@ public class Test_07_MainV2 {
         rbs.addAlgorithm(new RandomSearch());
         rbs.addAlgorithm(new RandomWalkAMAlgorithm())  ;
         rbs.addAlgorithm(new ES1p1sAlgorithm());
-        rbs.addAlgorithm(new TLBOAlgorithm());
+        rbs.addAlgorithm(new TLBO());
         rbs.run(1);
         System.out.println(rbs);
         

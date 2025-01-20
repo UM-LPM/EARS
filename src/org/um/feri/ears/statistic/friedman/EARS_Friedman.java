@@ -6,7 +6,7 @@ import java.util.Vector;
 import org.um.feri.ears.algorithms.so.de.DE;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
 import org.um.feri.ears.algorithms.so.random.RandomSearch;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.tlbo.TLBO;
 import org.um.feri.ears.benchmark.BenchmarkResults;
 import org.um.feri.ears.benchmark.CEC2010Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkRunner;
@@ -18,7 +18,7 @@ public class EARS_Friedman {
         BenchmarkRunner m = new BenchmarkRunner(false, false, b2) ;
         m.addAlgorithm(new RandomSearch()); // RWSi
         //m.addAlgorithm(new BeeColonyAlgorithm());  // ABC
-        m.addAlgorithm(new TLBOAlgorithm());       // TLBO
+        m.addAlgorithm(new TLBO());       // TLBO
         m.addAlgorithm(new ES1p1sAlgorithm()); // ES
 		for (DE.Strategy strategy : DE.Strategy.values())
 			m.addAlgorithm(new DE(strategy, 20));

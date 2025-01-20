@@ -5,7 +5,7 @@ import org.um.feri.ears.algorithms.so.abc.ABC;
 import org.um.feri.ears.algorithms.so.gwo.GWO;
 import org.um.feri.ears.algorithms.so.de.jade.JADE;
 import org.um.feri.ears.algorithms.so.random.RandomSearch;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.tlbo.TLBO;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
 
@@ -20,7 +20,7 @@ public class SOBenchmarkExample {
         ArrayList<NumberAlgorithm> algorithms = new ArrayList<NumberAlgorithm>();
         algorithms.add(new ABC());
         algorithms.add(new GWO());
-        algorithms.add(new TLBOAlgorithm());
+        algorithms.add(new TLBO());
         algorithms.add(new RandomSearch());
         algorithms.add(new JADE());
 
