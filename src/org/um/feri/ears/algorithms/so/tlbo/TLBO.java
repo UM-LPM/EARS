@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TLBOAlgorithm extends NumberAlgorithm {
+public class TLBO extends NumberAlgorithm {
 
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -33,15 +33,15 @@ public class TLBOAlgorithm extends NumberAlgorithm {
 
     private int keep = 0; // copy best from ex generation
 
-    public TLBOAlgorithm() {
+    public TLBO() {
         this(20);
     }
 
-    public TLBOAlgorithm(int popSize) {
+    public TLBO(int popSize) {
         this(0, popSize);
     }
 
-    public TLBOAlgorithm(int keep, int popSize) {
+    public TLBO(int keep, int popSize) {
         this.keep = keep;
         this.popSize = popSize;
         au = new Author("matej", "matej.crepinsek@um.si");
@@ -254,7 +254,7 @@ public class TLBOAlgorithm extends NumberAlgorithm {
             for (int k = 0; k < keep; k++)
                 population[back + k] = keepList.get(k);
             keepList.clear();
-            if (TLBOAlgorithm.removeDuplicates) {
+            if (TLBO.removeDuplicates) {
                 clearDuplicates(); // stop condition inside
             }
             sortByFirstBetterCondition();
@@ -275,7 +275,7 @@ public class TLBOAlgorithm extends NumberAlgorithm {
                     {8, 100}};
             int counter = 0;
             for (int i = 0; (i < paramCombinations.length) && (counter < maxCombinations); i++) {
-                alternative.add(new TLBOAlgorithm(paramCombinations[i][0], paramCombinations[i][1]));
+                alternative.add(new TLBO(paramCombinations[i][0], paramCombinations[i][1]));
                 counter++;
 
             }
