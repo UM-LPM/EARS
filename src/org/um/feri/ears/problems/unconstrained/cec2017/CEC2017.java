@@ -1,15 +1,14 @@
 package org.um.feri.ears.problems.unconstrained.cec2017;
 
 import org.um.feri.ears.problems.DoubleProblem;
-import org.um.feri.ears.problems.unconstrained.cec2015.input_data.DataReader;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Scanner;
+
+import static org.um.feri.ears.problems.unconstrained.cec2017.CECInputDataGenerator.*;
 
 
 /**
@@ -37,10 +36,10 @@ public abstract class CEC2017 extends DoubleProblem {
 
 
     /**
-     * Expensive Test functions are only defined for D=10, 30.
-     *
+     * CEC2017 base class constructor
+     * @param name    Name of the function
      * @param d       number of dimensions
-     * @param funcNum Function number 1-15
+     * @param funcNum Function number 1-29
      */
     public CEC2017(String name, int d, int funcNum) {
         super("CEC2017" + name, d, 1, 1, 0);
@@ -54,21 +53,73 @@ public abstract class CEC2017 extends DoubleProblem {
         shortName = "F" + funcNum;
         compNum = 10;
 
-        lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -100.0));
-        upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 100.0));
+        lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
+        upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
 
-        if (!((d == 10) || (d == 30) || (d == 50) || (d == 100))) {
-            System.out.println("\nError: CEC 2017 test functions are only defined for D = 10, 30, 50, 100.");
+        if (!((d == 5) || (d == 10) || (d == 30) || (d == 50) || (d == 100))) {
+            System.out.println("\nError: CEC 2017 test functions are only defined for D = 5, 10, 30, 50, 100.");
+        }
+
+        if(d == 5 && (funcNum == 12 || funcNum == 13 || funcNum == 17 || funcNum == 29)) {
+            System.out.println("\nError: CEC 2017 test functions 12, 13, 17, and 29 are only defined for D = 10, 30, 50, 100.");
         }
 
         this.y = new double [numberOfDimensions];
         this.z = new double [numberOfDimensions];
 
+        //if input_data files are not available, generate it
+        //if (!((d == 5) || (d == 10) || (d == 30) || (d == 50) || (d == 100))) {
+        //    generateData();
+        //}
+
         loadData();
 
         decisionSpaceOptima[0] = oShift[0];
         objectiveSpaceOptima[0] = funcNum * 100;
+    }
+
+    private void generateData() {
+
+        if(numberOfDimensions > 100) {
+            if (funcNum <= 19)
+                oShift = new double [1][numberOfDimensions];
+            else
+                oShift = new double [compNum][numberOfDimensions];
+
+            for (int i = 0; i < oShift.length; i++) {
+                oShift[i] = generateShiftVector(numberOfDimensions, -80, 80);
+            }
+        }
+
+
+        if(funcNum >= 10 && funcNum <= 19)  {
+            shuffle = new int [1][numberOfDimensions];
+            shuffle[0] = generateShuffleArray(numberOfDimensions);
+        }
+        else if (funcNum == 28 || funcNum == 29) {
+            shuffle = new int [compNum][numberOfDimensions];
+            for (int i = 0; i < compNum; i++) {
+                shuffle[i] = generateShuffleArray(numberOfDimensions);
+            }
+        }
+
+        if (funcNum <= 19) {
+            rotation = new double [numberOfDimensions][numberOfDimensions];
+            rotation = generateRotationMatrix(numberOfDimensions, 1.0);
+        }
+        else {
+            rotation = new double [compNum * numberOfDimensions][numberOfDimensions];
+
+            for (int i = 0; i < compNum; i++) {
+
+                double[][] currentRotation = generateRotationMatrix(numberOfDimensions, 1.0);
+
+                for (int row = 0; row < numberOfDimensions; row++) {
+                    rotation[i * numberOfDimensions + row] = currentRotation[row];
+                }
+            }
+        }
     }
 
     /**
@@ -176,18 +227,15 @@ public abstract class CEC2017 extends DoubleProblem {
      */
     private void loadShuffleData () {
 
-        // Try to populate the rotation matrix with rotation data file
         try {
             // Initialize shuffle matrix
             if      (funcNum >= 10 && funcNum <= 19) shuffle = new int [1][numberOfDimensions];
             else if (funcNum == 28 || funcNum == 29) shuffle = new int [compNum][numberOfDimensions];
 
-            File file = new File ("src/main/java/thesis/CEC2017/input_data/shuffle_data_" + funcNum + "_D" + numberOfDimensions + ".txt");
-
             String fn = "input_data/shuffle_data_" + funcNum + "_D" + numberOfDimensions + ".txt";
             InputStream dataFile = CEC2017.class.getResourceAsStream(fn);
             Scanner fileReader = new Scanner(dataFile);
-            // Fill rotation matrix with file data
+            // Fill shuffle matrix with file data
             for (int i = 0; i < shuffle.length; i++) {
                 for (int j = 0; j < shuffle[i].length; j++) {
                     shuffle[i][j] = fileReader.nextInt();
@@ -675,7 +723,7 @@ public abstract class CEC2017 extends DoubleProblem {
         temp2 *= s;
         temp2 += d * nx;
         temp = 0.0;
-        y = new double [nx]; // Need to reset y if it already gets used from a shift
+        y = new double [y.length]; // Need to reset y if it already gets used from a shift
         if (r_flag == 1) {
             rotateFunc(z, y, funcPos);
             for (int i = 0; i < nx; i++)

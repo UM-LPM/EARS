@@ -4,7 +4,7 @@ public class F5 extends CEC2017 {
 
     // Shifted and Rotated Schaffer F7 Function
     public F5(int d) {
-        super("F05", d, 1);
+        super("F05", d, 5);
     }
 
     @Override
