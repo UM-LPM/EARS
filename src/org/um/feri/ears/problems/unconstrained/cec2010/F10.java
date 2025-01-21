@@ -12,11 +12,12 @@ public class F10 extends CEC2010 {
 
         P = new int[numberOfDimensions];
         P = RNG.randomPermutation(numberOfDimensions);
-        OShift = new double[numberOfDimensions];
+        oShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {
-            OShift[i] = RNG.nextDouble(lowerLimit.get(i), upperLimit.get(i));
+            oShift[i] = RNG.nextDouble(lowerLimit.get(i), upperLimit.get(i));
         }
+        decisionSpaceOptima[0] = oShift;
 
         M = new double[m * m];
 
@@ -40,13 +41,13 @@ public class F10 extends CEC2010 {
         double[] s1;
 
         double[] p2 = getPermutatedIndices(x, P, from2, numberOfDimensions - from2);
-        double[] s2 = getPermutatedIndices(OShift, P, from2, numberOfDimensions - from2);
+        double[] s2 = getPermutatedIndices(oShift, P, from2, numberOfDimensions - from2);
 
         for (int k = 0; k < max; k++) {
             from = k * m;
             to = (k + 1) * m - 1;
             p1 = getPermutatedIndices(x, P, from, to - from);
-            s1 = getPermutatedIndices(OShift, P, from, to - from);
+            s1 = getPermutatedIndices(oShift, P, from, to - from);
             F += Functions.rastrigin_func(p1, to - from, s1, M, 1, 1);
         }
 

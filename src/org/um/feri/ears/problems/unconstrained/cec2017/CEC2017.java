@@ -58,11 +58,11 @@ public abstract class CEC2017 extends DoubleProblem {
 
 
         if (!((d == 5) || (d == 10) || (d == 30) || (d == 50) || (d == 100))) {
-            System.out.println("\nError: CEC 2017 test functions are only defined for D = 5, 10, 30, 50, 100.");
+            System.err.println("\nError: CEC 2017 test functions are only defined for D = 5, 10, 30, 50, 100.");
         }
 
         if(d == 5 && (funcNum == 12 || funcNum == 13 || funcNum == 17 || funcNum == 29)) {
-            System.out.println("\nError: CEC 2017 test functions 12, 13, 17, and 29 are only defined for D = 10, 30, 50, 100.");
+            System.err.println("\nError: CEC 2017 test functions 12, 13, 17, and 29 are only defined for D = 10, 30, 50, 100.");
         }
 
         this.y = new double [numberOfDimensions];
