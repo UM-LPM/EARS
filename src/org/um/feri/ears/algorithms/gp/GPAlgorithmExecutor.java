@@ -31,11 +31,14 @@ public class GPAlgorithmExecutor implements Serializable {
 
     public static final long serialVersionUID = -4197237531018661888L;
     public static GPAlgorithmExecutor Instance;
-    private GPAlgorithm gpAlgorithm;
-    private Configuration configuration;
+    protected GPAlgorithm gpAlgorithm;
+    protected Configuration configuration;
 
-    private GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData;
-    private ArrayList<GPAlgorithmConfigurationRunStats> gpAlgorithmConfigurationsRunStats;
+    protected int configurationIndex;
+    protected int runIndex;
+
+    protected GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData;
+    protected ArrayList<GPAlgorithmConfigurationRunStats> gpAlgorithmConfigurationsRunStats;
 
     // Constructors
     public GPAlgorithmExecutor(boolean createInstance) {
@@ -47,14 +50,8 @@ public class GPAlgorithmExecutor implements Serializable {
         }
 
         this.gpAlgorithmConfigurationsRunStats = new ArrayList<>();
-    }
-
-    public GPAlgorithmExecutor(GPAlgorithm gpAlgorithm) {
-        this.gpAlgorithm = gpAlgorithm;
-    }
-    public GPAlgorithmExecutor(GPAlgorithm gpAlgorithm, Configuration configuration) {
-        this.gpAlgorithm = gpAlgorithm;
-        this.configuration = configuration;
+        configurationIndex = 0;
+        runIndex = 0;
     }
 
     // Methods
@@ -224,36 +221,46 @@ public class GPAlgorithmExecutor implements Serializable {
             configuration = Configuration.deserializeFromFile(configurationFile);
         }
 
-        gpAlgorithmConfigurationsRunStats.clear();
-        multiConfigurationsProgressData = new GPAlgorithmMultiConfigurationsProgressData(configuration.MultiConfigurationPrograssDataFilePath);
-        try {
-            // Set initial seed
-            if(configuration.InitialSeed > 0){
-                RNG.setSeed(configuration.InitialSeed); // TODO Check if this is ok
-            }
+        if(configurationIndex ==  0 && runIndex == 0) {
+            gpAlgorithmConfigurationsRunStats.clear();
+            multiConfigurationsProgressData = new GPAlgorithmMultiConfigurationsProgressData(configuration.MultiConfigurationPrograssDataFilePath);
+        }
 
-            for (int i = 0; i < configuration.Configurations.size(); i++) {
+        try {
+            for (; configurationIndex < configuration.Configurations.size(); configurationIndex++) {
                 // Set initial seed
                 if(configuration.ResetSeedForEachConfiguration){
                     RNG.setSeed(configuration.InitialSeed);
                 }
 
-                GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats = new GPAlgorithmConfigurationRunStats(configuration.Configurations.get(i).Name);
-                multiConfigurationsProgressData.addMultiConfigurationProgressData(new GPAlgorithmMultiRunProgressData());
+                GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats;
 
-                for (int j = 0; j < configuration.Configurations.get(i).NumberOfReruns; j++) {
-                    multiConfigurationsProgressData.getMultiConfigurationProgressData().get(i).addMultiRunProgressData(new GPAlgorithmRunProgressData());
+                if(gpAlgorithmConfigurationsRunStats.size() == configurationIndex){
+                    gpAlgorithmConfigurationRunStats = new GPAlgorithmConfigurationRunStats(configuration.Configurations.get(configurationIndex).Name);
+                    gpAlgorithmConfigurationsRunStats.add(gpAlgorithmConfigurationRunStats);
+                    multiConfigurationsProgressData.addMultiConfigurationProgressData(new GPAlgorithmMultiRunProgressData());
 
-                    gpAlgorithm.execute(this, configuration.Configurations.get(i), saveGPAlgorithmStateFilename, multiConfigurationsProgressData);
+                    runIndex = 0;
+                }
+                else {
+                    gpAlgorithmConfigurationRunStats = gpAlgorithmConfigurationsRunStats.get(configurationIndex);
+                }
+
+                for (; runIndex < configuration.Configurations.get(configurationIndex).NumberOfReruns; ) {
+                    multiConfigurationsProgressData.getMultiConfigurationProgressData().get(configurationIndex).addMultiRunProgressData(new GPAlgorithmRunProgressData());
+
+                    gpAlgorithm.execute(this, configuration.Configurations.get(configurationIndex), saveGPAlgorithmStateFilename, multiConfigurationsProgressData);
                     gpAlgorithmConfigurationRunStats.addGpAlgorithmRunStats(gpAlgorithm.getStats());
 
+                    runIndex++;
+
                     // Save final GPAlgorithm run state to file for each configuration
-                    GPAlgorithm.serializeAlgorithmState(gpAlgorithm, i + "_" + j + "_RunConfigurationGPAlgorithm.ser" );
+                    GPAlgorithm.serializeAlgorithmState(gpAlgorithm, configurationIndex + "_" + runIndex + "_RunConfigurationGPAlgorithm.ser" );
 
                     // Save current GPAlgorithmExecutor state to file
                     serializeGPAlgorithmExecutorState(this, "GPAlgorithmExecutor.ser");
+
                 }
-                gpAlgorithmConfigurationsRunStats.add(gpAlgorithmConfigurationRunStats);
                 restartUnityInstances(false);
             }
 
@@ -453,6 +460,22 @@ public class GPAlgorithmExecutor implements Serializable {
 
     public void setMultiConfigurationsProgressData(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) {
         this.multiConfigurationsProgressData = multiConfigurationsProgressData;
+    }
+
+    public void setConfigurationIndex(int configurationIndex) {
+        this.configurationIndex = configurationIndex;
+    }
+
+    public int getConfigurationIndex() {
+        return configurationIndex;
+    }
+
+    public void setRunIndex(int runIndex) {
+        this.runIndex = runIndex;
+    }
+
+    public int getRunIndex() {
+        return runIndex;
     }
 
 }
