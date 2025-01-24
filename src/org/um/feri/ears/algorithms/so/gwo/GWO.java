@@ -53,7 +53,6 @@ public class GWO extends NumberAlgorithm {
             maxIt = (task.getMaxEvaluations() - popSize) / popSize;
         }
 
-
         while (!task.isStopCriterion()) {
             double a = 2.0 - task.getNumberOfIterations() * (2.0 / maxIt);
 
