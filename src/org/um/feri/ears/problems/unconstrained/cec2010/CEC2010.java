@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class CEC2010 extends DoubleProblem {
 
-    double[] oShift, M, y, z, x_bound;
+    double[] oShift, M, y, z, x_bound; //For M the Salomon’s random coordinate rotation technique is used
     int funcNum;
 
     int[] P;

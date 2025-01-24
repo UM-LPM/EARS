@@ -13,6 +13,10 @@ import org.um.feri.ears.util.Util;
 
 public class DummyAlgorithm extends NumberAlgorithm {
 
+    public enum FileFormat {
+        RESULT_PER_LINE, JSON, CEC_RESULTS_FORMAT
+    }
+
     HashMap<String, double[]> results;
     HashMap<String, EvaluationStorage.Evaluation[]> problemEvaluations;
     HashMap<String, ArrayList<EvaluationStorage.Evaluation>[]> problemEvaluationHistory; //stores the evaluation history for each problem and each run
@@ -20,19 +24,30 @@ public class DummyAlgorithm extends NumberAlgorithm {
     String algorithmName;
     String filesDir;
     String nameInFile;
-    public static boolean readFromJson = true;
+    FileFormat fileFormat;
 
-    static final int MAX_RESULTS_PER_FILE = 100; //this represents the number of results (lines) in a file. It should be set to the lowest possible number to improve memory management
+    static final int MAX_RUNS_PER_FILE = 100; //this represents the number of results (lines) in a file. It should be set to the lowest possible number to improve memory management
 
     public DummyAlgorithm(String algorithmName) {
-        this(algorithmName, algorithmName, "D:/Results/");
+        this(algorithmName, algorithmName, "D:/Results/", FileFormat.RESULT_PER_LINE);
     }
 
     public DummyAlgorithm(String algorithmName, String filesDir) {
-        this(algorithmName, algorithmName, filesDir);
+        this(algorithmName, algorithmName, filesDir, FileFormat.RESULT_PER_LINE);
     }
 
-    public DummyAlgorithm(String algorithmName, String nameInFile, String filesDir) {
+    public DummyAlgorithm(String algorithmName, String filesDir, FileFormat fileFormat) {
+        this(algorithmName, algorithmName, filesDir, fileFormat);
+    }
+
+    /**
+     * @param algorithmName name of the algorithm used in the results
+     * @param nameInFile name of the algorithm in the file
+     * @param filesDir directory where the results are stored
+     * @param fileFormat format of the results file
+     */
+    public DummyAlgorithm(String algorithmName, String nameInFile, String filesDir, FileFormat fileFormat) {
+        this.fileFormat = fileFormat;
         this.algorithmName = algorithmName;
         this.nameInFile = nameInFile;
         this.filesDir = filesDir;
@@ -41,8 +56,9 @@ public class DummyAlgorithm extends NumberAlgorithm {
         positions = new HashMap<>();
         problemEvaluations = new HashMap<>();
         problemEvaluationHistory = new HashMap<>();
-        if (!readFromJson)
-            fillResults(nameInFile); //TODO lazy load
+
+        if (fileFormat != FileFormat.JSON)
+            fillResults(nameInFile);
     }
 
     private void fillResults(String name) {
@@ -50,7 +66,7 @@ public class DummyAlgorithm extends NumberAlgorithm {
         File folder = new File(filesDir);
         File[] listOfFiles = folder.listFiles();
 
-        String problemName, fileName, value;
+        String problemName, fileName;
 
         assert listOfFiles != null;
         for (File file : listOfFiles) {
@@ -58,32 +74,80 @@ public class DummyAlgorithm extends NumberAlgorithm {
                 fileName = file.getName();
                 if (fileName.toLowerCase().indexOf(name.toLowerCase() + "_") == 0) {
                     problemName = fileName.substring(name.length() + 1, fileName.length() - 4);
-                    double[] resultArray = new double[MAX_RESULTS_PER_FILE];
+                    double[] resultArray;
                     int index = 0;
                     try (BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
                         String line = br.readLine();
 
-                        while (line != null) {
-                            //First line may contain metadata
-                            if (index == 0 && line.indexOf(';') > 0) {
-                                readAlgorithmInfo(line);
-                                line = br.readLine();
-                                continue;
-                            }
-                            if(line.isBlank())
-                                break;
+                        if(fileFormat == FileFormat.CEC_RESULTS_FORMAT) {
+                            int k = 0;
 
-                            line = line.replace(",", ".");
-                            resultArray[index] = Double.parseDouble(line);
-                            line = br.readLine();
-                            index++;
-                            if (index >= MAX_RESULTS_PER_FILE) {
-                                System.err.println("The file " + fileName + " has more than " + MAX_RESULTS_PER_FILE + " results. Skipping to end of file.");
-                                break;
+                            while (line != null) {
+                                if(line.isBlank())
+                                    break;
+
+                                String[] splitLine;
+                                if (line.contains(",")) {
+                                    splitLine = line.split(",");
+                                } else {
+                                    // Split by one or more whitespace characters
+                                    splitLine = line.split("\\s+");
+                                }
+
+                                index = 0;
+                                resultArray = new double[MAX_RUNS_PER_FILE];
+
+                                for (String s : splitLine) {
+
+                                    if(s.isBlank())
+                                        continue;
+
+                                    if (index >= MAX_RUNS_PER_FILE) {
+                                        System.err.println("The file " + fileName + " has more than " + MAX_RUNS_PER_FILE + " results. Skipping to end of file.");
+                                        break;
+                                    }
+
+                                    if (s.equalsIgnoreCase("inf")) {
+                                        resultArray[index++] = Double.POSITIVE_INFINITY;
+                                    } else if (s.equalsIgnoreCase("-inf")) {
+                                        resultArray[index++] = Double.NEGATIVE_INFINITY;
+                                    } else {
+                                        resultArray[index++] = Double.parseDouble(s);
+                                    }
+                                }
+
+                                String problemKey = problemName.toLowerCase() + "k" + k++;
+                                results.put(problemKey, resultArray);
+                                positions.put(problemKey, 0);
+
+                                line = br.readLine();
                             }
+
+                        } else if (fileFormat == FileFormat.RESULT_PER_LINE) {
+                            resultArray = new double[MAX_RUNS_PER_FILE];
+                            while (line != null) {
+                                //First line may contain metadata
+                                if (index == 0 && line.indexOf(';') > 0) {
+                                    readAlgorithmInfo(line);
+                                    line = br.readLine();
+                                    continue;
+                                }
+                                if(line.isBlank())
+                                    break;
+
+                                //line = line.replace(",", ".");
+                                resultArray[index] = Double.parseDouble(line);
+                                line = br.readLine();
+                                index++;
+                                if (index >= MAX_RUNS_PER_FILE) {
+                                    System.err.println("The file " + fileName + " has more than " + MAX_RUNS_PER_FILE + " results. Skipping to end of file.");
+                                    break;
+                                }
+                            }
+                            results.put(problemName.toLowerCase(), resultArray);
+                            positions.put(problemName.toLowerCase(), 0);
                         }
-                        results.put(problemName.toLowerCase(), resultArray);
-                        positions.put(problemName.toLowerCase(), 0);
+
                     } catch (Exception e) {
                         System.out.println("Error in file: " + file.getAbsolutePath() + " " + e.getMessage());
                         e.printStackTrace();
@@ -117,7 +181,7 @@ public class DummyAlgorithm extends NumberAlgorithm {
     @Override
     public DummySolution execute(Task task) {
 
-        if (readFromJson) {
+        if (fileFormat == FileFormat.JSON) {
             String key = task.getFileNameString() + task.getStopCriterionString();
 
             //load evaluations from file
