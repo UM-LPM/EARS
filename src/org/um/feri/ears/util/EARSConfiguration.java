@@ -21,6 +21,10 @@ public class EARSConfiguration implements Serializable {
     public int MaxTreeSize;
     public float ElitismProb;
     public int SeqSelNumOfChildren;
+    public int RayHitObjectTargetGameObjectCount;
+    public int RayHitObjectRayCount;
+    public int GridCellContainsObjectGridSizeX;
+    public int GridCellContainsObjectGridSizeY;
     public String InitPopGeneratorMethod;
     public String Functions;
     public String Terminals;

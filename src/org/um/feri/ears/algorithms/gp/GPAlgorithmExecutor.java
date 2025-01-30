@@ -8,6 +8,8 @@ import org.um.feri.ears.individual.representations.gp.Node;
 import org.um.feri.ears.individual.representations.gp.Target;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Selector;
 import org.um.feri.ears.individual.representations.gp.behaviour.tree.Sequencer;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.sensors.GridCellContainsObject;
+import org.um.feri.ears.individual.representations.gp.behaviour.tree.sensors.RayHitObject;
 import org.um.feri.ears.individual.representations.gp.symbolic.regression.VarNode;
 import org.um.feri.ears.operators.gp.FeasibilityGPOperator;
 import org.um.feri.ears.operators.gp.GPOperator;
@@ -175,6 +177,18 @@ public class GPAlgorithmExecutor implements Serializable {
         // Seq, Sel number of children
         Selector.MAX_CHILDREN = earsConfiguration.SeqSelNumOfChildren;
         Sequencer.MAX_CHILDREN = earsConfiguration.SeqSelNumOfChildren;
+
+        // RayHitObjectTargetGameObjectCount, RayHitObjectRayCount
+        if(earsConfiguration.RayHitObjectTargetGameObjectCount > 0)
+            RayHitObject.TARGET_GAME_OBJECT_COUNT = earsConfiguration.RayHitObjectTargetGameObjectCount;
+        if(earsConfiguration.RayHitObjectRayCount > 0)
+            RayHitObject.RAY_INDEX_COUNT = earsConfiguration.RayHitObjectRayCount;
+
+        // GridCellContainsObjectGridSizeX, GridCellContainsObjectGridSizeY
+        if(earsConfiguration.GridCellContainsObjectGridSizeX > 0)
+            GridCellContainsObject.GRID_SIZE_X = earsConfiguration.GridCellContainsObjectGridSizeX;
+        if(earsConfiguration.GridCellContainsObjectGridSizeY > 0)
+            GridCellContainsObject.GRID_SIZE_Y = earsConfiguration.GridCellContainsObjectGridSizeY;
 
         // Functions
         programProblem.setBaseFunctionNodeTypesFromStringList(Arrays.asList(earsConfiguration.Functions.split(",")));

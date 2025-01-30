@@ -87,7 +87,7 @@ public class RequestBodyParams implements Serializable
                     break;
                 case Mean:
                     int finalI = i;
-                    if(solutions.get(finalI).getFitness() != null){
+                    if(solutions.get(finalI).getFitness() != null && solutions.get(finalI).getFitness().getAdditionalValues() != null){
                         lastEvalIndividualFitnesses[i] = new IndividualFitness(i, new HashMap<>(){{
                             put("Rating", solutions.get(finalI).getFitness().getAdditionalValues().get("Rating"));
                         }});
