@@ -179,8 +179,10 @@ public class GPAlgorithmExecutor implements Serializable {
         Sequencer.MAX_CHILDREN = earsConfiguration.SeqSelNumOfChildren;
 
         // RayHitObjectTargetGameObjectCount, RayHitObjectRayCount
-        if(earsConfiguration.RayHitObjectTargetGameObjectCount > 0)
-            RayHitObject.TARGET_GAME_OBJECT_COUNT = earsConfiguration.RayHitObjectTargetGameObjectCount;
+        if(earsConfiguration.TargetGameObjectCount > 0){
+            RayHitObject.TARGET_GAME_OBJECT_COUNT = earsConfiguration.TargetGameObjectCount;
+            GridCellContainsObject.TARGET_GAME_OBJECT_COUNT = earsConfiguration.TargetGameObjectCount;
+        }
         if(earsConfiguration.RayHitObjectRayCount > 0)
             RayHitObject.RAY_INDEX_COUNT = earsConfiguration.RayHitObjectRayCount;
 

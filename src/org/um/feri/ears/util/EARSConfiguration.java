@@ -5,6 +5,9 @@ import org.um.feri.ears.individual.representations.gp.Target;
 import java.io.Serializable;
 
 public class EARSConfiguration implements Serializable {
+
+    public static final long serialVersionUID = -2562246291051823548L;
+
     public GPAlgorithmType AlgorithmType;
     public GPProblemType ProblemType;
     public String ProblemName;
@@ -21,7 +24,7 @@ public class EARSConfiguration implements Serializable {
     public int MaxTreeSize;
     public float ElitismProb;
     public int SeqSelNumOfChildren;
-    public int RayHitObjectTargetGameObjectCount;
+    public int TargetGameObjectCount;
     public int RayHitObjectRayCount;
     public int GridCellContainsObjectGridSizeX;
     public int GridCellContainsObjectGridSizeY;

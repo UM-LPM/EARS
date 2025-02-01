@@ -8,6 +8,8 @@ import java.util.List;
 
 public class RayHitObject extends ConditionNode {
 
+    public static final long serialVersionUID = -2309355124233620126L;
+
     public static int TARGET_GAME_OBJECT_COUNT = 7;
     public static int RAY_INDEX_COUNT = 17;
 
