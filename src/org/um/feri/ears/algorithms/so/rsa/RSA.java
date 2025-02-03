@@ -27,7 +27,7 @@ public class RSA extends NumberAlgorithm {
     public int dim;
 
     public RSA() {
-        this(5);
+        this(30); //source code: 10, paper: 30
     }
     public RSA(int popSize) {
         this(popSize, 0.1, 0.1);

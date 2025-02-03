@@ -20,7 +20,7 @@ public class SSA extends NumberAlgorithm {
     private NumberSolution<Double> food;
 
     public SSA() {
-        this(30);
+        this(30); // according to paper and source code : 30
     }
 
     public SSA(int popSize) {

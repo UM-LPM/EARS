@@ -18,14 +18,14 @@ public class AVOA extends NumberAlgorithm {
     private NumberSolution<Double> bestVulture2;
     private ArrayList<NumberSolution<Double>> population;
 
-    // Control parameters
+    // Control parameters according to source code
     private final double p1 = 0.6;
     private final double p2 = 0.4;
     private final double p3 = 0.6;
     private final double alpha = 0.8;
 
     public AVOA() {
-        this(30);
+        this(30); //paper and source code: 30
     }
 
     public AVOA(int popSize) {
@@ -33,7 +33,11 @@ public class AVOA extends NumberAlgorithm {
         this.popSize = popSize;
 
         au = new Author("marko", "marko.bakan@student.um.si");
-        ai = new AlgorithmInfo("AVOA", "African Vultures Optimization Algorithm", "@article{abdollahzadeh2021african,\n" + "  title={African vultures optimization algorithm: A new nature-inspired metaheuristic algorithm for global optimization problems},\n" + "  author={Abdollahzadeh, Benyamin and Gharehchopogh, Farhad Soleimanian and Mirjalili, Seyedali},\n" + "  journal={Computers & Industrial Engineering},\n" + "  pages={107408},\n" + "  year={2021},\n" + "  publisher={Elsevier}}");
+        ai = new AlgorithmInfo("AVOA", "African Vultures Optimization Algorithm", "@article{abdollahzadeh2021african,\n"
+                + "  title={African vultures optimization algorithm: A new nature-inspired metaheuristic algorithm for global optimization problems},\n"
+                + "  author={Abdollahzadeh, Benyamin and Gharehchopogh, Farhad Soleimanian and Mirjalili, Seyedali},\n"
+                + "  journal={Computers & Industrial Engineering},\n"
+                + "  pages={107408},\n" + "  year={2021},\n" + "  publisher={Elsevier}}");
     }
 
     @Override

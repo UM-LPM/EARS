@@ -26,7 +26,7 @@ public class LSHADE extends NumberAlgorithm {
     private int popRate;
     @AlgorithmParameter(name = "archive rate", min = "1.0", max = "3.0")
     private double arcRate;
-    @AlgorithmParameter(name = "current best mutation", description = "value for current-to-pbest/1 mutation", min = "0.05", max = "0.15")
+    @AlgorithmParameter(name = "current best mutation", description = "p - value for current-to-pbest/1 mutation", min = "0.05", max = "0.15")
     private double pBestRate;
     @AlgorithmParameter(name = "historical memory size", description = "H", min = "2", max = "10")
     private int memorySize;
@@ -50,10 +50,11 @@ public class LSHADE extends NumberAlgorithm {
     }
 
     public LSHADE() {
-        arcRate = 2.6;
-        popRate = 18;
-        pBestRate = 0.11; //p value for current-to-pbest/1 mutation
-        memorySize = 6; //H historical memory size
+        //Tuned settings according to the paper
+        popRate = 18; //default: 20
+        arcRate = 2.6; //default: 2.0
+        pBestRate = 0.11; //default: 0.1
+        memorySize = 6; //default: 5
 
         au = new Author("miha", "miha.ravber@um.si");
         ai = new AlgorithmInfo("LSHADE", "Linear Population Size Reduction Success-History based Adaptive DE",

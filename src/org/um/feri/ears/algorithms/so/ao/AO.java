@@ -28,13 +28,14 @@ public class AO extends NumberAlgorithm {
 
     public AO()
     {
-        this(20);
+        this(30); //paper: 30, source code: 20
     }
 
     public AO(int popSize) {
 
         this.popSize = popSize;
 
+        //according to source code and paper
         this.alpha  = 0.1;
         this.beta   = 1.5;
         this.delta  = 0.1;
@@ -115,7 +116,7 @@ public class AO extends NumberAlgorithm {
 
                         for (int j = 0; j < task.problem.getNumberOfDimensions(); ++j) {
 
-                            newIndividual[j] = (bestIndividual.getValue(j) - mean(j)) * alpha - randNumber1 +
+                            newIndividual[j] = (bestIndividual.getValue(j) - mean(i)) * alpha - randNumber1 +
                                     (randNumber2 * (task.problem.getUpperLimit(j) - task.problem.getLowerLimit(j)) + task.problem.getLowerLimit(j)) * delta;    //Eq. (13)
                         }
 

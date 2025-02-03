@@ -17,7 +17,7 @@ public class SCSO extends NumberAlgorithm {
     private NumberSolution<Double> bestSolution;
 
     public SCSO() {
-        this(30);
+        this(30); //paper and source code: 30
     }
 
     public SCSO(int popSize) {

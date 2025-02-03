@@ -33,7 +33,7 @@ public class GAOA extends NumberAlgorithm {
     private ArrayList<NumberSolution<Double>> oldPopulation;
 
     public GAOA() {
-        this(50, 0.88, 0.34, 1.5);
+        this(50, 0.88, 0.34, 1.5); //set according to source code
     }
 
     public GAOA(int popSize, double S, double PSR, double beta) {
@@ -42,6 +42,7 @@ public class GAOA extends NumberAlgorithm {
         this.S = S;
         this.PSR = PSR;
         this.beta = beta;
+
 
         au = new Author("zan", "zan.hozjan1@student.um.si");
         ai = new AlgorithmInfo("GAOA", "Gazelle Optimisation Algorithm",

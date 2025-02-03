@@ -37,6 +37,8 @@ class RFOA(popSize: Int = 10) : NumberAlgorithm() {
         )
     }
 
+    //population size 100 in paper
+
     @Throws(StopCriterionException::class)
     override fun execute(task: Task<NumberSolution<Double?>, DoubleProblem>): NumberSolution<Double> {
         this.task = task

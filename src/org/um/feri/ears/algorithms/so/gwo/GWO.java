@@ -20,7 +20,7 @@ public class GWO extends NumberAlgorithm {
     private NumberSolution<Double> alpha, beta, delta;
 
     public GWO() {
-        this(30);
+        this(30); // default population size from source code
     }
 
     public GWO(int popSize) {
