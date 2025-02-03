@@ -246,7 +246,10 @@ public abstract class CEC2017 extends DoubleProblem {
         catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+    }
 
+    public int getFunctionNumber() {
+        return funcNum;
     }
 
     /**

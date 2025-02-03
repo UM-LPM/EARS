@@ -99,7 +99,9 @@ public class NumberSolution<N extends Number> extends Solution {
 
     public String toString() {
 
-        String objectivesString = Arrays.stream(getObjectives()).mapToObj(o -> Util.dfcshort.format(o)).collect(Collectors.joining(",", "[", "]"));
+        String objectivesString = Arrays.stream(getObjectives())
+                .mapToObj(o -> Util.dfcshort.format(o) + " (" + o + ")")
+                .collect(Collectors.joining(",", "[", "]"));
 
         String variablesString =  getVariables().stream()
                 .map(String::valueOf)
