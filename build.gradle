@@ -5,7 +5,7 @@ plugins {
     id 'idea'
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.beryx.jlink' version '2.25.0'
-    id 'org.jetbrains.kotlin.jvm' version '2.1.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
 }
 
 idea {
