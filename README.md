@@ -21,7 +21,8 @@ The latest release including the .jar file can be downloaded  from the [releases
 
 **First Download EARS project**
 
-* Go to: `File` - > `New` -> `Project from Version Control` -> `Git`
+* __*Old version*__ Go to: `File` - > `New` -> `Project from Version Control` -> `Git`
+* Go to: `File` - > `New` -> `Clone Repository` -> `Repository URL`
 * Set URL to https://github.com/UM-LPM/EARS.git
 * Select the directory where you want to save the project (example: "path to my projects/EARS")
 * Import Gradle project
@@ -39,10 +40,11 @@ Groovy:
 include ':EARS'
 project(':EARS').projectDir = new File('path to EARS') // example: new File('../my_projects/EARS')  or project.projectDir.path + "/../EARS"
 ```
-Kotlin:
+Kotlin **settings.gradle.kts**:
 ```Kotlin
-include(":EARS")
-project(":EARS").projectDir = File("path to EARS")
+rootProject.name = "YOUR_PROJECT_DEFAULT"
+include(":EARS") //add this line
+project(":EARS").projectDir = file("path to EARS") //add this line 
 ```
 
 * In file  **build.gradle** add:
@@ -131,7 +133,7 @@ public class SOSingleRun {
 
         Task sphere = new Task(problem, StopCriterion.EVALUATIONS, 10000, 0, 0); // set the stopping criterion to max 10000 evaluations
 
-        NumberAlgorithm alg = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN);
+        NumberAlgorithm alg = new DE(DE.Strategy.JDE_RAND_1_BIN);
         NumberSolution<Double> best;
         try {
             best = alg.execute(sphere);
