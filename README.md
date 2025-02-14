@@ -40,10 +40,11 @@ Groovy:
 include ':EARS'
 project(':EARS').projectDir = new File('path to EARS') // example: new File('../my_projects/EARS')  or project.projectDir.path + "/../EARS"
 ```
-Kotlin:
+Kotlin **settings.gradle.kts**:
 ```Kotlin
-include(":EARS")
-project(":EARS").projectDir = File("path to EARS")
+rootProject.name = "YOUR_PROJECT_DEFAULT"
+include(":EARS") //add this line
+project(":EARS").projectDir = file("path to EARS") //add this line 
 ```
 
 * In file  **build.gradle** add:
