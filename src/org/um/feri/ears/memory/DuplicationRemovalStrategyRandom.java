@@ -12,15 +12,6 @@ public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy
         this.maxHits = maxHits;
     }
 
-    @Override
-    public void changeSolution(double[] x) {
-        double[] tmp = t.problem.generateRandomVariables();
-        for (int i = 0; i < x.length; i++) {
-            if (RNG.nextDouble() < 0.2)
-                x[i] = tmp[i];
-        }
-
-    }
 
     @Override
     public void changeSolution(NumberSolution<Double> solution) {

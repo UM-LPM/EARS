@@ -8,11 +8,6 @@ public class DuplicationRemovalStrategyLeaveIt extends DuplicationRemovalStrateg
     }
 
     @Override
-    public void changeSolution(double[] x) {
-        //do not change it, it will take additional evaluation
-    }
-
-    @Override
     public void changeSolution(NumberSolution<Double> solution) {
 
     }

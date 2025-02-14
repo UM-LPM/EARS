@@ -6,8 +6,6 @@ import org.um.feri.ears.problems.Task;
 
 abstract public class DuplicationRemovalStrategy {
     Task<NumberSolution<Double>, DoubleProblem> t;
-
-    abstract public void changeSolution(double[] x);
     abstract public void changeSolution(NumberSolution<Double> solution);
     abstract public boolean criteria4Change(int hits);
 
