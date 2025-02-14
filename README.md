@@ -21,7 +21,8 @@ The latest release including the .jar file can be downloaded  from the [releases
 
 **First Download EARS project**
 
-* Go to: `File` - > `New` -> `Project from Version Control` -> `Git`
+* __*Old version*__ Go to: `File` - > `New` -> `Project from Version Control` -> `Git`
+* Go to: `File` - > `New` -> `Clone Repository` -> `Repository URL`
 * Set URL to https://github.com/UM-LPM/EARS.git
 * Select the directory where you want to save the project (example: "path to my projects/EARS")
 * Import Gradle project
