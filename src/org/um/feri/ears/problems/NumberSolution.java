@@ -121,4 +121,11 @@ public class NumberSolution<N extends Number> extends Solution {
         aux = aux.replace(".", ",");
         return aux;
     }
+
+    // This method is used to set existing object to original
+    // used instead of clone.
+    public void setClone(NumberSolution<N> org) {
+        variables = new ArrayList<>(org.variables);
+        super.setClone(org);
+    }
 }
