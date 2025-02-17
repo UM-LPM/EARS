@@ -47,6 +47,16 @@ public class Util {
         return s;
     }
 
+    public static String arrayToString(List<Double> d, String delimeter) {
+        String s = "";
+        for (int i = 0; i < d.size(); i++) {
+            s = s + df01.format(d.get(i));
+            if (i < d.size() - 1)
+                s = s + delimeter+" ";
+        }
+        return s;
+    }
+
     public static String arrayToString(double[] d) {
         String s = "";
         for (int i = 0; i < d.length; i++) {

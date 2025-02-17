@@ -6,6 +6,7 @@ import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.report.Pair;
 import org.um.feri.ears.util.report.ReportBank;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MemoryBankDoubleSolution {
@@ -21,6 +22,8 @@ public class MemoryBankDoubleSolution {
     int duplicationHitSum;
     int duplicationBeforeGlobal;
     StringBuilder sb;
+    boolean clearAfterStopHit = true;
+    public ArrayList<NumberSolution<Double>> all;
     private HashMap<String, NumberSolution<Double>> hashMapMemory;
     private HashMap<String, Integer> hashMapMemoryHits;
     DuplicationRemovalStrategy updateStrategy;
@@ -36,7 +39,9 @@ public class MemoryBankDoubleSolution {
     }
 
     private static final int[] POW10 = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
-
+    public void setClearAfterStopHit(boolean clearAfterStopHit) {
+        this.clearAfterStopHit = clearAfterStopHit;
+    }
     public static String format(double val, int precision) {
         StringBuilder sb = new StringBuilder();
         if (val < 0) {
@@ -60,8 +65,13 @@ public class MemoryBankDoubleSolution {
         precisionPower = (long) Math.pow(10, precisionInDecimalPlaces);
         hashMapMemory = new HashMap<>(10000);
         hashMapMemoryHits = new HashMap<>(10000);
+        all = new ArrayList<>();
         sb = new StringBuilder();
         reset();
+    }
+
+    public HashMap<String, NumberSolution<Double>> getHashMapMemory() {
+        return hashMapMemory;
     }
 
     private double round(double v) {
@@ -100,13 +110,15 @@ public class MemoryBankDoubleSolution {
     }
 
     public NumberSolution<Double> generateRandomSolution(TaskWithMemory task) throws StopCriterionException {
-        return task.problem.generateRandomEvaluatedSolution();
+        var tmp = task.problem.generateRandomSolution();
+        eval(task, tmp);
+        return tmp;
+       // return task. problem.generateRandomEvaluatedSolution();
     }
 
     //if duplicate mirror values
     public void eval(TaskWithMemory task, NumberSolution<Double> solution) throws StopCriterionException {
         // round(x);
-
 
         double[] x = solution.getVariables().stream().mapToDouble(Double::doubleValue).toArray();
         String key = encodeKeyPerc(x);
@@ -152,7 +164,8 @@ public class MemoryBankDoubleSolution {
 
             //set solution values to ds
             solution.setClone(ds); //copy duplicate to solution
-            if (task.isStopCriterion()) { // TODO be careful clear here or in main?
+            all.add(solution);
+            if (task.isStopCriterion() && clearAfterStopHit) { // TODO be careful clear here or in main?
                 clearMemory();
             }
   /*    if (converganceGraphDataCollect) {
@@ -169,6 +182,7 @@ public class MemoryBankDoubleSolution {
         } else { //not duplicate
             hashMapMemoryHits.put(key, 1); // new one�
             task.evalParent(solution);
+            all.add(solution);
            // ds = task.evalOrg(x);
             if (best4ConvergenceGraph == null)
                 best4ConvergenceGraph = solution;
@@ -180,7 +194,7 @@ public class MemoryBankDoubleSolution {
                 ReportBank.addPairValue(DUPLICATE_CONVERGENCE_NOT, new Pair(task.getNumberOfEvaluations() + 1, task.getNumberOfEvaluations() + 1-duplicationHitSum));
             }
             hashMapMemory.put(key, solution);
-            if (task.isStopCriterion())
+            if (task.isStopCriterion() && clearAfterStopHit)
                 clearMemory();
         }
     }
@@ -202,6 +216,7 @@ public class MemoryBankDoubleSolution {
         ReportBank.logMemory(ReportBank.MEMORY_END);
         hashMapMemory.clear();
         hashMapMemoryHits.clear();
+        all.clear();
         System.gc();
     }
 

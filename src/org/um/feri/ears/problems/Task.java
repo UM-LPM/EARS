@@ -94,7 +94,7 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
 
     private void checkIfGlobalReached(S solution) {
         if (problem.numberOfObjectives == 1) //Only for single-objective optimization
-            isGlobal = isEqualToGlobalOptimum(solution);
+            isGlobal = isGlobal || isEqualToGlobalOptimum(solution);
     }
 
     public boolean isEqualToGlobalOptimum(S solution) {

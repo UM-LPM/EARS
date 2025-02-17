@@ -42,6 +42,10 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
         sb = new StringBuilder();
     }
 
+    public MemoryBankDoubleSolution getDataBank() {
+        return mb;
+    }
+
     @Override
     public void eval(NumberSolution<Double> solution) throws StopCriterionException {
         mb.eval(this, solution);

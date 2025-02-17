@@ -36,6 +36,9 @@ public class GAOA extends NumberAlgorithm {
         this(50, 0.88, 0.34, 1.5); //set according to source code
     }
 
+    public GAOA(int popSize) {
+        this(popSize, 0.88, 0.34, 1.5); //set according to source code
+    }
     public GAOA(int popSize, double S, double PSR, double beta) {
         super();
         this.popSize = popSize;

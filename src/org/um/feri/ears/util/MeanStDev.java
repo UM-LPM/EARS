@@ -106,7 +106,7 @@ public class MeanStDev {
      * @return the standard deviation
      */
     public double standardDeviation(ArrayList<Double> population) {
-        if (population.size() == 0) return 0;
+        if (population.isEmpty()) return 0;
         double v = variance(population);
         if (v > 0)
             return Math.sqrt(variance(population));
@@ -114,7 +114,7 @@ public class MeanStDev {
     }
 
     public double mean(ArrayList<Double> population) {
-        if (population.size() == 0) return 0;
+        if (population.isEmpty()) return 0;
         double sum = 0;
         for (Double d : population) {
             sum += d;
