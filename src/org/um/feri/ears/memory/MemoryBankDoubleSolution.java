@@ -39,9 +39,11 @@ public class MemoryBankDoubleSolution {
     }
 
     private static final int[] POW10 = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
+
     public void setClearAfterStopHit(boolean clearAfterStopHit) {
         this.clearAfterStopHit = clearAfterStopHit;
     }
+
     public static String format(double val, int precision) {
         StringBuilder sb = new StringBuilder();
         if (val < 0) {
@@ -113,7 +115,7 @@ public class MemoryBankDoubleSolution {
         var tmp = task.problem.generateRandomSolution();
         eval(task, tmp);
         return tmp;
-       // return task. problem.generateRandomEvaluatedSolution();
+        // return task. problem.generateRandomEvaluatedSolution();
     }
 
     //if duplicate mirror values
@@ -123,7 +125,7 @@ public class MemoryBankDoubleSolution {
         double[] x = solution.getVariables().stream().mapToDouble(Double::doubleValue).toArray();
         String key = encodeKeyPerc(x);
         //last evaluation record data
-        if (1 + duplicationHitSum + task.getNumberOfEvaluations() == task.getMaxEvaluations()) {
+        if (1 + duplicationHitSum + task.getNumberOfEvaluations() == task.getMaxEvaluations()) { //not main logs, just for record middle of the run
             //Log
             ReportBank.logMemory(ReportBank.MEMORY_END + ReportBank.MFES);
             ReportBank.addDoubleValue(ReportBank.BEST + ReportBank.MFES, best4ConvergenceGraph.getEval());
@@ -140,6 +142,7 @@ public class MemoryBankDoubleSolution {
             NumberSolution<Double> ds;
             ds = hashMapMemory.get(key);
             duplicationHitSum++;
+            hashMapMemoryHits.put(key, hashMapMemoryHits.get(key) + 1);
 
             if (!task.isGlobal()) {
                 duplicationBeforeGlobal++;
@@ -155,12 +158,12 @@ public class MemoryBankDoubleSolution {
                 updateStrategy.changeSolution(solution);
                 eval(task, solution); //not the same calls itself
                 return; //end
-            } else {
-                if (updateStrategy.forceIncEvaluation()) {
-                    task.incrementNumberOfEvaluations(1); //no change but we...
-                }
-                hashMapMemoryHits.put(key, hashMapMemoryHits.get(key) + 1);
             }
+
+            if (updateStrategy.forceIncEvaluation()) { //count twice duplicationHitSum and eval?
+                task.incrementNumberOfEvaluations(1); //no change but we...
+            }
+
 
             //set solution values to ds
             solution.setClone(ds); //copy duplicate to solution
@@ -183,7 +186,7 @@ public class MemoryBankDoubleSolution {
             hashMapMemoryHits.put(key, 1); // new one�
             task.evalParent(solution);
             all.add(solution);
-           // ds = task.evalOrg(x);
+            // ds = task.evalOrg(x);
             if (best4ConvergenceGraph == null)
                 best4ConvergenceGraph = solution;
             else if (task.problem.isFirstBetter(solution, best4ConvergenceGraph))
@@ -191,7 +194,7 @@ public class MemoryBankDoubleSolution {
             if (convergenceGraphDataCollect) {
                 ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConvergenceGraph.getEval()));
                 ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), solution.getEval()));
-                ReportBank.addPairValue(DUPLICATE_CONVERGENCE_NOT, new Pair(task.getNumberOfEvaluations() + 1, task.getNumberOfEvaluations() + 1-duplicationHitSum));
+                ReportBank.addPairValue(DUPLICATE_CONVERGENCE_NOT, new Pair(task.getNumberOfEvaluations() + 1, task.getNumberOfEvaluations() + 1 - duplicationHitSum));
             }
             hashMapMemory.put(key, solution);
             if (task.isStopCriterion() && clearAfterStopHit)

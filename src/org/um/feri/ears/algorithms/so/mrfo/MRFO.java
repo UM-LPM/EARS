@@ -7,6 +7,7 @@ import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.random.RNG;
+
 import java.util.ArrayList;
 
 public class MRFO extends NumberAlgorithm {
@@ -39,6 +40,7 @@ public class MRFO extends NumberAlgorithm {
         );
 
     }
+
     @Override
     public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
 
@@ -71,7 +73,7 @@ public class MRFO extends NumberAlgorithm {
                     double beta = 2 * Math.exp(r1 * ((double) (maxIt - task.getNumberOfIterations()) / maxIt)) * Math.sin(2 * Math.PI * r1);
                     // Cyclone foraging equation(3.3)
                     //explore best solution space
-                    if (coef > RNG.nextDouble() ) {
+                    if (coef > RNG.nextDouble()) {
                         //first agent
                         if (i == 0) {
                             for (int d = 0; d < dimensions; d++) {
@@ -83,11 +85,11 @@ public class MRFO extends NumberAlgorithm {
                         else {
                             for (int d = 0; d < dimensions; d++) {
                                 newPosition[d] = bestSolution.getValue(d) +
-                                        RNG.nextDouble() * (population.get(i-1).getValue(d) - manta.getValue(d)) +
+                                        RNG.nextDouble() * (population.get(i - 1).getValue(d) - manta.getValue(d)) +
                                         beta * (bestSolution.getValue(d) - manta.getValue(d));
                             }
                         }
-                    //Cyclone foraging
+                        //Cyclone foraging
                     } else {
                         //exploration a random point in search space
                         // Reference random solution //equation(7)
@@ -101,8 +103,8 @@ public class MRFO extends NumberAlgorithm {
                         } else {
                             for (int d = 0; d < dimensions; d++) {
                                 double randomSol = RNG.nextDouble(task.problem.lowerLimit.get(d), task.problem.upperLimit.get(d));
-                                newPosition[d] =randomSol +
-                                        RNG.nextDouble() * (population.get(i-1).getValue(d) - manta.getValue(d)) +
+                                newPosition[d] = randomSol +
+                                        RNG.nextDouble() * (population.get(i - 1).getValue(d) - manta.getValue(d)) +
                                         beta * (randomSol - manta.getValue(d));
                             }
                         }
@@ -122,7 +124,7 @@ public class MRFO extends NumberAlgorithm {
                         for (int j = 0; j < dimensions; j++) {
                             double alpha = 2 * RNG.nextDouble() * Math.sqrt(-Math.log(RNG.nextDouble()));
                             newPosition[j] = manta.getValue(j) +
-                                    RNG.nextDouble() * (population.get(i-1).getValue(j) - manta.getValue(j)) +
+                                    RNG.nextDouble() * (population.get(i - 1).getValue(j) - manta.getValue(j)) +
                                     alpha * (bestSolution.getValue(j) - manta.getValue(j));
                         }
                     }
@@ -167,7 +169,7 @@ public class MRFO extends NumberAlgorithm {
                     somersaultPopulation.add(newSolution);
                 }
 
-                for (int i = 0; i < popSize; i++) {
+                for (int i = 0; i < somersaultPopulation.size(); i++) { //if breaks in the middle of iteration can be less than pop_size
                     if (task.problem.isFirstBetter(somersaultPopulation.get(i), population.get(i))) {
                         population.set(i, somersaultPopulation.get(i));
                     }

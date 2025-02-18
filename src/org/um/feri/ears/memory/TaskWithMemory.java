@@ -10,7 +10,7 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
     StringBuilder sb;
     boolean stopWhenPercDuplicates;
     int stopIfDuplicatesCount;
-    private static int NOT_SET_EVAL=-1;
+    private static int NOT_SET_EVAL = -1;
     private boolean isStagnation;
     int internalStagnationCounter;
     NumberSolution<Double> best;
@@ -19,14 +19,14 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
                           DoubleProblem p, int xPrecision, DuplicationRemovalStrategy strategy, int stopDuplicatesStagnationPerc) {
         this(stop, eval, allowedTime, maxIterations, epsilon, p, xPrecision, strategy);
         stopWhenPercDuplicates = true;
-        stopIfDuplicatesCount = eval/stopDuplicatesStagnationPerc;
-        stopAtEval=NOT_SET_EVAL; //NOT_REACH
+        stopIfDuplicatesCount = eval / stopDuplicatesStagnationPerc;
+        stopAtEval = NOT_SET_EVAL; //NOT_REACH
         internalStagnationCounter = 0;
-        if (stop==StopCriterion.STAGNATION) { //fake it TODO
+        if (stop == StopCriterion.STAGNATION) { //fake it TODO
             isStagnation = (stop == StopCriterion.STAGNATION);
-            this.stopCriterion=StopCriterion.EVALUATIONS; //
+            this.stopCriterion = StopCriterion.EVALUATIONS; //
             stopWhenPercDuplicates = false;
-            maxTrialsBeforeStagnation = eval/stopDuplicatesStagnationPerc;
+            maxTrialsBeforeStagnation = eval / stopDuplicatesStagnationPerc;
         }
 
 
@@ -65,10 +65,9 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
             if (best == null) {
                 best = tmp;
                 internalStagnationCounter = 1;
-            }
-            else {
-                if (problem.isFirstBetter(tmp,best)) {
-                    best= tmp;
+            } else {
+                if (problem.isFirstBetter(tmp, best)) {
+                    best = tmp;
                     internalStagnationCounter = 0;
                 } else
                     ++internalStagnationCounter;
@@ -92,15 +91,19 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
 
     @Override
     public boolean isStopCriterion() {
+        if (stopCriterion == StopCriterion.EVALUATIONS) {
+            if (mb.duplicationHitSum >= getMaxEvaluations() * 2) //force stop
+                return true;
+        }
         if (isStagnation) {
-           if (internalStagnationCounter>=getMaxTrialsBeforeStagnation()) {
-               stopAtEval = numberOfEvaluations;
-               isStop = true;
-               return true;
-           }
+            if (internalStagnationCounter >= getMaxTrialsBeforeStagnation()) {
+                stopAtEval = numberOfEvaluations;
+                isStop = true;
+                return true;
+            }
         }
         if (stopWhenPercDuplicates) {
-            if (mb.getDuplicationHitSum()>=stopIfDuplicatesCount) {
+            if (mb.getDuplicationHitSum() >= stopIfDuplicatesCount) {
                 stopAtEval = numberOfEvaluations;
                 isStop = true;
                 return true;
@@ -110,7 +113,7 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
     }
 
     public int getStopAtEval() {
-        if (stopAtEval==NOT_SET_EVAL) return numberOfEvaluations;
+        if (stopAtEval == NOT_SET_EVAL) return numberOfEvaluations;
         return stopAtEval;
     }
 
