@@ -124,5 +124,6 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
     public int getDuplicationBeforeGlobal() {
         return mb.getDuplicationBeforeGlobal();
     }
+    
 
 }

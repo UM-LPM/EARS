@@ -1,4 +1,5 @@
 package org.um.feri.ears.algorithms.so.de.jDElscop;
+
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
@@ -16,7 +17,7 @@ public class jDElscop extends NumberAlgorithm {
      * http://sci2s.ugr.es/EAMHCO#Software
      */
     public enum Strategy {
-		STRATEGY_JDE_BEST, STRATEGY_JDE_BIN, STRATEGY_JDE_EXP;
+        STRATEGY_JDE_BEST, STRATEGY_JDE_BIN, STRATEGY_JDE_EXP;
         public static int COUNT = Strategy.values().length;
     }
 
@@ -40,6 +41,7 @@ public class jDElscop extends NumberAlgorithm {
         );
         au = new Author("Matej", "matej.crepinsek@um.si");
     }
+
     private void initPopulation() throws StopCriterionException {
         popX = new jDElscopSolution[popSize];
         for (int i = 0; i < popSize; i++) {
@@ -52,6 +54,7 @@ public class jDElscop extends NumberAlgorithm {
                 break;
         }
     }
+
     @Override
     public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task; // used in functions
@@ -214,12 +217,12 @@ public class jDElscop extends NumberAlgorithm {
                 }
                 variablePopSize = (variablePopSize + 1) / 2; // NP = popReduceS2(newPop,
                 // extDim, NP, cost);
-                System.out.println("Reduce from:" + this.popSize + " to "
-                        + variablePopSize + "  time:" + task.getNumberOfEvaluations());
+                //System.out.println("Reduce from:" + this.popSize + " to "
+                //        + variablePopSize + "  time:" + task.getNumberOfEvaluations());
 
             } else {
-				// take best half!
-				if (variablePopSize >= 0) System.arraycopy(popTmp, 0, popX, 0, variablePopSize);
+                // take best half!
+                if (variablePopSize >= 0) System.arraycopy(popTmp, 0, popX, 0, variablePopSize);
             }
             task.incrementNumberOfIterations();
         }

@@ -9,7 +9,11 @@ import java.util.concurrent.TimeUnit;
 
 public class Task<S extends Solution, P extends Problem<S>> implements Serializable {
 
-    public static final class Accessor { private Accessor() {} }
+    public static final class Accessor {
+        private Accessor() {
+        }
+    }
+
     private static final Accessor ACCESSOR_INSTANCE = new Accessor();
 
     //TODO add "Task.Accessor accessor" to method call
@@ -42,7 +46,7 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
      * @param problem          the problem to be solved
      * @param stopCriterion    the stopping criterion
      * @param maxEvaluations   the maximum number of evaluations allowed
-     * @param allowedTimeMs      the maximum CPU time allowed in milliseconds
+     * @param allowedTimeMs    the maximum CPU time allowed in milliseconds
      * @param maxIterations    the maximum number of iterations
      * @param epsilonForGlobal the epsilon value used to check closeness to the global optimum
      */
@@ -249,7 +253,7 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
         incrementNumberOfEvaluations(1);
         long start = System.nanoTime();
         problem.evaluate(solution);
-        if(problem.numberOfConstraints > 0)
+        if (problem.numberOfConstraints > 0)
             problem.evaluateConstraints(solution);
         checkImprovement(solution);
         evaluationTimeNs += System.nanoTime() - start;
@@ -263,7 +267,7 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
         incrementNumberOfEvaluations(solutions.size());
         long start = System.nanoTime();
         problem.bulkEvaluate(solutions);
-        if(problem.numberOfConstraints > 0) {
+        if (problem.numberOfConstraints > 0) {
             // TODO Implement bulkEvaluateConstraints(solutions) method
         }
 
@@ -279,7 +283,6 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
                 evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTimeNs, bestSolution.getEval()));
         }
     }
-
 
 
     /**
@@ -557,5 +560,9 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
                     + epsilonForGlobal;
         } else
             return "";
+    }
+
+    public S getBestSolution() {
+        return bestSolution;
     }
 }
