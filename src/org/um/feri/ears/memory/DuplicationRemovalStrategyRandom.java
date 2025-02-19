@@ -13,21 +13,26 @@ public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy
 
 
     @Override
+    public String getID() {
+        return "SGR";
+    }
+
+    @Override
     public void changeSolution(NumberSolution<Double> solution) {
         double[] tmp = t.problem.generateRandomVariables();
         var list = solution.getVariables(); //hope this is not deep copy
         for (int i = 0; i < list.size(); i++) {
-                list.set(i, tmp[i]);
+            list.set(i, tmp[i]);
         }
     }
 
     @Override
     public boolean criteria4Change(int hits) {
-		return hits > maxHits;
-	}
+        return hits > maxHits;
+    }
 
     public String toString() {
-		return "Random duplicate strategy " +
-				" with max hits " + maxHits;
+        return "Random duplicate strategy " +
+                " with max hits " + maxHits;
     }
 }

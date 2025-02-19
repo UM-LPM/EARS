@@ -13,6 +13,11 @@ public class DuplicationRemovalStrategyRandomOld extends DuplicationRemovalStrat
 
 
     @Override
+    public String getID() {
+        return "SOld"; //TODO remove if not used
+    }
+
+    @Override
     public void changeSolution(NumberSolution<Double> solution) {
         double[] tmp = t.problem.generateRandomVariables();
         var list = solution.getVariables(); //hope this is not deep copy
@@ -24,11 +29,11 @@ public class DuplicationRemovalStrategyRandomOld extends DuplicationRemovalStrat
 
     @Override
     public boolean criteria4Change(int hits) {
-		return hits > maxHits;
-	}
+        return hits > maxHits;
+    }
 
     public String toString() {
-		return "Random duplicate strategy " +
-				" with max hits " + maxHits;
+        return "Random duplicate strategy " +
+                " with max hits " + maxHits;
     }
 }
