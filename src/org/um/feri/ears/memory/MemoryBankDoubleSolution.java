@@ -121,6 +121,9 @@ public class MemoryBankDoubleSolution {
     //if duplicate mirror values
     public void eval(TaskWithMemory task, NumberSolution<Double> solution) throws StopCriterionException {
         // round(x);
+        if (updateStrategy.isForceExplore()) { //this is when we force for example next 10 solutions to be generated randomly
+            updateStrategy.changeSolution(solution);
+        }
 
         double[] x = solution.getVariables().stream().mapToDouble(Double::doubleValue).toArray();
         String key = encodeKeyPerc(x);

@@ -13,6 +13,10 @@ abstract public class DuplicationRemovalStrategy {
 
     abstract public boolean criteria4Change(int hits);
 
+    public boolean isForceExplore() {
+        return false;
+    }
+
     public boolean forceIncEvaluation() {
         return false;
     }
