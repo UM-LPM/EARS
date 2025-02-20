@@ -8,6 +8,7 @@ public class ReportBank {
     public static final String DUPLICATE_ALL = "DALL";
     public static final String SR = "SR";
     public static final String BEST = "BEST";
+    public static final String HITS = "HITS";
     public static final String TIME = "TIME";
     public static final String MEMORY_START = "MEMORY_START";
     public static final String MEMORY_END = "MEMORY_END";

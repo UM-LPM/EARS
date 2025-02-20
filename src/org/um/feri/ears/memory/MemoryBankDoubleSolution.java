@@ -6,8 +6,7 @@ import org.um.feri.ears.util.Util;
 import org.um.feri.ears.util.report.Pair;
 import org.um.feri.ears.util.report.ReportBank;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class MemoryBankDoubleSolution {
     public static final String FITNESS = "FIT";
@@ -186,7 +185,7 @@ public class MemoryBankDoubleSolution {
 
             return;
         } else { //not duplicate
-            hashMapMemoryHits.put(key, 1); // new one�
+            hashMapMemoryHits.put(key, 0); // new one no duplicate
             task.evalParent(solution);
             all.add(solution);
             // ds = task.evalOrg(x);
@@ -241,6 +240,19 @@ public class MemoryBankDoubleSolution {
 
     public int getDuplicationBeforeGlobal() {
         return duplicationBeforeGlobal;
+    }
+
+    public Collection<Integer> getHits() {
+//        Map<Integer, Integer> frequencyMap = new HashMap<>();
+//        for (Integer num : hashMapMemoryHits.values()) {
+//            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+//        }
+//
+//        // Sort by frequency
+//        List<Map.Entry<Integer, Integer>> sortedEntries = new ArrayList<>(frequencyMap.entrySet());
+//        sortedEntries.sort(Map.Entry.comparingByValue());
+
+        return hashMapMemoryHits.values();
     }
 
 }

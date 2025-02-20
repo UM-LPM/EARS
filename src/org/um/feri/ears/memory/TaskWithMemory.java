@@ -3,6 +3,8 @@ package org.um.feri.ears.memory;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.util.Util;
 
+import java.util.ArrayList;
+
 public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> {
     protected MemoryBankDoubleSolution mb;
     int xPrecision;
@@ -124,6 +126,11 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
     public int getDuplicationBeforeGlobal() {
         return mb.getDuplicationBeforeGlobal();
     }
-    
 
+
+    public ArrayList<Integer> getDuplicationHits() {
+        var tmp = new ArrayList<Integer>();
+        tmp.addAll(mb.getHits());
+        return tmp;
+    }
 }
