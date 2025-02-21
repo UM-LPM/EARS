@@ -13,6 +13,7 @@ import java.util.List;
 
 import static java.lang.Math.*;
 
+//TODO  Check deepcopy problem for solutions
 public class GAOA extends NumberAlgorithm {
     @AlgorithmParameter(name = "population size")
     private int popSize;
@@ -39,6 +40,7 @@ public class GAOA extends NumberAlgorithm {
     public GAOA(int popSize) {
         this(popSize, 0.88, 0.34, 1.5); //set according to source code
     }
+
     public GAOA(int popSize, double S, double PSR, double beta) {
         super();
         this.popSize = popSize;

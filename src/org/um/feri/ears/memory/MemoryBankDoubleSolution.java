@@ -11,6 +11,8 @@ import java.util.*;
 public class MemoryBankDoubleSolution {
     public static final String FITNESS = "FIT";
     public static final String CONVERGENCE = "CON";
+    public static final String CONVERGENCE_BEST = "CONBEST";
+    public static final String EVAL_VS_DUPLICATES = "EVALDUP";
     public static final String CONVERGENCE_DUPLICATE = "CONdUP";
     public static final String CONVERGENCE_DUPLICATE_VALUE = "CONdUPvAL";
     public static final String DUPLICATE_CONVERGENCE = "DupCon";
@@ -123,7 +125,9 @@ public class MemoryBankDoubleSolution {
         if (updateStrategy.isForceExplore()) { //this is when we force for example next 10 solutions to be generated randomly
             updateStrategy.changeSolution(solution);
         }
-
+        if (convergenceGraphDataCollect) {
+            ReportBank.addPairValue(EVAL_VS_DUPLICATES, new Pair(task.getNumberOfEvaluations(), duplicationHitSum));
+        }
         double[] x = solution.getVariables().stream().mapToDouble(Double::doubleValue).toArray();
         String key = encodeKeyPerc(x);
         //last evaluation record data
@@ -190,10 +194,15 @@ public class MemoryBankDoubleSolution {
             all.add(solution);
             // ds = task.evalOrg(x);
             if (best4ConvergenceGraph == null)
-                best4ConvergenceGraph = solution;
-            else if (task.problem.isFirstBetter(solution, best4ConvergenceGraph))
-                best4ConvergenceGraph = solution;
+                best4ConvergenceGraph = solution.copy();
+            if (task.problem.isFirstBetter(solution, best4ConvergenceGraph)) {
+                best4ConvergenceGraph = solution.copy();
+                if (convergenceGraphDataCollect) {
+                    ReportBank.addPairValue(CONVERGENCE_BEST, new Pair(task.getNumberOfEvaluations(), best4ConvergenceGraph.getEval()));
+                }
+            }
             if (convergenceGraphDataCollect) {
+                ReportBank.addPairValue(EVAL_VS_DUPLICATES, new Pair(task.getNumberOfEvaluations(), duplicationHitSum));
                 ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConvergenceGraph.getEval()));
                 ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), solution.getEval()));
                 ReportBank.addPairValue(DUPLICATE_CONVERGENCE_NOT, new Pair(task.getNumberOfEvaluations() + 1, task.getNumberOfEvaluations() + 1 - duplicationHitSum));
