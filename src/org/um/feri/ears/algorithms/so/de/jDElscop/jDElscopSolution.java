@@ -3,6 +3,7 @@ package org.um.feri.ears.algorithms.so.de.jDElscop;
 
 import org.um.feri.ears.problems.NumberSolution;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -18,6 +19,27 @@ public class jDElscopSolution extends NumberSolution<Double> {
         super(eval);
         parameters = Arrays.copyOf(eval.parameters, eval.parameters.length);
     }
+
+    public jDElscopSolution(NumberSolution<Double> eval, double[] tmpPar) {
+        super(eval);
+        parameters = Arrays.copyOf(tmpPar, tmpPar.length);
+    }
+
+    @Override
+    public void setClone(NumberSolution<Double> org) {
+        if (org instanceof jDElscopSolution) {
+            parameters = Arrays.copyOf(((jDElscopSolution) org).parameters, ((jDElscopSolution) org).parameters.length);
+        }
+        super.setClone(org);
+    }
+
+    public void setClone(jDElscopSolution org) {
+
+        parameters = Arrays.copyOf(org.parameters, org.parameters.length);
+
+        super.setClone(org);
+    }
+
 
     public static jDElscopSolution setInitState(NumberSolution<Double> a) {
         jDElscopSolution tmp = new jDElscopSolution(a);

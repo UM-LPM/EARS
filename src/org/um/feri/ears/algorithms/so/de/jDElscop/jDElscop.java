@@ -174,14 +174,14 @@ public class jDElscop extends NumberAlgorithm {
                 for (int j = 0; j < D; j++) {
                     tmp[j] = task.problem.makeFeasible(tmp[j], j); // in bounds
                 }
-
-                NumberSolution<Double> tmpI = new NumberSolution<>(Util.toDoubleArrayList(tmp));
+                jDElscopSolution tmpI = new jDElscopSolution(new NumberSolution<>(Util.toDoubleArrayList(tmp)), tmpPar);
+                //NumberSolution<Double> tmpI = new NumberSolution<>(Util.toDoubleArrayList(tmp));
                 task.eval(tmpI);
 
                 if (task.problem.isFirstBetter(popX[i], tmpI)) { // old is better
                     popTmp[i] = popX[i];
                 } else {
-                    popTmp[i] = jDElscopSolution.setParamState(tmpI, tmpPar);
+                    popTmp[i] = tmpI;//jDElscopSolution.setParamState(tmpI, tmpPar);
                     if (task.problem.isFirstBetter(popTmp[i], g)) {
                         g = popTmp[i];
                         if (debug) {
