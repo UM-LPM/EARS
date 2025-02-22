@@ -14,7 +14,7 @@ public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy
 
     @Override
     public String getID() {
-        return "SGR";
+        return "r";
     }
 
     @Override

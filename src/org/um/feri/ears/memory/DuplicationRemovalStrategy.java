@@ -26,4 +26,7 @@ abstract public class DuplicationRemovalStrategy {
     public void setTask(Task<NumberSolution<Double>, DoubleProblem> t) {
         this.t = t;
     }
+
+    public void update(int maxEvaluations, int numberOfDimensions) {
+    }
 }

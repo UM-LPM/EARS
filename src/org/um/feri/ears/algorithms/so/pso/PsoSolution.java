@@ -1,10 +1,13 @@
 package org.um.feri.ears.algorithms.so.pso;
 
+import org.um.feri.ears.algorithms.so.de.jDElscop.jDElscopSolution;
 import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.util.random.RNG;
+
+import java.util.Arrays;
 
 public class PsoSolution extends NumberSolution<Double> {
     public PsoSolution pBest;
@@ -32,5 +35,21 @@ public class PsoSolution extends NumberSolution<Double> {
             setValue(i, getValue(i) + velocity[i]);
         }
         this.velocity = velocity;
+    }
+
+    @Override
+    public void setClone(NumberSolution<Double> org) {
+        if (org instanceof PsoSolution) {
+            PsoSolution pso = (PsoSolution) org;
+            velocity = Arrays.copyOf(pso.velocity, pso.velocity.length);
+            pBest = pso.pBest;
+        }
+        super.setClone(org);
+    }
+
+
+    public void setClone(PsoSolution org) {
+        velocity = Arrays.copyOf(org.velocity, org.velocity.length);
+        super.setClone(org);
     }
 }
