@@ -18,6 +18,7 @@ public class GWO extends NumberAlgorithm {
 
     private ArrayList<NumberSolution<Double>> population;
     private NumberSolution<Double> alpha, beta, delta;
+    private NumberSolution<Double> best;
 
     public GWO() {
         this(30); // default population size from source code
@@ -44,6 +45,8 @@ public class GWO extends NumberAlgorithm {
     public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         this.task = task;
         initPopulation();
+        updateABD();
+
         int maxIt = 10000;
         if (task.getStopCriterion() == StopCriterion.ITERATIONS) {
             maxIt = task.getMaxIterations();
@@ -52,9 +55,10 @@ public class GWO extends NumberAlgorithm {
         if (task.getStopCriterion() == StopCriterion.EVALUATIONS) {
             maxIt = (task.getMaxEvaluations() - popSize) / popSize;
         }
-
         while (!task.isStopCriterion()) {
-            double a = 2.0 - task.getNumberOfIterations() * (2.0 / maxIt);
+            int calculatedIteration = task.getNumberOfEvaluations() / popSize;
+            //double a = 2.0 - task.getNumberOfIterations() * (2.0 / maxIt);
+            double a = 2.0 - calculatedIteration * (2.0 / maxIt);
 
             for (int index = 0; index < popSize; index++) {
                 NumberSolution<Double> wolf = population.get(index);
@@ -98,22 +102,26 @@ public class GWO extends NumberAlgorithm {
                     break;
                 NumberSolution<Double> newWolf = new NumberSolution<>(Util.toDoubleArrayList(newPosition));
                 task.eval(newWolf);
-
+                if (task.problem.isFirstBetter(newWolf, best)) best = newWolf.copy();
                 population.set(index, newWolf);
             }
             updateABD();
             task.incrementNumberOfIterations();
         }
-        return alpha;
+        return best;
     }
 
     private void initPopulation() throws StopCriterionException {
         population = new ArrayList<>();
-
+        NumberSolution<Double> tmp;
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population.add(task.generateRandomEvaluatedSolution());
+
+            tmp = task.generateRandomEvaluatedSolution();
+            if (best == null) best = tmp.copy();
+            else if (task.problem.isFirstBetter(tmp, best)) best = tmp.copy();
+            population.add(tmp);
         }
         updateABD();
     }
