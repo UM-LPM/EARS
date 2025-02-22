@@ -19,7 +19,7 @@ public class DuplicationRemovalStrategyLeaveIt extends DuplicationRemovalStrateg
     }
 
     @Override
-    public boolean criteria4Change(int hits) {
+    public boolean criteria4Change(int hits, int duplicates) {
         return false; //always
     }
 

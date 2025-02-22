@@ -160,7 +160,7 @@ public class MemoryBankDoubleSolution {
                 ReportBank.addPairValue(DUPLICATE_CONVERGENCE, new Pair(task.getNumberOfEvaluations() + 1, duplicationHitSum));
             }
 
-            if (updateStrategy.criteria4Change(hashMapMemoryHits.get(key))) {
+            if (updateStrategy.criteria4Change(hashMapMemoryHits.get(key), duplicationHitSum)) {
                 updateStrategy.changeSolution(solution);
                 eval(task, solution); //not the same calls itself
                 return; //end

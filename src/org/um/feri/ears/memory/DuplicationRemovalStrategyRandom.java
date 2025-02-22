@@ -27,7 +27,7 @@ public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy
     }
 
     @Override
-    public boolean criteria4Change(int hits) {
+    public boolean criteria4Change(int hits, int duplicates) {
         return hits > maxHits;
     }
 

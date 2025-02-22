@@ -11,7 +11,9 @@ abstract public class DuplicationRemovalStrategy {
 
     abstract public void changeSolution(NumberSolution<Double> solution);
 
-    abstract public boolean criteria4Change(int hits);
+    //abstract public boolean criteria4Change(int hits);
+
+    abstract public boolean criteria4Change(int hits, int duplicates);
 
     public boolean isForceExplore() {
         return false;
