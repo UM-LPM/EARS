@@ -9,8 +9,8 @@ public class DuplicationRemovalStrategyLeaveIt2 extends DuplicationRemovalStrate
 
     @Override
     public String getID() {
-        return "SIgnore";
-    }
+        return "i";
+    } //i-ignore
 
     @Override
     public void changeSolution(NumberSolution<Double> solution) {
