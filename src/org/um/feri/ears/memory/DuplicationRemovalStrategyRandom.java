@@ -11,6 +11,10 @@ public class DuplicationRemovalStrategyRandom extends DuplicationRemovalStrategy
         this.maxHits = maxHits;
     }
 
+    @Override
+    public String getAlgID() {
+        return getID() + "(" + maxHits + ")";
+    }
 
     @Override
     public String getID() {

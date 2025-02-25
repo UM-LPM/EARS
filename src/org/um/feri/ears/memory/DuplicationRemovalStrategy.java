@@ -9,6 +9,10 @@ abstract public class DuplicationRemovalStrategy {
 
     abstract public String getID();
 
+    public String getAlgID() {
+        return getID();
+    }
+
     abstract public void changeSolution(NumberSolution<Double> solution);
 
     //abstract public boolean criteria4Change(int hits);

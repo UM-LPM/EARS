@@ -13,6 +13,7 @@ public class DuplicationRemovalStrategyLeaveIt extends DuplicationRemovalStrateg
         return "SLcount";
     }
 
+
     @Override
     public void changeSolution(NumberSolution<Double> solution) {
 
