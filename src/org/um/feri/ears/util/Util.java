@@ -52,19 +52,23 @@ public class Util {
         for (int i = 0; i < d.size(); i++) {
             s = s + df01.format(d.get(i));
             if (i < d.size() - 1)
-                s = s + delimeter+" ";
+                s = s + delimeter + " ";
+        }
+        return s;
+    }
+
+    public static String arrayToString(double[] d, String delimeter) {
+        String s = "";
+        for (int i = 0; i < d.length; i++) {
+            s = s + df01.format(d[i]);
+            if (i < d.length - 1)
+                s = s + delimeter + " ";
         }
         return s;
     }
 
     public static String arrayToString(double[] d) {
-        String s = "";
-        for (int i = 0; i < d.length; i++) {
-            s = s + df01.format(d[i]);
-            if (i < d.length - 1)
-                s = s + ", ";
-        }
-        return s;
+        return arrayToString(d, ",");
     }
 
     public static <T extends Number> void addParetoToJSON(String listID, String benchmark, String file, ParetoSolution<T> best) {
@@ -228,6 +232,7 @@ public class Util {
         }
         return sb.toString();
     }
+
     public static double max(double... args) {
         double maxValue = args[0];
         for (double arg : args) {
@@ -297,7 +302,8 @@ public class Util {
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-                String inputLine;StringBuilder response = new StringBuilder();
+                String inputLine;
+                StringBuilder response = new StringBuilder();
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
@@ -310,7 +316,7 @@ public class Util {
         }
     }
 
-    public static void appendExceptionToLogFile(Exception exception, String filePath){
+    public static void appendExceptionToLogFile(Exception exception, String filePath) {
         try (FileWriter fw = new FileWriter(filePath, true);
              BufferedWriter bw = new BufferedWriter(fw)) {
             bw.write("ERROR:" + exception.toString());
