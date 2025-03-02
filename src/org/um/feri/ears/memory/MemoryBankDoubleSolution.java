@@ -264,4 +264,8 @@ public class MemoryBankDoubleSolution {
         return hashMapMemoryHits.values();
     }
 
+    public void resetDuplicateCounter() {
+        duplicationHitSum = 0;
+        duplicationBeforeGlobal = 0;
+    }
 }

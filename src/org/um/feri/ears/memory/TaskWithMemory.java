@@ -91,6 +91,10 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
         return sb.toString();
     }
 
+    public boolean isStopCriterionOrg() {
+        return super.isStopCriterion();
+    }
+
     @Override
     public boolean isStopCriterion() {
         if (stopCriterion == StopCriterion.EVALUATIONS) {
