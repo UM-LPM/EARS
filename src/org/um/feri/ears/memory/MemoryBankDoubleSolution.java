@@ -123,6 +123,7 @@ public class MemoryBankDoubleSolution {
     public void eval(TaskWithMemory task, NumberSolution<Double> solution) throws StopCriterionException {
         // round(x);
         if (updateStrategy.isForceExplore()) { //this is when we force for example next 10 solutions to be generated randomly
+            //solution.setClone(ds); //copy duplicate to solution
             updateStrategy.changeSolution(solution);
         }
         if (convergenceGraphDataCollect) {
@@ -161,6 +162,7 @@ public class MemoryBankDoubleSolution {
             }
 
             if (updateStrategy.criteria4Change(hashMapMemoryHits.get(key), duplicationHitSum)) {
+                solution.setClone(ds); //Copy old additional parameters
                 updateStrategy.changeSolution(solution);
                 eval(task, solution); //not the same calls itself
                 return; //end
@@ -172,7 +174,8 @@ public class MemoryBankDoubleSolution {
 
 
             //set solution values to ds
-            solution.setClone(ds); //copy duplicate to solution
+            // solution.getEval();
+            solution.setObjective(0, ds.getEval()); //set fitness
             all.add(solution);
             if (task.isStopCriterion() && clearAfterStopHit) { // TODO be careful clear here or in main?
                 clearMemory();

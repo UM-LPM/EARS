@@ -75,7 +75,7 @@ public class LSHADE extends NumberAlgorithm {
         lowerLimit = task.problem.getLowerLimit();
         upperLimit = task.problem.getUpperLimit();
 
-        if(initPopSizeSet) // if initial population size set
+        if (initPopSizeSet) // if initial population size set
             popSize = initialPopSize;
         else
             popSize = Math.round(task.problem.getNumberOfDimensions() * popRate);
@@ -199,7 +199,7 @@ public class LSHADE extends NumberAlgorithm {
                 modifySolutionWithParentMedium(offspring, population[target]);
 
                 if (task.isStopCriterion())
-                    break;
+                    return best; //stop execution
                 // evaluate the children's fitness value
                 NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(offspring));
                 task.eval(newSolution);
