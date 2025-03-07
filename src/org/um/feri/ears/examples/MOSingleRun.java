@@ -18,6 +18,8 @@ import org.um.feri.ears.problems.StopCriterion;
 import org.um.feri.ears.problems.Task;
 import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.problems.moo.zdt.ZDT6;
+import org.um.feri.ears.quality_indicator.InvertedGenerationalDistance;
+import org.um.feri.ears.quality_indicator.QualityIndicator;
 
 public class MOSingleRun {
 
@@ -44,11 +46,12 @@ public class MOSingleRun {
 
 			Task<NumberSolution<Double>, DoubleProblem> task = new Task<>(p, StopCriterion.EVALUATIONS, 30000, 5000, 100);
 			ParetoSolution best = moead.execute(task);
-			best.saveObjectivesToCSVFile("test");
+			//best.saveObjectivesToCSVFile("test");
 
-			//best.evaluate(new InvertedGenerationalDistance(p.getNumberOfObjectives(), p.getReferenceSetFileName()));
+			QualityIndicator qi = new InvertedGenerationalDistance(p.getNumberOfObjectives(), p.getReferenceSetFileName());
+			best.evaluate(qi);
 
-			System.out.println(best.getEval());
+			System.out.println(best.getQiEval(qi.getName()));
 
 		} catch (Exception e) {
 			e.printStackTrace();
