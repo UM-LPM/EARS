@@ -38,7 +38,7 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
     int evaluationsPerTick = 100;
 
     TournamentResults tournamentResults = new TournamentResults();
-    BenchmarkResults<R, S, P, A> benchmarkResults = new BenchmarkResults();
+    protected BenchmarkResults<R, S, P, A> benchmarkResults = new BenchmarkResults();
 
     public Benchmark() {
         tasks = new ArrayList<>();
@@ -157,7 +157,7 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
 
     protected ArrayList<AlgorithmRunResult<R, S, P, A>> runOneTask(Task task) {
 
-        if(ratingCalculation == RatingCalculation.RATING_CONVERGENCE_GRAPH || ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM) {
+        if (ratingCalculation == RatingCalculation.RATING_CONVERGENCE_GRAPH || ratingCalculation == RatingCalculation.RATING_CONVERGENCE_SUM) {
             task.enableEvaluationHistory();
             task.setStoreEveryNthEvaluation(evaluationsPerTick);
         }
@@ -209,7 +209,7 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
         return runResults;
     }
 
-    private void performStatistics() {
+    protected void performStatistics() {
 
         //TODO check if stopping criterion max evaluations
         if (ratingCalculation == RatingCalculation.RATING_CONVERGENCE_GRAPH) {
@@ -245,14 +245,14 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
                 for (int i = 0; i < ratings.length; i++) {
                     double rating = ratings[i].getRating();
                     double RD = ratings[i].getRatingDeviation();
-                    sb.append((i+1) * evaluationsPerTick).append("\t");
+                    sb.append((i + 1) * evaluationsPerTick).append("\t");
                     sb.append(Util.df1.format(rating)).append("\t");
                     sb.append(RD).append("\n");
                 }
                 String output = sb.toString();
-                output = output.replace(",","");
+                output = output.replace(",", "");
 
-                Util.writeToFile("D:\\"+algorithm + ".txt", output);
+                Util.writeToFile("D:\\" + algorithm + ".txt", output);
             }
 
         } else {

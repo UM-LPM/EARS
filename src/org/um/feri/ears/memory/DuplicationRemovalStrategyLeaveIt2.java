@@ -13,19 +13,18 @@ public class DuplicationRemovalStrategyLeaveIt2 extends DuplicationRemovalStrate
     } //i-ignore
 
     @Override
-    public void changeSolution(NumberSolution<Double> solution) {
-
+    public void changeSolution(NumberSolution<Double> solution) { //ignore duplicates
     }
 
     @Override
     public boolean criteria4Change(int hits, int duplicates) {
-        return false; //always
+        return false; //always ignore
     }
 
     @Override
     public boolean forceIncEvaluation() {
         return false;
-    }
+    } //always ignore
 
     public String toString() {
         return Class.class.getSimpleName();

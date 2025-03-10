@@ -16,13 +16,13 @@ public class ScheduleLoop<T> extends Schedule<T> {
     @Override
     public double visit(int depth, int maxDepth) {
         double delta = scheduleToLoop.visit(depth + 1, maxDepth);
-        for(int totalIterations = 1; delta > maxDelta; totalIterations++) {
+        for (int totalIterations = 1; delta > maxDelta; totalIterations++) {
             delta = scheduleToLoop.visit(depth + 1, maxDepth);
-            if(totalIterations > MAX_ITERATIONS)
-                throw new RuntimeException(String.format(
-                        "Maximum iterations (%d) reached.", MAX_ITERATIONS));
+            if (totalIterations > MAX_ITERATIONS) return delta;
+//                throw new RuntimeException(String.format(
+//                        "Maximum iterations (%d) reached.", MAX_ITERATIONS));
         }
-        
+
         return delta;
     }
 }
