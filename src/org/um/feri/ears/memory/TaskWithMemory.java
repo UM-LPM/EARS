@@ -20,7 +20,6 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
     public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
                           DoubleProblem p, int xPrecision, DuplicationRemovalStrategy strategy, int stopDuplicatesStagnationPerc) {
         this(stop, eval, allowedTime, maxIterations, epsilon, p, xPrecision, strategy);
-        stopWhenPercDuplicates = true;
         stopIfDuplicatesCount = eval / stopDuplicatesStagnationPerc;
         stopAtEval = NOT_SET_EVAL; //NOT_REACH
         internalStagnationCounter = 0;
