@@ -267,7 +267,7 @@ public class OMOPSO extends MOAlgorithm<Double, NumberSolution<Double>, DoublePr
         for (int i = 0; i < swarmSize; i++) {
             if (task.isStopCriterion())
                 return;
-            newSolution = new NumberSolution<>(task.getRandomEvaluatedSolution());
+            newSolution = new NumberSolution<>(task.generateRandomEvaluatedSolution());
             // problem.evaluateConstraints(newSolution);
             swarm.add(newSolution);
         }

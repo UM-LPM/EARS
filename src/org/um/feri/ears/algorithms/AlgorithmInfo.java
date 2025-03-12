@@ -1,11 +1,12 @@
 package org.um.feri.ears.algorithms;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AlgorithmInfo {
+public class AlgorithmInfo implements Serializable {
     private String acronym; // used as algorithm ID
     private String fullName;
     private String paperBibTeX; // BibTeX string of the original published paper

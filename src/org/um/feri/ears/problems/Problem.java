@@ -3,7 +3,10 @@ package org.um.feri.ears.problems;
 import com.ctc.wstx.shaded.msv_core.datatype.xsd.Comparator;
 import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 
-public abstract class Problem<S extends Solution> {
+import java.io.Serializable;
+import java.util.List;
+
+public abstract class Problem<S extends Solution> implements Serializable {
 
     protected int numberOfObjectives;
     protected int numberOfGlobalOptima;
@@ -42,6 +45,7 @@ public abstract class Problem<S extends Solution> {
     }
 
     public abstract void evaluate(S solution);
+    public abstract void bulkEvaluate(List<S> solution);
 
     /**
      * Makes the provided solution feasible.
@@ -58,7 +62,7 @@ public abstract class Problem<S extends Solution> {
      */
     public abstract boolean isFeasible(S solution);
 
-    public abstract S getRandomSolution();
+    public abstract S generateRandomSolution();
 
     public boolean isFirstBetter(S solution1, S solution2)  {
         return Comparator.LESS == solutionDominanceComparator.compare(solution1,solution2);
@@ -84,8 +88,8 @@ public abstract class Problem<S extends Solution> {
      *
      * @return a random evaluated solution.
      */
-    public S getRandomEvaluatedSolution() {
-        S solution = getRandomSolution();
+    public S generateRandomEvaluatedSolution() {
+        S solution = generateRandomSolution();
         evaluate(solution);
         return solution;
     }

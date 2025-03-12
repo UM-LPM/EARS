@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class CEC2010 extends DoubleProblem {
 
-    double[] OShift, M, y, z, x_bound;
+    double[] oShift, M, y, z, x_bound; //For M the Salomon’s random coordinate rotation technique is used
     int funcNum;
 
     int[] P;
@@ -22,7 +22,9 @@ public abstract class CEC2010 extends DoubleProblem {
         shortName = "F" + funcNum;
         benchmarkName = "CEC2010";
 
-        //Search Range
+        if (d <= 51)
+            System.err.println("The number of diemnsions must be larger than 50!");
+
         if (funcNum == 1 | funcNum == 4 | funcNum == 7 | funcNum == 8 | funcNum == 9 | funcNum == 12 |
                 funcNum == 13 | funcNum == 14 | funcNum == 17 | funcNum == 18 | funcNum == 19 | funcNum == 20) {
 
@@ -37,7 +39,6 @@ public abstract class CEC2010 extends DoubleProblem {
             lowerLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, -32.0));
             upperLimit = new ArrayList<Double>(Collections.nCopies(numberOfDimensions, 32.0));
         }
-        decisionSpaceOptima[0] = OShift;
     }
 
     protected List<Double> getPermutatedIndices(List<Double> x, int[] perm, int start, int length) {

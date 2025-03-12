@@ -20,7 +20,7 @@ public class GWO extends NumberAlgorithm {
     private NumberSolution<Double> alpha, beta, delta;
 
     public GWO() {
-        this(30);
+        this(30); // default population size from source code
     }
 
     public GWO(int popSize) {
@@ -52,7 +52,6 @@ public class GWO extends NumberAlgorithm {
         if (task.getStopCriterion() == StopCriterion.EVALUATIONS) {
             maxIt = (task.getMaxEvaluations() - popSize) / popSize;
         }
-
 
         while (!task.isStopCriterion()) {
             double a = 2.0 - task.getNumberOfIterations() * (2.0 / maxIt);
@@ -93,7 +92,7 @@ public class GWO extends NumberAlgorithm {
 
                     newPosition[i] = (x1 + x2 + x3) / 3; // Equation (3.7)
                 }
-                task.problem.setFeasible(newPosition);
+                task.problem.makeFeasible(newPosition);
 
                 if (task.isStopCriterion())
                     break;
@@ -114,7 +113,7 @@ public class GWO extends NumberAlgorithm {
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population.add(task.getRandomEvaluatedSolution());
+            population.add(task.generateRandomEvaluatedSolution());
         }
         updateABD();
     }

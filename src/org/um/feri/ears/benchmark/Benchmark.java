@@ -32,8 +32,9 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
     protected int numberOfRuns = 15;
     protected boolean runInParallel = false;
     protected boolean displayRatingCharts = true;
-    boolean displayRatingIntervalBand = false;
-    protected RatingCalculation ratingCalculation= RatingCalculation.NORMAL;
+    protected boolean displayAdvancedStats = true;
+
+    protected RatingCalculation ratingCalculation = RatingCalculation.NORMAL;
     int evaluationsPerTick = 100;
 
     TournamentResults tournamentResults = new TournamentResults();
@@ -105,6 +106,10 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
 
     public void setDisplayRatingCharts(boolean displayRatingCharts) {
         this.displayRatingCharts = displayRatingCharts;
+    }
+
+    public void setDisplayAdvancedStats(boolean displayAdvancedStats) {
+        this.displayAdvancedStats = displayAdvancedStats;
     }
 
     public abstract void initAllProblems();
@@ -256,7 +261,7 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
             }
 
             performTournament(-1);
-            tournamentResults.displayResults(displayRatingCharts);
+            tournamentResults.displayResults(displayAdvancedStats, displayRatingCharts);
         }
     }
 
@@ -291,10 +296,6 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
             problems[i] = tasks.get(i).getProblemName();
         }
         return problems;
-    }
-
-    public void setDisplayRatingIntervalBand(boolean displayRatingIntervalBand) {
-        this.displayRatingIntervalBand = displayRatingIntervalBand;
     }
 
     public void setEvaluationsPerTick(int evaluationsPerTick) {

@@ -327,8 +327,8 @@ public class MBF extends NumberAlgorithm {
 
             y1[i] = alpha * x1.get(i) + (1 - alpha) * x2.get(i);
             y2[i] = alpha * x2.get(i) + (1 - alpha) * x1.get(i);
-            y1[i] = task.problem.setFeasible(y1[i], i);
-            y2[i] = task.problem.setFeasible(y2[i], i);
+            y1[i] = task.problem.makeFeasible(y1[i], i);
+            y2[i] = task.problem.makeFeasible(y2[i], i);
 
         }
 
@@ -368,11 +368,11 @@ public class MBF extends NumberAlgorithm {
         SharkAttack = new CichlidsSolution[popSize];
         BestResult = new CichlidsSolution[popSize];
 
-        best = task.getRandomEvaluatedSolution();
+        best = task.generateRandomEvaluatedSolution();
         population.add(new CichlidsSolution(best));
 
         for (int i = 1; i < popSize; i++) {
-            population.add(new CichlidsSolution(task.getRandomEvaluatedSolution()));
+            population.add(new CichlidsSolution(task.generateRandomEvaluatedSolution()));
             population.get(i).movement = new double[task.problem.getNumberOfDimensions()];
 
             if (task.problem.isFirstBetter(population.get(i), best)) {

@@ -10,11 +10,12 @@ public class F19 extends CEC2010 {
     public F19(int d) {
         super("F19 Shifted Schwefel's Problem 1.2", d, 19);
 
-        OShift = new double[numberOfDimensions];
+        oShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {
-            OShift[i] = RNG.nextDouble(lowerLimit.get(i), upperLimit.get(i));
+            oShift[i] = RNG.nextDouble(lowerLimit.get(i), upperLimit.get(i));
         }
+        decisionSpaceOptima[0] = oShift;
 
         M = new double[m * m];
 
@@ -29,6 +30,6 @@ public class F19 extends CEC2010 {
 
     @Override
     public double eval(double[] x) {
-        return Functions.schwefel_func(x, numberOfDimensions, OShift, M, 1, 0);
+        return Functions.schwefel_func(x, numberOfDimensions, oShift, M, 1, 0);
     }
 }

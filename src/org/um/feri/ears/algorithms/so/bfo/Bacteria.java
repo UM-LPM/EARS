@@ -11,7 +11,7 @@ public class Bacteria extends NumberSolution<Double> implements Comparable<Bacte
 	double c;
 	
 	public Bacteria(Task<NumberSolution<Double>, DoubleProblem> t, double c) throws StopCriterionException {
-		super(t.getRandomEvaluatedSolution());
+		super(t.generateRandomEvaluatedSolution());
 		prev = this;
 		health = 0;
 		this.c = c;

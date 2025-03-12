@@ -66,7 +66,7 @@ public class BTLBO extends NumberAlgorithm {
         if (task.isStopCriterion()) {
             return;
         }
-        population[0] = task.getRandomEvaluatedSolution();
+        population[0] = task.generateRandomEvaluatedSolution();
         if (stat.getCurrent_g().getBest() == null) {
             stat.getCurrent_g().setBest(population[0]);
         }
@@ -80,7 +80,7 @@ public class BTLBO extends NumberAlgorithm {
                 return;
             }
 
-            population[i] = (NumberSolution<Double>) task.getRandomEvaluatedSolution();
+            population[i] = (NumberSolution<Double>) task.generateRandomEvaluatedSolution();
             if (task.problem.isFirstBetter(population[i], stat.getBest())) {
                 stat.getCurrent_g().setBest(population[i]);
             }

@@ -99,7 +99,7 @@ public class GOA extends NumberAlgorithm {
                     newPosition[k] = c * S_total[k] + best.getValue(k);
                 }
 
-                task.problem.setFeasible(newPosition);
+                task.problem.makeFeasible(newPosition);
                 if (task.isStopCriterion())
                     break;
 
@@ -140,7 +140,7 @@ public class GOA extends NumberAlgorithm {
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            NumberSolution<Double> newSolution = task.getRandomEvaluatedSolution();
+            NumberSolution<Double> newSolution = task.generateRandomEvaluatedSolution();
             population.add(newSolution);
         }
 

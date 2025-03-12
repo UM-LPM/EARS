@@ -302,7 +302,7 @@ public class ExpBas{
 
         ArrayList<ArrayList<Double>> population = new ArrayList<>();
         ArrayList<Double> populationFitnesses = new ArrayList<>();
-        population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.getRandomVariables()))));
+        population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.generateRandomVariables()))));
         populationFitnesses.add(problem.eval(population.get(0)));
         ArrayList<Double> bestSolution = new ArrayList<>(population.get(0));
         double bestFitness = populationFitnesses.get(0);
@@ -313,7 +313,7 @@ public class ExpBas{
 
         // Initialize population
         for(int i = 1; i < NP; i++){
-            population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.getRandomVariables()))));
+            population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.generateRandomVariables()))));
             explorationPhases++; // Since random solutions have no parents, exploration must be assumed
             populationFitnesses.add(problem.eval(population.get(i)));
             cntFES++;
@@ -358,7 +358,7 @@ public class ExpBas{
 
                 boolean isRandom = false;
                 if(!problem.isFeasible(u)){
-                    u = new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.getRandomVariables())));
+                    u = new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.generateRandomVariables())));
                     explorationPhases++; // Since random solutions have no parents, exploration must be assumed
                     isRandom = true;
                 }

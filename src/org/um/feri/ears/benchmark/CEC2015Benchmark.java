@@ -69,7 +69,7 @@ public class CEC2015Benchmark extends SOBenchmark<NumberSolution<Double>, Number
 
             if (stopCriterion == StopCriterion.CPU_TIME) {
                 for (int i = 0; i < warmupIterations; i++) {
-                    p.getRandomEvaluatedSolution();
+                    p.generateRandomEvaluatedSolution();
                 }
             }
 
@@ -82,7 +82,7 @@ public class CEC2015Benchmark extends SOBenchmark<NumberSolution<Double>, Number
         long start = System.nanoTime();
         long duration;
         for (int i = 0; i < maxEvaluations; i++) {
-            p.getRandomEvaluatedSolution();
+            p.generateRandomEvaluatedSolution();
         }
         duration = System.nanoTime() - start;
         // add algorithm runtime

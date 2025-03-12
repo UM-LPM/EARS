@@ -99,27 +99,21 @@ public class MemoryBankDoubleSolution {
 
     }
 
-    public NumberSolution<Double> getRandomSolution(TaskWithMemory task) throws StopCriterionException {
-        double[] d = task.problem.getRandomVariables();
-        return eval(task, d);
+    public NumberSolution<Double> generateRandomSolution(TaskWithMemory task) throws StopCriterionException {
+        return task.problem.generateRandomEvaluatedSolution();
     }
-    /*
-     * public String encodeKey(double x[]) { StringBuffer sb = new StringBuffer();
-     * for(double d:x) { sb.append(""+Double.doubleToLongBits(d)).append("."); }
-     * return sb.toString();
-     *
-     * }
-     */
 
-    public NumberSolution<Double> eval(TaskWithMemory task, double[] x) throws StopCriterionException {
+    //if duplicate mirror values
+    public void eval(TaskWithMemory task, NumberSolution<Double> solution) throws StopCriterionException {
         // round(x);
-        NumberSolution<Double> ds;
+
+
+        double[] x = solution.getVariables().stream().mapToDouble(Double::doubleValue).toArray();
         String key = encodeKeyPerc(x);
         //last evaluation record data
         if (1 + duplicationHitSum + task.getNumberOfEvaluations() == task.getMaxEvaluations()) {
             //Log
             ReportBank.logMemory(ReportBank.MEMORY_END + ReportBank.MFES);
-
             ReportBank.addDoubleValue(ReportBank.BEST + ReportBank.MFES, best4ConvergenceGraph.getEval());
             if (task.isGlobal()) {
                 ReportBank.addDoubleValue(ReportBank.SR + ReportBank.MFES, 1.);
@@ -131,12 +125,14 @@ public class MemoryBankDoubleSolution {
             ReportBank.logTime(ReportBank.TIME + ReportBank.MFES);
         }
         if (hashMapMemory.containsKey(key)) { //duplicate
+            NumberSolution<Double> ds;
+            ds = hashMapMemory.get(key);
             duplicationHitSum++;
+
             if (!task.isGlobal()) {
                 duplicationBeforeGlobal++;
             }
             if (convergenceGraphDataCollect) {
-                ds = hashMapMemory.get(key);
                 // eval+1 one plus becuse we fake that we need additional evaluation
                 ReportBank.addPairValue(CONVERGENCE_DUPLICATE, new Pair(task.getNumberOfEvaluations() + 1, best4ConvergenceGraph.getEval()));
                 ReportBank.addPairValue(CONVERGENCE_DUPLICATE_VALUE, new Pair(task.getNumberOfEvaluations() + 1, ds.getEval()));
@@ -144,27 +140,21 @@ public class MemoryBankDoubleSolution {
             }
 
             if (updateStrategy.criteria4Change(hashMapMemoryHits.get(key))) {
-                updateStrategy.changeSolution(x);
-                return eval(task, x);
-       /* round(x);
-        //hashMapMemoryHits.put(key, 1); // new one� ERROR
-        ds = task.evalOrg(x);
-        if (converganceGraphDataCollect) {
-          if (best4ConverganceGraph == null)
-            best4ConverganceGraph = ds;
-          else if (task.isFirstBetter(ds, best4ConverganceGraph))
-            best4ConverganceGraph = ds;
-        }
-
-        hashMapMemory.put(key, ds);
-        */
+                updateStrategy.changeSolution(solution);
+                eval(task, solution); //not the same calls itself
+                return; //end
             } else {
                 if (updateStrategy.forceIncEvaluation()) {
-                    task.incrementNumberOfEvaluations(); //no change but we...
+                    task.incrementNumberOfEvaluations(1); //no change but we...
                 }
                 hashMapMemoryHits.put(key, hashMapMemoryHits.get(key) + 1);
             }
-            ds = new NumberSolution<>(hashMapMemory.get(key)); //do I need new?
+
+            //set solution values to ds
+            solution.setClone(ds); //copy duplicate to solution
+            if (task.isStopCriterion()) { // TODO be careful clear here or in main?
+                clearMemory();
+            }
   /*    if (converganceGraphDataCollect) {
         if (best4ConverganceGraph == null)
           best4ConverganceGraph = ds;
@@ -174,28 +164,27 @@ public class MemoryBankDoubleSolution {
         ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));
       }
       */
-            if (task.isStopCriterion()) { // TODO be careful clear here or in main?
-                clearMemory();
-            }
-            return ds;
+
+            return;
         } else { //not duplicate
             hashMapMemoryHits.put(key, 1); // new one�
-            ds = task.evalOrg(x);
+            task.evalParent(solution);
+           // ds = task.evalOrg(x);
             if (best4ConvergenceGraph == null)
-                best4ConvergenceGraph = ds;
-            else if (task.problem.isFirstBetter(ds, best4ConvergenceGraph))
-                best4ConvergenceGraph = ds;
+                best4ConvergenceGraph = solution;
+            else if (task.problem.isFirstBetter(solution, best4ConvergenceGraph))
+                best4ConvergenceGraph = solution;
             if (convergenceGraphDataCollect) {
                 ReportBank.addPairValue(CONVERGENCE, new Pair(task.getNumberOfEvaluations(), best4ConvergenceGraph.getEval()));
-                ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), ds.getEval()));
+                ReportBank.addPairValue(FITNESS, new Pair(task.getNumberOfEvaluations(), solution.getEval()));
                 ReportBank.addPairValue(DUPLICATE_CONVERGENCE_NOT, new Pair(task.getNumberOfEvaluations() + 1, task.getNumberOfEvaluations() + 1-duplicationHitSum));
             }
-            hashMapMemory.put(key, ds);
+            hashMapMemory.put(key, solution);
             if (task.isStopCriterion())
                 clearMemory();
-            return ds;
         }
     }
+
 
     public void reset() {
         duplicationHitSum = 0;

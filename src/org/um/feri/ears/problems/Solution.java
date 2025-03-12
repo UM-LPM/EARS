@@ -1,11 +1,12 @@
 package org.um.feri.ears.problems;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Solution {
+public abstract class Solution implements Serializable {
 
     int numberOfObjectives;
 
@@ -274,4 +275,21 @@ public abstract class Solution {
         currentID = 1;
     }
 
+    // This method is used to set existing object to original
+    // used instead of clone.
+    void setClone(Solution org) {
+       objectives = org.objectives;
+       numberOfObjectives = org.numberOfObjectives;
+       constraintsMet = org.constraintsMet;
+       crowdingDistance = org.crowdingDistance;
+       rank = org.rank;
+       numberOfViolatedConstraints = org.numberOfViolatedConstraints;
+       ID = org.ID; // TODO Ravby Check if needed for softClone
+       timeStamp = org.timeStamp;
+       generationNumber = org.generationNumber;
+       overallConstraintViolation = org.overallConstraintViolation;
+       attributes = org.attributes;
+       paretoFitness = org.paretoFitness;
+
+    }
 }

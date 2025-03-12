@@ -69,7 +69,7 @@ public class SolutionUtils {
 
         // found the min distance respect to population
         for (int i = 0; i < solutionList.size(); i++) {
-            double aux = distanceBetweenSolutions(solution, solutionList.get(i));
+            double aux = calculateEuclideanDistance(solution, solutionList.get(i));
             if (aux < distance)
                 distance = aux;
         }
@@ -83,7 +83,7 @@ public class SolutionUtils {
      * @param solutionJ The second <code>Solution</code>.
      * @return the distance between solutions.
      */
-    public static <T extends Number> double distanceBetweenSolutions(NumberSolution<T> solutionI, NumberSolution<T> solutionJ) {
+    public static <T extends Number> double calculateEuclideanDistance(NumberSolution<T> solutionI, NumberSolution<T> solutionJ) {
         double distance = 0.0;
 
         double diff;

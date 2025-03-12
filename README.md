@@ -21,7 +21,8 @@ The latest release including the .jar file can be downloaded  from the [releases
 
 **First Download EARS project**
 
-* Go to: `File` - > `New` -> `Project from Version Control` -> `Git`
+* __*Old version*__ Go to: `File` - > `New` -> `Project from Version Control` -> `Git`
+* Go to: `File` - > `New` -> `Clone Repository` -> `Repository URL`
 * Set URL to https://github.com/UM-LPM/EARS.git
 * Select the directory where you want to save the project (example: "path to my projects/EARS")
 * Import Gradle project
@@ -39,10 +40,11 @@ Groovy:
 include ':EARS'
 project(':EARS').projectDir = new File('path to EARS') // example: new File('../my_projects/EARS')  or project.projectDir.path + "/../EARS"
 ```
-Kotlin:
+Kotlin **settings.gradle.kts**:
 ```Kotlin
-include(":EARS")
-project(":EARS").projectDir = File("path to EARS")
+rootProject.name = "YOUR_PROJECT_DEFAULT"
+include(":EARS") //add this line
+project(":EARS").projectDir = file("path to EARS") //add this line 
 ```
 
 * In file  **build.gradle** add:
@@ -93,11 +95,11 @@ public class RandomWalkAlgorithm extends NumberAlgorithm { // needs to extend Nu
         // the task object holds information about the stopping criterion
         // and information about the problem (number of dimensions, number of constraints, upper and lower bounds...)
         NumberSolution<Double> newSolution;
-        best = task.getRandomEvaluatedSolution();  // generate new random solution (number of evaluations is incremented automatically)
+        best = task.generateRandomEvaluatedSolution();  // generate new random solution (number of evaluations is incremented automatically)
         // to evaluate a custom solution or an array use task.eval(mySolution)
         while (!task.isStopCriterion()) { // run until the stopping criterion is not reached
 
-            newSolution = task.getRandomEvaluatedSolution();
+            newSolution = task.generateRandomEvaluatedSolution();
             if (task.problem.isFirstBetter(newSolution, best)) { // use method isFirstBetter to check which solution is better (it checks constraints and considers the type of the problem (minimization or maximization))
                 best = newSolution;
             }
@@ -116,7 +118,7 @@ Executing a single Task:
 
 ```java
 import org.um.feri.ears.algorithms.NumberAlgorithm;
-import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.de.DE;
 import org.um.feri.ears.problems.*;
 import org.um.feri.ears.problems.unconstrained.Sphere;
 import org.um.feri.ears.util.random.RNG;
@@ -131,7 +133,7 @@ public class SOSingleRun {
 
         Task sphere = new Task(problem, StopCriterion.EVALUATIONS, 10000, 0, 0); // set the stopping criterion to max 10000 evaluations
 
-        NumberAlgorithm alg = new DEAlgorithm(DEAlgorithm.Strategy.JDE_RAND_1_BIN);
+        NumberAlgorithm alg = new DE(DE.Strategy.JDE_RAND_1_BIN);
         NumberSolution<Double> best;
         try {
             best = alg.execute(sphere);
@@ -148,9 +150,9 @@ To perform a tournament you need more than one algorithm (player) and more than 
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.abc.ABC;
 import org.um.feri.ears.algorithms.so.gwo.GWO;
-import org.um.feri.ears.algorithms.so.jade.JADE;
-import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.de.jade.JADE;
+import org.um.feri.ears.algorithms.so.random.RandomSearch;
+import org.um.feri.ears.algorithms.so.tlbo.TLBO;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
 import org.um.feri.ears.util.random.RNG;
@@ -224,7 +226,7 @@ public class ExpBasExample {
 
         ArrayList<ArrayList<Double>> population = new ArrayList<>();
         ArrayList<Double> populationFitnesses = new ArrayList<>();
-        population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.getRandomVariables()))));
+        population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.generateRandomVariables()))));
         populationFitnesses.add(problem.eval(population.get(0)));
         ArrayList<Double> bestSolution = new ArrayList<>(population.get(0));
         double bestFitness = populationFitnesses.get(0);
@@ -235,7 +237,7 @@ public class ExpBasExample {
 
         // Initialize population
         for(int i = 1; i < NP; i++){
-            population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.getRandomVariables()))));
+            population.add(new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.generateRandomVariables()))));
             explorationPhases++; // Exploration is assumed for random solutions
             populationFitnesses.add(problem.eval(population.get(i)));
             cntFES++;
@@ -280,7 +282,7 @@ public class ExpBasExample {
 
                 boolean isRandom = false;  // Flag remembers if new solution is created randomly
                 if(!problem.isFeasible(u)){
-                    u = new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.getRandomVariables())));
+                    u = new ArrayList<>(Arrays.asList(ArrayUtils.toObject(problem.generateRandomVariables())));
                     explorationPhases++;  // Exploration is assumed for random solutions
                     isRandom = true;
                 }

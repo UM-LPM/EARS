@@ -87,7 +87,7 @@ public class RMO extends NumberAlgorithm {
                     V[i][j] = RNG.nextDouble(-1, 1) * ((task.problem.getUpperLimit(j) - task.problem.getLowerLimit(j)) / k);//RNG.nextDouble(task.getLowerLimit()[j], task.problem.getUpperLimit()[j]) / 100.0;
 
                     //Move particle and check constrains
-                    X[i][j] = task.problem.setFeasible(V[i][j] * W + cp[j], j);
+                    X[i][j] = task.problem.makeFeasible(V[i][j] * W + cp[j], j);
                 }
 
                 if (task.isStopCriterion()) {

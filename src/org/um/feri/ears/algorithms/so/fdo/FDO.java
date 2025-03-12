@@ -83,7 +83,7 @@ public class FDO extends NumberAlgorithm {
                     }
                     double newBeeXs = x + pace;
                     if (solutionMustRemainInsideBoundary) {
-                        newBeeXs = setFeasible(newBeeXs, dim);
+                        newBeeXs = makeFeasible(newBeeXs, dim);
                     }
                     tempXs[dim] = newBeeXs;
                     lastPace.add(pace); //save pace for potential reuse
@@ -109,7 +109,7 @@ public class FDO extends NumberAlgorithm {
                         double distanceFromBestBee = best.getValue(n) - population[i].getValue(n);
                         double x = population[i].getValue(n) + (distanceFromBestBee * fitnessWeight) + population[i].getLastPace().get(n);
                         if (solutionMustRemainInsideBoundary) {
-                            x = setFeasible(x, n);
+                            x = makeFeasible(x, n);
                         }
                         tempXs[n] = x;
                     }
@@ -134,7 +134,7 @@ public class FDO extends NumberAlgorithm {
                             double x = population[i].getValue(n) + population[i].getValue(n) * r;
 
                             if (solutionMustRemainInsideBoundary) {
-                                x = setFeasible(x, n);
+                                x = makeFeasible(x, n);
                             }
                             tempXs[n] = x;
                         }
@@ -188,7 +188,7 @@ public class FDO extends NumberAlgorithm {
         return Math.exp(logGamma(x));
     }
 
-    private double setFeasible(double x, int d) {
+    private double makeFeasible(double x, int d) {
         if (x > task.problem.getUpperLimit(d)) {
             x = task.problem.getUpperLimit(d) * RNG.nextDouble();
         } else if (x < task.problem.getLowerLimit(d)) {
@@ -199,12 +199,12 @@ public class FDO extends NumberAlgorithm {
 
     private void initPopulation() throws StopCriterionException {
         population = new Bee[popSize];
-        best = new Bee(task.getRandomEvaluatedSolution());
+        best = new Bee(task.generateRandomEvaluatedSolution());
         population[0] = new Bee(new NumberSolution(best));
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population[i] = new Bee(task.getRandomEvaluatedSolution());
+            population[i] = new Bee(task.generateRandomEvaluatedSolution());
             if (task.problem.isFirstBetter(population[i], best)) {
                 best = new Bee(population[i]);
             }

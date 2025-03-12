@@ -55,7 +55,7 @@ public class PredefinedRandom extends RandomGenerator {
     @Override
     public int nextInt() {
         double normalized = (getNextPredefinedNumber() % 1.0);
-        return Integer.MIN_VALUE + (int) (normalized * (Integer.MAX_VALUE - (long)Integer.MIN_VALUE));
+        return (int)(Integer.MIN_VALUE + (long)(normalized * ((long)Integer.MAX_VALUE - Integer.MIN_VALUE)));
     }
 
     @Override

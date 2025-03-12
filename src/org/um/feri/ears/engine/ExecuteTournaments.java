@@ -569,7 +569,6 @@ public class ExecuteTournaments {
             e.printStackTrace();
         }
 
-        DummyAlgorithm.readFromJson = false; //engine only works with .txt files
         ArrayList<DummyAlgorithm> players = new ArrayList<DummyAlgorithm>();
         DummyBenchmark dr = new DummyBenchmark(0.000001); //Create benchmark
         dr.setDisplayRatingCharts(false);

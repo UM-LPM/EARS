@@ -52,7 +52,7 @@ public class SimulatedAnnealing extends NumberAlgorithm {
             sigma[i] *= 0.1;
         }
 
-        globalBest = task.getRandomEvaluatedSolution();
+        globalBest = task.generateRandomEvaluatedSolution();
         currentBest = new NumberSolution<>(globalBest);
 
         while (!task.isStopCriterion()) {
@@ -95,7 +95,7 @@ public class SimulatedAnnealing extends NumberAlgorithm {
             } else
                 x[i] = currentVariables[i];
         }
-        task.problem.setFeasible(x);
+        task.problem.makeFeasible(x);
 
         NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(x));
         task.eval(newSolution);

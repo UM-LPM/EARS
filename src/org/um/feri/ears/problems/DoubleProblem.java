@@ -16,7 +16,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
 
     @Override
     public void makeFeasible(NumberSolution<Double> solution) {
-        setFeasible(solution.getVariables());
+        makeFeasible(solution.getVariables());
     }
 
     public void makeFeasible(NumberSolution<Double> solution, BoundaryControl.BoundaryControlMethod bcm) {
@@ -29,7 +29,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
     }
 
     @Override
-    public NumberSolution<Double> getRandomSolution() {
+    public NumberSolution<Double> generateRandomSolution() {
 
         List<Double> x = new ArrayList<>();
         for (int i = 0; i < numberOfDimensions; i++) {
@@ -44,7 +44,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
      *
      * @return random variables
      */
-    public double[] getRandomVariables() {
+    public double[] generateRandomVariables() {
         double[] x = new double[numberOfDimensions];
         for (int j = 0; j < numberOfDimensions; j++) {
             x[j] = RNG.nextDouble(lowerLimit.get(j), upperLimit.get(j));
@@ -65,15 +65,15 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
      *
      * @param x vector to be set to feasible
      */
-    public void setFeasible(List<Double> x) {
+    public void makeFeasible(List<Double> x) {
         for (int i = 0; i < x.size(); i++) {
-            x.set(i, setFeasible(x.get(i), i));
+            x.set(i, makeFeasible(x.get(i), i));
         }
     }
 
-    public void setFeasible(double[] x) {
+    public void makeFeasible(double[] x) {
         for (int i = 0; i < x.length; i++) {
-            x[i] = setFeasible(x[i], i);
+            x[i] = makeFeasible(x[i], i);
         }
     }
 
@@ -88,7 +88,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
      * @return feasible value
      */
     @CheckReturnValue
-    public double setFeasible(double value, int dimension) {
+    public double makeFeasible(double value, int dimension) {
         return Math.max(Math.min(value, upperLimit.get(dimension)), lowerLimit.get(dimension));
     }
 
@@ -119,6 +119,7 @@ public abstract class DoubleProblem extends NumberProblem<Double> {
 
     //TODO replace with accessor pattern
     @Override
+    @Deprecated
     public void evaluate(NumberSolution<Double> solution) {
         solution.setObjective(0, eval(solution.getVariables()));
     }

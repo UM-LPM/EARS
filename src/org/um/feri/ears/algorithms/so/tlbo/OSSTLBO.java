@@ -63,12 +63,12 @@ public class OSSTLBO extends NumberAlgorithm {
     private void initPopulation() throws StopCriterionException {
         population = new NumberSolution[popSize];
 
-        best = task.getRandomEvaluatedSolution();
+        best = task.generateRandomEvaluatedSolution();
         population[0] = new NumberSolution<>(best);
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population[i] = task.getRandomEvaluatedSolution();
+            population[i] = task.generateRandomEvaluatedSolution();
             if (task.problem.isFirstBetter(population[i], best)) {
                 best = new NumberSolution<>(population[i]);
             }

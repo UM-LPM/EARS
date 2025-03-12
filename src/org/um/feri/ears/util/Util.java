@@ -1,6 +1,9 @@
 package org.um.feri.ears.util;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -242,5 +245,68 @@ public class Util {
     public static ArrayList<Double> toDoubleArrayList(double[] array) {
 
         return Arrays.stream(array).boxed().collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static String sendEvaluateRequest(String apiUrl, String jsonBody, int timeout, RequestBodyParams requestBodyParams, String jsonBodyDestFolderPath) throws Exception {
+        // Write the JSON to file
+        //File jsonFile = new File("C:\\Users\\marko\\UnityProjects\\GeneralTrainingEnvironmentForMAS\\WebAPI\\RequestData\\jsonBody.json");
+        File jsonFile = new File(jsonBodyDestFolderPath);
+
+        if (jsonFile.exists()) {
+            jsonFile.delete();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(jsonFile))) {
+            writer.write(jsonBody);
+        }
+
+        URL url = new URL(apiUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(timeout);
+
+        // Set the request method to POST
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setChunkedStreamingMode(0); // Enable chunked transfer encoding
+        conn.setDoOutput(true);
+
+        // Convert evalEnvInstanceURIs to JSON
+        Gson gson = new Gson();
+        String jsonRequestBody = gson.toJson(requestBodyParams);
+
+        InputStream jsonBodyStream = new ByteArrayInputStream(jsonRequestBody.getBytes(StandardCharsets.UTF_8));
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] buffer = new byte[8192]; // 8KB buffer
+            int bytesRead;
+            while ((bytesRead = jsonBodyStream.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+        }
+
+        int responseCode = conn.getResponseCode();
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                String inputLine;StringBuilder response = new StringBuilder();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                return response.toString();
+            }
+        } else if (responseCode == 888) {
+            throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
+        } else {
+            throw new RuntimeException("HTTP POST request failed with response code: " + responseCode);
+        }
+    }
+
+    public static void appendExceptionToLogFile(Exception exception, String filePath){
+        try (FileWriter fw = new FileWriter(filePath, true);
+             BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write("ERROR:" + exception.toString());
+            bw.newLine(); // Adds a new line after appending the content
+        } catch (IOException e) {
+            System.out.println("Error appending to file: " + e.getMessage());
+        }
     }
 }

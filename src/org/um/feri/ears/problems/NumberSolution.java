@@ -1,5 +1,6 @@
 package org.um.feri.ears.problems;
 
+import org.um.feri.ears.util.Point;
 import org.um.feri.ears.util.Util;
 
 import java.util.ArrayList;
@@ -75,6 +76,10 @@ public class NumberSolution<N extends Number> extends Solution {
         return variables;
     }
 
+    public Point<N> getVariablesAsPoint() {
+        return new Point<N>(variables);
+    }
+
     public int numberOfVariables() {
         return variables.size();
     }
@@ -94,7 +99,9 @@ public class NumberSolution<N extends Number> extends Solution {
 
     public String toString() {
 
-        String objectivesString = Arrays.stream(getObjectives()).mapToObj(o -> Util.dfcshort.format(o)).collect(Collectors.joining(",", "[", "]"));
+        String objectivesString = Arrays.stream(getObjectives())
+                .mapToObj(o -> Util.dfcshort.format(o) + " (" + o + ")")
+                .collect(Collectors.joining(",", "[", "]"));
 
         String variablesString =  getVariables().stream()
                 .map(String::valueOf)
@@ -113,5 +120,12 @@ public class NumberSolution<N extends Number> extends Solution {
             aux = aux + this.getObjective(i) + ";";
         aux = aux.replace(".", ",");
         return aux;
+    }
+
+    // This method is used to set existing object to original
+    // used instead of clone.
+    public void setClone(NumberSolution<N> org) {
+        variables = new ArrayList<>(org.variables);
+        super.setClone(org);
     }
 }

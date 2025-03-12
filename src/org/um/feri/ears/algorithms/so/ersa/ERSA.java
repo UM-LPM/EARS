@@ -1,8 +1,5 @@
 package org.um.feri.ears.algorithms.so.ersa;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.checkerframework.checker.units.qual.A;
-import org.jetbrains.annotations.NotNull;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.NumberAlgorithm;
@@ -10,10 +7,9 @@ import org.um.feri.ears.problems.DoubleProblem;
 import org.um.feri.ears.problems.NumberSolution;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.Task;
-import org.um.feri.ears.util.Util;
+import org.um.feri.ears.util.SolutionUtils;
 import org.um.feri.ears.util.random.RNG;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 // Changed N = 100
@@ -49,7 +45,7 @@ public class ERSA extends NumberAlgorithm {
         Streamer() throws StopCriterionException {
             // create an initial random evaluated solution in the feasible region
             try {
-                Fn0 = task.getRandomEvaluatedSolution();
+                Fn0 = task.generateRandomEvaluatedSolution();
             } catch (StopCriterionException e) {
                 throw e;
             }
@@ -156,7 +152,7 @@ public class ERSA extends NumberAlgorithm {
             // Returns True if streamer is to be kept active
             // Returns False if streamer needs to be eliminated (better solution not found or En < CV)
 
-            double x = EuclideanDistance(Fn_prev, Fn_curr);
+            double x = SolutionUtils.calculateEuclideanDistance(Fn_prev, Fn_curr);
 
             //if(printDebug)
             //System.out.println(String.format("Fn0=%e, Curr=%e, Prev=%e, Glob=%e", Fn0.getEval(), Fn_curr.getEval(), Fn_prev.getEval(), globalBest.getEval()));
@@ -249,14 +245,6 @@ public class ERSA extends NumberAlgorithm {
 
             return true;
         }
-
-        double EuclideanDistance(NumberSolution<Double> s1, NumberSolution<Double> s2) {
-            double sum = 0.0;
-            for (int i = 0; i < task.problem.getNumberOfDimensions(); i++)
-                sum += Math.pow(s1.getValue(i) - s2.getValue(i), 2.0);
-            return Math.sqrt(sum);
-        }
-
     }
 
     public ERSA() {

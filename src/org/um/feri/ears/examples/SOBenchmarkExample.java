@@ -3,9 +3,9 @@ package org.um.feri.ears.examples;
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.abc.ABC;
 import org.um.feri.ears.algorithms.so.gwo.GWO;
-import org.um.feri.ears.algorithms.so.jade.JADE;
-import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.de.jade.JADE;
+import org.um.feri.ears.algorithms.so.random.RandomSearch;
+import org.um.feri.ears.algorithms.so.tlbo.TLBO;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.RPUOed30Benchmark;
 
@@ -20,8 +20,8 @@ public class SOBenchmarkExample {
         ArrayList<NumberAlgorithm> algorithms = new ArrayList<NumberAlgorithm>();
         algorithms.add(new ABC());
         algorithms.add(new GWO());
-        algorithms.add(new TLBOAlgorithm());
-        algorithms.add(new RandomWalkAlgorithm());
+        algorithms.add(new TLBO());
+        algorithms.add(new RandomSearch());
         algorithms.add(new JADE());
 
         RPUOed30Benchmark rpuoed30 = new RPUOed30Benchmark(); // benchmark with prepared tasks and settings

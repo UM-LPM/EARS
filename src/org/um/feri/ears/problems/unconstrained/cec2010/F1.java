@@ -16,15 +16,16 @@ public class F1 extends CEC2010 {
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
 
-        OShift = new double[numberOfDimensions];
+        oShift = new double[numberOfDimensions];
 
         for (int i = 0; i < numberOfDimensions; i++) {
-            OShift[i] = RNG.nextDouble(lowerLimit.get(i), upperLimit.get(i));
+            oShift[i] = RNG.nextDouble(lowerLimit.get(i), upperLimit.get(i));
         }
+        decisionSpaceOptima[0] = oShift;
     }
 
     public double eval(double[] x) {
-        return Functions.ellips_func(x, numberOfDimensions, OShift, M, 1, 0);
+        return Functions.ellips_func(x, numberOfDimensions, oShift, M, 1, 0);
     }
 
 }

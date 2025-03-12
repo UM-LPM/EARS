@@ -146,7 +146,7 @@ public class FSS extends NumberAlgorithm {
                 }
 
                 //take care about bounds of search space
-                task.problem.setFeasible(newSolution);
+                task.problem.makeFeasible(newSolution);
 
                 //evaluate new current solution
                 if (task.isStopCriterion())
@@ -281,7 +281,7 @@ public class FSS extends NumberAlgorithm {
             }
 
             //take care about bounds of search space
-            task.problem.setFeasible(newSolution);
+            task.problem.makeFeasible(newSolution);
 
             //evaluate new current solution
             if (task.isStopCriterion())
@@ -322,7 +322,7 @@ public class FSS extends NumberAlgorithm {
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            FishSolution newSolution = new FishSolution(task.getRandomEvaluatedSolution());
+            FishSolution newSolution = new FishSolution(task.generateRandomEvaluatedSolution());
             school.add(newSolution);
         }
 

@@ -85,7 +85,7 @@ public class BA extends NumberAlgorithm {
 					}
 				}
 				
-				task.problem.setFeasible(S);
+				task.problem.makeFeasible(S);
 				if(task.isStopCriterion())
 					break;
 
@@ -121,12 +121,12 @@ public class BA extends NumberAlgorithm {
 	private void initPopulation() throws StopCriterionException {
 		
 		population = new ArrayList<BatSolution>();
-		best = new BatSolution(task.getRandomEvaluatedSolution());
+		best = new BatSolution(task.generateRandomEvaluatedSolution());
 		best.v = new double[task.problem.getNumberOfDimensions()];
 		population.add(best);
 		for (int i = 1; i < popSize; i++) {
 			
-			BatSolution newSolution = new BatSolution(task.getRandomEvaluatedSolution());
+			BatSolution newSolution = new BatSolution(task.generateRandomEvaluatedSolution());
 			newSolution.v = new double[task.problem.getNumberOfDimensions()];
 			newSolution.A = RNG.nextDouble(1,2);
 			newSolution.r = RNG.nextDouble();

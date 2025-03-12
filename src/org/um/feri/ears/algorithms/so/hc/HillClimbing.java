@@ -45,7 +45,7 @@ public class HillClimbing extends NumberAlgorithm {
         this.task = task;
 
         double[] interval = task.problem.getInterval();
-        globalBest = task.getRandomEvaluatedSolution();
+        globalBest = task.generateRandomEvaluatedSolution();
         currentBest = new NumberSolution<>(globalBest);
         boolean improvement;
 
@@ -130,7 +130,7 @@ public class HillClimbing extends NumberAlgorithm {
                 //restart search if no improvement
                 if (!improvement) {
                     if (!task.isStopCriterion())
-                        currentBest = task.getRandomEvaluatedSolution();
+                        currentBest = task.generateRandomEvaluatedSolution();
                 }
             }
         }

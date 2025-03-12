@@ -295,7 +295,7 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
 
             if (task.isStopCriterion())
                 return;
-            NumberSolution<N> newSolution = task.getRandomEvaluatedSolution();
+            NumberSolution<N> newSolution = task.generateRandomEvaluatedSolution();
 
             population.add(newSolution);
             savedValues[i] = new NumberSolution<N>(newSolution);
@@ -307,7 +307,7 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
             z[i] = 1.0e+30;
             if (task.isStopCriterion())
                 return;
-            indArray[i] = task.getRandomEvaluatedSolution();
+            indArray[i] = task.generateRandomEvaluatedSolution();
         }
 
         for (int i = 0; i < populationSize; i++) {

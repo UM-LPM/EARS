@@ -30,7 +30,7 @@ public class RandomWalkAMAlgorithm extends NumberAlgorithm {
     private double[] xInSameDirection(double[] old, double[] newX) {
         double[] am = new double[old.length];
         for (int i = 0; i < old.length; i++) {
-            am[i] = task.problem.setFeasible(newX[i] + (newX[i] - old[i]), i); // if out of
+            am[i] = task.problem.makeFeasible(newX[i] + (newX[i] - old[i]), i); // if out of
             // range
         }
         return am;
@@ -40,11 +40,11 @@ public class RandomWalkAMAlgorithm extends NumberAlgorithm {
     public NumberSolution<Double> execute(Task<NumberSolution<Double>, DoubleProblem> task) throws StopCriterionException {
         NumberSolution<Double> currentSolution, iAritmetic, iExtend;
         this.task = task;
-        bestSolution = task.getRandomEvaluatedSolution();
+        bestSolution = task.generateRandomEvaluatedSolution();
         if (debug)
             System.out.println(task.getNumberOfEvaluations() + " " + bestSolution);
         while (!task.isStopCriterion()) {
-            currentSolution = task.getRandomEvaluatedSolution();
+            currentSolution = task.generateRandomEvaluatedSolution();
             if (task.problem.isFirstBetter(currentSolution, bestSolution)) {
                 if (!task.isStopCriterion()) { // try also arithmetic mean
 

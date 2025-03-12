@@ -3,10 +3,10 @@ package org.um.feri.ears.statistic.friedman;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import org.um.feri.ears.algorithms.so.de.DEAlgorithm;
+import org.um.feri.ears.algorithms.so.de.DE;
 import org.um.feri.ears.algorithms.so.es.ES1p1sAlgorithm;
-import org.um.feri.ears.algorithms.so.random.RandomWalkAlgorithm;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.random.RandomSearch;
+import org.um.feri.ears.algorithms.so.tlbo.TLBO;
 import org.um.feri.ears.benchmark.BenchmarkResults;
 import org.um.feri.ears.benchmark.CEC2010Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkRunner;
@@ -16,12 +16,12 @@ public class EARS_Friedman {
     public static void main(String[] args) {
     	CEC2010Benchmark b2 = new CEC2010Benchmark(0.001);
         BenchmarkRunner m = new BenchmarkRunner(false, false, b2) ;
-        m.addAlgorithm(new RandomWalkAlgorithm()); // RWSi
+        m.addAlgorithm(new RandomSearch()); // RWSi
         //m.addAlgorithm(new BeeColonyAlgorithm());  // ABC
-        m.addAlgorithm(new TLBOAlgorithm());       // TLBO
+        m.addAlgorithm(new TLBO());       // TLBO
         m.addAlgorithm(new ES1p1sAlgorithm()); // ES
-		for (DEAlgorithm.Strategy strategy : DEAlgorithm.Strategy.values())
-			m.addAlgorithm(new DEAlgorithm(strategy, 20));
+		for (DE.Strategy strategy : DE.Strategy.values())
+			m.addAlgorithm(new DE(strategy, 20));
 		m.run(25);
         BenchmarkResults br = m.getBenchmarkResults();
         FriedmanTransport fr = FriedmanTransport.calc4Friedman(br.getResultsByAlgorithm());

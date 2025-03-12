@@ -44,7 +44,7 @@ public class GSASolution extends NumberSolution<Double> {
     }
 
     public GSASolution(Task<NumberSolution<Double>, DoubleProblem> t) throws StopCriterionException {
-        super(t.getRandomEvaluatedSolution());
+        super(t.generateRandomEvaluatedSolution());
         v = new double[t.problem.getNumberOfDimensions()]; //init V=zeros(N,dim);
         a = new double[t.problem.getNumberOfDimensions()]; //init
         E = new double[t.problem.getNumberOfDimensions()]; //init
@@ -84,12 +84,12 @@ public class GSASolution extends NumberSolution<Double> {
                 feasable = false;
                 break;
             }
-            x[i] = t.problem.setFeasible(x[i] + v[i], i); //if not feasable generate random?
+            x[i] = t.problem.makeFeasible(x[i] + v[i], i); //if not feasable generate random?
             //%     %%Agents that go out of the search space, are reinitialized randomly .
             //Tp=X(i,:)>up;Tm=X(i,:)<low;X(i,:)=(X(i,:).*(~(Tp+Tm)))+((rand(1,dim).*(up-low)+low).*(Tp+Tm));
         }
         if (!feasable) { //if not feasable generate random
-            x = t.problem.getRandomVariables();
+            x = t.problem.generateRandomVariables();
         }
 
         NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(x));

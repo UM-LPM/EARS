@@ -370,12 +370,12 @@ public class jSO extends NumberAlgorithm{
             population.add(null);
             offspringPopulation.add(null);
         }
-        best = task.getRandomEvaluatedSolution();
+        best = task.generateRandomEvaluatedSolution();
         population.set(0, new NumberSolution<>(best));
         for (int i = 1; i < popSize; i++) {
             if (task.isStopCriterion())
                 break;
-            population.set(i, task.getRandomEvaluatedSolution());
+            population.set(i, task.generateRandomEvaluatedSolution());
             if (task.problem.isFirstBetter(population.get(i), best)) {
                 best = new NumberSolution<>(population.get(i));
             }

@@ -128,7 +128,7 @@ public class GSAv2 extends NumberAlgorithm {
         double[] velocities = pop.get(popIndex).getVelocities();
         double[] newPosition = new double[positions.length];
         for (int i = 0; i < positions.length; i++) {
-            newPosition[i] = task.problem.setFeasible(positions[i] + velocities[i], i);
+            newPosition[i] = task.problem.makeFeasible(positions[i] + velocities[i], i);
         }
 
         NumberSolution<Double> newSolution = new NumberSolution<>(Util.toDoubleArrayList(newPosition));

@@ -42,6 +42,16 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
         sb = new StringBuilder();
     }
 
+    @Override
+    public void eval(NumberSolution<Double> solution) throws StopCriterionException {
+        mb.eval(this, solution);
+    }
+
+    //used to prevent recursive calls//real calls
+    protected void evalParent(NumberSolution<Double> solution) throws StopCriterionException {
+        super.eval(solution);
+    }
+
     public NumberSolution<Double> evalOrg(double[] x) throws StopCriterionException {
 
         NumberSolution<Double> tmp = new NumberSolution<>(Util.toDoubleArrayList(x));
@@ -64,8 +74,8 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
     }
 
     @Override
-    public NumberSolution<Double> getRandomEvaluatedSolution() throws StopCriterionException {
-        return mb.getRandomSolution(this);
+    public NumberSolution<Double> generateRandomEvaluatedSolution() throws StopCriterionException {
+        return mb.generateRandomSolution(this);
     }
 
     @Override

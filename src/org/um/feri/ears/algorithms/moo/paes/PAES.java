@@ -51,7 +51,7 @@ public class PAES<N extends Number, P extends NumberProblem<N>> extends MOAlgori
 
         if (task.isStopCriterion())
             return;
-        NumberSolution<N> solution = new NumberSolution<N>(task.getRandomEvaluatedSolution());
+        NumberSolution<N> solution = new NumberSolution<N>(task.generateRandomEvaluatedSolution());
         // problem.evaluateConstraints(solution);
 
         archive.add(new NumberSolution<N>(solution));

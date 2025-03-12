@@ -10,6 +10,6 @@ public class F4 extends CEC2015 {
 
     @Override
     public double eval(double[] x) {
-        return Functions.schwefel_func(x, numberOfDimensions, OShift, M, 1, 0) + 100.0 * funcNum;
+        return Functions.schwefel_func(x, numberOfDimensions, oShift, M, 1, 0) + 100.0 * funcNum;
     }
 }

@@ -73,7 +73,6 @@ public class PSOv2 extends NumberAlgorithm {
                     //c2 * RNG.nextDouble() * (gBest.getValue(d) - population.get(i).getValue(d));
                     velocity.add(v);
                 }
-
                 BoundaryControl.clamp(velocity, task.problem.lowerLimit, task.problem.upperLimit);
 
                 population.get(i).updatePosition(velocity);
@@ -84,7 +83,6 @@ public class PSOv2 extends NumberAlgorithm {
                         population.get(i).velocity.set(j, 0.0);
                     }
                 }
-
                 task.eval(population.get(i));
                 if (task.problem.isFirstBetter(population.get(i), population.get(i).pBest))
                     population.get(i).pBest = new PsoSolutionv2(population.get(i));

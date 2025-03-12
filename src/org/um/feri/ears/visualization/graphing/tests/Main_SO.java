@@ -1,7 +1,7 @@
 package org.um.feri.ears.visualization.graphing.tests;
 
 import org.um.feri.ears.algorithms.so.pso.PSO;
-import org.um.feri.ears.algorithms.so.tlbo.TLBOAlgorithm;
+import org.um.feri.ears.algorithms.so.tlbo.TLBO;
 import org.um.feri.ears.benchmark.Benchmark;
 import org.um.feri.ears.benchmark.BenchmarkRunnerBestAlgSettings;
 import org.um.feri.ears.benchmark.RPUOed2Benchmark;
@@ -29,7 +29,7 @@ public class Main_SO {
         rbs.addAlgorithm(new PSO());
         //rbs.addAlgorithm(new DEAlgorithm(3,20)); 	// Ne dela, zastarela koda?
 //        rbs.addAlgorithm(new ES1p1sAlgorithm());
-        rbs.addAlgorithm(new TLBOAlgorithm());
+        rbs.addAlgorithm(new TLBO());
         
         rbs.run(50);
         System.out.println(rbs);
