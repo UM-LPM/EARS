@@ -146,6 +146,7 @@ public class MemoryBankDoubleSolution {
             ReportBank.logTime(ReportBank.TIME + ReportBank.MFES);
         }
         if (hashMapMemory.containsKey(key)) { //duplicate
+            task.internalStagnationCounter++; //TODO checek if it is ok
             NumberSolution<Double> ds;
             ds = hashMapMemory.get(key);
             duplicationHitSum++;

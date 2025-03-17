@@ -14,8 +14,12 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
     int stopIfDuplicatesCount;
     private static int NOT_SET_EVAL = -1;
     private boolean isStagnation;
-    int internalStagnationCounter;
+    protected int internalStagnationCounter;
     NumberSolution<Double> best;
+
+    int getStagnationTrialCounter() {
+        return stagnationTrialCounter;
+    }
 
     public TaskWithMemory(StopCriterion stop, int eval, long allowedTime, int maxIterations, double epsilon,
                           DoubleProblem p, int xPrecision, DuplicationRemovalStrategy strategy, int stopDuplicatesStagnationPerc) {
@@ -41,6 +45,10 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
         strategy.setTask(this);
         mb = new MemoryBankDoubleSolution(xPrecision, strategy);
         sb = new StringBuilder();
+        if (stop == StopCriterion.STAGNATION) { //fake it TODO
+            isStagnation = (stop == StopCriterion.STAGNATION);
+            this.stopCriterion = StopCriterion.EVALUATIONS; //
+        }
     }
 
     public MemoryBankDoubleSolution getDataBank() {
@@ -97,11 +105,13 @@ public class TaskWithMemory extends Task<NumberSolution<Double>, DoubleProblem> 
     @Override
     public boolean isStopCriterion() {
         if (stopCriterion == StopCriterion.EVALUATIONS) {
-            if (mb.duplicationHitSum >= getMaxEvaluations() * 2) //force stop
+            if (mb.duplicationHitSum >= getMaxEvaluations() * 2) {//force stop
+                System.out.println("\u001B[34m" + "StopCriterion stopped mb.duplicationHitSum >= getMaxEvaluations() * 2" + "\u001B[0m");
                 return true;
+            }
         }
         if (isStagnation) {
-            if (internalStagnationCounter >= getMaxTrialsBeforeStagnation()) {
+            if ((internalStagnationCounter + stagnationTrialCounter) >= getMaxTrialsBeforeStagnation()) {
                 stopAtEval = numberOfEvaluations;
                 isStop = true;
                 return true;

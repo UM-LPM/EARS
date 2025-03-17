@@ -15,7 +15,7 @@ http://infinity77.net/global_optimization/test_functions_nd_S.html#go_benchmark.
 public class Salomon extends DoubleProblem {
 
     public Salomon(int d) {
-        super("Salomon", d, 1, 1, 0);
+        super("Salomon" + d, d, 1, 1, 0);
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, -100.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 100.0));
     }

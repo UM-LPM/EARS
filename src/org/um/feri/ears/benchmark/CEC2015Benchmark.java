@@ -20,6 +20,7 @@ public class CEC2015Benchmark extends SOBenchmark<NumberSolution<Double>, Number
     public CEC2015Benchmark(double drawLimit) {
         super();
         name = "Benchmark CEC 2015";
+        shortName = "CEC2015";
         this.drawLimit = drawLimit;
         maxEvaluations = 300000;
         dimension = 30;

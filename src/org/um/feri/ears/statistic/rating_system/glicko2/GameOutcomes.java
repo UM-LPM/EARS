@@ -3,6 +3,22 @@ package org.um.feri.ears.statistic.rating_system.glicko2;
 public class GameOutcomes {
     int win, lose, draw;
 
+    public enum GameOutcomesType {
+        WIN, LOSE, DRAW
+    }
+
+    public int get(GameOutcomesType type) {
+        switch (type) {
+            case WIN:
+                return win;
+            case LOSE:
+                return lose;
+            case DRAW:
+                return draw;
+        }
+        return 0;
+    }
+
     public GameOutcomes(int win, int lose, int draw) {
         super();
         this.win = win;

@@ -175,8 +175,8 @@ public class DE extends NumberAlgorithm {
         au = new Author("matej", "matej.crepinsek@um.si");
         ai = new AlgorithmInfo(strategy.label, strategy.label,
                 "[1] J. Brest, S. Greiner, B. Boskovic, M. Mernik, V. Zumer. \n"
-                + "Self-adapting control parameters in differential evolution: a\n" + "comparative study on numerical benchmark problems.\n"
-                + "IEEE Transactions on Evolutionary Computation, 2006, vol. 10,\n" + "no. 6, pp. 646-657. DOI 10.1109/TEVC.2006.872133"
+                        + "Self-adapting control parameters in differential evolution: a\n" + "comparative study on numerical benchmark problems.\n"
+                        + "IEEE Transactions on Evolutionary Computation, 2006, vol. 10,\n" + "no. 6, pp. 646-657. DOI 10.1109/TEVC.2006.872133"
         );
     }
 
@@ -196,6 +196,10 @@ public class DE extends NumberAlgorithm {
         for (i = 0; i < popSize; i++) {
             c[i] = new DESolution(task.generateRandomEvaluatedSolution(), Finit, CRinit);
             // System.out.println(i+". "+c[i]);
+            if (bestI == null) bestI = c[i];
+            if (task.problem.isFirstBetter(c[i], bestI))
+                bestI = c[i];
+            if (task.isStopCriterion()) break;
         }
         
 		/*double x7[] = {
@@ -206,11 +210,11 @@ public class DE extends NumberAlgorithm {
 	    8.0};
         c[0] = new IndividualSA(task.eval(x7), Finit, CRinit);
         */
-        bestI = c[0];
-        for (i = 0; i < popSize; i++) {
-            if (task.problem.isFirstBetter(c[i], bestI))
-                bestI = c[i];
-        }
+//        bestI = c[0];
+//        for (i = 0; i < popSize; i++) {
+//            if (task.problem.isFirstBetter(c[i], bestI))
+//                bestI = c[i];
+//        }
         // if (strategy == 20) System.out.println("Start 0I:"+bestI);
         best = new DESolution(bestI);
         bestit = new DESolution(bestI);
