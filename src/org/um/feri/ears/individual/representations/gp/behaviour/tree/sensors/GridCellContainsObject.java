@@ -49,11 +49,19 @@ public class GridCellContainsObject extends ConditionNode {
         Object31
     }
 
+    private enum ObjectTeamType
+    {
+        Default, // Detect any object
+        Teammate, // Detect your teams object
+        Opponent // Detect opponent teams object
+    }
+
     public GridCellContainsObject() {
         this(BehaviourTreeNodeType.GRID_CELL_CONTAINS_OBJECT, List.of(
                 new Property("targetGameObject",0, GridCellContainsObject.TARGET_GAME_OBJECT_COUNT),
                 new Property("gridPositionX",0, GRID_SIZE_X),
-                new Property("gridPositionY",0, GRID_SIZE_Y)
+                new Property("gridPositionY",0, GRID_SIZE_Y),
+                new Property("targetTeamType",0, GridCellContainsObject.ObjectTeamType.values().length) // Team identifier
         ));
     }
 

@@ -65,11 +65,19 @@ public class RayHitObject extends ConditionNode {
         Object31
     }
 
+    private enum ObjectTeamType
+    {
+        Default, // Detect any object
+        Teammate, // Detect your teams object
+        Opponent // Detect opponent teams object
+    }
+
     public RayHitObject() {
         this(BehaviourTreeNodeType.RAY_HIT_OBJECT, List.of(
-                new Property("targetGameObject",0, TARGET_GAME_OBJECT_COUNT), // TODO replace with TargetGameObject.values().length // TODO change 1 back to 0
+                new Property("targetGameObject",0, TARGET_GAME_OBJECT_COUNT),
                 new Property("side",0, AgentSide.values().length),
-                new Property("rayIndex",0, RAY_INDEX_COUNT) // Number of rays (check in Unity)
+                new Property("rayIndex",0, RAY_INDEX_COUNT), // Number of rays (check in Unity)
+                new Property("targetTeamType",0, ObjectTeamType.values().length) // Team identifier
         ));
     }
 
