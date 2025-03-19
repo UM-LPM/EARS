@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Util {
+    public static DecimalFormat dff0 = new DecimalFormat("0.00");
     public static DecimalFormat df0 = new DecimalFormat("####.##");
     public static DecimalFormat df01 = new DecimalFormat("####.####");
     public static DecimalFormat df1 = new DecimalFormat("#,###.#");

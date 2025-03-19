@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 public class Glicko2RatingCalculator {
     private static final double T = 0.5; // Constant that constrains the change in volatility (0.3 to 1.2) (Glicko2)
+    public static double minRD = 50;
 
     public static void calculateNewRatings(HashMap<String, Player> prePeriodRatings, boolean allGames) {
         HashMap<String, Glicko2Rating> newPlayerRatings = new HashMap<>();
@@ -66,7 +67,7 @@ public class Glicko2RatingCalculator {
                     double g = g(opponentRatingDeviation);
                     double E = E(rating, opponentRating, opponentRatingDeviation);
                     performanceRatingFromGameOutcomes += g * (gameResult.getGameResultScore(id) - E);
-                    variance += (g * g) * E * (1 - E);
+                    variance += (g * g) * E * (1. - E);
                 }
                 variance = 1. / variance;
                 double improvement = variance * performanceRatingFromGameOutcomes;
@@ -83,18 +84,19 @@ public class Glicko2RatingCalculator {
                 do {
                     d = (t * t) + v + ex;
                     h1 = -(x - a) / (T * T) - 0.5 * ex / d + 0.5 * ex * ((D / d) * (D / d));
-                    h2 = -1 / (T * T) - 0.5 * ex * ((t * t) + v) / (d * d) + 0.5 * (D * D) * ex * ((t * t) + v - ex) / (d * d * d);
+                    h2 = -1. / (T * T) - 0.5 * ex * ((t * t) + v) / (d * d) + 0.5 * (D * D) * ex * ((t * t) + v - ex) / (d * d * d);
                     prevX = x;
                     x = x - h1 / h2;
                     xabs = Math.abs(x - prevX);
                 } while (xabs > .0000001);
                 postRatingVolatility = Math.exp(x / 2);
                 double updatedRD = Math.sqrt(Math.pow(ratingDeviation, 2) + Math.pow(postRatingVolatility, 2));
-                postRD = 1 / Math.sqrt((1 / (updatedRD * updatedRD)) + (1 / variance));
+                postRD = 1. / Math.sqrt((1. / (updatedRD * updatedRD)) + (1. / variance));
 
                 postRating = rating + (postRD * postRD) * performanceRatingFromGameOutcomes;
             }
-            if (postRD < 50 / Glicko2Rating.GLICKO2_CONSTANT) postRD = 50 / Glicko2Rating.GLICKO2_CONSTANT; //set min RD
+            if (postRD < minRD / Glicko2Rating.GLICKO2_CONSTANT)
+                postRD = minRD / Glicko2Rating.GLICKO2_CONSTANT; //set min RD
             if (postRD > 350 / Glicko2Rating.GLICKO2_CONSTANT)
                 postRD = 350 / Glicko2Rating.GLICKO2_CONSTANT; //set max RD
             Glicko2Rating tmp = new Glicko2Rating(Glicko2Rating.getGlicko2Rating(postRating), Glicko2Rating.getGlicko2RatingDeviation(postRD), postRatingVolatility);
