@@ -3,7 +3,6 @@ package org.um.feri.ears.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -22,7 +21,7 @@ public class Configuration implements Serializable{
     public String MultiConfigurationPrograssDataFilePath;
     public boolean ExecuteFinalMasterTournaments;
     public long InitialSeed;
-    public boolean ResetSeedForEachConfiguration;
+    public boolean SetInitialSeedForEachConfigurationRun;
     public List<RunConfiguration> Configurations;
     public RunConfiguration FinalMasterTournamentsConfiguration;
 

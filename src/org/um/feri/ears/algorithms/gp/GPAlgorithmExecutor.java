@@ -244,11 +244,6 @@ public class GPAlgorithmExecutor implements Serializable {
 
         try {
             for (; configurationIndex < configuration.Configurations.size(); configurationIndex++) {
-                // Set initial seed
-                if(configuration.ResetSeedForEachConfiguration){
-                    RNG.setSeed(configuration.InitialSeed);
-                }
-
                 GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats;
 
                 if(gpAlgorithmConfigurationsRunStats.size() == configurationIndex){
@@ -263,6 +258,15 @@ public class GPAlgorithmExecutor implements Serializable {
                 }
 
                 for (; runIndex < configuration.Configurations.get(configurationIndex).NumberOfReruns; ) {
+                    // TODO Remove this ??? (temp solution to start from the beggining but leave the existing runs)
+                    //if(multiConfigurationsProgressData.getMultiConfigurationProgressData().get(configurationIndex).getMultiRunProgressData().size() -1 < runIndex)
+                    //    continue;
+
+                    // Set initial seed
+                    if(configuration.SetInitialSeedForEachConfigurationRun){
+                        RNG.setSeed(configuration.InitialSeed + runIndex);
+                    }
+
                     multiConfigurationsProgressData.getMultiConfigurationProgressData().get(configurationIndex).addMultiRunProgressData(new GPAlgorithmRunProgressData());
 
                     gpAlgorithm.execute(this, configuration.Configurations.get(configurationIndex), saveGPAlgorithmStateFilename, multiConfigurationsProgressData);
