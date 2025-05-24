@@ -23,7 +23,9 @@ import org.um.feri.ears.visualization.gp.components.ImagePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -205,7 +207,7 @@ public class GPInterface extends JFrame {
             String gpDataFile = selectGPDataFile();
 
             try{
-                gpAlgorithmExecutor.initializeGpAlgorithmStateFromFile(gpDataFile);
+                this.gpAlgorithmExecutor = GPAlgorithmExecutor.deserializeGPAlgorithmExecutorState(gpDataFile);
                 setSaveGPAlgorithmStatsFilename();
 
                 updateGPAlgorithmParamsUI();
@@ -214,17 +216,21 @@ public class GPInterface extends JFrame {
                 return;
             }
             catch (Exception ex){
-                System.out.println("Error loading gp algorithm state from file: " + ex.getMessage() + "\n Trying to load gp algorithm executor state");
+                System.out.println("Error loading gp algorithm executor state from file: " + ex.getMessage());
+                logError("Error loading gp algorithm executor state from file: " + ex.getMessage(), ex);
             }
 
             try {
-                this.gpAlgorithmExecutor = GPAlgorithmExecutor.deserializeGPAlgorithmExecutorState(gpDataFile);
+                gpAlgorithmExecutor.initializeGpAlgorithmStateFromFile(gpDataFile);
                 setSaveGPAlgorithmStatsFilename();
 
                 updateGPAlgorithmParamsUI();
                 updateUI();
 
             } catch (Exception ex) {
+                System.out.println("Error loading gp algorithm state from file: " + ex.getMessage() + "\n Trying to load gp algorithm executor state");
+                // Write to log file
+                logError("Error loading gp algorithm state from file: " + ex.getMessage() + "\n Trying to load gp algorithm executor state", ex);
                 throw new RuntimeException(ex);
             }
         });
@@ -407,6 +413,15 @@ public class GPInterface extends JFrame {
         });
     }
 
+    public static void logError(String message, Exception e) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("EARS_error.txt", true))) {
+            writer.println("ERROR: " + message);
+            e.printStackTrace(writer); // Print stack trace to file
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Fallback: Print to console
+        }
+    }
+
     public void loadConfiguration(boolean loadFromFile){
         try {
             if (loadFromFile) {
@@ -518,7 +533,7 @@ public class GPInterface extends JFrame {
         this.bestGenerationFitnessGraphPanel.setScores(gpAlgorithmExecutor.getGpAlgorithm().getBestGenFitnesses());
 
         // Update population list
-        displayPopulation(displayPopulationCheckBox.isSelected());
+        //displayPopulation(displayPopulationCheckBox.isSelected());
 
         // Update best individual
         updateBestIndividual();

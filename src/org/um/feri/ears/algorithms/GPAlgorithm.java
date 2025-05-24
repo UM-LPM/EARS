@@ -122,8 +122,6 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
                     // Update GP Algorithm progress data run
                     if(multiConfigurationsProgressData != null){
                         multiConfigurationsProgressData.addGenProgressData(i + 1, executionPhaseName, this);
-                        multiConfigurationsProgressData.saveProgressData(); // For testing purposes only
-                        GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
                     }
 
                     // Print current gpAlgorithm statistics to console

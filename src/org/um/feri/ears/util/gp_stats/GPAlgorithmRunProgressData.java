@@ -61,6 +61,12 @@ public class GPAlgorithmRunProgressData implements Serializable {
                     new GPProgramSolutionSimple(progressDataGen.getPopulation().get(i), false));
         }*/
 
+        // Only add the best solution
+        gpAlgorithmGenProgressData.addProgramSolutionSimple(
+                new GPProgramSolutionSimple(progressDataGen.getBest(), false));
+
+        //gpAlgorithmGenProgressData.addProgramSolution(progressDataGen.getBest());
+
         genProgressData.add(gpAlgorithmGenProgressData);
 
         if(generation % 5 == 0)
@@ -72,6 +78,8 @@ public class GPAlgorithmRunProgressData implements Serializable {
 
         gpAlgorithmXGenBestProgressData.addProgramSolutionSimple(
                 new GPProgramSolutionSimple(progressDataGen.getBest(), false));
+
+        gpAlgorithmXGenBestProgressData.addProgramSolution(progressDataGen.getBest());
 
         xGenBestProgressData.add(gpAlgorithmXGenBestProgressData);
     }

@@ -377,9 +377,10 @@ public class GPAlgorithmExecutor implements Serializable {
     public void restartUnityInstances(boolean restartInstances){
         // 1. Close all running GeneralTrainingPlatformForMAS instances
         try {
-            Runtime.getRuntime().exec("taskkill /F /IM " + configuration.UnityGameFile);
+            executeCommand("taskkill /F /IM " + configuration.UnityGameFile, "pkill -f " + configuration.UnityGameFile);
+            System.out.println("Closing Unity instance: " + configuration.UnityExeLocation + configuration.UnityGameFile);
             Thread.sleep(5000);
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -387,9 +388,10 @@ public class GPAlgorithmExecutor implements Serializable {
             // 2. Rerun GeneralTrainingPlatformForMAS (Unity)
             for (int instances = 0; instances < configuration.EvalEnvInstanceURIs.split(",").length; instances++) {
                 try {
-                    Runtime.getRuntime().exec("cmd /c start " + configuration.UnityExeLocation + configuration.UnityGameFile);
+                    executeCommand("start " + configuration.UnityExeLocation + configuration.UnityGameFile + " -batchmode -nographics", configuration.UnityExeLocation + configuration.UnityGameFile + " -batchmode -nographics");
+                    System.out.println("Starting Unity instance: " + configuration.UnityExeLocation + configuration.UnityGameFile + " -batchmode -nographics");
                     Thread.sleep(2000);
-                } catch (IOException | InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -403,11 +405,27 @@ public class GPAlgorithmExecutor implements Serializable {
         }
     }
 
+    public void executeCommand(String commandWin, String commandLinux) throws  Exception{
+        String[] command;
+
+        String os = System.getProperty("os.name").toLowerCase();
+        // Example command: list directory contents
+        if (os.contains("win")) {
+            // Windows uses 'cmd /c'
+            command = new String[]{"cmd.exe", "/c", commandWin};
+        } else {
+            // Unix-like systems use 'bash -c'
+            command = new String[]{"bash", "-c", commandLinux};
+        }
+
+        ProcessBuilder builder = new ProcessBuilder(command);
+        builder.start();
+    }
+
     public void loadDefaultConfiguration(){
         // Load first configuration in the list
         if(configuration != null){
             setEARSConfiguration(configuration.Configurations.get(0));
-
         }
     }
 

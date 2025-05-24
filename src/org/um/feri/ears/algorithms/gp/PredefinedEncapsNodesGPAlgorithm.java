@@ -632,8 +632,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Add individuals to the progressData
         if(multiConfigurationsProgressData != null) {
             multiConfigurationsProgressData.addMasterTournamentGraphData(bestGenSolutionsMasterTournament);
-            multiConfigurationsProgressData.saveProgressData(); // For testing purposes only
-            GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
         }
     }
 
@@ -656,8 +654,6 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         // Add individuals to the progressData
         if(multiConfigurationsProgressData != null) {
             multiConfigurationsProgressData.addConvergenceGraphData(bestGenSolutionsConvergenceGraph.get(bestGenSolutionsConvergenceGraph.size() - 1));
-            multiConfigurationsProgressData.saveProgressData(); // For testing purposes only
-            GPAlgorithmMultiConfigurationsProgressData.serializeState(multiConfigurationsProgressData);
         }
     }
 
