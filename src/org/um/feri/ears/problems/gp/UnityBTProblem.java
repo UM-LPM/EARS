@@ -67,7 +67,6 @@ public class UnityBTProblem extends ProgramProblem {
                 String apiUrl = "http://localhost:5016/api/JsonToSoParser";
                 RequestBodyParams requestBodyParams = getRequestBodyParams();
 
-
                 if(problemEvaluatorType == GPProblemEvaluatorType.Complex){
                     requestBodyParams.setLastEvalIndividualFitnesses(solutions, lastEvalIndividualFitnessesRatingCompositionType);
                 }
@@ -76,7 +75,7 @@ public class UnityBTProblem extends ProgramProblem {
 
                 Gson gson = new Gson();
                 HttpResponse obj = gson.fromJson(response, HttpResponse.class);
-                System.out.println(LocalDateTime.now() + "Finished with response: " + response);
+                System.out.println(LocalDateTime.now() + "Finished with response from unity with status: " + obj.getStatus());
 
                 // Verify that request was successful
                 if (Objects.equals(obj.getStatus(), "Success")) {

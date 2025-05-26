@@ -112,4 +112,16 @@ public class GPAlgorithmRunStats implements Serializable {
     public ProgramSolution getBestRunSolution() {
         return bestGenSolutions.get(bestGenSolutions.size() - 1);
     }
+
+    public ProgramSolution getBestRunSolution(int gen) {
+        if(gen < 0 || gen >= bestGenSolutions.size()){
+            return null;
+        }
+
+        return bestGenSolutions.get(gen);
+    }
+
+    public int getBestGenSolutionSize() {
+        return bestGenSolutions.size();
+    }
 }

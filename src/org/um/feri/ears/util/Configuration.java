@@ -23,7 +23,7 @@ public class Configuration implements Serializable{
     public long InitialSeed;
     public boolean SetInitialSeedForEachConfigurationRun;
     public List<RunConfiguration> Configurations;
-    public RunConfiguration FinalMasterTournamentsConfiguration;
+    public RunConfigurationFinal FinalMasterTournamentsConfiguration;
 
     public static Configuration deserializeFromFile(String filePath){
         ObjectMapper objectMapper = new ObjectMapper();

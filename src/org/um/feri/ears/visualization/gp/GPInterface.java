@@ -665,8 +665,8 @@ public class GPInterface extends JFrame {
             clearSelectedIndividualUI();
         }
         else{
-            String file = individual.getTree().displayTree(imgPathPrefix + "tree" + String.valueOf(index), false);
-            selectedIndividualImagePanel.setImage(file);
+            //String file = individual.getTree().displayTree(imgPathPrefix + "tree" + String.valueOf(index), false);
+            //selectedIndividualImagePanel.setImage(file);
             selectedIndividualID.setText("" + index);
             selectedIndividualFitnes.setText("" + Util.roundDouble(individual.getEval(), 2));
             selectedIndividualTreeDepthLabel.setText("" + individual.getTree().treeMaxDepth());
@@ -705,8 +705,8 @@ public class GPInterface extends JFrame {
         }
         else{
             this.lastUuid = UUID.randomUUID().toString();
-            String file = gpAlgorithmExecutor.getGpAlgorithm().getBest().getTree().displayTree(imgPathPrefix + "tree" + this.lastUuid, false);
-            bestIndividualImagePanel.setImage(file);
+            //String file = gpAlgorithmExecutor.getGpAlgorithm().getBest().getTree().displayTree(imgPathPrefix + "tree" + this.lastUuid, false);
+            //bestIndividualImagePanel.setImage(file);
             bestIndividualID.setText("" + gpAlgorithmExecutor.getGpAlgorithm().getBest().getID());
             bestIndividualFitnes.setText("" + Util.roundDouble(gpAlgorithmExecutor.getGpAlgorithm().getBest().getEval(), 2));
             bestIndividualTreeDepth.setText("" + gpAlgorithmExecutor.getGpAlgorithm().getBest().getTree().treeMaxDepth());

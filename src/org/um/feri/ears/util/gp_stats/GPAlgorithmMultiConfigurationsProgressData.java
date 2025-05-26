@@ -13,11 +13,13 @@ public class GPAlgorithmMultiConfigurationsProgressData implements Serializable 
     protected String multiConfigurationPrograssDataFilePath;
     protected List<GPAlgorithmMultiRunProgressData> multiConfigurationProgressData;
 
-    protected List<GPProgramSolutionSimple> finalMasterTournamentGraphData;
+    //protected List<GPProgramSolutionSimple> finalMasterTournamentGraphData;
+    protected List<List<GPProgramSolutionSimple>> finalMasterTournamentGraphData;
 
     public GPAlgorithmMultiConfigurationsProgressData(String multiConfigurationPrograssDataFilePath) {
         this.multiConfigurationProgressData = new ArrayList<>();
         this.multiConfigurationPrograssDataFilePath = multiConfigurationPrograssDataFilePath;
+        this.finalMasterTournamentGraphData = new ArrayList<>();
     }
 
     public List<GPAlgorithmMultiRunProgressData> getMultiConfigurationProgressData() {
@@ -40,15 +42,21 @@ public class GPAlgorithmMultiConfigurationsProgressData implements Serializable 
         this.multiConfigurationPrograssDataFilePath = multiConfigurationPrograssDataFilePath;
     }
 
-    public List<GPProgramSolutionSimple> getFinalMasterTournamentGraphData() {
+    public List<List<GPProgramSolutionSimple>> getFinalMasterTournamentGraphData() {
         return finalMasterTournamentGraphData;
     }
 
-    public void setFinalMasterTournamentGraphData(List<ProgramSolution> finalMasterTournamentGraphData) {
-        this.finalMasterTournamentGraphData = new ArrayList<>();
+    public void clearFinalMasterTournamentGraphData() {
+        this.finalMasterTournamentGraphData.clear();
+    }
+
+    public void addFinalMasterTournamentGraphData(List<ProgramSolution> finalMasterTournamentGraphData) {
+        List<GPProgramSolutionSimple> finalMasterGenTournamentGraphData = new ArrayList<>();
         for (ProgramSolution solution : finalMasterTournamentGraphData) {
-            this.finalMasterTournamentGraphData.add(new GPProgramSolutionSimple(solution, true));
+            finalMasterGenTournamentGraphData.add(new GPProgramSolutionSimple(solution, true));
         }
+
+        this.finalMasterTournamentGraphData.add(finalMasterGenTournamentGraphData);
     }
 
     public void resetMultiConfigurationProgressData() {

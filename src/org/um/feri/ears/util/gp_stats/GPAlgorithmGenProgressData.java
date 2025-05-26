@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GPAlgorithmGenProgressData implements Serializable {
+
+    public static final long serialVersionUID = 6085691811958600768L;
+
     private int generation;
 
     private String executionPhaseName;
