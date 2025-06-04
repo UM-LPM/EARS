@@ -1,25 +1,36 @@
 package org.um.feri.ears.algorithms;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.um.feri.ears.algorithms.gp.DefaultGPAlgorithm;
 import org.um.feri.ears.algorithms.gp.GPAlgorithmExecutor;
+import org.um.feri.ears.algorithms.gp.RequiredEvalsCalcMethod;
 import org.um.feri.ears.problems.StopCriterionException;
 import org.um.feri.ears.problems.gp.ProgramProblem;
 import org.um.feri.ears.problems.gp.ProgramSolution;
 import org.um.feri.ears.util.GPAlgorithmRunStats;
 import org.um.feri.ears.util.RunConfiguration;
+import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
+import org.yaml.snakeyaml.util.Tuple;
 
 import javax.swing.*;
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolution, ProgramProblem> {
 
     public static final long serialVersionUID = -7440978397322072640L;
+
+    @AlgorithmParameter(name = "required evaluations calculation method")
+    protected RequiredEvalsCalcMethod requiredEvalsCalcMethod;
+
+    @AlgorithmParameter(name = "required evaluations calculation method params")
+    // Dictionary with key value pairs
+    protected HashMap<String, Integer> requiredEvalsCalcMethodParams;
 
     public static final String TASK_NAME_PREFIX = "task_";
     public static boolean CAN_RUN = true;
@@ -43,7 +54,7 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
 
     public abstract ProgramSolution getBest();
 
-    public abstract List<ProgramSolution> getBestGenSolutions();
+    public abstract List<ImmutablePair<Integer, ProgramSolution>> getBestGenSolutions();
 
     public abstract List<ProgramSolution> getBestGenSolutionsConvergenceGraph();
 
@@ -127,7 +138,7 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
                     // Print current gpAlgorithm statistics to console
                     if(isDebug()){
                         System.out.println("Generation: " + getTask().getNumberOfIterations() + ", Best Fitness: " + getBest().getEval() + ", Avg Fitness: " + getAvgGenFitnesses().get(getAvgGenFitnesses().size() - 1) + ", Avg Tree Depth: " + getAvgGenTreeDepths().get(getAvgGenTreeDepths().size() - 1) + ", Avg Tree Size: " + getAvgGenTreeSizes().get(getAvgGenTreeSizes().size() - 1));
-                        System.out.println("Best Individual: " + getBest().getTree().toJsonString());
+                        //System.out.println("Best Individual: " + getBest().getTree().toJsonString());
                     }
 
                     if (saveGPAlgorithmStateFilename == null || saveGPAlgorithmStateFilename.length() == 0) {
@@ -188,6 +199,41 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
         return alg;
     }
 
+    public int calculateRequiredEvals(int popSize){
+        if(requiredEvalsCalcMethod != RequiredEvalsCalcMethod.POP_SIZE && (requiredEvalsCalcMethodParams == null || !requiredEvalsCalcMethodParams.containsKey("EvalsPerMatch"))){
+            throw new IllegalArgumentException("Required evaluations calculation method params must contain key 'EvalsPerMatch' for the required evaluations calculation method: " + requiredEvalsCalcMethod);
+        }
+
+        int evalsPerMatch = 1;
+        if(requiredEvalsCalcMethodParams != null && requiredEvalsCalcMethodParams.containsKey("EvalsPerMatch")){
+            evalsPerMatch = requiredEvalsCalcMethodParams.get("EvalsPerMatch");
+        }
+
+        int requiredEvals = -1;
+        switch(requiredEvalsCalcMethod){
+            case POP_SIZE:
+                return popSize;
+            case SET:
+                requiredEvals = popSize - 1;
+                break;
+            case DET:
+                requiredEvals = (2 * popSize) - 2;
+                break;
+            case K_Random_Opponents:
+                if(requiredEvalsCalcMethodParams == null || !requiredEvalsCalcMethodParams.containsKey("K")){
+                    throw new IllegalArgumentException("Required evaluations calculation method params must contain key 'K' for K Random Opponents method");
+                }
+                requiredEvals = (int) Math.floor((popSize * requiredEvalsCalcMethodParams.get("K")) / 2.0);
+                break;
+            case SwissSystem:
+            case SSOS:
+                requiredEvals = (int) (Math.ceil(popSize / 2.0) * Math.ceil(Math.log(popSize) / Math.log(2)));
+                break;
+        }
+
+        return requiredEvals * evalsPerMatch;
+    }
+
     public void setPopSize(int popSize) {
         return;
     }
@@ -230,5 +276,21 @@ public abstract class GPAlgorithm extends Algorithm<ProgramSolution, ProgramSolu
 
     public GPAlgorithmRunStats getStats(){
         return new GPAlgorithmRunStats(getBestGenSolutions(), getBestGenSolutionsConvergenceGraph(), getBestGenSolutionsMasterTournament(), bestOverallFitnesses, avgGenFitnesses, avgGenTreeDepths, avgGenTreeSizes, bestGenFitnesses);
+    }
+
+    public RequiredEvalsCalcMethod getRequiredEvalsCalcMethod() {
+        return requiredEvalsCalcMethod;
+    }
+
+    public void setRequiredEvalsCalcMethod(RequiredEvalsCalcMethod requiredEvalsCalcMethod) {
+        this.requiredEvalsCalcMethod = requiredEvalsCalcMethod;
+    }
+
+    public Map<String, Integer> getRequiredEvalsCalcMethodParams() {
+        return requiredEvalsCalcMethodParams;
+    }
+
+    public void setRequiredEvalsCalcMethodParams(HashMap<String, Integer> requiredEvalsCalcMethodParams) {
+        this.requiredEvalsCalcMethodParams = requiredEvalsCalcMethodParams;
     }
 }

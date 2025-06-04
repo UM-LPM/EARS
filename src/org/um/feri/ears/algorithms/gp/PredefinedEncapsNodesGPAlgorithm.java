@@ -1,6 +1,8 @@
 package org.um.feri.ears.algorithms.gp;
 
 import com.google.gson.Gson;
+import jdk.jshell.spi.ExecutionControl;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.AlgorithmStepper;
 import org.um.feri.ears.algorithms.Author;
@@ -19,9 +21,12 @@ import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
 import org.um.feri.ears.util.random.RNG;
+import org.yaml.snakeyaml.util.Tuple;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     public static final long serialVersionUID = 5702986569144275111L;
@@ -68,19 +73,20 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
     private List<ProgramSolution> hallOfFame;
 
-    private List<ProgramSolution> bestGenSolutions; // Used for master and convergence graph calculation
+    private List<ImmutablePair<Integer, ProgramSolution>> bestGenSolutions; // Used for master and convergence graph calculation
     private List<ProgramSolution> bestGenSolutionsConvergenceGraph; // Results for convergence graph
     private List<ProgramSolution> bestGenSolutionsMasterTournament; // Results for master tournament graph
 
     public PredefinedEncapsNodesGPAlgorithm() {
-        this(100, 0.90, 0.05, 0.025, 2, 0, null);
+        this(100, 0.90, 0.05, 0.025, 2, 0, RequiredEvalsCalcMethod.POP_SIZE, null, null);
     }
 
     public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments) {
-        this(popSize,crossoverProbability, elitismProbability,mutationProbability,numberOfTournaments, 0, null);
+        this(popSize,crossoverProbability, elitismProbability,mutationProbability,numberOfTournaments, 0, RequiredEvalsCalcMethod.POP_SIZE, null, null);
     }
 
-    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, int hallOfFameSize, Task<ProgramSolution,ProgramProblem> task) {
+    public PredefinedEncapsNodesGPAlgorithm(int popSize, double crossoverProbability, double elitismProbability, double mutationProbability, int numberOfTournaments, int hallOfFameSize, RequiredEvalsCalcMethod requiredEvalsCalcMethod, HashMap<String, Integer> requiredEvalsCalcMethodParams, Task<ProgramSolution,ProgramProblem> task) {
+        super();
         this.popSize = popSize;
         this.crossoverProbability = crossoverProbability;
         this.elitismProbability = elitismProbability;
@@ -112,6 +118,9 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         this.hallOfFameSize = hallOfFameSize;
         this.hallOfFame = new ArrayList<>();
         this.bestGenSolutions = new ArrayList<>();
+
+        this.requiredEvalsCalcMethod = requiredEvalsCalcMethod;
+        this.requiredEvalsCalcMethodParams = requiredEvalsCalcMethodParams;
     }
 
     @Override
@@ -308,7 +317,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                     }
 
                     // Add best solution to bestGenIndividual
-                    bestGenSolutions.add(new ProgramSolution(currentGenBest));
+                    bestGenSolutions.add(new ImmutablePair<>(this.task.getNumberOfEvaluations(), new ProgramSolution(currentGenBest)));
 
                     // Update statistics
                     if (this.isDebug())
@@ -444,7 +453,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
      * Initialize @popSize individuals and evaluate them. Best random generated solution is saved to @best
      */
     private void populationInitialization() throws StopCriterionException {
-        population = this.task.getRandomEvaluatedSolution(this.popSize);
+        population = this.task.getRandomEvaluatedSolution(this.popSize, calculateRequiredEvals(this.popSize));
 
         for(ProgramSolution sol : population){
             if (task.problem.isFirstBetter(sol, best))
@@ -507,8 +516,10 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
             this.population.addAll(hallOfFame);
         }
 
+        int requiredEvaluations = calculateRequiredEvals(this.population.size());
+
         // If the number of evaluations is greater than the maximum number of evaluations, we need to remove the last individuals
-        if(this.task.getNumberOfEvaluations() + this.population.size() > this.task.getMaxEvaluations()){
+        if(this.task.getNumberOfEvaluations() + requiredEvaluations > this.task.getMaxEvaluations()){
             int evals = this.task.getMaxEvaluations() - this.task.getNumberOfEvaluations();
 
             // Partial evaluation with Complex problem evaluator type are not permited!
@@ -520,7 +531,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
             population = new ArrayList<>(this.population.subList(0, evals));
         }
 
-        this.task.bulkEval(this.population);
+        this.task.bulkEval(this.population, requiredEvaluations);
 
         currentGenBest = new ProgramSolution(this.population.get(0));
         int hallOfFameSizeCurrent = (this.hallOfFameSize > 0 && this.hallOfFame != null) ? this.hallOfFame.size() : 0;
@@ -616,8 +627,8 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     public void buildMasterTournamentGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) {
         // Copy bestGenSolutions to bestGenSolutionsMasterTournament
         bestGenSolutionsMasterTournament = new ArrayList<>();
-        for (ProgramSolution bestGenSolution : this.bestGenSolutions) {
-            bestGenSolutionsMasterTournament.add(new ProgramSolution(bestGenSolution));
+        for (ImmutablePair<Integer, ProgramSolution> bestGenSolution : this.bestGenSolutions) {
+            bestGenSolutionsMasterTournament.add(new ProgramSolution(bestGenSolution.right));
         }
 
         // Reset IDs and Additional data
@@ -638,8 +649,8 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     public void buildConvergenceGraph(GPAlgorithmMultiConfigurationsProgressData multiConfigurationsProgressData) {
         // Copy bestGenSolutions to bestGenSolutionsConvergenceGraph
         bestGenSolutionsConvergenceGraph = new ArrayList<>();
-        for (ProgramSolution bestGenSolution : this.bestGenSolutions) {
-            bestGenSolutionsConvergenceGraph.add(new ProgramSolution(bestGenSolution));
+        for (ImmutablePair<Integer, ProgramSolution> bestGenSolution : this.bestGenSolutions) {
+            bestGenSolutionsConvergenceGraph.add(new ProgramSolution(bestGenSolution.right));
         }
 
         // Reset IDs
@@ -663,7 +674,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
     }
 
     @Override
-    public List<ProgramSolution> getBestGenSolutions() {
+    public List<ImmutablePair<Integer, ProgramSolution>> getBestGenSolutions() {
         return bestGenSolutions;
     }
 

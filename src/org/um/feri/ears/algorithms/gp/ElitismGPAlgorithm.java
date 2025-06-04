@@ -1,5 +1,6 @@
 package org.um.feri.ears.algorithms.gp;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.AlgorithmStepper;
 import org.um.feri.ears.algorithms.Author;
@@ -23,6 +24,7 @@ import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmRunProgressData;
 import org.um.feri.ears.util.random.RNG;
+import org.yaml.snakeyaml.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -241,7 +243,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
      * Initialize @popSize individuals and evaluate them. Best random generated solution is saved to @best
      */
     private void populationInitialization() throws StopCriterionException {
-        population = this.task.getRandomEvaluatedSolution(this.popSize);
+        population = this.task.getRandomEvaluatedSolution(this.popSize, calculateRequiredEvals(this.popSize));
 
         for(ProgramSolution sol : population){
             if (task.problem.isFirstBetter(sol, best))
@@ -314,13 +316,15 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
         ProgramSolution currentGenBest = null;
         population = new ArrayList<>(this.currentPopulation);
 
+        int requiredEvaluations = calculateRequiredEvals(this.population.size());
+
         // If the number of evaluations is greater than the maximum number of evaluations, we need to remove the last individuals
-        if(this.task.getNumberOfEvaluations() + this.population.size() >= this.task.getMaxEvaluations()){
+        if(this.task.getNumberOfEvaluations() + requiredEvaluations >= this.task.getMaxEvaluations()){
             int evals = this.task.getMaxEvaluations() - this.task.getNumberOfEvaluations();
             population = new ArrayList<>(this.population.subList(0, evals));
         }
 
-        this.task.bulkEval(this.population);
+        this.task.bulkEval(this.population, requiredEvaluations);
 
         currentGenBest = new ProgramSolution(this.population.get(0));
         for(ProgramSolution sol : population){
@@ -533,7 +537,7 @@ public class ElitismGPAlgorithm extends GPAlgorithm {
     public void setHallOfFameSize(int hallOfFameSize) {    }
 
     @Override
-    public List<ProgramSolution> getBestGenSolutions() {
+    public List<ImmutablePair<Integer, ProgramSolution>> getBestGenSolutions() {
         return null;
     }
 

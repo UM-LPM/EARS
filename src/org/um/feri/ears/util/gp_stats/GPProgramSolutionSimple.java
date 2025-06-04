@@ -24,6 +24,7 @@ public class GPProgramSolutionSimple implements Serializable {
 
     protected HashMap<String, Integer> nodeCounts; // { "Sequencer": 24, "Selector": 12, "MoveForward": 5, ... }
     protected String configurationName;
+    protected int evaluationCount; // Number of evaluations performed on this solution
 
     public GPProgramSolutionSimple(ProgramSolution programSolution, boolean setIndividualMatchResults) {
         this.individualId = programSolution.getID();
@@ -39,6 +40,7 @@ public class GPProgramSolutionSimple implements Serializable {
         this.treeDotString = ""; // TODO Remove this
         this.nodeCounts = programSolution.getTree().getNodeCounts();
         this.configurationName = programSolution.getConfigurationName();
+        this.evaluationCount = programSolution.getEvaluationCount();
     }
 
     public GPProgramSolutionSimple(long individualId, double[] objectives, FinalIndividualFitness finalIndividualFitness, int changesCount, Tree tree) {
@@ -51,6 +53,7 @@ public class GPProgramSolutionSimple implements Serializable {
         this.terminalNodes = tree.getTerminalNodes().size();
         this.functionNodes = tree.getFunctionNodes().size();
         this.treeDotString = tree.toDotString();
+        this.evaluationCount = -1; // Default value, can be set later
     }
 
     public long getIndividualId() {
@@ -99,6 +102,14 @@ public class GPProgramSolutionSimple implements Serializable {
 
     public void setConfigurationName(String configurationName) {
         this.configurationName = configurationName;
+    }
+
+    public int getEvaluationCount() {
+        return evaluationCount;
+    }
+
+    public void setEvaluationCount(int evaluationCount) {
+        this.evaluationCount = evaluationCount;
     }
 
 }

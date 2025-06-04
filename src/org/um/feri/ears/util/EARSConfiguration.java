@@ -1,8 +1,11 @@
 package org.um.feri.ears.util;
 
+import org.um.feri.ears.algorithms.gp.RequiredEvalsCalcMethod;
 import org.um.feri.ears.individual.representations.gp.Target;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EARSConfiguration implements Serializable {
 
@@ -39,4 +42,7 @@ public class EARSConfiguration implements Serializable {
     public int HallOfFameSize;
     public boolean BuildMasterTournament;
     public boolean BuildConvergenceGraph;
+
+    public RequiredEvalsCalcMethod RequiredEvalsCalcMethod;
+    public HashMap<String, Integer> RequiredEvalsCalcMethodParams;
 }

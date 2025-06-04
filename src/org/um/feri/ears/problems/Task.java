@@ -126,26 +126,6 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
     }
 
     /**
-     * Generates X random evaluated solutions.
-     *
-     * @param numOfSolutions to be generated
-     * @return X random evaluated solutions.
-     * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
-     *                                To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
-     */
-    public List<S> getRandomEvaluatedSolution(int numOfSolutions) throws StopCriterionException {
-        // Generate numOfSolutions random solutions and bulk evaluate them
-        List<S> solutions = new ArrayList<>();
-        for (int i = 0; i < numOfSolutions; i++) {
-            solutions.add(problem.getRandomSolution());
-        }
-
-        bulkEval(solutions);
-
-        return solutions;
-    }
-
-    /**
      * Evaluates the given solution
      *
      * @param solution to be evaluated
@@ -191,6 +171,26 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
         }
     }
 
+    /**
+     * Generates X random evaluated solutions.
+     *
+     * @param numOfSolutions to be generated
+     * @return X random evaluated solutions.
+     * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
+     *                                To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
+     */
+    public List<S> getRandomEvaluatedSolution(int numOfSolutions, int requiredEvals) throws StopCriterionException {
+        // Generate numOfSolutions random solutions and bulk evaluate them
+        List<S> solutions = new ArrayList<>();
+        for (int i = 0; i < numOfSolutions; i++) {
+            solutions.add(problem.getRandomSolution());
+        }
+
+        bulkEval(solutions, requiredEvals);
+
+        return solutions;
+    }
+
     public void eval(S solution, List<Solution> parents) throws StopCriterionException {
 
         eval(solution);
@@ -212,25 +212,25 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
      * @throws StopCriterionException is thrown if the method is called after the stop criteria is met.
      *                                To prevent exception call {@link #isStopCriterion()} method to check if the stop criterion is already met.
      */
-    public void bulkEval(List<S> solutions) throws StopCriterionException {
+    public void bulkEval(List<S> solutions, int requiredEvals) throws StopCriterionException {
         switch (stopCriterion) {
             case EVALUATIONS:
-                performEvaluations(solutions);
+                performEvaluations(solutions, requiredEvals);
                 break;
             case ITERATIONS:
                 if (isStop)
                     throw new StopCriterionException("Max iterations");
-                performEvaluations(solutions);
+                performEvaluations(solutions, requiredEvals);
                 break;
             case GLOBAL_OPTIMUM_OR_EVALUATIONS:
                 if (isGlobal)
                     throw new StopCriterionException("Global optimum already found");
-                performEvaluations(solutions);
+                performEvaluations(solutions, requiredEvals);
                 break;
             case CPU_TIME:
                 if (!isStop) {
                     hasCpuTimeExceeded(); // if CPU time is exceed allow last eval
-                    performEvaluations(solutions);
+                    performEvaluations(solutions, requiredEvals);
                 } else {
                     throw new StopCriterionException("CPU Time");
                 }
@@ -238,7 +238,7 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
             case STAGNATION:
                 if (isStop)
                     throw new StopCriterionException("Solution stagnation");
-                performEvaluations(solutions);
+                performEvaluations(solutions, requiredEvals);
                 break;
         }
 
@@ -259,8 +259,8 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
             evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTimeNs, bestSolution.getEval()));
     }
 
-    private void performEvaluations(List<S> solutions) throws StopCriterionException {
-        incrementNumberOfEvaluations(solutions.size());
+    private void performEvaluations(List<S> solutions, int requiredEvals) throws StopCriterionException {
+        incrementNumberOfEvaluations(requiredEvals);
         long start = System.nanoTime();
         problem.bulkEvaluate(solutions);
         if(problem.numberOfConstraints > 0) {

@@ -1,5 +1,6 @@
 package org.um.feri.ears.algorithms.gp;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.GPAlgorithm;
@@ -12,6 +13,7 @@ import org.um.feri.ears.util.GPProblemType;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
+import org.yaml.snakeyaml.util.Tuple;
 
 import java.util.Collections;
 import java.util.List;
@@ -108,7 +110,7 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
     public void setHallOfFameSize(int hallOfFameSize) {    }
 
     @Override
-    public List<ProgramSolution> getBestGenSolutions() {
+    public List<ImmutablePair<Integer, ProgramSolution>> getBestGenSolutions() {
         return null;
     }
 
@@ -121,4 +123,5 @@ public class RandomWalkGPAlgorithm extends GPAlgorithm {
     public List<ProgramSolution> getBestGenSolutionsMasterTournament() {
         return null;
     }
+
 }

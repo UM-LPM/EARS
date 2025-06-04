@@ -1,6 +1,8 @@
 package org.um.feri.ears.util;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.um.feri.ears.problems.gp.ProgramSolution;
+import org.yaml.snakeyaml.util.Tuple;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,7 +10,8 @@ import java.util.List;
 
 public class GPAlgorithmRunStats implements Serializable {
 
-    protected List<ProgramSolution> bestGenSolutions;
+    //protected List<ProgramSolution> bestGenSolutions;
+    protected List<ImmutablePair<Integer, ProgramSolution>> bestGenSolutions;
     protected List<ProgramSolution> bestGenSolutionsConvergenceGraph;
     protected List<ProgramSolution> bestGenSolutionsMasterTournament;
 
@@ -26,7 +29,7 @@ public class GPAlgorithmRunStats implements Serializable {
         bestGenFitnesses = new ArrayList<>();
     }
 
-    public GPAlgorithmRunStats(List<ProgramSolution> bestGenSolutions, List<ProgramSolution> bestGenSolutionsConvergenceGraph, List<ProgramSolution> bestGenSolutionsMasterTournament, ArrayList<Double> bestOverallFitnesses, ArrayList<Double> avgGenFitnesses, ArrayList<Double> avgGenTreeDepths, ArrayList<Double> avgGenTreeSizes, ArrayList<Double> bestGenFitnesses) {
+    public GPAlgorithmRunStats(List<ImmutablePair<Integer, ProgramSolution>> bestGenSolutions, List<ProgramSolution> bestGenSolutionsConvergenceGraph, List<ProgramSolution> bestGenSolutionsMasterTournament, ArrayList<Double> bestOverallFitnesses, ArrayList<Double> avgGenFitnesses, ArrayList<Double> avgGenTreeDepths, ArrayList<Double> avgGenTreeSizes, ArrayList<Double> bestGenFitnesses) {
         this.bestGenSolutions = bestGenSolutions;
         this.bestGenSolutionsConvergenceGraph = bestGenSolutionsConvergenceGraph;
         this.bestGenSolutionsMasterTournament = bestGenSolutionsMasterTournament;
@@ -109,16 +112,44 @@ public class GPAlgorithmRunStats implements Serializable {
         return bestRunAvgFitnesses;
     }
 
-    public ProgramSolution getBestRunSolution() {
+    public ImmutablePair<Integer, ProgramSolution> getBestRunSolution() {
         return bestGenSolutions.get(bestGenSolutions.size() - 1);
     }
 
-    public ProgramSolution getBestRunSolution(int gen) {
-        if(gen < 0 || gen >= bestGenSolutions.size()){
-            return null;
-        }
+    public ImmutablePair<Integer, ProgramSolution> getBestRunSolution(int gen){
+        return getBestRunSolution(gen, -1);
+    }
 
-        return bestGenSolutions.get(gen);
+    public ImmutablePair<Integer, ProgramSolution> getBestRunSolution(int gen, int evals ) {
+        if(bestGenSolutions == null || bestGenSolutions.size() == 0) {
+            throw new IllegalArgumentException("No solutions found in the run stats.");
+        }
+        if(gen == -1 && evals > 0){
+            // Find ProgramSolution where evaluations are the closest to the given evals
+            int closestIndex = 0;
+            int closestDiff = Math.abs(bestGenSolutions.get(closestIndex).left - evals);
+
+            for (int i = 1; i < bestGenSolutions.size(); i++) {
+                int diff = Math.abs(bestGenSolutions.get(i).left - evals);
+                if (diff <= closestDiff) {
+                    closestDiff = diff;
+                    closestIndex = i;
+                }
+            }
+
+            return bestGenSolutions.get(closestIndex);
+        }
+        else if(gen >= 0 && gen < bestGenSolutions.size()){
+            // Return the solution for the given generation
+            return bestGenSolutions.get(gen);
+        } else {
+            throw new IllegalArgumentException("Invalid generation index: " + gen);
+
+        }
+    }
+
+    public List<ImmutablePair<Integer, ProgramSolution>> getBestGenSolutions(){
+        return bestGenSolutions;
     }
 
     public int getBestGenSolutionSize() {

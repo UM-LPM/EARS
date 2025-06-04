@@ -5,4 +5,5 @@ import java.util.List;
 
 public class RunConfigurationFinal extends RunConfiguration {
     public int ExecuteFinalMasterTournamentEveryXGen;
+    public FinalMasterTournamentsComparisonType FinalMasterTournamentsComparisonType;
 }

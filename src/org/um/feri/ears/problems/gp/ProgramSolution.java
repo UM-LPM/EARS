@@ -27,6 +27,7 @@ public class ProgramSolution extends Solution {
 
     protected int changesCount; // Number of changes made to the solution
     protected String configurationName;
+    protected int evaluationCount; // Number of evaluations performed on this solution
 
     public ProgramSolution(int numberOfObjectives) {
         super(numberOfObjectives);
@@ -44,6 +45,8 @@ public class ProgramSolution extends Solution {
         NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone(); // TODO Remove this when moved to FinalIndividualFitness
         isDirty = s.isDirty;
         changesCount = s.changesCount;
+        configurationName = s.configurationName;
+        evaluationCount = -1; // Default value, can be set later
     }
 
     public ProgramSolution(ProgramSolution s, String configurationName) {
@@ -55,6 +58,7 @@ public class ProgramSolution extends Solution {
         isDirty = s.isDirty;
         changesCount = s.changesCount;
         this.configurationName = configurationName;
+        evaluationCount = s.evaluationCount;
     }
 
     @Override
@@ -236,5 +240,13 @@ public class ProgramSolution extends Solution {
 
     public void setConfigurationName(String configurationName){
         this.configurationName = configurationName;
+    }
+
+    public int getEvaluationCount() {
+        return evaluationCount;
+    }
+
+    public void setEvaluationCount(int evaluationCount) {
+        this.evaluationCount = evaluationCount;
     }
 }
