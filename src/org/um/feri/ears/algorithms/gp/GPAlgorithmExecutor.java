@@ -375,25 +375,29 @@ public class GPAlgorithmExecutor implements Serializable {
                 // TODO: Option 1 - Compare solutions based on the number of generations
                 System.out.println("Executing FinalMasterTournaments based on generations");
                 int executeFinalMasterTournamentEveryXGen = configuration.FinalMasterTournamentsConfiguration.ExecuteFinalMasterTournamentEveryXGen;
-                for (int i = 0; i < gpAlgorithmConfigurationsRunStats.get(0).getGpAlgorithmRunStats().get(0).getBestGenSolutionSize(); i += executeFinalMasterTournamentEveryXGen) {
-                    finalMasterTournamentIndividuals = new ArrayList<>();
-                    // 3.1 Prepare final master tournament individuals (all best solutions from all configurations and all runs)
-                    for (GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats : gpAlgorithmConfigurationsRunStats) {
-                        for (GPAlgorithmRunStats gpAlgorithmRunStats : gpAlgorithmConfigurationRunStats.getGpAlgorithmRunStats()) {
-                            finalMasterTournamentIndividuals.add(new ProgramSolution(gpAlgorithmRunStats.getBestRunSolution(i).right, gpAlgorithmConfigurationRunStats.getConfigurationName()));
+                for (int i = 0; i < gpAlgorithmConfigurationsRunStats.get(0).getGpAlgorithmRunStats().get(0).getBestGenSolutionSize(); i++) {
+                    if(i % executeFinalMasterTournamentEveryXGen == 0 || ((i == gpAlgorithmConfigurationsRunStats.get(0).getGpAlgorithmRunStats().get(0).getBestGenSolutionSize() - 1) && i % executeFinalMasterTournamentEveryXGen != 0)) {
+                        System.out.println("Executing FinalMasterTournaments at generation: " + (i + 1));
+
+                        finalMasterTournamentIndividuals = new ArrayList<>();
+                        // 3.1 Prepare final master tournament individuals (all best solutions from all configurations and all runs)
+                        for (GPAlgorithmConfigurationRunStats gpAlgorithmConfigurationRunStats : gpAlgorithmConfigurationsRunStats) {
+                            for (GPAlgorithmRunStats gpAlgorithmRunStats : gpAlgorithmConfigurationRunStats.getGpAlgorithmRunStats()) {
+                                finalMasterTournamentIndividuals.add(new ProgramSolution(gpAlgorithmRunStats.getBestRunSolution(i).right, gpAlgorithmConfigurationRunStats.getConfigurationName()));
+                            }
                         }
+
+                        // Restart finalMasterTournamentIndividuals ids
+                        for (int j = 0; j < finalMasterTournamentIndividuals.size(); j++) {
+                            finalMasterTournamentIndividuals.get(j).setID(j);
+                        }
+
+                        // 3.2 Execute final master tournament
+                        this.gpAlgorithm.getTask().problem.bulkEvaluate(finalMasterTournamentIndividuals);
+
+                        // 3.3 Save final master tournament results
+                        multiConfigurationsProgressData.addFinalMasterTournamentGraphData(finalMasterTournamentIndividuals);
                     }
-
-                    // Restart finalMasterTournamentIndividuals ids
-                    for (int j = 0; j < finalMasterTournamentIndividuals.size(); j++) {
-                        finalMasterTournamentIndividuals.get(j).setID(j);
-                    }
-
-                    // 3.2 Execute final master tournament
-                    this.gpAlgorithm.getTask().problem.bulkEvaluate(finalMasterTournamentIndividuals);
-
-                    // 3.3 Save final master tournament results
-                    multiConfigurationsProgressData.addFinalMasterTournamentGraphData(finalMasterTournamentIndividuals);
                 }
             }
             else {
@@ -412,9 +416,10 @@ public class GPAlgorithmExecutor implements Serializable {
                 }
 
                 // Step 1: Compare solutions based on the number of evaluations spent for each configuration and each run
+                int executeFinalMasterTournamentEveryXGen = configuration.FinalMasterTournamentsConfiguration.ExecuteFinalMasterTournamentEveryXGen;
                 int i = 0;
                 for(ImmutablePair<Integer, ProgramSolution> genSolution : gpAlgorithmConfigurationRunStatsMax.getGpAlgorithmRunStats().get(0).getBestGenSolutions()) {
-                    if(i % configuration.FinalMasterTournamentsConfiguration.ExecuteFinalMasterTournamentEveryXGen == 0 || ((i == gpAlgorithmConfigurationRunStatsMax.getGpAlgorithmRunStats().get(0).getBestGenSolutions().size() - 1) && i % configuration.FinalMasterTournamentsConfiguration.ExecuteFinalMasterTournamentEveryXGen != 0)) {
+                    if(i % executeFinalMasterTournamentEveryXGen == 0 || ((i == gpAlgorithmConfigurationRunStatsMax.getGpAlgorithmRunStats().get(0).getBestGenSolutions().size() - 1) && i % executeFinalMasterTournamentEveryXGen != 0)) {
                         int evals = genSolution.left;
                         System.out.println("Executing FinalMasterTournaments at evaluations: " + evals);
 

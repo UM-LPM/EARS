@@ -200,26 +200,30 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         execute(generations, null, "Main_phase", multiConfigurationsProgressData);
 
         if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
-            // Update Unity configuration
-            Configuration.serializeUnityConfig(runConfiguration.UnityConfigurationMasterTournamentGraph, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+            if(gpAlgorithmExecutor.configuration.ExecuteMasterTournaments){
+                // Update Unity configuration
+                Configuration.serializeUnityConfig(runConfiguration.UnityConfigurationMasterTournamentGraph, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
-            // Restart Unity Instances
-            gpAlgorithmExecutor.restartUnityInstances(true);
+                // Restart Unity Instances
+                gpAlgorithmExecutor.restartUnityInstances(true);
 
-            // Build Master Tournament Graph
-            if (runConfiguration.EARSConfiguration.BuildMasterTournament) {
-                buildMasterTournamentGraph(multiConfigurationsProgressData);
+                // Build Master Tournament Graph
+                if (runConfiguration.EARSConfiguration.BuildMasterTournament) {
+                    buildMasterTournamentGraph(multiConfigurationsProgressData);
+                }
             }
 
-            // Update Unity configuration
-            Configuration.serializeUnityConfig(runConfiguration.UnityConfigurationConvergenceGraph, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
+            if(gpAlgorithmExecutor.configuration.BuildConvergenceGraphs){
+                // Update Unity configuration
+                Configuration.serializeUnityConfig(runConfiguration.UnityConfigurationConvergenceGraph, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
 
-            // Restart Unity Instances
-            gpAlgorithmExecutor.restartUnityInstances(true);
+                // Restart Unity Instances
+                gpAlgorithmExecutor.restartUnityInstances(true);
 
-            // Build Convergence Graph
-            if (runConfiguration.EARSConfiguration.BuildConvergenceGraph) {
-                buildConvergenceGraph(multiConfigurationsProgressData);
+                // Build Convergence Graph
+                if (runConfiguration.EARSConfiguration.BuildConvergenceGraph) {
+                    buildConvergenceGraph(multiConfigurationsProgressData);
+                }
             }
         }
 

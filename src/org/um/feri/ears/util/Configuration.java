@@ -19,6 +19,8 @@ public class Configuration implements Serializable{
     public String UnityExeLocation;
     public String UnityConfigDestFilePath;
     public String MultiConfigurationPrograssDataFilePath;
+    public boolean ExecuteMasterTournaments;
+    public boolean BuildConvergenceGraphs;
     public boolean ExecuteFinalMasterTournaments;
     public long InitialSeed;
     public boolean SetInitialSeedForEachConfigurationRun;
