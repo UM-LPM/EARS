@@ -30,7 +30,8 @@ public class FinalIndividualFitness implements Serializable {
                 this.individualMatchResults.add(new IndividualMatchResult(imr));
             }
 
-        this.avgMatchResult = new IndividualMatchResult(fitness.avgMatchResult);
+        if(fitness.avgMatchResult != null)
+            this.avgMatchResult = new IndividualMatchResult(fitness.avgMatchResult);
 
         this.additionalValues = new HashMap<>();
         if(fitness.additionalValues != null)

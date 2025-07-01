@@ -32,6 +32,10 @@ public class GPNodeCallFrequencyCountPruningOperator extends GPOperator {
     public ProgramSolution execute(ProgramSolution tProgramSolution, ProgramProblem tProgramProblem) {
         int[] nodeCallFrequencyCount = tProgramSolution.getNodeCallFrequencyCount();
 
+        if(nodeCallFrequencyCount == null || nodeCallFrequencyCount.length == 0) {
+            return tProgramSolution;
+        }
+
         // 1. Find the node with the highest frequency of calls (root node contains the total number of calls)
         int maxNodeCallFrequency = nodeCallFrequencyCount[0];
 

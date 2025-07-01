@@ -365,7 +365,6 @@ public class GPAlgorithmExecutor implements Serializable {
             restartUnityInstances(true);
         }
 
-        // TODO: Execute finalMasterTournament for each best individual from the
         // 3. Execute final master tournament for all configurations (tournament for each best solution each X gens)
         multiConfigurationsProgressData.clearFinalMasterTournamentGraphData();
 

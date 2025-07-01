@@ -21,8 +21,6 @@ public class ProgramSolution extends Solution {
 
     protected FinalIndividualFitness Fitness;
 
-    protected int[] NodeCallFrequencyCount; // TODO Remove this when moved to FinalIndividualFitness
-
     protected boolean isDirty; // Flag to indicate if the solution has been modified (GPOperators, etc.)
 
     protected int changesCount; // Number of changes made to the solution
@@ -32,7 +30,6 @@ public class ProgramSolution extends Solution {
     public ProgramSolution(int numberOfObjectives) {
         super(numberOfObjectives);
         this.Fitness = new FinalIndividualFitness();
-        this.NodeCallFrequencyCount = new int[]{};
         this.isDirty = false;
         this.changesCount = 0;
     }
@@ -42,7 +39,6 @@ public class ProgramSolution extends Solution {
         tree = s.tree.clone();
         parents = new ArrayList<>();
         Fitness = new FinalIndividualFitness(s.Fitness, true);
-        NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone(); // TODO Remove this when moved to FinalIndividualFitness
         isDirty = s.isDirty;
         changesCount = s.changesCount;
         configurationName = s.configurationName;
@@ -54,7 +50,6 @@ public class ProgramSolution extends Solution {
         tree = s.tree.clone();
         parents = new ArrayList<>();
         Fitness = new FinalIndividualFitness(s.Fitness, true);
-        NodeCallFrequencyCount = s.NodeCallFrequencyCount.clone(); // TODO Remove this when moved to FinalIndividualFitness
         isDirty = s.isDirty;
         changesCount = s.changesCount;
         this.configurationName = configurationName;
@@ -201,17 +196,23 @@ public class ProgramSolution extends Solution {
     }
 
     public Map<String, Double> getAvgMatchFitnessResult(){
+        if(Fitness.getAvgMatchResult() == null){
+            if(Fitness.individualMatchResults != null)
+                return Fitness.individualMatchResults.get(0).individualValues;
+            else
+                return new HashMap<>(); // Return empty map if no match results are available
+        }
         return Fitness.getAvgMatchResult().individualValues;
     }
 
-    // TODO Remove this (when moved to FinalIndividualFitness)
-    public void setNodeCallFrequencyCount(int[] nodeCallFrequencyCount){
-        this.NodeCallFrequencyCount = nodeCallFrequencyCount;
-    }
-
-    // TODO Remove this (when moved to FinalIndividualFitness)
     public int[] getNodeCallFrequencyCount(){
-        return NodeCallFrequencyCount;
+        //return NodeCallFrequencyCount;
+        if(Fitness == null || Fitness.getIndividualMatchResults() == null || Fitness.getIndividualMatchResults().isEmpty()) {
+            return new int[]{};
+        }
+
+        ArrayList<Double> callFrequencies = (ArrayList<Double>) Fitness.getIndividualMatchResults().get(0).individualPerformanceData.getOrDefault("NodeCallFrequencyCount", new ArrayList<Double>());
+        return callFrequencies.stream().mapToInt(Double::intValue).toArray();
     }
 
     public void resetIsDirty(){

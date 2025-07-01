@@ -40,8 +40,6 @@ public class EARSConfiguration implements Serializable {
     public GPProblemEvaluatorType ProblemEvaluatorType;
     public LastEvalIndividualFitnessesRatingCompositionType LastEvalIndividualFitnessesRatingCompositionType;
     public int HallOfFameSize;
-    public boolean BuildMasterTournament;
-    public boolean BuildConvergenceGraph;
 
     public RequiredEvalsCalcMethod RequiredEvalsCalcMethod;
     public HashMap<String, Integer> RequiredEvalsCalcMethodParams;

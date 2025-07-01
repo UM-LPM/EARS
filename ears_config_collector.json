@@ -1,0 +1,754 @@
+{ 
+	"CoordinatorURI": "http://localhost:4000/",
+	"EvalEnvInstanceURIs": "http://localhost:4444/,http://localhost:4445/,http://localhost:4446/,http://localhost:4447/",
+	"DestinationFilePath": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\Resources\\Collector\\",
+	"JsonBodyDestFilePath": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\WebAPI\\RequestData\\jsonBody.json",
+	"ImagePath": "C:\\Users\\marko\\Documents\\FERI\\Projekti\\EARS\\out\\artifacts\\EARS_jar\\images\\",
+	"UnityGameFile": "GIANT.exe",
+	"UnityExeLocation": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\",
+	"UnityConfigDestFilePath": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\GIANT_Data\\conf.json",
+	"MultiConfigurationPrograssDataFilePath":"C:\\Users\\marko\\Documents\\FERI\\Projekti\\EARS\\Experiments\\multiConfigurationPrograssData.ser",
+	"ExecuteMasterTournaments": false,
+	"BuildConvergenceGraphs": false,
+	"ExecuteFinalMasterTournaments": false,
+	"InitialSeed": 123456,
+	"SetInitialSeedForEachConfigurationRun": true,
+	"Configurations": [
+		{
+			"Name": "NodeCallFrequencyCountPruning10",
+			"NumberOfReruns": 30,
+			"EARSConfiguration": {
+				"AlgorithmType": 2,
+				"ProblemType": 1,
+				"ProblemName": "Collector",
+				"FitnessEvaluations": 4100,
+				"Generations": 0,
+				"PopSize": 100,
+				"CrossoverProb": 0.75,
+				"MutationProb": 0.25,
+				"NumOfTournaments": 2,
+				"MinTreeDepth": 5,
+				"MaxTreeStartDepth": 6,
+				"MaxTreeEndDepth": 25,
+				"MaxTreeSize": 50,
+				"ElitismProb":  0.05,
+				"SeqSelNumOfChildren": 3,
+				"TargetGameObjectCount": 4,
+				"InitPopGeneratorMethod": "Random",
+				"Functions": "behaviour.tree.Sequencer,behaviour.tree.Selector,behaviour.tree.Inverter",
+				"Terminals": "behaviour.tree.sensors.RayHitObject,behaviour.tree.movement.MoveForward,behaviour.tree.movement.Rotate",
+				"FeasibilityControlOperators": ["GPDepthBasedTreePruningOperator-{}"],
+				"BloatControlOperators": ["GPNodeCallFrequencyCountPruningOperator-{\"pruneThreshold\": 10, \"pruneProbability\": 0.2}"],
+				"ProblemEvaluatorType": 1,
+				"LastEvalIndividualFitnessesRatingCompositionType": 0,
+				"HallOfFameSize": 0,
+				"RequiredEvalsCalcMethod": "POP_SIZE",
+				"RequiredEvalsCalcMethodParams": {
+					"EvalsPerMatch": 1
+				}
+			},
+			"EncapsulatedNodeDefinitions": [],
+			"UnityConfiguration": {
+				"AutoStart": true,
+				"ProblemDomain": "Collector",
+				"CoordinatorURI": "http://localhost:4000/",
+				"IndividualsSourceJSON": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\Resources\\Collector\\",
+				"IndividualsSourceSO": "C:\\Users\\marko\\Documents\\marko\\GenIATraP_Setup_New\\Resources\\Collector\\SOs\\",
+				"ConvertSOToJSON": false,
+				"StartCommunicatorURI": "http://localhost:4444/",
+				"TimeScale": 15,
+				"FixedTimeStep": 0.02,
+				"RerunTimes": 1,
+				"InitialSeed": 963852,
+				"Render": false,
+				"RandomSeedMode": 1,
+				"SimulationSteps": 3000,
+				"SimulationTime": 0,
+				"IncludeEncapsulatedNodesToFreqCount": false,
+				"EvaluatorType": 0, 
+				"RatingSystemType": -1,
+				"TournamentOrganizationType": 3,
+				"TournamentRounds": -1,
+				"SwapTournamentMatchTeams": false,
+				"GameScenarios": [
+					{"GameSceneName": "CollectorGameScene"}
+				],
+				"AgentScenarios": [
+					{
+						"AgentSceneName": "CollectorAgentScene", 
+						"GameScenarios": [
+							{"GameSceneName": "CollectorGameScene"}
+						]
+					}
+				],
+				"IncludeNodeCallFrequencyCounts": true,
+				"ProblemConfiguration": {
+					"DecisionRequestInterval": 2,
+					"ArenaRadius": 18,
+					"ArenaOffset": 0.0,
+					"AgentMoveSpeed": 10,
+					"AgentRotationSpeed": 180,
+					"GameMode": 1,
+					"StartNumberOfTargets": 1,
+					"TargetMinDistanceFromAgents": 10,
+					"TargetToTargetMinDistance": 10,
+					"MaxTargets": 20,
+					"RayHitObjectDetectionType": 1
+				},
+				"FitnessValues": 
+				{ 
+					"TimePenalty": 25,
+					"SectorExploration": -50,
+					"TargetsAcquired": -500
+				}
+			},
+			"UnityConfigurationMasterTournamentGraph": {},
+			"UnityConfigurationConvergenceGraph": {}
+		},
+		{
+			"Name": "NodeCallFrequencyCountPruning5",
+			"NumberOfReruns": 30,
+			"EARSConfiguration": {
+				"AlgorithmType": 2,
+				"ProblemType": 1,
+				"ProblemName": "Collector",
+				"FitnessEvaluations": 4100,
+				"Generations": 0,
+				"PopSize": 100,
+				"CrossoverProb": 0.75,
+				"MutationProb": 0.25,
+				"NumOfTournaments": 2,
+				"MinTreeDepth": 5,
+				"MaxTreeStartDepth": 6,
+				"MaxTreeEndDepth": 25,
+				"MaxTreeSize": 50,
+				"ElitismProb":  0.05,
+				"SeqSelNumOfChildren": 3,
+				"TargetGameObjectCount": 4,
+				"InitPopGeneratorMethod": "Random",
+				"Functions": "behaviour.tree.Sequencer,behaviour.tree.Selector,behaviour.tree.Inverter",
+				"Terminals": "behaviour.tree.sensors.RayHitObject,behaviour.tree.movement.MoveForward,behaviour.tree.movement.Rotate",
+				"FeasibilityControlOperators": ["GPDepthBasedTreePruningOperator-{}"],
+				"BloatControlOperators": ["GPNodeCallFrequencyCountPruningOperator-{\"pruneThreshold\": 5, \"pruneProbability\": 0.4}"],
+				"ProblemEvaluatorType": 1,
+				"LastEvalIndividualFitnessesRatingCompositionType": 0,
+				"HallOfFameSize": 0,
+				"RequiredEvalsCalcMethod": "POP_SIZE",
+				"RequiredEvalsCalcMethodParams": {
+					"EvalsPerMatch": 1
+				}
+			},
+			"EncapsulatedNodeDefinitions": [],
+			"UnityConfiguration": {
+				"AutoStart": true,
+				"ProblemDomain": "Collector",
+				"CoordinatorURI": "http://localhost:4000/",
+				"IndividualsSourceJSON": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\Resources\\Collector\\",
+				"IndividualsSourceSO": "C:\\Users\\marko\\Documents\\marko\\GenIATraP_Setup_New\\Resources\\Collector\\SOs\\",
+				"ConvertSOToJSON": false,
+				"StartCommunicatorURI": "http://localhost:4444/",
+				"TimeScale": 15,
+				"FixedTimeStep": 0.02,
+				"RerunTimes": 1,
+				"InitialSeed": 963852,
+				"Render": false,
+				"RandomSeedMode": 1,
+				"SimulationSteps": 3000,
+				"SimulationTime": 0,
+				"IncludeEncapsulatedNodesToFreqCount": false,
+				"EvaluatorType": 0, 
+				"RatingSystemType": -1,
+				"TournamentOrganizationType": 3,
+				"TournamentRounds": -1,
+				"SwapTournamentMatchTeams": false,
+				"GameScenarios": [
+					{"GameSceneName": "CollectorGameScene"}
+					
+				],
+				"AgentScenarios": [
+					{
+						"AgentSceneName": "CollectorAgentScene", 
+						"GameScenarios": [
+							{"GameSceneName": "CollectorGameScene"}
+						]
+					}
+				],
+				"IncludeNodeCallFrequencyCounts": true,
+				"ProblemConfiguration": {
+					"DecisionRequestInterval": 2,
+					"ArenaRadius": 18,
+					"ArenaOffset": 0.0,
+					"AgentMoveSpeed": 10,
+					"AgentRotationSpeed": 180,
+					"GameMode": 1,
+					"StartNumberOfTargets": 1,
+					"TargetMinDistanceFromAgents": 10,
+					"TargetToTargetMinDistance": 10,
+					"MaxTargets": 20,
+					"RayHitObjectDetectionType": 1
+				},
+				"FitnessValues": 
+				{ 
+					"TimePenalty": 25,
+					"SectorExploration": -50,
+					"TargetsAcquired": -500
+				}
+			},
+			"UnityConfigurationMasterTournamentGraph": {},
+			"UnityConfigurationConvergenceGraph": {}
+		},
+		{
+			"Name": "DepthTreePruning25",
+			"NumberOfReruns": 30,
+			"EARSConfiguration": {
+				"AlgorithmType": 2,
+				"ProblemType": 1,
+				"ProblemName": "Collector",
+				"FitnessEvaluations": 2100,
+				"Generations": 0,
+				"PopSize": 100,
+				"CrossoverProb": 0.75,
+				"MutationProb": 0.25,
+				"NumOfTournaments": 2,
+				"MinTreeDepth": 5,
+				"MaxTreeStartDepth": 6,
+				"MaxTreeEndDepth": 25,
+				"MaxTreeSize": 100,
+				"ElitismProb":  0.05,
+				"SeqSelNumOfChildren": 3,
+				"TargetGameObjectCount": 4,
+				"InitPopGeneratorMethod": "Random",
+				"Functions": "behaviour.tree.Sequencer,behaviour.tree.Selector,behaviour.tree.Inverter",
+				"Terminals": "behaviour.tree.sensors.RayHitObject,behaviour.tree.movement.MoveForward,behaviour.tree.movement.Rotate",
+				"FeasibilityControlOperators": ["GPDepthBasedTreePruningOperator-{}"],
+				"BloatControlOperators": [],
+				"ProblemEvaluatorType": 1,
+				"LastEvalIndividualFitnessesRatingCompositionType": 0,
+				"HallOfFameSize": 0,
+				"RequiredEvalsCalcMethod": "POP_SIZE",
+				"RequiredEvalsCalcMethodParams": {
+					"EvalsPerMatch": 1
+				}
+			},
+			"EncapsulatedNodeDefinitions": [],
+			"UnityConfiguration": {
+				"AutoStart": true,
+				"ProblemDomain": "Collector",
+				"CoordinatorURI": "http://localhost:4000/",
+				"IndividualsSourceJSON": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\Resources\\Collector\\",
+				"IndividualsSourceSO": "C:\\Users\\marko\\Documents\\marko\\GenIATraP_Setup_New\\Resources\\Collector\\SOs\\",
+				"ConvertSOToJSON": false,
+				"StartCommunicatorURI": "http://localhost:4444/",
+				"TimeScale": 15,
+				"FixedTimeStep": 0.02,
+				"RerunTimes": 1,
+				"InitialSeed": 963852,
+				"Render": false,
+				"RandomSeedMode": 1,
+				"SimulationSteps": 3000,
+				"SimulationTime": 0,
+				"IncludeEncapsulatedNodesToFreqCount": false,
+				"EvaluatorType": 0, 
+				"RatingSystemType": -1,
+				"TournamentOrganizationType": 3,
+				"TournamentRounds": -1,
+				"SwapTournamentMatchTeams": false,
+				"GameScenarios": [
+					{"GameSceneName": "CollectorGameScene"}
+					
+				],
+				"AgentScenarios": [
+					{
+						"AgentSceneName": "CollectorAgentScene", 
+						"GameScenarios": [
+							{"GameSceneName": "CollectorGameScene"}
+						]
+					}
+				],
+				"IncludeNodeCallFrequencyCounts": true,
+				"ProblemConfiguration": {
+					"DecisionRequestInterval": 2,
+					"ArenaRadius": 18,
+					"ArenaOffset": 0.0,
+					"AgentMoveSpeed": 10,
+					"AgentRotationSpeed": 180,
+					"GameMode": 1,
+					"StartNumberOfTargets": 1,
+					"TargetMinDistanceFromAgents": 10,
+					"TargetToTargetMinDistance": 10,
+					"MaxTargets": 20,
+					"RayHitObjectDetectionType": 1
+				},
+				"FitnessValues": 
+				{ 
+					"TimePenalty": 25,
+					"SectorExploration": -50,
+					"TargetsAcquired": -500
+				}
+			},
+			"UnityConfigurationMasterTournamentGraph": {},
+			"UnityConfigurationConvergenceGraph": {}
+		},
+		{
+			"Name": "DepthTreePruning10",
+			"NumberOfReruns": 30,
+			"EARSConfiguration": {
+				"AlgorithmType": 2,
+				"ProblemType": 1,
+				"ProblemName": "Collector",
+				"FitnessEvaluations": 2100,
+				"Generations": 0,
+				"PopSize": 100,
+				"CrossoverProb": 0.75,
+				"MutationProb": 0.25,
+				"NumOfTournaments": 2,
+				"MinTreeDepth": 5,
+				"MaxTreeStartDepth": 6,
+				"MaxTreeEndDepth": 10,
+				"MaxTreeSize": 100,
+				"ElitismProb":  0.05,
+				"SeqSelNumOfChildren": 3,
+				"TargetGameObjectCount": 4,
+				"InitPopGeneratorMethod": "Random",
+				"Functions": "behaviour.tree.Sequencer,behaviour.tree.Selector,behaviour.tree.Inverter",
+				"Terminals": "behaviour.tree.sensors.RayHitObject,behaviour.tree.movement.MoveForward,behaviour.tree.movement.Rotate",
+				"FeasibilityControlOperators": ["GPDepthBasedTreePruningOperator-{}"],
+				"BloatControlOperators": [],
+				"ProblemEvaluatorType": 1,
+				"LastEvalIndividualFitnessesRatingCompositionType": 0,
+				"HallOfFameSize": 0,
+				"RequiredEvalsCalcMethod": "POP_SIZE",
+				"RequiredEvalsCalcMethodParams": {
+					"EvalsPerMatch": 1
+				}
+			},
+			"EncapsulatedNodeDefinitions": [],
+			"UnityConfiguration": {
+				"AutoStart": true,
+				"ProblemDomain": "Collector",
+				"CoordinatorURI": "http://localhost:4000/",
+				"IndividualsSourceJSON": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\Resources\\Collector\\",
+				"IndividualsSourceSO": "C:\\Users\\marko\\Documents\\marko\\GenIATraP_Setup_New\\Resources\\Collector\\SOs\\",
+				"ConvertSOToJSON": false,
+				"StartCommunicatorURI": "http://localhost:4444/",
+				"TimeScale": 15,
+				"FixedTimeStep": 0.02,
+				"RerunTimes": 1,
+				"InitialSeed": 963852,
+				"Render": false,
+				"RandomSeedMode": 1,
+				"SimulationSteps": 3000,
+				"SimulationTime": 0,
+				"IncludeEncapsulatedNodesToFreqCount": false,
+				"EvaluatorType": 0, 
+				"RatingSystemType": -1,
+				"TournamentOrganizationType": 3,
+				"TournamentRounds": -1,
+				"SwapTournamentMatchTeams": false,
+				"GameScenarios": [
+					{"GameSceneName": "CollectorGameScene"}
+					
+				],
+				"AgentScenarios": [
+					{
+						"AgentSceneName": "CollectorAgentScene", 
+						"GameScenarios": [
+							{"GameSceneName": "CollectorGameScene"}
+						]
+					}
+				],
+				"IncludeNodeCallFrequencyCounts": true,
+				"ProblemConfiguration": {
+					"DecisionRequestInterval": 2,
+					"ArenaRadius": 18,
+					"ArenaOffset": 0.0,
+					"AgentMoveSpeed": 10,
+					"AgentRotationSpeed": 180,
+					"GameMode": 1,
+					"StartNumberOfTargets": 1,
+					"TargetMinDistanceFromAgents": 10,
+					"TargetToTargetMinDistance": 10,
+					"MaxTargets": 20,
+					"RayHitObjectDetectionType": 1
+				},
+				"FitnessValues": 
+				{ 
+					"TimePenalty": 25,
+					"SectorExploration": -50,
+					"TargetsAcquired": -500
+				}
+			},
+			"UnityConfigurationMasterTournamentGraph": {},
+			"UnityConfigurationConvergenceGraph": {}
+		},
+		{
+			"Name": "ClosestToMaxNodesPruning100",
+			"NumberOfReruns": 30,
+			"EARSConfiguration": {
+				"AlgorithmType": 2,
+				"ProblemType": 1,
+				"ProblemName": "Collector",
+				"FitnessEvaluations": 2100,
+				"Generations": 0,
+				"PopSize": 100,
+				"CrossoverProb": 0.75,
+				"MutationProb": 0.25,
+				"NumOfTournaments": 2,
+				"MinTreeDepth": 5,
+				"MaxTreeStartDepth": 6,
+				"MaxTreeEndDepth": 25,
+				"MaxTreeSize": 100,
+				"ElitismProb":  0.05,
+				"SeqSelNumOfChildren": 3,
+				"TargetGameObjectCount": 4,
+				"InitPopGeneratorMethod": "Random",
+				"Functions": "behaviour.tree.Sequencer,behaviour.tree.Selector,behaviour.tree.Inverter",
+				"Terminals": "behaviour.tree.sensors.RayHitObject,behaviour.tree.movement.MoveForward,behaviour.tree.movement.Rotate",
+				"FeasibilityControlOperators": ["GPDepthBasedTreePruningOperator-{}","GPTreeSizePruningOperator-{\"operatorType\":\"CLOSEST_TO_MAX_TREE_NODES\"}"],
+				"BloatControlOperators": [],
+				"ProblemEvaluatorType": 1,
+				"LastEvalIndividualFitnessesRatingCompositionType": 0,
+				"HallOfFameSize": 0,
+				"RequiredEvalsCalcMethod": "POP_SIZE",
+				"RequiredEvalsCalcMethodParams": {
+					"EvalsPerMatch": 1
+				}
+			},
+			"EncapsulatedNodeDefinitions": [],
+			"UnityConfiguration": {
+				"AutoStart": true,
+				"ProblemDomain": "Collector",
+				"CoordinatorURI": "http://localhost:4000/",
+				"IndividualsSourceJSON": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\Resources\\Collector\\",
+				"IndividualsSourceSO": "C:\\Users\\marko\\Documents\\marko\\GenIATraP_Setup_New\\Resources\\Collector\\SOs\\",
+				"ConvertSOToJSON": false,
+				"StartCommunicatorURI": "http://localhost:4444/",
+				"TimeScale": 15,
+				"FixedTimeStep": 0.02,
+				"RerunTimes": 1,
+				"InitialSeed": 963852,
+				"Render": false,
+				"RandomSeedMode": 1,
+				"SimulationSteps": 3000,
+				"SimulationTime": 0,
+				"IncludeEncapsulatedNodesToFreqCount": false,
+				"EvaluatorType": 0, 
+				"RatingSystemType": -1,
+				"TournamentOrganizationType": 3,
+				"TournamentRounds": -1,
+				"SwapTournamentMatchTeams": false,
+				"GameScenarios": [
+					{"GameSceneName": "CollectorGameScene"}
+					
+				],
+				"AgentScenarios": [
+					{
+						"AgentSceneName": "CollectorAgentScene", 
+						"GameScenarios": [
+							{"GameSceneName": "CollectorGameScene"}
+						]
+					}
+				],
+				"IncludeNodeCallFrequencyCounts": true,
+				"ProblemConfiguration": {
+					"DecisionRequestInterval": 2,
+					"ArenaRadius": 18,
+					"ArenaOffset": 0.0,
+					"AgentMoveSpeed": 10,
+					"AgentRotationSpeed": 180,
+					"GameMode": 1,
+					"StartNumberOfTargets": 1,
+					"TargetMinDistanceFromAgents": 10,
+					"TargetToTargetMinDistance": 10,
+					"MaxTargets": 20,
+					"RayHitObjectDetectionType": 1
+				},
+				"FitnessValues": 
+				{ 
+					"TimePenalty": 25,
+					"SectorExploration": -50,
+					"TargetsAcquired": -500
+				}
+			},
+			"UnityConfigurationMasterTournamentGraph": {},
+			"UnityConfigurationConvergenceGraph": {}
+		},
+		{
+			"Name": "ClosestToMaxNodesPruning50",
+			"NumberOfReruns": 30,
+			"EARSConfiguration": {
+				"AlgorithmType": 2,
+				"ProblemType": 1,
+				"ProblemName": "Collector",
+				"FitnessEvaluations": 2100,
+				"Generations": 0,
+				"PopSize": 100,
+				"CrossoverProb": 0.75,
+				"MutationProb": 0.25,
+				"NumOfTournaments": 2,
+				"MinTreeDepth": 5,
+				"MaxTreeStartDepth": 6,
+				"MaxTreeEndDepth": 11,
+				"MaxTreeSize": 60,
+				"ElitismProb":  0.05,
+				"SeqSelNumOfChildren": 3,
+				"TargetGameObjectCount": 4,
+				"InitPopGeneratorMethod": "Random",
+				"Functions": "behaviour.tree.Sequencer,behaviour.tree.Selector,behaviour.tree.Inverter",
+				"Terminals": "behaviour.tree.sensors.RayHitObject,behaviour.tree.movement.MoveForward,behaviour.tree.movement.Rotate",
+				"FeasibilityControlOperators": ["GPDepthBasedTreePruningOperator-{}","GPTreeSizePruningOperator-{\"operatorType\":\"CLOSEST_TO_MAX_TREE_NODES\"}"],
+				"BloatControlOperators": [],
+				"ProblemEvaluatorType": 1,
+				"LastEvalIndividualFitnessesRatingCompositionType": 0,
+				"HallOfFameSize": 0,
+				"RequiredEvalsCalcMethod": "POP_SIZE",
+				"RequiredEvalsCalcMethodParams": {
+					"EvalsPerMatch": 1
+				}
+			},
+			"EncapsulatedNodeDefinitions": [],
+			"UnityConfiguration": {
+				"AutoStart": true,
+				"ProblemDomain": "Collector",
+				"CoordinatorURI": "http://localhost:4000/",
+				"IndividualsSourceJSON": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\Resources\\Collector\\",
+				"IndividualsSourceSO": "C:\\Users\\marko\\Documents\\marko\\GenIATraP_Setup_New\\Resources\\Collector\\SOs\\",
+				"ConvertSOToJSON": false,
+				"StartCommunicatorURI": "http://localhost:4444/",
+				"TimeScale": 15,
+				"FixedTimeStep": 0.02,
+				"RerunTimes": 1,
+				"InitialSeed": 963852,
+				"Render": false,
+				"RandomSeedMode": 1,
+				"SimulationSteps": 3000,
+				"SimulationTime": 0,
+				"IncludeEncapsulatedNodesToFreqCount": false,
+				"EvaluatorType": 0, 
+				"RatingSystemType": -1,
+				"TournamentOrganizationType": 3,
+				"TournamentRounds": -1,
+				"SwapTournamentMatchTeams": false,
+				"GameScenarios": [
+					{"GameSceneName": "CollectorGameScene"}
+					
+				],
+				"AgentScenarios": [
+					{
+						"AgentSceneName": "CollectorAgentScene", 
+						"GameScenarios": [
+							{"GameSceneName": "CollectorGameScene"}
+						]
+					}
+				],
+				"IncludeNodeCallFrequencyCounts": true,
+				"ProblemConfiguration": {
+					"DecisionRequestInterval": 2,
+					"ArenaRadius": 18,
+					"ArenaOffset": 0.0,
+					"AgentMoveSpeed": 10,
+					"AgentRotationSpeed": 180,
+					"GameMode": 1,
+					"StartNumberOfTargets": 1,
+					"TargetMinDistanceFromAgents": 10,
+					"TargetToTargetMinDistance": 10,
+					"MaxTargets": 20,
+					"RayHitObjectDetectionType": 1
+				},
+				"FitnessValues": 
+				{ 
+					"TimePenalty": 25,
+					"SectorExploration": -50,
+					"TargetsAcquired": -500
+				}
+			},
+			"UnityConfigurationMasterTournamentGraph": {},
+			"UnityConfigurationConvergenceGraph": {}
+		},
+		{
+			"Name": "NodeCallFrequencyCountPruning20",
+			"NumberOfReruns": 30,
+			"EARSConfiguration": {
+				"AlgorithmType": 2,
+				"ProblemType": 1,
+				"ProblemName": "Collector",
+				"FitnessEvaluations": 4100,
+				"Generations": 0,
+				"PopSize": 100,
+				"CrossoverProb": 0.75,
+				"MutationProb": 0.25,
+				"NumOfTournaments": 2,
+				"MinTreeDepth": 5,
+				"MaxTreeStartDepth": 6,
+				"MaxTreeEndDepth": 25,
+				"MaxTreeSize": 50,
+				"ElitismProb":  0.05,
+				"SeqSelNumOfChildren": 3,
+				"TargetGameObjectCount": 4,
+				"InitPopGeneratorMethod": "Random",
+				"Functions": "behaviour.tree.Sequencer,behaviour.tree.Selector,behaviour.tree.Inverter",
+				"Terminals": "behaviour.tree.sensors.RayHitObject,behaviour.tree.movement.MoveForward,behaviour.tree.movement.Rotate",
+				"FeasibilityControlOperators": ["GPDepthBasedTreePruningOperator-{}"],
+				"BloatControlOperators": ["GPNodeCallFrequencyCountPruningOperator-{\"pruneThreshold\": 20, \"pruneProbability\": 0.2}"],
+				"ProblemEvaluatorType": 1,
+				"LastEvalIndividualFitnessesRatingCompositionType": 0,
+				"HallOfFameSize": 0,
+				"RequiredEvalsCalcMethod": "POP_SIZE",
+				"RequiredEvalsCalcMethodParams": {
+					"EvalsPerMatch": 1
+				}
+			},
+			"EncapsulatedNodeDefinitions": [],
+			"UnityConfiguration": {
+				"AutoStart": true,
+				"ProblemDomain": "Collector",
+				"CoordinatorURI": "http://localhost:4000/",
+				"IndividualsSourceJSON": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\Resources\\Collector\\",
+				"IndividualsSourceSO": "C:\\Users\\marko\\Documents\\marko\\GenIATraP_Setup_New\\Resources\\Collector\\SOs\\",
+				"ConvertSOToJSON": false,
+				"StartCommunicatorURI": "http://localhost:4444/",
+				"TimeScale": 15,
+				"FixedTimeStep": 0.02,
+				"RerunTimes": 1,
+				"InitialSeed": 963852,
+				"Render": false,
+				"RandomSeedMode": 1,
+				"SimulationSteps": 3000,
+				"SimulationTime": 0,
+				"IncludeEncapsulatedNodesToFreqCount": false,
+				"EvaluatorType": 0, 
+				"RatingSystemType": -1,
+				"TournamentOrganizationType": 3,
+				"TournamentRounds": -1,
+				"SwapTournamentMatchTeams": false,
+				"GameScenarios": [
+					{"GameSceneName": "CollectorGameScene"}
+					
+				],
+				"AgentScenarios": [
+					{
+						"AgentSceneName": "CollectorAgentScene", 
+						"GameScenarios": [
+							{"GameSceneName": "CollectorGameScene"}
+						]
+					}
+				],
+				"IncludeNodeCallFrequencyCounts": true,
+				"ProblemConfiguration": {
+					"DecisionRequestInterval": 2,
+					"ArenaRadius": 18,
+					"ArenaOffset": 0.0,
+					"AgentMoveSpeed": 10,
+					"AgentRotationSpeed": 180,
+					"GameMode": 1,
+					"StartNumberOfTargets": 1,
+					"TargetMinDistanceFromAgents": 10,
+					"TargetToTargetMinDistance": 10,
+					"MaxTargets": 20,
+					"RayHitObjectDetectionType": 1
+				},
+				"FitnessValues": 
+				{ 
+					"TimePenalty": 25,
+					"SectorExploration": -50,
+					"TargetsAcquired": -500
+				}
+			},
+			"UnityConfigurationMasterTournamentGraph": {},
+			"UnityConfigurationConvergenceGraph": {}
+		},
+		{
+			"Name": "DepthTreePruning6",
+			"NumberOfReruns": 30,
+			"EARSConfiguration": {
+				"AlgorithmType": 2,
+				"ProblemType": 1,
+				"ProblemName": "Collector",
+				"FitnessEvaluations": 2100,
+				"Generations": 0,
+				"PopSize": 100,
+				"CrossoverProb": 0.75,
+				"MutationProb": 0.25,
+				"NumOfTournaments": 2,
+				"MinTreeDepth": 5,
+				"MaxTreeStartDepth": 6,
+				"MaxTreeEndDepth": 6,
+				"MaxTreeSize": 100,
+				"ElitismProb":  0.05,
+				"SeqSelNumOfChildren": 3,
+				"TargetGameObjectCount": 4,
+				"InitPopGeneratorMethod": "Random",
+				"Functions": "behaviour.tree.Sequencer,behaviour.tree.Selector,behaviour.tree.Inverter",
+				"Terminals": "behaviour.tree.sensors.RayHitObject,behaviour.tree.movement.MoveForward,behaviour.tree.movement.Rotate",
+				"FeasibilityControlOperators": ["GPDepthBasedTreePruningOperator-{}"],
+				"BloatControlOperators": [],
+				"ProblemEvaluatorType": 1,
+				"LastEvalIndividualFitnessesRatingCompositionType": 0,
+				"HallOfFameSize": 0,
+				"RequiredEvalsCalcMethod": "POP_SIZE",
+				"RequiredEvalsCalcMethodParams": {
+					"EvalsPerMatch": 1
+				}
+			},
+			"EncapsulatedNodeDefinitions": [],
+			"UnityConfiguration": {
+				"AutoStart": true,
+				"ProblemDomain": "Collector",
+				"CoordinatorURI": "http://localhost:4000/",
+				"IndividualsSourceJSON": "C:\\Users\\marko\\UnityProjects\\GIANT_develop\\Builds\\Resources\\Collector\\",
+				"IndividualsSourceSO": "C:\\Users\\marko\\Documents\\marko\\GenIATraP_Setup_New\\Resources\\Collector\\SOs\\",
+				"ConvertSOToJSON": false,
+				"StartCommunicatorURI": "http://localhost:4444/",
+				"TimeScale": 15,
+				"FixedTimeStep": 0.02,
+				"RerunTimes": 1,
+				"InitialSeed": 963852,
+				"Render": false,
+				"RandomSeedMode": 1,
+				"SimulationSteps": 3000,
+				"SimulationTime": 0,
+				"IncludeEncapsulatedNodesToFreqCount": false,
+				"EvaluatorType": 0, 
+				"RatingSystemType": -1,
+				"TournamentOrganizationType": 3,
+				"TournamentRounds": -1,
+				"SwapTournamentMatchTeams": false,
+				"GameScenarios": [
+					{"GameSceneName": "CollectorGameScene"}
+					
+				],
+				"AgentScenarios": [
+					{
+						"AgentSceneName": "CollectorAgentScene", 
+						"GameScenarios": [
+							{"GameSceneName": "CollectorGameScene"}
+						]
+					}
+				],
+				"IncludeNodeCallFrequencyCounts": true,
+				"ProblemConfiguration": {
+					"DecisionRequestInterval": 2,
+					"ArenaRadius": 18,
+					"ArenaOffset": 0.0,
+					"AgentMoveSpeed": 10,
+					"AgentRotationSpeed": 180,
+					"GameMode": 1,
+					"StartNumberOfTargets": 1,
+					"TargetMinDistanceFromAgents": 10,
+					"TargetToTargetMinDistance": 10,
+					"MaxTargets": 20,
+					"RayHitObjectDetectionType": 1
+				},
+				"FitnessValues": 
+				{ 
+					"TimePenalty": 25,
+					"SectorExploration": -50,
+					"TargetsAcquired": -500
+				}
+			},
+			"UnityConfigurationMasterTournamentGraph": {},
+			"UnityConfigurationConvergenceGraph": {}
+		}
+		],
+	"FinalMasterTournamentsConfiguration": {}
+}

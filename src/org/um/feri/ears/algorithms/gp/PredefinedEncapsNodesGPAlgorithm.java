@@ -200,6 +200,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
         execute(generations, null, "Main_phase", multiConfigurationsProgressData);
 
         if(runConfiguration.EARSConfiguration.ProblemType == GPProblemType.BEHAVIOR) {
+            // Build Master Tournament Graph
             if(gpAlgorithmExecutor.configuration.ExecuteMasterTournaments){
                 // Update Unity configuration
                 Configuration.serializeUnityConfig(runConfiguration.UnityConfigurationMasterTournamentGraph, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
@@ -207,12 +208,10 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 // Restart Unity Instances
                 gpAlgorithmExecutor.restartUnityInstances(true);
 
-                // Build Master Tournament Graph
-                if (runConfiguration.EARSConfiguration.BuildMasterTournament) {
-                    buildMasterTournamentGraph(multiConfigurationsProgressData);
-                }
+                buildMasterTournamentGraph(multiConfigurationsProgressData);
             }
 
+            // Build Convergence Graph
             if(gpAlgorithmExecutor.configuration.BuildConvergenceGraphs){
                 // Update Unity configuration
                 Configuration.serializeUnityConfig(runConfiguration.UnityConfigurationConvergenceGraph, gpAlgorithmExecutor.getConfiguration().UnityConfigDestFilePath);
@@ -220,10 +219,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 // Restart Unity Instances
                 gpAlgorithmExecutor.restartUnityInstances(true);
 
-                // Build Convergence Graph
-                if (runConfiguration.EARSConfiguration.BuildConvergenceGraph) {
-                    buildConvergenceGraph(multiConfigurationsProgressData);
-                }
+                buildConvergenceGraph(multiConfigurationsProgressData);
             }
         }
 
@@ -250,7 +246,7 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
                 break;
             case ELITISM:
                 // Initialize the population of current generation
-                this.currentPopulation = new ArrayList<>(this.population.size());
+                this.currentPopulation = new ArrayList<>();
 
                 // Elitism phase
                 // Sort population by fitness
@@ -261,14 +257,16 @@ public class PredefinedEncapsNodesGPAlgorithm extends GPAlgorithm {
 
                 int eliteCountMod = this.eliteCount;
 
-                if(this.best.getObjective(0) <= this.population.get(0).getObjective(0)){
+                // TODO: Remove
+                /*if(this.best.getObjective(0) <= this.population.get(0).getObjective(0)){
                     this.currentPopulation.add(new ProgramSolution(this.best));
                     eliteCountMod--;
-                }
+                }*/
 
                 for (int i = 0; i < eliteCountMod; i++) {
                     this.currentPopulation.add(new ProgramSolution(population.get(i)));
                 }
+
                 break;
             case SELECTION_AND_CROSSOVER:
                 // Selection phase

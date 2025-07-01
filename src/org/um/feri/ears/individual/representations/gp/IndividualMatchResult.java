@@ -8,12 +8,14 @@ public class IndividualMatchResult implements Serializable {
     public String matchName;
     public float value;
     public HashMap<String, Double> individualValues;
+    public HashMap<String, Object> individualPerformanceData;
 
     public IndividualMatchResult(){
         this.opponentsIDs = new int[]{};
         this.matchName = "";
         this.value = 0;
         this.individualValues = new HashMap<>();
+        this.individualPerformanceData = new HashMap<>();
     }
 
     public IndividualMatchResult(IndividualMatchResult imr){
@@ -25,5 +27,8 @@ public class IndividualMatchResult implements Serializable {
         this.value = imr.value;
         this.individualValues = new HashMap<>();
         this.individualValues.putAll(imr.individualValues);
+        this.individualPerformanceData = new HashMap<>();
+        if(imr.individualPerformanceData != null)
+            this.individualPerformanceData.putAll(imr.individualPerformanceData);
     }
 }
