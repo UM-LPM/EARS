@@ -215,7 +215,7 @@ public class GPAlgorithmExecutor implements Serializable {
         this.gpAlgorithm.setHallOfFameSize(earsConfiguration.HallOfFameSize);
 
         // Required Evals Calc Method
-        if (configuration.FinalMasterTournamentsConfiguration != null && configuration.FinalMasterTournamentsConfiguration.FinalMasterTournamentsComparisonType == FinalMasterTournamentsComparisonType.Evaluations) {
+        if(configuration.FinalMasterTournamentsConfiguration == null || configuration.FinalMasterTournamentsConfiguration.FinalMasterTournamentsComparisonType == null || (configuration.FinalMasterTournamentsConfiguration != null && configuration.FinalMasterTournamentsConfiguration.FinalMasterTournamentsComparisonType == FinalMasterTournamentsComparisonType.Evaluations)){
             this.gpAlgorithm.setRequiredEvalsCalcMethod(earsConfiguration.RequiredEvalsCalcMethod);
             this.gpAlgorithm.setRequiredEvalsCalcMethodParams(earsConfiguration.RequiredEvalsCalcMethodParams);
             System.out.println("Setting RequiredEvalsCalcMethod to: " + earsConfiguration.RequiredEvalsCalcMethod + ", For " + runConfiguration.Name);

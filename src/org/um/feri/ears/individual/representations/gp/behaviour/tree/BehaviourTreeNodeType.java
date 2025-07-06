@@ -17,7 +17,11 @@ public enum BehaviourTreeNodeType {
     ROTATE_TURRET("RotateTurret"),
     HEALTH_LEVEL_BELLOW("HealthLevelBellow"),
     SHIELD_LEVEL_BELLOW("ShieldLevelBellow"),
-    AMMO_LEVEL_BELLOW("AmmoLevelBellow");
+    AMMO_LEVEL_BELLOW("AmmoLevelBellow"),
+    PICKUP_BALL("PickUpBall"),
+    THROW_BALL("ThrowBall"),
+    BALL_IN_HAND("BallInHand"),
+    BALL_IN_RANGE("BallInRange");
 
     private final String value;
 
