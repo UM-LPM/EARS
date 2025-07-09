@@ -16,7 +16,7 @@ public class AmmoLevelBellow extends ActionNode {
 
     public AmmoLevelBellow() {
         this(BehaviourTreeNodeType.AMMO_LEVEL_BELLOW, List.of(
-                new Property("ammoLevel",1, AmmoLevel.values().length + 1)
+                new Property("ammoLevel",0, AmmoLevel.values().length)
         ));
     }
 

@@ -16,7 +16,7 @@ public class ShieldLevelBellow extends ActionNode {
 
     public ShieldLevelBellow() {
         this(BehaviourTreeNodeType.SHIELD_LEVEL_BELLOW, List.of(
-                new Property("shieldLevel",1, ShieldLevel.values().length + 1)
+                new Property("shieldLevel",0, ShieldLevel.values().length)
         ));
     }
 

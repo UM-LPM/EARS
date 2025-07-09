@@ -21,7 +21,8 @@ public enum BehaviourTreeNodeType {
     PICKUP_BALL("PickUpBall"),
     THROW_BALL("ThrowBall"),
     BALL_IN_HAND("BallInHand"),
-    BALL_IN_RANGE("BallInRange");
+    BALL_IN_RANGE("BallInRange"),
+    GOAL_AHEAD("GoalAhead");
 
     private final String value;
 

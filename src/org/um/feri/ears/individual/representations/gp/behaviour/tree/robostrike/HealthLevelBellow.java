@@ -16,7 +16,7 @@ public class HealthLevelBellow extends ActionNode {
 
     public HealthLevelBellow() {
         this(BehaviourTreeNodeType.HEALTH_LEVEL_BELLOW, List.of(
-                new Property("healthLevel",1, HealthLevel.values().length + 1)
+                new Property("healthLevel",0, HealthLevel.values().length)
         ));
     }
 
