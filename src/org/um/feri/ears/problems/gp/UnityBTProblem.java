@@ -81,6 +81,9 @@ public class UnityBTProblem extends ProgramProblem {
                 if (Objects.equals(obj.getStatus(), "Success")) {
                     // Set fitness values after evaluation
                     for (int i = 0; i < solutions.size(); i++) {
+                        if(i != obj.getObject().getFitnesses()[i].individualID)
+                            throw new IllegalStateException("IDs from sent and received individuals do not match!");
+
                         solutions.get(i).setObjective(0, obj.getObject().getFitnesses()[i].value);
                         solutions.get(i).setFitness(obj.getObject().getFitnesses()[i]);
 
