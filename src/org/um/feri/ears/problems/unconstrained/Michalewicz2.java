@@ -18,9 +18,9 @@ public class Michalewicz2 extends DoubleProblem {
         lowerLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, 0.0));
         upperLimit = new ArrayList<>(Collections.nCopies(numberOfDimensions, PI));
 
-        decisionSpaceOptima[0][0] = 2.20290552;
-        decisionSpaceOptima[0][1] = 1.57079633;
-        objectiveSpaceOptima[0] = -1.80130341;
+        decisionSpaceOptima[0][0] = 2.20290552014618;
+        decisionSpaceOptima[0][1] = 1.57079632677565;
+        objectiveSpaceOptima[0] = -1.80130341009855321;
     }
 
     @Override

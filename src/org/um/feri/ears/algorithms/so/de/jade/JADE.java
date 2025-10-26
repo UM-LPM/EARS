@@ -129,36 +129,27 @@ public class JADE extends NumberAlgorithm {
                 // cauchy
                 // Generate Fi
                 do {
-                    Fpom = 0.1
-                            * Math.tan(Math.PI * (RNG.nextDouble() - 0.5))
-                            + muF;
+                    Fpom = 0.1 * Math.tan(Math.PI * (RNG.nextDouble() - 0.5)) + muF;
                 } while (Fpom <= 0);
                 popX[i].setF(Fpom);
-                // System.out.print(
-                // "("+pop_x[i].getCR()+", "+pop_x[i].getF()+") ");
+
                 jRand = RNG.nextInt(D);
                 tmp = Util.toDoubleArray(popX[i].getVariables());
                 do {
                     r1 = RNG.nextInt(popSize);
                 } while (r1 == i);
                 do {
-                    r2 = RNG.nextInt(popSize
-                            + Math.min(archX.size(), popSize));
+                    r2 = RNG.nextInt(popSize + Math.min(archX.size(), popSize));
                 } while (r2 == i || r2 == r1);
                 if (r2 < popSize)
                     inR2 = popX[r2];
                 else
                     inR2 = archX.get(r2 - popSize);
+
                 pBest = RNG.nextInt(eliteSize);
                 for (int d = 0; d < D; d++) {
                     if ((RNG.nextDouble() < popX[i].CR) || (d == jRand)) {
-                        tmp[d] = task.problem.makeFeasible(
-                                        tmp[d]
-                                                + popX[i].F
-                                                * (elite.get(pBest).getValue(d) - tmp[d])
-                                                + popX[i].F
-                                                * (popX[r1].getValue(d) - inR2
-                                                .getValue(d)), d);
+                        tmp[d] = task.problem.makeFeasible(tmp[d] + popX[i].F * (elite.get(pBest).getValue(d) - tmp[d]) + popX[i].F * (popX[r1].getValue(d) - inR2.getValue(d)), d);
                     }
                 }
 

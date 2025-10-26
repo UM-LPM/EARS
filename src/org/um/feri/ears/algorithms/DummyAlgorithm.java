@@ -126,6 +126,10 @@ public class DummyAlgorithm extends NumberAlgorithm {
                         } else if (fileFormat == FileFormat.RESULT_PER_LINE) {
                             resultArray = new double[MAX_RUNS_PER_FILE];
                             while (line != null) {
+                                if (index >= MAX_RUNS_PER_FILE) {
+                                    System.err.println("The file " + fileName + " has more than " + MAX_RUNS_PER_FILE + " results. Skipping to end of file.");
+                                    break;
+                                }
                                 //First line may contain metadata
                                 if (index == 0 && line.indexOf(';') > 0) {
                                     readAlgorithmInfo(line);
@@ -139,10 +143,6 @@ public class DummyAlgorithm extends NumberAlgorithm {
                                 resultArray[index] = Double.parseDouble(line);
                                 line = br.readLine();
                                 index++;
-                                if (index >= MAX_RUNS_PER_FILE) {
-                                    System.err.println("The file " + fileName + " has more than " + MAX_RUNS_PER_FILE + " results. Skipping to end of file.");
-                                    break;
-                                }
                             }
                             results.put(problemName.toLowerCase(), resultArray);
                             positions.put(problemName.toLowerCase(), 0);
