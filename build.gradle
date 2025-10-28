@@ -54,6 +54,9 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.4'
     implementation 'commons-io:commons-io:2.11.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    // Lets-Plot Kotlin dependencies
+    implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.9.3")
+    implementation("org.jetbrains.lets-plot:lets-plot-image-export:4.5.2")
 }
 
 version = '1.0'

@@ -1,4 +1,4 @@
-package org.um.feri.ears.examples.dynopt
+package org.um.feri.ears.examples.dynopt.v1
 
 class AlgorithmPerformance(val name: String) {
     val evalData: LinkedHashMap<String, EvalMetrics> = LinkedHashMap()
