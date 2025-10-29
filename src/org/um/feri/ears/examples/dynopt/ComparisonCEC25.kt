@@ -19,13 +19,12 @@ fun main() {
             "Environments${currentSettings.environments}_" +
             "Dim${currentSettings.dimensions}"
 
-
     // Available algorithms in the results folder:
     // "ACFPSO", "AMPDE", "AMPPSO", "AmQSO", "AMSO", "APCPSO", "CDE", "CESO", "CPSO", "CPSOR",
     // "DCPSO", "DSPSO", "DynDE", "DynPopDE", "FTMPSO", "HmSO", "IDSPSO", "ImQSO", "mCMAES", "mDE",
-    // "mjDE", "mPSO", "mQSO", "psfNBC", "RPSO", "SPSOAPAD", "TMIPSO"
+    // "mjDE", "mPSO", "mQSO", "psfNBC", "RPSO", "SPSO_AP_AD", "TMIPSO"
 
-    val algorithms = listOf("ACFPSO", "mjDE", "mCMAES")
+    val algorithms = listOf("AMPDE", "CDE", "CESO", "DynDE", "DynPopDE", "mDE", "mjDE", "SPSO_AP_AD")
     val algorithmsPerformances = algorithms.map { AlgorithmPerformance(name = it) }
     val players = algorithms.map { DummyAlgorithm(it, algResultsDir, DummyAlgorithm.FileFormat.CEC_RESULTS_FORMAT) }
         .toCollection(ArrayList<NumberAlgorithm>())
@@ -45,14 +44,19 @@ fun main() {
         }
     }
 
+    // == generate plot ==
+    val envFrom = 91
+    val envTo = 100
+
     LetsPlotUtils.generatePlot(
+        comparisonSettings = currentSettings,
         algorithms = algorithmsPerformances,
         width = 1500,
         height = 750,
-        minX = 0,
-        maxX = 255,   // indexes (1st evaluation index = 0, 51st evaluation index (change) = 51, 102nd evaluation index (change) = 102, etc.)
+        minX = if (envFrom == 1) 0 else currentSettings.envIndexes[envFrom - 2],
+        maxX = currentSettings.envIndexes[envTo - 1],   // indexes (1st evaluation index = 0, 51st evaluation index (change) = 51, 102nd evaluation index (change) = 102, etc.)
         showVerticalLines = true,
         xAxisChangeIndexInterval = 50,
-        filename="RCG_A3_CEC2025_F1.png"
+        filename = "RCG_CEC2025_01_EnvF${envFrom}T${envTo}_F1.png"
     )
 }

@@ -29,10 +29,15 @@ data class ComparisonSettings(
     val FEs: List<Int>
         get() = buildList {
             add(1)
-            addAll((100..(changeFrequency * environments) step sampleInterval).flatMap { i ->
+            addAll((sampleInterval..(changeFrequency * environments) step sampleInterval).flatMap { i ->
                 if (i % changeFrequency == 0 && i < changeFrequency * environments) listOf(i, i + 1)
                 else listOf(i)
             })
+        }
+    val envIndexes: List<Int>
+        get() = buildList {
+            val envIndex = (changeFrequency / sampleInterval) + 1
+            addAll(((envIndex - 1)..(envIndex * environments) step envIndex))
         }
 }
 

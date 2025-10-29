@@ -18,6 +18,7 @@ import java.io.File
 class LetsPlotUtils {
     companion object {
         fun generatePlot(
+            comparisonSettings: ComparisonSettings,
             algorithms: List<AlgorithmPerformance>,
             width: Int = 1500, height: Int = 750,
             minX: Int? = null, maxX: Int? = null,
@@ -82,21 +83,17 @@ class LetsPlotUtils {
             val maxX = maxX ?: (xValues.maxOrNull() ?: 0)
 
             if (showVerticalLines) {
-                val verticalLines = (0..xValues.toList().size - 1 step xAxisChangeIndexInterval).toList()
-                verticalLines.forEach { evalPoint ->
+                (listOf(0) + comparisonSettings.envIndexes).forEach { evalPoint ->
                     plot += geomVLine(xintercept = evalPoint, color = "lightgrey", linetype = "dashed")
                 }
             }
 
-            // define x-axis breaks for labeling, filtering for specific cases
-            val filteredXValues = (xValues.filter { it % xAxisChangeIndexInterval == 0 })
-
-            // plot x breaks and labels using 'xValues' instead of 'filteredXValues' for CEC 2017 and CEC 2022
+            // plot x breaks and labels
             plot += scaleXContinuous(
-                breaks = filteredXValues.toList(),
-                labels = filteredXValues.map { (it.toInt() * 100).toString() }, // specify the tick marks
+                breaks = (listOf(0) + comparisonSettings.envIndexes),
+                labels = (listOf("1") + comparisonSettings.envIndexes.map { (comparisonSettings.FEs[it]).toString() }), // specify the tick marks
                 limits = minX to maxX,
-                expand = listOf(0, 0)   // remove left padding on the x-axis
+                //expand = listOf(0, 0)   // remove left padding on the x-axis
             )
 
             plot += scaleYContinuous(format = "{d}") // format y-axis labels to show integers
