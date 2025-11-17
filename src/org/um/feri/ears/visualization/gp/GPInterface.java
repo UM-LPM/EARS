@@ -445,6 +445,11 @@ public class GPInterface extends JFrame {
             gpAlgorithmExecutor.setGpAlgorithm(null);
             gpAlgorithmExecutor.loadDefaultConfiguration();
 
+            // Update ImagePath
+            if(gpAlgorithmExecutor.getConfiguration().ImagePath != null && gpAlgorithmExecutor.getConfiguration().ImagePath.length() > 0){
+                imgPathPrefix = gpAlgorithmExecutor.getConfiguration().ImagePath;
+            }
+
             updateGPAlgorithmParamsUI();
             updateUI();
         }
@@ -533,7 +538,7 @@ public class GPInterface extends JFrame {
         this.bestGenerationFitnessGraphPanel.setScores(gpAlgorithmExecutor.getGpAlgorithm().getBestGenFitnesses());
 
         // Update population list
-        //displayPopulation(displayPopulationCheckBox.isSelected());
+        displayPopulation(displayPopulationCheckBox.isSelected());
 
         // Update best individual
         updateBestIndividual();

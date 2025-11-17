@@ -13,7 +13,6 @@ import org.um.feri.ears.util.GPProblemType;
 import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
-import org.yaml.snakeyaml.util.Tuple;
 
 import java.util.Collections;
 import java.util.List;
