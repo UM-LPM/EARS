@@ -2,9 +2,13 @@ package org.um.feri.ears.examples.dynopt.benchmarks
 
 import org.um.feri.ears.algorithms.NumberAlgorithm
 import org.um.feri.ears.benchmark.SOBenchmark
-import org.um.feri.ears.problems.*
+import org.um.feri.ears.problems.DoubleProblem
+import org.um.feri.ears.problems.DummyProblem
+import org.um.feri.ears.problems.NumberSolution
+import org.um.feri.ears.problems.StopCriterion
+import org.um.feri.ears.problems.Task
 
-class MPBBenchmark(val k: Int, val drawLimit: Double = 1e-7) :
+class MPBBenchmarkExample(val k: Int, val drawLimit: Double = 1e-7) :
     SOBenchmark<NumberSolution<Double>, NumberSolution<Double>, DoubleProblem, NumberAlgorithm>() {
 
     init {

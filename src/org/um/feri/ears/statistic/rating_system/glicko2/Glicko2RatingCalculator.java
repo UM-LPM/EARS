@@ -94,7 +94,7 @@ public class Glicko2RatingCalculator {
 
                 postRating = rating + (postRD * postRD) * performanceRatingFromGameOutcomes;
             }
-            if (postRD < 50 / Glicko2Rating.GLICKO2_CONSTANT) postRD = 50 / Glicko2Rating.GLICKO2_CONSTANT; //set min RD
+            if (postRD < 30 / Glicko2Rating.GLICKO2_CONSTANT) postRD = 30 / Glicko2Rating.GLICKO2_CONSTANT; //set min RD
             if (postRD > 350 / Glicko2Rating.GLICKO2_CONSTANT)
                 postRD = 350 / Glicko2Rating.GLICKO2_CONSTANT; //set max RD
             Glicko2Rating tmp = new Glicko2Rating(Glicko2Rating.getGlicko2Rating(postRating), Glicko2Rating.getGlicko2RatingDeviation(postRD), postRatingVolatility);

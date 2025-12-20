@@ -30,6 +30,8 @@ class LetsPlotUtils {
 
             val xValues = 0 until algorithms.first().evalMetrics.size   // x-axis values representing different evaluation points
 
+            //val tmpNames = listOf("Algorithm A", "Algorithm B", "Algorithm C")
+
             for (i in 0 until algorithms.size) {    // iterate through each algorithm
                 val yValues = algorithms[i].evalMetrics.map { it.rating } // extract rating values
 
@@ -43,7 +45,7 @@ class LetsPlotUtils {
                     "rating" to yValues,
                     "lowerBounds" to lowerBounds,
                     "upperBounds" to upperBounds,
-                    "Algorithm" to List(yValues.size) { algorithms[i].name }  // algorithm name labels
+                    "Algorithm" to List(yValues.size) { algorithms[i].name }  // algorithm name labels tmpNames[i]
                 )
 
                 // add rating line for the current algorithm
@@ -73,8 +75,8 @@ class LetsPlotUtils {
 
             // determine y-axis limits dynamically if not provided
             val allRatings = algorithms.flatMap { it.evalMetrics.map { it.rating } }
-            val minY = minY ?: (allRatings.min() - 2 * 50)  //
-            val maxY = maxY ?: (allRatings.max() + 2 * 50)
+            val minY = 2200//minY ?: (allRatings.min() - 2 * 50)  //
+            val maxY = 800//maxY ?: (allRatings.max() + 2 * 50)
 
             plot += scaleYContinuous(limits = minY to maxY) // set y-axis limits
 

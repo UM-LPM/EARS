@@ -34,7 +34,7 @@ data class ComparisonSettings(
                 else listOf(i)
             })
         }
-    val envIndexes: List<Int>
+    val envIndexes: List<Int>   // TODO: works only for 10, 100, 1000?
         get() = buildList {
             val envIndex = (changeFrequency / sampleInterval) + 1
             addAll(((envIndex - 1)..(envIndex * environments) step envIndex))
