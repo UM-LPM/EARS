@@ -14,7 +14,6 @@ import org.um.feri.ears.util.RunConfiguration;
 import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
-import org.yaml.snakeyaml.util.Tuple;
 
 import javax.swing.*;
 import java.io.*;

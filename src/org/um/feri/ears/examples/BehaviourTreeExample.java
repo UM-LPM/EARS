@@ -510,7 +510,7 @@ public class BehaviourTreeExample {
                     //System.out.println("Node call frequency (" + j + "): " + nodeCallFrequency[j]);
                 }
 
-                programSolutions.get(1).setNodeCallFrequencyCount(nodeCallFrequency);
+                //programSolutions.get(1).setNodeCallFrequencyCount(nodeCallFrequency);
                 GPNodeCallFrequencyCountPruningOperator gpnf = new GPNodeCallFrequencyCountPruningOperator(65,0.5);
                 ProgramSolution nodeCallFrequencySolution = gpnf.execute(programSolutions.get(1), sgp2);
 

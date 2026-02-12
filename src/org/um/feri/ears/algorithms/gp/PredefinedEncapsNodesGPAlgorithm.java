@@ -21,7 +21,6 @@ import org.um.feri.ears.util.annotation.AlgorithmParameter;
 import org.um.feri.ears.util.comparator.ProblemComparator;
 import org.um.feri.ears.util.gp_stats.GPAlgorithmMultiConfigurationsProgressData;
 import org.um.feri.ears.util.random.RNG;
-import org.yaml.snakeyaml.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.HashMap;

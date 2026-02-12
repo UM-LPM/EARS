@@ -2,7 +2,6 @@ package org.um.feri.ears.util;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.um.feri.ears.problems.gp.ProgramSolution;
-import org.yaml.snakeyaml.util.Tuple;
 
 import java.io.Serializable;
 import java.util.ArrayList;
