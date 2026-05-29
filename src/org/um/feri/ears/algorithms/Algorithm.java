@@ -120,7 +120,7 @@ public abstract class Algorithm<R extends Solution, S extends Solution, P extend
     public String getFileNameString() {
         String fileName = ai.getAcronym().trim().replaceAll("[\\s_]", "-"); // replace all spaces and underscores with hyphen/dash
         fileName = fileName.replaceAll("[\\\\/:*?\"<>'%&@,.|{}+]", ""); // remove invalid characters
-        fileName += "-" + version;
+        //fileName += "-" + version;
         return fileName;
     }
 

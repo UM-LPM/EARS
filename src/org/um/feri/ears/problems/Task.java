@@ -24,7 +24,7 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
     protected long allowedCPUTimeNs;
     protected long evaluationTimeNs = 0;
     protected long timerStart;
-    protected double epsilonForGlobal = 0; // epsilon representing the error margin difference when comparing a solution to the global optimum
+    protected double epsilonForGlobal = 1e-8; // epsilon representing the error margin difference when comparing a solution to the global optimum
     protected boolean isStop;
     protected boolean isGlobal;
     private int resetCount = 0;
