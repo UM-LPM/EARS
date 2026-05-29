@@ -151,7 +151,7 @@ public class CRO extends NumberAlgorithm {
 	}
 
 	private void createInitialPopulation() throws StopCriterionException {
-		// At inizialiazation populate only part of the coral reef (rho)
+		// At initialization populate only part of the coral reef (rho)
 		int quantity = (int) (rho * n * m);
 		coralReef = new ArrayList<>(n * m);
 		CoralSolution newCoral = new CoralSolution(task.generateRandomEvaluatedSolution());
