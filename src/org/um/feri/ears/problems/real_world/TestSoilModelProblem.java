@@ -1,4 +1,4 @@
-package org.um.feri.ears.problems.misc;
+package org.um.feri.ears.problems.real_world;
 
 import org.um.feri.ears.algorithms.NumberAlgorithm;
 import org.um.feri.ears.algorithms.so.de.DE;

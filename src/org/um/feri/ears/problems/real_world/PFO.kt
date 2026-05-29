@@ -1,4 +1,4 @@
-package org.um.feri.ears.problems.unconstrained
+package org.um.feri.ears.problems.real_world
 
 import org.um.feri.ears.problems.DoubleProblem
 import kotlin.math.PI
