@@ -26,8 +26,6 @@ public class DummyAlgorithm extends NumberAlgorithm {
     String nameInFile;
     FileFormat fileFormat;
 
-    static final int MAX_RUNS_PER_FILE = 100; //this represents the number of results (lines) in a file. It should be set to the lowest possible number to improve memory management
-
     public DummyAlgorithm(String algorithmName) {
         this(algorithmName, algorithmName, "D:/Results/", FileFormat.RESULT_PER_LINE);
     }
@@ -42,9 +40,9 @@ public class DummyAlgorithm extends NumberAlgorithm {
 
     /**
      * @param algorithmName name of the algorithm used in the results
-     * @param nameInFile name of the algorithm in the file
-     * @param filesDir directory where the results are stored
-     * @param fileFormat format of the results file
+     * @param nameInFile    name of the algorithm in the file
+     * @param filesDir      directory where the results are stored
+     * @param fileFormat    format of the results file
      */
     public DummyAlgorithm(String algorithmName, String nameInFile, String filesDir, FileFormat fileFormat) {
         this.fileFormat = fileFormat;
@@ -75,46 +73,38 @@ public class DummyAlgorithm extends NumberAlgorithm {
                 if (fileName.toLowerCase().indexOf(name.toLowerCase() + "_") == 0) {
                     problemName = fileName.substring(name.length() + 1, fileName.length() - 4);
                     double[] resultArray;
-                    int index = 0;
+
                     try (BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
                         String line = br.readLine();
 
-                        if(fileFormat == FileFormat.CEC_RESULTS_FORMAT) {
+                        if (fileFormat == FileFormat.CEC_RESULTS_FORMAT) {
                             int k = 0;
 
                             while (line != null) {
-                                if(line.isBlank())
+                                if (line.isBlank())
                                     break;
 
                                 String[] splitLine;
                                 if (line.contains(",")) {
                                     splitLine = line.split(",");
                                 } else {
-                                    // Split by one or more whitespace characters
                                     splitLine = line.split("\\s+");
                                 }
 
-                                index = 0;
-                                resultArray = new double[MAX_RUNS_PER_FILE];
-
+                                ArrayList<Double> resultList = new ArrayList<>();
                                 for (String s : splitLine) {
-
-                                    if(s.isBlank())
+                                    if (s.isBlank())
                                         continue;
 
-                                    if (index >= MAX_RUNS_PER_FILE) {
-                                        System.err.println("The file " + fileName + " has more than " + MAX_RUNS_PER_FILE + " results. Skipping to end of file.");
-                                        break;
-                                    }
-
                                     if (s.equalsIgnoreCase("inf")) {
-                                        resultArray[index++] = Double.POSITIVE_INFINITY;
+                                        resultList.add(Double.POSITIVE_INFINITY);
                                     } else if (s.equalsIgnoreCase("-inf")) {
-                                        resultArray[index++] = Double.NEGATIVE_INFINITY;
+                                        resultList.add(Double.NEGATIVE_INFINITY);
                                     } else {
-                                        resultArray[index++] = Double.parseDouble(s);
+                                        resultList.add(Double.parseDouble(s));
                                     }
                                 }
+                                resultArray = resultList.stream().mapToDouble(Double::doubleValue).toArray();
 
                                 String problemKey = problemName.toLowerCase() + "k" + k++;
                                 results.put(problemKey, resultArray);
@@ -122,32 +112,29 @@ public class DummyAlgorithm extends NumberAlgorithm {
 
                                 line = br.readLine();
                             }
-
+                            String problemKey = problemName.toLowerCase();
+                            results.put(problemKey, results.get(problemKey + "k" + (k - 1)));
+                            positions.put(problemKey, 0);
                         } else if (fileFormat == FileFormat.RESULT_PER_LINE) {
-                            resultArray = new double[MAX_RUNS_PER_FILE];
+                            ArrayList<Double> resultList = new ArrayList<>();
                             while (line != null) {
-                                if (index >= MAX_RUNS_PER_FILE) {
-                                    System.err.println("The file " + fileName + " has more than " + MAX_RUNS_PER_FILE + " results. Skipping to end of file.");
-                                    break;
-                                }
                                 //First line may contain metadata
-                                if (index == 0 && line.indexOf(';') > 0) {
+                                if (resultList.isEmpty() && line.indexOf(';') > 0) {
                                     readAlgorithmInfo(line);
                                     line = br.readLine();
                                     continue;
                                 }
-                                if(line.isBlank())
+                                if (line.isBlank())
                                     break;
 
                                 //line = line.replace(",", ".");
-                                resultArray[index] = Double.parseDouble(line);
+                                resultList.add(Double.parseDouble(line));
                                 line = br.readLine();
-                                index++;
                             }
+                            resultArray = resultList.stream().mapToDouble(Double::doubleValue).toArray();
                             results.put(problemName.toLowerCase(), resultArray);
                             positions.put(problemName.toLowerCase(), 0);
                         }
-
                     } catch (Exception e) {
                         System.out.println("Error in file: " + file.getAbsolutePath() + " " + e.getMessage());
                         e.printStackTrace();
