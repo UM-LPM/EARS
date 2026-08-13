@@ -144,6 +144,7 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
         initAllProblems();
         long start = System.nanoTime();
         for (int i = 0; i < numberOfRuns; i++) {
+            initRun();
             if (printInfo) System.out.println("Current run: " + (i + 1));
             for (Task task : tasks) {
                 if (printInfo) System.out.println("Current problem: " + task.getProblemName());
@@ -153,6 +154,9 @@ public abstract class Benchmark<R extends Solution, S extends Solution, P extend
         }
         long duration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
         performStatistics();
+    }
+    
+    protected void initRun() {
     }
 
     protected ArrayList<AlgorithmRunResult<R, S, P, A>> runOneTask(Task task) {

@@ -255,8 +255,7 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
         evaluationTimeNs += System.nanoTime() - start;
         checkIfGlobalReached(solution);
         GraphDataRecorder.AddRecord(solution, this.getProblemName());
-        if (bestSolution != null && isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
-            evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTimeNs, bestSolution.getEval()));
+        updateEvaluationHistory(solution);
     }
 
     private void performEvaluations(List<S> solutions) throws StopCriterionException {
@@ -275,9 +274,13 @@ public class Task<S extends Solution, P extends Problem<S>> implements Serializa
         for (S solution : solutions) {
             checkIfGlobalReached(solution);
             GraphDataRecorder.AddRecord(solution, this.getProblemName());
-            if (bestSolution != null && isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
-                evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTimeNs, bestSolution.getEval()));
+            updateEvaluationHistory(solution);
         }
+    }
+
+    protected void updateEvaluationHistory(S solution) {
+        if (bestSolution != null && isEvaluationHistoryEnabled && (numberOfEvaluations % storeEveryNthEvaluation == 0))
+            evaluationHistory.add(new EvaluationStorage.Evaluation(getNumberOfEvaluations(), getNumberOfIterations(), evaluationTimeNs, bestSolution.getEval()));
     }
 
 
