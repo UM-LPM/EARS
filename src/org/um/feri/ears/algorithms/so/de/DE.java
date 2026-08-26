@@ -376,7 +376,7 @@ public class DE extends NumberAlgorithm {
                         CR = tmpCR;
 
                     for (L = 0; L < D; L++) /* perform D binomial trials */ {
-                        if ((RNG.nextDouble() < CR) || L == D) {
+                        if ((RNG.nextDouble() < CR) || L == (D - 1)) {
                             tmp[n] = pold[r1].getValue(n) + F * (pold[r2].getValue(n) - pold[r3].getValue(n));
                         }
                         n = (n + 1) % D;
