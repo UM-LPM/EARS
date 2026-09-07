@@ -86,6 +86,7 @@ public class HOA extends NumberAlgorithm {
 
     private void initPopulation() throws StopCriterionException {
         population = new ArrayList<>();
+        globalBest = null;
         for (int i = 0; i < popSize; i++) {
             if (task.isStopCriterion()) {
                 break;
