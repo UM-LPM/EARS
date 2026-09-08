@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -388,11 +390,8 @@ public class ParetoSolution<N extends Number> extends Solution implements Iterab
 
     public void toJson(String filename) {
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
         try {
-            mapper.writeValue(Paths.get(filename).toFile(), solutions);
+            stateMapper().writeValue(Paths.get(filename).toFile(), solutions);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -400,9 +399,41 @@ public class ParetoSolution<N extends Number> extends Solution implements Iterab
 
     public void fromJson(String filename) throws JsonProcessingException {
         String json = Util.readFromFile(filename);
+        solutions = stateMapper().readValue(json, new TypeReference<List<NumberSolution<N>>>(){});
+    }
+
+    /**
+     * Mapper used to persist and restore solutions.
+     * <p>
+     * Solutions are mapped through their fields rather than their accessors. Going through
+     * getters/setters loses every piece of state that has no setter -- most importantly
+     * {@code numberOfObjectives}, which would come back as 0 and make
+     * {@code SolutionDominanceComparator} report every pair as non-dominated -- and it also
+     * writes derived views that cannot be read back: {@code getVariablesAsPoint()} returns a
+     * fixed-size {@link org.um.feri.ears.util.Point}, which Jackson throws on when it tries to
+     * populate it as a setterless collection.
+     */
+    private static ObjectMapper stateMapper() {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        solutions = mapper.readValue(json, new TypeReference<List<NumberSolution<N>>>(){});
+        mapper.setVisibility(mapper.getSerializationConfig().getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
+        mapper.addMixIn(Solution.class, SolutionStateMixin.class);
+        mapper.addMixIn(NumberSolution.class, SolutionStateMixin.class);
+        return mapper;
+    }
+
+    /**
+     * {@code parents} and {@code attributes} hold abstract-typed references that carry no state
+     * worth persisting and cannot be reconstructed reliably.
+     */
+    @JsonIgnoreProperties({"parents", "attributes"})
+    private abstract static class SolutionStateMixin {
     }
 
     public void loadObjectivesFromFile(String fileName) {

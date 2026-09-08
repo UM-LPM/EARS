@@ -81,12 +81,8 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
 
         distance.crowdingDistanceAssignment(population, numObj);
 
-        long startTime = System.currentTimeMillis();
         // Generations
         while (!task.isStopCriterion()) {
-
-            System.out.println("Generation: " + task.getNumberOfIterations() + " Time: " + (System.currentTimeMillis() - startTime) + "ms");
-            startTime = System.currentTimeMillis();
 
             // Create the offSpring solutionSet
             offspringPopulation = new ParetoSolution(populationSize);
@@ -170,10 +166,7 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
     @Override
     protected void init() {
 
-        if (isLoaded)
-            return;
-
-        if (optimalParam) {
+        if (optimalParam && !isLoaded) {
             switch (numObj) {
                 case 1: {
                     populationSize = 100;
@@ -194,7 +187,9 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
             }
         }
 
-        population = new ParetoSolution<>(populationSize);
+        if (!isLoaded) {
+            population = new ParetoSolution<>(populationSize);
+        }
         immutablePopulation = new ParetoSolution<>(populationSize);
     }
 
@@ -211,11 +206,18 @@ public class NSGAII<N extends Number, P extends NumberProblem<N>> extends MOAlgo
     @Override
     public void loadState(String fileName, boolean reevaluate) {
         try {
-            population = new ParetoSolution<>(populationSize);
-            population.fromJson(fileName);
+            ParetoSolution<N> loaded = new ParetoSolution<>();
+            loaded.fromJson(fileName);
+            if (loaded.size() == 0) {
+                System.out.println("Error while loading state: the file contains no solutions");
+                return;
+            }
+            // the capacity must follow the loaded size, otherwise add() silently drops solutions
+            loaded.setCapacity(loaded.size());
+            population = loaded;
+            populationSize = population.size();
             isLoaded = true;
             this.reevaluate = reevaluate;
-            populationSize = population.size();
         } catch (Exception e) {
             System.out.println("Error while loading state: " + e.getMessage());
         }

@@ -10,6 +10,7 @@ package org.um.feri.ears.algorithms.moo.moead;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.algorithms.StateManager;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
 import org.um.feri.ears.problems.NumberProblem;
@@ -39,13 +40,21 @@ import static java.util.Arrays.asList;
  * Computation, 2009.
  * </ol>
  */
-public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
+public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> implements StateManager {
 
     List<Integer> twoDimfiles = asList(100, 300, 400, 500, 600, 800, 1000);
     List<Integer> threeDimfiles = asList(500, 600, 800, 1000, 1200);
     List<Integer> fiveDimfiles = asList(1000, 1200, 1500, 1800, 2000, 2500);
 
     int populationSize;
+    /**
+     * Set when a population has been restored via {@link #loadState}
+     */
+    boolean isLoaded = false;
+    /**
+     * Whether a restored population is re-evaluated against the current problem
+     */
+    boolean reevaluate = false;
     /**
      * Stores the population
      */
@@ -104,7 +113,7 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
     @Override
     protected void init() throws StopCriterionException {
 
-        if (optimalParam) {
+        if (optimalParam && !isLoaded) {
             switch (numObj) {
                 case 1: {
                     populationSize = 100;
@@ -125,7 +134,9 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
             }
         }
 
-        population = new ParetoSolution<N>(populationSize);
+        if (!isLoaded) {
+            population = new ParetoSolution<N>(populationSize);
+        }
         savedValues = new NumberSolution[populationSize];
 
         indArray = new NumberSolution[numObj];
@@ -142,7 +153,17 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
         initNeighborhood();
 
         // STEP 1.2. Initialize population
-        initPopulation();
+        if (isLoaded) {
+            if (reevaluate) {
+                for (NumberSolution<N> solution : population) {
+                    if (task.isStopCriterion())
+                        return;
+                    task.eval(solution);
+                }
+            }
+        } else {
+            initPopulation();
+        }
 
         // STEP 1.3. Initialize z
         initIdealPoint();
@@ -496,4 +517,38 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
 		}
 		
 	}*/
+
+    @Override
+    public void saveState(String fileName) {
+        if (population == null) {
+            System.out.println("Error while saving state: the population has not been initialized yet");
+            return;
+        }
+        population.toJson(fileName);
+    }
+
+    @Override
+    public void loadState(String fileName, boolean reevaluate) {
+        try {
+            ParetoSolution<N> loaded = new ParetoSolution<>();
+            loaded.fromJson(fileName);
+            if (loaded.size() == 0) {
+                System.out.println("Error while loading state: the file contains no solutions");
+                return;
+            }
+            if (loaded.size() < T) {
+                System.out.println("Error while loading state: the population size (" + loaded.size()
+                        + ") must be at least the neighborhood size T (" + T + ")");
+                return;
+            }
+            loaded.setCapacity(loaded.size());
+            population = loaded;
+            // lambda and neighborhood are sized from populationSize in init(), so it must match
+            populationSize = population.size();
+            isLoaded = true;
+            this.reevaluate = reevaluate;
+        } catch (Exception e) {
+            System.out.println("Error while loading state: " + e.getMessage());
+        }
+    }
 }

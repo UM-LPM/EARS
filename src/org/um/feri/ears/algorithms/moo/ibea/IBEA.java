@@ -27,6 +27,7 @@ import java.util.List;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.algorithms.StateManager;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
@@ -35,10 +36,19 @@ import org.um.feri.ears.problems.moo.ParetoSolution;
 import org.um.feri.ears.util.comparator.SolutionDominanceComparator;
 import org.um.feri.ears.util.Ranking;
 
-public class IBEA<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
+public class IBEA<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> implements StateManager {
 
     int populationSize;
     int archiveSize;
+
+    /**
+     * Set when a population has been restored via {@link #loadState}
+     */
+    boolean isLoaded = false;
+    /**
+     * Whether a restored population is re-evaluated against the current problem
+     */
+    boolean reevaluate = false;
 
     ParetoSolution<N> population;
     ParetoSolution<N> archive;
@@ -85,13 +95,21 @@ public class IBEA<N extends Number, P extends NumberProblem<N>> extends MOAlgori
         BinaryTournament2<N> bt2 = new BinaryTournament2<>();
 
         // Create the initial solutionSet
-        NumberSolution<N> newSolution;
-        for (int i = 0; i < populationSize; i++) {
-            if (task.isStopCriterion())
-                return;
-            newSolution = new NumberSolution<N>(task.generateRandomEvaluatedSolution());
-            // problem.evaluateConstraints(newSolution);
-            population.add(newSolution);
+        if (isLoaded && reevaluate) {
+            for (NumberSolution<N> solution : population) {
+                if (task.isStopCriterion())
+                    return;
+                task.eval(solution);
+            }
+        } else if (!isLoaded) {
+            NumberSolution<N> newSolution;
+            for (int i = 0; i < populationSize; i++) {
+                if (task.isStopCriterion())
+                    return;
+                newSolution = new NumberSolution<N>(task.generateRandomEvaluatedSolution());
+                // problem.evaluateConstraints(newSolution);
+                population.add(newSolution);
+            }
         }
 
         while (!task.isStopCriterion()) {
@@ -140,7 +158,7 @@ public class IBEA<N extends Number, P extends NumberProblem<N>> extends MOAlgori
     @Override
     protected void init() {
 
-        if (optimalParam) {
+        if (optimalParam && !isLoaded) {
             switch (numObj) {
                 case 1: {
                     populationSize = 100;
@@ -164,13 +182,47 @@ public class IBEA<N extends Number, P extends NumberProblem<N>> extends MOAlgori
                 }
             }
         }
-        population = new ParetoSolution<N>(populationSize);
+        if (!isLoaded) {
+            population = new ParetoSolution<N>(populationSize);
+        }
         archive = new ParetoSolution<N>(archiveSize);
     }
 
     @Override
     public void resetToDefaultsBeforeNewRun() {
 
+    }
+
+    @Override
+    public void saveState(String fileName) {
+        ParetoSolution<N> state = (archive != null && archive.size() > 0) ? archive : population;
+        if (state == null || state.size() == 0) {
+            System.out.println("Error while saving state: there is no population to save yet");
+            return;
+        }
+        state.toJson(fileName);
+    }
+
+    @Override
+    public void loadState(String fileName, boolean reevaluate) {
+        try {
+            ParetoSolution<N> loaded = new ParetoSolution<>();
+            loaded.fromJson(fileName);
+            if (loaded.size() == 0) {
+                System.out.println("Error while loading state: the file contains no solutions");
+                return;
+            }
+            loaded.setCapacity(loaded.size());
+            // Restored into the population: the first union() of start() promotes it back
+            // into the archive, which is left empty.
+            population = loaded;
+            populationSize = population.size();
+            archiveSize = population.size();
+            isLoaded = true;
+            this.reevaluate = reevaluate;
+        } catch (Exception e) {
+            System.out.println("Error while loading state: " + e.getMessage());
+        }
     }
 
     /**
