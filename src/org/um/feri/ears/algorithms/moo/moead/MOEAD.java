@@ -216,10 +216,11 @@ public class MOEAD<N extends Number, P extends NumberProblem<N>> extends MOAlgor
                     best = population;
                     return;
                 }
+                // STEP 2.3. Repair
+                task.problem.makeFeasible(child);
+
                 // Evaluation
                 task.eval(child);
-
-                // STEP 2.3. Repair. Not necessary
 
                 // STEP 2.4. Update z_
                 updateReference(child);

@@ -13,6 +13,7 @@ import java.util.Vector;
 import org.um.feri.ears.algorithms.AlgorithmInfo;
 import org.um.feri.ears.algorithms.Author;
 import org.um.feri.ears.algorithms.MOAlgorithm;
+import org.um.feri.ears.algorithms.StateManager;
 import org.um.feri.ears.operators.BinaryTournament2;
 import org.um.feri.ears.operators.CrossoverOperator;
 import org.um.feri.ears.operators.MutationOperator;
@@ -36,9 +37,17 @@ import org.um.feri.ears.util.Ranking;
  * Solving problems with box constraints.
  * Evolutionary Computation, IEEE Transactions on, 18(4), 577-601.
  */
-public class NSGAIII<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> {
+public class NSGAIII<N extends Number, P extends NumberProblem<N>> extends MOAlgorithm<N, NumberSolution<N>, P> implements StateManager {
 
     int populationSize = 100;
+    /**
+     * Set when a population has been restored via {@link #loadState}
+     */
+    boolean isLoaded = false;
+    /**
+     * Whether a restored population is re-evaluated against the current problem
+     */
+    boolean reevaluate = false;
 
     double[][] lambda_; // reference points
 
@@ -72,14 +81,21 @@ public class NSGAIII<N extends Number, P extends NumberProblem<N>> extends MOAlg
 
     @Override
     protected void start() throws StopCriterionException {
-        // Create the initial population
-        NumberSolution<N> newSolution;
-        for (int i = 0; i < populationSize; i++) {
-            if (task.isStopCriterion())
-                return;
-            newSolution = new NumberSolution<N>(task.generateRandomEvaluatedSolution());
-            // problem.evaluateConstraints(newSolution);
-            population.add(newSolution);
+        if (isLoaded && reevaluate) {
+            for (NumberSolution<N> solution : population) {
+                if (task.isStopCriterion())
+                    return;
+                task.eval(solution);
+            }
+        } else if (!isLoaded) { // Create the initial population
+            NumberSolution<N> newSolution;
+            for (int i = 0; i < populationSize; i++) {
+                if (task.isStopCriterion())
+                    return;
+                newSolution = new NumberSolution<N>(task.generateRandomEvaluatedSolution());
+                // problem.evaluateConstraints(newSolution);
+                population.add(newSolution);
+            }
         }
 
         ParetoSolution<N> offspringPopulation;
@@ -121,9 +137,11 @@ public class NSGAIII<N extends Number, P extends NumberProblem<N>> extends MOAlg
 
             if (task.isStopCriterion())
                 break;
+            task.problem.makeFeasible(offspring[0]);
             task.eval(offspring[0]);
             if (task.isStopCriterion())
                 break;
+            task.problem.makeFeasible(offspring[1]);
             task.eval(offspring[1]);
 
             offspringPopulation.add(offspring[0]);
@@ -182,25 +200,6 @@ public class NSGAIII<N extends Number, P extends NumberProblem<N>> extends MOAlg
     @Override
     protected void init() {
 
-        switch (numObj) {
-            case 1: {
-                populationSize = 100;
-                break;
-            }
-            case 2: {
-                populationSize = 100;
-                break;
-            }
-            case 3: {
-                populationSize = 300;
-                break;
-            }
-            default: {
-                populationSize = 500;
-                break;
-            }
-        }
-
         bt2 = new BinaryTournament2<N>();
         sbx = new SBXCrossover(0.9, 20.0);
         plm = new PolynomialMutation(1.0 / task.problem.getNumberOfDimensions(), 20.0);
@@ -238,18 +237,58 @@ public class NSGAIII<N extends Number, P extends NumberProblem<N>> extends MOAlg
         }
 
         (new ReferencePoint()).generateReferencePoints(referencePoints, numObj, numberOfDivisions);
-        System.out.println(populationSize);
-        populationSize = referencePoints.size();
-        while (populationSize % 4 > 0) {
-            populationSize++;
+
+        int referenceBasedSize = referencePoints.size();
+        while (referenceBasedSize % 4 > 0) {
+            referenceBasedSize++;
         }
 
-        population = new ParetoSolution(populationSize);
+        if (isLoaded) {
+            // a restored population keeps its own size, which is normally derived from the
+            // reference points, so warn when the two no longer agree
+            if (populationSize != referenceBasedSize) {
+                System.out.println("Warning: the loaded population size (" + populationSize
+                        + ") differs from the size derived from the " + referencePoints.size()
+                        + " reference points (" + referenceBasedSize + ")");
+            }
+        } else {
+            populationSize = referenceBasedSize;
+            population = new ParetoSolution(populationSize);
+        }
     }
 
 
     @Override
     public void resetToDefaultsBeforeNewRun() {
 
+    }
+
+    @Override
+    public void saveState(String fileName) {
+        if (population == null || population.size() == 0) {
+            System.out.println("Error while saving state: there is no population to save yet");
+            return;
+        }
+        population.toJson(fileName);
+    }
+
+    @Override
+    public void loadState(String fileName, boolean reevaluate) {
+        try {
+            ParetoSolution<N> loaded = new ParetoSolution<>();
+            loaded.fromJson(fileName);
+            if (loaded.size() == 0) {
+                System.out.println("Error while loading state: the file contains no solutions");
+                return;
+            }
+            // the capacity must follow the loaded size, otherwise add() silently drops solutions
+            loaded.setCapacity(loaded.size());
+            population = loaded;
+            populationSize = population.size();
+            isLoaded = true;
+            this.reevaluate = reevaluate;
+        } catch (Exception e) {
+            System.out.println("Error while loading state: " + e.getMessage());
+        }
     }
 }

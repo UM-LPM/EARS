@@ -141,6 +141,7 @@ public class IBEA<N extends Number, P extends NumberProblem<N>> extends MOAlgori
                 mut.execute(offSpring[0], task.problem);
                 if (task.isStopCriterion())
                     break;
+                task.problem.makeFeasible(offSpring[0]);
                 task.eval(offSpring[0]);
                 offSpringSolutionSet.add(offSpring[0]);
             } // while
